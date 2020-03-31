@@ -5,6 +5,7 @@ using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using MimeKit;
 using System;
 using System.IO;
@@ -12,20 +13,30 @@ using System.Threading.Tasks;
 
 namespace ComplaintTracking.Services
 {
+    public class EmailOptions
+    {
+        public bool EnableEmail { get; set; }
+        public string SmtpHost { get; set; }
+        public int SmtpPort { get; set; }
+    }
+
     public class EmailSender : IEmailSender
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUrlHelper _urlHelper;
         private readonly ApplicationDbContext _context;
+        private readonly IConfiguration _configuration;
 
         public EmailSender(
             IHttpContextAccessor httpContextAccessor,
             IUrlHelper urlHelper,
-            ApplicationDbContext context)
+            ApplicationDbContext context,
+            IConfiguration configuration)
         {
             _httpContextAccessor = httpContextAccessor;
             _urlHelper = urlHelper;
             _context = context;
+            _configuration = configuration;
         }
 
         public async Task SendEmailAsync(
@@ -36,22 +47,18 @@ namespace ComplaintTracking.Services
             bool saveLocallyOnly = false,
             string replyTo = "")
         {
-            string subjectPrefix = "";
-
-            switch (CTS.CurrentEnvironment)
+            string subjectPrefix = CTS.CurrentEnvironment switch
             {
-                case ServerEnvironment.Development:
-                    subjectPrefix = "[CTS-DEV] ";
-                    break;
-                case ServerEnvironment.Staging:
-                    subjectPrefix = "[CTS-UAT] ";
-                    break;
-                case ServerEnvironment.Production:
-                    subjectPrefix = "[CTS] ";
-                    break;
-            }
+                ServerEnvironment.Development => "[CTS-DEV] ",
+                ServerEnvironment.Staging => "[CTS-UAT] ",
+                ServerEnvironment.Production => "[CTS] ",
+                _ => ""
+            };
 
-            bool disableEmail = saveLocallyOnly || _httpContextAccessor.HttpContext.Request.IsLocal() || !CTS.EnableEmail;
+            var emailOptions = new EmailOptions();
+            _configuration.GetSection("EmailOptions").Bind(emailOptions);
+
+            bool disableEmail = saveLocallyOnly || !emailOptions.EnableEmail;
 
             var emailMessage = new MimeMessage();
 
@@ -78,8 +85,6 @@ namespace ComplaintTracking.Services
 
             if (disableEmail)
             {
-                // ref: https://www.stevejgordon.co.uk/how-to-send-emails-in-asp-net-core-1-0
-                // https://www.strathweb.com/2016/04/request-islocal-in-asp-net-core/#comment-3335240646
                 var fileName = string.Format("email_{0:yyyy-MM-dd-HH-mm-ss.FFF}.txt", DateTime.Now);
                 using StreamWriter sw = File.CreateText(Path.Combine(FilePaths.UnsentEmailFolder, fileName));
                 await emailMessage.WriteToAsync(sw.BaseStream);
@@ -94,7 +99,7 @@ namespace ComplaintTracking.Services
                 }
 
                 using var client = new SmtpClient();
-                await client.ConnectAsync("smtp.gets.ga.gov", 25, SecureSocketOptions.None).ConfigureAwait(false);
+                await client.ConnectAsync(emailOptions.SmtpHost, emailOptions.SmtpPort, SecureSocketOptions.None).ConfigureAwait(false);
                 await client.SendAsync(emailMessage).ConfigureAwait(false);
                 await client.DisconnectAsync(true).ConfigureAwait(false);
             }

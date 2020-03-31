@@ -7,6 +7,7 @@ namespace ComplaintTracking.ExtensionMethods
     {
         public static bool IsLocal(this HttpRequest req)
         {
+            // https://www.strathweb.com/2016/04/request-islocal-in-asp-net-core/#comment-3335240646
             if (req.Host.HasValue)
             {
                 return req.Host.Value.StartsWith("localhost:");

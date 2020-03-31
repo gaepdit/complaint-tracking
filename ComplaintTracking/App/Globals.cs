@@ -21,9 +21,6 @@ namespace ComplaintTracking
 
         // Image thumbnail size
         public const int ThumbnailSize = 90;
-
-        // Enable or disable email on the server
-        public static bool EnableEmail;
         
         // Support contact & return address on system emails
         public static string AdminEmail;

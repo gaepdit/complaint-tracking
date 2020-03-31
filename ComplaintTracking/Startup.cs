@@ -187,7 +187,6 @@ namespace ComplaintTracking
 
         private void SetContacts()
         {
-            CTS.EnableEmail = Convert.ToBoolean(Configuration["EnableEmail"]);
             CTS.AdminEmail = Configuration["Contacts:AdminEmail"].ForceToString();
             CTS.DevEmail = Configuration["Contacts:DevEmail"].ForceToString();
             CTS.QAEmail = Configuration["Contacts:QAEmail"].ForceToString();
