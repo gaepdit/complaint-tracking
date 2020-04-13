@@ -61,7 +61,8 @@ namespace ComplaintTracking
 
         public async Task<SelectList> GetUsersInRoleSelectListAsync(CtsRole ctsRole, Guid? officeId = null)
         {
-            var users = await _userManager.GetUsersInRoleAsync(ctsRole.ToString());
+            var users = (await _userManager.GetUsersInRoleAsync(ctsRole.ToString()))
+                .Where(e => officeId == null || e.OfficeId == officeId);
             return new SelectList(users, nameof(ApplicationUser.Id), nameof(ApplicationUser.SortableFullName));
         }
     }
