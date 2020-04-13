@@ -1,0 +1,22 @@
+{
+  "name": "cts-tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CTS Tests",
+  "author": "Doug Waldron",
+  "license": "MIT",
+  "devDependencies": {
+    "cypress": "^4.3.0",
+    "cypress-failed-log": "^2.6.2"
+  },
+  "scripts": {
+    "cypress": "cypress open",
+    "cypress:run": "cypress run",
+    "cypress:dev": "cypress open --env configFile=dev",
+    "cypress:dev-run": "cypress run --env configFile=dev",
+    "cypress:uat": "cypress open --env configFile=uat",
+    "cypress:uat-run": "cypress run --env configFile=uat",
+    "cypress:prod": "cypress open --env configFile=prod",
+    "cypress:prod-run": "cypress run --env configFile=prod"
+  }
+}

@@ -1,0 +1,57 @@
+﻿@{
+    string statusCode = ViewData["statusCode"].ForceToString();
+
+    string statusCodeDesc = ViewData["statusCodeDesc"].ForceToString();
+
+    string shortId = ViewData["shortId"].ForceToString();
+
+    string mailto = CTS.AdminEmail + "?subject=CTS Support";
+    if (shortId != "")
+    {
+        mailto = mailto + " " + ViewData["shortId"];
+    }
+
+    @if (statusCode == "404")
+    {
+        ViewData["Title"] = "Not Found";
+    }
+    else
+    {
+        ViewData["Title"] = "Error";
+    }
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (statusCode == "404")
+{
+    <p>The file or page you have requested could not be found.</p>
+}
+else
+{
+    <p>An error occurred while processing your request.</p>
+}
+
+@if (shortId != "")
+{
+    <p>
+        The error has been reported to EPD IT. If you need assistance related
+        to this error, please contact <a href="mailto:@mailto">EPD IT Support</a>
+        and reference Error @shortId.
+    </p>
+}
+else
+{
+    <p>
+        If you need assistance, please contact <a href="mailto:@mailto">EPD IT Support</a>.
+    </p>
+}
+
+<ul>
+    <li><a asp-action="Index" asp-controller="Home">Return to the CTS Homepage</a></li>
+</ul>
+
+@if (statusCode != "" && statusCode != "404")
+{
+    <p><small>Status Code: @statusCode @statusCodeDesc</small></p>
+}

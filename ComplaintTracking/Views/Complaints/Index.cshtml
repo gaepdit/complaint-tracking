@@ -1,0 +1,594 @@
+@model SearchComplaintsViewModel
+
+@{
+    ViewData["Title"] = "Complaint Search";
+    string rowclass = "";
+    string selectText = "(any)";
+
+    string idColAria = "";
+    string receivedDateColAria = "";
+    string statusColAria = "";
+
+    switch (Model.Sort)
+    {
+        case SearchComplaintsViewModel.SortBy.IdAsc:
+            idColAria = "aria-sort=ascending";
+            break;
+        case SearchComplaintsViewModel.SortBy.IdDesc:
+            idColAria = "aria-sort=descending";
+            break;
+        case SearchComplaintsViewModel.SortBy.ReceivedDateAsc:
+            receivedDateColAria = "aria-sort=ascending";
+            break;
+        case SearchComplaintsViewModel.SortBy.ReceivedDateDesc:
+            receivedDateColAria = "aria-sort=descending";
+            break;
+        case SearchComplaintsViewModel.SortBy.StatusAsc:
+            statusColAria = "aria-sort=ascending";
+            break;
+        case SearchComplaintsViewModel.SortBy.StatusDesc:
+            statusColAria = "aria-sort=descending";
+            break;
+    }
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form method="get" class="usa-grid usa-section usa-section-light" asp-fragment="search-results">
+    <fieldset>
+        <legend>Status</legend>
+        <div class="usa-width-one-half">
+            @Html.LabelFor(m => m.ComplaintStatus)
+            @Html.DropDownListFor(m => m.ComplaintStatus, Html.GetEnumSelectList(typeof(SearchComplaintsViewModel.SearchComplaintStatus)), selectText)
+            @if (Model.IncludeDeleted)
+            {
+                @Html.LabelFor(m => m.DeleteStatus)
+                @Html.DropDownListFor(m => m.DeleteStatus, Html.GetEnumSelectList(typeof(SearchComplaintsViewModel.SearchDeleteStatus)), "Not Deleted")
+            }
+        </div>
+        <div class="usa-width-one-fourth">
+            @Html.LabelFor(m => m.DateComplaintClosedFrom)
+            @Html.EditorFor(m => m.DateComplaintClosedFrom, new { htmlAttributes = new { @class = "datepicker" } })
+        </div>
+        <div class="usa-width-one-fourth">
+            @Html.LabelFor(m => m.DateComplaintClosedTo)
+            @Html.EditorFor(m => m.DateComplaintClosedTo, new { htmlAttributes = new { @class = "datepicker" } })
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Received</legend>
+        <div class="usa-width-one-half">
+            @Html.LabelFor(m => m.ReceivedById)
+            @Html.DropDownListFor(m => m.ReceivedById, Model.AllUsersSelectList, selectText)
+        </div>
+        <div class="usa-width-one-fourth">
+            @Html.LabelFor(m => m.DateReceivedFrom)
+            @Html.EditorFor(m => m.DateReceivedFrom, new { htmlAttributes = new { @class = "datepicker" } })
+        </div>
+        <div class="usa-width-one-fourth">
+            @Html.LabelFor(m => m.DateReceivedTo)
+            @Html.EditorFor(m => m.DateReceivedTo, new { htmlAttributes = new { @class = "datepicker" } })
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Caller</legend>
+        <div class="usa-width-one-half">
+            @Html.LabelFor(m => m.CallerName)
+            @Html.EditorFor(m => m.CallerName)
+        </div>
+        <div class="usa-width-one-half">
+            @Html.LabelFor(m => m.CallerRepresents)
+            @Html.EditorFor(m => m.CallerRepresents)
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Complaint</legend>
+        <div class="usa-width-one-half">
+            @Html.LabelFor(m => m.ComplaintNature)
+            @Html.EditorFor(m => m.ComplaintNature)
+            @Html.LabelFor(m => m.ComplaintLocation)
+            @Html.EditorFor(m => m.ComplaintLocation)
+            @Html.LabelFor(m => m.ComplaintDirections)
+            @Html.EditorFor(m => m.ComplaintDirections)
+        </div>
+        <div class="usa-width-one-half">
+            @Html.LabelFor(m => m.ComplaintCity)
+            @Html.EditorFor(m => m.ComplaintCity)
+            @Html.LabelFor(m => m.ComplaintCountyId)
+            @Html.DropDownListFor(m => m.ComplaintCountyId, Model.CountySelectList, selectText)
+            @Html.LabelFor(m => m.ConcernId)
+            @Html.DropDownListFor(m => m.ConcernId, Model.ConcernSelectList, selectText)
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Source</legend>
+        <div class="usa-width-one-half">
+            @Html.LabelFor(m => m.SourceFacilityId)
+            @Html.EditorFor(m => m.SourceFacilityId)
+            @Html.LabelFor(m => m.SourceFacilityName)
+            @Html.EditorFor(m => m.SourceFacilityName)
+            @Html.LabelFor(m => m.SourceContactName)
+            @Html.EditorFor(m => m.SourceContactName)
+        </div>
+        <div class="usa-width-one-half">
+            @Html.LabelFor(m => m.SourceStreet)
+            @Html.EditorFor(m => m.SourceStreet)
+            @Html.LabelFor(m => m.SourceCity)
+            @Html.EditorFor(m => m.SourceCity)
+            <div>
+                <div class="usa-input-grid usa-input-grid-medium">
+                    @Html.LabelFor(m => m.SourceStateId)
+                    @Html.DropDownListFor(m => m.SourceStateId, Model.StateSelectList, selectText)
+                </div>
+                <div class="usa-input-grid usa-input-grid-small">
+                    @Html.LabelFor(m => m.SourcePostalCode)
+                    @Html.EditorFor(m => m.SourcePostalCode)
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Assignment</legend>
+        <div class="usa-width-one-half">
+            @Html.LabelFor(m => m.Office)
+            @Html.DropDownListFor(m => m.Office, Model.OfficeSelectList, selectText)
+        </div>
+        <div class="usa-width-one-half">
+            @Html.LabelFor(m => m.Owner)
+            @Html.DropDownListFor(m => m.Owner, Model.OwnerSelectList, selectText)
+        </div>
+    </fieldset>
+
+    <div class="gaepd-buttonrow">
+        <button type="submit" id="submit" name="submit" value="search">Search</button>
+        <a asp-action="Index" class="usa-button usa-button-outline">Clear search form</a>
+    </div>
+</form>
+
+@if (Model.Complaints != null)
+{
+    <table class="usa-table-borderless gaepd-table-responsive">
+        <caption id="search-results">
+            @if (Model.Complaints.TotalItems == 0)
+            {
+                <text>No results found</text>
+            }
+            else
+            {
+                if (Model.Complaints.TotalItems == 1)
+                {
+                    <text>One result</text>
+                }
+                else
+                {
+                    <text>@Model.Complaints.TotalItems.ToString("N0") total results; showing results @Model.Complaints.FirstItemIndex.ToString("N0") – @Model.Complaints.LastItemIndex.ToString("N0")</text>
+                }
+                if (Model.Complaints.TotalItems <= CTS.CsvRecordsExportLimit)
+                {
+                    <form asp-action="Download" asp-controller="Complaints" class="usa-form" style="float:right">
+                        <input type="hidden" asp-for="Sort" />
+                        <input type="hidden" asp-for="ComplaintStatus" />
+                        <input type="hidden" asp-for="DeleteStatus" />
+                        <input type="hidden" asp-for="DateReceivedFrom" />
+                        <input type="hidden" asp-for="DateReceivedTo" />
+                        <input type="hidden" asp-for="ReceivedById" />
+                        <input type="hidden" asp-for="DateComplaintClosedFrom" />
+                        <input type="hidden" asp-for="DateComplaintClosedTo" />
+                        <input type="hidden" asp-for="CallerName" />
+                        <input type="hidden" asp-for="CallerRepresents" />
+                        <input type="hidden" asp-for="ComplaintNature" />
+                        <input type="hidden" asp-for="ComplaintLocation" />
+                        <input type="hidden" asp-for="ComplaintDirections" />
+                        <input type="hidden" asp-for="ComplaintCity" />
+                        <input type="hidden" asp-for="ComplaintCountyId" />
+                        <input type="hidden" asp-for="ConcernId" />
+                        <input type="hidden" asp-for="SourceFacilityId" />
+                        <input type="hidden" asp-for="SourceFacilityName" />
+                        <input type="hidden" asp-for="SourceContactName" />
+                        <input type="hidden" asp-for="SourceCity" />
+                        <input type="hidden" asp-for="SourceStateId" />
+                        <input type="hidden" asp-for="SourcePostalCode" />
+                        <input type="hidden" asp-for="Office" />
+                        <input type="hidden" asp-for="Owner" />
+                        <button class="usa-button-outline gaepd-button-inline-action" id="export-tool">Download search results</button>
+                    </form>
+                }
+            }
+        </caption>
+        <thead>
+            <tr>
+                <th scope="col" class="gaepd-sortable" data-label="Sort by" @idColAria>
+                    <a asp-route-submit="Sort"
+                       asp-route-sort="@Model.IdSortAction"
+                       asp-route-complaintStatus="@(Model.ComplaintStatus.ToString())"
+                       asp-route-deleteStatus="@(Model.DeleteStatus.ToString())"
+                       asp-route-DateReceivedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedFrom))"
+                       asp-route-DateReceivedTo="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedTo))"
+                       asp-route-ReceivedById="@(Model.ReceivedById)"
+                       asp-route-DateComplaintClosedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedFrom))"
+                       asp-route-DateComplaintClosedTo="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedTo))"
+                       asp-route-CallerName="@(Model.CallerName)"
+                       asp-route-CallerRepresents="@(Model.CallerRepresents)"
+                       asp-route-ComplaintNature="@(Model.ComplaintNature)"
+                       asp-route-ComplaintLocation="@(Model.ComplaintLocation)"
+                       asp-route-ComplaintDirections="@(Model.ComplaintDirections)"
+                       asp-route-ComplaintCity="@(Model.ComplaintCity)"
+                       asp-route-ComplaintCountyId="@(Model.ComplaintCountyId)"
+                       asp-route-ConcernId="@(Model.ConcernId)"
+                       asp-route-SourceFacilityId="@(Model.SourceFacilityId)"
+                       asp-route-SourceFacilityName="@(Model.SourceFacilityName)"
+                       asp-route-SourceContactName="@(Model.SourceContactName)"
+                       asp-route-SourceCity="@(Model.SourceCity)"
+                       asp-route-SourceStateId="@(Model.SourceStateId)"
+                       asp-route-SourcePostalCode="@(Model.SourcePostalCode)"
+                       asp-route-Office="@(Model.Office)"
+                       asp-route-Owner="@(Model.Owner)"
+                       asp-fragment="search-results">
+                        @Html.DisplayNameFor(model => model.Complaints.FirstOrDefault().ComplaintId)
+                    </a>
+                </th>
+                <th scope="col">@Html.DisplayNameFor(m => m.Complaints.FirstOrDefault().ReceivedByName)</th>
+                <th scope="col" class="gaepd-sortable" data-label="Sort by" @receivedDateColAria>
+                    <a asp-route-submit="Sort"
+                       asp-route-sort="@Model.ReceivedDateSortAction"
+                       asp-route-complaintStatus="@(Model.ComplaintStatus.ToString())"
+                       asp-route-deleteStatus="@(Model.DeleteStatus.ToString())"
+                       asp-route-DateReceivedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedFrom))"
+                       asp-route-DateReceivedTo="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedTo))"
+                       asp-route-ReceivedById="@(Model.ReceivedById)"
+                       asp-route-DateComplaintClosedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedFrom))"
+                       asp-route-DateComplaintClosedTo="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedTo))"
+                       asp-route-CallerName="@(Model.CallerName)"
+                       asp-route-CallerRepresents="@(Model.CallerRepresents)"
+                       asp-route-ComplaintNature="@(Model.ComplaintNature)"
+                       asp-route-ComplaintLocation="@(Model.ComplaintLocation)"
+                       asp-route-ComplaintDirections="@(Model.ComplaintDirections)"
+                       asp-route-ComplaintCity="@(Model.ComplaintCity)"
+                       asp-route-ComplaintCountyId="@(Model.ComplaintCountyId)"
+                       asp-route-ConcernId="@(Model.ConcernId)"
+                       asp-route-SourceFacilityId="@(Model.SourceFacilityId)"
+                       asp-route-SourceFacilityName="@(Model.SourceFacilityName)"
+                       asp-route-SourceContactName="@(Model.SourceContactName)"
+                       asp-route-SourceCity="@(Model.SourceCity)"
+                       asp-route-SourceStateId="@(Model.SourceStateId)"
+                       asp-route-SourcePostalCode="@(Model.SourcePostalCode)"
+                       asp-route-Office="@(Model.Office)"
+                       asp-route-Owner="@(Model.Owner)"
+                       asp-fragment="search-results">
+                        @Html.DisplayNameFor(model => model.Complaints.FirstOrDefault().DateReceived)
+                    </a>
+                </th>
+                <th scope="col" class="gaepd-sortable" data-label="Sort by" @statusColAria>
+                    <a asp-route-submit="Sort"
+                       asp-route-sort="@Model.StatusSortAction"
+                       asp-route-complaintStatus="@(Model.ComplaintStatus.ToString())"
+                       asp-route-deleteStatus="@(Model.DeleteStatus.ToString())"
+                       asp-route-DateReceivedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedFrom))"
+                       asp-route-DateReceivedTo="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedTo))"
+                       asp-route-ReceivedById="@(Model.ReceivedById)"
+                       asp-route-DateComplaintClosedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedFrom))"
+                       asp-route-DateComplaintClosedTo="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedTo))"
+                       asp-route-CallerName="@(Model.CallerName)"
+                       asp-route-CallerRepresents="@(Model.CallerRepresents)"
+                       asp-route-ComplaintNature="@(Model.ComplaintNature)"
+                       asp-route-ComplaintLocation="@(Model.ComplaintLocation)"
+                       asp-route-ComplaintDirections="@(Model.ComplaintDirections)"
+                       asp-route-ComplaintCity="@(Model.ComplaintCity)"
+                       asp-route-ComplaintCountyId="@(Model.ComplaintCountyId)"
+                       asp-route-ConcernId="@(Model.ConcernId)"
+                       asp-route-SourceFacilityId="@(Model.SourceFacilityId)"
+                       asp-route-SourceFacilityName="@(Model.SourceFacilityName)"
+                       asp-route-SourceContactName="@(Model.SourceContactName)"
+                       asp-route-SourceCity="@(Model.SourceCity)"
+                       asp-route-SourceStateId="@(Model.SourceStateId)"
+                       asp-route-SourcePostalCode="@(Model.SourcePostalCode)"
+                       asp-route-Office="@(Model.Office)"
+                       asp-route-Owner="@(Model.Owner)"
+                       asp-fragment="search-results">
+                        @Html.DisplayNameFor(model => model.Complaints.FirstOrDefault().Status)
+                    </a>
+                </th>
+                <th scope="col">@Html.DisplayNameFor(m => m.Complaints.FirstOrDefault().SourceFacilityName)</th>
+                <th scope="col">@Html.DisplayNameFor(m => m.Complaints.FirstOrDefault().CurrentOwnerName)</th>
+                @if (Model.IncludeDeleted)
+                {
+                    <th scope="col">@Html.DisplayNameFor(m => m.Complaints.FirstOrDefault().Deleted)</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Complaints)
+            {
+                rowclass = "";
+                if (item.Deleted == "Deleted")
+                {
+                    rowclass = "gaepd-tablerow-dimmed";
+                }
+                <tr class="@rowclass">
+                    <th scope="row" data-label="@Html.DisplayNameFor(m => item.ComplaintId)">
+                        <a class="usa-button usa-button-outline" asp-action="Details" asp-route-id="@item.ComplaintId">@Html.DisplayFor(m => item.ComplaintId)</a>
+                    </th>
+                    <td data-label="@Html.DisplayNameFor(m => item.ReceivedByName)">@Html.DisplayFor(m => item.ReceivedByName)</td>
+                    <td data-label="@Html.DisplayNameFor(m => item.DateReceived)">@Html.DisplayFor(m => item.DateReceived)</td>
+                    <td data-label="@Html.DisplayNameFor(m => item.Status)">@item.Status</td>
+                    <td data-label="@Html.DisplayNameFor(m => item.SourceFacilityName)">
+                        @if (String.IsNullOrEmpty(item.SourceFacilityName) && String.IsNullOrEmpty(item.SourceLocation) && String.IsNullOrEmpty(item.SourceFacilityId))
+                        {
+                            @CTS.NotEnteredDisplayText;
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(m => item.SourceFacilityName)
+                            @if (item.SourceLocation != null)
+                            {
+                                <br />@Html.DisplayFor(m => item.SourceLocation)
+                            }
+                            @if (item.SourceFacilityId != null)
+                            {
+                                <br /><text>ID: </text>@Html.DisplayFor(m => item.SourceFacilityId)
+                            }
+                        }
+                    </td>
+                    <td data-label="@Html.DisplayNameFor(m => item.CurrentOwnerName)">
+                        @Html.DisplayFor(m => item.CurrentOwnerName)<br />
+                        @Html.DisplayFor(m => item.CurrentOfficeName)
+                    </td>
+                    @if (Model.IncludeDeleted)
+                    {
+                        <td data-label="@Html.DisplayNameFor(m => item.Deleted)">@Html.DisplayFor(m => item.Deleted)</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @if (Model.Complaints.TotalItems > CTS.PageSize)
+    {
+        <div class="gaepd-pagination">
+            @{
+                var pagBegin = Math.Max(1, Math.Min(Model.Complaints.PageIndex - 2, Model.Complaints.TotalPages - 4));
+                var pagEnd = Math.Min(Model.Complaints.TotalPages, Math.Max(Model.Complaints.PageIndex + 2, 5));
+            }
+
+            @if (Model.Complaints.HasPreviousPage)
+            {
+                <a asp-route-submit="Page"
+                   asp-route-page="1"
+                   asp-route-sort="@Model.Sort"
+                   asp-route-complaintStatus="@(Model.ComplaintStatus.ToString())"
+                   asp-route-deleteStatus="@(Model.DeleteStatus.ToString())"
+                   asp-route-DateReceivedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedFrom))"
+                   asp-route-DateReceivedTo="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedTo))"
+                   asp-route-ReceivedById="@(Model.ReceivedById)"
+                   asp-route-DateComplaintClosedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedFrom))"
+                   asp-route-DateComplaintClosedTo="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedTo))"
+                   asp-route-CallerName="@(Model.CallerName)"
+                   asp-route-CallerRepresents="@(Model.CallerRepresents)"
+                   asp-route-ComplaintNature="@(Model.ComplaintNature)"
+                   asp-route-ComplaintLocation="@(Model.ComplaintLocation)"
+                   asp-route-ComplaintDirections="@(Model.ComplaintDirections)"
+                   asp-route-ComplaintCity="@(Model.ComplaintCity)"
+                   asp-route-ComplaintCountyId="@(Model.ComplaintCountyId)"
+                   asp-route-ConcernId="@(Model.ConcernId)"
+                   asp-route-SourceFacilityId="@(Model.SourceFacilityId)"
+                   asp-route-SourceFacilityName="@(Model.SourceFacilityName)"
+                   asp-route-SourceContactName="@(Model.SourceContactName)"
+                   asp-route-SourceCity="@(Model.SourceCity)"
+                   asp-route-SourceStateId="@(Model.SourceStateId)"
+                   asp-route-SourcePostalCode="@(Model.SourcePostalCode)"
+                   asp-route-Office="@(Model.Office)"
+                   asp-route-Owner="@(Model.Owner)"
+                   asp-fragment="search-results"
+                   class="gaepd-pagination-first">
+                    First
+                </a>
+                <a asp-route-submit="Page"
+                   asp-route-page="@(Model.Complaints.PageIndex - 1)"
+                   asp-route-sort="@Model.Sort"
+                   asp-route-complaintStatus="@(Model.ComplaintStatus.ToString())"
+                   asp-route-deleteStatus="@(Model.DeleteStatus.ToString())"
+                   asp-route-DateReceivedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedFrom))"
+                   asp-route-DateReceivedTo="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedTo))"
+                   asp-route-ReceivedById="@(Model.ReceivedById)"
+                   asp-route-DateComplaintClosedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedFrom))"
+                   asp-route-DateComplaintClosedTo="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedTo))"
+                   asp-route-CallerName="@(Model.CallerName)"
+                   asp-route-CallerRepresents="@(Model.CallerRepresents)"
+                   asp-route-ComplaintNature="@(Model.ComplaintNature)"
+                   asp-route-ComplaintLocation="@(Model.ComplaintLocation)"
+                   asp-route-ComplaintDirections="@(Model.ComplaintDirections)"
+                   asp-route-ComplaintCity="@(Model.ComplaintCity)"
+                   asp-route-ComplaintCountyId="@(Model.ComplaintCountyId)"
+                   asp-route-ConcernId="@(Model.ConcernId)"
+                   asp-route-SourceFacilityId="@(Model.SourceFacilityId)"
+                   asp-route-SourceFacilityName="@(Model.SourceFacilityName)"
+                   asp-route-SourceContactName="@(Model.SourceContactName)"
+                   asp-route-SourceCity="@(Model.SourceCity)"
+                   asp-route-SourceStateId="@(Model.SourceStateId)"
+                   asp-route-SourcePostalCode="@(Model.SourcePostalCode)"
+                   asp-route-Office="@(Model.Office)"
+                   asp-route-Owner="@(Model.Owner)"
+                   asp-fragment="search-results"
+                   class="gaepd-pagination-prev">
+                    Previous
+                </a>
+            }
+            else
+            {
+                <span class="gaepd-pagination-first gaepd-pagination-disabled" title="First">First</span>
+                <span class="gaepd-pagination-prev gaepd-pagination-disabled" title="Previous">Prev</span>
+            }
+
+            <div class="gaepd-pagination-inner">
+                @if (pagBegin > 1)
+                {
+                    <span>…</span>
+                }
+
+                @for (var i = pagBegin; i <= pagEnd; i++)
+                {
+                    <a asp-route-submit="Page"
+                       asp-route-page="@i"
+                       asp-route-sort="@Model.Sort"
+                       asp-route-complaintStatus="@(Model.ComplaintStatus.ToString())"
+                       asp-route-deleteStatus="@(Model.DeleteStatus.ToString())"
+                       asp-route-DateReceivedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedFrom))"
+                       asp-route-DateReceivedTo="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedTo))"
+                       asp-route-ReceivedById="@(Model.ReceivedById)"
+                       asp-route-DateComplaintClosedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedFrom))"
+                       asp-route-DateComplaintClosedTo="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedTo))"
+                       asp-route-CallerName="@(Model.CallerName)"
+                       asp-route-CallerRepresents="@(Model.CallerRepresents)"
+                       asp-route-ComplaintNature="@(Model.ComplaintNature)"
+                       asp-route-ComplaintLocation="@(Model.ComplaintLocation)"
+                       asp-route-ComplaintDirections="@(Model.ComplaintDirections)"
+                       asp-route-ComplaintCity="@(Model.ComplaintCity)"
+                       asp-route-ComplaintCountyId="@(Model.ComplaintCountyId)"
+                       asp-route-ConcernId="@(Model.ConcernId)"
+                       asp-route-SourceFacilityId="@(Model.SourceFacilityId)"
+                       asp-route-SourceFacilityName="@(Model.SourceFacilityName)"
+                       asp-route-SourceContactName="@(Model.SourceContactName)"
+                       asp-route-SourceCity="@(Model.SourceCity)"
+                       asp-route-SourceStateId="@(Model.SourceStateId)"
+                       asp-route-SourcePostalCode="@(Model.SourcePostalCode)"
+                       asp-route-Office="@(Model.Office)"
+                       asp-route-Owner="@(Model.Owner)"
+                       asp-fragment="search-results"
+                       class="@(Model.Complaints.PageIndex == i ? "gaepd-pagination-active" : "")">
+                        @i
+                    </a>
+                }
+
+                @if (pagEnd < Model.Complaints.TotalPages)
+                {
+                    <span>…</span>
+                }
+            </div>
+
+            @if (Model.Complaints.HasNextPage)
+            {
+                <a asp-route-submit="Page"
+                   asp-route-page="@(Model.Complaints.PageIndex + 1)"
+                   asp-route-sort="@Model.Sort"
+                   asp-route-complaintStatus="@(Model.ComplaintStatus.ToString())"
+                   asp-route-deleteStatus="@(Model.DeleteStatus.ToString())"
+                   asp-route-DateReceivedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedFrom))"
+                   asp-route-DateReceivedTo="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedTo))"
+                   asp-route-ReceivedById="@(Model.ReceivedById)"
+                   asp-route-DateComplaintClosedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedFrom))"
+                   asp-route-DateComplaintClosedTo="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedTo))"
+                   asp-route-CallerName="@(Model.CallerName)"
+                   asp-route-CallerRepresents="@(Model.CallerRepresents)"
+                   asp-route-ComplaintNature="@(Model.ComplaintNature)"
+                   asp-route-ComplaintLocation="@(Model.ComplaintLocation)"
+                   asp-route-ComplaintDirections="@(Model.ComplaintDirections)"
+                   asp-route-ComplaintCity="@(Model.ComplaintCity)"
+                   asp-route-ComplaintCountyId="@(Model.ComplaintCountyId)"
+                   asp-route-ConcernId="@(Model.ConcernId)"
+                   asp-route-SourceFacilityId="@(Model.SourceFacilityId)"
+                   asp-route-SourceFacilityName="@(Model.SourceFacilityName)"
+                   asp-route-SourceContactName="@(Model.SourceContactName)"
+                   asp-route-SourceCity="@(Model.SourceCity)"
+                   asp-route-SourceStateId="@(Model.SourceStateId)"
+                   asp-route-SourcePostalCode="@(Model.SourcePostalCode)"
+                   asp-route-Office="@(Model.Office)"
+                   asp-route-Owner="@(Model.Owner)"
+                   asp-fragment="search-results"
+                   class="gaepd-pagination-next">
+                    Next
+                </a>
+                <a asp-route-submit="Page"
+                   asp-route-page="@(Model.Complaints.TotalPages)"
+                   asp-route-sort="@Model.Sort"
+                   asp-route-complaintStatus="@(Model.ComplaintStatus.ToString())"
+                   asp-route-deleteStatus="@(Model.DeleteStatus.ToString())"
+                   asp-route-DateReceivedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedFrom))"
+                   asp-route-DateReceivedTo="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedTo))"
+                   asp-route-ReceivedById="@(Model.ReceivedById)"
+                   asp-route-DateComplaintClosedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedFrom))"
+                   asp-route-DateComplaintClosedTo="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedTo))"
+                   asp-route-CallerName="@(Model.CallerName)"
+                   asp-route-CallerRepresents="@(Model.CallerRepresents)"
+                   asp-route-ComplaintNature="@(Model.ComplaintNature)"
+                   asp-route-ComplaintLocation="@(Model.ComplaintLocation)"
+                   asp-route-ComplaintDirections="@(Model.ComplaintDirections)"
+                   asp-route-ComplaintCity="@(Model.ComplaintCity)"
+                   asp-route-ComplaintCountyId="@(Model.ComplaintCountyId)"
+                   asp-route-ConcernId="@(Model.ConcernId)"
+                   asp-route-SourceFacilityId="@(Model.SourceFacilityId)"
+                   asp-route-SourceFacilityName="@(Model.SourceFacilityName)"
+                   asp-route-SourceContactName="@(Model.SourceContactName)"
+                   asp-route-SourceCity="@(Model.SourceCity)"
+                   asp-route-SourceStateId="@(Model.SourceStateId)"
+                   asp-route-SourcePostalCode="@(Model.SourcePostalCode)"
+                   asp-route-Office="@(Model.Office)"
+                   asp-route-Owner="@(Model.Owner)"
+                   asp-fragment="search-results"
+                   class="gaepd-pagination-last">
+                    Last
+                </a>
+            }
+            else
+            {
+                <span class="gaepd-pagination-next gaepd-pagination-disabled" title="Next">Next</span>
+                <span class="gaepd-pagination-last gaepd-pagination-disabled" title="Last">Last</span>
+            }
+        </div>
+    }
+}
+
+@section PageScripts {
+    <script type="text/javascript">
+        $(document).ready(function domReady() {
+
+            // Make owner select list hierarchical from Office select list
+            var OfficeIdSource = "#Office";
+            var OwnerIdDest = "#Owner";
+            $(OfficeIdSource).change(function loadUsersList() {
+                var url = '@Url.Content("~/")' + "api/Users/GetAll/" + $(OfficeIdSource).val();
+                $.getJSON(url, function processJsonResult(result) {
+                    if (result == null || result.length == 0) {
+                        var items = "<option selected value=''>@selectText</option>";
+                        $(OwnerIdDest).empty().html(items).prop('disabled', false);
+                    } else {
+                        var items = "<option selected value=''>@selectText</option>";
+                        $.each(result, function (i, item) {
+                            items += "<option value='" + item.value + "'>" + item.text + "</option>";
+                        });
+                        $(OwnerIdDest).empty().html(items).prop('disabled', false);
+                    }
+                }).fail(function jsonRequestFailed(d, textStatus, error) {
+                    console.error("getJSON failed, status: " + textStatus + ", error: " + error);
+                    var items = "<option selected value=''>Error</option>";
+                    $(OwnerIdDest).empty().html(items).prop('disabled', true);
+                });
+            });
+
+            // Set up date/time pickers
+            $('.datepicker')
+                .datepicker({
+                    dateFormat: 'm-d-yy'
+                })
+                .attr("placeholder", "m-d-yyyy");
+
+            // Don't submit empty form fields
+            $('#submit').click(function OnSearchSubmit() {
+                $('input').each(function(i) {
+                    var $input = $(this);
+                    if ($input.val() == '')
+                        $input.attr('disabled', 'disabled');
+                });
+                $('select').each(function(i) {
+                    var $input = $(this);
+                    if ($input.val() == '')
+                        $input.attr('disabled', 'disabled');
+                });
+            });
+        });
+    </script>
+}

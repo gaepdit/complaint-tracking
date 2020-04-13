@@ -1,0 +1,59 @@
+﻿@if (User.Identity.IsAuthenticated)
+{
+    var Email = User?.Identity?.Name;
+    string EmailMD5Hash = "";
+
+    if (!string.IsNullOrEmpty(Email))
+    {
+        EmailMD5Hash = string.Join("",
+            System.Security.Cryptography.MD5.Create()
+            .ComputeHash(System.Text.Encoding.ASCII.GetBytes(Email))
+            .Select(s => s.ToString("x2")));
+    }
+
+    <nav role="navigation" class="usa-nav">
+        <button class="usa-nav-close">
+            <img src="~/assets/img/close.svg" alt="close">
+        </button>
+        <ul class="usa-nav-primary usa-accordion">
+            @if (ViewData["Public"] != null)
+            {
+                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+            }
+            <li><a asp-controller="Complaints" asp-action="Create">+ New Complaint</a></li>
+            <li>
+                <button class="usa-accordion-button usa-nav-link" aria-expanded="false" aria-controls="side-nav-1">
+                    <span>Search</span>
+                </button>
+                <ul id="side-nav-1" class="usa-nav-submenu" aria-hidden="true">
+                    <li><a asp-controller="Complaints" asp-action="Index">Search Complaints</a></li>
+                    <li><a asp-controller="ComplaintActions" asp-action="Index">Search Complaint Actions</a></li>
+                </ul>
+            </li>
+            <li>
+                <button class="usa-accordion-button usa-nav-link" aria-expanded="false" aria-controls="side-nav-2">
+                    <span>Admin</span>
+                </button>
+                <ul id="side-nav-2" class="usa-nav-submenu" aria-hidden="true">
+                    <li>
+                        <a asp-controller="Account" asp-action="Index">
+                            <img src="https://www.gravatar.com/avatar/@EmailMD5Hash?s=32&r=pg&d=identicon" class="gaepd-avatar" alt="" />
+                            My Account
+                        </a>
+                    </li>
+                    <li>
+                        <form asp-controller="Account" asp-action="Logout" method="post" id="logoutMenu">
+                            <button type="submit" aria-label="Sign out" class="usa-button gaepd-nav-button">Sign out</button>
+                        </form>
+                    </li>
+                    <li><hr /></li>
+                    <li><a asp-controller="Reports" asp-action="Index">Reports</a></li>
+                    <li><a asp-controller="Users" asp-action="Index">CTS Users</a></li>
+                    <li><a asp-controller="Maintenance" asp-action="Index">Maintenance</a></li>
+                    <li><a asp-controller="Public" asp-action="Index">Public Portal</a></li>
+                    <li><a asp-controller="Support" asp-action="Index">Support</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+}

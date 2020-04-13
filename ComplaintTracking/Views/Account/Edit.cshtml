@@ -1,0 +1,45 @@
+﻿@model EditAccountViewModel
+@{
+    ViewData["Title"] = "Edit Your Profile";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-controller="Account" asp-action="Edit" method="post" class="usa-form">
+    <label asp-for="FirstName"></label>
+    <input asp-for="FirstName" />
+    <span asp-validation-for="FirstName" class="usa-input-error-message"></span>
+
+    <label asp-for="LastName"></label>
+    <input asp-for="LastName" />
+    <span asp-validation-for="LastName" class="usa-input-error-message"></span>
+
+    <label asp-for="Email"></label>
+    <input asp-for="Email" />
+    <span asp-validation-for="Email" class="usa-input-error-message"></span>
+
+    <label asp-for="Phone"></label>
+    <input asp-for="Phone" />
+    <span asp-validation-for="Phone" class="usa-input-error-message"></span>
+
+    <label asp-for="OfficeId"></label>
+    <select asp-for="OfficeId" asp-items="Model.OfficeSelectList">
+        <option value="">@CTS.SelectOfficeText</option>
+    </select>
+    <span asp-validation-for="OfficeId" class="usa-input-error-message"></span>
+
+    <div class="gaepd-buttonrow">
+        <button type="submit">Save</button>
+        <a asp-action="Index" class="usa-button usa-button-outline">Cancel</a>
+    </div>
+</form>
+
+<p>
+    <img src="https://www.gravatar.com/avatar/@Model.EmailMD5Hash?s=128&r=pg&d=identicon" class="gaepd-avatar" alt="Account image" />
+    <br />Edit your account image at <a href="https://gravatar.com">gravatar.com</a>.
+</p>
+
+
+@section PageScripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

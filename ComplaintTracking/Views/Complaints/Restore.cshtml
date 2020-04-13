@@ -1,0 +1,18 @@
+﻿@model RestoreComplaintViewModel
+
+@{
+    ViewData["Title"] = $"Restore Deleted Complaint ID {Model.Id}";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="Restore">
+    <label asp-for="Comment"></label>
+    <textarea asp-for="Comment"></textarea>
+    <span asp-validation-for="Comment" class="usa-input-error-message"></span>
+
+    <div class="gaepd-buttonrow">
+        <button type="submit">Restore</button>
+        <a asp-action="Details" asp-route-id="@Model.Id" class="usa-button usa-button-outline">Cancel</a>
+    </div>
+</form>

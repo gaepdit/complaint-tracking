@@ -1,0 +1,95 @@
+﻿
+@{
+    ViewData["Title"] = "User Roles and Capabilities";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h2 id="public">Public</h2>
+
+<p>Visitors to this site who are not logged in can only do the following:</p>
+
+<ul>
+    <li>Search for and view basic info for all Complaints, excluding caller info.</li>
+    <li>Search for and view all info for Complaints that have been closed, excluding caller info.</li>
+</ul>
+
+<h2 id="staff">Staff</h2>
+
+<p>All Users with CTS accounts who are logged into the application can:</p>
+
+<ul>
+    <li>Create new Complaints and either assign them to Users within the same Office or to the Master User of another Office.</li>
+    <li>Edit Complaints assigned to them.</li>
+    <li>Add/edit Complaint Actions for Complaints assigned to them.</li>
+    <li>Transfer (reassign) their Complaints to other Users within the same Office or to the Master User of another Office.</li>
+    <li>Search for and view all info for all Complaints, excluding deleted Complaints and deleted Complaint Actions.</li>
+    <li>View a list of CTS Users.</li>
+    <li>View the lookup tables for Complaint Action Types and Areas of Concern.</li>
+    <li>View reports for self.</li>
+    <li>Edit account info for self, including changing assigned Office.</li>
+</ul>
+
+<h2 id="master-users">Master Users</h2>
+
+<p>One User in each Office is designated the “Master User” for that Office. The Master User can:</p>
+
+<ul>
+    <li>Assign unassigned Complaints to users within that Office.</li>
+</ul>
+
+<h2 id="cts-roles">CTS Roles</h2>
+
+<p>Users can be granted one or more of the following roles.</p>
+
+<ul>
+    <li>
+        <h3>Manager</h3>
+
+        <p>Users in the Manager role can:</p>
+
+        <ul>
+            <li>Reassign open Complaints currently assigned to Users in the same Office.</li>
+            <li>Edit Complaints assigned to Users in the same Office.</li>
+            <li>Approve &amp; close Complaints that have been submitted for review.</li>
+            <li>Edit all Complaint Actions.</li>
+            <li>Delete and restore Complaint Actions.</li>
+            <li>View deleted Complaint Actions.</li>
+            <li>View reports for all Users within the same Office.</li>
+        </ul>
+    </li>
+    <li>
+        <h3>Division Manager</h3>
+
+        <p>Users in the Division Manager role have all of the capabilities of a Manager, plus they can:</p>
+
+        <ul>
+            <li>Create and manage CTS User accounts and assign roles, including the Division Manager role.</li>
+            <li>Edit EPD Offices and designate the Master User for each Office.</li>
+            <li>Edit the lookup tables for Complaint Action Types and Areas of Concern.</li>
+            <li>Edit all Complaints.</li>
+            <li>Reopen Complaints that have been closed.</li>
+            <li>Delete and restore Complaints.</li>
+            <li>View deleted Complaints.</li>
+            <li>View reports for all Users.</li>
+        </ul>
+    </li>
+    <li>
+        <h3>User Account Admin</h3>
+
+        <p>Users in the User Account Admin role can:</p>
+
+        <ul>
+            <li>Create and manage CTS User accounts and assign roles, excluding the Division Manager role.</li>
+        </ul>
+    </li>
+    <li>
+        <h3>Data Export</h3>
+
+        <p>Users in the Data Export role can:</p>
+
+        <ul>
+            <li>Generate a ZIP archive of Complaints.</li>
+        </ul>
+    </li>
+</ul>

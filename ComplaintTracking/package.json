@@ -1,0 +1,24 @@
+{
+  "name": "complaint-tracking",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Complaint Tracking System",
+  "author": "Doug Waldron <douglas.waldron@dnr.ga.gov>",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "natives": "1.1.4",
+    "rimraf": "^2.5.4"
+  },
+  "dependencies": {
+    "@fancyapps/fancybox": "3.2.5",
+    "ga-epd-wds": "1.20.0",
+    "jquery": "^3.4.1",
+    "jquery-timepicker": "1.3.3",
+    "jquery-ui-dist": "1.12.1",
+    "jquery-validation-unobtrusive": "^3.2.11"
+  },
+  "scripts": {
+    "cypress": "cypress open"
+  }
+}

@@ -1,0 +1,461 @@
+﻿@model CreateComplaintViewModel
+
+@{
+    ViewData["Title"] = "Add New Complaint";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <ul class="usa-accordion-bordered">
+        <li>
+            <button type="button" class="usa-accordion-button" aria-controls="received" aria-expanded="true">
+                Received
+            </button>
+            <div id="received" class="usa-accordion-content usa-grid-full">
+                <div class="usa-width-one-half">
+                    <fieldset>
+                        <label asp-for="DateReceivedDate"></label>
+                        <div class="usa-input-grid usa-input-grid-medium">
+                            <input asp-for="DateReceivedDate" class="datepicker" />
+                        </div>
+                        <label asp-for="DateReceivedTime" class="usa-sr-only"></label>
+                        <div class="usa-input-grid usa-input-grid-small">
+                            <input asp-for="DateReceivedTime" class="timepicker" />
+                        </div>
+                    </fieldset>
+                    <span asp-validation-for="DateReceivedDate" class="usa-input-error-message"></span>
+                    <span asp-validation-for="DateReceivedTime" class="usa-input-error-message"></span>
+                </div>
+                <div class="usa-width-one-half">
+                    <fieldset>
+                        <label asp-for="ReceivedById"></label>
+                        <select asp-for="ReceivedById" asp-items="Model.SelectLists.AllUsersSelectList"></select>
+                        <span asp-validation-for="ReceivedById" class="usa-input-error-message"></span>
+                    </fieldset>
+                </div>
+            </div>
+        </li>
+
+        <li>
+            <button type="button" class="usa-accordion-button" aria-controls="caller">
+                Caller
+            </button>
+            <div id="caller" class="usa-accordion-content">
+                <div class="usa-grid-full">
+                    <div class="usa-width-one-half">
+                        <label asp-for="CallerName"></label>
+                        <input asp-for="CallerName" />
+                        <span asp-validation-for="CallerName" class="usa-input-error-message"></span>
+
+                        <label asp-for="CallerRepresents"></label>
+                        <input asp-for="CallerRepresents" />
+                        <span asp-validation-for="CallerRepresents" class="usa-input-error-message"></span>
+
+                        <label asp-for="CallerEmail"></label>
+                        <input asp-for="CallerEmail" />
+                        <span asp-validation-for="CallerEmail" class="usa-input-error-message"></span>
+
+                        <label asp-for="CallerPhoneNumber"></label>
+                        <div>
+                            <div class="usa-input-grid usa-input-grid-medium">
+                                <input asp-for="CallerPhoneNumber" />
+                                <span asp-validation-for="CallerPhoneNumber" class="usa-input-error-message"></span>
+                            </div>
+                            <div class="usa-input-grid usa-input-grid-small">
+                                <select asp-for="CallerPhoneType" asp-items="Model.SelectLists.PhoneTypesSelectList">
+                                    <option value="">@CTS.SelectPhoneTypeText</option>
+                                </select>
+                                <span asp-validation-for="CallerPhoneType" class="usa-input-error-message"></span>
+                            </div>
+                        </div>
+
+                        <label asp-for="CallerSecondaryPhoneNumber"></label>
+                        <div>
+                            <div class="usa-input-grid usa-input-grid-medium">
+                                <input asp-for="CallerSecondaryPhoneNumber" />
+                                <span asp-validation-for="CallerSecondaryPhoneNumber" class="usa-input-error-message"></span>
+                            </div>
+                            <div class="usa-input-grid usa-input-grid-small">
+                                <select asp-for="CallerSecondaryPhoneType" asp-items="Model.SelectLists.PhoneTypesSelectList">
+                                    <option value="">@CTS.SelectPhoneTypeText</option>
+                                </select>
+                                <span asp-validation-for="CallerSecondaryPhoneType" class="usa-input-error-message"></span>
+                            </div>
+                        </div>
+
+                        <label asp-for="CallerTertiaryPhoneNumber"></label>
+                        <div>
+                            <div class="usa-input-grid usa-input-grid-medium">
+                                <input asp-for="CallerTertiaryPhoneNumber" />
+                                <span asp-validation-for="CallerTertiaryPhoneNumber" class="usa-input-error-message"></span>
+                            </div>
+                            <div class="usa-input-grid usa-input-grid-small">
+                                <select asp-for="CallerTertiaryPhoneType" asp-items="Model.SelectLists.PhoneTypesSelectList">
+                                    <option value="">@CTS.SelectPhoneTypeText</option>
+                                </select>
+                                <span asp-validation-for="CallerTertiaryPhoneType" class="usa-input-error-message"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <fieldset class="usa-width-one-half">
+                        <legend>Caller address</legend>
+                        <label asp-for="CallerStreet"></label>
+                        <input asp-for="CallerStreet" />
+                        <span asp-validation-for="CallerStreet" class="usa-input-error-message"></span>
+
+                        <label asp-for="CallerStreet2"></label>
+                        <input asp-for="CallerStreet2" />
+                        <span asp-validation-for="CallerStreet2" class="usa-input-error-message"></span>
+
+                        <div>
+                            <div class="usa-input-grid usa-input-grid-medium">
+                                <label asp-for="CallerCity"></label>
+                                <input asp-for="CallerCity" />
+                                <span asp-validation-for="CallerCity" class="usa-input-error-message"></span>
+                            </div>
+                            <div class="usa-input-grid usa-input-grid-small">
+                                <label asp-for="CallerStateId"></label>
+                                <select asp-for="CallerStateId" asp-items="Model.SelectLists.StatesSelectList">
+                                    <option value="">@CTS.SelectStateText</option>
+                                </select>
+                                <span asp-validation-for="CallerStateId" class="usa-input-error-message"></span>
+                            </div>
+                        </div>
+
+                        <label asp-for="CallerPostalCode"></label>
+                        <input asp-for="CallerPostalCode" class="usa-input-medium" />
+                        <span asp-validation-for="CallerPostalCode" class="usa-input-error-message"></span>
+                    </fieldset>
+                </div>
+            </div>
+        </li>
+
+        <li>
+            <button type="button" class="usa-accordion-button" aria-controls="complaint">
+                Complaint
+            </button>
+            <div id="complaint" class="usa-accordion-content">
+                <div class="usa-grid-full">
+                    <div class="usa-width-one-half">
+                        <label asp-for="ComplaintNature"></label>
+                        <textarea asp-for="ComplaintNature"></textarea>
+                        <span asp-validation-for="ComplaintNature" class="usa-input-error-message"></span>
+
+                        <label asp-for="ComplaintLocation"></label>
+                        <textarea asp-for="ComplaintLocation"></textarea>
+                        <span asp-validation-for="ComplaintLocation" class="usa-input-error-message"></span>
+
+                        <label asp-for="ComplaintDirections"></label>
+                        <textarea asp-for="ComplaintDirections"></textarea>
+                        <span asp-validation-for="ComplaintDirections" class="usa-input-error-message"></span>
+                    </div>
+                    <div class="usa-width-one-half">
+                        <label asp-for="ComplaintCity"></label>
+                        <input asp-for="ComplaintCity" />
+                        <span asp-validation-for="ComplaintCity" class="usa-input-error-message"></span>
+
+                        <label asp-for="ComplaintCountyId"></label>
+                        <select asp-for="ComplaintCountyId" asp-items="Model.SelectLists.CountiesSelectList">
+                            <option value="">@CTS.SelectCountyText</option>
+                        </select>
+                        <span asp-validation-for="ComplaintCountyId" class="usa-input-error-message"></span>
+
+                        <label asp-for="PrimaryConcernId"></label>
+                        <select asp-for="PrimaryConcernId" asp-items="Model.SelectLists.AreasOfConcernSelectList">
+                            <option value="">@CTS.SelectConcernText</option>
+                        </select>
+                        <span asp-validation-for="PrimaryConcernId" class="usa-input-error-message"></span>
+
+                        <label asp-for="SecondaryConcernId"></label>
+                        <select asp-for="SecondaryConcernId" asp-items="Model.SelectLists.AreasOfConcernSelectList">
+                            <option value="">@CTS.SelectConcernText</option>
+                        </select>
+                        <span asp-validation-for="SecondaryConcernId" class="usa-input-error-message"></span>
+                    </div>
+                </div>
+            </div>
+        </li>
+
+        <li>
+            <button type="button" class="usa-accordion-button" aria-controls="source">
+                Source
+            </button>
+            <div id="source" class="usa-accordion-content">
+                <div class="usa-grid-full">
+                    <div class="usa-width-one-half">
+                        <label asp-for="SourceFacilityId"></label>
+                        <input asp-for="SourceFacilityId" />
+                        <span asp-validation-for="SourceFacilityId" class="usa-input-error-message"></span>
+
+                        <label asp-for="SourceContactName"></label>
+                        <input asp-for="SourceContactName" />
+                        <span asp-validation-for="SourceContactName" class="usa-input-error-message"></span>
+
+                        <label asp-for="SourceFacilityName"></label>
+                        <input asp-for="SourceFacilityName" />
+                        <span asp-validation-for="SourceFacilityName" class="usa-input-error-message"></span>
+
+                        <label asp-for="SourceEmail"></label>
+                        <input asp-for="SourceEmail" />
+                        <span asp-validation-for="SourceEmail" class="usa-input-error-message"></span>
+
+                        <label asp-for="SourcePhoneNumber"></label>
+                        <div>
+                            <div class="usa-input-grid usa-input-grid-medium">
+                                <input asp-for="SourcePhoneNumber" />
+                                <span asp-validation-for="SourcePhoneNumber" class="usa-input-error-message"></span>
+                            </div>
+                            <div class="usa-input-grid usa-input-grid-small">
+                                <select asp-for="SourcePhoneType" asp-items="Model.SelectLists.PhoneTypesSelectList">
+                                    <option value="">@CTS.SelectPhoneTypeText</option>
+                                </select>
+                                <span asp-validation-for="SourcePhoneType" class="usa-input-error-message"></span>
+                            </div>
+                        </div>
+
+                        <label asp-for="SourceSecondaryPhoneNumber"></label>
+                        <div>
+                            <div class="usa-input-grid usa-input-grid-medium">
+                                <input asp-for="SourceSecondaryPhoneNumber" />
+                                <span asp-validation-for="SourceSecondaryPhoneNumber" class="usa-input-error-message"></span>
+                            </div>
+                            <div class="usa-input-grid usa-input-grid-small">
+                                <select asp-for="SourceSecondaryPhoneType" asp-items="Model.SelectLists.PhoneTypesSelectList">
+                                    <option value="">@CTS.SelectPhoneTypeText</option>
+                                </select>
+                                <span asp-validation-for="SourceSecondaryPhoneType" class="usa-input-error-message"></span>
+                            </div>
+                        </div>
+
+                        <label asp-for="SourceTertiaryPhoneNumber"></label>
+                        <div>
+                            <div class="usa-input-grid usa-input-grid-medium">
+                                <input asp-for="SourceTertiaryPhoneNumber" />
+                                <span asp-validation-for="SourceTertiaryPhoneNumber" class="usa-input-error-message"></span>
+                            </div>
+                            <div class="usa-input-grid usa-input-grid-small">
+                                <select asp-for="SourceTertiaryPhoneType" asp-items="Model.SelectLists.PhoneTypesSelectList">
+                                    <option value="">@CTS.SelectPhoneTypeText</option>
+                                </select>
+                                <span asp-validation-for="SourceTertiaryPhoneType" class="usa-input-error-message"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="usa-width-one-half">
+                        <fieldset>
+                            <legend>Source address</legend>
+                            <label asp-for="SourceStreet"></label>
+                            <input asp-for="SourceStreet" />
+                            <span asp-validation-for="SourceStreet" class="usa-input-error-message"></span>
+
+                            <label asp-for="SourceStreet2"></label>
+                            <input asp-for="SourceStreet2" />
+                            <span asp-validation-for="SourceStreet2" class="usa-input-error-message"></span>
+
+                            <div>
+                                <div class="usa-input-grid usa-input-grid-medium">
+                                    <label asp-for="SourceCity"></label>
+                                    <input asp-for="SourceCity" />
+                                    <span asp-validation-for="SourceCity" class="usa-input-error-message"></span>
+                                </div>
+                                <div class="usa-input-grid usa-input-grid-small">
+                                    <label asp-for="SourceStateId"></label>
+                                    <select asp-for="SourceStateId" asp-items="Model.SelectLists.StatesSelectList">
+                                        <option value="">@CTS.SelectStateText</option>
+                                    </select>
+                                    <span asp-validation-for="SourceStateId" class="usa-input-error-message"></span>
+                                </div>
+                            </div>
+
+                            <label asp-for="SourcePostalCode"></label>
+                            <input asp-for="SourcePostalCode" class="usa-input-medium" />
+                            <span asp-validation-for="SourcePostalCode" class="usa-input-error-message"></span>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </li>
+
+        <li>
+            <button type="button" class="usa-accordion-button" aria-controls="attachments">
+                Attachments
+            </button>
+            <div id="attachments" class="usa-accordion-content gaepd-form-fileupload">
+                <p>Selected files will be uploaded when Complaint is saved.</p>
+                <input asp-for="Attachments" class="filesUploadInput" data-multiple-caption="{count} files selected"
+                       accept=".txt,.jpg,.jpeg,.png,.gif,.svg,.pdf,.html,.htm,.csv,.xlsx,.xls,.rtf,.docx,.doc,.ppt,.pptx" />
+                <label for="Attachments" class="filesUploadLabel">
+                    <kbd class="usa-button usa-button-outline usa-button-active">&nbsp;</kbd><span class="usa-button usa-button-active">Choose files...</span>
+                </label>
+                <span class="filesUploadInfo"></span>
+                <p>
+                    <em>
+                        Supported file types are images, documents, and spreadsheets.<br />
+                        All files must comply with
+                        <a href="~/static/Complaint-Attachments-Policy.pdf" target="_blank">EPD’s complaint attachments policy (<abbr>PDF</abbr>)</a>.
+                    </em>
+                </p>
+            </div>
+        </li>
+
+        <li>
+            <button type="button" class="usa-accordion-button" aria-controls="assignment">
+                Assignment
+            </button>
+            <div id="assignment" class="usa-accordion-content">
+                <div class="usa-grid-full">
+                    <div class="usa-width-one-half">
+                        <label asp-for="CurrentOfficeId"></label>
+                        <select asp-for="CurrentOfficeId" asp-items="Model.SelectLists.OfficesSelectList">
+                            <option value="">@CTS.SelectOfficeText</option>
+                        </select>
+                        <span asp-validation-for="CurrentOfficeId" class="usa-input-error-message"></span>
+                    </div>
+                    <div class="usa-width-one-half">
+                        <label asp-for="CurrentOwnerId"></label>
+                        @if (Model.DisableCurrentOwnerSelect)
+                        {
+                            <select asp-for="CurrentOwnerId" asp-items="Model.SelectLists.UsersInOfficeSelectList" disabled="disabled">
+                                <option value="">@CTS.SelectUserMasterText</option>
+                            </select>
+                        }
+                        else
+                        {
+                            <select asp-for="CurrentOwnerId" asp-items="Model.SelectLists.UsersInOfficeSelectList">
+                                <option value="">@CTS.SelectUserMasterText</option>
+                            </select>
+                        }
+                        <span asp-validation-for="CurrentOwnerId" class="usa-input-error-message"></span>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+
+    <div class="gaepd-buttonrow">
+        <button type="submit">Save Complaint</button>
+        <a asp-controller="Home" asp-action="Index" class="usa-button usa-button-outline">Cancel</a>
+    </div>
+</form>
+
+@section PageScripts {
+    <script type="text/javascript">
+        $(document).ready(function domReady() {
+
+            // Make owner select list hierarchical from Office select list
+            var OfficeIdSource = "#CurrentOfficeId";
+            var OwnerIdDest = "#CurrentOwnerId";
+            $(OfficeIdSource).change(function loadUsersList() {
+                if ($(OfficeIdSource).val() != "") {
+                    var url = '@Url.Content("~/")' + "api/Users/ByOffice/" + $(OfficeIdSource).val();
+                    $.getJSON(url, function processJsonResult(result) {
+                        if (result == null || result.length == 0) {
+                            var items = "<option selected value=''>@CTS.SelectUserMasterText</option>";
+                            $(OwnerIdDest).empty().html(items).prop('disabled', true);
+                        } else {
+                            var items = "<option selected value=''>@CTS.SelectUserMasterText</option>";
+                            $.each(result, function (i, item) {
+                                items += "<option value='" + item.value + "'>" + item.text + "</option>";
+                            });
+                            $(OwnerIdDest).empty().html(items).prop('disabled', false);
+                        }
+                    }).fail(function jsonRequestFailed(d, textStatus, error) {
+                        console.error("getJSON failed, status: " + textStatus + ", error: " + error);
+                        var items = "<option selected value=''>Error</option>";
+                        $(OwnerIdDest).empty().html(items).prop('disabled', true);
+                    });
+                } else {
+                    var items = "<option selected value=''>@CTS.SelectUserMasterText</option>";
+                    $(OwnerIdDest).empty().html(items).prop('disabled', true);
+                }
+            });
+
+            // Add button to copy Caller info to Source info
+            $('#source').prepend(
+                $('<button type="button">Copy info from Caller</button>')
+                .click(function copyCallerToSource() {
+                    $("#SourceContactName").val($("#CallerName").val());
+                    $("#SourceEmail").val($("#CallerEmail").val());
+                    $("#SourcePhoneNumber").val($("#CallerPhoneNumber").val());
+                    $("#SourcePhoneType").val($("#CallerPhoneType").val());
+                    $("#SourceSecondaryPhoneNumber").val($("#CallerSecondaryPhoneNumber").val());
+                    $("#SourceSecondaryPhoneType").val($("#CallerSecondaryPhoneType").val());
+                    $("#SourceTertiaryPhoneNumber").val($("#CallerTertiaryPhoneNumber").val());
+                    $("#SourceTertiaryPhoneType").val($("#CallerTertiaryPhoneType").val());
+                    $("#SourceStreet").val($("#CallerStreet").val());
+                    $("#SourceStreet2").val($("#CallerStreet2").val());
+                    $("#SourceCity").val($("#CallerCity").val());
+                    $("#SourceStateId").val($("#CallerStateId").val());
+                    $("#SourcePostalCode").val($("#CallerPostalCode").val());
+                })
+            );
+
+            // Set up date/time pickers
+            $('.datepicker')
+                .datepicker({
+                    dateFormat: 'm-d-yy'
+                })
+                .attr("placeholder", "m-d-yyyy");
+
+            var interval = 30;
+            var tp = $('#DateReceivedTime');
+            var newTime = null;
+            if (tp.val() == '') {
+                var d = new Date();
+                var m = (((d.getMinutes() + interval / 2) / interval | 0) * interval) % 60;
+                var h = ((((d.getMinutes() / (120 - interval)) + .5) | 0) + d.getHours()) % 24;
+                var newTime = new Date(0,0,0,h,m);
+            }
+            $('.timepicker').timepicker({
+                timeFormat: 'h:mm p',
+                interval: interval,
+                dropdown: true,
+                scrollbar: true,
+                defaultTime: newTime,
+            });
+
+            // File upload button behavior
+            var filesUploadInput = document.getElementsByClassName('filesUploadInput')[0];
+            if (filesUploadInput != undefined) {
+                var filesUploadLabel = document.getElementsByClassName('filesUploadLabel')[0];
+                var filesUploadInfo = document.getElementsByClassName('filesUploadInfo')[0];
+                var filesUploadLabelStart = filesUploadLabel.innerHTML;
+                var filesUploadInfoStart = filesUploadInfo.innerHTML;
+
+                filesUploadInput.addEventListener('change', function (e) {
+                    var fileName = '';
+
+                    if (this.files && this.files.length > 1) {
+                        fileName = (this.getAttribute('data-multiple-caption') || '').replace('{count}', this.files.length);
+                    } else {
+                        fileName = e.target.value.split('\\').pop();
+                    }
+
+                    if (fileName) {
+                        filesUploadLabel.querySelector('kbd').innerHTML = fileName;
+                        if (this.files.length > 10) {
+                            filesUploadInfo.innerHTML = "Too many files selected. Please select fewer than 10 files at a time.";
+                            filesUploadInfo.classList.add('usa-input-error-message');
+                        } else {
+                            filesUploadInfo.innerHTML = filesUploadInfoStart;
+                        }
+                    } else {
+                        filesUploadLabel.innerHTML = filesUploadLabelStart;
+                        filesUploadInfo.innerHTML = filesUploadInfoStart;
+                        filesUploadInfo.classList.remove('usa-input-error-message');
+                    }
+                });
+
+                // Firefox bug fix
+                filesUploadInput.addEventListener('focus', function () {
+                    filesUploadInput.classList.add('has-focus');
+                });
+                filesUploadInput.addEventListener('blur', function () {
+                    filesUploadInput.classList.remove('has-focus');
+                });
+            }
+
+        });
+    </script>
+}

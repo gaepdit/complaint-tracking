@@ -1,0 +1,15 @@
+@model string
+@if (!String.IsNullOrEmpty(Model))
+{
+    @if(!Model.StartsWith("DISABLE.")) {
+        <a href="mailto:@Html.Encode(Model)">@Html.Encode(Model)</a>
+    }
+    else
+    {
+        @Html.Encode(Model)
+    }
+}
+else
+{
+    @CTS.NotEnteredDisplayText
+}

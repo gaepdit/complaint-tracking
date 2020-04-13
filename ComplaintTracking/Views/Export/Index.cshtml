@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "CTS Data Export";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    This tool exports data directly from the Complaint Tracking System database. The data are current (within 15 hours) but exclude some 
+    information and records not subject to disclosure. 
+</p>
+
+<p>The tool downloads a ZIP archive containing three CSV files as follows:</p>
+
+<ol>
+    <li><p><b>Open Records:</b> Limited information provided about complaints for which EPD’s investigation has not concluded.</p></li>
+    <li><p><b>Closed Records:</b> More complete information provided about complaints for which EPD’s investigation has concluded.</p></li>
+    <li><p><b>Complaint Actions:</b> Investigative actions taken by EPD for complaints for which EPD’s investigation has concluded.</p></li>
+</ol>
+
+<p>Some records have been further modified as follows:</p>
+
+<ul>
+    <li><p>Personally identifiable information, including email addresses and telephone numbers, has been removed to the extent possible.</p></li>
+    <li><p>Fields longer than 32,600 characters have been truncated to accommodate <a href="https://support.office.com/en-us/article/excel-specifications-and-limits-1672b34d-7043-467e-8e27-269d656771c3">limitations in Microsoft Excel</a>.</p></li>
+</ul>
+
+
+<form asp-action="Download" asp-controller="Export">
+    <button id="export-tool" class="usa-button usa-button-big">Download CTS Data</button> <em>Please be patient; it may take several minutes.</em>
+</form>

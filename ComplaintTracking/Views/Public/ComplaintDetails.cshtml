@@ -1,0 +1,128 @@
+@model PublicComplaintDetailsViewModel
+
+@{
+    ViewData["Public"] = "Public";
+    ViewData["Title"] = $"Complaint ID {Model.ComplaintId}";
+}
+
+<h1 id="details">
+    @ViewData["Title"] <i>&mdash; Public Copy</i>
+</h1>
+
+<p><small>Report generated on @String.Format(CTS.FormatDateTimeDisplay, DateTime.Now).</small></p>
+
+<h2 id="status">Status: <em>@Model.Status.GetDisplayName()</em></h2>
+
+<table class="gaepd-table-compact gaepd-table-rowheadings gaepd-table-autowidth">
+    <tbody>
+        <tr>
+            <th scope="row">@Html.DisplayNameFor(model => model.DateReceived)</th>
+            <td>@Html.DisplayFor(model => model.DateReceived)</td>
+        </tr>
+        <tr>
+            <th scope="row">@Html.DisplayNameFor(model => model.CurrentOffice)</th>
+            <td>@Html.DisplayFor(model => model.CurrentOffice.Name)</td>
+        </tr>
+        <tr>
+            <th scope="row">@Html.DisplayNameFor(model => model.DateComplaintClosed)</th>
+            <td>@Html.DisplayFor(model => model.DateComplaintClosed)</td>
+        </tr>
+        <tr>
+            <th scope="row">@Html.DisplayNameFor(model => model.ReviewComments)</th>
+            <td>@Html.DisplayFor(model => model.ReviewComments)</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 id="complaint">Complaint</h2>
+
+<p class="gaepd-preserve-linebreaks">@Html.DisplayFor(model => model.ComplaintNature)</p>
+
+<table class="gaepd-table-compact gaepd-table-rowheadings gaepd-table-autowidth">
+    <tbody>
+        <tr>
+            <th scope="row">@Html.DisplayNameFor(model => model.PrimaryConcern)</th>
+            <td>@Html.DisplayFor(model => model.PrimaryConcern.Name)</td>
+        </tr>
+        <tr>
+            <th scope="row">@Html.DisplayNameFor(model => model.SecondaryConcern)</th>
+            <td>@Html.DisplayFor(model => model.SecondaryConcern.Name)</td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="gaepd-table-compact gaepd-table-rowheadings gaepd-table-autowidth">
+    <tbody>
+        <tr>
+            <th scope="row">@Html.DisplayNameFor(model => model.ComplaintLocation)</th>
+            <td class="gaepd-preserve-linebreaks">@Html.DisplayFor(model => model.ComplaintLocation)</td>
+        </tr>
+        <tr>
+            <th scope="row">@Html.DisplayNameFor(model => model.ComplaintCity)</th>
+            <td>@Html.DisplayFor(model => model.ComplaintCity)</td>
+        </tr>
+        <tr>
+            <th scope="row">@Html.DisplayNameFor(model => model.ComplaintCounty)</th>
+            <td>@Html.DisplayFor(model => model.ComplaintCounty.Name)</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 id="source">Source</h2>
+
+<table class="gaepd-table-compact gaepd-table-rowheadings gaepd-table-autowidth">
+    <tbody>
+        <tr>
+            <th scope="row">@Html.DisplayNameFor(model => model.SourceFacilityId)</th>
+            <td>@Html.DisplayFor(model => model.SourceFacilityId)</td>
+        </tr>
+        <tr>
+            <th scope="row">@Html.DisplayNameFor(model => model.SourceFacilityName)</th>
+            <td>@Html.DisplayFor(model => model.SourceFacilityName)</td>
+        </tr>
+        <tr>
+            <th scope="row">@Html.DisplayNameFor(model => model.SourceContactName)</th>
+            <td>@Html.DisplayFor(model => model.SourceContactName)</td>
+        </tr>
+        <tr>
+            <th scope="row">@Html.DisplayNameFor(model => model.SourceAddress)</th>
+            <td class="gaepd-preserve-linebreaks">@Html.DisplayFor(model => model.SourceAddress)</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 id="actions">Actions</h2>
+
+@if (Model.ComplaintActions == null || Model.ComplaintActions.Count == 0)
+{
+    <p><i>None.</i></p>
+}
+else
+{
+    @foreach (var item in Model.ComplaintActions)
+    {
+        <h3>@Html.DisplayFor(m => item.ActionDate) <em>&mdash; @Html.DisplayFor(m => item.ActionType.Name)</em></h3>
+        <p class="gaepd-preserve-linebreaks">@Html.DisplayFor(m => item.Comments)</p>
+    }
+}
+
+<h2 id="attachments">Attachments</h2>
+
+@await Html.PartialAsync("_AttachmentsPublicPartial", Model.Attachments)
+
+@section PageScripts {
+    <script type="text/javascript">
+        (function (document, window, index) {
+
+            // Set fancyBox defaults
+            $.fancybox.defaults.buttons = [
+                'fullScreen',
+                'thumbs',
+                'download',
+                'zoom',
+                'close'
+            ];
+
+        }(document, window, 0));
+    </script>
+}

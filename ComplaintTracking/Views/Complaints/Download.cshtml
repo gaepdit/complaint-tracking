@@ -1,0 +1,16 @@
+﻿@model string
+@{
+    ViewData["Title"] = "Downloading Search Results";
+}
+<h1>@ViewData["Title"]</h1>
+
+@if (string.IsNullOrEmpty(Model))
+{
+    <p>There was an error generating the download.</p>
+}
+else
+{
+    <p>Your download should start automatically. Depending on the number of search results, it may take some time to generate.</p>
+    <p>If the download fails, <a href="@Model">click here to try again</a>.</p>
+    <iframe style="display:none" src="@Model"></iframe>
+}

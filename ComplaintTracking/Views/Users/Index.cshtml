@@ -1,0 +1,239 @@
+﻿@model UserIndexViewModel
+
+@{
+    ViewData["Title"] = "CTS Users";
+    string rowclass = "";
+
+    string nameColAria = "";
+    string officeColAria = "";
+
+    switch (Model.Sort)
+    {
+        case UserIndexViewModel.SortBy.NameAsc:
+            nameColAria = "aria-sort=ascending";
+            break;
+        case UserIndexViewModel.SortBy.NameDesc:
+            nameColAria = "aria-sort=descending";
+            break;
+        case UserIndexViewModel.SortBy.OfficeAsc:
+            officeColAria = "aria-sort=ascending";
+            break;
+        case UserIndexViewModel.SortBy.OfficeDesc:
+            officeColAria = "aria-sort=descending";
+            break;
+    }
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (User.IsInRole(nameof(CtsRole.DivisionManager)) || User.IsInRole(nameof(CtsRole.UserAdmin)))
+{
+    <p>
+        <a asp-controller="Users" asp-action="Register" class="usa-button usa-button-outline">Register a new user</a>
+    </p>
+}
+
+<form method="get" class="usa-grid usa-section usa-section-light" asp-fragment="search-results">
+    <fieldset>
+        <legend>Filter Users</legend>
+        <div class="usa-width-one-half">
+            @Html.LabelFor(m => m.Name) @Html.EditorFor(m => m.Name)
+            @Html.LabelFor(m => m.Office) @Html.DropDownListFor(m => m.Office, Model.OfficeSelectList, "(any)")
+        </div>
+        <div class="usa-width-one-half">
+            @Html.LabelFor(m => m.Status)
+            @Html.DropDownListFor(m => m.Status, Html.GetEnumSelectList(typeof(UserIndexViewModel.UserStatus)), "Active")
+        </div>
+    </fieldset>
+    <div class="gaepd-buttonrow">
+        <button type="submit" id="submit" name="submit" value="Search">Apply filter</button>
+        <a asp-action="Index" class="usa-button usa-button-outline">Clear filter</a>
+    </div>
+</form>
+
+<table class="gaepd-table-compact gaepd-table-responsive">
+    <caption id="search-results">
+        @if (Model.Users.TotalItems == 0)
+        {
+            <text>No results found</text>
+        }
+        else if (Model.Users.TotalItems == 1)
+        {
+            <text>One result</text>
+        }
+        else
+        {
+            @Model.Users.TotalItems.ToString("N0")<text> total results; showing results </text> @Model.Users.FirstItemIndex.ToString("N0")<text> – </text>@Model.Users.LastItemIndex.ToString("N0")
+        }
+    </caption>
+    <thead>
+        <tr>
+            <th scope="col" class="gaepd-sortable" data-label="Sort by" @nameColAria>
+                <a asp-route-submit="Sort"
+                   asp-route-sort="@Model.NameSortAction"
+                   asp-route-name="@(Model.Name)"
+                   asp-route-office="@(Model.Office)"
+                   asp-route-status="@(Model.Status.ToString())"
+                   asp-fragment="search-results">
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().SortableFullName)
+                </a>
+            </th>
+            <th scope="col">@Html.DisplayNameFor(model => model.Users.FirstOrDefault().Email)</th>
+            <th scope="col" class="gaepd-sortable" data-label="Sort by" @officeColAria>
+                <a asp-route-submit="Sort"
+                   asp-route-sort="@Model.OfficeSortAction"
+                   asp-route-name="@(Model.Name)"
+                   asp-route-office="@(Model.Office)"
+                   asp-route-status="@(Model.Status.ToString())"
+                   asp-fragment="search-results">
+                    @Html.DisplayNameFor(model => model.Users.FirstOrDefault().Office)
+                </a>
+            </th>
+            <th scope="col">@Html.DisplayNameFor(model => model.Users.FirstOrDefault().Active)</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Users)
+        {
+            rowclass = "";
+            if (!item.Active)
+            {
+                rowclass = "gaepd-tablerow-dimmed";
+            }
+            <tr class="@rowclass">
+                <th scope="row" data-label="@Html.DisplayNameFor(model => item.FullName)">
+                    <img src="https://www.gravatar.com/avatar/@item.EmailMD5Hash?s=24&r=pg&d=identicon" class="gaepd-avatar-small" alt="" />
+                    @if (item.Id == Model.CurrentUserId)
+                    {
+                        <span class="usa-label">You</span>
+                    }
+                    @Html.DisplayFor(m => item.SortableFullName)
+                </th>
+                <td data-label="@Html.DisplayNameFor(model => item.Email)">@Html.DisplayFor(m => item.Email)</td>
+                <td data-label="@Html.DisplayNameFor(model => item.Office)">@Html.DisplayFor(m => item.Office)</td>
+                <td class="gaepd-tablecell-nolabel">@Html.DisplayFor(m => item.Active)</td>
+                <td class="gaepd-tablecell-nolabel">
+                    <a class="usa-button usa-button-outline gaepd-button-inline-action" asp-action="Details" asp-route-id="@item.Id">View</a>
+                    @if (User.IsInRole(nameof(CtsRole.DivisionManager)) || User.IsInRole(nameof(CtsRole.UserAdmin)))
+                    {
+                        <a class="usa-button usa-button-outline gaepd-button-inline-action" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (Model.Users.TotalItems > CTS.PageSize)
+{
+    <div class="gaepd-pagination">
+        @{
+            var pagBegin = Math.Max(1, Math.Min(Model.Users.PageIndex - 2, Model.Users.TotalPages - 4));
+            var pagEnd = Math.Min(Model.Users.TotalPages, Math.Max(Model.Users.PageIndex + 2, 5));
+        }
+
+        @if (Model.Users.HasPreviousPage)
+        {
+            <a asp-route-submit="Page"
+               asp-route-page="1"
+               asp-route-sort="@Model.Sort"
+               asp-route-name="@(Model.Name)"
+               asp-route-office="@(Model.Office)"
+               asp-route-status="@(Model.Status.ToString())"
+               asp-fragment="search-results"
+               class="gaepd-pagination-first">
+                First
+            </a>
+            <a asp-route-submit="Page"
+               asp-route-page="@(Model.Users.PageIndex - 1)"
+               asp-route-sort="@Model.Sort"
+               asp-route-name="@(Model.Name)"
+               asp-route-office="@(Model.Office)"
+               asp-route-status="@(Model.Status.ToString())"
+               asp-fragment="search-results"
+               class="gaepd-pagination-prev">
+                Previous
+            </a>
+        }
+        else
+        {
+            <span class="gaepd-pagination-first gaepd-pagination-disabled" title="First">First</span>
+            <span class="gaepd-pagination-prev gaepd-pagination-disabled" title="Previous">Prev</span>
+        }
+
+        <div class="gaepd-pagination-inner">
+            @if (pagBegin > 1)
+            {
+                <span>…</span>
+            }
+
+            @for (var i = pagBegin; i <= pagEnd; i++)
+            {
+                <a asp-route-submit="Page"
+                   asp-route-page="@i"
+                   asp-route-sort="@Model.Sort"
+                   asp-route-name="@(Model.Name)"
+                   asp-route-office="@(Model.Office)"
+                   asp-route-status="@(Model.Status.ToString())"
+                   asp-fragment="search-results"
+                   class="@(Model.Users.PageIndex == i ? "gaepd-pagination-active" : "")">
+                    @i
+                </a>
+            }
+
+            @if (pagEnd < Model.Users.TotalPages)
+            {
+                <span>…</span>
+            }
+        </div>
+
+        @if (Model.Users.HasNextPage)
+        {
+            <a asp-route-submit="Page"
+               asp-route-page="@(Model.Users.PageIndex + 1)"
+               asp-route-sort="@Model.Sort"
+               asp-route-name="@(Model.Name)"
+               asp-route-office="@(Model.Office)"
+               asp-route-status="@(Model.Status.ToString())"
+               asp-fragment="search-results"
+               class="gaepd-pagination-next">
+                Next
+            </a>
+            <a asp-route-submit="Page"
+               asp-route-page="@(Model.Users.TotalPages)"
+               asp-route-sort="@Model.Sort"
+               asp-route-name="@(Model.Name)"
+               asp-route-office="@(Model.Office)"
+               asp-route-status="@(Model.Status.ToString())"
+               asp-fragment="search-results"
+               class="gaepd-pagination-last">
+                Last
+            </a>
+        }
+        else
+        {
+            <span class="gaepd-pagination-next gaepd-pagination-disabled" title="Next">Next</span>
+            <span class="gaepd-pagination-last gaepd-pagination-disabled" title="Last">Last</span>
+        }
+    </div>
+}
+
+@section PageScripts {
+    <script type="text/javascript">
+        $(document).ready(function domReady() {
+            $('#submit').click(function OnSearchSubmit() {
+                $('input').each(function(i) {
+                    var $input = $(this);
+                    if ($input.val() == '')
+                        $input.attr('disabled', 'disabled');
+                });
+                $('select').each(function(i) {
+                    var $input = $(this);
+                    if ($input.val() == '')
+                        $input.attr('disabled', 'disabled');
+                });
+            });
+        });
+    </script>
+}

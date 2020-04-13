@@ -1,0 +1,134 @@
+@model ViewComplaintActionsViewModel
+
+@{
+    ViewData["Title"] = $"Actions for Complaint ID {Model.ComplaintId}";
+    string rowclass = "";
+    Guid itemId = default(Guid);
+}
+
+<h1>@ViewData["Title"]</h1>
+<section class="usa-section usa-section-light usa-grid" style="padding-top:3rem;padding-bottom:0;">
+    <h2 id="newaction">Add a New Action</h2>
+
+    <form asp-action="AddAction" class="usa-form-large">
+        <div class="usa-grid-full">
+            <div class="usa-width-one-third">
+                <label asp-for="ActionDate"></label>
+                <input asp-for="ActionDate" class="datepicker">
+                <span asp-validation-for="ActionDate" class="usa-input-error-message"></span>
+            </div>
+            <div class="usa-width-two-thirds">
+                <label asp-for="Investigator"></label>
+                <input asp-for="Investigator">
+                <span asp-validation-for="Investigator" class="usa-input-error-message"></span>
+            </div>
+        </div>
+
+        <label asp-for="ActionTypeId"></label>
+        <select asp-for="ActionTypeId" asp-items="Model.ActionTypesSelectList">
+            <option value="">@CTS.SelectActionTypeText</option>
+        </select>
+        <span asp-validation-for="ActionTypeId" class="usa-input-error-message"></span>
+
+        <label asp-for="Comments"></label>
+        <textarea asp-for="Comments"></textarea>
+        <span asp-validation-for="Comments" class="usa-input-error-message"></span>
+
+        <input asp-for="ComplaintId" />
+        <div class="gaepd-buttonrow">
+            <button type="submit">Add Action</button>
+            <a asp-action="Details" asp-route-id="@Model.ComplaintId">Back to Complaint Details</a>
+        </div>
+    </form>
+</section>
+
+@if (Model.ComplaintActions != null && Model.ComplaintActions.Count > 0)
+{
+    <h2 id="pastactions">Past Actions</h2>
+
+    <table class="usa-table-borderless gaepd-table-responsive gaepd-table-aligntop">
+        <thead>
+            <tr>
+                <th scope="col">@Html.DisplayNameFor(m => m.ComplaintActions.FirstOrDefault().ActionDate)</th>
+                <th scope="col">@Html.DisplayNameFor(m => m.ComplaintActions.FirstOrDefault().Investigator)</th>
+                <th scope="col">@Html.DisplayNameFor(m => m.ComplaintActions.FirstOrDefault().ActionType)</th>
+                <th scope="col">@Html.DisplayNameFor(m => m.ComplaintActions.FirstOrDefault().Comments)</th>
+                <th scope="col">@Html.DisplayNameFor(m => m.ComplaintActions.FirstOrDefault().EnteredBy)</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ComplaintActions)
+            {
+                itemId = item.Id;
+                rowclass = "";
+                if (item.Deleted)
+                {
+                    rowclass = "gaepd-tablerow-dimmed";
+                }
+                <tr class="@rowclass">
+                    <th scope="row" data-label="@Html.DisplayNameFor(m => item.ActionDate)">@Html.DisplayFor(m => item.ActionDate)</th>
+                    <td data-label="@Html.DisplayNameFor(m => item.Investigator)">@Html.DisplayFor(m => item.Investigator)</td>
+                    <td data-label="@Html.DisplayNameFor(m => item.ActionType)">@Html.DisplayFor(m => item.ActionType.Name)</td>
+                    <td data-label="@Html.DisplayNameFor(m => item.Comments)">
+                        @if (item.Deleted)
+                        {
+                            <div>
+                                <i>
+                                    This action was deleted by @Html.DisplayFor(model => item.DeletedBy.FullName)
+                                    on @String.Format(CTS.FormatDateTimeDisplay, item.DateDeleted).
+                                </i>
+                            </div>
+                            <br />
+                        }
+                        <div class="gaepd-preserve-linebreaks">@Html.DisplayFor(m => item.Comments)</div>
+                    </td>
+                    <td data-label="@Html.DisplayNameFor(m => item.EnteredBy)">
+                        @if (!string.IsNullOrEmpty(item.EnteredById) && item.DateEntered.HasValue)
+                        {
+                            <text>@Html.DisplayFor(m => item.EnteredBy.FullName), @Html.DisplayFor(m => item.DateEntered)</text>
+                        }
+                    </td>
+                    <td data-label="Actions">
+                        @if (item.Deleted)
+                        {
+                            @if (Model.UserCanDelete)
+                            {
+                                <form asp-action="RestoreAction" class="gaepd-form-inline-action">
+                                    @Html.HiddenFor(m => itemId)
+                                    @Html.HiddenFor(m => Model.ComplaintId)
+                                    <button class="gaepd-button-inline-action">Restore</button>
+                                </form>
+                            }
+                        }
+                        else
+                        {
+                            <a asp-action="EditAction" asp-route-id="@item.Id" class="usa-button usa-button-outline gaepd-button-inline-action">Edit</a>
+                            @if (Model.UserCanDelete)
+                            {
+                                <form asp-action="DeleteAction" class="gaepd-form-inline-action">
+                                    @Html.HiddenFor(m => itemId)
+                                    @Html.HiddenFor(m => Model.ComplaintId)
+                                    <button class="usa-button-secondary gaepd-button-inline-action">Delete</button>
+                                </form>
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@section PageScripts {
+    <script type="text/javascript">
+        $(document).ready(function domReady() {
+            // Set up datepicker
+            $('.datepicker')
+                .datepicker({
+                    dateFormat: 'm-d-yy'
+                })
+                .attr("placeholder", "m-d-yyyy");
+        });
+    </script>
+}

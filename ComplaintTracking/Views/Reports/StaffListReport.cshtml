@@ -1,0 +1,36 @@
+﻿@model ReportStaffListViewModel
+
+@{
+    ViewData["Title"] = "Report: " + Model.Title;
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (Model.Staff != null && Model.Staff.Count() > 0)
+{
+<table class="usa-table-borderless gaepd-table-autowidth gaepd-table-responsive">
+    <thead>
+        <tr>
+            <th scope="col">@Html.DisplayNameFor(model => Model.Staff.FirstOrDefault().Name)</th>
+            <th scope="col">@Html.DisplayNameFor(model => Model.Staff.FirstOrDefault().Office)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var staff in Model.Staff)
+        {
+        <tr>
+            <th scope="row" data-label="@Html.DisplayNameFor(m => staff.Name)">
+                <a asp-action="Details" asp-controller="Users" asp-route-id="@staff.Id">
+                    @Html.DisplayFor(m => staff.Name)
+                </a>
+            </th>
+            <td data-label="@Html.DisplayNameFor(m => staff.Office)">@Html.DisplayFor(m => staff.Office)</td>
+        </tr>
+        }
+    </tbody>
+</table>
+}
+else
+{
+<p>No staff found.</p>
+}

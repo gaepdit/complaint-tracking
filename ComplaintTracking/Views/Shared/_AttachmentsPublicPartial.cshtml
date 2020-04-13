@@ -1,0 +1,49 @@
+﻿@model List<AttachmentViewModel>
+
+@if (Model == null || Model.Count == 0)
+{
+    <p><i>None.</i></p>
+}
+
+<p>
+    <em>
+        (Attachments are only available for complaints created after April 2018.
+        Please note that not every complaint will necessarily have attachments.)
+    </em>
+</p>
+
+@if (Model != null && Model.Count > 0)
+{
+    <div class="usa-grid-full gaepd-file_list">
+        @foreach (var item in Model)
+        {
+            @if (item.IsImage)
+            {
+                <a asp-action="Attachment" asp-route-attachmentId="@item.Id" asp-route-fileName="@item.FileName"
+                   data-fancybox="attachment" data-caption="@item.FileName"
+                   class="gaepd-file_item usa-button-outline" target="_blank">
+                    <div class="gaepd-file_item-img">
+                        <img src="~/Public/Thumbnail/@item.Id" width="@CTS.ThumbnailSize" height="@CTS.ThumbnailSize" />
+                    </div>
+                    <div class="gaepd-file_item-body">
+                        @Html.DisplayFor(m => item.FileName)<br />
+                        <em><small>@Html.DisplayFor(m => item.Size)</small></em>
+                    </div>
+                </a>
+            }
+            else
+            {
+                <a asp-action="Attachment" asp-route-attachmentId="@item.Id" asp-route-fileName="@item.FileName"
+                   class="gaepd-file_item usa-button-outline" target="_blank">
+                    <div class="gaepd-file_item-img">
+                        @Html.DisplayFor(m => item.FileExtension)<br />
+                    </div>
+                    <div class="gaepd-file_item-body">
+                        @Html.DisplayFor(m => item.FileName)<br />
+                        <em><small>@Html.DisplayFor(m => item.Size)</small></em>
+                    </div>
+                </a>
+            }
+        }
+    </div>
+}

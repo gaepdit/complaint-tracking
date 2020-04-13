@@ -1,0 +1,15 @@
+{
+  "$schema": "https://on.cypress.io/cypress.schema.json",
+  "baseUrl": "https://localhost:61054",
+  "env": {
+    "writesEnabled": true,
+    "publicComplaintId": 1,
+    "deletedComplaintId": 4,
+    "admin-user": "example.user@dnr.ga.gov",
+    "admin-name": "Admin",
+    "admin-pass": "Abc123!!",
+    "staff-user": "example12@dnr.ga.gov",
+    "staff-name": "Staff12",
+    "staff-pass": "Abc123!!"
+  }
+}

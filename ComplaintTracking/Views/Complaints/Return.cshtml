@@ -1,0 +1,73 @@
+﻿@model ReturnComplaintViewModel
+
+@{
+    ViewData["Title"] = $"Return Complaint ID {Model.Id}";
+}
+
+<h1>@ViewData["Title"] to staff <i>(not approved)</i></h1>
+
+<form asp-action="Return">
+    <label asp-for="CurrentOfficeId"></label>
+    <select asp-for="CurrentOfficeId" asp-items="Model.OfficesSelectList">
+        <option value="">@CTS.SelectOfficeText</option>
+    </select>
+    <span asp-validation-for="CurrentOfficeId" class="usa-input-error-message"></span>
+
+    <label asp-for="CurrentOwnerId"></label>
+    @if (Model.DisableCurrentOwnerSelect)
+    {
+        <select asp-for="CurrentOwnerId" asp-items="Model.UsersInOfficeSelectList" disabled="disabled">
+            <option value="">@CTS.SelectUserMasterText</option>
+        </select>
+    }
+    else
+    {
+        <select asp-for="CurrentOwnerId" asp-items="Model.UsersInOfficeSelectList">
+            <option value="">@CTS.SelectUserMasterText</option>
+        </select>
+    }
+    <span asp-validation-for="CurrentOwnerId" class="usa-input-error-message"></span>
+
+    <label asp-for="Comment"></label>
+    <textarea asp-for="Comment"></textarea>
+    <span asp-validation-for="Comment" class="usa-input-error-message"></span>
+
+    <div class="gaepd-buttonrow">
+        <button type="submit">Return</button>
+        <a asp-action="Details" asp-route-id="@Model.Id" class="usa-button usa-button-outline">Cancel</a>
+    </div>
+</form>
+
+@section PageScripts {
+    <script type="text/javascript">
+        $(document).ready(function domReady() {
+            // Make staff (owner) select hierarchical from Office select
+            var OfficeIdSource = "#CurrentOfficeId";
+            var OwnerIdDest = "#CurrentOwnerId";
+            $(OfficeIdSource).change(function loadUsersList() {
+                if ($(OfficeIdSource).val() != "") {
+                    var url = '@Url.Content("~/")' + "api/Users/ByOffice/" + $(OfficeIdSource).val();
+                    $.getJSON(url, function processJsonResult(result) {
+                        if (result == null || result.length == 0) {
+                            var items = "<option selected value=''>@CTS.SelectUserMasterText</option>";
+                            $(OwnerIdDest).empty().html(items).prop('disabled', true);
+                        } else {
+                            var items = "<option selected value=''>@CTS.SelectUserMasterText</option>";
+                            $.each(result, function (i, item) {
+                                items += "<option value='" + item.value + "'>" + item.text + "</option>";
+                            });
+                            $(OwnerIdDest).empty().html(items).prop('disabled', false);
+                        }
+                    }).fail(function jsonRequestFailed(d, textStatus, error) {
+                        console.error("getJSON failed, status: " + textStatus + ", error: " + error);
+                        var items = "<option selected value=''>Error</option>";
+                        $(OwnerIdDest).empty().html(items).prop('disabled', true);
+                    });
+                } else {
+                    var items = "<option selected value=''>@CTS.SelectUserMasterText</option>";
+                    $(OwnerIdDest).empty().html(items).prop('disabled', true);
+                }
+            });
+        });
+    </script>
+}

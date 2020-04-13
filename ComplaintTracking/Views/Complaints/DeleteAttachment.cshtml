@@ -1,0 +1,31 @@
+﻿@model AttachmentViewModel
+
+@{
+    ViewData["Title"] = $"Delete Attachment from Complaint ID {Model.ComplaintId}";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>Are you sure you want to delete this attachment? <em>This cannot be undone.</em></p>
+
+<h2 class="gaepd-file-link">
+    @if (Model.IsImage)
+    {
+        <img src="~/Complaints/Thumbnail/@Model.Id" width="@CTS.ThumbnailSize" height="@CTS.ThumbnailSize" />
+    }
+    else
+    {
+        @Html.DisplayFor(m => Model.FileExtension)
+    }
+    @Html.DisplayFor(m => Model.FileName)
+</h2>
+
+<p>@Html.DisplayFor(m => Model.Size). @Html.DisplayNameFor(m => Model.UploadedBy) @Html.DisplayFor(m => Model.UploadedBy.FullName) on @Html.DisplayFor(m => Model.DateUploaded).</p>
+
+<form asp-action="DeleteAttachment">
+    <div class="gaepd-buttonrow">
+        <button type="submit" class="usa-button-secondary">Delete Attachment</button>
+        <input asp-for="Id" type="hidden" />
+        <a asp-action="Details" asp-route-id="@Model.ComplaintId" class="usa-button usa-button-outline">Cancel</a>
+    </div>
+</form>

@@ -1,0 +1,54 @@
+@model EditComplaintActionViewModel
+
+@{
+    ViewData["Title"] = "Edit Complaint Action";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>(This Action is part of Complaint ID @Model.ComplaintId.)</p>
+
+<form asp-action="EditAction" class="usa-form-large">
+    <div class="usa-grid-full">
+        <div class="usa-width-one-third">
+            <label asp-for="ActionDate"></label>
+            <input asp-for="ActionDate" class="datepicker">
+            <span asp-validation-for="ActionDate" class="usa-input-error-message"></span>
+        </div>
+        <div class="usa-width-two-thirds">
+            <label asp-for="Investigator"></label>
+            <input asp-for="Investigator">
+            <span asp-validation-for="Investigator" class="usa-input-error-message"></span>
+        </div>
+    </div>
+
+    <label asp-for="ActionTypeId"></label>
+    <select asp-for="ActionTypeId" asp-items="Model.ActionTypesSelectList">
+        <option value="">@CTS.SelectActionTypeText</option>
+    </select>
+    <span asp-validation-for="ActionTypeId" class="usa-input-error-message"></span>
+
+    <label asp-for="Comments"></label>
+    <textarea asp-for="Comments"></textarea>
+    <span asp-validation-for="Comments" class="usa-input-error-message"></span>
+
+    <input asp-for="Id" />
+    <input asp-for="ComplaintId" />
+    <div class="gaepd-buttonrow">
+        <button type="submit">Save</button>
+        <a asp-action="Actions" asp-route-id="@Model.ComplaintId" class="usa-button usa-button-outline">Cancel</a>
+    </div>
+</form>
+
+@section PageScripts {
+    <script type="text/javascript">
+        $(document).ready(function domReady() {
+            // Set up datepicker
+            $('.datepicker')
+                .datepicker({
+                    dateFormat: 'm-d-yy'
+                })
+                .attr("placeholder", "m-d-yyyy");
+        });
+    </script>
+}

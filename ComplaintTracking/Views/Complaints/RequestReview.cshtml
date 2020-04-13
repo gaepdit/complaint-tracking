@@ -1,0 +1,24 @@
+﻿@model RequestReviewViewModel
+
+@{
+    ViewData["Title"] = $"Request Review for Complaint ID {Model.Id}";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="RequestReview">
+    <label asp-for="ReviewById"></label>
+    <select asp-for="ReviewById" asp-items="Model.ManagersInOfficeSelectList">
+        <option value="">@CTS.SelectReviewerText</option>
+    </select>
+    <span asp-validation-for="ReviewById" class="usa-input-error-message"></span>
+
+    <label asp-for="Comment"></label>
+    <textarea asp-for="Comment"></textarea>
+    <span asp-validation-for="Comment" class="usa-input-error-message"></span>
+
+    <div class="gaepd-buttonrow">
+        <button type="submit">Request review</button>
+        <a asp-action="Details" asp-route-id="@Model.Id" class="usa-button usa-button-outline">Cancel</a>
+    </div>
+</form>

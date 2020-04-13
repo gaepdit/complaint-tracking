@@ -1,0 +1,15 @@
+@model ComplaintTracking.AlertMessages.AlertViewModel
+
+<div class="usa-alert @Model.AlertCssClass">
+    <button type="button" class="usa-button  usa-button-gray gaepd-button-closealert" aria-label="Close alert" onclick="this.parentNode.outerHTML = '';">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="usa-alert-body">
+        @if (Model.Title != null)
+        {
+            <h3 class="usa-alert-heading">@Model.Title</h3>
+        }
+        <p class="usa-alert-text">@Model.Message</p>
+        <div asp-validation-summary="All"></div>
+    </div>
+</div>

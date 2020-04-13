@@ -1,0 +1,53 @@
+@model UserViewModel
+
+@{
+    ViewData["Title"] = $"User Profile: {Model.FullName}";
+}
+
+<h1>User Profile: <i>@Model.FullName</i> </h1>
+
+<div><img src="https://www.gravatar.com/avatar/@Model.EmailMD5Hash?s=128&r=pg&d=identicon" class="gaepd-avatar" alt="Account image" /></div>
+
+<table class="gaepd-table-compact gaepd-table-rowheadings">
+    <tbody>
+        <tr>
+            <th scope="row">@Html.DisplayNameFor(model => model.FullName)</th>
+            <td>@Html.DisplayFor(m => m.FullName)</td>
+        </tr>
+        <tr>
+            <th scope="row">@Html.DisplayNameFor(model => model.Email)</th>
+            <td>@Html.DisplayFor(m => m.Email)</td>
+        </tr>
+        <tr>
+            <th scope="row">@Html.DisplayNameFor(model => model.Phone)</th>
+            <td>@Html.DisplayFor(m => m.Phone)</td>
+        </tr>
+        <tr>
+            <th scope="row">@Html.DisplayNameFor(model => model.Office)</th>
+            <td>@Html.DisplayFor(m => m.Office)</td>
+        </tr>
+        @if (Model.CtsRoles.Count() != 0)
+        {
+            <tr>
+                <th scope="row">@Html.DisplayNameFor(model => model.CtsRoles)</th>
+                <td>
+                    <ul class="usa-unstyled-list">
+                        @Html.DisplayFor(m => m.CtsRoles)
+                    </ul>
+                </td>
+            </tr>
+        }
+        <tr>
+            <th scope="row">@Html.DisplayNameFor(model => model.Active)</th>
+            <td>@Html.DisplayFor(m => m.Active)</td>
+        </tr>
+    </tbody>
+</table>
+
+<div>
+    @if (User.IsInRole(nameof(CtsRole.DivisionManager)) || User.IsInRole(nameof(CtsRole.UserAdmin)))
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="usa-button usa-button-outline">Edit</a>
+    }
+    <a asp-action="Index">Back to List</a>
+</div>

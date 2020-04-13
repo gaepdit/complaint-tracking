@@ -1,0 +1,181 @@
+﻿@{
+    ViewData["Title"] = "CTS Support";
+    string qaMailto = $"mailto:{CTS.QAEmail}?subject=CTS Testing";
+    string accountMailto = $"mailto:{CTS.AccountAdminEmail}?subject=CTS Account";
+    System.Version v = System.Reflection.Assembly.GetEntryAssembly().GetName().Version;
+    System.Version CtsVersion = new Version(v.Major, v.Minor, v.Build);
+}
+
+<environment names="Staging,Development">
+    <section id="uat" class="usa-section usa-section-dark usa-grid">
+        <h1>User Acceptance Testing</h1>
+        <p>Welcome to the CTS test site! Please contact <a href="@qaMailto">@CTS.QAEmail</a> with any results or feedback. Thank you.</p>
+        <p>The following features have been released for user testing:</p>
+        <ul>
+            <li>None currently</li>
+        </ul>
+    </section>
+</environment>
+
+<h1>Support</h1>
+<ul>
+    <li>
+        <p><a href="~/static/Complaint-Tracking-System-Instructions.pdf" target="_blank">General Instructions (<abbr>PDF</abbr>)</a></p>
+    </li>
+    <li>
+        <p><a href="~/static/Complaint-Attachments-Policy.pdf" target="_blank">Complaint Attachments Policy (<abbr>PDF</abbr>)</a></p>
+    </li>
+    <li>
+        <p>For account management requests, contact <a href="@accountMailto">@CTS.AccountAdminEmail</a></p>
+    </li>
+    <li>
+        <p>For technical support, create a ticket at the 
+        <a href="https://gaepdit.atlassian.net/servicedesk/customer/portal/1/create/39" target="_blank">EPD IT Service Desk</a></p>
+    </li>
+</ul>
+
+<h2>Credits</h2>
+<p>
+    Copyright © 2017 – @DateTime.Now.Year State of Georgia.
+    The CTS was developed by Georgia EPD-IT. Current version: <em>@CtsVersion</em>.
+</p>
+<p>The CTS uses the following open source components.</p>
+<ul>
+    <li><a href="https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-2.0">ASP.NET Core</a> (<a href="https://github.com/aspnet/Home/blob/dev/LICENSE.txt">License</a>)</li>
+    <li><a href="https://designsystem.digital.gov/">U.S. Web Design System</a> (<a href="https://github.com/uswds/uswds/blob/develop/LICENSE.md">License</a>)</li>
+    <li><a href="https://jquery.com/">jQuery</a> (<a href="https://jquery.org/license/">License</a>)</li>
+    <li><a href="https://timepicker.co/">jQuery Timepicker</a> (<a href="https://github.com/wvega/timepicker#license">License</a>)</li>
+    <li><a href="http://www.mimekit.net/">MailKit</a> (<a href="https://github.com/jstedfast/MailKit#license-information">License</a>)</li>
+    <li><a href="https://fontawesome.com/">Font Awesome</a> (<a href="https://fontawesome.com/license">License</a>)</li>
+    <li><a href="https://github.com/SixLabors/ImageSharp">ImageSharp</a> (<a href="https://github.com/SixLabors/ImageSharp/blob/master/LICENSE">License</a>)</li>
+    <li><a href="https://fancyapps.com/fancybox/">FancyBox</a> (<a href="https://fancyapps.com/fancybox/3/#license">License</a>)</li>
+    <li><a href="https://joshclose.github.io/CsvHelper/">CsvHelper</a> (<a href="https://joshclose.github.io/CsvHelper/#license">License</a>)</li>
+    <li><a href="https://github.com/getsentry/raven-csharp">SharpRaven</a> (<a href="https://github.com/getsentry/raven-csharp/blob/develop/LICENSE">License</a>)</li>
+</ul>
+
+<h2>Production Change Log</h2>
+
+<h3>November 4, 2019</h3>
+<p>Added new "User Admin" role to help manage account registrations.</p>
+
+<h3>August 8, 2018</h3>
+<p>Added new report: <a asp-controller="Reports" asp-action="DaysToClosureByOffice">Days to Closure By Office</a></p>
+
+<h3>July 24, 2018</h3>
+<p>File attachments are now available to view/download on the public portal.</p>
+
+<h3>June 14 & July 9, 2018</h3>
+<p>Bug fixes and performance improvements.</p>
+
+<h3>May 31, 2018</h3>
+<ul>
+    <li>Enabled attaching PowerPoint files to Complaints.</li>
+    <li>Added two new <a href="~/Reports">error reports</a>.</li>
+</ul>
+
+<h3>May 24, 2018</h3>
+<p>Bug fixes and performance improvements.</p>
+
+<h3>May 4, 2018</h3>
+<ul class="gaepd-list-custom gaepd-list-rocket">
+    <li>
+        Today we are proud to announce that we are launching the ability to add file attachments to complaints.
+        Currently, attachments are only available to view when logged in, but the plan is to make them available
+        to the public after a brief trial period.
+    </li>
+</ul>
+
+<p><a href="https://giphy.com/gifs/star-wars-gif-sw-J8uIVhQI1PqFO"><img src="https://media.giphy.com/media/J8uIVhQI1PqFO/giphy.gif" alt="May the Fourth Be With You"></a></p>
+
+<h3>January 25, March 2, March 13, March 21, March 30, April 9, & April 20, 2018</h3>
+<p>Bug fixes and performance improvements.</p>
+
+<h3>January 9, 2018</h3>
+<p>
+    Added ability to export Complaint search results as a CSV file.
+    This is only available if fewer than 500 search results are returned.
+</p>
+
+<h3>January 2, 2018</h3>
+<p>
+    Happy New Year! The biggest change in this release is the addition of a
+    <a asp-controller="Public" asp-action="Index">Public Portal</a> allowing
+    the public to search for and view closed complaints.
+</p>
+
+<p>In addition to some bug fixes and performance improvements, the following new features were also added:</p>
+
+<ul>
+    <li>Increased the space allowed for recording Nature of Complaint and Complaint Action Comments.</li>
+    <li>Added a <a asp-controller="Export" asp-action="Index">data exporter</a> for use in responding to some GORA requests.</li>
+</ul>
+
+<h3>December 19, 2017</h3>
+<p>
+    Fixed a bug introduced in yesterday's update that caused several duplicate complaints to be created
+    and prevented some staff from being notified if a complaint was assigned to them.
+</p>
+
+<h3>December 18, 2017</h3>
+<p>In addition to several bug fixes, the following new features have been added:</p>
+
+<ul>
+    <li>Three <a asp-controller="Reports" asp-action="Index">new reports</a> have been added.</li>
+    <li>The length of text entered into some forms has been limited, so that error messages are avoided.</li>
+    <li>Complaints can now be reassigned by the manager when they are not approved.</li>
+    <li>Comments added by reviewers are now included in emails.</li>
+</ul>
+
+<h3>November 21, 2017</h3>
+<ul>
+    <li>Added PDF instructions to Support Page</li>
+    <li>Added new report: <a asp-controller="Reports" asp-action="DaysToClosureByStaff">Days to Closure By Staff</a></li>
+    <li>Added account images (avatars)</li>
+    <li>Modified some forms to help avoid error messages</li>
+    <li>Performance improvements and bug fixes</li>
+</ul>
+
+<h3>October 19, 2017</h3>
+<ul>
+    <li>
+        The Complaint and Complaint Action search forms now include inactive employees for searching.
+        Additionally, each employee's office location is listed making it easier to find the right person.
+    </li>
+    <li>
+        The Complaint search form also now allows you search for source address.
+    </li>
+    <li>
+        The Dashboard for managers displays additional sections like “Complaints Pending Review” even if those sections are empty.
+    </li>
+    <li>
+        Several bugs were fixed in this release as well.
+    </li>
+</ul>
+
+<h3>September 30, 2017</h3>
+<ul class="gaepd-list-custom gaepd-list-rocket">
+    <li>Site launched</li>
+</ul>
+
+@section PageStyles {
+    <style type="text/css">
+        .gaepd-list-custom {
+            list-style: none;
+            margin-left: 0;
+            padding-left: .5em;
+        }
+
+            .gaepd-list-custom li {
+                padding-left: 1.44em;
+                text-indent: -1.44em;
+            }
+
+                .gaepd-list-custom li:before {
+                    padding-right: .44em;
+                }
+
+        .gaepd-list-rocket li:before {
+            content: "🚀";
+        }
+    </style>
+}

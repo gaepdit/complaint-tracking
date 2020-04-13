@@ -1,0 +1,29 @@
+﻿@model EditOfficeViewModel
+
+@{
+    ViewData["Title"] = "Edit Office/Master User";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="Edit" class="usa-form">
+    <label asp-for="Name"></label>
+    <input asp-for="Name" />
+    <span asp-validation-for="Name" class="usa-input-error-message"></span>
+
+    <label asp-for="MasterUserId"></label>
+    <select asp-for="MasterUserId" asp-items="Model.UsersSelectList">
+        <option value="">@CTS.SelectUserText</option>
+    </select>
+    <span asp-validation-for="MasterUserId" class="usa-input-error-message"></span>
+
+    <input asp-for="Active" />
+    <label asp-for="Active"></label>
+    <span asp-validation-for="Active" class="usa-input-error-message"></span>
+
+    <div class="gaepd-buttonrow">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit">Save</button>
+        <a asp-action="Details" asp-route-id="@Model.Id" class="usa-button usa-button-outline">Cancel</a>
+    </div>
+</form>

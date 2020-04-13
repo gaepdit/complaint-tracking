@@ -1,0 +1,28 @@
+@model ActionTypeViewModel
+
+@{
+    ViewData["Title"] = "Complaint Action Type";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="gaepd-table-compact gaepd-table-rowheadings gaepd-table-autowidth">
+    <tbody>
+        <tr>
+            <th scope="row">@Html.DisplayNameFor(model => model.Name)</th>
+            <td>@Html.DisplayFor(model => model.Name)</td>
+        </tr>
+        <tr>
+            <th scope="row">@Html.DisplayNameFor(model => model.Active)</th>
+            <td>@Html.DisplayFor(model => model.Active)</td>
+        </tr>
+    </tbody>
+</table>
+
+<div>
+    @if (User.IsInRole(CtsRole.DivisionManager.ToString()))
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="usa-button usa-button-outline">Edit</a>
+    }
+    <a asp-action="Index">Back to List</a>
+</div>

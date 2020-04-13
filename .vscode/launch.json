@@ -1,0 +1,57 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/ComplaintTracking/bin/Debug/netcoreapp3.1/ComplaintTracking.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/ComplaintTracking",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "https://localhost:61054;http://localhost:61053"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        },
+        {
+            "name": "Launch (Firefox Dev)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/ComplaintTracking/bin/Debug/netcoreapp3.1/ComplaintTracking.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/ComplaintTracking",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "https://localhost:61054;http://localhost:61053"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            },
+            "launchBrowser": {
+                "enabled": true,
+                "osx": {
+                    "command": "/Applications/Firefox Developer Edition.app/Contents/MacOS/firefox",
+                    "args": "${auto-detect-url}"
+                },
+                "windows": {
+                    "command": "\"C:\\Program Files\\Firefox Developer Edition\\firefox.exe\"",
+                    "args": "${auto-detect-url}"
+                }
+            }
+        }
+    ]
+}
