@@ -44,12 +44,10 @@ namespace ComplaintTracking
             {
                 if (string.IsNullOrEmpty(connectionString))
                 {
-                    Console.WriteLine("Using Sqlite database.");
-                    opts.UseSqlite($"Data Source='{Path.Combine(FilePaths.BasePath,"cts-local.db")}'");
+                    opts.UseSqlite($"Data Source='{Path.Combine(FilePaths.BasePath, "cts-local.db")}'");
                 }
                 else
                 {
-                    Console.WriteLine("Using SQL Server database.");
                     opts.UseSqlServer(connectionString);
                 }
             });
