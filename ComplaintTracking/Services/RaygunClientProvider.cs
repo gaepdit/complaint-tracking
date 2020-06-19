@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Mindscape.Raygun4Net;
@@ -27,8 +26,7 @@ namespace ComplaintTracking.Services
 
                 client.UserInfo = new RaygunIdentifierMessage(email)
                 {
-                    IsAnonymous = false,
-                    Email = email
+                    IsAnonymous = false
                 };
             }
 
