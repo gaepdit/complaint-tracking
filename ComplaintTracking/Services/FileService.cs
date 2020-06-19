@@ -28,9 +28,10 @@ namespace ComplaintTracking.Services
             catch (Exception ex)
             {
                 // Log error but take no other action here
-                ex.Data.Add("Action", "Deleting File");
-                ex.Data.Add("File", filePath);
-                await _errorLogger.LogErrorAsync(ex);
+                var customData = new Dictionary<string, object>();
+                customData.Add("Action", "Deleting File");
+                customData.Add("File", filePath);
+                await _errorLogger.LogErrorAsync(ex, "TryDeleteFileAsync", customData);
             }
         }
 

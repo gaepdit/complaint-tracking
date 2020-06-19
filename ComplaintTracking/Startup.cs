@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SharpRaven;
+using Mindscape.Raygun4Net.AspNetCore;
 using System;
 using System.IO;
 
@@ -74,15 +74,11 @@ namespace ComplaintTracking
             services.AddDataProtection()
                 .PersistKeysToFileSystem(new DirectoryInfo(FilePaths.DataProtectionKeysFolder));
 
-            // Add Sentry.io error logging
-            services.AddScoped<IRavenClient, RavenClient>(s =>
-             {
-                 return new RavenClient(Configuration["SentryDSN"])
-                 {
-                     Environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"),
-                     Release = typeof(Program).Assembly.GetName().Version.ToString(3)
-                 };
-             });
+            // Add error logging
+            services.AddRaygun(Configuration, new RaygunMiddlewareSettings()
+            {
+                ClientProvider = new RaygunClientProvider()
+            });
 
             // Add sessions
             services.AddSession();
@@ -123,6 +119,7 @@ namespace ComplaintTracking
                 app.UseHsts();
                 app.UseExceptionHandler("/Error");
             }
+            app.UseRaygun();
 
             app.UseStatusCodePagesWithReExecute("/Error/Status/{0}");
 

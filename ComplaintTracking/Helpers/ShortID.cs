@@ -7,7 +7,7 @@ namespace ComplaintTracking
         private static readonly Random _random = new Random();
         private static readonly string _pool = "ABCDEFGHKMNPQRSTUVWXYZ2345689";
 
-        public static string GetShortID(int length = 6)
+        public static string GetShortID(int length = 4)
         {
             int poolLength = _pool.Length;
             string output = string.Empty;

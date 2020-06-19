@@ -4,6 +4,7 @@ using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.Primitives;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ComplaintTracking.Services
@@ -51,11 +52,12 @@ namespace ComplaintTracking.Services
             catch (Exception ex)
             {
                 // Log error but take no other action here
-                ex.Data.Add("Action", "Saving Image");
-                ex.Data.Add("As Thumbnail", asThumbnail);
-                ex.Data.Add("IFormFile", file);
-                ex.Data.Add("Save Path", savePath);
-                await _errorLogger.LogErrorAsync(ex);
+                var customData = new Dictionary<string, object>();
+                customData.Add("Action", "Saving Image");
+                customData.Add("As Thumbnail", asThumbnail);
+                customData.Add("IFormFile", file);
+                customData.Add("Save Path", savePath);
+                await _errorLogger.LogErrorAsync(ex, "SaveImage", customData);
                 return false;
             }
         }
