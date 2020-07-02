@@ -4,6 +4,17 @@
     ViewData["Title"] = "Dashboard";
 }
 
+<div class="usa-grid">
+    <div class="usa-alert usa-alert-warning">
+        <div class="usa-alert-body">
+            <p class="usa-alert-text">
+                There will be a scheduled maintenance outage of this web site from Wednesday afternoon 7/8/2020 at 4&nbsp;PM
+                until Thursday morning 7/9/2020 at 6&nbsp;AM. Thank you for your patience!
+            </p>
+        </div>
+    </div>
+</div>
+
 <h1>@ViewData["Title"]</h1>
 
 <form class="usa-search usa-search-big" asp-action="Index">
@@ -17,137 +28,23 @@
 @if (User.IsInRole(CtsRole.Manager.ToString()))
 {
     <h2>Complaints Pending Review</h2>
-        @if (Model.MgrComplaintsPendingReview == null || Model.MgrComplaintsPendingReview.Count() == 0)
-        {
-            <p>None.</p>
-        }
-        else
-        {
-            <table class="usa-table-borderless gaepd-table-autowidth gaepd-table-responsive">
-                <thead>
-                    <tr>
-                        <th scope="col">@Html.DisplayNameFor(model => Model.MgrComplaintsPendingReview.FirstOrDefault().Id)</th>
-                        <th scope="col">@Html.DisplayNameFor(model => Model.MgrComplaintsPendingReview.FirstOrDefault().DateReceived)</th>
-                        <th scope="col">@Html.DisplayNameFor(model => Model.MgrComplaintsPendingReview.FirstOrDefault().Status)</th>
-                        <th scope="col">@Html.DisplayNameFor(model => Model.MgrComplaintsPendingReview.FirstOrDefault().SourceFacilityName)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.MgrComplaintsPendingReview)
-                    {
-                        <tr>
-                            <th scope="row" data-label="@Html.DisplayNameFor(m => item.Id)">
-                                <a class="usa-button usa-button-outline" asp-action="Details" asp-controller="Complaints" asp-route-id="@item.Id">@Html.DisplayFor(m => item.Id)</a>
-                            </th>
-                            <td data-label="@Html.DisplayNameFor(m => item.DateReceived)">@Html.DisplayFor(m => item.DateReceived)</td>
-                            <td data-label="@Html.DisplayNameFor(m => item.Status)">@item.Status.GetDisplayName()</td>
-                            <td data-label="@Html.DisplayNameFor(m => item.SourceFacilityName)">
-                                @Html.DisplayFor(m => item.SourceFacilityName)
-                                @if (item.SourceLocation != null)
-                                {
-                                    <br />@Html.DisplayFor(m => item.SourceLocation)
-                                }
-                                <br />ID: @Html.DisplayFor(m => item.SourceFacilityId)
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
-
-        <h2>Complaints in @Model.MyOfficeName that have not been accepted</h2>
-        @if (Model.MgrUnacceptedComplaints == null || Model.MgrUnacceptedComplaints.Count() == 0)
-        {
-            <p>None.</p>
-        }
-        else
-        {
-            <table class="usa-table-borderless gaepd-table-autowidth gaepd-table-responsive">
-                <thead>
-                    <tr>
-                        <th scope="col">@Html.DisplayNameFor(model => Model.MgrUnacceptedComplaints.FirstOrDefault().Id)</th>
-                        <th scope="col">@Html.DisplayNameFor(model => Model.MgrUnacceptedComplaints.FirstOrDefault().DateReceived)</th>
-                        <th scope="col">@Html.DisplayNameFor(model => Model.MgrUnacceptedComplaints.FirstOrDefault().Status)</th>
-                        <th scope="col">@Html.DisplayNameFor(model => Model.MgrUnacceptedComplaints.FirstOrDefault().SourceFacilityName)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.MgrUnacceptedComplaints)
-                    {
-                        <tr>
-                            <th scope="row" data-label="@Html.DisplayNameFor(m => item.Id)">
-                                <a class="usa-button usa-button-outline" asp-action="Details" asp-controller="Complaints" asp-route-id="@item.Id">@Html.DisplayFor(m => item.Id)</a>
-                            </th>
-                            <td data-label="@Html.DisplayNameFor(m => item.DateReceived)">@Html.DisplayFor(m => item.DateReceived)</td>
-                            <td data-label="@Html.DisplayNameFor(m => item.Status)">@item.Status.GetDisplayName()</td>
-                            <td data-label="@Html.DisplayNameFor(m => item.SourceFacilityName)">
-                                @Html.DisplayFor(m => item.SourceFacilityName)
-                                @if (item.SourceLocation != null)
-                                {
-                                    <br />@Html.DisplayFor(m => item.SourceLocation)
-                                }
-                                <br />ID: @Html.DisplayFor(m => item.SourceFacilityId)
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
-
-        <h2>Unassigned Complaints in @Model.MyOfficeName</h2>
-        @if (Model.MgrUnassignedComplaints == null || Model.MgrUnassignedComplaints.Count() == 0)
-        {
-            <p>None.</p>
-        }
-        else
-        {
-            <table class="usa-table-borderless gaepd-table-autowidth gaepd-table-responsive">
-                <thead>
-                    <tr>
-                        <th scope="col">@Html.DisplayNameFor(model => Model.MgrUnassignedComplaints.FirstOrDefault().Id)</th>
-                        <th scope="col">@Html.DisplayNameFor(model => Model.MgrUnassignedComplaints.FirstOrDefault().DateReceived)</th>
-                        <th scope="col">@Html.DisplayNameFor(model => Model.MgrUnassignedComplaints.FirstOrDefault().Status)</th>
-                        <th scope="col">@Html.DisplayNameFor(model => Model.MgrUnassignedComplaints.FirstOrDefault().SourceFacilityName)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.MgrUnassignedComplaints)
-                    {
-                        <tr>
-                            <th scope="row" data-label="@Html.DisplayNameFor(m => item.Id)">
-                                <a class="usa-button usa-button-outline" asp-action="Details" asp-controller="Complaints" asp-route-id="@item.Id">@Html.DisplayFor(m => item.Id)</a>
-                            </th>
-                            <td data-label="@Html.DisplayNameFor(m => item.DateReceived)">@Html.DisplayFor(m => item.DateReceived)</td>
-                            <td data-label="@Html.DisplayNameFor(m => item.Status)">@item.Status.GetDisplayName()</td>
-                            <td data-label="@Html.DisplayNameFor(m => item.SourceFacilityName)">
-                                @Html.DisplayFor(m => item.SourceFacilityName)
-                                @if (item.SourceLocation != null)
-                                {
-                                    <br />@Html.DisplayFor(m => item.SourceLocation)
-                                }
-                                <br />ID: @Html.DisplayFor(m => item.SourceFacilityId)
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
-}
-
-@if (Model.MyNewComplaints != null && Model.MyNewComplaints.Count() > 0)
-{
-    <h2>My New Complaints</h2>
+    @if (Model.MgrComplaintsPendingReview == null || Model.MgrComplaintsPendingReview.Count() == 0)
+    {
+        <p>None.</p>
+    }
+    else
+    {
         <table class="usa-table-borderless gaepd-table-autowidth gaepd-table-responsive">
             <thead>
                 <tr>
-                    <th scope="col">@Html.DisplayNameFor(model => Model.MyNewComplaints.FirstOrDefault().Id)</th>
-                    <th scope="col">@Html.DisplayNameFor(model => Model.MyNewComplaints.FirstOrDefault().DateReceived)</th>
-                    <th scope="col">@Html.DisplayNameFor(model => Model.MyNewComplaints.FirstOrDefault().Status)</th>
-                    <th scope="col">@Html.DisplayNameFor(model => Model.MyNewComplaints.FirstOrDefault().SourceFacilityName)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => Model.MgrComplaintsPendingReview.FirstOrDefault().Id)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => Model.MgrComplaintsPendingReview.FirstOrDefault().DateReceived)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => Model.MgrComplaintsPendingReview.FirstOrDefault().Status)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => Model.MgrComplaintsPendingReview.FirstOrDefault().SourceFacilityName)</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.MyNewComplaints)
+                @foreach (var item in Model.MgrComplaintsPendingReview)
                 {
                     <tr>
                         <th scope="row" data-label="@Html.DisplayNameFor(m => item.Id)">
@@ -167,6 +64,120 @@
                 }
             </tbody>
         </table>
+    }
+
+    <h2>Complaints in @Model.MyOfficeName that have not been accepted</h2>
+    @if (Model.MgrUnacceptedComplaints == null || Model.MgrUnacceptedComplaints.Count() == 0)
+    {
+        <p>None.</p>
+    }
+    else
+    {
+        <table class="usa-table-borderless gaepd-table-autowidth gaepd-table-responsive">
+            <thead>
+                <tr>
+                    <th scope="col">@Html.DisplayNameFor(model => Model.MgrUnacceptedComplaints.FirstOrDefault().Id)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => Model.MgrUnacceptedComplaints.FirstOrDefault().DateReceived)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => Model.MgrUnacceptedComplaints.FirstOrDefault().Status)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => Model.MgrUnacceptedComplaints.FirstOrDefault().SourceFacilityName)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.MgrUnacceptedComplaints)
+                {
+                    <tr>
+                        <th scope="row" data-label="@Html.DisplayNameFor(m => item.Id)">
+                            <a class="usa-button usa-button-outline" asp-action="Details" asp-controller="Complaints" asp-route-id="@item.Id">@Html.DisplayFor(m => item.Id)</a>
+                        </th>
+                        <td data-label="@Html.DisplayNameFor(m => item.DateReceived)">@Html.DisplayFor(m => item.DateReceived)</td>
+                        <td data-label="@Html.DisplayNameFor(m => item.Status)">@item.Status.GetDisplayName()</td>
+                        <td data-label="@Html.DisplayNameFor(m => item.SourceFacilityName)">
+                            @Html.DisplayFor(m => item.SourceFacilityName)
+                            @if (item.SourceLocation != null)
+                            {
+                                <br />@Html.DisplayFor(m => item.SourceLocation)
+                            }
+                            <br />ID: @Html.DisplayFor(m => item.SourceFacilityId)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <h2>Unassigned Complaints in @Model.MyOfficeName</h2>
+    @if (Model.MgrUnassignedComplaints == null || Model.MgrUnassignedComplaints.Count() == 0)
+    {
+        <p>None.</p>
+    }
+    else
+    {
+        <table class="usa-table-borderless gaepd-table-autowidth gaepd-table-responsive">
+            <thead>
+                <tr>
+                    <th scope="col">@Html.DisplayNameFor(model => Model.MgrUnassignedComplaints.FirstOrDefault().Id)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => Model.MgrUnassignedComplaints.FirstOrDefault().DateReceived)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => Model.MgrUnassignedComplaints.FirstOrDefault().Status)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => Model.MgrUnassignedComplaints.FirstOrDefault().SourceFacilityName)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.MgrUnassignedComplaints)
+                {
+                    <tr>
+                        <th scope="row" data-label="@Html.DisplayNameFor(m => item.Id)">
+                            <a class="usa-button usa-button-outline" asp-action="Details" asp-controller="Complaints" asp-route-id="@item.Id">@Html.DisplayFor(m => item.Id)</a>
+                        </th>
+                        <td data-label="@Html.DisplayNameFor(m => item.DateReceived)">@Html.DisplayFor(m => item.DateReceived)</td>
+                        <td data-label="@Html.DisplayNameFor(m => item.Status)">@item.Status.GetDisplayName()</td>
+                        <td data-label="@Html.DisplayNameFor(m => item.SourceFacilityName)">
+                            @Html.DisplayFor(m => item.SourceFacilityName)
+                            @if (item.SourceLocation != null)
+                            {
+                                <br />@Html.DisplayFor(m => item.SourceLocation)
+                            }
+                            <br />ID: @Html.DisplayFor(m => item.SourceFacilityId)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+
+@if (Model.MyNewComplaints != null && Model.MyNewComplaints.Count() > 0)
+{
+    <h2>My New Complaints</h2>
+    <table class="usa-table-borderless gaepd-table-autowidth gaepd-table-responsive">
+        <thead>
+            <tr>
+                <th scope="col">@Html.DisplayNameFor(model => Model.MyNewComplaints.FirstOrDefault().Id)</th>
+                <th scope="col">@Html.DisplayNameFor(model => Model.MyNewComplaints.FirstOrDefault().DateReceived)</th>
+                <th scope="col">@Html.DisplayNameFor(model => Model.MyNewComplaints.FirstOrDefault().Status)</th>
+                <th scope="col">@Html.DisplayNameFor(model => Model.MyNewComplaints.FirstOrDefault().SourceFacilityName)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.MyNewComplaints)
+            {
+                <tr>
+                    <th scope="row" data-label="@Html.DisplayNameFor(m => item.Id)">
+                        <a class="usa-button usa-button-outline" asp-action="Details" asp-controller="Complaints" asp-route-id="@item.Id">@Html.DisplayFor(m => item.Id)</a>
+                    </th>
+                    <td data-label="@Html.DisplayNameFor(m => item.DateReceived)">@Html.DisplayFor(m => item.DateReceived)</td>
+                    <td data-label="@Html.DisplayNameFor(m => item.Status)">@item.Status.GetDisplayName()</td>
+                    <td data-label="@Html.DisplayNameFor(m => item.SourceFacilityName)">
+                        @Html.DisplayFor(m => item.SourceFacilityName)
+                        @if (item.SourceLocation != null)
+                        {
+                            <br />@Html.DisplayFor(m => item.SourceLocation)
+                        }
+                        <br />ID: @Html.DisplayFor(m => item.SourceFacilityId)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 
 <h2>My Open Complaints</h2>
@@ -187,7 +198,7 @@ else
         </thead>
         <tbody>
             @foreach (var item in Model.MyOpenComplaints)
-                {
+            {
                 <tr>
                     <th scope="row" data-label="@Html.DisplayNameFor(m => item.Id)">
                         <a class="usa-button usa-button-outline" asp-action="Details" asp-controller="Complaints" asp-route-id="@item.Id">@Html.DisplayFor(m => item.Id)</a>
@@ -214,43 +225,43 @@ else
     {
         <h2>Master: Unassigned Complaints for @dictItem.Key.Name</h2>
 
-            @if (dictItem.Value != null && dictItem.Value.Count > 0)
-            {
-                <table class="usa-table-borderless gaepd-table-autowidth gaepd-table-responsive">
-                    <thead>
+        @if (dictItem.Value != null && dictItem.Value.Count > 0)
+        {
+            <table class="usa-table-borderless gaepd-table-autowidth gaepd-table-responsive">
+                <thead>
+                    <tr>
+                        <th scope="col">@Html.DisplayNameFor(model => dictItem.Value.FirstOrDefault().Id)</th>
+                        <th scope="col">@Html.DisplayNameFor(model => dictItem.Value.FirstOrDefault().DateReceived)</th>
+                        <th scope="col">@Html.DisplayNameFor(model => dictItem.Value.FirstOrDefault().Status)</th>
+                        <th scope="col">@Html.DisplayNameFor(model => dictItem.Value.FirstOrDefault().SourceFacilityName)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in dictItem.Value)
+                    {
                         <tr>
-                            <th scope="col">@Html.DisplayNameFor(model => dictItem.Value.FirstOrDefault().Id)</th>
-                            <th scope="col">@Html.DisplayNameFor(model => dictItem.Value.FirstOrDefault().DateReceived)</th>
-                            <th scope="col">@Html.DisplayNameFor(model => dictItem.Value.FirstOrDefault().Status)</th>
-                            <th scope="col">@Html.DisplayNameFor(model => dictItem.Value.FirstOrDefault().SourceFacilityName)</th>
+                            <th scope="row" data-label="@Html.DisplayNameFor(m => item.Id)">
+                                <a class="usa-button usa-button-outline" asp-action="Details" asp-controller="Complaints" asp-route-id="@item.Id">@Html.DisplayFor(m => item.Id)</a>
+                            </th>
+                            <td data-label="@Html.DisplayNameFor(m => item.DateReceived)">@Html.DisplayFor(m => item.DateReceived)</td>
+                            <td data-label="@Html.DisplayNameFor(m => item.Status)">@item.Status.GetDisplayName()</td>
+                            <td data-label="@Html.DisplayNameFor(m => item.SourceFacilityName)">
+                                @Html.DisplayFor(m => item.SourceFacilityName)
+                                @if (item.SourceLocation != null)
+                                {
+                                    <br />@Html.DisplayFor(m => item.SourceLocation)
+                                }
+                                <br />ID: @Html.DisplayFor(m => item.SourceFacilityId)
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in dictItem.Value)
-                        {
-                            <tr>
-                                <th scope="row" data-label="@Html.DisplayNameFor(m => item.Id)">
-                                    <a class="usa-button usa-button-outline" asp-action="Details" asp-controller="Complaints" asp-route-id="@item.Id">@Html.DisplayFor(m => item.Id)</a>
-                                </th>
-                                <td data-label="@Html.DisplayNameFor(m => item.DateReceived)">@Html.DisplayFor(m => item.DateReceived)</td>
-                                <td data-label="@Html.DisplayNameFor(m => item.Status)">@item.Status.GetDisplayName()</td>
-                                <td data-label="@Html.DisplayNameFor(m => item.SourceFacilityName)">
-                                    @Html.DisplayFor(m => item.SourceFacilityName)
-                                    @if (item.SourceLocation != null)
-                                    {
-                                        <br />@Html.DisplayFor(m => item.SourceLocation)
-                                    }
-                                    <br />ID: @Html.DisplayFor(m => item.SourceFacilityId)
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            }
-            else
-            {
-                <p>None.</p>
-            }
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>None.</p>
+        }
 
     }
 }
