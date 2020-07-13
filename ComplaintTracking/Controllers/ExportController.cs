@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using static ComplaintTracking.Caching;
 
@@ -120,9 +119,10 @@ namespace ComplaintTracking.Controllers
                 catch (Exception ex)
                 {
                     // Log error but take no other action if file can't be deleted
-                    ex.Data.Add("File", fileInfo.ToString());
-                    ex.Data.Add("FileList", fileInfos.ToString());
-                    await _errorLogger.LogErrorAsync(ex, (User == null) ? "Unknown" : User.Identity.Name, MethodBase.GetCurrentMethod().Name);
+                    var customData = new Dictionary<string, object>();
+                    customData.Add("File", fileInfo.ToString());
+                    customData.Add("FileList", fileInfos.ToString());
+                    await _errorLogger.LogErrorAsync(ex, "DeleteOldExportFilesAsync", customData);
                 }
             }
         }

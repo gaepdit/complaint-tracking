@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace ComplaintTracking.Controllers
@@ -83,9 +82,10 @@ namespace ComplaintTracking.Controllers
             }
             catch (Exception ex)
             {
-                ex.Data.Add("Action", "Saving Complaint");
-                ex.Data.Add("ViewModel", model);
-                await _errorLogger.LogErrorAsync(ex, (User == null) ? "Unknown" : User.Identity.Name, MethodBase.GetCurrentMethod().Name);
+                var customData = new Dictionary<string, object>();
+                customData.Add("Action", "Saving Complaint");
+                customData.Add("ViewModel", model);
+                await _errorLogger.LogErrorAsync(ex, "POST: Complaints/Create add complaint", customData);
 
                 msg = "There was an error saving the complaint. Please try again or contact support.";
                 ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
@@ -136,12 +136,13 @@ namespace ComplaintTracking.Controllers
             }
             catch (Exception ex)
             {
-                ex.Data.Add("Action", "Saving Transitions");
-                ex.Data.Add("Complaint ID", complaint.Id);
-                ex.Data.Add("ViewModel", model);
-                ex.Data.Add("Complaint Model", complaint);
-                ex.Data.Add("Transition ID", transitionId);
-                await _errorLogger.LogErrorAsync(ex, (User == null) ? "Unknown" : User.Identity.Name, MethodBase.GetCurrentMethod().Name);
+                var customData = new Dictionary<string, object>();
+                customData.Add("Action", "Saving Transitions");
+                customData.Add("Complaint ID", complaint?.Id);
+                customData.Add("ViewModel", model);
+                customData.Add("Complaint Model", complaint);
+                customData.Add("Transition ID", transitionId);
+                await _errorLogger.LogErrorAsync(ex, "POST: Complaints/Create add transitions", customData);
 
                 saveStatus = AlertStatus.Warning;
                 transitionSaveError = true;
@@ -184,11 +185,12 @@ namespace ComplaintTracking.Controllers
             }
             catch (Exception ex)
             {
-                ex.Data.Add("Action", "Emailing recipients");
-                ex.Data.Add("Complaint ID", complaint.Id);
-                ex.Data.Add("ViewModel", model);
-                ex.Data.Add("Complaint Model", complaint);
-                await _errorLogger.LogErrorAsync(ex, (User == null) ? "Unknown" : User.Identity.Name, MethodBase.GetCurrentMethod().Name);
+                var customData = new Dictionary<string, object>();
+                customData.Add("Action", "Emailing recipients");
+                customData.Add("Complaint ID", complaint.Id);
+                customData.Add("ViewModel", model);
+                customData.Add("Complaint Model", complaint);
+                await _errorLogger.LogErrorAsync(ex, "POST: Complaints/Create send email", customData);
 
                 saveStatus = AlertStatus.Warning;
                 emailError = true;
@@ -237,11 +239,12 @@ namespace ComplaintTracking.Controllers
                         }
                         catch (Exception ex)
                         {
-                            ex.Data.Add("Action", "Saving Attachments");
-                            ex.Data.Add("Complaint ID", complaint.Id);
-                            ex.Data.Add("ViewModel", model);
-                            ex.Data.Add("Complaint Model", complaint);
-                            await _errorLogger.LogErrorAsync(ex, (User == null) ? "Unknown" : User.Identity.Name, MethodBase.GetCurrentMethod().Name);
+                            var customData = new Dictionary<string, object>();
+                            customData.Add("Action", "Saving Attachments");
+                            customData.Add("Complaint ID", complaint.Id);
+                            customData.Add("ViewModel", model);
+                            customData.Add("Complaint Model", complaint);
+                            await _errorLogger.LogErrorAsync(ex, "POST: Complaints/Create save attachments", customData);
 
                             foreach (var attachment in savedFileList)
                             {

@@ -12,7 +12,7 @@ The Complaint Tracking System (CTS) uses the following open-source components an
 * [fancyBox](https://fancyapps.com/fancybox/3/)
 * [CsvHelper/](https://joshclose.github.io/CsvHelper/)
 * [MailKit](http://www.mimekit.net/)
-* [SharpRaven: a C# client for Sentry](https://github.com/getsentry/raven-csharp)
+* [Raygun4Net](https://github.com/MindscapeHQ/raygun4net)
 * [ImageSharp](https://sixlabors.com/projects/imagesharp/)
 
 ## Images
