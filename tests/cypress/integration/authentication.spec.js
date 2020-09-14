@@ -71,10 +71,11 @@ context('Authentication', () => {
     cy.get('.usa-alert-error')
       .contains('Invalid login attempt.')
       .should('exist')
-    cy.get('.usa-alert-error').get('.usa-button').click()
     cy.get('.usa-alert-error')
       .contains('Invalid login attempt.')
-      .should('not.exist')
+      .get('.usa-button')
+      .click()
+    cy.contains('Invalid login attempt.').should('not.exist')
   })
 
   it('does not log in if user does not exist', () => {
