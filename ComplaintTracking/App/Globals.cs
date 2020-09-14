@@ -22,10 +22,10 @@ namespace ComplaintTracking
         // Image thumbnail size
         public const int ThumbnailSize = 90;
         
-        // Support contact & return address on system emails
+        // Support contact and return address on system emails
         public static string AdminEmail;
 
-        // Developer receives error & test emails
+        // Developer receives error and test emails
         public static string DevEmail;
 
         // QA contact

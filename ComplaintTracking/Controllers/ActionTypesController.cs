@@ -211,7 +211,7 @@ namespace ComplaintTracking.Controllers
             if (ignoreId.HasValue)
             {
                 return _context.LookupActionTypes.AsNoTracking()
-                    .AnyAsync(e => e.Name == name & e.Id != ignoreId.Value);
+                    .AnyAsync(e => e.Name == name && e.Id != ignoreId.Value);
             }
             else
             {

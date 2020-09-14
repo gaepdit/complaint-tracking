@@ -20,7 +20,7 @@ namespace ComplaintTracking
             }
 
             return await _context.Users.AsNoTracking()
-                .AnyAsync(e => e.Email == email & e.Id != ignoreId);
+                .AnyAsync(e => e.Email == email && e.Id != ignoreId);
         }
 
         public async Task<SelectList> GetUsersSelectListAsync(Guid? officeId = null, bool includeInactive = false)

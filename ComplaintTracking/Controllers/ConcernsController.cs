@@ -1,4 +1,4 @@
-using ComplaintTracking.AlertMessages;
+﻿using ComplaintTracking.AlertMessages;
 using ComplaintTracking.Data;
 using ComplaintTracking.Models;
 using ComplaintTracking.ViewModels;
@@ -17,7 +17,7 @@ namespace ComplaintTracking.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IMemoryCache _cache;
-        private const string objectDisplayName = "Area of Concern";
+        private const string _objectDisplayName = "Area of Concern";
 
         public ConcernsController(
             ApplicationDbContext context,
@@ -97,19 +97,19 @@ namespace ComplaintTracking.Controllers
                     _context.Add(item);
                     await _context.SaveChangesAsync();
 
-                    msg = string.Format("The {0} has been created.", objectDisplayName);
+                    msg = string.Format("The {0} has been created.", _objectDisplayName);
                     TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
 
                     return RedirectToAction("Details", new { id = item.Id });
                 }
                 catch
                 {
-                    msg = string.Format("There was an error saving the {0}. Please try again or contact support.", objectDisplayName);
+                    msg = string.Format("There was an error saving the {0}. Please try again or contact support.", _objectDisplayName);
                 }
             }
             else
             {
-                msg = string.Format("The {0} was not created. Please fix the errors shown below.", objectDisplayName);
+                msg = string.Format("The {0} was not created. Please fix the errors shown below.", _objectDisplayName);
             }
 
             ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
@@ -186,13 +186,13 @@ namespace ComplaintTracking.Controllers
                     }
                 }
 
-                msg = string.Format("The {0} was updated.", objectDisplayName);
+                msg = string.Format("The {0} was updated.", _objectDisplayName);
                 TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
 
                 return RedirectToAction("Details", new { id = model.Id });
             }
 
-            msg = string.Format("The {0} was not updated. Please fix the errors shown below.", objectDisplayName);
+            msg = string.Format("The {0} was not updated. Please fix the errors shown below.", _objectDisplayName);
             ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
 
             return View(model);
@@ -211,7 +211,7 @@ namespace ComplaintTracking.Controllers
             if (ignoreId.HasValue)
             {
                 return _context.LookupConcerns.AsNoTracking()
-                    .AnyAsync(e => e.Name == name & e.Id != ignoreId.Value);
+                    .AnyAsync(e => e.Name == name && e.Id != ignoreId.Value);
             }
 
             return _context.LookupConcerns.AsNoTracking()

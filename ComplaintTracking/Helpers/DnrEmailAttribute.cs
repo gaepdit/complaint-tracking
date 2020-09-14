@@ -7,7 +7,7 @@ namespace ComplaintTracking.Validation
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
     sealed public class DnrEmailAddressAttribute : ValidationAttribute
     {
-        private const int MatchTimeoutInSeconds = 2;
+        private const int _matchTimeoutInSeconds = 2;
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
@@ -20,7 +20,7 @@ namespace ComplaintTracking.Validation
 
         private bool IsValidDnrEmailAddress(string emailAddress)
         {
-            var regex = new Regex(RegexPatterns.DnrEmailPattern, default, TimeSpan.FromSeconds(MatchTimeoutInSeconds));
+            var regex = new Regex(RegexPatterns.DnrEmailPattern, default, TimeSpan.FromSeconds(_matchTimeoutInSeconds));
             return !string.IsNullOrEmpty(emailAddress) && regex.IsMatch(emailAddress);
         }
     }

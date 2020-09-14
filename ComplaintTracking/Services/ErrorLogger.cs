@@ -31,7 +31,7 @@ namespace ComplaintTracking.Services
             string shortId = ShortID.GetShortID();
 
             // Custom data
-            customData = customData ?? new Dictionary<string, object>();
+            customData ??= new Dictionary<string, object>();
             customData.Add("CTS Error ID", shortId);
             if (!string.IsNullOrEmpty(context))
             {

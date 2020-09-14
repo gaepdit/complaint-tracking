@@ -39,15 +39,15 @@ namespace ComplaintTracking.Controllers
         {
             // Get status code details
             string statusCodeDesc = "";
-            if (StatusCodeDescriptions.ContainsKey(statusCode))
+            if (_statusCodeDescriptions.ContainsKey(statusCode))
             {
-                statusCodeDesc = StatusCodeDescriptions[statusCode];
+                statusCodeDesc = _statusCodeDescriptions[statusCode];
             }
 
             ViewData["statusCode"] = statusCode.ToString();
             ViewData["statusCodeDesc"] = statusCodeDesc;
 
-            // 404 & 400 errors don't get logged
+            // 404 and 400 errors don't get logged
             if (statusCode != StatusCodes.Status404NotFound && statusCode != StatusCodes.Status400BadRequest)
             {
                 // Get the details of the exception that occurred
@@ -68,9 +68,11 @@ namespace ComplaintTracking.Controllers
                     pathAndQueryString = string.Concat(Request.Path.ToString(), Request.QueryString.ToString());
                 }
 
-                var customData = new Dictionary<string, object>();
-                customData.Add("HTTP Status Code", statusCode.ToString());
-                customData.Add("HTTP Status Code Description", statusCodeDesc);
+                var customData = new Dictionary<string, object>
+                {
+                    { "HTTP Status Code", statusCode.ToString() },
+                    { "HTTP Status Code Description", statusCodeDesc }
+                };
 
                 // Log Error by throwing new exception
                 try
@@ -112,7 +114,7 @@ namespace ComplaintTracking.Controllers
         //     return Ok();
         // }
 
-        private static Dictionary<int, string> StatusCodeDescriptions = new Dictionary<int, string>()
+        private static readonly Dictionary<int, string> _statusCodeDescriptions = new Dictionary<int, string>()
         {
             { 100, "Continue"},
             { 101, "Switching Protocols"},
