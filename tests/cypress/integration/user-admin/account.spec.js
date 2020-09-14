@@ -17,18 +17,14 @@ context('Admin account access', () => {
 
       cy.visit('Account')
       cy.contains('Edit').click()
-      cy.get('#Email')
-        .clear()
-        .type(badEmail)
+      cy.get('#Email').clear().type(badEmail)
       cy.get('#OfficeId').select('Air Protection Branch')
       cy.contains('Save').click()
       cy.get('.validation-summary-errors').should(
         'contain',
         'A valid DNR email address is required'
       )
-      cy.get('#Email')
-        .clear()
-        .type(Cypress.env('admin-user'))
+      cy.get('#Email').clear().type(Cypress.env('admin-user'))
       cy.contains('Save').click()
       cy.get('.usa-alert-success').should(
         'contain.text',
@@ -78,9 +74,7 @@ context('Admin account access', () => {
         'A valid DNR email address is required'
       )
 
-      cy.get('#Email')
-        .clear()
-        .type(goodEmail)
+      cy.get('#Email').clear().type(goodEmail)
       cy.contains('Save').click()
       cy.get('.usa-alert-success').should(
         'contain.text',

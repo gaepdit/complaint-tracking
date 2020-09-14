@@ -11,16 +11,16 @@ context('Authentication', () => {
       body: {
         Email: Cypress.env('staff-user'),
         Password: Cypress.env('staff-pass'),
-        RememberMe: false
-      }
-    }).should(resp => {
+        RememberMe: false,
+      },
+    }).should((resp) => {
       expect(resp.status).to.eq(400)
     })
     cy.getCookie('.AspNetCore.Identity.Application').should('not.exist')
   })
 
   it('sets identity cookie on successful login', () => {
-    cy.get('input[name=__RequestVerificationToken]').then(tokenInput => {
+    cy.get('input[name=__RequestVerificationToken]').then((tokenInput) => {
       cy.request({
         method: 'Post',
         url: 'Account/Login',
@@ -30,9 +30,9 @@ context('Authentication', () => {
           Email: Cypress.env('staff-user'),
           Password: Cypress.env('staff-pass'),
           RememberMe: false,
-          __RequestVerificationToken: tokenInput.val()
-        }
-      }).should(resp => {
+          __RequestVerificationToken: tokenInput.val(),
+        },
+      }).should((resp) => {
         expect(resp.status).to.eq(302)
       })
       cy.getCookie('.AspNetCore.Identity.Application').should('exist')
@@ -71,9 +71,7 @@ context('Authentication', () => {
     cy.get('.usa-alert-error')
       .contains('Invalid login attempt.')
       .should('exist')
-    cy.get('.usa-alert-error')
-      .get('.usa-button')
-      .click()
+    cy.get('.usa-alert-error').get('.usa-button').click()
     cy.get('.usa-alert-error')
       .contains('Invalid login attempt.')
       .should('not.exist')

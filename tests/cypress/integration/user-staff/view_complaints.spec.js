@@ -19,9 +19,7 @@ context('Staff complaint access', () => {
       'Complaint ID ' + Cypress.env('publicComplaintId')
     )
     cy.get('h1').should('not.contain', 'Public Copy')
-    cy.get('h2')
-      .eq(0)
-      .should('contain', 'Status: Approved/Closed')
+    cy.get('h2').eq(0).should('contain', 'Status: Approved/Closed')
   })
 
   it('can access public complaint and open public copy', () => {
@@ -31,9 +29,7 @@ context('Staff complaint access', () => {
       'Complaint ID ' + Cypress.env('publicComplaintId')
     )
     cy.get('h1').should('not.contain', 'Public Copy')
-    cy.get('h2')
-      .eq(0)
-      .should('contain', 'Status: Approved/Closed')
+    cy.get('h2').eq(0).should('contain', 'Status: Approved/Closed')
 
     cy.contains('View public page').click()
     cy.url().should(
@@ -46,9 +42,7 @@ context('Staff complaint access', () => {
       'contain',
       'Complaint ID ' + Cypress.env('publicComplaintId') + ' — Public Copy'
     )
-    cy.get('h2')
-      .eq(0)
-      .should('contain', 'Status: Approved/Closed')
+    cy.get('h2').eq(0).should('contain', 'Status: Approved/Closed')
   })
 
   it('can access non-public complaint and open public details', () => {
@@ -58,9 +52,7 @@ context('Staff complaint access', () => {
       .select('Under Investigation')
       .get('#submit')
       .click()
-    cy.get('tbody a')
-      .eq(0)
-      .click()
+    cy.get('tbody a').eq(0).click()
 
     cy.url().should(
       'contain',
@@ -68,9 +60,7 @@ context('Staff complaint access', () => {
     )
     cy.get('h1').should('contain', 'Complaint ID')
     cy.get('h1').should('not.contain', 'Public Copy')
-    cy.get('h2')
-      .eq(0)
-      .should('contain', 'Status: Under Investigation')
+    cy.get('h2').eq(0).should('contain', 'Status: Under Investigation')
 
     cy.contains('View public details').click()
     cy.url().should(
@@ -78,16 +68,14 @@ context('Staff complaint access', () => {
       Cypress.config().baseUrl + '/Complaints/PublicDetails/'
     )
     cy.get('h1').should('contain', 'Public Details')
-    cy.get('h2')
-      .eq(0)
-      .should('contain', 'Status: Under Investigation')
+    cy.get('h2').eq(0).should('contain', 'Status: Under Investigation')
   })
 
   it('can not access deleted complaint', () => {
     cy.request({
       url: 'Complaints/Details/' + Cypress.env('deletedComplaintId'),
-      failOnStatusCode: false
-    }).should(resp => {
+      failOnStatusCode: false,
+    }).should((resp) => {
       expect(resp.status).to.eq(404)
     })
   })

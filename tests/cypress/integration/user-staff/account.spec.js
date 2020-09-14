@@ -17,17 +17,13 @@ context('Staff account access', () => {
 
       cy.visit('Account')
       cy.contains('Edit').click()
-      cy.get('#Email')
-        .clear()
-        .type(badEmail)
+      cy.get('#Email').clear().type(badEmail)
       cy.contains('Save').click()
       cy.get('.validation-summary-errors').should(
         'contain',
         'A valid DNR email address is required'
       )
-      cy.get('#Email')
-        .clear()
-        .type(Cypress.env('staff-user'))
+      cy.get('#Email').clear().type(Cypress.env('staff-user'))
       cy.contains('Save').click()
       cy.get('.usa-alert-success').should(
         'contain.text',
@@ -69,7 +65,7 @@ context('Staff account access', () => {
       .contains('View')
       .click()
       .url()
-      .then($viewUrl => {
+      .then(($viewUrl) => {
         cy.visit($viewUrl.replace('Details', 'Edit'))
       })
       .contains('Access Denied')

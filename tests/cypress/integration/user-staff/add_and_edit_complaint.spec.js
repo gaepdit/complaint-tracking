@@ -52,14 +52,9 @@ context('Staff complaint editing', () => {
       cy.get('tr').contains(fileName)
 
       // delete file
-      cy.get('tr')
-        .contains('tr', fileName)
-        .contains('Delete')
-        .click()
+      cy.get('tr').contains('tr', fileName).contains('Delete').click()
       cy.get('h1').should('contain', 'Delete Attachment from Complaint ID')
       cy.contains('button', 'Delete Attachment').click()
-      cy.get('tr')
-        .contains(fileName)
-        .should('not.exist')
+      cy.get('tr').contains(fileName).should('not.exist')
     })
 })

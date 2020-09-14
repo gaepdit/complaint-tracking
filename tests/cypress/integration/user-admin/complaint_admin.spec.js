@@ -13,17 +13,13 @@ context('Admin complaint administration', () => {
         .select('Approved/Closed')
         .get('#submit')
         .click()
-      cy.get('tbody a')
-        .eq(0)
-        .click()
+      cy.get('tbody a').eq(0).click()
 
       // reopen complaint
       cy.contains('Reopen').click()
       cy.get('h1').should('contain', 'Reopen Complaint ID')
       cy.get('#Comment').type('Test comment')
-      cy.get('form')
-        .contains('form', 'Reopen')
-        .submit()
+      cy.get('form').contains('form', 'Reopen').submit()
       cy.get('.usa-alert-success').should(
         'contain.text',
         'The Complaint has been reopened.'
@@ -38,9 +34,7 @@ context('Admin complaint administration', () => {
       cy.wait('@apiRequest')
       cy.get('#CurrentOwnerId').selectNth(1)
       cy.get('#Comment').type('Test comment')
-      cy.get('form')
-        .contains('form', 'Assign')
-        .submit()
+      cy.get('form').contains('form', 'Assign').submit()
       cy.get('.usa-alert').should('contain.text', 'assign')
 
       // submit for review
@@ -48,9 +42,7 @@ context('Admin complaint administration', () => {
       cy.get('h1').should('contain', 'Request Review for Complaint ID')
       cy.get('#ReviewById').selectNth(1)
       cy.get('#Comment').type('Test comment')
-      cy.get('form')
-        .contains('form', 'Request review')
-        .submit()
+      cy.get('form').contains('form', 'Request review').submit()
       cy.get('.usa-alert-success').should(
         'contain.text',
         'The Complaint has been submitted for review.'
@@ -60,9 +52,7 @@ context('Admin complaint administration', () => {
       cy.contains('Close Complaint').click()
       cy.get('h1').should('contain', 'Approve and Close Complaint ID')
       cy.get('#Comment').type('Test comment')
-      cy.get('form')
-        .contains('form', 'Approve')
-        .submit()
+      cy.get('form').contains('form', 'Approve').submit()
       cy.get('.usa-alert-success').should(
         'contain.text',
         'The Complaint has been approved/closed.'

@@ -7,9 +7,7 @@ context('Staff reports', () => {
 
   it('can run a report', () => {
     cy.visit('Reports')
-    cy.get('h1')
-      .eq(0)
-      .should('contain', 'Status Reports')
+    cy.get('h1').eq(0).should('contain', 'Status Reports')
 
     cy.visit('Reports/DaysToClosureByOffice')
     cy.get('h1').should('contain', 'Report: Days To Closure By Office')

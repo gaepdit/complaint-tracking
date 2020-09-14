@@ -20,9 +20,7 @@ context('Public view', () => {
       'contain',
       'Complaint ID ' + Cypress.env('publicComplaintId') + ' — Public Copy'
     )
-    cy.get('h2')
-      .eq(0)
-      .should('contain', 'Status: Approved/Closed')
+    cy.get('h2').eq(0).should('contain', 'Status: Approved/Closed')
   })
 
   it('can access public complaint', () => {
@@ -37,18 +35,21 @@ context('Public view', () => {
       'contain',
       'Complaint ID ' + Cypress.env('publicComplaintId') + ' — Public Copy'
     )
-    cy.get('h2')
-      .eq(0)
-      .should('contain', 'Status: Approved/Closed')
+    cy.get('h2').eq(0).should('contain', 'Status: Approved/Closed')
   })
 
   it('can access public complaint from non-public URL', () => {
-    cy.visit('Complaints/Details/'+Cypress.env("publicComplaintId"))
+    cy.visit('Complaints/Details/' + Cypress.env('publicComplaintId'))
     cy.url().should(
       'eq',
-      Cypress.config().baseUrl + '/Public/ComplaintDetails/'+Cypress.env("publicComplaintId")
+      Cypress.config().baseUrl +
+        '/Public/ComplaintDetails/' +
+        Cypress.env('publicComplaintId')
     )
-    cy.get('h1').should('contain', 'Complaint ID '+Cypress.env("publicComplaintId")+' — Public Copy')
+    cy.get('h1').should(
+      'contain',
+      'Complaint ID ' + Cypress.env('publicComplaintId') + ' — Public Copy'
+    )
   })
 
   it('can not access deleted complaint', () => {
