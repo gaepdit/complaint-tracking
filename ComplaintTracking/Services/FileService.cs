@@ -39,7 +39,7 @@ namespace ComplaintTracking.Services
         {
             // Try to save using the image service (which handles image rotation problems). 
             // If image service fails, save file directly.
-            if (!await _imageService.SaveImage(file, savePath))
+            if (!await _imageService.SaveImageAsync(file, savePath))
             {
                 using var stream = new FileStream(savePath, FileMode.Create);
                 await file.CopyToAsync(stream);
@@ -61,7 +61,7 @@ namespace ComplaintTracking.Services
             if (FileTypes.FilenameImpliesImage(fileName))
             {
                 var thumbnailSavePath = Path.Combine(FilePaths.ThumbnailsFolder, string.Concat(attachmentId.ToString(), fileExtension));
-                if (await _imageService.SaveThumbnail(file, thumbnailSavePath))
+                if (await _imageService.SaveThumbnailAsync(file, thumbnailSavePath))
                 {
                     isImage = true;
                 }
