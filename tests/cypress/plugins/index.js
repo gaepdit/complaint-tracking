@@ -29,11 +29,6 @@ module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
 
-  // https://github.com/bahmutov/cypress-failed-log
-  on('task', {
-    failed: require('cypress-failed-log/src/failed')()
-  })
-
   // accept a configFile value
   const file = config.env.configFile || null
 

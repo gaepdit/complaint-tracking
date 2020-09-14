@@ -19,9 +19,6 @@ import './commands'
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
-// https://github.com/bahmutov/cypress-failed-log
-require('cypress-failed-log')
-
 // https://glebbahmutov.com/blog/keep-passwords-secret-in-e2e-tests/
 /**
  * Logs the user by making API call to POST /login.
@@ -37,7 +34,7 @@ export const login = (username, password) => {
   }
 
   cy.visit('Account/Login')
-  cy.get('input[name=__RequestVerificationToken]').then(tokenInput => {
+  cy.get('input[name=__RequestVerificationToken]').then((tokenInput) => {
     cy.request({
       method: 'Post',
       url: 'Account/Login',
@@ -47,8 +44,8 @@ export const login = (username, password) => {
         Email: username,
         Password: password,
         RememberMe: false,
-        __RequestVerificationToken: tokenInput.val()
-      }
+        __RequestVerificationToken: tokenInput.val(),
+      },
     })
   })
   cy.getCookie('.AspNetCore.Identity.Application').should('exist')
