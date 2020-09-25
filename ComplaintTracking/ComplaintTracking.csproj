@@ -37,7 +37,6 @@
     <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="16.7.56" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\PublishProfiles\DevPublish.pubxml" />
     <None Include="Web.Release.config" />
     <None Include="Web.Staging.config" />
     <None Include="Web.Debug.config" />
