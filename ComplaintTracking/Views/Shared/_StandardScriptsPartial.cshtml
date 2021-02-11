@@ -14,6 +14,8 @@
   rg4js('apiKey', '@Configuration["RaygunSettings:ApiKey"]');
   rg4js('enableCrashReporting', true);
   rg4js('enablePulse', true);
+  rg4js('options', {ignore3rdPartyErrors: true});
+  rg4js('whitelistCrossOriginDomains', ['cdnjs.cloudflare.com']);
 @if (identity?.IsAuthenticated == true)
 {
   <text>
