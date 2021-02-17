@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Connections;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Mindscape.Raygun4Net.AspNetCore;
@@ -28,6 +29,8 @@ namespace ComplaintTracking.Services
             string context = "",
             Dictionary<string, object> customData = null)
         {
+            if (ExceptionCanBeIgnored(ex)) return string.Empty;
+
             string shortId = ShortID.GetShortID();
 
             // Custom data
@@ -43,6 +46,14 @@ namespace ComplaintTracking.Services
             await raygunClient.SendInBackground(ex, null, customData);
 
             return shortId;
+        }
+
+        private bool ExceptionCanBeIgnored(Exception ex)
+        {
+            // ConnectionResetException is irrelevant; should be fixed in .NET 6.0
+            if (ex is ConnectionResetException && ex.Message.Contains("The client has disconnected")) return true;
+
+            return false;
         }
     }
 
