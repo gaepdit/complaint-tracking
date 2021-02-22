@@ -16,18 +16,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mindscape.Raygun4Net.AspNetCore;
-using System;
 using System.IO;
 
 namespace ComplaintTracking
 {
     public class Startup
     {
-        private readonly IWebHostEnvironment _env;
-
-        public Startup(IWebHostEnvironment env, IConfiguration configuration)
+        public Startup(IConfiguration configuration)
         {
-            _env = env;
             Configuration = configuration;
             Setup();
         }

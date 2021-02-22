@@ -88,31 +88,30 @@ namespace ComplaintTracking.Controllers
             return View("Error");
         }
 
-        // [Route("Error/TestUnhandledException")]
-        // public IActionResult TestUnhandledException()
-        // {
-        //     throw new ArgumentException("Testing Unhandled Exception");
-        //     return Ok();
-        // }
+        //[Route("Error/TestUnhandledException")]
+        //public IActionResult TestUnhandledException()
+        //{
+        //    throw new ArgumentException("Testing Unhandled Exception");
+        //}
 
-        // [Route("Error/TestHandledException")]
-        // public async Task<IActionResult> TestHandledException()
-        // {
-        //     try
-        //     {
-        //         throw new ArgumentException("Testing Handled Exception");
-        //     }
-        //     catch (System.Exception ex)
-        //     {
-        //         // Log error but take no other action if file can't be deleted
-        //         var customData = new Dictionary<string, object>();
-        //         customData.Add("Data1", "Some data");
-        //         customData.Add("Data2", "Some more data");
-        //         await _errorLogger.LogErrorAsync(ex, "Error/TestHandledException", customData);
-        //     }
+        //[Route("Error/TestHandledException")]
+        //public async Task<IActionResult> TestHandledException()
+        //{
+        //    try
+        //    {
+        //        throw new ArgumentException("Testing Handled Exception");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var customData = new Dictionary<string, object>
+        //        {
+        //            { "Custom Data", "Some data" }
+        //        };
+        //        await _errorLogger.LogErrorAsync(ex, "Error/TestHandledException", customData);
+        //    }
 
-        //     return Ok();
-        // }
+        //    return Ok();
+        //}
 
         private static readonly Dictionary<int, string> _statusCodeDescriptions = new Dictionary<int, string>()
         {

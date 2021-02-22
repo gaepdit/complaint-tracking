@@ -1,9 +1,8 @@
-using ComplaintTracking.Data;
+﻿using ComplaintTracking.Data;
 using ComplaintTracking.ExtensionMethods;
 using ComplaintTracking.Models;
 using MailKit.Net.Smtp;
 using MailKit.Security;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
@@ -22,18 +21,15 @@ namespace ComplaintTracking.Services
 
     public class EmailSender : IEmailSender
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUrlHelper _urlHelper;
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
 
         public EmailSender(
-            IHttpContextAccessor httpContextAccessor,
             IUrlHelper urlHelper,
             ApplicationDbContext context,
             IConfiguration configuration)
         {
-            _httpContextAccessor = httpContextAccessor;
             _urlHelper = urlHelper;
             _context = context;
             _configuration = configuration;
