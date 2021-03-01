@@ -1,4 +1,5 @@
 ﻿using CsvHelper;
+using CsvHelper.Configuration;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -10,11 +11,11 @@ namespace ComplaintTracking
     {
         public static async Task<MemoryStream> GetCsvMemoryStreamAsync<T>(this List<T> records)
         {
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture) { SanitizeForInjection = true };
             using var ms = new MemoryStream();
             using var sw = new StreamWriter(ms);
-            using var csv = new CsvWriter(sw, CultureInfo.InvariantCulture);
+            using var csv = new CsvWriter(sw, config);
 
-            csv.Configuration.SanitizeForInjection = true;
             csv.WriteRecords(records);
 
             await csv.FlushAsync();
