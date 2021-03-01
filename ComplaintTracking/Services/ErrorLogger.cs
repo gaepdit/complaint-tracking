@@ -31,7 +31,7 @@ namespace ComplaintTracking.Services
         {
             if (ExceptionCanBeIgnored(ex)) return string.Empty;
 
-            string shortId = ShortID.GetShortID();
+            var shortId = ShortID.GetShortID();
 
             // Custom data
             customData ??= new Dictionary<string, object>();
@@ -48,7 +48,7 @@ namespace ComplaintTracking.Services
             return shortId;
         }
 
-        private bool ExceptionCanBeIgnored(Exception ex)
+        private static bool ExceptionCanBeIgnored(Exception ex)
         {
             // ConnectionResetException is irrelevant; should be fixed in .NET 6.0
             if (ex is ConnectionResetException && ex.Message.Contains("The client has disconnected")) return true;
