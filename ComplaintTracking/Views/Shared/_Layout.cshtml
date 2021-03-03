@@ -18,7 +18,7 @@
     @await Html.PartialAsync("_FaviconPartial")
     @await Html.PartialAsync("_StandardStylesheetsPartial")
     @RenderSection("PageStyles", required: false)
-<script type="text/javascript">
+    <script type="text/javascript">
   !function(a,b,c,d,e,f,g,h){a.RaygunObject=e,a[e]=a[e]||function(){
   (a[e].o=a[e].o||[]).push(arguments)},f=b.createElement(c),g=b.getElementsByTagName(c)[0],
   f.async=1,f.src=d,g.parentNode.insertBefore(f,g),h=a.onerror,a.onerror=function(b,c,d,f,g){
@@ -133,7 +133,7 @@
   rg4js('enableCrashReporting', true);
   rg4js('enablePulse', true);
   rg4js('options', {ignore3rdPartyErrors: true});
-  rg4js('whitelistCrossOriginDomains', ['cdnjs.cloudflare.com']);
+  rg4js('whitelistCrossOriginDomains', ['cdnjs.cloudflare.com','cdn.jsdelivr.net']);
 @if (User?.Identity?.IsAuthenticated == true)
 {
   <text>

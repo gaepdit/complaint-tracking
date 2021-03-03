@@ -7,15 +7,15 @@
   "license": "MIT",
   "devDependencies": {
     "gulp": "^4.0.2",
-    "natives": "^1.1.6",
     "rimraf": "^3.0.2"
   },
   "dependencies": {
-    "@fancyapps/fancybox": "3.2.5",
+    "@fancyapps/fancybox": "~3.5.7",
     "ga-epd-wds": "1.20.0",
-    "jquery": "~3.5.1",
-    "jquery-timepicker": "1.3.3",
-    "jquery-ui-dist": "1.12.1",
-    "jquery-validation-unobtrusive": "~3.2.11"
+    "jquery": "^3.6.0",
+    "jquery-timepicker": "~1.3.3",
+    "jquery-ui-dist": "~1.12.1",
+    "jquery-validation-unobtrusive": "~3.2.12",
+    "jquery-validation": "~1.19.3"
   }
 }

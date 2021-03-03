@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptLibraryMappings">
+    <file url="PROJECT" libraries="{fancybox, gagov_external_blocks-footer, gagov_external_blocks-topper, jquery, jquery-validate, jquery-validation, jquery-validation-unobtrusive, jqueryui, raygun, timepicker}" />
+  </component>
+</project>

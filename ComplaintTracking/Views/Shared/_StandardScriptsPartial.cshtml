@@ -1,26 +1,27 @@
 ﻿<environment names="Development">
-  <script src="~/assets/lib/jquery/jquery.js"></script>
-  <script src="~/assets/lib/jquery-ui/jquery-ui.js"></script>
-  <script src="~/assets/lib/jquery-timepicker/jquery.timepicker.js"></script>
-  <script src="~/assets/lib/fancybox/jquery.fancybox.js"></script>
-  <script src="~/assets/js/uswds.js"></script>
+    <script src="~/assets/lib/jquery/jquery.js"></script>
+    <script src="~/assets/lib/jquery-ui/jquery-ui.js"></script>
+    <script src="~/assets/lib/jquery-timepicker/jquery.timepicker.js"></script>
+    <script src="~/assets/lib/fancybox/jquery.fancybox.js"></script>
+    <script src="~/assets/js/uswds.js"></script>
 </environment>
 <environment names="Staging,Production">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" 
-    asp-fallback-src="~/assets/lib/jquery/jquery.min.js"
-    asp-fallback-test="window.jQuery"
-    integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" 
-    asp-fallback-src="~/assets/lib/jquery-ui/jquery-ui.min.js"
-    asp-fallback-test="window.jQuery.ui"
-    integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA==" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js" 
-    asp-fallback-src="~/assets/jquery-timepicker/jquery.timepicker.js"
-    asp-fallback-test="window.jQuery.TimePicker"
-    integrity="sha512-ux1VHIyaPxawuad8d1wr1i9l4mTwukRq5B3s8G3nEmdENnKF5wKfOV6MEUH0k/rNT4mFr/yL+ozoDiwhUQekTg==" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" 
-    asp-fallback-src="~/assets/lib/fancybox/jquery.fancybox.min.js"
-    asp-fallback-test="$.fancybox"
-    integrity="sha512-GtU3C24wUoqw9549QI/9K3/JVLHIVqdwdDVkEkaX8umZS7TGEaBFUSBJe6tU6/VAc20z9BkYN3Yw2Jov7pUrqQ==" crossorigin="anonymous"></script>
-  <script src="~/assets/js/uswds.min.js" asp-append-version="true"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+            asp-fallback-src="~/assets/lib/jquery/jquery.min.js"
+            asp-fallback-test="window.jQuery"
+            integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"
+            asp-fallback-src="~/assets/lib/jquery-ui/jquery-ui.min.js"
+            asp-fallback-test="window.jQuery.ui"
+            integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA==" crossorigin="anonymous"></script>
+    @* Note: Latest jquery-timepicker on cdnjs (1.3.5) and npmjs (1.3.3) are out of sync, but they are functionally equivalent. *@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"
+            asp-fallback-src="~/assets/jquery-timepicker/jquery.timepicker.js"
+            asp-fallback-test="window.jQuery.TimePicker"
+            integrity="sha512-ux1VHIyaPxawuad8d1wr1i9l4mTwukRq5B3s8G3nEmdENnKF5wKfOV6MEUH0k/rNT4mFr/yL+ozoDiwhUQekTg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"
+            asp-fallback-src="~/assets/lib/fancybox/jquery.fancybox.min.js"
+            asp-fallback-test="$.fancybox"
+            integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA==" crossorigin="anonymous"></script>
+    <script src="~/assets/js/uswds.min.js" asp-append-version="true"></script>
 </environment>
