@@ -22,6 +22,14 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "https://localhost:44312;http://localhost:55077"
+    },
+    "ComplaintTracking-AsStaging": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Staging"
+      },
+      "applicationUrl": "https://localhost:44312;http://localhost:55077"
     }
   }
 }
