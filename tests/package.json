@@ -6,7 +6,7 @@
   "author": "Doug Waldron",
   "license": "MIT",
   "devDependencies": {
-    "cypress": "^5.1.0"
+    "cypress": "^6.6.0"
   },
   "scripts": {
     "cypress": "cypress open",
