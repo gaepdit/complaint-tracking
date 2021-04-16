@@ -180,7 +180,7 @@ namespace ComplaintTracking
         {
             CTS.AdminEmail = Configuration["Contacts:AdminEmail"].ForceToString();
             CTS.DevEmail = Configuration["Contacts:DevEmail"].ForceToString();
-            CTS.QAEmail = Configuration["Contacts:QAEmail"].ForceToString();
+            CTS.SupportEmail = Configuration["Contacts:SupportEmail"].ForceToString();
             CTS.AccountAdminEmail = Configuration["Contacts:AccountAdminEmail"].ForceToString();
         }
     }

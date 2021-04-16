@@ -43,7 +43,7 @@ namespace ComplaintTracking.Services
             bool saveLocallyOnly = false,
             string replyTo = "")
         {
-            string subjectPrefix = CTS.CurrentEnvironment switch
+            var subjectPrefix = CTS.CurrentEnvironment switch
             {
                 ServerEnvironment.Development => "[CTS-DEV] ",
                 ServerEnvironment.Staging => "[CTS-UAT] ",
@@ -54,7 +54,7 @@ namespace ComplaintTracking.Services
             var emailOptions = new EmailOptions();
             _configuration.GetSection("EmailOptions").Bind(emailOptions);
 
-            bool disableEmail = saveLocallyOnly || !emailOptions.EnableEmail;
+            var disableEmail = saveLocallyOnly || !emailOptions.EnableEmail;
 
             var emailMessage = new MimeMessage();
 
@@ -81,8 +81,8 @@ namespace ComplaintTracking.Services
 
             if (disableEmail)
             {
-                var fileName = string.Format("email_{0:yyyy-MM-dd-HH-mm-ss.FFF}.txt", DateTime.Now);
-                using StreamWriter sw = File.CreateText(Path.Combine(FilePaths.UnsentEmailFolder, fileName));
+                var fileName = $"email_{DateTime.Now:yyyy-MM-dd-HH-mm-ss.FFF}.txt";
+                await using var sw = File.CreateText(Path.Combine(FilePaths.UnsentEmailFolder, fileName));
                 await emailMessage.WriteToAsync(sw.BaseStream);
             }
             else
@@ -91,11 +91,11 @@ namespace ComplaintTracking.Services
                 {
                     emailMessage.To.Clear();
                     emailMessage.To.Add(new MailboxAddress("", CTS.DevEmail));
-                    emailMessage.To.Add(new MailboxAddress("", CTS.QAEmail));
                 }
 
                 using var client = new SmtpClient();
-                await client.ConnectAsync(emailOptions.SmtpHost, emailOptions.SmtpPort, SecureSocketOptions.None).ConfigureAwait(false);
+                await client.ConnectAsync(emailOptions.SmtpHost, emailOptions.SmtpPort, SecureSocketOptions.None)
+                    .ConfigureAwait(false);
                 await client.SendAsync(emailMessage).ConfigureAwait(false);
                 await client.DisconnectAsync(true).ConfigureAwait(false);
             }

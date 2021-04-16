@@ -28,8 +28,8 @@ namespace ComplaintTracking
         // Developer receives error and test emails
         public static string DevEmail;
 
-        // QA contact
-        public static string QAEmail;
+        // Support contact
+        public static string SupportEmail;
 
         // Account administrator
         public static string AccountAdminEmail;
