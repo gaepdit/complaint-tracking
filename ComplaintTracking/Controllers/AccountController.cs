@@ -1,3 +1,6 @@
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using ComplaintTracking.AlertMessages;
 using ComplaintTracking.Data;
 using ComplaintTracking.Models;
@@ -5,15 +8,12 @@ using ComplaintTracking.Services;
 using ComplaintTracking.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using static ComplaintTracking.Caching;
 
 namespace ComplaintTracking.Controllers
@@ -52,11 +52,6 @@ namespace ComplaintTracking.Controllers
         {
             var currentUser = await GetCurrentUserAsync();
 
-            if (currentUser == null)
-            {
-                throw new Exception("Current user not found");
-            }
-
             string officeName = null;
 
             if (currentUser.OfficeId != null)
@@ -94,49 +89,45 @@ namespace ComplaintTracking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
-            string msg;
             ViewData["ReturnUrl"] = returnUrl;
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(model);
+
+            // Check if active user first
+            var u = await _context.Users.AsNoTracking()
+                .Where(e => e.Email == model.Email)
+                .SingleOrDefaultAsync();
+
+            string msg;
+            if (u is {Active: false})
             {
-                // Check if active user first
-                var u = await _context.Users.AsNoTracking()
-                    .Where(e => e.Email == model.Email)
-                    .SingleOrDefaultAsync();
+                msg = "Invalid login attempt.";
+                ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error);
+                return View(model);
+            }
 
-                if (u != null && u.Active == false)
-                {
-                    msg = "Invalid login attempt.";
-                    ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error);
-                    return View(model);
-                }
+            // This doesn't count login failures towards account lockout
+            // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+            if (result.Succeeded)
+            {
+                _logger.LogInformation(1, "User logged in");
 
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
-                {
-                    _logger.LogInformation(1, "User logged in.");
+                // TODO: Customize welcome message
+                // But User name is only available after redirect:
+                // https://stackoverflow.com/a/38997379/212978
+                TempData.SaveAlertForSession("You have been logged in. Welcome back!");
+                return RedirectToLocal(returnUrl);
+            }
 
-                    // TODO: Customize welcome message
-                    // But User name is only available after redirect:
-                    // https://stackoverflow.com/a/38997379/212978
-                    TempData.SaveAlertForSession("You have been logged in. Welcome back!");
-                    return RedirectToLocal(returnUrl);
-                }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning(2, "User account locked out.");
-                    return View("Lockout");
-                }
-                else
-                {
-                    msg = "Invalid login attempt.";
-                    ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error);
-                    return View(model);
-                }
+            if (result.IsLockedOut)
+            {
+                _logger.LogWarning(2, "User account locked out");
+                return View("Lockout");
             }
 
             // If we got this far, something failed, redisplay form
+            msg = "Invalid login attempt.";
+            ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error);
             return View(model);
         }
 
@@ -156,7 +147,7 @@ namespace ComplaintTracking.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            _logger.LogInformation(4, "User logged out.");
+            _logger.LogInformation(4, "User logged out");
 
             TempData.SaveAlertForSession("You have been signed out.");
             return RedirectToAction(nameof(HomeController.Index), "Home");
@@ -194,7 +185,7 @@ namespace ComplaintTracking.Controllers
             }
 
             var passwordResetCode = await _userManager.GeneratePasswordResetTokenAsync(user);
-            return RedirectToAction(nameof(SetPassword), new { userId = user.Id, code = passwordResetCode });
+            return RedirectToAction(nameof(SetPassword), new {userId = user.Id, code = passwordResetCode});
         }
 
         [HttpGet]
@@ -206,7 +197,7 @@ namespace ComplaintTracking.Controllers
                 return NotFound();
             }
 
-            var model = new SetPasswordViewModel()
+            var model = new SetPasswordViewModel
             {
                 Code = code,
                 UserId = userId
@@ -230,15 +221,16 @@ namespace ComplaintTracking.Controllers
             }
 
             var user = await _userManager.FindByIdAsync(model.UserId);
-            if (user != null && user.Active)
+            if (user is {Active: true})
             {
                 var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
                 if (result.Succeeded)
                 {
                     msg = "Your password has been set. Please sign in.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
-                    return RedirectToAction(nameof(AccountController.Login));
+                    return RedirectToAction(nameof(Login));
                 }
+
                 AddErrors(result);
             }
 
@@ -274,8 +266,8 @@ namespace ComplaintTracking.Controllers
                 var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    _logger.LogInformation(3, "User changed their password successfully.");
+                    await _signInManager.SignInAsync(user, false);
+                    _logger.LogInformation(3, "User changed their password successfully");
 
                     msg = "Your password has been changed.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
@@ -311,7 +303,7 @@ namespace ComplaintTracking.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user == null || !user.Active)
+                if (user is not {Active: true})
                 {
                     // Don't reveal that the user does not exist or is not active
                     return View("ForgotPasswordConfirmation");
@@ -323,7 +315,8 @@ namespace ComplaintTracking.Controllers
                 if (!(await _userManager.IsEmailConfirmedAsync(user)))
                 {
                     code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code }, protocol: HttpContext.Request.Scheme);
+                    callbackUrl = Url.Action("ConfirmEmail", "Account", new {userId = user.Id, code},
+                        HttpContext.Request.Scheme);
                     await _emailSender.SendEmailAsync(
                         model.Email,
                         EmailTemplates.ConfirmNewAccount.Subject,
@@ -335,7 +328,8 @@ namespace ComplaintTracking.Controllers
                 // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
                 // Send an email with this link
                 code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                callbackUrl = Url.Action(nameof(ResetPassword), "Account", new { userId = user.Id, code }, protocol: HttpContext.Request.Scheme);
+                callbackUrl = Url.Action(nameof(ResetPassword), "Account", new {userId = user.Id, code},
+                    HttpContext.Request.Scheme);
                 await _emailSender.SendEmailAsync(
                     model.Email,
                     EmailTemplates.ResetPassword.Subject,
@@ -386,15 +380,16 @@ namespace ComplaintTracking.Controllers
             }
 
             var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user != null && user.Active)
+            if (user is {Active: true})
             {
                 var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
                 if (result.Succeeded)
                 {
                     msg = "Your password has been reset. Please sign in.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
-                    return RedirectToAction(nameof(AccountController.Login));
+                    return RedirectToAction(nameof(Login));
                 }
+
                 AddErrors(result);
             }
 
@@ -417,11 +412,6 @@ namespace ComplaintTracking.Controllers
         {
             var user = await GetCurrentUserAsync();
 
-            if (user == null)
-            {
-                throw new Exception("Current user not found");
-            }
-
             var model = new EditAccountViewModel
             {
                 FirstName = user.FirstName,
@@ -443,11 +433,6 @@ namespace ComplaintTracking.Controllers
             string msg;
 
             var user = await GetCurrentUserAsync();
-
-            if (user == null)
-            {
-                throw new Exception("Current user not found");
-            }
 
             if (await _dal.EmailAlreadyUsedAsync(model.Email, user.Id))
             {
@@ -473,27 +458,32 @@ namespace ComplaintTracking.Controllers
                 if (result.Succeeded)
                 {
                     // check if the email address was changed; send notification emails to both if changed
-                    if (oldEmail.ToUpper() != user.Email.ToUpper())
+                    if (!string.Equals(oldEmail, user.Email, StringComparison.CurrentCultureIgnoreCase))
                     {
                         await _emailSender.SendEmailAsync(
                             oldEmail,
                             EmailTemplates.NotifyEmailChange.Subject,
-                            string.Format(EmailTemplates.NotifyEmailChange.PlainBody, oldEmail, user.Email, CTS.AdminEmail),
-                            string.Format(EmailTemplates.NotifyEmailChange.HtmlBody, oldEmail, user.Email, CTS.AdminEmail));
+                            string.Format(EmailTemplates.NotifyEmailChange.PlainBody, oldEmail, user.Email,
+                                CTS.AdminEmail),
+                            string.Format(EmailTemplates.NotifyEmailChange.HtmlBody, oldEmail, user.Email,
+                                CTS.AdminEmail));
                         await _emailSender.SendEmailAsync(
                             user.Email,
                             EmailTemplates.NotifyEmailChange.Subject,
-                            string.Format(EmailTemplates.NotifyEmailChange.PlainBody, oldEmail, user.Email, CTS.AdminEmail),
-                            string.Format(EmailTemplates.NotifyEmailChange.HtmlBody, oldEmail, user.Email, CTS.AdminEmail));
+                            string.Format(EmailTemplates.NotifyEmailChange.PlainBody, oldEmail, user.Email,
+                                CTS.AdminEmail),
+                            string.Format(EmailTemplates.NotifyEmailChange.HtmlBody, oldEmail, user.Email,
+                                CTS.AdminEmail));
                     }
 
-                    _logger.LogInformation(3, "User updated.");
+                    _logger.LogInformation(3, "User updated");
 
                     msg = "Your profile was updated.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
 
                     return RedirectToAction(nameof(Index));
                 }
+
                 AddErrors(result);
             }
 

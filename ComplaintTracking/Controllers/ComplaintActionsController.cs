@@ -1,6 +1,4 @@
-﻿
-using ComplaintTracking.AlertMessages;
-using ComplaintTracking.Data;
+﻿using ComplaintTracking.AlertMessages;
 using ComplaintTracking.Generic;
 using ComplaintTracking.Models;
 using ComplaintTracking.ViewModels;
@@ -14,7 +12,7 @@ using static ComplaintTracking.ViewModels.SearchComplaintActionsViewModel;
 
 namespace ComplaintTracking.Controllers
 {
-    public partial class ComplaintActionsController : Controller
+    public class ComplaintActionsController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly DAL _dal;
@@ -43,12 +41,11 @@ namespace ComplaintTracking.Controllers
         )
         {
             var currentUser = await GetCurrentUserAsync();
-            bool includeDeleted = currentUser != null
-                && User.IsInRole(CtsRole.DivisionManager.ToString());
+            var includeDeleted = currentUser != null && User.IsInRole(CtsRole.DivisionManager.ToString());
             if (!includeDeleted) deleteStatus = null;
 
             // ViewModel
-            var model = new SearchComplaintActionsViewModel()
+            var model = new SearchComplaintActionsViewModel
             {
                 IncludeDeleted = includeDeleted,
                 ActionDateFrom = ActionDateFrom,

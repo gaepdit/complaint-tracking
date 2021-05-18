@@ -1,16 +1,14 @@
-using System.IO;
-
 namespace ComplaintTracking
 {
     // File system folder names
-    public static class FilePaths
+    internal static class FilePaths
     {
-        internal static string BasePath;
-        internal static string AttachmentsFolder;
-        internal static string DataProtectionKeysFolder;
-        internal static string ExportFolder;
-        internal static string LogsFolder ;
-        internal static string ThumbnailsFolder;
-        internal static string UnsentEmailFolder;
+        public static string BasePath { get; set; }
+        public static string AttachmentsFolder { get; set; }
+        public static string DataProtectionKeysFolder { get; set; }
+        public static string ExportFolder { get; set; }
+        public static string LogsFolder { get; set; }
+        public static string ThumbnailsFolder { get; set; }
+        public static string UnsentEmailFolder { get; set; }
     }
 }

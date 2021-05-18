@@ -1,4 +1,7 @@
-﻿using ComplaintTracking.AlertMessages;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using ComplaintTracking.AlertMessages;
 using ComplaintTracking.Data;
 using ComplaintTracking.Models;
 using ComplaintTracking.ViewModels;
@@ -6,9 +9,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using static ComplaintTracking.Caching;
 
 namespace ComplaintTracking.Controllers
@@ -17,7 +17,7 @@ namespace ComplaintTracking.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IMemoryCache _cache;
-        private const string _objectDisplayName = "Complaint Action Type";
+        private const string ObjectDisplayName = "Complaint Action Type";
 
         public ActionTypesController(
             ApplicationDbContext context,
@@ -30,19 +30,19 @@ namespace ComplaintTracking.Controllers
         // GET: ActionTypes
         public async Task<IActionResult> Index()
         {
-            var model = new ActionTypeIndexViewModel()
+            var model = new ActionTypeIndexViewModel
             {
                 ActionTypes = await _context.LookupActionTypes.AsNoTracking()
-                .OrderBy(e => e.Name)
-                .Select(e => new ActionTypeViewModel(e))
-                .ToListAsync()
+                    .OrderBy(e => e.Name)
+                    .Select(e => new ActionTypeViewModel(e))
+                    .ToListAsync()
             };
 
             return View(model);
         }
 
         // GET: ActionTypes/Details/5
-        public async Task<IActionResult> Details(Guid id)
+        public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
             {
@@ -85,7 +85,7 @@ namespace ComplaintTracking.Controllers
 
             if (ModelState.IsValid)
             {
-                var item = new ActionType()
+                var item = new ActionType
                 {
                     Name = model.Name
                 };
@@ -97,19 +97,19 @@ namespace ComplaintTracking.Controllers
                     _context.Add(item);
                     await _context.SaveChangesAsync();
 
-                    msg = string.Format("The {0} has been created.", _objectDisplayName);
+                    msg = $"The {ObjectDisplayName} has been created.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
 
-                    return RedirectToAction("Details", new { id = item.Id });
+                    return RedirectToAction("Details", new {id = item.Id});
                 }
                 catch
                 {
-                    msg = string.Format("There was an error saving the {0}. Please try again or contact support.", _objectDisplayName);
+                    msg = $"There was an error saving the {ObjectDisplayName}. Please try again or contact support.";
                 }
             }
             else
             {
-                msg = string.Format("The {0} was not created. Please fix the errors shown below.", _objectDisplayName);
+                msg = $"The {ObjectDisplayName} was not created. Please fix the errors shown below.";
             }
 
             ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
@@ -119,7 +119,7 @@ namespace ComplaintTracking.Controllers
 
         // GET: ActionTypes/Edit/5
         [Authorize(Roles = nameof(CtsRole.DivisionManager))]
-        public async Task<IActionResult> Edit(Guid id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
             {
@@ -160,7 +160,7 @@ namespace ComplaintTracking.Controllers
 
             if (ModelState.IsValid)
             {
-                var item = new ActionType()
+                var item = new ActionType
                 {
                     Id = model.Id,
                     Name = model.Name,
@@ -186,13 +186,13 @@ namespace ComplaintTracking.Controllers
                     }
                 }
 
-                msg = string.Format("The {0} was updated.", _objectDisplayName);
+                msg = $"The {ObjectDisplayName} was updated.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
 
-                return RedirectToAction("Details", new { id = model.Id });
+                return RedirectToAction("Details", new {id = model.Id});
             }
 
-            msg = string.Format("The {0} was not updated. Please fix the errors shown below.", _objectDisplayName);
+            msg = $"The {ObjectDisplayName} was not updated. Please fix the errors shown below.";
             ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
 
             return View(model);
@@ -213,11 +213,9 @@ namespace ComplaintTracking.Controllers
                 return _context.LookupActionTypes.AsNoTracking()
                     .AnyAsync(e => e.Name == name && e.Id != ignoreId.Value);
             }
-            else
-            {
-                return _context.LookupActionTypes.AsNoTracking()
-                    .AnyAsync(e => e.Name == name);
-            }
+
+            return _context.LookupActionTypes.AsNoTracking()
+                .AnyAsync(e => e.Name == name);
         }
     }
 }
