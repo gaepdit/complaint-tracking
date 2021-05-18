@@ -9,6 +9,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using static ComplaintTracking.ViewModels.PublicSearchViewModel;
 
 namespace ComplaintTracking.Controllers
@@ -47,7 +48,7 @@ namespace ComplaintTracking.Controllers
             return View(model);
         }
 
-        [HttpGet]
+        [HttpGet, HttpHead]
         public async Task<IActionResult> Index(
                     int page = 1,
                     string submit = null,

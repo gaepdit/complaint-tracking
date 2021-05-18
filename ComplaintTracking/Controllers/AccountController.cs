@@ -1,4 +1,4 @@
-﻿using ComplaintTracking.AlertMessages;
+using ComplaintTracking.AlertMessages;
 using ComplaintTracking.Data;
 using ComplaintTracking.Models;
 using ComplaintTracking.Services;
@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using static ComplaintTracking.Caching;
 
 namespace ComplaintTracking.Controllers
@@ -162,10 +163,19 @@ namespace ComplaintTracking.Controllers
         }
 
         // GET: /Account/ConfirmEmail
-        [HttpGet]
+        [HttpGet, HttpHead]
         [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
+            if (HttpMethods.IsHead(HttpContext.Request.Method))
+            {
+                // This isn't a technically correct HEAD response, since the HTTP headers will not match what
+                // would be returned from a valid GET request, but it's close enough since the purpose is to
+                // satisfy Microsoft's Safe Links feature while avoiding a 405 Method Not Allowed crash report
+                // and without validating the code.
+                return Ok();
+            }
+
             if (userId == null || code == null)
             {
                 return NotFound();
@@ -348,7 +358,7 @@ namespace ComplaintTracking.Controllers
         }
 
         // GET: /Account/ResetPassword
-        [HttpGet]
+        [HttpGet, HttpHead]
         [AllowAnonymous]
         public IActionResult ResetPassword(string code = null)
         {
