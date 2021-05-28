@@ -1,4 +1,4 @@
-﻿using ComplaintTracking.AlertMessages;
+using ComplaintTracking.AlertMessages;
 using ComplaintTracking.Data;
 using ComplaintTracking.Models;
 using ComplaintTracking.ViewModels;
@@ -303,6 +303,57 @@ namespace ComplaintTracking.Controllers
             });
         }
 
+        public async Task<IActionResult> DaysSinceLastActionByStaff(string office)
+        {
+            var currentUser = await GetCurrentUserAsync();
+
+            if (string.IsNullOrEmpty(office)
+                || !Guid.TryParse(office, out var officeId)
+                || officeId == default
+                || !await _dal.OfficeExists(officeId))
+            {
+                if(!currentUser.OfficeId.HasValue) return BadRequest();
+                officeId = currentUser.OfficeId.Value;
+            }
+
+            var officeStaff = _context.Users.AsNoTracking()
+                .Where(e => e.OfficeId == officeId);
+
+            IEnumerable<ReportDaysSinceLastActionByStaffViewModel.StaffList> staffList = await officeStaff
+                .OrderBy(e => e.LastName)
+                .ThenBy(e => e.FirstName)
+                .Select(e => new ReportDaysSinceLastActionByStaffViewModel.StaffList(e))
+                .ToListAsync();
+
+            foreach (var user in staffList)
+            {
+                var query = 
+                    $@"SELECT c.Id, l.Name AS ComplaintCounty, c.SourceFacilityName,
+                           convert(date, c.DateReceived) AS DateReceived, a.LastActionDate
+                    FROM Complaints c
+                    left JOIN LookupCounties l ON c.ComplaintCountyId = l.Id
+                    INNER JOIN
+                    (SELECT c.Id, convert(date, max(a.ActionDate)) AS LastActionDate
+                     FROM Complaints c
+                     left JOIN ComplaintActions a ON c.Id = a.ComplaintId
+                     GROUP BY c.Id) a ON c.Id = a.Id
+                    WHERE c.Deleted = 0 and c.ComplaintClosed = 0 AND c.CurrentOwnerId = '{user.Id}'
+                    ORDER BY c.Id desc";
+
+                user.Complaints = await DataSQLHelper
+                    .ExecSQL<ReportDaysSinceLastActionByStaffViewModel.ComplaintList>(query, _context);
+            }
+
+            return View("DaysSinceLastActionByStaff", new ReportDaysSinceLastActionByStaffViewModel
+            {
+                Title = "Days Since Last Action By Staff",
+                Staff = staffList,
+                OfficeSelectList = await _dal.GetOfficesSelectListAsync(),
+                Office = officeId.ToString(),
+                CurrentAction = nameof(DaysSinceLastActionByStaff)
+            });
+        }
+
         public async Task<IActionResult> DaysToClosureByOffice(DateTime? beginDate, DateTime? endDate)
         {
             var currentUser = await GetCurrentUserAsync();
@@ -319,7 +370,7 @@ namespace ComplaintTracking.Controllers
                 beginDate = endDate.Value.AddYears(-1).AddDays(1);
             }
 
-                IEnumerable<ReportDaysToClosureByOfficeViewModel.OfficeList> officeList = null;
+            IEnumerable<ReportDaysToClosureByOfficeViewModel.OfficeList> officeList = null;
 
             if (endDate < beginDate)
             {
@@ -516,6 +567,5 @@ namespace ComplaintTracking.Controllers
         {
             return _userManager.GetUserAsync(HttpContext.User);
         }
-
     }
 }
