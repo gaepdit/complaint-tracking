@@ -53,6 +53,8 @@ namespace ComplaintTracking.ViewModels
             [DisplayFormat(DataFormatString = CTS.FormatDateShortDisplay)]
             public DateTime DateReceived { get; init; }
 
+            public ComplaintStatus Status { get; init; }
+
             [Display(Name = "Most Recent Action Date")]
             [DisplayFormat(DataFormatString = CTS.FormatDateShortDisplay)]
             public DateTime? LastActionDate { get; init; }

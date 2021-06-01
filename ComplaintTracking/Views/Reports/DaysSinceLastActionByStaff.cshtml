@@ -36,6 +36,7 @@
                         <th scope="col">@Html.DisplayNameFor(model => staff.Complaints.FirstOrDefault().ComplaintCounty)</th>
                         <th scope="col">@Html.DisplayNameFor(model => staff.Complaints.FirstOrDefault().SourceFacilityName)</th>
                         <th scope="col">@Html.DisplayNameFor(model => staff.Complaints.FirstOrDefault().DateReceived)</th>
+                        <th scope="col">@Html.DisplayNameFor(model => staff.Complaints.FirstOrDefault().Status)</th>
                         <th scope="col">@Html.DisplayNameFor(model => staff.Complaints.FirstOrDefault().LastActionDate)</th>
                         <th scope="col">@Html.DisplayNameFor(model => staff.Complaints.FirstOrDefault().DaysSinceLastAction)</th>
                     </tr>
@@ -50,6 +51,7 @@
                             <td data-label="@Html.DisplayNameFor(m => complaint.ComplaintCounty)">@Html.DisplayFor(m => complaint.ComplaintCounty)</td>
                             <td data-label="@Html.DisplayNameFor(m => complaint.SourceFacilityName)">@Html.DisplayFor(m => complaint.SourceFacilityName)</td>
                             <td data-label="@Html.DisplayNameFor(m => complaint.DateReceived)">@Html.DisplayFor(m => complaint.DateReceived)</td>
+                            <td data-label="@Html.DisplayNameFor(m => complaint.Status)">@Html.DisplayFor(m => complaint.Status)</td>
                             <td data-label="@Html.DisplayNameFor(m => complaint.LastActionDate)">@Html.DisplayFor(m => complaint.LastActionDate)</td>
                             <td data-label="@Html.DisplayNameFor(m => complaint.DaysSinceLastAction)">@Html.DisplayFor(m => complaint.DaysSinceLastAction)</td>
                         </tr>

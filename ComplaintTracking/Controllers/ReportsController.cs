@@ -329,7 +329,7 @@ namespace ComplaintTracking.Controllers
             {
                 var query = 
                     $@"SELECT c.Id, l.Name AS ComplaintCounty, c.SourceFacilityName,
-                           convert(date, c.DateReceived) AS DateReceived, a.LastActionDate
+                           convert(date, c.DateReceived) AS DateReceived, c.Status, a.LastActionDate
                     FROM Complaints c
                     left JOIN LookupCounties l ON c.ComplaintCountyId = l.Id
                     INNER JOIN
