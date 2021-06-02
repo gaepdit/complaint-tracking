@@ -1,15 +1,15 @@
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using ComplaintTracking.AlertMessages;
 using ComplaintTracking.Models;
 using ComplaintTracking.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ComplaintTracking.Controllers
 {
-    public partial class ComplaintsController : Controller
+    public partial class ComplaintsController
     {
         // Review/Transitions
 
@@ -17,11 +17,8 @@ namespace ComplaintTracking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Accept(int id)
         {
-            var currentUser = await GetCurrentUserAsync();
-            if (currentUser == null)
-            {
+            var currentUser = await GetCurrentUserAsync() ??
                 throw new Exception("Current user not found");
-            }
 
             var complaint = await _context.Complaints
                 .Where(e => e.Id == id)
@@ -39,19 +36,21 @@ namespace ComplaintTracking.Controllers
             {
                 msg = "This Complaint has been deleted and cannot be edited.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
+
             if (currentUser.Id != complaint.CurrentOwner.Id)
             {
-                msg = string.Format("This Complaint was not assigned to you so you cannot accept it.", objectDisplayName);
+                msg = "This Complaint was not assigned to you so you cannot accept it.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
+
             if (complaint.ComplaintClosed)
             {
                 msg = "This Complaint has been closed and cannot be edited unless it is reopened.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
 
             // update complaint properties
@@ -83,25 +82,19 @@ namespace ComplaintTracking.Controllers
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+
+                throw;
             }
 
             msg = "The Complaint was accepted.";
             TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
 
-            return RedirectToAction("Details", new { id });
+            return RedirectToAction("Details", new {id});
         }
 
         public async Task<IActionResult> Assign(int id)
         {
             var currentUser = await GetCurrentUserAsync();
-            if (currentUser == null)
-            {
-                throw new Exception("Current user not found");
-            }
 
             var model = await _context.Complaints.AsNoTracking()
                 .Where(m => m.Id == id)
@@ -120,18 +113,19 @@ namespace ComplaintTracking.Controllers
             {
                 msg = "This Complaint has been deleted and cannot be edited.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
 
             string officeMasterId = null;
             if (model.CurrentOfficeId.HasValue)
             {
                 officeMasterId = (await _context.LookupOffices.AsNoTracking()
-                    .Where(e => e.Id == model.CurrentOfficeId.Value)
-                    .SingleOrDefaultAsync())?
+                        .Where(e => e.Id == model.CurrentOfficeId.Value)
+                        .SingleOrDefaultAsync())?
                     .MasterUserId;
             }
-            bool currentUserIsMaster = model.CurrentOwnerId == null
+
+            var currentUserIsMaster = model.CurrentOwnerId == null
                 && officeMasterId != null
                 && currentUser.Id == officeMasterId;
 
@@ -140,16 +134,16 @@ namespace ComplaintTracking.Controllers
                 && !(User.IsInRole(CtsRole.DivisionManager.ToString()))
                 && !currentUserIsMaster)
             {
-                msg = string.Format("You do not have permission to edit this Complaint.", objectDisplayName);
+                msg = "You do not have permission to edit this Complaint.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
 
             if (model.ComplaintIsClosed)
             {
                 msg = "This Complaint has been closed and cannot be edited unless it is reopened.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
 
             model.OfficesSelectList = await _dal.GetOfficesSelectListAsync(true);
@@ -170,10 +164,6 @@ namespace ComplaintTracking.Controllers
             }
 
             var currentUser = await GetCurrentUserAsync();
-            if (currentUser == null)
-            {
-                throw new Exception("Current user not found");
-            }
 
             string msg;
 
@@ -193,32 +183,32 @@ namespace ComplaintTracking.Controllers
                 {
                     msg = "This Complaint has been deleted and cannot be edited.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
 
-                string officeMasterId = (await _context.LookupOffices.AsNoTracking()
-                    .Where(e => e.Id == complaint.CurrentOfficeId)
-                    .SingleOrDefaultAsync())
+                var officeMasterId = (await _context.LookupOffices.AsNoTracking()
+                        .Where(e => e.Id == complaint.CurrentOfficeId)
+                        .SingleOrDefaultAsync())
                     .MasterUserId;
-                bool currentUserIsMaster = complaint.CurrentOwnerId == null
+                var currentUserIsMaster = complaint.CurrentOwnerId == null
                     && officeMasterId != null
                     && currentUser.Id == officeMasterId;
 
                 if (currentUser.Id != complaint.CurrentOwnerId
-                     && !(User.IsInRole(CtsRole.Manager.ToString()) && currentUser.OfficeId == complaint.CurrentOfficeId)
-                     && !(User.IsInRole(CtsRole.DivisionManager.ToString()))
-                     && !currentUserIsMaster)
+                    && !(User.IsInRole(CtsRole.Manager.ToString()) && currentUser.OfficeId == complaint.CurrentOfficeId)
+                    && !(User.IsInRole(CtsRole.DivisionManager.ToString()))
+                    && !currentUserIsMaster)
                 {
-                    msg = string.Format("You do not have permission to edit this Complaint.", objectDisplayName);
+                    msg = "You do not have permission to edit this Complaint.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
 
                 if (complaint.ComplaintClosed)
                 {
                     msg = "This Complaint has been closed and cannot be edited unless it is reopened.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
 
                 var fromOfficeId = complaint.CurrentOfficeId;
@@ -227,9 +217,9 @@ namespace ComplaintTracking.Controllers
                 if (model.CurrentOfficeId == fromOfficeId
                     && model.CurrentOwnerId == fromOwnerId)
                 {
-                    msg = string.Format("The Complaint assignment has not changed.", objectDisplayName);
+                    msg = "The Complaint assignment has not changed.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Information);
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
 
                 if (model.CurrentOwnerId == CTS.SelectUserMasterText
@@ -241,10 +231,11 @@ namespace ComplaintTracking.Controllers
                 }
 
                 // Update complaint properties
-                complaint.CurrentOfficeId = model.CurrentOfficeId.Value;
+                complaint.CurrentOfficeId = model.CurrentOfficeId ?? default;
                 complaint.CurrentOwnerId = model.CurrentOwnerId;
-                complaint.DateCurrentOwnerAssigned = (model.CurrentOwnerId != null) ? (DateTime?)DateTime.Now : null;
-                complaint.DateCurrentOwnerAccepted = (model.CurrentOwnerId != null && model.CurrentOwnerId == currentUser.Id) ? (DateTime?)DateTime.Now : null;
+                complaint.DateCurrentOwnerAssigned = (model.CurrentOwnerId != null) ? DateTime.Now : null;
+                complaint.DateCurrentOwnerAccepted =
+                    model.CurrentOwnerId != null && model.CurrentOwnerId == currentUser.Id ? DateTime.Now : null;
                 if (model.CurrentOwnerId == currentUser.Id)
                 {
                     complaint.Status = ComplaintStatus.UnderInvestigation;
@@ -253,23 +244,24 @@ namespace ComplaintTracking.Controllers
                 try
                 {
                     complaint.CurrentAssignmentTransitionId =
-                    await AddComplaintTransition(new ComplaintTransition()
-                    {
-                        ComplaintId = complaint.Id,
-                        TransferredByUserId = currentUser.Id,
-                        TransferredFromUserId = fromOwnerId,
-                        TransferredFromOfficeId = fromOfficeId,
-                        TransferredToUserId = model.CurrentOwnerId,
-                        TransferredToOfficeId = model.CurrentOfficeId,
-                        DateAccepted = (currentUser.Id == model.CurrentOwnerId) ? (DateTime?)DateTime.Now : null,
-                        TransitionType = TransitionType.Assigned,
-                        Comment = model.Comment,
-                    });
+                        await AddComplaintTransition(new ComplaintTransition()
+                        {
+                            ComplaintId = complaint.Id,
+                            TransferredByUserId = currentUser.Id,
+                            TransferredFromUserId = fromOwnerId,
+                            TransferredFromOfficeId = fromOfficeId,
+                            TransferredToUserId = model.CurrentOwnerId,
+                            TransferredToOfficeId = model.CurrentOfficeId,
+                            DateAccepted = currentUser.Id == model.CurrentOwnerId ? DateTime.Now : null,
+                            TransitionType = TransitionType.Assigned,
+                            Comment = model.Comment,
+                        });
 
                     _context.Update(complaint);
                     await _context.SaveChangesAsync();
 
-                    var complaintUrl = Url.Action("Details", "Complaints", new { id = complaint.Id }, protocol: HttpContext.Request.Scheme);
+                    var complaintUrl = Url.Action("Details", "Complaints", new {id = complaint.Id},
+                        HttpContext.Request.Scheme);
                     if (complaint.CurrentOwnerId == null)
                     {
                         // Send email to Master of current Office
@@ -281,10 +273,12 @@ namespace ComplaintTracking.Controllers
                             await _emailSender.SendEmailAsync(
                                 masterEmail,
                                 string.Format(EmailTemplates.ComplaintOpenedToMaster.Subject, complaint.Id),
-                                string.Format(EmailTemplates.ComplaintOpenedToMaster.PlainBody, complaint.Id, complaintUrl, currentOffice.Name),
-                                string.Format(EmailTemplates.ComplaintOpenedToMaster.HtmlBody, complaint.Id, complaintUrl, currentOffice.Name),
+                                string.Format(EmailTemplates.ComplaintOpenedToMaster.PlainBody, complaint.Id,
+                                    complaintUrl, currentOffice.Name),
+                                string.Format(EmailTemplates.ComplaintOpenedToMaster.HtmlBody, complaint.Id,
+                                    complaintUrl, currentOffice.Name),
                                 !masterUser.Active || !masterUser.EmailConfirmed,
-                                replyTo: currentUser.Email);
+                                currentUser.Email);
                         }
                     }
                     else
@@ -298,23 +292,23 @@ namespace ComplaintTracking.Controllers
                             string.Format(EmailTemplates.ComplaintAssigned.PlainBody, complaint.Id, complaintUrl),
                             string.Format(EmailTemplates.ComplaintAssigned.HtmlBody, complaint.Id, complaintUrl),
                             !currentOwner.Active || !currentOwner.EmailConfirmed,
-                            replyTo: currentUser.Email);
+                            currentUser.Email);
                     }
 
-                    msg = string.Format("The {0} has been assigned.", objectDisplayName);
+                    msg = $"The {ObjectDisplayName} has been assigned.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
 
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
                 catch
                 {
-                    msg = string.Format("There was an error saving the {0}. Please try again or contact support.", objectDisplayName);
+                    msg = $"There was an error saving the {ObjectDisplayName}. Please try again or contact support.";
                     ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
                 }
             }
             else
             {
-                msg = string.Format("The {0} was not assigned. Please fix the errors shown below.", objectDisplayName);
+                msg = $"The {ObjectDisplayName} was not assigned. Please fix the errors shown below.";
                 ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
             }
 
@@ -329,10 +323,6 @@ namespace ComplaintTracking.Controllers
         public async Task<IActionResult> Approve(int id)
         {
             var currentUser = await GetCurrentUserAsync();
-            if (currentUser == null)
-            {
-                throw new Exception("Current user not found");
-            }
 
             var model = await _context.Complaints.AsNoTracking()
                 .Where(m => m.Id == id)
@@ -351,23 +341,25 @@ namespace ComplaintTracking.Controllers
             {
                 msg = "This Complaint has been deleted and cannot be edited.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
+
             if (!(User.IsInRole(CtsRole.Manager.ToString()) && currentUser.OfficeId == model.CurrentOfficeId)
                 && !(User.IsInRole(CtsRole.DivisionManager.ToString())))
             {
-                msg = string.Format("You do not have permission to review this Complaint.", objectDisplayName);
+                msg = "You do not have permission to review this Complaint.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
-            }
-            if (model.ComplaintIsClosed)
-            {
-                msg = "This Complaint has been closed and cannot be edited unless it is reopened.";
-                TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
 
-            return View(model);
+            if (!model.ComplaintIsClosed)
+            {
+                return View(model);
+            }
+
+            msg = "This Complaint has been closed and cannot be edited unless it is reopened.";
+            TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
+            return RedirectToAction("Details", new {id});
         }
 
         [HttpPost]
@@ -380,10 +372,6 @@ namespace ComplaintTracking.Controllers
             }
 
             var currentUser = await GetCurrentUserAsync();
-            if (currentUser == null)
-            {
-                throw new Exception("Current user not found");
-            }
 
             string msg;
 
@@ -403,20 +391,22 @@ namespace ComplaintTracking.Controllers
                 {
                     msg = "This Complaint has been deleted and cannot be edited.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
+
                 if (!(User.IsInRole(CtsRole.Manager.ToString()) && currentUser.OfficeId == complaint.CurrentOfficeId)
                     && !(User.IsInRole(CtsRole.DivisionManager.ToString())))
                 {
-                    msg = string.Format("You do not have permission to review this Complaint.", objectDisplayName);
+                    msg = "You do not have permission to review this Complaint.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
+
                 if (complaint.ComplaintClosed)
                 {
                     msg = "This Complaint has been closed and cannot be edited unless it is reopened.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
 
                 // Update complaint properties
@@ -439,43 +429,44 @@ namespace ComplaintTracking.Controllers
                     _context.Update(complaint);
                     await _context.SaveChangesAsync();
 
-                    string recipientId = complaint.CurrentOwnerId;
-                    if (recipientId == null)
-                    {
-                        recipientId = (await _context.LookupOffices.AsNoTracking()
+                    var recipientId = complaint.CurrentOwnerId ??
+                        (await _context.LookupOffices.AsNoTracking()
                             .Where(e => e.Id == complaint.CurrentOfficeId)
-                            .SingleOrDefaultAsync())?
-                            .MasterUserId;
-                    }
+                            .SingleOrDefaultAsync())?.MasterUserId;
+
                     if (recipientId != null)
                     {
                         var recipientUser = await _userManager.FindByIdAsync(recipientId);
                         var recipientEmail = await _userManager.GetEmailAsync(recipientUser);
-                        var complaintUrl = Url.Action("Details", "Complaints", new { id = complaint.Id }, protocol: HttpContext.Request.Scheme);
+                        var complaintUrl = Url.Action("Details", "Complaints", new {id = complaint.Id},
+                            HttpContext.Request.Scheme);
 
                         await _emailSender.SendEmailAsync(
                             recipientEmail,
                             string.Format(EmailTemplates.ComplaintApproved.Subject, complaint.Id),
-                            string.Format(EmailTemplates.ComplaintApproved.PlainBody, complaint.Id, complaintUrl, model.Comment),
+                            string.Format(EmailTemplates.ComplaintApproved.PlainBody, complaint.Id, complaintUrl,
+                                model.Comment),
                             string.Format(EmailTemplates.ComplaintApproved.HtmlBody, complaint.Id, complaintUrl,
-                                (model.Comment == null) ? null : _htmlEncoder.Encode(model.Comment).Replace("&#xD;&#xA;", "<br />")),
+                                (model.Comment == null)
+                                    ? null
+                                    : _htmlEncoder.Encode(model.Comment).Replace("&#xD;&#xA;", "<br />")),
                             !recipientUser.Active || !recipientUser.EmailConfirmed,
-                            replyTo: currentUser.Email);
+                            currentUser.Email);
                     }
 
-                    msg = string.Format("The {0} has been approved/closed.", objectDisplayName);
+                    msg = $"The {ObjectDisplayName} has been approved/closed.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
 
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
                 catch
                 {
-                    msg = string.Format("There was an error saving the {0}. Please try again or contact support.", objectDisplayName);
+                    msg = $"There was an error saving the {ObjectDisplayName}. Please try again or contact support.";
                     ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
                 }
             }
 
-            msg = string.Format("The {0} was not closed. Please fix the errors shown below.", objectDisplayName);
+            msg = $"The {ObjectDisplayName} was not closed. Please fix the errors shown below.";
             ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
 
             return View(model);
@@ -484,10 +475,6 @@ namespace ComplaintTracking.Controllers
         public async Task<IActionResult> Return(int id)
         {
             var currentUser = await GetCurrentUserAsync();
-            if (currentUser == null)
-            {
-                throw new Exception("Current user not found");
-            }
 
             var model = await _context.Complaints.AsNoTracking()
                 .Where(m => m.Id == id)
@@ -506,29 +493,29 @@ namespace ComplaintTracking.Controllers
             {
                 msg = "This Complaint has been deleted and cannot be edited.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
 
             if (!(User.IsInRole(CtsRole.Manager.ToString()) && currentUser.OfficeId == model.CurrentOfficeId)
-                && !(User.IsInRole(CtsRole.DivisionManager.ToString())))
+                && !User.IsInRole(CtsRole.DivisionManager.ToString()))
             {
-                msg = string.Format("You do not have permission to review this Complaint.", objectDisplayName);
+                msg = "You do not have permission to review this Complaint.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
 
             if (model.Status != ComplaintStatus.ReviewPending)
             {
-                msg = string.Format("Review was not requested for this Complaint.", objectDisplayName);
+                msg = "Review was not requested for this Complaint.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Information);
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
 
             if (model.ComplaintIsClosed)
             {
                 msg = "This Complaint has been closed and cannot be edited unless it is reopened.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
 
             model.OfficesSelectList = await _dal.GetOfficesSelectListAsync(true);
@@ -548,10 +535,6 @@ namespace ComplaintTracking.Controllers
             }
 
             var currentUser = await GetCurrentUserAsync();
-            if (currentUser == null)
-            {
-                throw new Exception("Current user not found");
-            }
 
             string msg;
 
@@ -571,29 +554,29 @@ namespace ComplaintTracking.Controllers
                 {
                     msg = "This Complaint has been deleted and cannot be edited.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
 
                 if (!(User.IsInRole(CtsRole.Manager.ToString()) && currentUser.OfficeId == complaint.CurrentOfficeId)
                     && !(User.IsInRole(CtsRole.DivisionManager.ToString())))
                 {
-                    msg = string.Format("You do not have permission to review this Complaint.", objectDisplayName);
+                    msg = "You do not have permission to review this Complaint.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
 
                 if (complaint.Status != ComplaintStatus.ReviewPending)
                 {
-                    msg = string.Format("Review was not requested for this Complaint.", objectDisplayName);
+                    msg = "Review was not requested for this Complaint.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Information);
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
 
                 if (complaint.ComplaintClosed)
                 {
                     msg = "This Complaint has been closed and cannot be edited unless it is reopened.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
 
                 var fromReviewerId = complaint.ReviewById;
@@ -614,10 +597,11 @@ namespace ComplaintTracking.Controllers
 
                 if (model.CurrentOwnerId != fromOwnerId)
                 {
-                    complaint.CurrentOfficeId = model.CurrentOfficeId.Value;
+                    complaint.CurrentOfficeId = model.CurrentOfficeId ?? default;
                     complaint.CurrentOwnerId = model.CurrentOwnerId;
-                    complaint.DateCurrentOwnerAssigned = (model.CurrentOwnerId != null) ? (DateTime?)DateTime.Now : null;
-                    complaint.DateCurrentOwnerAccepted = (model.CurrentOwnerId != null && model.CurrentOwnerId == currentUser.Id) ? (DateTime?)DateTime.Now : null;
+                    complaint.DateCurrentOwnerAssigned = model.CurrentOwnerId != null ? DateTime.Now : null;
+                    complaint.DateCurrentOwnerAccepted =
+                        (model.CurrentOwnerId != null && model.CurrentOwnerId == currentUser.Id) ? DateTime.Now : null;
                 }
 
                 try
@@ -630,7 +614,9 @@ namespace ComplaintTracking.Controllers
                         TransferredFromOfficeId = fromOfficeId,
                         TransferredToUserId = complaint.CurrentOwnerId,
                         TransferredToOfficeId = complaint.CurrentOfficeId,
-                        DateAccepted = (model.CurrentOwnerId != fromOwnerId && currentUser.Id == model.CurrentOwnerId) ? (DateTime?)DateTime.Now : null,
+                        DateAccepted = (model.CurrentOwnerId != fromOwnerId && currentUser.Id == model.CurrentOwnerId)
+                            ? DateTime.Now
+                            : null,
                         TransitionType = TransitionType.ReturnedByReviewer,
                         Comment = model.Comment,
                     });
@@ -643,42 +629,43 @@ namespace ComplaintTracking.Controllers
                     _context.Update(complaint);
                     await _context.SaveChangesAsync();
 
-                    string recipientId = complaint.CurrentOwnerId;
-                    if (recipientId == null)
-                    {
-                        recipientId = (await _context.LookupOffices
-                            .FindAsync(complaint.CurrentOfficeId))?
-                            .MasterUserId;
-                    }
+                    var recipientId = complaint.CurrentOwnerId ??
+                        (await _context.LookupOffices
+                            .FindAsync(complaint.CurrentOfficeId))?.MasterUserId;
+
                     if (recipientId != null)
                     {
                         var recipientUser = await _userManager.FindByIdAsync(recipientId);
                         var recipientEmail = await _userManager.GetEmailAsync(recipientUser);
-                        var complaintUrl = Url.Action("Details", "Complaints", new { id = complaint.Id }, protocol: HttpContext.Request.Scheme);
+                        var complaintUrl = Url.Action("Details", "Complaints", new {id = complaint.Id},
+                            HttpContext.Request.Scheme);
 
                         await _emailSender.SendEmailAsync(
                             recipientEmail,
                             string.Format(EmailTemplates.ComplaintReturned.Subject, complaint.Id),
-                            string.Format(EmailTemplates.ComplaintReturned.PlainBody, complaint.Id, complaintUrl, model.Comment),
+                            string.Format(EmailTemplates.ComplaintReturned.PlainBody, complaint.Id, complaintUrl,
+                                model.Comment),
                             string.Format(EmailTemplates.ComplaintReturned.HtmlBody, complaint.Id, complaintUrl,
-                                (model.Comment == null) ? null : _htmlEncoder.Encode(model.Comment).Replace("&#xD;&#xA;", "<br />")),
+                                model.Comment == null
+                                    ? null
+                                    : _htmlEncoder.Encode(model.Comment).Replace("&#xD;&#xA;", "<br />")),
                             !recipientUser.Active || !recipientUser.EmailConfirmed,
-                            replyTo: currentUser.Email);
+                            currentUser.Email);
                     }
 
-                    msg = string.Format("The {0} has been returned.", objectDisplayName);
+                    msg = $"The {ObjectDisplayName} has been returned.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
 
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
                 catch
                 {
-                    msg = string.Format("There was an error saving the {0}. Please try again or contact support.", objectDisplayName);
+                    msg = $"There was an error saving the {ObjectDisplayName}. Please try again or contact support.";
                     ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
                 }
             }
 
-            msg = string.Format("The {0} was not edited. Please fix the errors shown below.", objectDisplayName);
+            msg = $"The {ObjectDisplayName} was not edited. Please fix the errors shown below.";
             ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
 
             // Populate the select lists before returning the model
@@ -692,10 +679,6 @@ namespace ComplaintTracking.Controllers
         public async Task<IActionResult> RequestReview(int id)
         {
             var currentUser = await GetCurrentUserAsync();
-            if (currentUser == null)
-            {
-                throw new Exception("Current user not found");
-            }
 
             var model = await _context.Complaints.AsNoTracking()
                 .Include(e => e.CurrentOffice)
@@ -715,33 +698,36 @@ namespace ComplaintTracking.Controllers
             {
                 msg = "This Complaint has been deleted and cannot be edited.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
+
             if (currentUser.Id != model.CurrentOwnerId
                 && !(User.IsInRole(CtsRole.Manager.ToString()) && currentUser.OfficeId == model.CurrentOfficeId)
-                && !(User.IsInRole(CtsRole.DivisionManager.ToString())))
+                && !User.IsInRole(CtsRole.DivisionManager.ToString()))
             {
-                msg = string.Format("You do not have permission to edit this Complaint.", objectDisplayName);
+                msg = "You do not have permission to edit this Complaint.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
+
             if (model.ComplaintIsClosed)
             {
                 msg = "This Complaint has been closed and cannot be edited unless it is reopened.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
 
-            model.ManagersInOfficeSelectList = await _dal.GetUsersInRoleSelectListAsync(CtsRole.Manager, model.CurrentOfficeId);
-            if (model.ManagersInOfficeSelectList == null
-                || model.ManagersInOfficeSelectList.Count() == 0)
+            model.ManagersInOfficeSelectList =
+                await _dal.GetUsersInRoleSelectListAsync(CtsRole.Manager, model.CurrentOfficeId);
+            if (model.ManagersInOfficeSelectList != null && model.ManagersInOfficeSelectList.Any())
             {
-                msg = $"\"{model.CurrentOfficeName}\" does not have any managers to review/approve Complaints. Please contact the Director's Office.";
-                TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Warning");
-                return RedirectToAction("Details", new { id });
+                return View(model);
             }
 
-            return View(model);
+            msg =
+                $"\"{model.CurrentOfficeName}\" does not have any managers to review/approve Complaints. Please contact the Director's Office.";
+            TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Warning");
+            return RedirectToAction("Details", new {id});
         }
 
         [HttpPost]
@@ -754,10 +740,6 @@ namespace ComplaintTracking.Controllers
             }
 
             var currentUser = await GetCurrentUserAsync();
-            if (currentUser == null)
-            {
-                throw new Exception("Current user not found");
-            }
 
             string msg;
 
@@ -766,12 +748,13 @@ namespace ComplaintTracking.Controllers
             {
                 reviewer = await _userManager.FindByIdAsync(model.ReviewById);
             }
+
             if (reviewer == null)
             {
                 ModelState.AddModelError(nameof(RequestReviewViewModel.ReviewById), "Valid reviewer is required.");
             }
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && reviewer != null)
             {
                 var complaint = await _context.Complaints
                     .Where(e => e.Id == id)
@@ -784,9 +767,9 @@ namespace ComplaintTracking.Controllers
 
                 if (model.ReviewById == complaint.ReviewById)
                 {
-                    msg = string.Format("The Complaint reviewer has not changed.", objectDisplayName);
+                    msg = "The Complaint reviewer has not changed.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Information);
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
 
                 // Check permissions
@@ -794,21 +777,23 @@ namespace ComplaintTracking.Controllers
                 {
                     msg = "This Complaint has been deleted and cannot be edited.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
+
                 if (currentUser.Id != complaint.CurrentOwnerId
-                     && !(User.IsInRole(CtsRole.Manager.ToString()) && currentUser.OfficeId == complaint.CurrentOfficeId)
-                     && !(User.IsInRole(CtsRole.DivisionManager.ToString())))
+                    && !(User.IsInRole(CtsRole.Manager.ToString()) && currentUser.OfficeId == complaint.CurrentOfficeId)
+                    && !(User.IsInRole(CtsRole.DivisionManager.ToString())))
                 {
-                    msg = string.Format("You do not have permission to edit this Complaint.", objectDisplayName);
+                    msg = "You do not have permission to edit this Complaint.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
+
                 if (complaint.ComplaintClosed)
                 {
                     msg = "This Complaint has been closed and cannot be edited unless it is reopened.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
 
                 var fromOwnerId = complaint.CurrentOwnerId;
@@ -835,57 +820,55 @@ namespace ComplaintTracking.Controllers
                     await _context.SaveChangesAsync();
 
                     var reviewerEmail = await _userManager.GetEmailAsync(reviewer);
-                    var complaintUrl = Url.Action("Details", "Complaints", new { id = complaint.Id }, protocol: HttpContext.Request.Scheme);
+                    var complaintUrl = Url.Action("Details", "Complaints", new {id = complaint.Id},
+                        HttpContext.Request.Scheme);
 
                     await _emailSender.SendEmailAsync(
                         reviewerEmail,
                         string.Format(EmailTemplates.ComplaintReviewRequested.Subject, complaint.Id),
-                        string.Format(EmailTemplates.ComplaintReviewRequested.PlainBody, complaint.Id, complaintUrl, model.Comment),
+                        string.Format(EmailTemplates.ComplaintReviewRequested.PlainBody, complaint.Id, complaintUrl,
+                            model.Comment),
                         string.Format(EmailTemplates.ComplaintReviewRequested.HtmlBody, complaint.Id, complaintUrl,
-                            (model.Comment == null) ? null : _htmlEncoder.Encode(model.Comment).Replace("&#xD;&#xA;", "<br />")),
+                            model.Comment == null
+                                ? null
+                                : _htmlEncoder.Encode(model.Comment).Replace("&#xD;&#xA;", "<br />")),
                         !reviewer.Active || !reviewer.EmailConfirmed,
-                        replyTo: currentUser.Email);
+                        currentUser.Email);
 
-                    msg = string.Format("The {0} has been submitted for review.", objectDisplayName);
+                    msg = $"The {ObjectDisplayName} has been submitted for review.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
 
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
                 catch
                 {
-                    msg = string.Format("There was an error saving the {0}. Please try again or contact support.", objectDisplayName);
+                    msg = $"There was an error saving the {ObjectDisplayName}. Please try again or contact support.";
                     ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
                 }
             }
 
-            msg = string.Format("The {0} was not updated. Please fix the errors shown below.", objectDisplayName);
+            msg = $"The {ObjectDisplayName} was not updated. Please fix the errors shown below.";
             ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
 
             // Populate the select lists before returning the model
             var officeID = (await _context.Complaints.AsNoTracking()
-                .Where(e => e.Id == id)
-                .SingleOrDefaultAsync())
+                    .Where(e => e.Id == id)
+                    .SingleOrDefaultAsync())
                 .CurrentOfficeId;
             model.ManagersInOfficeSelectList = await _dal.GetUsersInRoleSelectListAsync(CtsRole.Manager, officeID);
-            if (model.ManagersInOfficeSelectList == null
-                || model.ManagersInOfficeSelectList.Count() == 0)
+            if (model.ManagersInOfficeSelectList != null && model.ManagersInOfficeSelectList.Any())
             {
-                msg = $"\"{model.CurrentOfficeName}\" does not have any managers to review/approve Complaints. Please contact the Director's Office.";
-                TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Warning");
-                return RedirectToAction("Details", new { id });
+                return View(model);
             }
 
-            return View(model);
+            msg =
+                $"\"{model.CurrentOfficeName}\" does not have any managers to review/approve Complaints. Please contact the Director's Office.";
+            TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Warning");
+            return RedirectToAction("Details", new {id});
         }
 
         public async Task<IActionResult> Reopen(int id)
         {
-            var currentUser = await GetCurrentUserAsync();
-            if (currentUser == null)
-            {
-                throw new Exception("Current user not found");
-            }
-
             var model = await _context.Complaints.AsNoTracking()
                 .Where(m => m.Id == id)
                 .Select(e => new ReopenComplaintViewModel(e))
@@ -903,22 +886,24 @@ namespace ComplaintTracking.Controllers
             {
                 msg = "This Complaint has been deleted and cannot be edited.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
-            }
-            if (!User.IsInRole(CtsRole.DivisionManager.ToString()))
-            {
-                msg = string.Format("You do not have permission to reopen this Complaint.", objectDisplayName);
-                TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
-            }
-            if (!model.ComplaintIsClosed)
-            {
-                msg = "This Complaint has not been closed so it cannot be reopened.";
-                TempData.SaveAlertForSession(msg, AlertStatus.Information);
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
 
-            return View(model);
+            if (!User.IsInRole(CtsRole.DivisionManager.ToString()))
+            {
+                msg = "You do not have permission to reopen this Complaint.";
+                TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
+                return RedirectToAction("Details", new {id});
+            }
+
+            if (model.ComplaintIsClosed)
+            {
+                return View(model);
+            }
+
+            msg = "This Complaint has not been closed so it cannot be reopened.";
+            TempData.SaveAlertForSession(msg, AlertStatus.Information);
+            return RedirectToAction("Details", new {id});
         }
 
         [HttpPost]
@@ -931,10 +916,6 @@ namespace ComplaintTracking.Controllers
             }
 
             var currentUser = await GetCurrentUserAsync();
-            if (currentUser == null)
-            {
-                throw new Exception("Current user not found");
-            }
 
             string msg;
 
@@ -954,19 +935,21 @@ namespace ComplaintTracking.Controllers
                 {
                     msg = "This Complaint has been deleted and cannot be edited.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
+
                 if (!User.IsInRole(CtsRole.DivisionManager.ToString()))
                 {
-                    msg = string.Format("You do not have permission to reopen this Complaint.", objectDisplayName);
+                    msg = "You do not have permission to reopen this Complaint.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
+
                 if (!complaint.ComplaintClosed)
                 {
                     msg = "This Complaint has not been closed so it cannot be reopened.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Information);
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
 
                 // Update complaint properties
@@ -990,43 +973,44 @@ namespace ComplaintTracking.Controllers
                     _context.Update(complaint);
                     await _context.SaveChangesAsync();
 
-                    string recipientId = complaint.CurrentOwnerId;
-                    if (recipientId == null)
-                    {
-                        recipientId = (await _context.LookupOffices.AsNoTracking()
+                    var recipientId = complaint.CurrentOwnerId ??
+                        (await _context.LookupOffices.AsNoTracking()
                             .Where(e => e.Id == complaint.CurrentOfficeId)
-                            .SingleOrDefaultAsync())?
-                            .MasterUserId;
-                    }
+                            .SingleOrDefaultAsync())?.MasterUserId;
+
                     if (recipientId != null)
                     {
                         var recipientUser = await _userManager.FindByIdAsync(recipientId);
                         var recipientEmail = await _userManager.GetEmailAsync(recipientUser);
-                        var complaintUrl = Url.Action("Details", "Complaints", new { id = complaint.Id }, protocol: HttpContext.Request.Scheme);
+                        var complaintUrl = Url.Action("Details", "Complaints", new {id = complaint.Id},
+                            HttpContext.Request.Scheme);
 
                         await _emailSender.SendEmailAsync(
                             recipientEmail,
                             string.Format(EmailTemplates.ComplaintReopened.Subject, complaint.Id),
-                            string.Format(EmailTemplates.ComplaintReopened.PlainBody, complaint.Id, complaintUrl, model.Comment),
+                            string.Format(EmailTemplates.ComplaintReopened.PlainBody, complaint.Id, complaintUrl,
+                                model.Comment),
                             string.Format(EmailTemplates.ComplaintReopened.HtmlBody, complaint.Id, complaintUrl,
-                                (model.Comment == null) ? null : _htmlEncoder.Encode(model.Comment).Replace("&#xD;&#xA;", "<br />")),
+                                model.Comment == null
+                                    ? null
+                                    : _htmlEncoder.Encode(model.Comment).Replace("&#xD;&#xA;", "<br />")),
                             !recipientUser.Active || !recipientUser.EmailConfirmed,
-                            replyTo: currentUser.Email);
+                            currentUser.Email);
                     }
 
-                    msg = string.Format("The {0} has been reopened.", objectDisplayName);
+                    msg = $"The {ObjectDisplayName} has been reopened.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
 
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
                 catch
                 {
-                    msg = string.Format("There was an error saving the {0}. Please try again or contact support.", objectDisplayName);
+                    msg = $"There was an error saving the {ObjectDisplayName}. Please try again or contact support.";
                     ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
                 }
             }
 
-            msg = string.Format("The {0} was not edited. Please fix the errors shown below.", objectDisplayName);
+            msg = $"The {ObjectDisplayName} was not edited. Please fix the errors shown below.";
             ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
 
             return View(model);
@@ -1034,12 +1018,6 @@ namespace ComplaintTracking.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            var currentUser = await GetCurrentUserAsync();
-            if (currentUser == null)
-            {
-                throw new Exception("Current user not found");
-            }
-
             var model = await _context.Complaints.AsNoTracking()
                 .Where(m => m.Id == id)
                 .Select(e => new DeleteComplaintViewModel(e))
@@ -1057,16 +1035,17 @@ namespace ComplaintTracking.Controllers
             {
                 msg = "This Complaint has already been deleted.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Information);
-                return RedirectToAction("Details", new { id });
-            }
-            if (!User.IsInRole(CtsRole.DivisionManager.ToString()))
-            {
-                msg = string.Format("You do not have permission to delete this Complaint.", objectDisplayName);
-                TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
 
-            return View(model);
+            if (User.IsInRole(CtsRole.DivisionManager.ToString()))
+            {
+                return View(model);
+            }
+
+            msg = "You do not have permission to delete this Complaint.";
+            TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
+            return RedirectToAction("Details", new {id});
         }
 
         [HttpPost]
@@ -1079,10 +1058,6 @@ namespace ComplaintTracking.Controllers
             }
 
             var currentUser = await GetCurrentUserAsync();
-            if (currentUser == null)
-            {
-                throw new Exception("Current user not found");
-            }
 
             string msg;
 
@@ -1102,13 +1077,14 @@ namespace ComplaintTracking.Controllers
                 {
                     msg = "This Complaint has already been deleted.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Information);
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
+
                 if (!User.IsInRole(CtsRole.DivisionManager.ToString()))
                 {
-                    msg = string.Format("You do not have permission to delete this Complaint.", objectDisplayName);
+                    msg = "You do not have permission to delete this Complaint.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
 
                 // Update complaint properties
@@ -1130,19 +1106,19 @@ namespace ComplaintTracking.Controllers
                     _context.Update(complaint);
                     await _context.SaveChangesAsync();
 
-                    msg = string.Format("The {0} has been deleted.", objectDisplayName);
+                    msg = $"The {ObjectDisplayName} has been deleted.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
 
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
                 catch
                 {
-                    msg = string.Format("There was an error saving the {0}. Please try again or contact support.", objectDisplayName);
+                    msg = $"There was an error saving the {ObjectDisplayName}. Please try again or contact support.";
                     ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
                 }
             }
 
-            msg = string.Format("The {0} was not deleted. Please fix the errors shown below.", objectDisplayName);
+            msg = $"The {ObjectDisplayName} was not deleted. Please fix the errors shown below.";
             ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
 
             return View(model);
@@ -1150,12 +1126,6 @@ namespace ComplaintTracking.Controllers
 
         public async Task<IActionResult> Restore(int id)
         {
-            var currentUser = await GetCurrentUserAsync();
-            if (currentUser == null)
-            {
-                throw new Exception("Current user not found");
-            }
-
             var model = await _context.Complaints.AsNoTracking()
                 .Where(m => m.Id == id)
                 .Select(e => new RestoreComplaintViewModel(e))
@@ -1173,16 +1143,17 @@ namespace ComplaintTracking.Controllers
             {
                 msg = "This Complaint is not deleted, so it can't be restored.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Information);
-                return RedirectToAction("Details", new { id });
-            }
-            if (!User.IsInRole(CtsRole.DivisionManager.ToString()))
-            {
-                msg = string.Format("You do not have permission to restore this Complaint.", objectDisplayName);
-                TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
 
-            return View(model);
+            if (User.IsInRole(CtsRole.DivisionManager.ToString()))
+            {
+                return View(model);
+            }
+
+            msg = "You do not have permission to restore this Complaint.";
+            TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
+            return RedirectToAction("Details", new {id});
         }
 
         [HttpPost]
@@ -1195,10 +1166,6 @@ namespace ComplaintTracking.Controllers
             }
 
             var currentUser = await GetCurrentUserAsync();
-            if (currentUser == null)
-            {
-                throw new Exception("Current user not found");
-            }
 
             string msg;
 
@@ -1218,13 +1185,14 @@ namespace ComplaintTracking.Controllers
                 {
                     msg = "This Complaint is not deleted, so it can't be restored.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Information);
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
+
                 if (!User.IsInRole(CtsRole.DivisionManager.ToString()))
                 {
-                    msg = string.Format("You do not have permission to restore this Complaint.", objectDisplayName);
+                    msg = "You do not have permission to restore this Complaint.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
 
                 // Update complaint properties
@@ -1246,19 +1214,19 @@ namespace ComplaintTracking.Controllers
                     _context.Update(complaint);
                     await _context.SaveChangesAsync();
 
-                    msg = string.Format("The {0} has been restored.", objectDisplayName);
+                    msg = $"The {ObjectDisplayName} has been restored.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
 
-                    return RedirectToAction("Details", new { id });
+                    return RedirectToAction("Details", new {id});
                 }
                 catch
                 {
-                    msg = string.Format("There was an error saving the {0}. Please try again or contact support.", objectDisplayName);
+                    msg = $"There was an error saving the {ObjectDisplayName}. Please try again or contact support.";
                     ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
                 }
             }
 
-            msg = string.Format("The {0} was not restored. Please fix the errors shown below.", objectDisplayName);
+            msg = $"The {ObjectDisplayName} was not restored. Please fix the errors shown below.";
             ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
 
             return View(model);

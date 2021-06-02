@@ -1,32 +1,28 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using ComplaintTracking.AlertMessages;
 using ComplaintTracking.Models;
 using ComplaintTracking.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ComplaintTracking.Controllers
 {
-    public partial class ComplaintsController : Controller
+    public partial class ComplaintsController
     {
         // GET: Complaints/Create
         public async Task<IActionResult> Create()
         {
             var currentUser = await GetCurrentUserAsync();
-            if (currentUser == null)
-            {
-                throw new Exception("Current user not found");
-            }
 
             var model = new CreateComplaintViewModel()
             {
                 SelectLists = await _dal.GetCommonSelectListsAsync(currentUser.OfficeId),
                 ReceivedById = currentUser.Id,
                 DateReceivedDate = DateTime.Now,
-                CurrentOfficeId = currentUser?.OfficeId,
+                CurrentOfficeId = currentUser.OfficeId,
                 DisableCurrentOwnerSelect = false,
             };
             return View(model);
@@ -38,16 +34,12 @@ namespace ComplaintTracking.Controllers
         public async Task<IActionResult> Create(CreateComplaintViewModel model)
         {
             var currentUser = await GetCurrentUserAsync();
-            if (currentUser == null)
-            {
-                throw new Exception("Current user not found");
-            }
 
             string msg = null;
 
             if (!ModelState.IsValid)
             {
-                msg = $"The Complaint was not created. Please fix the errors shown below.";
+                msg = "The Complaint was not created. Please fix the errors shown below.";
                 ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
 
                 // Populate the select lists before returning the model
@@ -58,8 +50,8 @@ namespace ComplaintTracking.Controllers
                 return View(model);
             }
 
-            if ((!User.IsInRole(CtsRole.DivisionManager.ToString())
-                && model.CurrentOfficeId != currentUser.OfficeId)
+            if (!User.IsInRole(CtsRole.DivisionManager.ToString())
+                && model.CurrentOfficeId != currentUser.OfficeId
                 || model.CurrentOwnerId == CTS.SelectUserMasterText)
             {
                 model.CurrentOwnerId = null;
@@ -70,8 +62,10 @@ namespace ComplaintTracking.Controllers
                 Status = ComplaintStatus.New,
                 DateEntered = DateTime.Now,
                 EnteredBy = currentUser,
-                DateCurrentOwnerAssigned = (model.CurrentOwnerId != null) ? (DateTime?)DateTime.Now : null,
-                DateCurrentOwnerAccepted = (model.CurrentOwnerId != null && model.CurrentOwnerId == currentUser.Id) ? (DateTime?)DateTime.Now : null,
+                DateCurrentOwnerAssigned = (model.CurrentOwnerId != null) ? DateTime.Now : null,
+                DateCurrentOwnerAccepted = (model.CurrentOwnerId != null && model.CurrentOwnerId == currentUser.Id)
+                    ? DateTime.Now
+                    : null,
             };
 
             // Save main complaint details
@@ -82,9 +76,10 @@ namespace ComplaintTracking.Controllers
             }
             catch (Exception ex)
             {
-                var customData = new Dictionary<string, object>();
-                customData.Add("Action", "Saving Complaint");
-                customData.Add("ViewModel", model);
+                var customData = new Dictionary<string, object>
+                {
+                    {"Action", "Saving Complaint"}, {"ViewModel", model}
+                };
                 await _errorLogger.LogErrorAsync(ex, "POST: Complaints/Create add complaint", customData);
 
                 msg = "There was an error saving the complaint. Please try again or contact support.";
@@ -101,8 +96,8 @@ namespace ComplaintTracking.Controllers
             var saveStatus = AlertStatus.Success;
 
             // Save initial complaint transitions
-            bool transitionSaveError = false;
-            Guid transitionId = Guid.Empty;
+            var transitionSaveError = false;
+            var transitionId = Guid.Empty;
             try
             {
                 transitionId = await AddComplaintTransition(new ComplaintTransition()
@@ -121,7 +116,7 @@ namespace ComplaintTracking.Controllers
                         TransferredByUserId = currentUser.Id,
                         TransferredToUserId = model.CurrentOwnerId,
                         TransferredToOfficeId = model.CurrentOfficeId,
-                        DateAccepted = (currentUser.Id == model.CurrentOwnerId) ? (DateTime?)DateTime.Now : null,
+                        DateAccepted = (currentUser.Id == model.CurrentOwnerId) ? DateTime.Now : null,
                         TransitionType = TransitionType.Assigned,
                     });
 
@@ -136,12 +131,14 @@ namespace ComplaintTracking.Controllers
             }
             catch (Exception ex)
             {
-                var customData = new Dictionary<string, object>();
-                customData.Add("Action", "Saving Transitions");
-                customData.Add("Complaint ID", complaint?.Id);
-                customData.Add("ViewModel", model);
-                customData.Add("Complaint Model", complaint);
-                customData.Add("Transition ID", transitionId);
+                var customData = new Dictionary<string, object>
+                {
+                    {"Action", "Saving Transitions"},
+                    {"Complaint ID", complaint.Id},
+                    {"ViewModel", model},
+                    {"Complaint Model", complaint},
+                    {"Transition ID", transitionId}
+                };
                 await _errorLogger.LogErrorAsync(ex, "POST: Complaints/Create add transitions", customData);
 
                 saveStatus = AlertStatus.Warning;
@@ -149,10 +146,11 @@ namespace ComplaintTracking.Controllers
             }
 
             // Email appropriate recipients
-            bool emailError = false;
+            var emailError = false;
             try
             {
-                var complaintUrl = Url.Action("Details", "Complaints", new { id = complaint.Id }, protocol: HttpContext.Request.Scheme);
+                var complaintUrl = Url.Action("Details", "Complaints", new {id = complaint.Id},
+                    protocol: HttpContext.Request.Scheme);
                 if (complaint.CurrentOwnerId == null)
                 {
                     // Email Master of current Office
@@ -163,33 +161,37 @@ namespace ComplaintTracking.Controllers
                     await _emailSender.SendEmailAsync(
                         masterEmail,
                         string.Format(EmailTemplates.ComplaintOpenedToMaster.Subject, complaint.Id),
-                        string.Format(EmailTemplates.ComplaintOpenedToMaster.PlainBody, complaint.Id, complaintUrl, currentOffice.Name),
-                        string.Format(EmailTemplates.ComplaintOpenedToMaster.HtmlBody, complaint.Id, complaintUrl, currentOffice.Name),
+                        string.Format(EmailTemplates.ComplaintOpenedToMaster.PlainBody, complaint.Id, complaintUrl,
+                            currentOffice.Name),
+                        string.Format(EmailTemplates.ComplaintOpenedToMaster.HtmlBody, complaint.Id, complaintUrl,
+                            currentOffice.Name),
                         !officeMaster.Active || !officeMaster.EmailConfirmed,
-                        replyTo: currentUser.Email);
+                        currentUser.Email);
                 }
                 else
                 {
                     // Email new owner
                     var currentOwner = await _userManager.FindByIdAsync(complaint.CurrentOwnerId);
                     var currentOwnerEmail = await _userManager.GetEmailAsync(currentOwner);
-                    bool isValidUser = currentOwner.Active && currentOwner.EmailConfirmed;
+                    var isValidUser = currentOwner.Active && currentOwner.EmailConfirmed;
                     await _emailSender.SendEmailAsync(
                         currentOwnerEmail,
                         string.Format(EmailTemplates.ComplaintAssigned.Subject, complaint.Id),
                         string.Format(EmailTemplates.ComplaintAssigned.PlainBody, complaint.Id, complaintUrl),
                         string.Format(EmailTemplates.ComplaintAssigned.HtmlBody, complaint.Id, complaintUrl),
                         !isValidUser,
-                        replyTo: currentUser.Email);
+                        currentUser.Email);
                 }
             }
             catch (Exception ex)
             {
-                var customData = new Dictionary<string, object>();
-                customData.Add("Action", "Emailing recipients");
-                customData.Add("Complaint ID", complaint.Id);
-                customData.Add("ViewModel", model);
-                customData.Add("Complaint Model", complaint);
+                var customData = new Dictionary<string, object>
+                {
+                    {"Action", "Emailing recipients"},
+                    {"Complaint ID", complaint.Id},
+                    {"ViewModel", model},
+                    {"Complaint Model", complaint}
+                };
                 await _errorLogger.LogErrorAsync(ex, "POST: Complaints/Create send email", customData);
 
                 saveStatus = AlertStatus.Warning;
@@ -197,10 +199,10 @@ namespace ComplaintTracking.Controllers
             }
 
             // Save attachments
-            bool attachmentsError = false;
-            int fileCount = 0;
+            var attachmentsError = false;
+            var fileCount = 0;
             string attachmentErrorMessage = null;
-            if (model.Attachments != null && model.Attachments.Count > 0)
+            if (model.Attachments is {Count: > 0})
             {
                 switch (_fileService.ValidateUploadedFiles(model.Attachments))
                 {
@@ -213,7 +215,8 @@ namespace ComplaintTracking.Controllers
                     case FilesValidationResult.WrongType:
                         saveStatus = AlertStatus.Warning;
                         attachmentsError = true;
-                        attachmentErrorMessage = "An invalid file type was selected. (Supported file types are images, documents, and spreadsheets.) ";
+                        attachmentErrorMessage =
+                            "An invalid file type was selected. (Supported file types are images, documents, and spreadsheets.) ";
                         break;
 
                     case FilesValidationResult.Valid:
@@ -224,27 +227,28 @@ namespace ComplaintTracking.Controllers
                             foreach (var file in model.Attachments)
                             {
                                 var attachment = await _fileService.SaveAttachmentAsync(file);
+                                if (attachment == null) continue;
 
-                                if (attachment != null)
-                                {
-                                    attachment.ComplaintId = complaint.Id;
-                                    attachment.UploadedById = currentUser.Id;
-                                    _context.Add(attachment);
-                                    savedFileList.Add(attachment);
-                                    fileCount++;
-                                }
+                                attachment.ComplaintId = complaint.Id;
+                                attachment.UploadedById = currentUser.Id;
+                                _context.Add(attachment);
+                                savedFileList.Add(attachment);
+                                fileCount++;
                             }
 
                             await _context.SaveChangesAsync();
                         }
                         catch (Exception ex)
                         {
-                            var customData = new Dictionary<string, object>();
-                            customData.Add("Action", "Saving Attachments");
-                            customData.Add("Complaint ID", complaint.Id);
-                            customData.Add("ViewModel", model);
-                            customData.Add("Complaint Model", complaint);
-                            await _errorLogger.LogErrorAsync(ex, "POST: Complaints/Create save attachments", customData);
+                            var customData = new Dictionary<string, object>
+                            {
+                                {"Action", "Saving Attachments"},
+                                {"Complaint ID", complaint.Id},
+                                {"ViewModel", model},
+                                {"Complaint Model", complaint}
+                            };
+                            await _errorLogger.LogErrorAsync(ex, "POST: Complaints/Create save attachments",
+                                customData);
 
                             foreach (var attachment in savedFileList)
                             {
@@ -260,23 +264,19 @@ namespace ComplaintTracking.Controllers
                             attachmentsError = true;
                             attachmentErrorMessage = "An unknown database error occurred. ";
                         }
+
                         break;
                 }
             }
 
-            // Compile response message
-            if (fileCount == 0)
+            msg = fileCount switch
             {
-                msg = "The Complaint has been created. ";
-            }
-            else if (fileCount == 1)
-            {
-                msg = "The Complaint has been created and one file was attached. ";
-            }
-            else if (fileCount > 1)
-            {
-                msg = $"The Complaint has been created and {fileCount} files were attached. ";
-            }
+                // Compile response message
+                0 => "The Complaint has been created. ",
+                1 => "The Complaint has been created and one file was attached. ",
+                > 1 => $"The Complaint has been created and {fileCount} files were attached. ",
+                _ => msg
+            };
 
             if (saveStatus != AlertStatus.Success)
             {
@@ -292,14 +292,15 @@ namespace ComplaintTracking.Controllers
 
                 if (attachmentsError)
                 {
-                    msg += "There was a problem saving the attachments: " + attachmentErrorMessage + "No files were saved. ";
+                    msg += "There was a problem saving the attachments: " + attachmentErrorMessage +
+                        "No files were saved. ";
                 }
 
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Warning");
             }
 
             TempData.SaveAlertForSession(msg, saveStatus, saveStatus.GetDisplayName());
-            return RedirectToAction("Details", new { id = complaint.Id });
+            return RedirectToAction("Details", new {id = complaint.Id});
         }
 
         // GET: Complaints/Edit/5
@@ -311,10 +312,6 @@ namespace ComplaintTracking.Controllers
             }
 
             var currentUser = await GetCurrentUserAsync();
-            if (currentUser == null)
-            {
-                throw new Exception("Current user not found");
-            }
 
             var model = await _context.Complaints.AsNoTracking()
                 .Where(e => e.Id == id)
@@ -333,30 +330,31 @@ namespace ComplaintTracking.Controllers
             {
                 msg = "This Complaint has been deleted and cannot be edited.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
+
             if (currentUser.Id != model.CurrentOwnerId
                 && !(User.IsInRole(CtsRole.Manager.ToString()) && currentUser.OfficeId == model.CurrentOfficeId)
                 && !(User.IsInRole(CtsRole.DivisionManager.ToString()))
                 && !(model.EnteredById == currentUser.Id && model.DateEntered.AddHours(1) > DateTime.Now))
             {
-                msg = string.Format("You do not have permission to edit this Complaint.", objectDisplayName);
+                msg = "You do not have permission to edit this Complaint.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
-            if (currentUser != null
-                && (currentUser.Id == model.CurrentOwnerId)
-                && (model.DateCurrentOwnerAccepted == null))
+
+            if (currentUser.Id == model.CurrentOwnerId && model.DateCurrentOwnerAccepted == null)
             {
-                msg = string.Format("You must accept this Complaint before you can edit it.", objectDisplayName);
+                msg = "You must accept this Complaint before you can edit it.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
+
             if (model.ComplaintIsClosed)
             {
                 msg = "This Complaint has been closed and cannot be edited unless it is reopened.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
 
             model.SelectLists = await _dal.GetCommonSelectListsAsync(currentUser.OfficeId);
@@ -374,16 +372,12 @@ namespace ComplaintTracking.Controllers
             }
 
             var currentUser = await GetCurrentUserAsync();
-            if (currentUser == null)
-            {
-                throw new Exception("Current user not found");
-            }
 
             string msg;
 
             if (!ModelState.IsValid)
             {
-                msg = string.Format("The {0} was not updated. Please fix the errors shown below.", objectDisplayName);
+                msg = $"The {ObjectDisplayName} was not updated. Please fix the errors shown below.";
                 ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
 
                 // Populate the select lists before returning the model
@@ -405,38 +399,40 @@ namespace ComplaintTracking.Controllers
             {
                 msg = "This Complaint has been deleted and cannot be edited.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
+
             if (currentUser.Id != complaint.CurrentOwnerId
                 && !(User.IsInRole(CtsRole.Manager.ToString()) && currentUser.OfficeId == complaint.CurrentOfficeId)
                 && !(User.IsInRole(CtsRole.DivisionManager.ToString()))
                 && !(complaint.EnteredById == currentUser.Id && complaint.DateEntered.AddHours(1) > DateTime.Now))
             {
-                msg = string.Format("You do not have permission to edit this Complaint.", objectDisplayName);
+                msg = "You do not have permission to edit this Complaint.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
-            if (currentUser != null
-                && (currentUser.Id == complaint.CurrentOwnerId)
-                && (complaint.DateCurrentOwnerAccepted == null))
+
+            if (currentUser.Id == complaint.CurrentOwnerId && complaint.DateCurrentOwnerAccepted == null)
             {
-                msg = string.Format("You must accept this Complaint before you can edit it.", objectDisplayName);
+                msg = "You must accept this Complaint before you can edit it.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
+
             if (complaint.ComplaintClosed)
             {
                 msg = "This Complaint has been closed and cannot be edited unless it is reopened.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
 
             // Update complaint properties
-            complaint.DateReceived = model.DateReceivedDate.Value.Date;
+            if (model.DateReceivedDate != null) complaint.DateReceived = model.DateReceivedDate.Value.Date;
             if (model.DateReceivedTime.HasValue)
             {
                 complaint.DateReceived = complaint.DateReceived.Add(model.DateReceivedTime.Value.TimeOfDay);
             }
+
             complaint.ReceivedById = model.ReceivedById;
             complaint.CallerName = model.CallerName;
             complaint.CallerRepresents = model.CallerRepresents;
@@ -486,16 +482,14 @@ namespace ComplaintTracking.Controllers
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+
+                throw;
             }
 
-            msg = string.Format("The {0} was updated.", objectDisplayName);
+            msg = $"The {ObjectDisplayName} was updated.";
             TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
 
-            return RedirectToAction("Details", new { id });
+            return RedirectToAction("Details", new {id});
         }
     }
 }

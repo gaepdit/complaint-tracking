@@ -1,16 +1,16 @@
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using ComplaintTracking.AlertMessages;
 using ComplaintTracking.Generic;
 using ComplaintTracking.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using static ComplaintTracking.ViewModels.SearchComplaintsViewModel;
 
 namespace ComplaintTracking.Controllers
 {
-    public partial class ComplaintsController : Controller
+    public partial class ComplaintsController
     {
         public async Task<IActionResult> Index(
             int page = 1,
@@ -45,7 +45,7 @@ namespace ComplaintTracking.Controllers
         {
             var currentUser = await GetCurrentUserAsync();
             var isForPublic = currentUser == null;
-            bool includeDeleted = !isForPublic
+            var includeDeleted = !isForPublic
                 && User.IsInRole(CtsRole.DivisionManager.ToString());
             if (!includeDeleted) deleteStatus = null;
 
@@ -177,13 +177,11 @@ namespace ComplaintTracking.Controllers
                         var fileName = $"cts_search_{DateTime.Now:yyyy-MM-dd-HH-mm-ss.FFF}.csv";
                         return File(await list.GetCsvByteArrayAsync(), FileTypes.CsvContentType, fileName);
                     }
-                    else
-                    {
-                        msg = $"Unable to export more than {CTS.CsvRecordsExportLimit} records.";
-                        ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
-                    }
+
+                    msg = $"Unable to export more than {CTS.CsvRecordsExportLimit} records.";
+                    ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
                 }
-                
+
                 // Paging
                 complaints = complaints
                     .Skip((page - 1) * CTS.PageSize)
@@ -264,6 +262,7 @@ namespace ComplaintTracking.Controllers
         }
 
         [HttpGet]
-        public IActionResult Download() => RedirectToAction("Index");
+        [ActionName("Download")]
+        public IActionResult GetDownload() => RedirectToAction("Index");
     }
 }

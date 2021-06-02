@@ -1,15 +1,15 @@
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using ComplaintTracking.AlertMessages;
 using ComplaintTracking.Models;
 using ComplaintTracking.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ComplaintTracking.Controllers
 {
-    public partial class ComplaintsController : Controller
+    public partial class ComplaintsController
     {
         public async Task<IActionResult> Actions(int? id)
         {
@@ -19,10 +19,6 @@ namespace ComplaintTracking.Controllers
             }
 
             var currentUser = await GetCurrentUserAsync();
-            if (currentUser == null || User == null)
-            {
-                throw new Exception("Current user not found");
-            }
 
             var model = await _context.Complaints.AsNoTracking()
                 .Where(m => m.Id == id)
@@ -41,36 +37,38 @@ namespace ComplaintTracking.Controllers
             {
                 msg = "This Complaint has been deleted and cannot be edited.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
+
             if (currentUser.Id != model.CurrentOwnerId
                 && !(User.IsInRole(CtsRole.Manager.ToString()) && currentUser.OfficeId == model.CurrentOfficeId)
                 && !(User.IsInRole(CtsRole.DivisionManager.ToString())))
             {
                 msg = "You do not have permission to edit this Complaint.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
-            if (currentUser != null
-                && (currentUser.Id == model.CurrentOwnerId)
-                && (model.DateCurrentOwnerAccepted == null))
+
+            if (currentUser.Id == model.CurrentOwnerId && model.DateCurrentOwnerAccepted == null)
             {
                 msg = "You must accept this Complaint before you can edit it.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
+
             if (model.ComplaintClosed)
             {
                 msg = "This Complaint has been closed and cannot be edited unless it is reopened.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id });
+                return RedirectToAction("Details", new {id});
             }
 
-            bool includeDeleted = User != null
+            var includeDeleted = User != null
                 && (User.IsInRole(CtsRole.DivisionManager.ToString())
                     || User.IsInRole(CtsRole.Manager.ToString()));
 
-            model.ComplaintActions = await _dal.GetComplaintActionsByComplaintId(id.Value, SortOrder.Descending, includeDeleted).ToListAsync();
+            model.ComplaintActions = await _dal
+                .GetComplaintActionsByComplaintId(id.Value, SortOrder.Descending, includeDeleted).ToListAsync();
             model.ActionTypesSelectList = await _dal.GetActionTypesSelectListAsync();
             model.UserCanDelete = includeDeleted;
             model.ActionDate = DateTime.Now;
@@ -84,10 +82,6 @@ namespace ComplaintTracking.Controllers
         public async Task<IActionResult> AddAction(int id, AddComplaintActionViewModel model)
         {
             var currentUser = await GetCurrentUserAsync();
-            if (currentUser == null)
-            {
-                throw new Exception("Current user not found");
-            }
 
             string msg;
 
@@ -109,29 +103,30 @@ namespace ComplaintTracking.Controllers
                 {
                     msg = "This Complaint has been deleted and cannot be edited.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new { id = model.ComplaintId });
+                    return RedirectToAction("Details", new {id = model.ComplaintId});
                 }
+
                 if (currentUser.Id != complaint.CurrentOwnerId
                     && !(User.IsInRole(CtsRole.Manager.ToString()) && currentUser.OfficeId == complaint.CurrentOfficeId)
                     && !(User.IsInRole(CtsRole.DivisionManager.ToString())))
                 {
                     msg = "You do not have permission to edit this Complaint.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new { id = model.ComplaintId });
+                    return RedirectToAction("Details", new {id = model.ComplaintId});
                 }
-                if (currentUser != null
-                    && (currentUser.Id == complaint.CurrentOwnerId)
-                    && (complaint.DateCurrentOwnerAccepted == null))
+
+                if (currentUser.Id == complaint.CurrentOwnerId && complaint.DateCurrentOwnerAccepted == null)
                 {
                     msg = "You must accept this Complaint before you can edit it.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new { id = model.ComplaintId });
+                    return RedirectToAction("Details", new {id = model.ComplaintId});
                 }
+
                 if (complaint.ComplaintClosed)
                 {
                     msg = "This Complaint has been closed and cannot be edited unless it is reopened.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new { id = model.ComplaintId });
+                    return RedirectToAction("Details", new {id = model.ComplaintId});
                 }
 
                 // Update model
@@ -146,7 +141,7 @@ namespace ComplaintTracking.Controllers
                     msg = "The Action has been added.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
 
-                    return RedirectToAction("Actions", new { id = model.ComplaintId });
+                    return RedirectToAction("Actions", new {id = model.ComplaintId});
                 }
                 catch
                 {
@@ -160,16 +155,14 @@ namespace ComplaintTracking.Controllers
 
             // Populate the view model before returning
             var vm = new ViewComplaintActionsViewModel(complaint, model);
-            if (vm == null)
-            {
-                return NotFound();
-            }
 
-            bool includeDeleted = User != null
+            var includeDeleted = User != null
                 && (User.IsInRole(CtsRole.DivisionManager.ToString())
                     || User.IsInRole(CtsRole.Manager.ToString()));
 
-            vm.ComplaintActions = await _dal.GetComplaintActionsByComplaintId(model.ComplaintId, SortOrder.Descending, includeDeleted).ToListAsync();
+            vm.ComplaintActions = await _dal
+                .GetComplaintActionsByComplaintId(model.ComplaintId, SortOrder.Descending, includeDeleted)
+                .ToListAsync();
             vm.ActionTypesSelectList = await _dal.GetActionTypesSelectListAsync();
             vm.UserCanDelete = includeDeleted;
             return View("Actions", vm);
@@ -180,28 +173,24 @@ namespace ComplaintTracking.Controllers
         public async Task<IActionResult> DeleteAction(Guid itemId, int complaintId)
         {
             var currentUser = await GetCurrentUserAsync();
-            if (currentUser == null)
-            {
-                throw new Exception("Current user not found");
-            }
 
             string msg;
 
-            bool userCanDelete = User != null
+            var userCanDelete = User != null
                 && (User.IsInRole(CtsRole.DivisionManager.ToString())
                     || User.IsInRole(CtsRole.Manager.ToString()));
             if (!userCanDelete)
             {
                 msg = "You do not have permission to delete Complaint Actions.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id = complaintId });
+                return RedirectToAction("Details", new {id = complaintId});
             }
 
             if (!ModelState.IsValid)
             {
                 msg = "There was an error deleting the Action. Please try again or contact support.";
                 ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
-                return RedirectToAction("Actions", new { id = complaintId });
+                return RedirectToAction("Actions", new {id = complaintId});
             }
 
             var complaint = await _context.Complaints.AsNoTracking()
@@ -221,13 +210,14 @@ namespace ComplaintTracking.Controllers
             {
                 msg = "This Complaint has been deleted and cannot be edited.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id = complaintId });
+                return RedirectToAction("Details", new {id = complaintId});
             }
+
             if (complaintAction.Deleted)
             {
                 msg = "The Action has already been deleted.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Actions", new { id = itemId });
+                return RedirectToAction("Actions", new {id = itemId});
             }
 
             // Update complaint action
@@ -242,13 +232,13 @@ namespace ComplaintTracking.Controllers
 
                 msg = "The Action has been deleted.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
-                return RedirectToAction("Actions", new { id = complaintId });
+                return RedirectToAction("Actions", new {id = complaintId});
             }
             catch
             {
                 msg = "There was an error deleting the Action. Please try again or contact support.";
                 ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
-                return RedirectToAction("Actions", new { id = complaintId });
+                return RedirectToAction("Actions", new {id = complaintId});
             }
         }
 
@@ -256,29 +246,23 @@ namespace ComplaintTracking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RestoreAction(Guid itemId, int complaintId)
         {
-            var currentUser = await GetCurrentUserAsync();
-            if (currentUser == null)
-            {
-                throw new Exception("Current user not found");
-            }
-
             string msg;
 
-            bool userCanDelete = User != null
+            var userCanDelete = User != null
                 && (User.IsInRole(CtsRole.DivisionManager.ToString())
                     || User.IsInRole(CtsRole.Manager.ToString()));
             if (!userCanDelete)
             {
                 msg = "You do not have permission to restore Complaint Actions.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id = complaintId });
+                return RedirectToAction("Details", new {id = complaintId});
             }
 
             if (!ModelState.IsValid)
             {
                 msg = "There was an error restoring the Action. Please try again or contact support.";
                 ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
-                return RedirectToAction("Actions", new { id = complaintId });
+                return RedirectToAction("Actions", new {id = complaintId});
             }
 
             var complaint = await _context.Complaints.AsNoTracking()
@@ -298,13 +282,14 @@ namespace ComplaintTracking.Controllers
             {
                 msg = "This Complaint has been deleted and cannot be edited.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id = complaintId });
+                return RedirectToAction("Details", new {id = complaintId});
             }
+
             if (!complaintAction.Deleted)
             {
                 msg = "The Action is not deleted, so it can't be restored.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Actions", new { id = itemId });
+                return RedirectToAction("Actions", new {id = itemId});
             }
 
             // Update complaint action
@@ -319,28 +304,19 @@ namespace ComplaintTracking.Controllers
 
                 msg = "The Action has been restored.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
-                return RedirectToAction("Actions", new { id = complaintId });
+                return RedirectToAction("Actions", new {id = complaintId});
             }
             catch
             {
                 msg = "There was an error restoring the Action. Please try again or contact support.";
                 ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
-                return RedirectToAction("Actions", new { id = complaintId });
+                return RedirectToAction("Actions", new {id = complaintId});
             }
         }
 
         public async Task<IActionResult> EditAction(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var currentUser = await GetCurrentUserAsync();
-            if (currentUser == null || User == null)
-            {
-                throw new Exception("Current user not found");
-            }
 
             var model = await _context.ComplaintActions.AsNoTracking()
                 .Where(m => m.Id == id)
@@ -368,35 +344,37 @@ namespace ComplaintTracking.Controllers
             {
                 msg = "This Complaint has been deleted and cannot be edited.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id = model.ComplaintId });
+                return RedirectToAction("Details", new {id = model.ComplaintId});
             }
+
             if (model.Deleted)
             {
                 msg = "The Action has been deleted and cannot be edited.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Actions", new { id });
+                return RedirectToAction("Actions", new {id});
             }
+
             if (currentUser.Id != complaint.CurrentOwnerId
                 && !(User.IsInRole(CtsRole.Manager.ToString()) && currentUser.OfficeId == complaint.CurrentOfficeId)
                 && !(User.IsInRole(CtsRole.DivisionManager.ToString())))
             {
                 msg = "You do not have permission to edit this Complaint.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id = model.ComplaintId });
+                return RedirectToAction("Details", new {id = model.ComplaintId});
             }
-            if (currentUser != null
-                && (currentUser.Id == complaint.CurrentOwnerId)
-                && (complaint.DateCurrentOwnerAccepted == null))
+
+            if (currentUser.Id == complaint.CurrentOwnerId && complaint.DateCurrentOwnerAccepted == null)
             {
                 msg = "You must accept this Complaint before you can edit it.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id = model.ComplaintId });
+                return RedirectToAction("Details", new {id = model.ComplaintId});
             }
+
             if (complaint.ComplaintClosed)
             {
                 msg = "This Complaint has been closed and cannot be edited unless it is reopened.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new { id = model.ComplaintId });
+                return RedirectToAction("Details", new {id = model.ComplaintId});
             }
 
             model.ActionTypesSelectList = await _dal.GetActionTypesSelectListAsync();
@@ -408,10 +386,6 @@ namespace ComplaintTracking.Controllers
         public async Task<IActionResult> EditAction(Guid id, EditComplaintActionViewModel model)
         {
             var currentUser = await GetCurrentUserAsync();
-            if (currentUser == null)
-            {
-                throw new Exception("Current user not found");
-            }
 
             string msg;
 
@@ -440,34 +414,35 @@ namespace ComplaintTracking.Controllers
                 {
                     msg = "This Complaint has been deleted and cannot be edited.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new { id = model.ComplaintId });
+                    return RedirectToAction("Details", new {id = model.ComplaintId});
                 }
+
                 if (currentUser.Id != complaint.CurrentOwnerId
                     && !(User.IsInRole(CtsRole.Manager.ToString()) && currentUser.OfficeId == complaint.CurrentOfficeId)
-                    && !(User.IsInRole(CtsRole.DivisionManager.ToString())))
+                    && !User.IsInRole(CtsRole.DivisionManager.ToString()))
                 {
                     msg = "You do not have permission to edit this Complaint.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new { id = model.ComplaintId });
+                    return RedirectToAction("Details", new {id = model.ComplaintId});
                 }
-                if (currentUser != null
-                    && (currentUser.Id == complaint.CurrentOwnerId)
-                    && (complaint.DateCurrentOwnerAccepted == null))
+
+                if (currentUser.Id == complaint.CurrentOwnerId && complaint.DateCurrentOwnerAccepted == null)
                 {
                     msg = "You must accept this Complaint before you can edit it.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new { id = model.ComplaintId });
+                    return RedirectToAction("Details", new {id = model.ComplaintId});
                 }
+
                 if (complaint.ComplaintClosed)
                 {
                     msg = "This Complaint has been closed and cannot be edited unless it is reopened.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new { id = model.ComplaintId });
+                    return RedirectToAction("Details", new {id = model.ComplaintId});
                 }
 
                 // update complaint action
-                complaintAction.ActionDate = model.ActionDate.Value;
-                complaintAction.ActionTypeId = model.ActionTypeId.Value;
+                complaintAction.ActionDate = model.ActionDate ?? default;
+                complaintAction.ActionTypeId = model.ActionTypeId ?? default;
                 complaintAction.Investigator = model.Investigator;
                 complaintAction.Comments = model.Comments;
 
@@ -479,7 +454,7 @@ namespace ComplaintTracking.Controllers
                     msg = "The Action has been updated.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
 
-                    return RedirectToAction("Actions", new { id = model.ComplaintId });
+                    return RedirectToAction("Actions", new {id = model.ComplaintId});
                 }
                 catch
                 {

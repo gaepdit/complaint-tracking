@@ -115,7 +115,7 @@ namespace ComplaintTracking.Controllers
                 // TODO: Customize welcome message
                 // But User name is only available after redirect:
                 // https://stackoverflow.com/a/38997379/212978
-                TempData.SaveAlertForSession("You have been logged in. Welcome back!");
+                TempData.SaveAlertForSession("You have been logged in. Welcome back!", AlertStatus.Information);
                 return RedirectToLocal(returnUrl);
             }
 
@@ -149,7 +149,7 @@ namespace ComplaintTracking.Controllers
             await _signInManager.SignOutAsync();
             _logger.LogInformation(4, "User logged out");
 
-            TempData.SaveAlertForSession("You have been signed out.");
+            TempData.SaveAlertForSession("You have been signed out.", AlertStatus.Information);
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 

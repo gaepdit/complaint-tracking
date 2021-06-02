@@ -1,16 +1,15 @@
-﻿using ComplaintTracking.Data;
+﻿using System.Text.Encodings.Web;
+using System.Threading.Tasks;
+using ComplaintTracking.Data;
 using ComplaintTracking.Models;
 using ComplaintTracking.Services;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
 
 namespace ComplaintTracking.Controllers
 {
-    public partial class ComplaintsController : Controller
+    public partial class ComplaintsController
     {
-        #region Constructor
+        // Constructor
 
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -20,7 +19,7 @@ namespace ComplaintTracking.Controllers
         private readonly HtmlEncoder _htmlEncoder;
         private readonly DAL _dal;
 
-        private const string objectDisplayName = "Complaint";
+        private const string ObjectDisplayName = "Complaint";
 
         public ComplaintsController(
             ApplicationDbContext context,
@@ -30,7 +29,7 @@ namespace ComplaintTracking.Controllers
             IFileService fileService,
             HtmlEncoder htmlEncoder,
             DAL dal
-            )
+        )
         {
             _context = context;
             _userManager = userManager;
@@ -40,15 +39,9 @@ namespace ComplaintTracking.Controllers
             _htmlEncoder = htmlEncoder;
             _dal = dal;
         }
-        #endregion
 
-        #region Helpers
+        // Helpers
 
-        private Task<ApplicationUser> GetCurrentUserAsync()
-        {
-            return _userManager.GetUserAsync(HttpContext.User);
-        }
-
-        #endregion
+        private  Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(User);
     }
 }
