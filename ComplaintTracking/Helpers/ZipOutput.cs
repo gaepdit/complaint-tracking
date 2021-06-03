@@ -7,25 +7,22 @@ namespace ComplaintTracking
 {
     public static class ZipOutput
     {
-        public static async Task<MemoryStream> GetZipMemoryStreamAsync(this Dictionary<string, Task<MemoryStream>> files)
+        public static async Task<MemoryStream> GetZipMemoryStreamAsync(
+            this Dictionary<string, Task<MemoryStream>> files)
         {
-            using var zipMemoryStream = new MemoryStream();
-            using (var zipArchive = new ZipArchive(zipMemoryStream, ZipArchiveMode.Create, true))
+            var zipMemoryStream = new MemoryStream();
+            using var zipArchive = new ZipArchive(zipMemoryStream, ZipArchiveMode.Create, true);
+            foreach (var (key, value) in files)
             {
-                foreach (var kvp in files)
-                {
-                    var zipEntry = zipArchive.CreateEntry(kvp.Key);
-                    using var zipEntryStream = zipEntry.Open();
-                    await new MemoryStream((await kvp.Value).ToArray()).CopyToAsync(zipEntryStream);
-                }
+                var zipEntry = zipArchive.CreateEntry(key);
+                await using var zipEntryStream = zipEntry.Open();
+                await new MemoryStream((await value).ToArray()).CopyToAsync(zipEntryStream);
             }
 
             return zipMemoryStream;
         }
 
-        public static async Task<byte[]> GetZipByteArrayAsync(this Dictionary<string, Task<MemoryStream>> files)
-        {
-            return (await files.GetZipMemoryStreamAsync()).ToArray();
-        }
+        public static async Task<byte[]> GetZipByteArrayAsync(this Dictionary<string, Task<MemoryStream>> files) =>
+            (await files.GetZipMemoryStreamAsync()).ToArray();
     }
 }

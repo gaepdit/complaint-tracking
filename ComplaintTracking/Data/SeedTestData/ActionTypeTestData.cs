@@ -1,5 +1,5 @@
-﻿using ComplaintTracking.Models;
-using System.Collections.Generic;
+﻿using System.Linq;
+using ComplaintTracking.Models;
 
 namespace ComplaintTracking.Data
 {
@@ -7,7 +7,8 @@ namespace ComplaintTracking.Data
     {
         public static ActionType[] GetActionTypes()
         {
-            string[] items = {
+            string[] items =
+            {
                 "Initial investigation",
                 "Follow-up investigation",
                 "Referred to",
@@ -19,14 +20,7 @@ namespace ComplaintTracking.Data
                 "Consent/administrative order"
             };
 
-            var itemList = new List<ActionType>();
-
-            foreach (string item in items)
-            {
-                itemList.Add(new ActionType { Name = item });
-            }
-
-            return itemList.ToArray();
+            return items.Select(item => new ActionType {Name = item}).ToArray();
         }
     }
 }

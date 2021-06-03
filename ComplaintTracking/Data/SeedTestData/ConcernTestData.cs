@@ -1,5 +1,5 @@
-﻿using ComplaintTracking.Models;
-using System.Collections.Generic;
+﻿using System.Linq;
+using ComplaintTracking.Models;
 
 namespace ComplaintTracking.Data
 {
@@ -7,7 +7,8 @@ namespace ComplaintTracking.Data
     {
         public static Concern[] GetConcerns()
         {
-            string[] items = {
+            string[] items =
+            {
                 "Agricultural Ground Water Use",
                 "Agricultural Surface Water Use",
                 "Air Quality Control",
@@ -50,14 +51,7 @@ namespace ComplaintTracking.Data
                 "Water Quality Stormwater Urban"
             };
 
-            var itemList = new List<Concern>();
-
-            foreach (string item in items)
-            {
-                itemList.Add(new Concern { Name = item });
-            }
-
-            return itemList.ToArray();
+            return items.Select(item => new Concern {Name = item}).ToArray();
         }
     }
 }

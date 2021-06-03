@@ -1,23 +1,24 @@
 ﻿using System;
+using System.Text;
 
 namespace ComplaintTracking
 {
     public static class ShortID
     {
-        private static readonly Random _random = new Random();
-        private static readonly string _pool = "ABCDEFGHKMNPQRSTUVWXYZ2345689";
+        private static readonly Random _random = new();
+        private const string _pool = "ABCDEFGHKMNPQRSTUVWXYZ2345689";
 
         public static string GetShortID(int length = 4)
         {
-            int poolLength = _pool.Length;
-            string output = string.Empty;
+            var poolLength = _pool.Length;
+            var output = new StringBuilder();
 
-            for (int i = 0; i < length; i++)
+            for (var i = 0; i < length; i++)
             {
-                output += _pool[_random.Next(0, poolLength)];
+                output.Append(_pool[_random.Next(0, poolLength)]);
             }
 
-            return output;
+            return output.ToString();
         }
     }
 }

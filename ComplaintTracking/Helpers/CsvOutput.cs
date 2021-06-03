@@ -1,9 +1,9 @@
-﻿using CsvHelper;
-using CsvHelper.Configuration;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
+using CsvHelper;
+using CsvHelper.Configuration;
 
 namespace ComplaintTracking
 {
@@ -11,12 +11,12 @@ namespace ComplaintTracking
     {
         public static async Task<MemoryStream> GetCsvMemoryStreamAsync<T>(this List<T> records)
         {
-            var config = new CsvConfiguration(CultureInfo.InvariantCulture) { SanitizeForInjection = true };
-            using var ms = new MemoryStream();
-            using var sw = new StreamWriter(ms);
-            using var csv = new CsvWriter(sw, config);
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture) {SanitizeForInjection = true};
+            var ms = new MemoryStream();
+            await using var sw = new StreamWriter(ms);
+            await using var csv = new CsvWriter(sw, config);
 
-            csv.WriteRecords(records);
+            await csv.WriteRecordsAsync(records);
 
             await csv.FlushAsync();
             await sw.FlushAsync();
@@ -25,20 +25,7 @@ namespace ComplaintTracking
             return ms;
         }
 
-        public static async Task<byte[]> GetCsvByteArrayAsync<T>(this List<T> records)
-        {
-            return (await records.GetCsvMemoryStreamAsync()).ToArray();
-        }
-
-        /* Example Controller usage:
-
-        [HttpGet]
-        [Produces(CsvOutput.CsvMimeType)]
-        public async Task<IActionResult> GetCsvFileDownload()
-        {
-            return File(await results.GetCsvByteArrayAsync(), CsvOutput.CsvMimeType, "FileName");
-        }
-
-        */
+        public static async Task<byte[]> GetCsvByteArrayAsync<T>(this List<T> records) =>
+            (await records.GetCsvMemoryStreamAsync()).ToArray();
     }
 }

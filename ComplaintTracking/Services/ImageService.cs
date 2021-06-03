@@ -1,21 +1,23 @@
-﻿using Microsoft.AspNetCore.Http;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 
 namespace ComplaintTracking.Services
 {
     public class ImageService : IImageService
     {
         private readonly IErrorLogger _errorLogger;
-        public ImageService(IErrorLogger errorLogger) { _errorLogger = errorLogger; }
 
-        public async Task<bool> SaveThumbnailAsync(IFormFile file, string savePath)
+        public ImageService(IErrorLogger errorLogger)
         {
-            return await SaveImageAsync(file, savePath, true);
+            _errorLogger = errorLogger;
         }
+
+        public Task<bool> SaveThumbnailAsync(IFormFile file, string savePath) =>
+            SaveImageAsync(file, savePath, true);
 
         public async Task<bool> SaveImageAsync(IFormFile file, string savePath, bool asThumbnail = false)
         {
@@ -42,8 +44,6 @@ namespace ComplaintTracking.Services
                     image.Mutate(x => x.AutoOrient());
                 }
 
-                if (image == null) return false;
-
                 await image.SaveAsync(savePath);
                 return true;
             }
@@ -52,10 +52,10 @@ namespace ComplaintTracking.Services
                 // Log error but take no other action here
                 var customData = new Dictionary<string, object>
                 {
-                    { "Action", "Saving Image" },
-                    { "As Thumbnail", asThumbnail },
-                    { "IFormFile", file },
-                    { "Save Path", savePath }
+                    {"Action", "Saving Image"},
+                    {"As Thumbnail", asThumbnail},
+                    {"IFormFile", file},
+                    {"Save Path", savePath}
                 };
                 await _errorLogger.LogErrorAsync(ex, "SaveImage", customData);
                 return false;

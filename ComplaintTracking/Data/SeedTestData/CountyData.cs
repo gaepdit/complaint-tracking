@@ -1,5 +1,5 @@
-﻿using ComplaintTracking.Models;
-using System.Collections.Generic;
+﻿using System.Linq;
+using ComplaintTracking.Models;
 
 namespace ComplaintTracking.Data
 {
@@ -7,7 +7,8 @@ namespace ComplaintTracking.Data
     {
         public static County[] GetCounties()
         {
-            string[] items = {
+            string[] items =
+            {
                 "Appling",
                 "Atkinson",
                 "Bacon",
@@ -169,14 +170,7 @@ namespace ComplaintTracking.Data
                 "Worth"
             };
 
-            var itemList = new List<County>();
-
-            foreach (string item in items)
-            {
-                itemList.Add(new County { Name = item });
-            }
-
-            return itemList.ToArray();
+            return items.Select(item => new County {Name = item}).ToArray();
         }
     }
 }

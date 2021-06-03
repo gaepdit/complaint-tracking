@@ -8,9 +8,7 @@ namespace ComplaintTracking.Data
     public partial class SeedTestData
     {
         public static async Task<Complaint[]> GetComplaintsAsync(
-            ApplicationDbContext _context,
-            ApplicationUser user
-            )
+            ApplicationDbContext _context, ApplicationUser user)
         {
             var office = await _context.LookupOffices.FirstOrDefaultAsync(e => e.Name == "Director's Office");
             var state = await _context.LookupStates.FirstOrDefaultAsync(e => e.PostalAbbreviation == "GA");

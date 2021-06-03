@@ -25,11 +25,11 @@ namespace ComplaintTracking.Services
         }
 
         public async Task<string> LogErrorAsync(
-            Exception ex,
+            Exception exception,
             string context = "",
             Dictionary<string, object> customData = null)
         {
-            if (ExceptionCanBeIgnored(ex)) return string.Empty;
+            if (ExceptionCanBeIgnored(exception)) return string.Empty;
 
             var shortId = ShortID.GetShortID();
 
@@ -43,22 +43,19 @@ namespace ComplaintTracking.Services
 
             // Send to error logger
             var raygunClient = _clientProvider.GetClient(_settings.Value, _httpContextAccessor.HttpContext);
-            await raygunClient.SendInBackground(ex, null, customData);
+            await raygunClient.SendInBackground(exception, null, customData);
 
             return shortId;
         }
 
-        private static bool ExceptionCanBeIgnored(Exception ex)
-        {
+        private static bool ExceptionCanBeIgnored(Exception ex) =>
             // ConnectionResetException is irrelevant; should be fixed in .NET 6.0
-            if (ex is ConnectionResetException && ex.Message.Contains("The client has disconnected")) return true;
-
-            return false;
-        }
+            ex is ConnectionResetException && ex.Message.Contains("The client has disconnected");
     }
 
     public interface IErrorLogger
     {
-        Task<string> LogErrorAsync(Exception exception, string context = "", Dictionary<string, object> customData = null);
+        Task<string> LogErrorAsync(Exception exception, string context = "",
+            Dictionary<string, object> customData = null);
     }
 }

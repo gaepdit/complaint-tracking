@@ -257,7 +257,7 @@ namespace ComplaintTracking.Models
 
         [Display(Name = "Current Assigned Program")]
         [StringLength(50)]
-        [Obsolete]
+        [Obsolete("Holdover from old application")]
         public string CurrentProgram { get; set; }
 
         [Display(Name = "Current Assigned Associate")]

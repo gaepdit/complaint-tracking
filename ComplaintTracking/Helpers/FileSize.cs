@@ -1,10 +1,12 @@
 ﻿using System;
+using JetBrains.Annotations;
 
 namespace ComplaintTracking
 {
     public static class FileSize
     {
-        public enum FileSizeUnits
+        [UsedImplicitly(ImplicitUseTargetFlags.Members)]
+        private enum FileSizeUnits
         {
             bytes = 0,
             KB = 1,
@@ -17,10 +19,10 @@ namespace ComplaintTracking
 
         public static string ToFileSizeString(this long value, int precision = 2)
         {
-            double pow = Math.Floor((value > 0 ? Math.Log(value) : 0) / Math.Log(1024));
+            var pow = Math.Floor((value > 0 ? Math.Log(value) : 0) / Math.Log(1024));
             pow = Math.Min(pow, Enum.GetNames(typeof(FileSizeUnits)).Length); // Total number of FileSizeUnits available
-            string valueString = (value / (double)Math.Pow(1024, pow)).ToString(pow == 0 ? "N0" : "N" + precision.ToString());
-            string unitString = ((FileSizeUnits)(int)pow).ToString();
+            var valueString = (value / Math.Pow(1024, pow)).ToString(pow == 0 ? "N0" : "N" + precision);
+            var unitString = ((FileSizeUnits) (int) pow).ToString();
             return valueString + " " + unitString;
         }
     }

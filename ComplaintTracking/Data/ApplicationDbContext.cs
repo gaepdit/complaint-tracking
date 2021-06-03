@@ -1,14 +1,13 @@
-﻿using ComplaintTracking.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.Extensions.Hosting;
-using System;
+﻿using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using ComplaintTracking.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
 namespace ComplaintTracking.Data
 {
@@ -39,7 +38,8 @@ namespace ComplaintTracking.Data
         {
             base.OnModelCreating(builder);
 
-            foreach (var entityType in builder.Model.GetEntityTypes().Where(e => typeof(IAuditable).IsAssignableFrom(e.ClrType)))
+            foreach (var entityType in builder.Model.GetEntityTypes()
+                .Where(e => typeof(IAuditable).IsAssignableFrom(e.ClrType)))
             {
                 builder.Entity(entityType.ClrType)
                     .Property<DateTime?>("CreatedDate");
@@ -81,30 +81,28 @@ namespace ComplaintTracking.Data
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            string userId = GetUserId(_httpContextAccessor.HttpContext?.User);
+            var userId = GetUserId(_httpContextAccessor.HttpContext?.User);
 
             foreach (var entry in ChangeTracker.Entries<IAuditable>())
             {
-                if (entry.State == EntityState.Added)
+                switch (entry.State)
                 {
-                    entry.Property("CreatedById").CurrentValue = userId;
-                    entry.Property("CreatedDate").CurrentValue = DateTime.Now;
-                }
-                else if (entry.State == EntityState.Modified)
-                {
-                    entry.Property("UpdatedById").CurrentValue = userId;
-                    entry.Property("UpdatedDate").CurrentValue = DateTime.Now;
+                    case EntityState.Added:
+                        entry.Property("CreatedById").CurrentValue = userId;
+                        entry.Property("CreatedDate").CurrentValue = DateTime.Now;
+                        break;
+                    case EntityState.Modified:
+                        entry.Property("UpdatedById").CurrentValue = userId;
+                        entry.Property("UpdatedDate").CurrentValue = DateTime.Now;
+                        break;
                 }
             }
 
             return base.SaveChangesAsync(cancellationToken);
         }
 
-        private string GetUserId(ClaimsPrincipal user)
-        {
-            if (user == null) return null;
-            return user.FindFirst(e => e.Type == ClaimTypes.NameIdentifier)?.Value;
-        }
+        private static string GetUserId(ClaimsPrincipal user) =>
+            user?.FindFirst(e => e.Type == ClaimTypes.NameIdentifier)?.Value;
 
         // Database tables
         public DbSet<ActionType> LookupActionTypes { get; set; }

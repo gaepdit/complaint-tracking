@@ -1,9 +1,10 @@
-﻿using ComplaintTracking.Models;
-using Microsoft.AspNetCore.Http;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using ComplaintTracking.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace ComplaintTracking.Services
 {
@@ -28,9 +29,11 @@ namespace ComplaintTracking.Services
             catch (Exception ex)
             {
                 // Log error but take no other action here
-                var customData = new Dictionary<string, object>();
-                customData.Add("Action", "Deleting File");
-                customData.Add("File", filePath);
+                var customData = new Dictionary<string, object>
+                {
+                    {"Action", "Deleting File"},
+                    {"File", filePath}
+                };
                 await _errorLogger.LogErrorAsync(ex, "TryDeleteFileAsync", customData);
             }
         }
@@ -41,7 +44,7 @@ namespace ComplaintTracking.Services
             // If image service fails, save file directly.
             if (!await _imageService.SaveImageAsync(file, savePath))
             {
-                using var stream = new FileStream(savePath, FileMode.Create);
+                await using var stream = new FileStream(savePath, FileMode.Create);
                 await file.CopyToAsync(stream);
             }
         }
@@ -55,22 +58,24 @@ namespace ComplaintTracking.Services
 
             var fileName = file.FileName.Trim();
             var fileExtension = Path.GetExtension(fileName);
-            bool isImage = false;
-            Guid attachmentId = Guid.NewGuid();
+            var isImage = false;
+            var attachmentId = Guid.NewGuid();
 
             if (FileTypes.FilenameImpliesImage(fileName))
             {
-                var thumbnailSavePath = Path.Combine(FilePaths.ThumbnailsFolder, string.Concat(attachmentId.ToString(), fileExtension));
+                var thumbnailSavePath = Path.Combine(FilePaths.ThumbnailsFolder,
+                    string.Concat(attachmentId.ToString(), fileExtension));
                 if (await _imageService.SaveThumbnailAsync(file, thumbnailSavePath))
                 {
                     isImage = true;
                 }
             }
 
-            var savePath = Path.Combine(FilePaths.AttachmentsFolder, string.Concat(attachmentId.ToString(), fileExtension));
+            var savePath = Path.Combine(FilePaths.AttachmentsFolder,
+                string.Concat(attachmentId.ToString(), fileExtension));
             await SaveFileAsync(file, savePath);
 
-            return new Attachment()
+            return new Attachment
             {
                 Id = attachmentId,
                 FileName = Path.GetFileName(fileName),
@@ -88,29 +93,27 @@ namespace ComplaintTracking.Services
                 return FilesValidationResult.TooMany;
             }
 
-            foreach (var file in files)
+            if (files.Any(file => file.Length > 0 && !FileTypes.FileUploadAllowed(file.FileName)))
             {
-                if (file.Length > 0 && !FileTypes.FileUploadAllowed(file.FileName))
-                {
-                    return FilesValidationResult.WrongType;
-                }
+                return FilesValidationResult.WrongType;
             }
+
             return FilesValidationResult.Valid;
         }
     }
-}
 
-public enum FilesValidationResult
-{
-    Valid,
-    TooMany,
-    WrongType
-}
+    public enum FilesValidationResult
+    {
+        Valid,
+        TooMany,
+        WrongType
+    }
 
-public interface IFileService
-{
-    Task TryDeleteFileAsync(string filePath);
-    Task SaveFileAsync(IFormFile file, string savePath);
-    Task<Attachment> SaveAttachmentAsync(IFormFile file);
-    FilesValidationResult ValidateUploadedFiles(List<IFormFile> files);
+    public interface IFileService
+    {
+        Task TryDeleteFileAsync(string filePath);
+        Task SaveFileAsync(IFormFile file, string savePath);
+        Task<Attachment> SaveAttachmentAsync(IFormFile file);
+        FilesValidationResult ValidateUploadedFiles(List<IFormFile> files);
+    }
 }

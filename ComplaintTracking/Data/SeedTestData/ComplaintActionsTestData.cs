@@ -8,20 +8,18 @@ namespace ComplaintTracking.Data
     public partial class SeedTestData
     {
         public static async Task<ComplaintAction[]> GetComplaintActions(
-            ApplicationDbContext _context,
-            ApplicationUser user
-            )
+            ApplicationDbContext _context, ApplicationUser user)
         {
             ComplaintAction[] c = {
                 new ComplaintAction {
-                    Complaint = await _context.Complaints.FirstOrDefaultAsync(e => e.Deleted == true),
+                    Complaint = await _context.Complaints.FirstOrDefaultAsync(e => e.Deleted),
                     ActionDate = DateTime.Parse("Jun 13, 2017"),
                     ActionType = await _context.LookupActionTypes.FirstOrDefaultAsync(e => e.Name == "Initial investigation"),
                     Comments = "Investigation comments.",
                     Investigator = "I. N. Vestigator",
                 },
                 new ComplaintAction {
-                    Complaint = await _context.Complaints.FirstOrDefaultAsync(e => e.Deleted == true),
+                    Complaint = await _context.Complaints.FirstOrDefaultAsync(e => e.Deleted),
                     ActionDate = DateTime.Parse("Jun 16, 2017"),
                     ActionType = await _context.LookupActionTypes.FirstOrDefaultAsync(e => e.Name == "Referred to"),
                     Comments = "Investigation comments.",
@@ -52,14 +50,14 @@ namespace ComplaintTracking.Data
                     DateDeleted = DateTime.Parse("Jun 16, 2017"),
                 },
                 new ComplaintAction {
-                    Complaint = await _context.Complaints.FirstOrDefaultAsync(e => e.Status == ComplaintStatus.ReviewPending && e.Deleted == false),
+                    Complaint = await _context.Complaints.FirstOrDefaultAsync(e => e.Status == ComplaintStatus.ReviewPending && !e.Deleted ),
                     ActionDate = DateTime.Parse("Jun 13, 2017"),
                     ActionType = await _context.LookupActionTypes.FirstOrDefaultAsync(e => e.Name == "Initial investigation"),
                     Comments = "Investigation comments.",
                     Investigator = "I. N. Vestigator",
                 },
                 new ComplaintAction {
-                    Complaint = await _context.Complaints.FirstOrDefaultAsync(e => e.Status == ComplaintStatus.ReviewPending && e.Deleted == false),
+                    Complaint = await _context.Complaints.FirstOrDefaultAsync(e => e.Status == ComplaintStatus.ReviewPending && !e.Deleted ),
                     ActionDate = DateTime.Parse("Jun 16, 2017"),
                     ActionType = await _context.LookupActionTypes.FirstOrDefaultAsync(e => e.Name == "Referred to"),
                     Comments = "Investigation comments.",

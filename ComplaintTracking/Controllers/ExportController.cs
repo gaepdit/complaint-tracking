@@ -143,7 +143,7 @@ namespace ComplaintTracking.Controllers
         private async Task<MemoryStream> OpenComplaintsCsvStreamAsync()
         {
             const string query = "SELECT * FROM gora.OpenComplaints ORDER BY ComplaintId";
-            var result = await DataSQLHelper.ExecSQL<OpenComplaints>(query, _context, ExportTimeout);
+            var result = await DataSqlHelper.ExecSQL<OpenComplaints>(query, _context, ExportTimeout);
 
             return await result.GetCsvMemoryStreamAsync();
         }
@@ -151,7 +151,7 @@ namespace ComplaintTracking.Controllers
         private async Task<MemoryStream> ClosedComplaintsCsvStreamAsync()
         {
             const string query = "SELECT * FROM gora.ClosedComplaints ORDER BY ComplaintId";
-            var result = await DataSQLHelper.ExecSQL<ClosedComplaints>(query, _context, ExportTimeout);
+            var result = await DataSqlHelper.ExecSQL<ClosedComplaints>(query, _context, ExportTimeout);
 
             return await result.GetCsvMemoryStreamAsync();
         }
@@ -159,7 +159,7 @@ namespace ComplaintTracking.Controllers
         private async Task<MemoryStream> ClosedComplaintActionsCsvStreamAsync()
         {
             const string query = "SELECT * FROM gora.ClosedComplaintActions ORDER BY ComplaintId, ActionDate";
-            var result = await DataSQLHelper.ExecSQL<ClosedComplaintActions>(query, _context, ExportTimeout);
+            var result = await DataSqlHelper.ExecSQL<ClosedComplaintActions>(query, _context, ExportTimeout);
 
             return await result.GetCsvMemoryStreamAsync();
         }

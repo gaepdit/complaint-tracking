@@ -258,7 +258,7 @@ namespace ComplaintTracking.Controllers
                         AND a.MinActionDate BETWEEN '{beginDate:d}' AND '{endDate:d}'
                         ORDER BY c.Id";
 
-                    user.Complaints = await DataSQLHelper
+                    user.Complaints = await DataSqlHelper
                         .ExecSQL<ReportDaysToFollowUpByStaffViewModel.ComplaintList>(query, _context);
                 }
             }
@@ -312,7 +312,7 @@ namespace ComplaintTracking.Controllers
                     WHERE c.Deleted = 0 and c.ComplaintClosed = 0 AND c.CurrentOwnerId = '{user.Id}'
                     ORDER BY c.Id desc";
 
-                user.Complaints = await DataSQLHelper
+                user.Complaints = await DataSqlHelper
                     .ExecSQL<ReportDaysSinceLastActionByStaffViewModel.ComplaintList>(query, _context);
             }
 

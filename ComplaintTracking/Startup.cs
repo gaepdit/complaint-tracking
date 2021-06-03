@@ -1,4 +1,6 @@
-﻿using ComplaintTracking.Data;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using ComplaintTracking.Data;
 using ComplaintTracking.Models;
 using ComplaintTracking.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -16,7 +18,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mindscape.Raygun4Net.AspNetCore;
-using System.IO;
 
 namespace ComplaintTracking
 {
@@ -28,13 +29,13 @@ namespace ComplaintTracking
             Setup();
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             // Add database context
-            string connectionString = Configuration.GetConnectionString("DefaultConnection");
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
 
             services.AddDbContext<ApplicationDbContext>(opts =>
             {
@@ -100,6 +101,7 @@ namespace ComplaintTracking
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        [SuppressMessage("ReSharper", "S125")]
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -115,6 +117,7 @@ namespace ComplaintTracking
                 app.UseHsts();
                 app.UseExceptionHandler("/Error");
             }
+
             app.UseRaygun();
 
             app.UseStatusCodePagesWithReExecute("/Error/Status/{0}");
@@ -141,10 +144,7 @@ namespace ComplaintTracking
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapDefaultControllerRoute();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); });
         }
 
         private void Setup()
@@ -157,7 +157,8 @@ namespace ComplaintTracking
         {
             // Base path for all generated/uploaded files
             FilePaths.BasePath = string.IsNullOrWhiteSpace(Configuration["UserFilesBasePath"])
-                ? "../_UserFiles" : Configuration["UserFilesBasePath"].ForceToString();
+                ? "../_UserFiles"
+                : Configuration["UserFilesBasePath"].ForceToString();
 
             // Set file paths
             FilePaths.AttachmentsFolder = Path.Combine(FilePaths.BasePath, "UserFiles", "attachments");

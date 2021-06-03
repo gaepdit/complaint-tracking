@@ -1,12 +1,11 @@
-﻿using ComplaintTracking.Models;
-using Microsoft.AspNetCore.Hosting;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using ComplaintTracking.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace ComplaintTracking.Data
 {
@@ -31,7 +30,6 @@ namespace ComplaintTracking.Data
             var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-            var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
 
             // Initialize database
             if (dbContext.Database.IsSqlite())
@@ -41,10 +39,6 @@ namespace ComplaintTracking.Data
             else if (dbContext.Database.IsSqlServer())
             {
                 await InitializeAsync(dbContext, roleManager);
-            }
-            else
-            {
-                throw new Exception("Database setup error");
             }
         }
 
@@ -89,8 +83,8 @@ namespace ComplaintTracking.Data
             }
 
             // Create Default Admin User
-            string email = CTS.AdminEmail;
-            string password = "Abc123!!";
+            var email = CTS.AdminEmail;
+            const string password = "Abc123!!";
             if (!await context.Users.AnyAsync(e => e.Email == email))
             {
                 var user = new ApplicationUser
@@ -103,27 +97,38 @@ namespace ComplaintTracking.Data
                     Office = null
                 };
                 await userManager.CreateAsync(user, password);
-                await userManager.AddToRoleAsync(await userManager.FindByNameAsync(email), CtsRole.DivisionManager.ToString());
+                await userManager.AddToRoleAsync(await userManager.FindByNameAsync(email),
+                    CtsRole.DivisionManager.ToString());
             }
 
-            ApplicationUser adminUser = await userManager.FindByNameAsync(email);
+            var adminUser = await userManager.FindByNameAsync(email);
 
-            if (!await context.LookupCounties.AnyAsync()) await context.LookupCounties.AddRangeAsync(SeedTestData.GetCounties());
-            if (!await context.LookupStates.AnyAsync()) await context.LookupStates.AddRangeAsync(SeedTestData.GetStates());
-            if (!await context.LookupOffices.AnyAsync()) await context.LookupOffices.AddRangeAsync(SeedTestData.GetOffices(adminUser));
-            if (!await context.LookupConcerns.AnyAsync()) await context.LookupConcerns.AddRangeAsync(SeedTestData.GetConcerns());
-            if (!await context.LookupActionTypes.AnyAsync()) await context.LookupActionTypes.AddRangeAsync(SeedTestData.GetActionTypes());
+            if (!await context.LookupCounties.AnyAsync())
+                await context.LookupCounties.AddRangeAsync(SeedTestData.GetCounties());
+            if (!await context.LookupStates.AnyAsync())
+                await context.LookupStates.AddRangeAsync(SeedTestData.GetStates());
+            if (!await context.LookupOffices.AnyAsync())
+                await context.LookupOffices.AddRangeAsync(SeedTestData.GetOffices(adminUser));
+            if (!await context.LookupConcerns.AnyAsync())
+                await context.LookupConcerns.AddRangeAsync(SeedTestData.GetConcerns());
+            if (!await context.LookupActionTypes.AnyAsync())
+                await context.LookupActionTypes.AddRangeAsync(SeedTestData.GetActionTypes());
             await context.SaveChangesAsync();
 
-            if (!await context.Complaints.AnyAsync()) await context.Complaints.AddRangeAsync(await SeedTestData.GetComplaintsAsync(context, adminUser));
+            if (!await context.Complaints.AnyAsync())
+                await context.Complaints.AddRangeAsync(await SeedTestData.GetComplaintsAsync(context, adminUser));
             await context.SaveChangesAsync();
 
-            if (!await context.ComplaintActions.AnyAsync()) await context.ComplaintActions.AddRangeAsync(await SeedTestData.GetComplaintActions(context, adminUser));
-            if (!await context.ComplaintTransitions.AnyAsync()) await context.ComplaintTransitions.AddRangeAsync(await SeedTestData.GetComplaintTransitions(context, adminUser));
+            if (!await context.ComplaintActions.AnyAsync())
+                await context.ComplaintActions.AddRangeAsync(
+                    await SeedTestData.GetComplaintActions(context, adminUser));
+            if (!await context.ComplaintTransitions.AnyAsync())
+                await context.ComplaintTransitions.AddRangeAsync(
+                    await SeedTestData.GetComplaintTransitions(context, adminUser));
             await context.SaveChangesAsync();
 
             // Add additional users
-            if ((await context.Users.CountAsync()) <= 1) await SeedTestData.AddUsersAsync(context, userManager);
+            if (await context.Users.CountAsync() <= 1) await SeedTestData.AddUsersAsync(context, userManager);
         }
     }
 }

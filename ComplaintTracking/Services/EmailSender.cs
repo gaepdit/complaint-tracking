@@ -1,4 +1,7 @@
-﻿using ComplaintTracking.Data;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
+using ComplaintTracking.Data;
 using ComplaintTracking.ExtensionMethods;
 using ComplaintTracking.Models;
 using MailKit.Net.Smtp;
@@ -6,9 +9,6 @@ using MailKit.Security;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
-using System;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace ComplaintTracking.Services
 {
@@ -36,10 +36,10 @@ namespace ComplaintTracking.Services
         }
 
         public async Task SendEmailAsync(
-            string emailTo,
+            string email,
             string subject,
-            string textBody,
-            string htmlBody = "",
+            string plainMessage,
+            string htmlMessage = "",
             bool saveLocallyOnly = false,
             string replyTo = "")
         {
@@ -59,9 +59,9 @@ namespace ComplaintTracking.Services
             var emailMessage = new MimeMessage();
 
             emailMessage.From.Add(new MailboxAddress("Complaint Tracking System", CTS.AdminEmail));
-            emailMessage.To.Add(new MailboxAddress("", emailTo));
+            emailMessage.To.Add(new MailboxAddress("", email));
 
-            if (!string.IsNullOrEmpty(replyTo) && replyTo != emailTo)
+            if (!string.IsNullOrEmpty(replyTo) && replyTo != email)
             {
                 emailMessage.ReplyTo.Add(new MailboxAddress("", replyTo));
             }
@@ -70,11 +70,11 @@ namespace ComplaintTracking.Services
 
             var builder = new BodyBuilder();
             var appUrl = _urlHelper.AbsoluteAction("Index", "Home");
-            builder.TextBody = textBody + string.Format(EmailTemplates.PlainSignature, appUrl, emailTo);
+            builder.TextBody = plainMessage + string.Format(EmailTemplates.PlainSignature, appUrl, email);
 
-            if (!string.IsNullOrWhiteSpace(htmlBody))
+            if (!string.IsNullOrWhiteSpace(htmlMessage))
             {
-                builder.HtmlBody = htmlBody + string.Format(EmailTemplates.HtmlSignature, appUrl, emailTo);
+                builder.HtmlBody = htmlMessage + string.Format(EmailTemplates.HtmlSignature, appUrl, email);
             }
 
             emailMessage.Body = builder.ToMessageBody();
@@ -106,8 +106,8 @@ namespace ComplaintTracking.Services
                 To = emailMessage.To.ToString(),
                 From = emailMessage.From.ToString(),
                 Subject = subject,
-                TextBody = textBody,
-                HtmlBody = htmlBody
+                TextBody = plainMessage,
+                HtmlBody = htmlMessage
             });
             await _context.SaveChangesAsync();
         }
