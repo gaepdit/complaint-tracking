@@ -1,11 +1,11 @@
-﻿using ComplaintTracking.Models;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using ComplaintTracking.Models;
 using ComplaintTracking.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using static ComplaintTracking.Caching;
 
 namespace ComplaintTracking
@@ -14,10 +14,7 @@ namespace ComplaintTracking
     {
         public async Task<CommonSelectLists> GetCommonSelectListsAsync(Guid? officeId)
         {
-            if (!officeId.HasValue)
-            {
-                officeId = default(Guid);
-            }
+            officeId ??= default;
 
             var areasOfConcern = await GetAreasOfConcernSelectListAsync();
             var offices = await GetOfficesSelectListAsync(true);
@@ -77,10 +74,8 @@ namespace ComplaintTracking
             }
         }
 
-        public SelectList GetPhoneTypesSelectList()
-        {
-            return new SelectList(Enum.GetValues(typeof(PhoneType)));
-        }
+        private static SelectList GetPhoneTypesSelectList() =>
+            new(Enum.GetValues(typeof(PhoneType)));
 
         public async Task<SelectList> GetAreasOfConcernSelectListAsync()
         {
@@ -114,7 +109,6 @@ namespace ComplaintTracking
 
             async Task<SelectList> actionsSelectList()
             {
-
                 var items = await _context.LookupActionTypes.AsNoTracking()
                     .Where(t => t.Active)
                     .OrderBy(t => t.Name)

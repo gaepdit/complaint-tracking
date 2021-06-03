@@ -1,8 +1,8 @@
-﻿using ComplaintTracking.ViewModels;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ComplaintTracking.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace ComplaintTracking
 {
@@ -36,15 +36,6 @@ namespace ComplaintTracking
                 .Where(e => !e.Deleted)
                 .Where(e => !e.Complaint.Deleted)
                 .Select(e => e.FileName)
-                .SingleOrDefaultAsync();
-        }
-
-        public async Task<int> GetComplaintIdForAttachmentAsync(Guid attachmentId)
-        {
-            return await _context.Attachments.AsNoTracking()
-                .Where(e => e.Id == attachmentId)
-                .Where(e => !e.Deleted)
-                .Select(e => e.ComplaintId)
                 .SingleOrDefaultAsync();
         }
     }

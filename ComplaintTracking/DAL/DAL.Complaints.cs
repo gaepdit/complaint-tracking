@@ -82,24 +82,17 @@ namespace ComplaintTracking
             // Filters
             if (complaintStatus.HasValue)
             {
-                switch (complaintStatus.Value)
+                complaints = complaintStatus.Value switch
                 {
-                    case SearchComplaintStatus.Closed:
-                        complaints = complaints.Where(e => e.Status == ComplaintStatus.Closed);
-                        break;
-                    case SearchComplaintStatus.New:
-                        complaints = complaints.Where(e => e.Status == ComplaintStatus.New);
-                        break;
-                    case SearchComplaintStatus.ReviewPending:
-                        complaints = complaints.Where(e => e.Status == ComplaintStatus.ReviewPending);
-                        break;
-                    case SearchComplaintStatus.UnderInvestigation:
-                        complaints = complaints.Where(e => e.Status == ComplaintStatus.UnderInvestigation);
-                        break;
-                    case SearchComplaintStatus.Open:
-                        complaints = complaints.Where(e => e.Status != ComplaintStatus.Closed);
-                        break;
-                }
+                    SearchComplaintStatus.Closed => complaints.Where(e => e.Status == ComplaintStatus.Closed),
+                    SearchComplaintStatus.New => complaints.Where(e => e.Status == ComplaintStatus.New),
+                    SearchComplaintStatus.ReviewPending => complaints.Where(e =>
+                        e.Status == ComplaintStatus.ReviewPending),
+                    SearchComplaintStatus.UnderInvestigation => complaints.Where(e =>
+                        e.Status == ComplaintStatus.UnderInvestigation),
+                    SearchComplaintStatus.Open => complaints.Where(e => e.Status != ComplaintStatus.Closed),
+                    _ => complaints
+                };
             }
 
             if (deleteStatus.HasValue)

@@ -1,10 +1,12 @@
-﻿using ComplaintTracking.Data;
+﻿using System.Diagnostics.CodeAnalysis;
+using ComplaintTracking.Data;
 using ComplaintTracking.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace ComplaintTracking
 {
+    [SuppressMessage("ReSharper", "S101")]
     public partial class DAL
     {
         private readonly ApplicationDbContext _context;

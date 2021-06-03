@@ -1,10 +1,10 @@
-﻿using ComplaintTracking.Models;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using ComplaintTracking.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using static ComplaintTracking.Caching;
 
 namespace ComplaintTracking
@@ -43,11 +43,11 @@ namespace ComplaintTracking
                 entry =>
                 {
                     entry.AbsoluteExpiration = new DateTimeOffset(DateTime.Now.AddDays(LONG_CACHE_TIME));
-                    return usersSelectList(includeInactive);
+                    return usersSelectList();
                 }
             );
 
-            async Task<SelectList> usersSelectList(bool includeInactive)
+            async Task<SelectList> usersSelectList()
             {
                 var items = await _context.Users.AsNoTracking()
                     .Where(t => t.Active || includeInactive)
