@@ -11,15 +11,15 @@ namespace ComplaintTracking
 {
     public partial class DAL
     {
-        public async Task<bool> EmailAlreadyUsedAsync(string email, string ignoreId = null)
+        public Task<bool> EmailAlreadyUsedAsync(string email, string ignoreId = null)
         {
             if (string.IsNullOrEmpty(ignoreId))
             {
-                return await _context.Users.AsNoTracking()
+                return _context.Users.AsNoTracking()
                     .AnyAsync(e => e.Email == email);
             }
 
-            return await _context.Users.AsNoTracking()
+            return _context.Users.AsNoTracking()
                 .AnyAsync(e => e.Email == email && e.Id != ignoreId);
         }
 

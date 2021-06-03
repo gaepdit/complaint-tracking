@@ -1,4 +1,7 @@
-﻿using ComplaintTracking.AlertMessages;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using ComplaintTracking.AlertMessages;
 using ComplaintTracking.Data;
 using ComplaintTracking.Models;
 using ComplaintTracking.ViewModels;
@@ -6,9 +9,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ComplaintTracking.Controllers
 {
@@ -31,7 +31,7 @@ namespace ComplaintTracking.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-            if (!User.Identity.IsAuthenticated)
+            if (User?.Identity == null || !User.Identity.IsAuthenticated)
             {
                 return View("PortalHome");
             }
@@ -84,30 +84,30 @@ namespace ComplaintTracking.Controllers
 
                 // Manager: Unassigned Complaints
                 mgrUnassignedComplaints = await _context.Complaints.AsNoTracking()
-                   .Where(e => e.CurrentOfficeId == currentUser.OfficeId)
-                   .Where(e => e.CurrentOwnerId == null)
-                   .Where(e => !e.ComplaintClosed)
-                   .Where(e => !e.Deleted)
-                   .OrderByDescending(e => e.DateReceived)
-                   .Select(e => new HomeComplaintListViewModel(e))
-                   .ToListAsync();
+                    .Where(e => e.CurrentOfficeId == currentUser.OfficeId)
+                    .Where(e => e.CurrentOwnerId == null)
+                    .Where(e => !e.ComplaintClosed)
+                    .Where(e => !e.Deleted)
+                    .OrderByDescending(e => e.DateReceived)
+                    .Select(e => new HomeComplaintListViewModel(e))
+                    .ToListAsync();
 
                 // Manager: Unaccepted Complaints 
                 mgrUnacceptedComplaints = await _context.Complaints.AsNoTracking()
-                   .Where(e => e.CurrentOfficeId == currentUser.OfficeId)
-                   .Where(e => e.CurrentOwnerId != null)
-                   .Where(e => e.DateCurrentOwnerAccepted == null)
-                   .Where(e => !e.ComplaintClosed)
-                   .Where(e => !e.Deleted)
-                   .OrderByDescending(e => e.DateReceived)
-                   .Select(e => new HomeComplaintListViewModel(e))
-                   .ToListAsync();
+                    .Where(e => e.CurrentOfficeId == currentUser.OfficeId)
+                    .Where(e => e.CurrentOwnerId != null)
+                    .Where(e => e.DateCurrentOwnerAccepted == null)
+                    .Where(e => !e.ComplaintClosed)
+                    .Where(e => !e.Deleted)
+                    .OrderByDescending(e => e.DateReceived)
+                    .Select(e => new HomeComplaintListViewModel(e))
+                    .ToListAsync();
             }
 
             // Master: Unassigned Complaints
             var officesForMaster = await _dal.GetOfficesForMasterAsync(currentUser.Id);
             var unassignedComplaintsForMaster = new Dictionary<Office, List<HomeComplaintListViewModel>>();
-            if (officesForMaster != null && officesForMaster.Count() > 0)
+            if (officesForMaster.Any())
             {
                 foreach (var item in officesForMaster)
                 {
@@ -140,18 +140,18 @@ namespace ComplaintTracking.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(HomeIndexViewModel model)
         {
-            string msg = "Please enter a Complaint ID first.";
+            var msg = "Please enter a Complaint ID first.";
 
             if (model.FindComplaint.HasValue)
             {
-                bool includeDeleted = User != null && User.IsInRole(CtsRole.DivisionManager.ToString());
+                var includeDeleted = User != null && User.IsInRole(CtsRole.DivisionManager.ToString());
 
                 var complaintExists = await _context.Complaints.AsNoTracking()
                     .AnyAsync(e => e.Id == model.FindComplaint.Value && (includeDeleted || !e.Deleted));
 
                 if (complaintExists)
                 {
-                    return RedirectToAction("Details", "Complaints", new { id = model.FindComplaint });
+                    return RedirectToAction("Details", "Complaints", new {id = model.FindComplaint});
                 }
 
                 msg = "A Complaint with that ID could not be found.";
@@ -162,10 +162,6 @@ namespace ComplaintTracking.Controllers
         }
 
         // Helpers
-        private Task<ApplicationUser> GetCurrentUserAsync()
-        {
-            return _userManager.GetUserAsync(HttpContext.User);
-        }
-
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
     }
 }

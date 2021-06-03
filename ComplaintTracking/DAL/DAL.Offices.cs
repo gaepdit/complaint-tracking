@@ -43,7 +43,7 @@ namespace ComplaintTracking
                 .Name;
         }
 
-        public async Task<IEnumerable<Office>> GetOfficesForMasterAsync(string userId)
+        public async Task<List<Office>> GetOfficesForMasterAsync(string userId)
         {
             return await _context.LookupOffices.AsNoTracking()
                 .Where(e => e.MasterUserId == userId)

@@ -1,15 +1,14 @@
-﻿using ComplaintTracking.AlertMessages;
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using ComplaintTracking.AlertMessages;
 using ComplaintTracking.Data;
 using ComplaintTracking.Generic;
 using ComplaintTracking.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using static ComplaintTracking.ViewModels.PublicSearchViewModel;
 
 namespace ComplaintTracking.Controllers
@@ -30,10 +29,10 @@ namespace ComplaintTracking.Controllers
         {
             if (model.FindComplaint.HasValue && ModelState.IsValid)
             {
-                return RedirectToAction("ComplaintDetails", "Public", new { id = model.FindComplaint });
+                return RedirectToAction("ComplaintDetails", "Public", new {id = model.FindComplaint});
             }
 
-            string msg = "Please enter a Complaint ID first.";
+            const string msg = "Please enter a Complaint ID first.";
 
             // ViewModel
             model = new PublicSearchViewModel()
@@ -50,20 +49,20 @@ namespace ComplaintTracking.Controllers
 
         [HttpGet, HttpHead]
         public async Task<IActionResult> Index(
-                    int page = 1,
-                    string submit = null,
-                    SortBy sort = SortBy.IdDesc,
-                    DateTime? DateFrom = null,
-                    DateTime? DateTo = null,
-                    string Nature = null,
-                    int? CountyId = null,
-                    Guid? TypeId = null,
-                    string SourceName = null,
-                    string Street = null,
-                    string City = null,
-                    int? StateId = null,
-                    string PostalCode = null
-                )
+            int page = 1,
+            string submit = null,
+            SortBy sort = SortBy.IdDesc,
+            DateTime? DateFrom = null,
+            DateTime? DateTo = null,
+            string Nature = null,
+            int? CountyId = null,
+            Guid? TypeId = null,
+            string SourceName = null,
+            string Street = null,
+            string City = null,
+            int? StateId = null,
+            string PostalCode = null
+        )
         {
             // ViewModel
             var model = new PublicSearchViewModel()
@@ -99,7 +98,7 @@ namespace ComplaintTracking.Controllers
             {
                 // Search
                 var complaints = _context.Complaints.AsNoTracking()
-                        .Where(e => !e.Deleted && e.ComplaintClosed);
+                    .Where(e => !e.Deleted && e.ComplaintClosed);
 
                 // Filters
                 if (DateFrom.HasValue)
@@ -107,48 +106,58 @@ namespace ComplaintTracking.Controllers
                     complaints = complaints
                         .Where(e => DateFrom.Value <= e.DateReceived);
                 }
+
                 if (DateTo.HasValue)
                 {
                     complaints = complaints
                         .Where(e => e.DateReceived.Date <= DateTo.Value);
                 }
+
                 if (CountyId.HasValue)
                 {
                     complaints = complaints
                         .Where(e => e.ComplaintCountyId.HasValue && e.ComplaintCountyId.Value == CountyId.Value);
                 }
+
                 if (!string.IsNullOrEmpty(Nature))
                 {
                     complaints = complaints
                         .Where(e => e.ComplaintNature.ToLower().Contains(Nature.ToLower()));
                 }
+
                 if (TypeId.HasValue)
                 {
                     complaints = complaints
                         .Where(e => (e.PrimaryConcernId.HasValue && e.PrimaryConcernId.Value == TypeId.Value)
                             || (e.SecondaryConcernId.HasValue && e.SecondaryConcernId.Value == TypeId.Value));
                 }
+
                 if (!string.IsNullOrEmpty(SourceName))
                 {
                     complaints = complaints
                         .Where(e => e.SourceFacilityName.ToLower().Contains(SourceName.ToLower()));
                 }
+
                 if (!string.IsNullOrEmpty(Street))
                 {
                     complaints = complaints
                         .Where(e => e.SourceStreet.ToLower().Contains(Street.ToLower())
                             || e.SourceStreet2.ToLower().Contains(Street.ToLower()));
                 }
+
                 if (!string.IsNullOrEmpty(City))
                 {
                     complaints = complaints
-                        .Where(e => e.SourceCity.ToLower().Contains(City.ToLower()) || e.ComplaintCity.ToLower().Contains(City.ToLower()));
+                        .Where(e => e.SourceCity.ToLower().Contains(City.ToLower()) ||
+                            e.ComplaintCity.ToLower().Contains(City.ToLower()));
                 }
+
                 if (StateId.HasValue)
                 {
                     complaints = complaints
                         .Where(e => e.SourceStateId.HasValue && e.SourceStateId.Value == StateId.Value);
                 }
+
                 if (!string.IsNullOrEmpty(PostalCode))
                 {
                     complaints = complaints
@@ -161,7 +170,6 @@ namespace ComplaintTracking.Controllers
                 // Sort
                 switch (sort)
                 {
-                    default:
                     case SortBy.IdAsc:
                         complaints = complaints.OrderBy(e => e.Id);
                         break;
@@ -178,6 +186,8 @@ namespace ComplaintTracking.Controllers
                             .ThenBy(e => e.Id);
                         model.ReceivedDateSortAction = SortBy.ReceivedDateAsc;
                         break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(sort), sort, null);
                 }
 
                 // Include
@@ -208,7 +218,7 @@ namespace ComplaintTracking.Controllers
                 return NotFound();
             }
 
-            PublicComplaintDetailsViewModel model = await GetPublicComplaintDetailsAsync(id.Value);
+            var model = await GetPublicComplaintDetailsAsync(id.Value);
 
             if (model == null)
             {
@@ -242,7 +252,7 @@ namespace ComplaintTracking.Controllers
                 return NotFound();
             }
 
-            return RedirectToAction(nameof(Attachment), new { attachmentId, fileName });
+            return RedirectToAction(nameof(Attachment), new {attachmentId, fileName});
         }
 
         [Route("/Public/Attachment/{attachmentId}/{fileName}")]
@@ -266,7 +276,8 @@ namespace ComplaintTracking.Controllers
                 return NotFound();
             }
 
-            var filePath = Path.Combine(FilePaths.AttachmentsFolder, string.Concat(attachment.Id, attachment.FileExtension));
+            var filePath = Path.Combine(FilePaths.AttachmentsFolder,
+                string.Concat(attachment.Id, attachment.FileExtension));
 
             return await TryReturnFile(filePath, attachment.FileName);
         }
@@ -287,7 +298,8 @@ namespace ComplaintTracking.Controllers
                 return NotFound();
             }
 
-            var filePath = Path.Combine(FilePaths.ThumbnailsFolder, string.Concat(attachment.Id, attachment.FileExtension));
+            var filePath = Path.Combine(FilePaths.ThumbnailsFolder,
+                string.Concat(attachment.Id, attachment.FileExtension));
 
             return await TryReturnFile(filePath, attachment.FileName);
         }
@@ -309,12 +321,7 @@ namespace ComplaintTracking.Controllers
                 return FileNotFound(fileName);
             }
 
-            if (fileBytes == null || fileBytes.Length == 0)
-            {
-                return FileNotFound(fileName);
-            }
-
-            return File(fileBytes, FileTypes.GetContentType(fileName));
+            return fileBytes.Length == 0 ? FileNotFound(fileName) : File(fileBytes, FileTypes.GetContentType(fileName));
         }
 
         private IActionResult FileNotFound(string fileName)

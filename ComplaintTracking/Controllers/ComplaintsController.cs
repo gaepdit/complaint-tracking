@@ -42,6 +42,6 @@ namespace ComplaintTracking.Controllers
 
         // Helpers
 
-        private  Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(User);
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(User);
     }
 }

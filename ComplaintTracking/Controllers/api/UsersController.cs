@@ -1,11 +1,11 @@
-﻿using ComplaintTracking.Data;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using ComplaintTracking.Data;
 using ComplaintTracking.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ComplaintTracking.Controllers.Api
 {
@@ -29,63 +29,46 @@ namespace ComplaintTracking.Controllers.Api
         [HttpGet("ByOffice/{id}")]
         public async Task<JsonResult> ByOffice(string id)
         {
-            if (!string.IsNullOrEmpty(id))
+            if (string.IsNullOrEmpty(id) || !Guid.TryParse(id, out var officeGuid) || officeGuid == default)
+                return Json(null);
+
+            var user = await GetCurrentUserAsync();
+            if (user == null) return Json(null);
+
+            var officeMasterId = (await _context.LookupOffices.AsNoTracking()
+                    .Where(e => e.Id == officeGuid)
+                    .SingleOrDefaultAsync())?
+                .MasterUserId;
+
+            var currentUserIsMaster = officeMasterId != null
+                && user.Id == officeMasterId;
+
+            if (user.OfficeId == officeGuid
+                || User.IsInRole(CtsRole.DivisionManager.ToString())
+                || currentUserIsMaster)
             {
-                if (Guid.TryParse(id, out Guid officeGuid))
-                {
-                    if (officeGuid != null && officeGuid != default)
-                    {
-                        var user = await GetCurrentUserAsync();
-                        if (user != null)
-                        {
-                            string officeMasterId = (await _context.LookupOffices.AsNoTracking()
-                                .Where(e => e.Id == officeGuid)
-                                .SingleOrDefaultAsync())?
-                                .MasterUserId;
-
-                            bool currentUserIsMaster = officeMasterId != null
-                                && user.Id == officeMasterId;
-
-                            if (user.OfficeId == officeGuid
-                                || User.IsInRole(CtsRole.DivisionManager.ToString())
-                                || currentUserIsMaster)
-                            {
-                                return Json(await _dal.GetUsersSelectListAsync(officeGuid));
-                            }
-                        }
-                    }
-                }
+                return Json(await _dal.GetUsersSelectListAsync(officeGuid));
             }
+
             return Json(null);
         }
 
         [HttpGet("GetAll")]
-        // public async Task<JsonResult> GetAll()
         public JsonResult GetAll()
         {
-            //return Json(await _dal.GetAllUsersSelectListAsync(true));
             return Json(null);
         }
 
         [HttpGet("GetAll/{id}")]
         public async Task<JsonResult> GetAll(string id)
         {
-            if (!string.IsNullOrEmpty(id))
-            {
-                if (Guid.TryParse(id, out Guid officeGuid))
-                {
-                    if (officeGuid != null && officeGuid != default)
-                    {
-                        return Json(await _dal.GetUsersSelectListAsync(officeGuid, true));
-                    }
-                }
-            }
-            return Json(null);
+            if (string.IsNullOrEmpty(id) || !Guid.TryParse(id, out var officeGuid)) return Json(null);
+
+            return officeGuid != default
+                ? Json(await _dal.GetUsersSelectListAsync(officeGuid, true))
+                : Json(null);
         }
 
-        private Task<ApplicationUser> GetCurrentUserAsync()
-        {
-            return _userManager.GetUserAsync(HttpContext.User);
-        }
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
     }
 }

@@ -44,11 +44,6 @@ namespace ComplaintTracking.Controllers
         // GET: Concerns/Details/5
         public async Task<IActionResult> Details(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var item = await _context.LookupConcerns.AsNoTracking()
                 .Where(m => m.Id == id)
                 .SingleOrDefaultAsync();
@@ -97,19 +92,19 @@ namespace ComplaintTracking.Controllers
                     _context.Add(item);
                     await _context.SaveChangesAsync();
 
-                    msg = string.Format("The {0} has been created.", _objectDisplayName);
+                    msg = $"The {_objectDisplayName} has been created.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
 
                     return RedirectToAction("Details", new { id = item.Id });
                 }
                 catch
                 {
-                    msg = string.Format("There was an error saving the {0}. Please try again or contact support.", _objectDisplayName);
+                    msg = $"There was an error saving the {_objectDisplayName}. Please try again or contact support.";
                 }
             }
             else
             {
-                msg = string.Format("The {0} was not created. Please fix the errors shown below.", _objectDisplayName);
+                msg = $"The {_objectDisplayName} was not created. Please fix the errors shown below.";
             }
 
             ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
@@ -121,11 +116,6 @@ namespace ComplaintTracking.Controllers
         [Authorize(Roles = nameof(CtsRole.DivisionManager))]
         public async Task<IActionResult> Edit(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var item = await _context.LookupConcerns.AsNoTracking()
                 .Where(m => m.Id == id)
                 .SingleOrDefaultAsync();
@@ -186,13 +176,13 @@ namespace ComplaintTracking.Controllers
                     }
                 }
 
-                msg = string.Format("The {0} was updated.", _objectDisplayName);
+                msg = $"The {_objectDisplayName} was updated.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
 
                 return RedirectToAction("Details", new { id = model.Id });
             }
 
-            msg = string.Format("The {0} was not updated. Please fix the errors shown below.", _objectDisplayName);
+            msg = $"The {_objectDisplayName} was not updated. Please fix the errors shown below.";
             ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
 
             return View(model);

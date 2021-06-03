@@ -6,8 +6,8 @@ namespace ComplaintTracking
     {
         public const int LONG_CACHE_TIME = 1;
         public const int EXTRA_LONG_CACHE_TIME = 30;
-        public static TimeSpan LONG_CACHE_TIMESPAN = TimeSpan.FromDays(LONG_CACHE_TIME);
-        public static TimeSpan EXTRA_LONG_CACHE_TIMESPAN = TimeSpan.FromDays(EXTRA_LONG_CACHE_TIME);
+        public static readonly TimeSpan LONG_CACHE_TIMESPAN = TimeSpan.FromDays(LONG_CACHE_TIME);
+        public static readonly TimeSpan EXTRA_LONG_CACHE_TIMESPAN = TimeSpan.FromDays(EXTRA_LONG_CACHE_TIME);
 
         public static class CacheKeys
         {

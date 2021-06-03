@@ -1,13 +1,12 @@
-﻿using ComplaintTracking.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using ComplaintTracking.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ComplaintTracking.Controllers
 {
-    public partial class PublicController : Controller
+    public partial class PublicController
     {
         private async Task<SelectList> GetCountiesSelectListAsync()
         {

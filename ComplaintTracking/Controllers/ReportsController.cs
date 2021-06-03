@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using ComplaintTracking.AlertMessages;
 using ComplaintTracking.Data;
 using ComplaintTracking.Models;
@@ -5,10 +9,6 @@ using ComplaintTracking.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ComplaintTracking.Controllers
 {
@@ -38,12 +38,11 @@ namespace ComplaintTracking.Controllers
             var currentUser = await GetCurrentUserAsync();
 
             if (string.IsNullOrEmpty(office)
-                || !Guid.TryParse(office, out Guid officeId)
-                || officeId == null
+                || !Guid.TryParse(office, out var officeId)
                 || officeId == default
                 || !(await _dal.OfficeExists(officeId)))
             {
-                officeId = currentUser.OfficeId.Value;
+                officeId = currentUser.OfficeId ?? default;
             }
 
             return View("Report", new ReportViewModel
@@ -70,11 +69,10 @@ namespace ComplaintTracking.Controllers
 
             if (string.IsNullOrEmpty(office)
                 || !Guid.TryParse(office, out Guid officeId)
-                || officeId == null
                 || officeId == default
-                || !(await _dal.OfficeExists(officeId)))
+                || !await _dal.OfficeExists(officeId))
             {
-                officeId = currentUser.OfficeId.Value;
+                officeId = currentUser.OfficeId ?? default;
             }
 
             return View("Report", new ReportViewModel
@@ -100,11 +98,10 @@ namespace ComplaintTracking.Controllers
 
             if (string.IsNullOrEmpty(office)
                 || !Guid.TryParse(office, out Guid officeId)
-                || officeId == null
                 || officeId == default
-                || !(await _dal.OfficeExists(officeId)))
+                || !await _dal.OfficeExists(officeId))
             {
-                officeId = currentUser.OfficeId.Value;
+                officeId = currentUser.OfficeId ?? default;
             }
 
             return View("Report", new ReportViewModel
@@ -128,18 +125,11 @@ namespace ComplaintTracking.Controllers
 
         public async Task<IActionResult> AllComplaintsReceivedByDate(DateTime? selectedDate)
         {
-            if (!selectedDate.HasValue)
-            {
-                selectedDate = DateTime.Today.AddDays(-1).Date;
-            }
-
-            var complaints = _context.Complaints.AsNoTracking()
-                .Where(e => !e.Deleted)
-                .Where(e => e.DateReceived.Date == selectedDate);
+            selectedDate ??= DateTime.Today.AddDays(-1).Date;
 
             return View("Report", new ReportViewModel
             {
-                Title = string.Format("All Complaints Received on {0:MMMM\u00a0d, yyyy}", selectedDate),
+                Title = $"All Complaints Received on {selectedDate:MMMM\u00a0d, yyyy}",
                 ComplaintsExpanded = await _context.Complaints.AsNoTracking()
                     .Where(e => !e.Deleted)
                     .Where(e => e.DateReceived.Date == selectedDate)
@@ -162,31 +152,22 @@ namespace ComplaintTracking.Controllers
             var currentUser = await GetCurrentUserAsync();
 
             if (string.IsNullOrEmpty(office)
-                || !Guid.TryParse(office, out Guid officeId)
-                || officeId == null
+                || !Guid.TryParse(office, out var officeId)
                 || officeId == default
-                || !(await _dal.OfficeExists(officeId)))
+                || !await _dal.OfficeExists(officeId))
             {
-                officeId = currentUser.OfficeId.Value;
+                officeId = currentUser.OfficeId ?? default;
             }
 
             var today = DateTime.Today;
+            beginDate ??= new DateTime(today.Year, today.Month, 1).AddMonths(-1);
+            endDate ??= new DateTime(today.Year, today.Month, 1).AddDays(-1);
 
-            if (!beginDate.HasValue)
-            {
-                beginDate = new DateTime(today.Year, today.Month, 1).AddMonths(-1);
-            }
-
-            if (!endDate.HasValue)
-            {
-                endDate = new DateTime(today.Year, today.Month, 1).AddDays(-1);
-            }
-
-            IEnumerable<ReportDaysToClosureByStaffViewModel.StaffList> staffList = null;
+            List<ReportDaysToClosureByStaffViewModel.StaffList> staffList = null;
 
             if (endDate < beginDate)
             {
-                var msg = "The beginning date must precede the end date.";
+                const string msg = "The beginning date must precede the end date.";
                 ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
             }
             else
@@ -233,30 +214,21 @@ namespace ComplaintTracking.Controllers
 
             if (string.IsNullOrEmpty(office)
                 || !Guid.TryParse(office, out Guid officeId)
-                || officeId == null
                 || officeId == default
-                || !(await _dal.OfficeExists(officeId)))
+                || !await _dal.OfficeExists(officeId))
             {
-                officeId = currentUser.OfficeId.Value;
+                officeId = currentUser.OfficeId ?? default;
             }
 
             var today = DateTime.Today;
+            beginDate ??= new DateTime(today.Year, today.Month, 1).AddMonths(-1);
+            endDate ??= new DateTime(today.Year, today.Month, 1).AddDays(-1);
 
-            if (!beginDate.HasValue)
-            {
-                beginDate = new DateTime(today.Year, today.Month, 1).AddMonths(-1);
-            }
-
-            if (!endDate.HasValue)
-            {
-                endDate = new DateTime(today.Year, today.Month, 1).AddDays(-1);
-            }
-
-            IEnumerable<ReportDaysToFollowUpByStaffViewModel.StaffList> staffList = null;
+            List<ReportDaysToFollowUpByStaffViewModel.StaffList> staffList = null;
 
             if (endDate < beginDate)
             {
-                var msg = "The beginning date must precede the end date.";
+                const string msg = "The beginning date must precede the end date.";
                 ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
             }
             else
@@ -272,7 +244,7 @@ namespace ComplaintTracking.Controllers
 
                 foreach (var user in staffList)
                 {
-                    string query = $@"SELECT c.Id, l.Name AS ComplaintCounty, c.SourceFacilityName, 
+                    var query = $@"SELECT c.Id, l.Name AS ComplaintCounty, c.SourceFacilityName, 
                         convert(DATE, c.DateReceived) AS DateReceived, a.MinActionDate
                         FROM Complaints c
                         INNER JOIN LookupCounties l ON c.ComplaintCountyId = l.Id
@@ -312,7 +284,7 @@ namespace ComplaintTracking.Controllers
                 || officeId == default
                 || !await _dal.OfficeExists(officeId))
             {
-                if(!currentUser.OfficeId.HasValue) return BadRequest();
+                if (!currentUser.OfficeId.HasValue) return BadRequest();
                 officeId = currentUser.OfficeId.Value;
             }
 
@@ -327,7 +299,7 @@ namespace ComplaintTracking.Controllers
 
             foreach (var user in staffList)
             {
-                var query = 
+                var query =
                     $@"SELECT c.Id, l.Name AS ComplaintCounty, c.SourceFacilityName,
                            convert(date, c.DateReceived) AS DateReceived, c.Status, a.LastActionDate
                     FROM Complaints c
@@ -356,25 +328,15 @@ namespace ComplaintTracking.Controllers
 
         public async Task<IActionResult> DaysToClosureByOffice(DateTime? beginDate, DateTime? endDate)
         {
-            var currentUser = await GetCurrentUserAsync();
-
             var today = DateTime.Today;
+            endDate ??= new DateTime(today.Year - Convert.ToInt32(today.Month < 7), 6, 30);
+            beginDate ??= endDate.Value.AddYears(-1).AddDays(1);
 
-            if (!endDate.HasValue)
-            {
-                endDate = new DateTime(today.Year - Convert.ToInt32(today.Month < 7), 6, 30);
-            }
-
-            if (!beginDate.HasValue)
-            {
-                beginDate = endDate.Value.AddYears(-1).AddDays(1);
-            }
-
-            IEnumerable<ReportDaysToClosureByOfficeViewModel.OfficeList> officeList = null;
+            List<ReportDaysToClosureByOfficeViewModel.OfficeList> officeList = null;
 
             if (endDate < beginDate)
             {
-                var msg = "The beginning date must precede the end date.";
+                const string msg = "The beginning date must precede the end date.";
                 ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
             }
             else
@@ -415,30 +377,21 @@ namespace ComplaintTracking.Controllers
 
             if (string.IsNullOrEmpty(office)
                 || !Guid.TryParse(office, out Guid officeId)
-                || officeId == null
                 || officeId == default
-                || !(await _dal.OfficeExists(officeId)))
+                || !await _dal.OfficeExists(officeId))
             {
-                officeId = currentUser.OfficeId.Value;
+                officeId = currentUser.OfficeId ?? default;
             }
 
             var today = DateTime.Today;
+            beginDate ??= new DateTime(today.Year, today.Month, 1).AddMonths(-1);
+            endDate ??= new DateTime(today.Year, today.Month, 1).AddDays(-1);
 
-            if (!beginDate.HasValue)
-            {
-                beginDate = new DateTime(today.Year, today.Month, 1).AddMonths(-1);
-            }
-
-            if (!endDate.HasValue)
-            {
-                endDate = new DateTime(today.Year, today.Month, 1).AddDays(-1);
-            }
-
-            IEnumerable<ReportComplaintsByStaffViewModel.StaffList> staffList = null;
+            List<ReportComplaintsByStaffViewModel.StaffList> staffList = null;
 
             if (endDate < beginDate)
             {
-                var msg = "The beginning date must precede the end date.";
+                const string msg = "The beginning date must precede the end date.";
                 ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
             }
             else
@@ -480,25 +433,15 @@ namespace ComplaintTracking.Controllers
 
         public async Task<IActionResult> ComplaintsByCounty(DateTime? beginDate, DateTime? endDate)
         {
-            var currentUser = await GetCurrentUserAsync();
-
             var today = DateTime.Today;
+            beginDate ??= new DateTime(today.Year, today.Month, 1).AddMonths(-1);
+            endDate ??= new DateTime(today.Year, today.Month, 1).AddDays(-1);
 
-            if (!beginDate.HasValue)
-            {
-                beginDate = new DateTime(today.Year, today.Month, 1).AddMonths(-1);
-            }
-
-            if (!endDate.HasValue)
-            {
-                endDate = new DateTime(today.Year, today.Month, 1).AddDays(-1);
-            }
-
-            IEnumerable<ReportComplaintsByCountyViewModel.CountyList> countyList = null;
+            List<ReportComplaintsByCountyViewModel.CountyList> countyList = null;
 
             if (endDate < beginDate)
             {
-                var msg = "The beginning date must precede the end date.";
+                const string msg = "The beginning date must precede the end date.";
                 ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
             }
             else
@@ -563,9 +506,6 @@ namespace ComplaintTracking.Controllers
         }
 
         // Helpers
-        private Task<ApplicationUser> GetCurrentUserAsync()
-        {
-            return _userManager.GetUserAsync(HttpContext.User);
-        }
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
     }
 }

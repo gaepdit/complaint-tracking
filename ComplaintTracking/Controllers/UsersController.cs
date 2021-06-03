@@ -1,4 +1,8 @@
-﻿using ComplaintTracking.AlertMessages;
+﻿using System;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ComplaintTracking.AlertMessages;
 using ComplaintTracking.Data;
 using ComplaintTracking.Generic;
 using ComplaintTracking.Models;
@@ -10,10 +14,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static ComplaintTracking.Caching;
 using static ComplaintTracking.ViewModels.UserIndexViewModel;
 
@@ -59,18 +59,18 @@ namespace ComplaintTracking.Controllers
             {
                 users = users.Where(e => e.FirstName.Contains(name) || e.LastName.Contains(name));
             }
+
             if (office.HasValue)
             {
                 users = users.Where(e => e.OfficeId == office.Value);
             }
-            if (!status.HasValue)
+
+            users = status switch
             {
-                users = users.Where(e => e.Active);
-            }
-            if (status.HasValue && status == UserStatus.Inactive)
-            {
-                users = users.Where(e => !e.Active);
-            }
+                null => users.Where(e => e.Active),
+                UserStatus.Inactive => users.Where(e => !e.Active),
+                _ => users
+            };
 
             // ViewModel
             var model = new UserIndexViewModel()
@@ -86,7 +86,6 @@ namespace ComplaintTracking.Controllers
             // Sort
             switch (sort)
             {
-                default:
                 case SortBy.NameAsc:
                     users = users.OrderBy(e => e.LastName).ThenBy(e => e.FirstName);
                     model.NameSortAction = SortBy.NameDesc;
@@ -99,8 +98,11 @@ namespace ComplaintTracking.Controllers
                     model.OfficeSortAction = SortBy.OfficeDesc;
                     break;
                 case SortBy.OfficeDesc:
-                    users = users.OrderByDescending(e => e.Office.Name).ThenBy(e => e.LastName).ThenBy(e => e.FirstName);
+                    users = users.OrderByDescending(e => e.Office.Name).ThenBy(e => e.LastName)
+                        .ThenBy(e => e.FirstName);
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(sort), sort, null);
             }
 
             // Count
@@ -166,7 +168,8 @@ namespace ComplaintTracking.Controllers
             var model = new RegisterUserViewModel()
             {
                 OfficeSelectList = await _dal.GetOfficesSelectListAsync(),
-                CurrentUserIsDivisionManager = await _userManager.IsInRoleAsync(currentUser, nameof(CtsRole.DivisionManager)),
+                CurrentUserIsDivisionManager =
+                    await _userManager.IsInRoleAsync(currentUser, nameof(CtsRole.DivisionManager))
             };
 
             return View(model);
@@ -181,7 +184,8 @@ namespace ComplaintTracking.Controllers
             string msg;
 
             var currentUser = await GetCurrentUserAsync();
-            bool currentUserIsDivisionManager = await _userManager.IsInRoleAsync(currentUser, nameof(CtsRole.DivisionManager));
+            bool currentUserIsDivisionManager =
+                await _userManager.IsInRoleAsync(currentUser, nameof(CtsRole.DivisionManager));
 
             if (await _dal.EmailAlreadyUsedAsync(model.Email))
             {
@@ -200,7 +204,7 @@ namespace ComplaintTracking.Controllers
                     OfficeId = model.OfficeId
                 };
 
-                string pwd = GenerateNewPassword();
+                var pwd = GenerateNewPassword();
 
                 _cache.Remove(CacheKeys.UsersSelectList);
                 _cache.Remove(CacheKeys.UsersIncludeInactiveSelectList);
@@ -248,9 +252,10 @@ namespace ComplaintTracking.Controllers
                     }
 
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
-                    string code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-                    string callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code }, protocol: HttpContext.Request.Scheme);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new {userId = user.Id, code},
+                        protocol: HttpContext.Request.Scheme);
                     await _emailSender.SendEmailAsync(
                         model.Email,
                         EmailTemplates.ConfirmNewAccount.Subject,
@@ -258,13 +263,15 @@ namespace ComplaintTracking.Controllers
                         string.Format(EmailTemplates.ConfirmNewAccount.HtmlBody, model.Email, callbackUrl),
                         replyTo: currentUser.Email);
 
-                    _logger.LogInformation(3, "User created a new account with password.");
+                    _logger.LogInformation(3, "User created a new account with password");
 
-                    msg = "The new user account has been created, and a confirmation email has been sent to the email provided.";
+                    msg =
+                        "The new user account has been created, and a confirmation email has been sent to the email provided.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
 
-                    return RedirectToAction(nameof(Details), new { id = user.Id });
+                    return RedirectToAction(nameof(Details), new {id = user.Id});
                 }
+
                 AddErrors(result);
             }
 
@@ -275,7 +282,7 @@ namespace ComplaintTracking.Controllers
             return View(model);
         }
 
-        // GET: /Users/Edit/{id}
+        // GET: `Users/Edit/{id}`
         [HttpGet]
         [Authorize(Roles = nameof(CtsRole.DivisionManager) + "," + nameof(CtsRole.UserAdmin))]
         public async Task<IActionResult> Edit(string id)
@@ -314,7 +321,8 @@ namespace ComplaintTracking.Controllers
                 IsUserAdmin = await _userManager.IsInRoleAsync(user, nameof(CtsRole.UserAdmin)),
                 IsDataExporter = await _userManager.IsInRoleAsync(user, nameof(CtsRole.DataExport)),
                 OfficeSelectList = await _dal.GetOfficesSelectListAsync(),
-                CurrentUserIsDivisionManager = await _userManager.IsInRoleAsync(currentUser, nameof(CtsRole.DivisionManager)),
+                CurrentUserIsDivisionManager =
+                    await _userManager.IsInRoleAsync(currentUser, nameof(CtsRole.DivisionManager)),
             };
 
             return View(model);
@@ -334,7 +342,8 @@ namespace ComplaintTracking.Controllers
             }
 
             var currentUser = await GetCurrentUserAsync();
-            bool currentUserIsDivisionManager = await _userManager.IsInRoleAsync(currentUser, nameof(CtsRole.DivisionManager));
+            var currentUserIsDivisionManager =
+                await _userManager.IsInRoleAsync(currentUser, nameof(CtsRole.DivisionManager));
 
             if (await _dal.EmailAlreadyUsedAsync(model.Email, id))
             {
@@ -343,7 +352,6 @@ namespace ComplaintTracking.Controllers
 
             if (ModelState.IsValid)
             {
-
                 var user = await _userManager.FindByIdAsync(model.Id);
                 var oldEmail = user.Email.Trim();
 
@@ -407,24 +415,29 @@ namespace ComplaintTracking.Controllers
                         await _emailSender.SendEmailAsync(
                             oldEmail,
                             EmailTemplates.NotifyEmailChange.Subject,
-                            string.Format(EmailTemplates.NotifyEmailChange.PlainBody, oldEmail, user.Email, CTS.AdminEmail),
-                            string.Format(EmailTemplates.NotifyEmailChange.HtmlBody, oldEmail, user.Email, CTS.AdminEmail),
+                            string.Format(EmailTemplates.NotifyEmailChange.PlainBody, oldEmail, user.Email,
+                                CTS.AdminEmail),
+                            string.Format(EmailTemplates.NotifyEmailChange.HtmlBody, oldEmail, user.Email,
+                                CTS.AdminEmail),
                             replyTo: currentUser.Email);
                         await _emailSender.SendEmailAsync(
                             user.Email,
                             EmailTemplates.NotifyEmailChange.Subject,
-                            string.Format(EmailTemplates.NotifyEmailChange.PlainBody, oldEmail, user.Email, CTS.AdminEmail),
-                            string.Format(EmailTemplates.NotifyEmailChange.HtmlBody, oldEmail, user.Email, CTS.AdminEmail),
+                            string.Format(EmailTemplates.NotifyEmailChange.PlainBody, oldEmail, user.Email,
+                                CTS.AdminEmail),
+                            string.Format(EmailTemplates.NotifyEmailChange.HtmlBody, oldEmail, user.Email,
+                                CTS.AdminEmail),
                             replyTo: currentUser.Email);
                     }
 
-                    _logger.LogInformation(3, "User updated.");
+                    _logger.LogInformation(3, "User updated");
 
                     msg = "The user profile was updated.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
 
-                    return RedirectToAction(nameof(Details), new { id = user.Id });
+                    return RedirectToAction(nameof(Details), new {id = user.Id});
                 }
+
                 AddErrors(result);
             }
 
@@ -445,12 +458,9 @@ namespace ComplaintTracking.Controllers
             }
         }
 
-        private Task<ApplicationUser> GetCurrentUserAsync()
-        {
-            return _userManager.GetUserAsync(HttpContext.User);
-        }
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
-        private string GenerateNewPassword()
+        private static string GenerateNewPassword()
         {
             // Password must:
             // be at least six characters and
@@ -460,20 +470,19 @@ namespace ComplaintTracking.Controllers
             //   * digit
             //   * non alphanumeric character
 
-            StringBuilder pwd = new StringBuilder();
-            Random rnd = new Random();
+            var pwd = new StringBuilder();
+            var rnd = new Random();
 
-            Int32 cnt = 12;
-            Int32 id;
+            const int cnt = 12;
+            int id;
 
-            string passNumber = "23456789";
-            string passLower = "abcdefghkmnpqrstuvwxyz";
-            string passUpper = "ABCDEFGHJKLMNPQRSTUVWXYZ";
-            string passAlphaNum = passLower + passNumber + passUpper;
-            string passSpecialChar = "@!#$%^&*";
+            const string passNumber = "23456789";
+            const string passLower = "abcdefghkmnpqrstuvwxyz";
+            const string passUpper = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+            const string passAlphaNum = passLower + passNumber + passUpper;
+            const string passSpecialChar = "@!#$%^&*";
 
-
-            for (Int32 i = 1; i <= cnt; i++)
+            for (var i = 1; i <= cnt; i++)
             {
                 id = rnd.Next(0, passAlphaNum.Length);
                 pwd.Append(passAlphaNum.Substring(id, 1));

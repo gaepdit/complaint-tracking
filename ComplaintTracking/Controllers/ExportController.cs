@@ -1,15 +1,16 @@
-﻿using ComplaintTracking.AlertMessages;
-using ComplaintTracking.Data;
-using ComplaintTracking.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Caching.Memory;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ComplaintTracking.AlertMessages;
+using ComplaintTracking.Data;
+using ComplaintTracking.Services;
+using JetBrains.Annotations;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Caching.Memory;
 using static ComplaintTracking.Caching;
 
 namespace ComplaintTracking.Controllers
@@ -55,12 +56,12 @@ namespace ComplaintTracking.Controllers
             {
                 var xm = await GetOrCreateDataExportAsync();
 
-                byte[] fileBytes = System.IO.File.ReadAllBytes(xm.FilePath);
+                var fileBytes = await System.IO.File.ReadAllBytesAsync(xm.FilePath);
                 return File(fileBytes, FileTypes.ZipContentType, xm.FileName);
             }
             catch (SqlException)
             {
-                string msg = "A database error occurred; please try again later. " +
+                const string msg = "A database error occurred; please try again later. " +
                     "If you continue to receive this message, please contact EPD-IT.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Error, "Error");
                 return RedirectToAction("Index");
@@ -91,9 +92,9 @@ namespace ComplaintTracking.Controllers
 
             var dataFiles = new Dictionary<string, Task<MemoryStream>>
             {
-                { $"{nameof(OpenComplaints)}_{xm.FileDateString}.csv", OpenComplaintsCsvStreamAsync() },
-                { $"{nameof(ClosedComplaints)}_{xm.FileDateString}.csv", ClosedComplaintsCsvStreamAsync() },
-                { $"{nameof(ClosedComplaintActions)}_{xm.FileDateString}.csv", ClosedComplaintActionsCsvStreamAsync() }
+                {$"{nameof(OpenComplaints)}_{xm.FileDateString}.csv", OpenComplaintsCsvStreamAsync()},
+                {$"{nameof(ClosedComplaints)}_{xm.FileDateString}.csv", ClosedComplaintsCsvStreamAsync()},
+                {$"{nameof(ClosedComplaintActions)}_{xm.FileDateString}.csv", ClosedComplaintActionsCsvStreamAsync()}
             };
 
             await System.IO.File.WriteAllBytesAsync(xm.FilePath, await dataFiles.GetZipByteArrayAsync());
@@ -119,61 +120,29 @@ namespace ComplaintTracking.Controllers
                 catch (Exception ex)
                 {
                     // Log error but take no other action if file can't be deleted
-                    var customData = new Dictionary<string, object>();
-                    customData.Add("File", fileInfo.ToString());
-                    customData.Add("FileList", fileInfos.ToString());
+                    var customData = new Dictionary<string, object>
+                    {
+                        {"File", fileInfo.ToString()},
+                        {"FileList", fileInfos.ToString()}
+                    };
                     await _errorLogger.LogErrorAsync(ex, "DeleteOldExportFilesAsync", customData);
                 }
             }
         }
 
-        public class DataExportMeta
+        private class DataExportMeta
         {
-            public DateTime ExportDate { get; set; }
-
-            public DataExportMeta(DateTime dataExportDate)
-            {
-                ExportDate = dataExportDate;
-            }
-
-            public string FileDateString
-            {
-                get
-                {
-                    return $"{ExportDate:yyyy-MM-dd-HH-mm-ss.FFF}";
-                }
-            }
-
-            public string FileName
-            {
-                get
-                {
-                    return $"cts_export_{FileDateString}.zip";
-                }
-            }
-
-            public string FilePath
-            {
-                get
-                {
-                    return Path.Combine(FilePaths.ExportFolder, FileName);
-                }
-            }
-
-            public DateTimeOffset FileExpirationDate
-            {
-                get
-                {
-                    return new DateTimeOffset(ExportDate.AddHours(ExportLifespan));
-                }
-            }
+            private DateTime ExportDate { get; }
+            public DataExportMeta(DateTime dataExportDate) => ExportDate = dataExportDate;
+            public string FileDateString => $"{ExportDate:yyyy-MM-dd-HH-mm-ss.FFF}";
+            public string FileName => $"cts_export_{FileDateString}.zip";
+            public string FilePath => Path.Combine(FilePaths.ExportFolder, FileName);
+            public DateTimeOffset FileExpirationDate => new(ExportDate.AddHours(ExportLifespan));
         }
-
-        #region MemoryStream DAL
 
         private async Task<MemoryStream> OpenComplaintsCsvStreamAsync()
         {
-            string query = "SELECT * FROM gora.OpenComplaints ORDER BY ComplaintId";
+            const string query = "SELECT * FROM gora.OpenComplaints ORDER BY ComplaintId";
             var result = await DataSQLHelper.ExecSQL<OpenComplaints>(query, _context, ExportTimeout);
 
             return await result.GetCsvMemoryStreamAsync();
@@ -181,7 +150,7 @@ namespace ComplaintTracking.Controllers
 
         private async Task<MemoryStream> ClosedComplaintsCsvStreamAsync()
         {
-            string query = "SELECT * FROM gora.ClosedComplaints ORDER BY ComplaintId";
+            const string query = "SELECT * FROM gora.ClosedComplaints ORDER BY ComplaintId";
             var result = await DataSQLHelper.ExecSQL<ClosedComplaints>(query, _context, ExportTimeout);
 
             return await result.GetCsvMemoryStreamAsync();
@@ -189,17 +158,14 @@ namespace ComplaintTracking.Controllers
 
         private async Task<MemoryStream> ClosedComplaintActionsCsvStreamAsync()
         {
-            string query = "SELECT * FROM gora.ClosedComplaintActions ORDER BY ComplaintId, ActionDate";
+            const string query = "SELECT * FROM gora.ClosedComplaintActions ORDER BY ComplaintId, ActionDate";
             var result = await DataSQLHelper.ExecSQL<ClosedComplaintActions>(query, _context, ExportTimeout);
 
             return await result.GetCsvMemoryStreamAsync();
         }
 
-        #endregion
-
-        #region Data classes
-
-        private class OpenComplaints
+        [UsedImplicitly(ImplicitUseTargetFlags.Members)]
+        public class OpenComplaints
         {
             public int ComplaintId { get; set; }
             public string CallerCity { get; set; }
@@ -220,7 +186,8 @@ namespace ComplaintTracking.Controllers
             public string ReceivedBy { get; set; }
         }
 
-        private class ClosedComplaints
+        [UsedImplicitly(ImplicitUseTargetFlags.Members)]
+        public class ClosedComplaints
         {
             public int ComplaintId { get; set; }
             public string CallerCity { get; set; }
@@ -258,7 +225,8 @@ namespace ComplaintTracking.Controllers
             public string SourceStreet2 { get; set; }
         }
 
-        private class ClosedComplaintActions
+        [UsedImplicitly(ImplicitUseTargetFlags.Members)]
+        public class ClosedComplaintActions
         {
             public int ComplaintId { get; set; }
             public DateTime ActionDate { get; set; }
@@ -268,7 +236,5 @@ namespace ComplaintTracking.Controllers
             public string EnteredBy { get; set; }
             public string Investigator { get; set; }
         }
-
-        #endregion
     }
 }
