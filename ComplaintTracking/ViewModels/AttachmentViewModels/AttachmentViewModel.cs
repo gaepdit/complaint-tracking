@@ -10,17 +10,16 @@ namespace ComplaintTracking.ViewModels
 
         public AttachmentViewModel(Attachment a)
         {
-            if (a != null)
-            {
-                Id = a.Id;
-                ComplaintId = a.ComplaintId;
-                FileName = a.FileName;
-                FileExtension = a.FileExtension;
-                Size = a.Size;
-                DateUploaded = a.DateUploaded;
-                UploadedBy = a.UploadedBy;
-                IsImage = a.IsImage;
-            }
+            if (a == null) return;
+            
+            Id = a.Id;
+            ComplaintId = a.ComplaintId;
+            FileName = a.FileName;
+            FileExtension = a.FileExtension;
+            Size = a.Size;
+            DateUploaded = a.DateUploaded;
+            UploadedBy = a.UploadedBy;
+            IsImage = a.IsImage;
         }
 
         public Guid Id { get; set; }
@@ -43,16 +42,8 @@ namespace ComplaintTracking.ViewModels
         public DateTime DateUploaded { get; set; }
 
         [Display(Name = "Uploaded by")]
-        public virtual ApplicationUser UploadedBy { get; set; }
+        public ApplicationUser UploadedBy { get; set; }
 
-        public string UploadedByUserName
-        {
-            get
-            {
-                return UploadedBy?.FullName;
-            }
-        }
-
-        public bool IsImage { get; set; } = false;
+        public bool IsImage { get; set; }
     }
 }

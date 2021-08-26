@@ -11,8 +11,8 @@ namespace ComplaintTracking.Models
         public ComplaintAction(AddComplaintActionViewModel m)
         {
             ComplaintId = m.ComplaintId;
-            ActionDate = m.ActionDate.Value;
-            ActionTypeId = m.ActionTypeId.Value;
+            ActionDate = m.ActionDate ?? DateTime.Today;
+            ActionTypeId = m.ActionTypeId ?? Guid.Empty;
             Investigator = m.Investigator;
             Comments = m.Comments;
         }
@@ -28,6 +28,7 @@ namespace ComplaintTracking.Models
 
         [Display(Name = "Action Type")]
         public ActionType ActionType { get; set; }
+
         public Guid ActionTypeId { get; set; }
 
         [StringLength(100)]
@@ -39,6 +40,7 @@ namespace ComplaintTracking.Models
 
         [Display(Name = "Entered By")]
         public ApplicationUser EnteredBy { get; set; }
+
         public string EnteredById { get; set; }
 
         [DataType(DataType.MultilineText)]
@@ -46,13 +48,14 @@ namespace ComplaintTracking.Models
 
         #region Deletion
 
-        public bool Deleted { get; set; } = false;
+        public bool Deleted { get; set; }
 
         [Display(Name = "Date Deleted")]
         public DateTime? DateDeleted { get; set; }
 
         [Display(Name = "Deleted By")]
         public ApplicationUser DeletedBy { get; set; }
+
         public string DeletedById { get; set; }
 
         #endregion

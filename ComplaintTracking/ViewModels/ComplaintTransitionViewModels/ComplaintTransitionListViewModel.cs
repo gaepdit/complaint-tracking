@@ -34,28 +34,10 @@ namespace ComplaintTracking.ViewModels
         [DataType(DataType.MultilineText)]
         public string Comment { get; set; }
 
-        public string TransferredByUserName
-        {
-            get
-            {
-                return TransferredByUser?.FullName;
-            }
-        }
+        public string TransferredByUserName => TransferredByUser?.FullName;
 
-        public string TransferredToUserName
-        {
-            get
-            {
-                return TransferredToUser?.FullName;
-            }
-        }
+        public string TransferredToUserName => TransferredToUser?.FullName;
 
-        public string TransferredFromUserName
-        {
-            get
-            {
-                return TransferredFromUser?.FullName;
-            }
-        }
+        public string TransferredFromUserName => TransferredFromUser?.FullName;
     }
 }

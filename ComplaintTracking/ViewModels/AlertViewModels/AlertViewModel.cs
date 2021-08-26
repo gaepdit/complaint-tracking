@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace ComplaintTracking.AlertMessages
 {
@@ -17,7 +16,8 @@ namespace ComplaintTracking.AlertMessages
             Status = status;
         }
 
-        public AlertViewModel(string message, string status, string title = null) : this(message, ConvertStatusToEnum(status), title) { }
+        public AlertViewModel(string message, string status, string title = null) :
+            this(message, ConvertStatusToEnum(status), title) { }
 
         public string Title { get; set; }
         public string Message { get; set; }

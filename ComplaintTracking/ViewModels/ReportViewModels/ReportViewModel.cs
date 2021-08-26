@@ -19,6 +19,7 @@ namespace ComplaintTracking.ViewModels
         public string Office { get; set; }
 
         public bool UseDate { get; set; } = false;
+
         [DisplayFormat(DataFormatString = CTS.FormatDateEdit,
             ApplyFormatInEditMode = true)]
         [DataType(DataType.Text)]
@@ -59,13 +60,8 @@ namespace ComplaintTracking.ViewModels
 
             [Display(Name = "Location")]
             [DisplayFormat(ConvertEmptyStringToNull = true)]
-            public string SourceLocation
-            {
-                get
-                {
-                    return StringFunctions.ConcatNonEmptyStrings(new string[] { SourceCity, SourceStateName }, ", ");
-                }
-            }
+            public string SourceLocation => 
+                StringFunctions.ConcatNonEmptyStrings(new[] { SourceCity, SourceStateName }, ", ");
 
             [Display(Name = "ID")]
             [DisplayFormat(

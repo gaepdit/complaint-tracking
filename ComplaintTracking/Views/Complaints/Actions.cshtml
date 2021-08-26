@@ -2,8 +2,6 @@
 
 @{
     ViewData["Title"] = $"Actions for Complaint ID {Model.ComplaintId}";
-    string rowclass = "";
-    Guid itemId = default(Guid);
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -60,13 +58,8 @@
         <tbody>
             @foreach (var item in Model.ComplaintActions)
             {
-                itemId = item.Id;
-                rowclass = "";
-                if (item.Deleted)
-                {
-                    rowclass = "gaepd-tablerow-dimmed";
-                }
-                <tr class="@rowclass">
+                var itemId = item.Id;
+                <tr class="@(item.Deleted ? "gaepd-tablerow-dimmed" : "")">
                     <th scope="row" data-label="@Html.DisplayNameFor(m => item.ActionDate)">@Html.DisplayFor(m => item.ActionDate)</th>
                     <td data-label="@Html.DisplayNameFor(m => item.Investigator)">@Html.DisplayFor(m => item.Investigator)</td>
                     <td data-label="@Html.DisplayNameFor(m => item.ActionType)">@Html.DisplayFor(m => item.ActionType.Name)</td>

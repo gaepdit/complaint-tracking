@@ -52,21 +52,15 @@ namespace ComplaintTracking.Controllers
         {
             var currentUser = await GetCurrentUserAsync();
 
-            string officeName = null;
-
-            if (currentUser.OfficeId != null)
-            {
-                officeName = await _dal.GetOfficeName(currentUser.OfficeId);
-            }
-
             var model = new AccountIndexViewModel
             {
                 Email = currentUser.Email,
                 Phone = currentUser.Phone,
                 FullName = currentUser.FullName,
-                OfficeName = officeName,
-                Roles = await _userManager.GetRolesAsync(currentUser)
+                OfficeName = currentUser.OfficeId is null ? null : await _dal.GetOfficeName(currentUser.OfficeId)
             };
+
+            model.SetRoles(await _userManager.GetRolesAsync(currentUser));
 
             return View(model);
         }
@@ -98,7 +92,7 @@ namespace ComplaintTracking.Controllers
                 .SingleOrDefaultAsync();
 
             string msg;
-            if (u is {Active: false})
+            if (u is { Active: false })
             {
                 msg = "Invalid login attempt.";
                 ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error);
@@ -185,7 +179,7 @@ namespace ComplaintTracking.Controllers
             }
 
             var passwordResetCode = await _userManager.GeneratePasswordResetTokenAsync(user);
-            return RedirectToAction(nameof(SetPassword), new {userId = user.Id, code = passwordResetCode});
+            return RedirectToAction(nameof(SetPassword), new { userId = user.Id, code = passwordResetCode });
         }
 
         [HttpGet]
@@ -221,7 +215,7 @@ namespace ComplaintTracking.Controllers
             }
 
             var user = await _userManager.FindByIdAsync(model.UserId);
-            if (user is {Active: true})
+            if (user is { Active: true })
             {
                 var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
                 if (result.Succeeded)
@@ -303,7 +297,7 @@ namespace ComplaintTracking.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user is not {Active: true})
+                if (user is not { Active: true })
                 {
                     // Don't reveal that the user does not exist or is not active
                     return View("ForgotPasswordConfirmation");
@@ -315,7 +309,7 @@ namespace ComplaintTracking.Controllers
                 if (!(await _userManager.IsEmailConfirmedAsync(user)))
                 {
                     code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    callbackUrl = Url.Action("ConfirmEmail", "Account", new {userId = user.Id, code},
+                    callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code },
                         HttpContext.Request.Scheme);
                     await _emailSender.SendEmailAsync(
                         model.Email,
@@ -328,7 +322,7 @@ namespace ComplaintTracking.Controllers
                 // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
                 // Send an email with this link
                 code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                callbackUrl = Url.Action(nameof(ResetPassword), "Account", new {userId = user.Id, code},
+                callbackUrl = Url.Action(nameof(ResetPassword), "Account", new { userId = user.Id, code },
                     HttpContext.Request.Scheme);
                 await _emailSender.SendEmailAsync(
                     model.Email,
@@ -380,7 +374,7 @@ namespace ComplaintTracking.Controllers
             }
 
             var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user is {Active: true})
+            if (user is { Active: true })
             {
                 var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
                 if (result.Succeeded)

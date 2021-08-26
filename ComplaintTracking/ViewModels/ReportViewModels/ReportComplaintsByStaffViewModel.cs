@@ -34,6 +34,7 @@ namespace ComplaintTracking.ViewModels
                 Id = user.Id;
                 Name = user.SortableFullName;
             }
+
             [Display(Name = "Staff ID")]
             public string Id { get; }
             public string Name { get; }

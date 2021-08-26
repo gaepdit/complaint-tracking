@@ -35,26 +35,18 @@ namespace ComplaintTracking.ViewModels
                 Id = user.Id;
                 Name = user.SortableFullName;
             }
+
             [Display(Name = "Staff ID")]
             public string Id { get; set; }
+
             public string Name { get; set; }
             public IEnumerable<ComplaintList> Complaints { get; set; }
 
             [DisplayFormat(DataFormatString = "{0:N1}")]
-            public double AverageDaysToClosure
-            {
-                get
-                {
-                    if (Complaints != null && Complaints.Count() > 0)
-                    {
-                        return Complaints.Average(e => e.DaysToClosure);
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                }
-            }
+            public double AverageDaysToClosure => 
+                Complaints != null && Complaints.Any()
+                    ? Complaints.Average(e => e.DaysToClosure) 
+                    : 0;
         }
 
         public class ComplaintList
@@ -89,13 +81,9 @@ namespace ComplaintTracking.ViewModels
             public DateTime? DateComplaintClosed { get; set; }
 
             [Display(Name = "Days to Closure")]
-            public int DaysToClosure
-            {
-                get
-                {
-                    return DateComplaintClosed.Value.Date.Subtract(DateReceived.Date).Days;
-                }
-            }
+            public int DaysToClosure => DateComplaintClosed.HasValue
+                ? DateComplaintClosed.Value.Date.Subtract(DateReceived.Date).Days
+                : -1;
         }
     }
 }

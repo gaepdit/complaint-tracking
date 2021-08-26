@@ -2,8 +2,7 @@
 
 @{
     ViewData["Title"] = "CTS Users";
-    string rowclass = "";
-
+    
     string nameColAria = "";
     string officeColAria = "";
 
@@ -96,12 +95,7 @@
     <tbody>
         @foreach (var item in Model.Users)
         {
-            rowclass = "";
-            if (!item.Active)
-            {
-                rowclass = "gaepd-tablerow-dimmed";
-            }
-            <tr class="@rowclass">
+            <tr class="@(!item.Active? "gaepd-tablerow-dimmed" :"")">
                 <th scope="row" data-label="@Html.DisplayNameFor(model => item.FullName)">
                     <img src="https://www.gravatar.com/avatar/@item.EmailMD5Hash?s=24&r=pg&d=identicon" class="gaepd-avatar-small" alt="" />
                     @if (item.Id == Model.CurrentUserId)
@@ -170,15 +164,16 @@
 
             @for (var i = pagBegin; i <= pagEnd; i++)
             {
+                var index = i;
                 <a asp-route-submit="Page"
-                   asp-route-page="@i"
+                   asp-route-page="@index"
                    asp-route-sort="@Model.Sort"
                    asp-route-name="@(Model.Name)"
                    asp-route-office="@(Model.Office)"
                    asp-route-status="@(Model.Status.ToString())"
                    asp-fragment="search-results"
-                   class="@(Model.Users.PageIndex == i ? "gaepd-pagination-active" : "")">
-                    @i
+                   class="@(Model.Users.PageIndex == index ? "gaepd-pagination-active" : "")">
+                    @index
                 </a>
             }
 

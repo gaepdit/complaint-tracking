@@ -38,13 +38,8 @@ namespace ComplaintTracking.ViewModels
 
         [Display(Name = "Location")]
         [DisplayFormat(ConvertEmptyStringToNull = true)]
-        public string SourceLocation
-        {
-            get
-            {
-                return StringFunctions.ConcatNonEmptyStrings(new string[] { SourceCity, SourceStateName }, ", ");
-            }
-        }
+        public string SourceLocation =>
+            StringFunctions.ConcatNonEmptyStrings(new[] { SourceCity, SourceStateName }, ", ");
 
         [Display(Name = "ID")]
         [DisplayFormat(

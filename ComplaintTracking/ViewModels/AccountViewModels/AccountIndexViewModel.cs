@@ -11,17 +11,12 @@ namespace ComplaintTracking.ViewModels
         public string FullName { get; set; }
 
         public string Email { get; set; }
-        public string EmailMD5Hash
-        {
-            get
-            {
-                return string.Join("",
-                    System.Security.Cryptography.MD5.Create()
+
+        public string EmailMD5Hash =>
+            string.Join("",
+                System.Security.Cryptography.MD5.Create()
                     .ComputeHash(System.Text.Encoding.ASCII.GetBytes(Email.Trim().ToLower()))
-                    .Select(s => s.ToString("x2"))
-                    );
-            }
-        }
+                    .Select(s => s.ToString("x2")));
 
         [Display(Name = "Phone Number")]
         [DisplayFormat(
@@ -39,21 +34,12 @@ namespace ComplaintTracking.ViewModels
         [Display(Name = "CTS Roles")]
         public IList<CtsRole> CtsRoles { get; set; }
 
-        public IList<string> Roles
+        public void SetRoles(IEnumerable<string> value)
         {
-            get
-            {
-                return CtsRoles
-                    .Select(x => x.ToString())
-                    .ToList();
-            }
-            set
-            {
-                CtsRoles = value
-                    .Select(x => Enum.Parse(typeof(CtsRole), x))
-                    .Cast<CtsRole>()
-                    .ToList();
-            }
+            CtsRoles = value
+                .Select(x => Enum.Parse(typeof(CtsRole), x))
+                .Cast<CtsRole>()
+                .ToList();
         }
     }
 }

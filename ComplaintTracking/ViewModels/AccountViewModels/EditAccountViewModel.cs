@@ -23,17 +23,11 @@ namespace ComplaintTracking.ViewModels
         [EmailAddress]
         [DnrEmailAddress(ErrorMessage = "A valid DNR email address is required")]
         public string Email { get; set; }
-        public string EmailMD5Hash
-        {
-            get
-            {
-                return string.Join("",
-                    System.Security.Cryptography.MD5.Create()
+        public string EmailMD5Hash =>
+            string.Join("",
+                System.Security.Cryptography.MD5.Create()
                     .ComputeHash(System.Text.Encoding.ASCII.GetBytes(Email.Trim().ToLower()))
-                    .Select(s => s.ToString("x2"))
-                    );
-            }
-        }
+                    .Select(s => s.ToString("x2")));
 
         [StringLength(25)]
         [Display(Name = "Phone Number")]

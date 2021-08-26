@@ -34,6 +34,7 @@ namespace ComplaintTracking.ViewModels
                 Id = county.Id;
                 Name = county.Name;
             }
+
             [Display(Name = "County ID")]
             public int Id { get; }
             public string Name { get; }

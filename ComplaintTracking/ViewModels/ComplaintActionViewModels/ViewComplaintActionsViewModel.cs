@@ -42,7 +42,7 @@ namespace ComplaintTracking.ViewModels
 
         public bool UserCanDelete { get; set; }
         public bool ComplaintClosed { get; set; }
-        public bool ComplaintDeleted { get; set; } = false;
+        public bool ComplaintDeleted { get; set; }
         public DateTime? DateCurrentOwnerAccepted { get; set; }
         public Guid? CurrentOfficeId { get; set; }
         public string CurrentOwnerId { get; set; }

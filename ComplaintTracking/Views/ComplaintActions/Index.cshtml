@@ -249,21 +249,22 @@
 
                 @for (var i = pagBegin; i <= pagEnd; i++)
                 {
+                    var index = i;
                     <a asp-route-submit="Page"
-                       asp-route-page="@i"
+                       asp-route-page="@index"
                        asp-route-sort="@Model.Sort"
                        asp-route-deleteStatus="@(Model.DeleteStatus.ToString())"
-                       asp-route-ActionDateFrom="@(String.Format(CTS.FormatDateEdit, Model.ActionDateFrom))"
-                       asp-route-ActionDateTo="@(String.Format(CTS.FormatDateEdit, Model.ActionDateTo))"
+                       asp-route-ActionDateFrom="@(string.Format(CTS.FormatDateEdit, Model.ActionDateFrom))"
+                       asp-route-ActionDateTo="@(string.Format(CTS.FormatDateEdit, Model.ActionDateTo))"
                        asp-route-ActionType="@(Model.ActionType)"
                        asp-route-Investigator="@(Model.Investigator)"
-                       asp-route-DateEnteredFrom="@(String.Format(CTS.FormatDateEdit, Model.DateEnteredFrom))"
-                       asp-route-DateEnteredTo="@(String.Format(CTS.FormatDateEdit, Model.DateEnteredTo))"
+                       asp-route-DateEnteredFrom="@(string.Format(CTS.FormatDateEdit, Model.DateEnteredFrom))"
+                       asp-route-DateEnteredTo="@(string.Format(CTS.FormatDateEdit, Model.DateEnteredTo))"
                        asp-route-EnteredBy="@(Model.EnteredBy)"
                        asp-route-Comments="@(Model.Comments)"
                        asp-fragment="search-results"
-                       class="@(Model.ComplaintActions.PageIndex == i ? "gaepd-pagination-active" : "")">
-                        @i
+                       class="@(Model.ComplaintActions.PageIndex == index ? "gaepd-pagination-active" : "")">
+                        @index
                     </a>
                 }
 

@@ -54,6 +54,7 @@ namespace ComplaintTracking.ViewModels
             get => _complaintNature.RedactPII();
             set => _complaintNature = value;
         }
+
         private string _complaintNature;
 
         [Display(Name = "Location of Complaint")]
@@ -65,6 +66,7 @@ namespace ComplaintTracking.ViewModels
             get => _complaintLocation.RedactPII();
             set => _complaintLocation = value;
         }
+
         private string _complaintLocation;
 
         [Display(Name = "City of Complaint")]
@@ -131,13 +133,13 @@ namespace ComplaintTracking.ViewModels
         #region Review/Closure
 
         [Display(Name = "Approved/Closed")]
-        public bool ComplaintClosed { get; } = false;
+        public bool ComplaintClosed { get; }
 
         #endregion
 
         #region Attachments
 
-        public List<AttachmentViewModel> Attachments { get; set;  }
+        public List<AttachmentViewModel> Attachments { get; set; }
 
         #endregion
 
@@ -151,9 +153,12 @@ namespace ComplaintTracking.ViewModels
         {
             get
             {
-                string cityState = StringFunctions.ConcatNonEmptyStrings(new string[] { SourceCity, SourceState?.Name }, ", ");
-                string cityStateZip = StringFunctions.ConcatNonEmptyStrings(new string[] { cityState, SourcePostalCode }, " ");
-                return StringFunctions.ConcatNonEmptyStrings(new string[] { SourceStreet, SourceStreet2, cityStateZip }, Environment.NewLine);
+                string cityState =
+                    StringFunctions.ConcatNonEmptyStrings(new[] { SourceCity, SourceState?.Name }, ", ");
+                string cityStateZip =
+                    StringFunctions.ConcatNonEmptyStrings(new[] { cityState, SourcePostalCode }, " ");
+                return StringFunctions.ConcatNonEmptyStrings(new[] { SourceStreet, SourceStreet2, cityStateZip },
+                    Environment.NewLine);
             }
         }
 

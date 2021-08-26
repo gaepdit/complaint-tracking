@@ -14,7 +14,7 @@
     <environment names="Development,Staging">
         <meta name="robots" content="noindex, nofollow">
     </environment>
-    <title>@StringFunctions.ConcatNonEmptyStrings(new string[] { ViewData["Title"].ToString(), "Georgia EPD Complaint Tracking System" }, " · ")</title>
+    <title>@StringFunctions.ConcatNonEmptyStrings(new[] { ViewData["Title"].ToString(), "Georgia EPD Complaint Tracking System" }, " · ")</title>
     @await Html.PartialAsync("_FaviconPartial")
     @await Html.PartialAsync("_StandardStylesheetsPartial")
     @RenderSection("PageStyles", required: false)
@@ -39,7 +39,7 @@
 </head>
 <body>
     <a class="usa-skipnav" href="#main-content">Skip to main content</a>
-    @if (!User.Identity.IsAuthenticated)
+    @if (User?.Identity is null || !User.Identity.IsAuthenticated)
     {
         <script type="text/javascript" src="https://georgia.gov/gagov_external_blocks/topper"></script>
     }
@@ -77,7 +77,7 @@
         <header class="usa-header usa-header-basic" role="banner">
             <div class="usa-nav-container">
                 <div class="usa-navbar gaepd-navbar">
-                    @if (User.Identity.IsAuthenticated)
+                    @if (User?.Identity is not null && User.Identity.IsAuthenticated)
                     {
                         <button class="usa-menu-btn">Menu</button>
                     }
@@ -112,7 +112,7 @@
     <main class="usa-grid usa-section usa-content" id="main-content">
         @if (ViewData["AlertMessage"] != null)
         {
-            @await Html.PartialAsync("_AlertPartial", ViewData["AlertMessage"]);
+            @await Html.PartialAsync("_AlertPartial", ViewData["AlertMessage"])
         }
         @RenderBody()
     </main>
@@ -122,7 +122,7 @@
             <a href="#">Return to top</a>
         </div>
     </div>
-    @if (!User.Identity.IsAuthenticated)
+    @if (User?.Identity is null || !User.Identity.IsAuthenticated)
     {
         <div class="gaepd-footer">
             <ul class="gaepd-footer-menu">

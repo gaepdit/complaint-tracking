@@ -8,13 +8,12 @@ namespace ComplaintTracking.ViewModels
     {
         public OfficeViewModel(Office item)
         {
-            if (item != null)
-            {
-                Id = item.Id;
-                Active = item.Active;
-                Name = item.Name;
-                MasterUser = item.MasterUser;
-            }
+            if (item == null) return;
+
+            Id = item.Id;
+            Active = item.Active;
+            Name = item.Name;
+            MasterUser = item.MasterUser;
         }
 
         public Guid Id { get; set; }
@@ -29,6 +28,6 @@ namespace ComplaintTracking.ViewModels
 
         [Required]
         [Display(Name = "Master User")]
-        public virtual ApplicationUser MasterUser { get; set; }
+        public ApplicationUser MasterUser { get; set; }
     }
 }

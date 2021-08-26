@@ -42,20 +42,10 @@ namespace ComplaintTracking.ViewModels
             public IEnumerable<ComplaintList> Complaints { get; set; }
 
             [DisplayFormat(DataFormatString = "{0:N1}")]
-            public double AverageDaysToFollowUp
-            {
-                get
-                {
-                    if (Complaints != null && Complaints.Count() > 0)
-                    {
-                        return Complaints.Average(e => e.DaysToFollowUp);
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                }
-            }
+            public double AverageDaysToFollowUp => 
+                Complaints != null && Complaints.Any()
+                    ? Complaints.Average(e => e.DaysToFollowUp) 
+                    : 0;
         }
 
         public class ComplaintList
@@ -81,13 +71,7 @@ namespace ComplaintTracking.ViewModels
             public DateTime MinActionDate { get; set; }
 
             [Display(Name = "Days to Follow Up")]
-            public int DaysToFollowUp
-            {
-                get
-                {
-                    return MinActionDate.Date.Subtract(DateReceived.Date).Days;
-                }
-            }
+            public int DaysToFollowUp => MinActionDate.Date.Subtract(DateReceived.Date).Days;
         }
     }
 }

@@ -1,15 +1,12 @@
 ﻿@if (User.Identity.IsAuthenticated)
 {
     var Email = User?.Identity?.Name;
-    string EmailMD5Hash = "";
-
-    if (!string.IsNullOrEmpty(Email))
-    {
-        EmailMD5Hash = string.Join("",
-            System.Security.Cryptography.MD5.Create()
+    var EmailMD5Hash = string.IsNullOrEmpty(Email) 
+        ? "" 
+        : string.Join("",
+        System.Security.Cryptography.MD5.Create()
             .ComputeHash(System.Text.Encoding.ASCII.GetBytes(Email))
             .Select(s => s.ToString("x2")));
-    }
 
     <nav role="navigation" class="usa-nav">
         <button class="usa-nav-close">

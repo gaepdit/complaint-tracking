@@ -10,15 +10,15 @@ namespace ComplaintTracking.ViewModels
         {
             ComplaintId = e.Id;
             DateReceived = e.DateReceived;
-            SetDeleted = e.Deleted;
+            SetDeleted(e.Deleted);
             ReceivedByName = e.ReceivedBy?.SortableFullName;
             SourceFacilityId = e.SourceFacilityId;
             SourceFacilityName = e.SourceFacilityName;
-            SourceCity = e.SourceCity;
-            SourceStateName = e.SourceState?.Name;
-            SetStatus = e.Status;
-            CurrentOfficeName = e.CurrentOfficeId == null ? null : e.CurrentOffice.Name;
-            CurrentOwnerName = e.CurrentOwnerId == null ? null : e.CurrentOwner.SortableFullName;
+            SetSourceCity(e.SourceCity);
+            SetSourceStateName(e.SourceState?.Name);
+            SetStatus(e.Status);
+            CurrentOfficeName = e.CurrentOffice?.Name;
+            CurrentOwnerName = e.CurrentOwner?.SortableFullName;
         }
 
         #region ID column
@@ -43,9 +43,9 @@ namespace ComplaintTracking.ViewModels
 
         private ComplaintStatus status;
 
-        public ComplaintStatus SetStatus { set { status = value; } }
+        private void SetStatus(ComplaintStatus value) => status = value;
 
-        public string Status { get { return status.GetDisplayName(); } }
+        public string Status => status.GetDisplayName();
 
         #endregion
 
@@ -56,20 +56,15 @@ namespace ComplaintTracking.ViewModels
         public string SourceFacilityName { get; set; }
 
         private string sourceStateName;
-        public string SourceStateName { set { sourceStateName = value; } }
+        private void SetSourceStateName(string value) => sourceStateName = value;
 
         private string sourceCity;
-        public string SourceCity { set { sourceCity = value; } }
+        private void SetSourceCity(string value) => sourceCity = value;
 
         [Display(Name = "Location")]
         [DisplayFormat(ConvertEmptyStringToNull = true)]
-        public string SourceLocation
-        {
-            get
-            {
-                return StringFunctions.ConcatNonEmptyStrings(new string[] { sourceCity, sourceStateName }, ", ");
-            }
-        }
+        public string SourceLocation =>
+            StringFunctions.ConcatNonEmptyStrings(new[] { sourceCity, sourceStateName }, ", ");
 
         [Display(Name = "ID")]
         [DisplayFormat(
@@ -99,10 +94,10 @@ namespace ComplaintTracking.ViewModels
 
         private bool deleted;
 
-        public bool SetDeleted { set { deleted = value; } }
+        private void SetDeleted(bool value) => deleted = value;
 
         [Display(Name = "Deleted?")]
-        public string Deleted { get { return deleted ? "Deleted" : "No"; } }
+        public string Deleted => deleted ? "Deleted" : "No";
 
         #endregion
     }

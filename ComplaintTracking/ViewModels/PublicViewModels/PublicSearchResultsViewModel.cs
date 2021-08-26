@@ -42,13 +42,8 @@ namespace ComplaintTracking.ViewModels
         public string SourceCity { get; set; }
 
         [DisplayFormat(ConvertEmptyStringToNull = true)]
-        public string SourceLocation
-        {
-            get
-            {
-                return StringFunctions.ConcatNonEmptyStrings(new string[] { SourceCity, SourceStateName }, ", ");
-            }
-        }
+        public string SourceLocation => 
+            StringFunctions.ConcatNonEmptyStrings(new[] { SourceCity, SourceStateName }, ", ");
 
         #endregion
 

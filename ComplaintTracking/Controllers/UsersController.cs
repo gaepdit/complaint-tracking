@@ -150,10 +150,8 @@ namespace ComplaintTracking.Controllers
                 return RedirectToAction(nameof(AccountController.Index), "Account");
             }
 
-            var model = new UserViewModel(user)
-            {
-                Roles = await _userManager.GetRolesAsync(user)
-            };
+            var model = new UserViewModel(user);
+            model.SetRoles(await _userManager.GetRolesAsync(user));
 
             return View(model);
         }
@@ -254,7 +252,7 @@ namespace ComplaintTracking.Controllers
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new {userId = user.Id, code},
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code },
                         protocol: HttpContext.Request.Scheme);
                     await _emailSender.SendEmailAsync(
                         model.Email,
@@ -269,7 +267,7 @@ namespace ComplaintTracking.Controllers
                         "The new user account has been created, and a confirmation email has been sent to the email provided.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
 
-                    return RedirectToAction(nameof(Details), new {id = user.Id});
+                    return RedirectToAction(nameof(Details), new { id = user.Id });
                 }
 
                 AddErrors(result);
@@ -435,7 +433,7 @@ namespace ComplaintTracking.Controllers
                     msg = "The user profile was updated.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
 
-                    return RedirectToAction(nameof(Details), new {id = user.Id});
+                    return RedirectToAction(nameof(Details), new { id = user.Id });
                 }
 
                 AddErrors(result);

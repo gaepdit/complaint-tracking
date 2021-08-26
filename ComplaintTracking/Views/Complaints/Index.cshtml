@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Complaint Search";
-    string rowclass = "";
     string selectText = "(any)";
 
     string idColAria = "";
@@ -308,12 +307,7 @@
         <tbody>
             @foreach (var item in Model.Complaints)
             {
-                rowclass = "";
-                if (item.Deleted == "Deleted")
-                {
-                    rowclass = "gaepd-tablerow-dimmed";
-                }
-                <tr class="@rowclass">
+                <tr class="@(item.Deleted == "Deleted" ? "gaepd-tablerow-dimmed" : "")">
                     <th scope="row" data-label="@Html.DisplayNameFor(m => item.ComplaintId)">
                         <a class="usa-button usa-button-outline" asp-action="Details" asp-route-id="@item.ComplaintId">@Html.DisplayFor(m => item.ComplaintId)</a>
                     </th>
@@ -323,7 +317,7 @@
                     <td data-label="@Html.DisplayNameFor(m => item.SourceFacilityName)">
                         @if (String.IsNullOrEmpty(item.SourceFacilityName) && String.IsNullOrEmpty(item.SourceLocation) && String.IsNullOrEmpty(item.SourceFacilityId))
                         {
-                            @CTS.NotEnteredDisplayText;
+                            @CTS.NotEnteredDisplayText
                         }
                         else
                         {
@@ -438,8 +432,9 @@
 
                 @for (var i = pagBegin; i <= pagEnd; i++)
                 {
+                    var index = i;
                     <a asp-route-submit="Page"
-                       asp-route-page="@i"
+                       asp-route-page="@index"
                        asp-route-sort="@Model.Sort"
                        asp-route-complaintStatus="@(Model.ComplaintStatus.ToString())"
                        asp-route-deleteStatus="@(Model.DeleteStatus.ToString())"
@@ -466,8 +461,8 @@
                        asp-route-Office="@(Model.Office)"
                        asp-route-Owner="@(Model.Owner)"
                        asp-fragment="search-results"
-                       class="@(Model.Complaints.PageIndex == i ? "gaepd-pagination-active" : "")">
-                        @i
+                       class="@(Model.Complaints.PageIndex == index ? "gaepd-pagination-active" : "")">
+                        @index
                     </a>
                 }
 

@@ -1,9 +1,8 @@
-﻿using ComplaintTracking.Models;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using ComplaintTracking.Models;
 
 namespace ComplaintTracking.ViewModels
 {
@@ -25,37 +24,16 @@ namespace ComplaintTracking.ViewModels
         [Display(Name = "Through")]
         public DateTime? EndDate { get; set; }
 
-        public int TotalComplaints
-        {
-            get
-            {
-                if (Offices == null || Offices.Count() == 0)
-                {
-                    return 0;
-                }
-
-                return Offices.Sum(e => e.Complaints != null ? e.Complaints.Count() : 0);
-            }
-        }
+        public int TotalComplaints =>
+            Offices == null || !Offices.Any()
+                ? 0
+                : Offices.Sum(e => e.Complaints?.Count() ?? 0);
 
         [DisplayFormat(DataFormatString = "{0:N1}")]
-        public double TotalAverageDaysToClosure
-        {
-            get
-            {
-                if (Offices == null || Offices.Count() == 0)
-                {
-                    return 0;
-                }
-
-                if (TotalComplaints == 0)
-                {
-                    return 0;
-                }
-
-                return Offices.Sum(e => e.TotalDaysToClosure) / Convert.ToDouble(TotalComplaints);
-            }
-        }
+        public double TotalAverageDaysToClosure =>
+            Offices == null || !Offices.Any() || TotalComplaints == 0
+                ? 0
+                : Offices.Sum(e => e.TotalDaysToClosure) / Convert.ToDouble(TotalComplaints);
 
         public class OfficeList
         {
@@ -71,30 +49,15 @@ namespace ComplaintTracking.ViewModels
             public IEnumerable<ComplaintList> Complaints { get; set; }
 
             [DisplayFormat(DataFormatString = "{0:N1}")]
-            public double AverageDaysToClosure
-            {
-                get
-                {
-                    if (Complaints == null || Complaints.Count() == 0)
-                    {
-                        return 0;
-                    }
-                    
-                    return Complaints.Average(e => e.DaysToClosure);
-                }
-            }
-            public int TotalDaysToClosure
-            {
-                get
-                {
-                    if (Complaints == null || Complaints.Count() == 0)
-                    {
-                        return 0;
-                    }
-                    
-                    return Complaints.Sum(e => e.DaysToClosure);
-                }
-            }
+            public double AverageDaysToClosure => 
+                Complaints == null || !Complaints.Any() 
+                    ? 0 
+                    : Complaints.Average(e => e.DaysToClosure);
+
+            public int TotalDaysToClosure => 
+                Complaints == null || !Complaints.Any()
+                    ? 0 
+                    : Complaints.Sum(e => e.DaysToClosure);
         }
 
         public class ComplaintList
@@ -110,13 +73,9 @@ namespace ComplaintTracking.ViewModels
             public DateTime DateReceived { get; set; }
             public DateTime? DateComplaintClosed { get; set; }
 
-            public int DaysToClosure
-            {
-                get
-                {
-                    return DateComplaintClosed.Value.Date.Subtract(DateReceived.Date).Days;
-                }
-            }
+            public int DaysToClosure => DateComplaintClosed.HasValue
+                ? DateComplaintClosed.Value.Date.Subtract(DateReceived.Date).Days
+                : -1;
         }
     }
 }

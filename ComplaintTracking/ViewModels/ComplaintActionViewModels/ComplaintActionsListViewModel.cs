@@ -8,17 +8,22 @@ namespace ComplaintTracking.ViewModels
     {
         public ComplaintActionsListViewModel(ComplaintAction i)
         {
-            if (i != null)
-            {
-                Id = i.Id;
-                ComplaintId = i.ComplaintId;
-                ActionDate = i.ActionDate;
-                ActionType = i.ActionType;
-                Investigator = i.Investigator;
-                EnteredBy = i.EnteredBy;
-                Comments = (i.Comments == null) ? null : i.Comments.Substring(0, Math.Min(100, i.Comments.Length)) + (i.Comments.Length > 100 ? "…" : string.Empty);
-                Deleted = i.Deleted;
-            }
+            if (i == null) return;
+
+            Id = i.Id;
+            ComplaintId = i.ComplaintId;
+            ActionDate = i.ActionDate;
+            ActionType = i.ActionType;
+            Investigator = i.Investigator;
+            EnteredBy = i.EnteredBy;
+            Comments = TruncateComment(i.Comments);
+            Deleted = i.Deleted;
+        }
+
+        private static string TruncateComment(string comment)
+        {
+            if (comment is null) return null;
+            return comment.Length > 100 ? comment[..100] + "…" : comment;
         }
 
         public Guid Id { get; set; }
@@ -43,6 +48,6 @@ namespace ComplaintTracking.ViewModels
 
         [Display(Name = "Deleted?")]
         [UIHint("BooleanDeleted")]
-        public bool Deleted { get; set; } = false;
+        public bool Deleted { get; set; }
     }
 }

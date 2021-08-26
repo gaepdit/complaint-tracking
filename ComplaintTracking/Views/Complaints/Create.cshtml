@@ -285,7 +285,7 @@
                 <p>Selected files will be uploaded when Complaint is saved.</p>
                 <input asp-for="Attachments" class="filesUploadInput" data-multiple-caption="{count} files selected"
                        accept=".txt,.jpg,.jpeg,.png,.gif,.svg,.pdf,.html,.htm,.csv,.xlsx,.xls,.rtf,.docx,.doc,.ppt,.pptx" />
-                <label for="Attachments" class="filesUploadLabel">
+                <label asp-for="Attachments" class="filesUploadLabel">
                     <kbd class="usa-button usa-button-outline usa-button-active">&nbsp;</kbd><span class="usa-button usa-button-active">Choose files...</span>
                 </label>
                 <span class="filesUploadInfo"></span>

@@ -138,6 +138,7 @@ namespace ComplaintTracking.ViewModels
             NullDisplayText = CTS.NotEnteredDisplayText,
             ConvertEmptyStringToNull = true)]
         public string CallerPhoneNumber { get; set; }
+
         public PhoneType? CallerPhoneType { get; set; }
 
         [Display(Name = "Secondary Phone")]
@@ -145,6 +146,7 @@ namespace ComplaintTracking.ViewModels
             NullDisplayText = CTS.NotEnteredDisplayText,
             ConvertEmptyStringToNull = true)]
         public string CallerSecondaryPhoneNumber { get; set; }
+
         public PhoneType? CallerSecondaryPhoneType { get; set; }
 
         [Display(Name = "Other Phone")]
@@ -152,6 +154,7 @@ namespace ComplaintTracking.ViewModels
             NullDisplayText = CTS.NotEnteredDisplayText,
             ConvertEmptyStringToNull = true)]
         public string CallerTertiaryPhoneNumber { get; set; }
+
         public PhoneType? CallerTertiaryPhoneType { get; set; }
 
         [Display(Name = "Email Address")]
@@ -240,6 +243,7 @@ namespace ComplaintTracking.ViewModels
             NullDisplayText = CTS.NotEnteredDisplayText,
             ConvertEmptyStringToNull = true)]
         public string SourcePhoneNumber { get; set; }
+
         public PhoneType? SourcePhoneType { get; set; }
 
         [Display(Name = "Secondary Phone")]
@@ -247,6 +251,7 @@ namespace ComplaintTracking.ViewModels
             NullDisplayText = CTS.NotEnteredDisplayText,
             ConvertEmptyStringToNull = true)]
         public string SourceSecondaryPhoneNumber { get; set; }
+
         public PhoneType? SourceSecondaryPhoneType { get; set; }
 
         [Display(Name = "Other Phone")]
@@ -254,6 +259,7 @@ namespace ComplaintTracking.ViewModels
             NullDisplayText = CTS.NotEnteredDisplayText,
             ConvertEmptyStringToNull = true)]
         public string SourceTertiaryPhoneNumber { get; set; }
+
         public PhoneType? SourceTertiaryPhoneType { get; set; }
 
         [Display(Name = "Email Address")]
@@ -275,22 +281,10 @@ namespace ComplaintTracking.ViewModels
 
         [Display(Name = "Current Assigned Associate")]
         [DisplayFormat(NullDisplayText = CTS.SelectUserMasterText)]
-        public string CurrentOwnerFullName
-        {
-            get
-            {
-                return CurrentOwner?.FullName;
-            }
-        }
+        public string CurrentOwnerFullName => CurrentOwner?.FullName;
 
         [UIHint("EmailAddress")]
-        public string CurrentOwnerEmail
-        {
-            get
-            {
-                return CurrentOwner?.Email;
-            }
-        }
+        public string CurrentOwnerEmail => CurrentOwner?.Email;
 
         [Display(Name = "Date Assigned")]
         [DisplayFormat(DataFormatString = CTS.FormatDateTimeDisplay)]
@@ -302,20 +296,10 @@ namespace ComplaintTracking.ViewModels
 
         public List<ComplaintTransitionListViewModel> ComplaintTransitions { get; set; }
 
-        public DateTime? EarliestComplaintTransition
-        {
-            get
-            {
-                if (ComplaintTransitions != null && ComplaintTransitions.Count > 0)
-                {
-                    return ComplaintTransitions[ComplaintTransitions.Count - 1].DateTransferred;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
+        public DateTime? EarliestComplaintTransition =>
+            ComplaintTransitions is { Count: > 0 }
+                ? ComplaintTransitions[^1].DateTransferred
+                : null;
 
         #endregion
 
@@ -334,7 +318,7 @@ namespace ComplaintTracking.ViewModels
         public string ReviewComments { get; set; }
 
         [Display(Name = "Approved/Closed")]
-        public bool ComplaintClosed { get; set; } = false;
+        public bool ComplaintClosed { get; set; }
 
         [Display(Name = "Date Complaint Closed")]
         [DisplayFormat(DataFormatString = CTS.FormatDateTimeDisplay)]
@@ -355,7 +339,7 @@ namespace ComplaintTracking.ViewModels
 
         [Display(Name = "Deleted?")]
         [UIHint("BooleanDeleted")]
-        public bool Deleted { get; set; } = false;
+        public bool Deleted { get; set; }
 
         [Display(Name = "Deleted By")]
         public ApplicationUser DeletedBy { get; set; }
@@ -379,9 +363,10 @@ namespace ComplaintTracking.ViewModels
         {
             get
             {
-                string cityState = StringFunctions.ConcatNonEmptyStrings(new string[] { CallerCity, CallerState?.Name }, ", ");
-                string cityStateZip = StringFunctions.ConcatNonEmptyStrings(new string[] { cityState, CallerPostalCode }, " ");
-                return StringFunctions.ConcatNonEmptyStrings(new string[] { CallerStreet, CallerStreet2, cityStateZip }, Environment.NewLine);
+                string cityState = StringFunctions.ConcatNonEmptyStrings(new[] { CallerCity, CallerState?.Name }, ", ");
+                string cityStateZip = StringFunctions.ConcatNonEmptyStrings(new[] { cityState, CallerPostalCode }, " ");
+                return StringFunctions.ConcatNonEmptyStrings(new[] { CallerStreet, CallerStreet2, cityStateZip },
+                    Environment.NewLine);
             }
         }
 
@@ -393,9 +378,10 @@ namespace ComplaintTracking.ViewModels
         {
             get
             {
-                string cityState = StringFunctions.ConcatNonEmptyStrings(new string[] { SourceCity, SourceState?.Name }, ", ");
-                string cityStateZip = StringFunctions.ConcatNonEmptyStrings(new string[] { cityState, SourcePostalCode }, " ");
-                return StringFunctions.ConcatNonEmptyStrings(new string[] { SourceStreet, SourceStreet2, cityStateZip }, Environment.NewLine);
+                string cityState = StringFunctions.ConcatNonEmptyStrings(new[] { SourceCity, SourceState?.Name }, ", ");
+                string cityStateZip = StringFunctions.ConcatNonEmptyStrings(new[] { cityState, SourcePostalCode }, " ");
+                return StringFunctions.ConcatNonEmptyStrings(new[] { SourceStreet, SourceStreet2, cityStateZip },
+                    Environment.NewLine);
             }
         }
 
