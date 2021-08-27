@@ -24,6 +24,7 @@ namespace ComplaintTracking.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IMemoryCache _cache;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
         private readonly DAL _dal;
@@ -32,6 +33,7 @@ namespace ComplaintTracking.Controllers
             ApplicationDbContext context,
             IMemoryCache memoryCache,
             UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager,
             IEmailSender emailSender,
             ILoggerFactory loggerFactory,
             DAL dal)
@@ -39,6 +41,7 @@ namespace ComplaintTracking.Controllers
             _context = context;
             _cache = memoryCache;
             _userManager = userManager;
+            _roleManager = roleManager;
             _emailSender = emailSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
             _dal = dal;
@@ -50,11 +53,13 @@ namespace ComplaintTracking.Controllers
             SortBy sort = SortBy.NameAsc,
             string name = null,
             Guid? office = null,
-            UserStatus? status = null
+            UserStatus? status = null,
+            CtsRole? role = null
         )
         {
             // Filters
             var users = _context.Users.AsNoTracking();
+
             if (!string.IsNullOrWhiteSpace(name))
             {
                 users = users.Where(e => e.FirstName.Contains(name) || e.LastName.Contains(name));
@@ -71,6 +76,15 @@ namespace ComplaintTracking.Controllers
                 UserStatus.Inactive => users.Where(e => !e.Active),
                 _ => users
             };
+
+            if (role is not null)
+            {
+                var identityRole = await _roleManager.Roles.SingleOrDefaultAsync(r => r.Name == role.ToString());
+                if (identityRole is not null)
+                {
+                    users = users.Where(e => e.Roles.Any(r => r.RoleId == identityRole.Id));
+                }
+            }
 
             // ViewModel
             var model = new UserIndexViewModel()

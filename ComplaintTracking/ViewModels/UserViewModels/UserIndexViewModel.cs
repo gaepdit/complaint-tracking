@@ -20,6 +20,8 @@ namespace ComplaintTracking.ViewModels
         public SelectList OfficeSelectList { get; set; }
 
         public UserStatus? Status { get; set; }
+        
+        public CtsRole? Role { get; set; }
 
         #endregion
 
