@@ -94,7 +94,8 @@ namespace ComplaintTracking.Controllers
                 Office = office,
                 OfficeSelectList = await _dal.GetOfficesSelectListAsync(),
                 Status = status,
-                Sort = sort
+                Sort = sort,
+                Role = role,
             };
 
             // Sort

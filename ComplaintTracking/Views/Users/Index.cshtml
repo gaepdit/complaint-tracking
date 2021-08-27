@@ -82,6 +82,7 @@
                asp-route-name="@(Model.Name)"
                asp-route-office="@(Model.Office)"
                asp-route-status="@(Model.Status.ToString())"
+               asp-route-role="@(Model.Role)"
                asp-fragment="search-results">
                 @Html.DisplayNameFor(model => model.Users.FirstOrDefault().SortableFullName)
             </a>
@@ -93,6 +94,7 @@
                asp-route-name="@(Model.Name)"
                asp-route-office="@(Model.Office)"
                asp-route-status="@(Model.Status.ToString())"
+               asp-route-role="@(Model.Role)"
                asp-fragment="search-results">
                 @Html.DisplayNameFor(model => model.Users.FirstOrDefault().Office)
             </a>
@@ -144,6 +146,7 @@
                asp-route-name="@(Model.Name)"
                asp-route-office="@(Model.Office)"
                asp-route-status="@(Model.Status.ToString())"
+               asp-route-role="@(Model.Role)"
                asp-fragment="search-results"
                class="gaepd-pagination-first">
                 First
@@ -154,6 +157,7 @@
                asp-route-name="@(Model.Name)"
                asp-route-office="@(Model.Office)"
                asp-route-status="@(Model.Status.ToString())"
+               asp-route-role="@(Model.Role)"
                asp-fragment="search-results"
                class="gaepd-pagination-prev">
                 Previous
@@ -180,6 +184,7 @@
                    asp-route-name="@(Model.Name)"
                    asp-route-office="@(Model.Office)"
                    asp-route-status="@(Model.Status.ToString())"
+                   asp-route-role="@(Model.Role)"
                    asp-fragment="search-results"
                    class="@(Model.Users.PageIndex == index ? "gaepd-pagination-active" : "")">
                     @index
@@ -200,6 +205,7 @@
                asp-route-name="@(Model.Name)"
                asp-route-office="@(Model.Office)"
                asp-route-status="@(Model.Status.ToString())"
+               asp-route-role="@(Model.Role)"
                asp-fragment="search-results"
                class="gaepd-pagination-next">
                 Next
@@ -210,6 +216,7 @@
                asp-route-name="@(Model.Name)"
                asp-route-office="@(Model.Office)"
                asp-route-status="@(Model.Status.ToString())"
+               asp-route-role="@(Model.Role)"
                asp-fragment="search-results"
                class="gaepd-pagination-last">
                 Last
