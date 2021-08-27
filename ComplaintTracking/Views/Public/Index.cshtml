@@ -193,7 +193,7 @@
 
     @if (Model.Complaints.TotalItems > CTS.PageSize)
     {
-        <div class="gaepd-pagination">
+        <div class="gaepd-pagination no-visited">
             @{
                 var pagBegin = Math.Max(1, Math.Min(Model.Complaints.PageIndex - 2, Model.Complaints.TotalPages - 4));
                 var pagEnd = Math.Min(Model.Complaints.TotalPages, Math.Max(Model.Complaints.PageIndex + 2, 5));

@@ -35,6 +35,22 @@
         .gaepd-preserve-linebreaks {
             word-break: break-word;
         }
+        
+        a.no-visited, .no-visited a {
+            color: #0071bc;
+        }
+
+        a.no-visited:hover, a.no-visited:active,
+        .no-visited a:hover, .no-visited a:active {
+            color: #205493;
+        }
+        .no-visited .gaepd-pagination-inner a:hover,
+        .no-visited .gaepd-pagination-inner a:focus, 
+        .no-visited .gaepd-pagination-active, 
+        .no-visited .gaepd-pagination-active:visited {
+            background: #0071bc;
+            color: #ffffff;
+        }
     </style>
 </head>
 <body>
@@ -119,7 +135,7 @@
 
     <div class="usa-footer usa-footer-medium" role="contentinfo">
         <div class="usa-grid usa-footer-return-to-top">
-            <a href="#">Return to top</a>
+            <a href="#" class="no-visited">Return to top</a>
         </div>
     </div>
     @if (User?.Identity is null || !User.Identity.IsAuthenticated)
