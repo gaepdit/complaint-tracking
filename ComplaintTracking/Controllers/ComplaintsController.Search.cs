@@ -168,18 +168,12 @@ namespace ComplaintTracking.Controllers
                 // Export
                 if (export?.ToLower() == "csv")
                 {
-                    if (count <= CTS.CsvRecordsExportLimit)
-                    {
-                        var list = await complaints
-                            .Select(e => new ComplaintListViewModel(e))
-                            .ToListAsync().ConfigureAwait(false);
+                    var list = await complaints
+                        .Select(e => new ComplaintListViewModel(e))
+                        .ToListAsync().ConfigureAwait(false);
 
-                        var fileName = $"cts_search_{DateTime.Now:yyyy-MM-dd-HH-mm-ss.FFF}.csv";
-                        return File(await list.GetCsvByteArrayAsync(), FileTypes.CsvContentType, fileName);
-                    }
-
-                    msg = $"Unable to export more than {CTS.CsvRecordsExportLimit} records.";
-                    ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
+                    var fileName = $"cts_search_{DateTime.Now:yyyy-MM-dd-HH-mm-ss.FFF}.csv";
+                    return File(await list.GetCsvByteArrayAsync(), FileTypes.CsvContentType, fileName);
                 }
 
                 // Paging
