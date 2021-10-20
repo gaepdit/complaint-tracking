@@ -1,4 +1,4 @@
-﻿@if (!User.Identity.IsAuthenticated)
+﻿@if (User?.Identity == null || !User.Identity.IsAuthenticated)
 {
     <link rel="stylesheet" href="https://georgia.gov/profiles/georgiagov/modules/custom/gagov_external_blocks/css/gagov_external_blocks-topper.css" />
     <link rel="stylesheet" href="https://georgia.gov/profiles/georgiagov/modules/custom/gagov_external_blocks/css/gagov_external_blocks-footer.css" />
