@@ -134,6 +134,19 @@ namespace ComplaintTracking.Data
                     TransferredToUser = user,
                     TransitionType = TransitionType.Assigned
                 },
+                new ComplaintTransition
+                {
+                    Complaint = await _context.Complaints.FirstOrDefaultAsync(e => e.Status == ComplaintStatus.AdministrativelyClosed),
+                    DateAccepted = DateTime.Parse("Jul 1, 2015"),
+                    DateTransferred = DateTime.Parse("Jul 1, 2015"),
+                    Comment = "Administratively closed",
+                    TransferredByUser = user,
+                    TransferredFromUser = user,
+                    TransferredFromOffice = office,
+                    TransferredToOffice = office,
+                    TransferredToUser = user,
+                    TransitionType = TransitionType.Closed
+                },
             };
 
             return c;

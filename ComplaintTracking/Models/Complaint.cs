@@ -1,4 +1,4 @@
-﻿using ComplaintTracking.Data;
+using ComplaintTracking.Data;
 using ComplaintTracking.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -16,7 +16,7 @@ namespace ComplaintTracking.Models
         public Complaint(CreateComplaintViewModel m)
         {
             // Received
-            DateReceived = m.DateReceivedDate.Value.Date;
+            DateReceived = m.DateReceivedDate?.Date ?? DateTime.Today;
             if (m.DateReceivedTime.HasValue)
             {
                 DateReceived = DateReceived.Add(m.DateReceivedTime.Value.TimeOfDay);
@@ -294,7 +294,7 @@ namespace ComplaintTracking.Models
         public string ReviewComments { get; set; }
 
         [Display(Name = "Approved/Closed")]
-        public bool ComplaintClosed { get; set; } = false;
+        public bool ComplaintClosed { get; set; }
 
         [Display(Name = "Date Complaint Closed")]
         public DateTime? DateComplaintClosed { get; set; }
@@ -303,7 +303,7 @@ namespace ComplaintTracking.Models
 
         #region Deletion
 
-        public bool Deleted { get; set; } = false;
+        public bool Deleted { get; set; }
 
         [Display(Name = "Deleted By")]
         public ApplicationUser DeletedBy { get; set; }
@@ -320,17 +320,14 @@ namespace ComplaintTracking.Models
         #endregion
 
         #region Attachments
- 
+
         public virtual ICollection<Attachment> Attachments { get; set; }
- 
-        #endregion 
+
+        #endregion
     }
 
     #region enums
 
-    //
-    // Summary:
-    //     Represents an enumeration of the types of phone numbers.
     public enum PhoneType
     {
         Cell = 0,
@@ -339,30 +336,36 @@ namespace ComplaintTracking.Models
         Office = 3
     }
 
-    //
-    // Summary:
-    //     Represents an enumeration of the data types associated with data fields and parameters.
     public enum ComplaintStatus
     {
         //
         // Summary:
         //     Represents a new complaint that has not been accepted.
         New = 0,
+
         //
         // Summary:
         //     Represents a new complaint that has been accepted.
         [Display(Name = "Under Investigation")]
         UnderInvestigation = 1,
+
         //
         // Summary:
         //     Represents a complaint that has been submitted for review.
-        [Display(Name = "Review Pending")]
+        [Display(Name = "Review Pending")] 
         ReviewPending = 2,
+
         //
         // Summary:
         //     Represents a complaint that has been approved by a reviewer.
-        [Display(Name = "Approved/Closed")]
+        [Display(Name = "Approved/Closed")] 
         Closed = 3,
+
+        //
+        // Summary:
+        //     Represents a complaint that has been administratively closed (e.g., by EPD-IT).
+        [Display(Name = "Administratively Closed")]
+        AdministrativelyClosed = 4,
     }
 
     #endregion
