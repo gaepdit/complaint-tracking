@@ -141,13 +141,13 @@ namespace ComplaintTracking.ViewModels
         // and the hard-coded integer values ensure that previous bookmarks don't break.
         public enum SearchComplaintStatus
         {
-            [Display(Name = "All Open")] AllOpen = 4,
-            [Display(Name = "All Closed")] AllClosed = 3,
-            [Display(Name = "New")] New = 0,
-            [Display(Name = "Under Investigation")] UnderInvestigation = 1,
-            [Display(Name = "Review Pending")] ReviewPending = 2,
-            [Display(Name = "Approved/Closed")] Closed = 5,
-            [Display(Name = "Administratively Closed")] AdministrativelyClosed = 6,
+            [Display(Name = "All Open")] AllOpen,
+            [Display(Name = "All Closed")] AllClosed,
+            [Display(Name = "New")] New,
+            [Display(Name = "Under Investigation")] UnderInvestigation,
+            [Display(Name = "Review Pending")] ReviewPending,
+            [Display(Name = "Approved/Closed")] Closed,
+            [Display(Name = "Administratively Closed")] AdministrativelyClosed,
         }
 
         public enum SearchDeleteStatus
