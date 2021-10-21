@@ -1,4 +1,4 @@
-﻿@if (User.Identity.IsAuthenticated)
+﻿@if (User?.Identity != null && User.Identity.IsAuthenticated)
 {
     var Email = User?.Identity?.Name;
     var EmailMD5Hash = string.IsNullOrEmpty(Email) 
@@ -18,24 +18,28 @@
                 <li><a asp-controller="Home" asp-action="Index">Home</a></li>
             }
             <li><a asp-controller="Complaints" asp-action="Create">+ New Complaint</a></li>
+            <li><a asp-controller="Complaints" asp-action="Index">Complaints</a></li>
+            <li><a asp-controller="ComplaintActions" asp-action="Index">Actions</a></li>
             <li>
                 <button class="usa-accordion-button usa-nav-link" aria-expanded="false" aria-controls="side-nav-1">
-                    <span>Search</span>
+                    <span>More</span>
                 </button>
                 <ul id="side-nav-1" class="usa-nav-submenu" aria-hidden="true">
-                    <li><a asp-controller="Complaints" asp-action="Index">Search Complaints</a></li>
-                    <li><a asp-controller="ComplaintActions" asp-action="Index">Search Complaint Actions</a></li>
+                    <li><a asp-controller="Reports" asp-action="Index">Reports</a></li>
+                    <li><a asp-controller="Users" asp-action="Index">CTS Users</a></li>
+                    <li><a asp-controller="Maintenance" asp-action="Index">Site Maintenance</a></li>
+                    <li><a asp-controller="Public" asp-action="Index">Public Portal</a></li>
                 </ul>
             </li>
             <li>
                 <button class="usa-accordion-button usa-nav-link" aria-expanded="false" aria-controls="side-nav-2">
-                    <span>Admin</span>
+                    <span>Account</span>
                 </button>
                 <ul id="side-nav-2" class="usa-nav-submenu" aria-hidden="true">
                     <li>
                         <a asp-controller="Account" asp-action="Index">
                             <img src="https://www.gravatar.com/avatar/@EmailMD5Hash?s=32&r=pg&d=identicon" class="gaepd-avatar" alt="" />
-                            My Account
+                            My Profile
                         </a>
                     </li>
                     <li>
@@ -44,10 +48,6 @@
                         </form>
                     </li>
                     <li><hr /></li>
-                    <li><a asp-controller="Reports" asp-action="Index">Reports</a></li>
-                    <li><a asp-controller="Users" asp-action="Index">CTS Users</a></li>
-                    <li><a asp-controller="Maintenance" asp-action="Index">Maintenance</a></li>
-                    <li><a asp-controller="Public" asp-action="Index">Public Portal</a></li>
                     <li><a asp-controller="Support" asp-action="Index">Support</a></li>
                 </ul>
             </li>
