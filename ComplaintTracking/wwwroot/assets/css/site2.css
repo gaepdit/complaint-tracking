@@ -45,3 +45,30 @@ a.no-visited, .no-visited a {
         grid-template-columns: 1fr auto;
     }
 }
+
+/* Dev label */
+.gaepd-label-dev {
+    text-transform: none;
+    background: linear-gradient(120deg, #1f005c, #7a005c, #b90048, #de3825, #e68100, #94ff36, #94ff36);
+    background-size: 1800% 1800%;
+    animation: rainbow 10s ease infinite;
+}
+
+.gaepd-label-uat {
+    background: #ff7800;
+    animation: none;
+}
+
+@keyframes rainbow {
+    0% {
+        background-position: 0 20%
+    }
+
+    50% {
+        background-position: 100% 20%
+    }
+
+    100% {
+        background-position: 0 20%
+    }
+}
