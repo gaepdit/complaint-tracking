@@ -35,7 +35,8 @@
     <h2>Caller</h2>
     <div id="caller" class="">
         <div class="usa-grid-full">
-            <div class="usa-width-one-half">
+            <fieldset class="usa-width-one-half">
+                <legend>Caller info</legend>
                 <label asp-for="CallerName"></label>
                 <input asp-for="CallerName" />
                 <span asp-validation-for="CallerName" class="usa-input-error-message"></span>
@@ -89,7 +90,7 @@
                         <span asp-validation-for="CallerTertiaryPhoneType" class="usa-input-error-message"></span>
                     </div>
                 </div>
-            </div>
+            </fieldset>
             <fieldset class="usa-width-one-half">
                 <legend>Caller address</legend>
                 <label asp-for="CallerStreet"></label>
@@ -100,24 +101,25 @@
                 <input asp-for="CallerStreet2" />
                 <span asp-validation-for="CallerStreet2" class="usa-input-error-message"></span>
 
+                <label asp-for="CallerCity"></label>
+                <input asp-for="CallerCity" />
+                <span asp-validation-for="CallerCity" class="usa-input-error-message"></span>
+
                 <div>
                     <div class="usa-input-grid usa-input-grid-medium">
-                        <label asp-for="CallerCity"></label>
-                        <input asp-for="CallerCity" />
-                        <span asp-validation-for="CallerCity" class="usa-input-error-message"></span>
-                    </div>
-                    <div class="usa-input-grid usa-input-grid-small">
                         <label asp-for="CallerStateId"></label>
                         <select asp-for="CallerStateId" asp-items="Model.SelectLists.StatesSelectList">
                             <option value="">@CTS.SelectStateText</option>
                         </select>
                         <span asp-validation-for="CallerStateId" class="usa-input-error-message"></span>
                     </div>
-                </div>
 
-                <label asp-for="CallerPostalCode"></label>
-                <input asp-for="CallerPostalCode" class="usa-input-medium" />
-                <span asp-validation-for="CallerPostalCode" class="usa-input-error-message"></span>
+                    <div class="usa-input-grid usa-input-grid-small">
+                        <label asp-for="CallerPostalCode"></label>
+                        <input asp-for="CallerPostalCode" class="usa-input-medium" />
+                        <span asp-validation-for="CallerPostalCode" class="usa-input-error-message"></span>
+                    </div>
+                </div>
             </fieldset>
         </div>
     </div>
@@ -167,7 +169,7 @@
     <h2>Source</h2>
     <div id="source" class="">
         <div class="usa-grid-full">
-            <div class="usa-width-one-half">
+            <div id="source-info" class="usa-width-one-half">
                 <label asp-for="SourceFacilityId"></label>
                 <input asp-for="SourceFacilityId" />
                 <span asp-validation-for="SourceFacilityId" class="usa-input-error-message"></span>
@@ -226,37 +228,36 @@
                     </div>
                 </div>
             </div>
-            <div class="usa-width-one-half">
-                <fieldset>
-                    <legend>Source address</legend>
-                    <label asp-for="SourceStreet"></label>
-                    <input asp-for="SourceStreet" />
-                    <span asp-validation-for="SourceStreet" class="usa-input-error-message"></span>
+            <fieldset class="usa-width-one-half">
+                <legend>Source address</legend>
+                <label asp-for="SourceStreet"></label>
+                <input asp-for="SourceStreet" />
+                <span asp-validation-for="SourceStreet" class="usa-input-error-message"></span>
 
-                    <label asp-for="SourceStreet2"></label>
-                    <input asp-for="SourceStreet2" />
-                    <span asp-validation-for="SourceStreet2" class="usa-input-error-message"></span>
+                <label asp-for="SourceStreet2"></label>
+                <input asp-for="SourceStreet2" />
+                <span asp-validation-for="SourceStreet2" class="usa-input-error-message"></span>
 
-                    <div>
-                        <div class="usa-input-grid usa-input-grid-medium">
-                            <label asp-for="SourceCity"></label>
-                            <input asp-for="SourceCity" />
-                            <span asp-validation-for="SourceCity" class="usa-input-error-message"></span>
-                        </div>
-                        <div class="usa-input-grid usa-input-grid-small">
-                            <label asp-for="SourceStateId"></label>
-                            <select asp-for="SourceStateId" asp-items="Model.SelectLists.StatesSelectList">
-                                <option value="">@CTS.SelectStateText</option>
-                            </select>
-                            <span asp-validation-for="SourceStateId" class="usa-input-error-message"></span>
-                        </div>
+                <label asp-for="SourceCity"></label>
+                <input asp-for="SourceCity" />
+                <span asp-validation-for="SourceCity" class="usa-input-error-message"></span>
+
+                <div>
+                    <div class="usa-input-grid usa-input-grid-medium">
+                        <label asp-for="SourceStateId"></label>
+                        <select asp-for="SourceStateId" asp-items="Model.SelectLists.StatesSelectList">
+                            <option value="">@CTS.SelectStateText</option>
+                        </select>
+                        <span asp-validation-for="SourceStateId" class="usa-input-error-message"></span>
                     </div>
 
-                    <label asp-for="SourcePostalCode"></label>
-                    <input asp-for="SourcePostalCode" class="usa-input-medium" />
-                    <span asp-validation-for="SourcePostalCode" class="usa-input-error-message"></span>
-                </fieldset>
-            </div>
+                    <div class="usa-input-grid usa-input-grid-small">
+                        <label asp-for="SourcePostalCode"></label>
+                        <input asp-for="SourcePostalCode" class="usa-input-medium" />
+                        <span asp-validation-for="SourcePostalCode" class="usa-input-error-message"></span>
+                    </div>
+                </div>
+            </fieldset>
         </div>
     </div>
 
@@ -346,7 +347,7 @@
             });
 
             // Add button to copy Caller info to Source info
-            $('#source').prepend(
+            $('#source-info').prepend(
                 $('<button type="button">Copy info from Caller</button>')
                 .click(function copyCallerToSource() {
                     $("#SourceContactName").val($("#CallerName").val());
