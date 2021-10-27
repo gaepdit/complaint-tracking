@@ -1,11 +1,11 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using ComplaintTracking.AlertMessages;
+﻿using ComplaintTracking.AlertMessages;
 using ComplaintTracking.Generic;
 using ComplaintTracking.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using static ComplaintTracking.ViewModels.SearchComplaintsViewModel;
 
 namespace ComplaintTracking.Controllers
@@ -40,7 +40,7 @@ namespace ComplaintTracking.Controllers
             string SourcePostalCode = null,
             Guid? Office = null,
             string Owner = null,
-            string export = null
+            bool export = false
         )
         {
             var currentUser = await GetCurrentUserAsync();
@@ -90,7 +90,7 @@ namespace ComplaintTracking.Controllers
                 OwnerSelectList = owners
             };
 
-            if (string.IsNullOrEmpty(submit) && string.IsNullOrEmpty(export))
+            if (string.IsNullOrEmpty(submit) && !export)
             {
                 return View(model);
             }
@@ -107,11 +107,6 @@ namespace ComplaintTracking.Controllers
                 && DateReceivedFrom.Value > DateReceivedTo.Value)
             {
                 msg += "The beginning received date must precede the end date. ";
-            }
-
-            if (!string.IsNullOrEmpty(export) && export.ToLower() != "csv")
-            {
-                msg += "Export type is invalid.";
             }
 
             if (msg != null)
@@ -166,14 +161,14 @@ namespace ComplaintTracking.Controllers
                 var count = await complaints.CountAsync().ConfigureAwait(false);
 
                 // Export
-                if (export?.ToLower() == "csv")
+                if (export)
                 {
                     var list = await complaints
-                        .Select(e => new ComplaintListViewModel(e))
+                        .Select(e => new SearchResultsExportViewModel(e))
                         .ToListAsync().ConfigureAwait(false);
 
-                    var fileName = $"cts_search_{DateTime.Now:yyyy-MM-dd-HH-mm-ss.FFF}.csv";
-                    return File(await list.GetCsvByteArrayAsync(), FileTypes.CsvContentType, fileName);
+                    var fileName = $"cts_search_{DateTime.Now:yyyy-MM-dd-HH-mm-ss.FFF}.xlsx";
+                    return File(list.ExportExcelAsByteArray(), FileTypes.ExcelContentType, fileName);
                 }
 
                 // Paging
@@ -249,7 +244,7 @@ namespace ComplaintTracking.Controllers
                 SourcePostalCode,
                 Office,
                 Owner,
-                export = "csv"
+                export = true
             });
 
             return View("Download", url);
