@@ -19,6 +19,7 @@ namespace ComplaintTracking.ViewModels
             SetStatus(e.Status);
             CurrentOfficeName = e.CurrentOffice?.Name;
             CurrentOwnerName = e.CurrentOwner?.SortableFullName;
+            ReviewComments = e.ReviewComments;
         }
 
         #region ID column
@@ -41,11 +42,11 @@ namespace ComplaintTracking.ViewModels
 
         #region Status column
 
-        private ComplaintStatus status;
+        private ComplaintStatus _status;
 
-        private void SetStatus(ComplaintStatus value) => status = value;
+        private void SetStatus(ComplaintStatus value) => _status = value;
 
-        public string Status => status.GetDisplayName();
+        public string Status => _status.GetDisplayName();
 
         #endregion
 
@@ -90,14 +91,21 @@ namespace ComplaintTracking.ViewModels
 
         #endregion
 
+        #region Comments
+
+        [Display(Name = "Review Comments")]
+        public string ReviewComments { get; set; }
+
+        #endregion
+
         #region Deleted column
 
-        private bool deleted;
+        private bool _deleted;
 
-        private void SetDeleted(bool value) => deleted = value;
+        private void SetDeleted(bool value) => _deleted = value;
 
         [Display(Name = "Deleted?")]
-        public string Deleted => deleted ? "Deleted" : "No";
+        public string Deleted => _deleted ? "Deleted" : "No";
 
         #endregion
     }
