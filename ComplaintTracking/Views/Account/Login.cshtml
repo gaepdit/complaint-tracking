@@ -15,11 +15,11 @@
 
 <form asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="usa-form">
     <label asp-for="Email"></label>
-    <input asp-for="Email" />
+    <input asp-for="Email" autocomplete="username" />
     <span asp-validation-for="Email" class="usa-input-error-message"></span>
 
     <label asp-for="Password"></label>
-    <input asp-for="Password" />
+    <input asp-for="Password" autocomplete="current-password" />
     <span asp-validation-for="Password" class="usa-input-error-message"></span>
 
     <input asp-for="RememberMe" />
