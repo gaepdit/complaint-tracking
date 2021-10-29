@@ -1,12 +1,12 @@
-﻿using ComplaintTracking.Models;
+﻿using ClosedXML.Attributes;
+using ComplaintTracking.Models;
 using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace ComplaintTracking.ViewModels
 {
-    public class ComplaintListViewModel
+    public class SearchResultsExportViewModel
     {
-        public ComplaintListViewModel(Complaint e)
+        public SearchResultsExportViewModel(Complaint e)
         {
             ComplaintId = e.Id;
             DateReceived = e.DateReceived;
@@ -19,40 +19,25 @@ namespace ComplaintTracking.ViewModels
             SetStatus(e.Status);
             CurrentOfficeName = e.CurrentOffice?.Name;
             CurrentOwnerName = e.CurrentOwner?.SortableFullName;
+            ReviewComments = e.ReviewComments;
         }
 
-        #region ID column
-
-        [Display(Name = "Complaint ID")]
+        [XLColumn(Header = "Complaint ID")]
         public int ComplaintId { get; set; }
 
-        #endregion
-
-        #region Received column
-
-        [Display(Name = "Received By")]
+        [XLColumn(Header = "Received By")]
         public string ReceivedByName { get; set; }
 
-        [Display(Name = "Date Received")]
-        [DisplayFormat(DataFormatString = CTS.FormatDateShortDisplay)]
+        [XLColumn(Header = "Date Received")]
         public DateTime DateReceived { get; set; }
 
-        #endregion
-
-        #region Status column
-
         private ComplaintStatus _status;
-
         private void SetStatus(ComplaintStatus value) => _status = value;
 
+        [XLColumn(Header = "Status")]
         public string Status => _status.GetDisplayName();
 
-        #endregion
-
-        #region Source column
-
-        [Display(Name = "Source Name")]
-        [DisplayFormat(ConvertEmptyStringToNull = true)]
+        [XLColumn(Header = "Source Name")]
         public string SourceFacilityName { get; set; }
 
         private string _sourceStateName;
@@ -61,44 +46,26 @@ namespace ComplaintTracking.ViewModels
         private string _sourceCity;
         private void SetSourceCity(string value) => _sourceCity = value;
 
-        [Display(Name = "Source Location")]
-        [DisplayFormat(ConvertEmptyStringToNull = true)]
+        [XLColumn(Header = "Source Location")]
         public string SourceLocation =>
             StringFunctions.ConcatNonEmptyStrings(new[] { _sourceCity, _sourceStateName }, ", ");
 
-        [Display(Name = "Facility ID")]
-        [DisplayFormat(
-            NullDisplayText = CTS.NotEnteredDisplayText,
-            ConvertEmptyStringToNull = true)]
+        [XLColumn(Header = "Facility ID")]
         public string SourceFacilityId { get; set; }
 
-        #endregion
-
-        #region Assignment column
-
-        [Display(Name = "Current Assignment")]
-        [DisplayFormat(
-            NullDisplayText = CTS.SelectUserMasterText,
-            ConvertEmptyStringToNull = true)]
+        [XLColumn(Header = "Current Assignment")]
         public string CurrentOwnerName { get; set; }
 
-        [Display(Name = "EPD Office")]
-        [DisplayFormat(
-            NullDisplayText = CTS.NoOfficeDisplayText,
-            ConvertEmptyStringToNull = true)]
+        [XLColumn(Header = "EPD Office")]
         public string CurrentOfficeName { get; set; }
 
-        #endregion
-
-        #region Deleted column
+        [XLColumn(Header = "Review Comments")]
+        public string ReviewComments { get; set; }
 
         private bool _deleted;
-
         private void SetDeleted(bool value) => _deleted = value;
 
-        [Display(Name = "Deleted?")]
+        [XLColumn(Header = "Deleted?")]
         public string Deleted => _deleted ? "Deleted" : "No";
-
-        #endregion
     }
 }

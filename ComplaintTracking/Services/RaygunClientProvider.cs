@@ -19,7 +19,7 @@ namespace ComplaintTracking.Services
                 args.Message.Details.Tags.Add(CTS.CurrentEnvironment.ToString());
             };
 
-            var identity = context?.User?.Identity as ClaimsIdentity;
+            var identity = context?.User.Identity as ClaimsIdentity;
             if (identity?.IsAuthenticated != true) return client;
 
             client.UserInfo = new RaygunIdentifierMessage(identity.Name)

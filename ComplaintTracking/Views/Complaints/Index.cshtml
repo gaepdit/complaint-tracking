@@ -39,11 +39,6 @@
         <div class="usa-width-one-half">
             @Html.LabelFor(m => m.ComplaintStatus)
             @Html.DropDownListFor(m => m.ComplaintStatus, Html.GetEnumSelectList(typeof(SearchComplaintsViewModel.SearchComplaintStatus)), selectText)
-            @if (Model.IncludeDeleted)
-            {
-                @Html.LabelFor(m => m.DeleteStatus)
-                @Html.DropDownListFor(m => m.DeleteStatus, Html.GetEnumSelectList(typeof(SearchComplaintsViewModel.SearchDeleteStatus)), "Not Deleted")
-            }
         </div>
         <div class="usa-width-one-fourth">
             @Html.LabelFor(m => m.DateComplaintClosedFrom)
@@ -53,6 +48,13 @@
             @Html.LabelFor(m => m.DateComplaintClosedTo)
             @Html.EditorFor(m => m.DateComplaintClosedTo, new { htmlAttributes = new { @class = "datepicker" } })
         </div>
+        @if (Model.IncludeDeleted)
+        {
+            <div class="usa-width-one-half">
+                @Html.LabelFor(m => m.DeleteStatus)
+                @Html.DropDownListFor(m => m.DeleteStatus, Html.GetEnumSelectList(typeof(SearchComplaintsViewModel.SearchDeleteStatus)), "Not Deleted")
+            </div>
+        }
     </fieldset>
 
     <fieldset>
@@ -167,37 +169,34 @@
                 {
                     <text>@Model.Complaints.TotalItems.ToString("N0") total results; showing results @Model.Complaints.FirstItemIndex.ToString("N0") – @Model.Complaints.LastItemIndex.ToString("N0")</text>
                 }
-                if (Model.Complaints.TotalItems <= CTS.CsvRecordsExportLimit)
-                {
-                    <form asp-action="Download" asp-controller="Complaints" class="usa-form" style="float:right">
-                        <input type="hidden" asp-for="Sort" />
-                        <input type="hidden" asp-for="ComplaintStatus" />
-                        <input type="hidden" asp-for="DeleteStatus" />
-                        <input type="hidden" asp-for="DateReceivedFrom" />
-                        <input type="hidden" asp-for="DateReceivedTo" />
-                        <input type="hidden" asp-for="ReceivedById" />
-                        <input type="hidden" asp-for="DateComplaintClosedFrom" />
-                        <input type="hidden" asp-for="DateComplaintClosedTo" />
-                        <input type="hidden" asp-for="CallerName" />
-                        <input type="hidden" asp-for="CallerRepresents" />
-                        <input type="hidden" asp-for="ComplaintNature" />
-                        <input type="hidden" asp-for="ComplaintLocation" />
-                        <input type="hidden" asp-for="ComplaintDirections" />
-                        <input type="hidden" asp-for="ComplaintCity" />
-                        <input type="hidden" asp-for="ComplaintCountyId" />
-                        <input type="hidden" asp-for="ConcernId" />
-                        <input type="hidden" asp-for="SourceFacilityId" />
-                        <input type="hidden" asp-for="SourceFacilityName" />
-                        <input type="hidden" asp-for="SourceContactName" />
-                        <input type="hidden" asp-for="SourceStreet" />
-                        <input type="hidden" asp-for="SourceCity" />
-                        <input type="hidden" asp-for="SourceStateId" />
-                        <input type="hidden" asp-for="SourcePostalCode" />
-                        <input type="hidden" asp-for="Office" />
-                        <input type="hidden" asp-for="Owner" />
-                        <button class="usa-button-outline gaepd-button-inline-action" id="export-tool">Download search results</button>
-                    </form>
-                }
+                <form asp-action="Download" asp-controller="Complaints" class="usa-form" style="float:right">
+                    <input type="hidden" asp-for="Sort" />
+                    <input type="hidden" asp-for="ComplaintStatus" />
+                    <input type="hidden" asp-for="DeleteStatus" />
+                    <input type="hidden" asp-for="DateReceivedFrom" />
+                    <input type="hidden" asp-for="DateReceivedTo" />
+                    <input type="hidden" asp-for="ReceivedById" />
+                    <input type="hidden" asp-for="DateComplaintClosedFrom" />
+                    <input type="hidden" asp-for="DateComplaintClosedTo" />
+                    <input type="hidden" asp-for="CallerName" />
+                    <input type="hidden" asp-for="CallerRepresents" />
+                    <input type="hidden" asp-for="ComplaintNature" />
+                    <input type="hidden" asp-for="ComplaintLocation" />
+                    <input type="hidden" asp-for="ComplaintDirections" />
+                    <input type="hidden" asp-for="ComplaintCity" />
+                    <input type="hidden" asp-for="ComplaintCountyId" />
+                    <input type="hidden" asp-for="ConcernId" />
+                    <input type="hidden" asp-for="SourceFacilityId" />
+                    <input type="hidden" asp-for="SourceFacilityName" />
+                    <input type="hidden" asp-for="SourceContactName" />
+                    <input type="hidden" asp-for="SourceStreet" />
+                    <input type="hidden" asp-for="SourceCity" />
+                    <input type="hidden" asp-for="SourceStateId" />
+                    <input type="hidden" asp-for="SourcePostalCode" />
+                    <input type="hidden" asp-for="Office" />
+                    <input type="hidden" asp-for="Owner" />
+                    <button class="usa-button-outline gaepd-button-inline-action" id="export-tool">Download search results</button>
+                </form>
             }
         </caption>
         <thead>
@@ -207,11 +206,11 @@
                        asp-route-sort="@Model.IdSortAction"
                        asp-route-complaintStatus="@(Model.ComplaintStatus.ToString())"
                        asp-route-deleteStatus="@(Model.DeleteStatus.ToString())"
-                       asp-route-DateReceivedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedFrom))"
-                       asp-route-DateReceivedTo="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedTo))"
+                       asp-route-DateReceivedFrom="@(String.Format(CTS.FormatDateEdit, Model.DateReceivedFrom))"
+                       asp-route-DateReceivedTo="@(String.Format(CTS.FormatDateEdit, Model.DateReceivedTo))"
                        asp-route-ReceivedById="@(Model.ReceivedById)"
-                       asp-route-DateComplaintClosedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedFrom))"
-                       asp-route-DateComplaintClosedTo="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedTo))"
+                       asp-route-DateComplaintClosedFrom="@(String.Format(CTS.FormatDateEdit, Model.DateComplaintClosedFrom))"
+                       asp-route-DateComplaintClosedTo="@(String.Format(CTS.FormatDateEdit, Model.DateComplaintClosedTo))"
                        asp-route-CallerName="@(Model.CallerName)"
                        asp-route-CallerRepresents="@(Model.CallerRepresents)"
                        asp-route-ComplaintNature="@(Model.ComplaintNature)"
@@ -239,11 +238,11 @@
                        asp-route-sort="@Model.ReceivedDateSortAction"
                        asp-route-complaintStatus="@(Model.ComplaintStatus.ToString())"
                        asp-route-deleteStatus="@(Model.DeleteStatus.ToString())"
-                       asp-route-DateReceivedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedFrom))"
-                       asp-route-DateReceivedTo="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedTo))"
+                       asp-route-DateReceivedFrom="@(String.Format(CTS.FormatDateEdit, Model.DateReceivedFrom))"
+                       asp-route-DateReceivedTo="@(String.Format(CTS.FormatDateEdit, Model.DateReceivedTo))"
                        asp-route-ReceivedById="@(Model.ReceivedById)"
-                       asp-route-DateComplaintClosedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedFrom))"
-                       asp-route-DateComplaintClosedTo="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedTo))"
+                       asp-route-DateComplaintClosedFrom="@(String.Format(CTS.FormatDateEdit, Model.DateComplaintClosedFrom))"
+                       asp-route-DateComplaintClosedTo="@(String.Format(CTS.FormatDateEdit, Model.DateComplaintClosedTo))"
                        asp-route-CallerName="@(Model.CallerName)"
                        asp-route-CallerRepresents="@(Model.CallerRepresents)"
                        asp-route-ComplaintNature="@(Model.ComplaintNature)"
@@ -270,11 +269,11 @@
                        asp-route-sort="@Model.StatusSortAction"
                        asp-route-complaintStatus="@(Model.ComplaintStatus.ToString())"
                        asp-route-deleteStatus="@(Model.DeleteStatus.ToString())"
-                       asp-route-DateReceivedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedFrom))"
-                       asp-route-DateReceivedTo="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedTo))"
+                       asp-route-DateReceivedFrom="@(String.Format(CTS.FormatDateEdit, Model.DateReceivedFrom))"
+                       asp-route-DateReceivedTo="@(String.Format(CTS.FormatDateEdit, Model.DateReceivedTo))"
                        asp-route-ReceivedById="@(Model.ReceivedById)"
-                       asp-route-DateComplaintClosedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedFrom))"
-                       asp-route-DateComplaintClosedTo="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedTo))"
+                       asp-route-DateComplaintClosedFrom="@(String.Format(CTS.FormatDateEdit, Model.DateComplaintClosedFrom))"
+                       asp-route-DateComplaintClosedTo="@(String.Format(CTS.FormatDateEdit, Model.DateComplaintClosedTo))"
                        asp-route-CallerName="@(Model.CallerName)"
                        asp-route-CallerRepresents="@(Model.CallerRepresents)"
                        asp-route-ComplaintNature="@(Model.ComplaintNature)"
@@ -324,11 +323,14 @@
                             @Html.DisplayFor(m => item.SourceFacilityName)
                             @if (item.SourceLocation != null)
                             {
-                                <br />@Html.DisplayFor(m => item.SourceLocation)
+                                <br />
+                                @Html.DisplayFor(m => item.SourceLocation)
                             }
                             @if (item.SourceFacilityId != null)
                             {
-                                <br /><text>ID: </text>@Html.DisplayFor(m => item.SourceFacilityId)
+                                <br />
+                                <text>ID: </text>
+                                @Html.DisplayFor(m => item.SourceFacilityId)
                             }
                         }
                     </td>
@@ -360,11 +362,11 @@
                    asp-route-sort="@Model.Sort"
                    asp-route-complaintStatus="@(Model.ComplaintStatus.ToString())"
                    asp-route-deleteStatus="@(Model.DeleteStatus.ToString())"
-                   asp-route-DateReceivedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedFrom))"
-                   asp-route-DateReceivedTo="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedTo))"
+                   asp-route-DateReceivedFrom="@(String.Format(CTS.FormatDateEdit, Model.DateReceivedFrom))"
+                   asp-route-DateReceivedTo="@(String.Format(CTS.FormatDateEdit, Model.DateReceivedTo))"
                    asp-route-ReceivedById="@(Model.ReceivedById)"
-                   asp-route-DateComplaintClosedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedFrom))"
-                   asp-route-DateComplaintClosedTo="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedTo))"
+                   asp-route-DateComplaintClosedFrom="@(String.Format(CTS.FormatDateEdit, Model.DateComplaintClosedFrom))"
+                   asp-route-DateComplaintClosedTo="@(String.Format(CTS.FormatDateEdit, Model.DateComplaintClosedTo))"
                    asp-route-CallerName="@(Model.CallerName)"
                    asp-route-CallerRepresents="@(Model.CallerRepresents)"
                    asp-route-ComplaintNature="@(Model.ComplaintNature)"
@@ -391,11 +393,11 @@
                    asp-route-sort="@Model.Sort"
                    asp-route-complaintStatus="@(Model.ComplaintStatus.ToString())"
                    asp-route-deleteStatus="@(Model.DeleteStatus.ToString())"
-                   asp-route-DateReceivedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedFrom))"
-                   asp-route-DateReceivedTo="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedTo))"
+                   asp-route-DateReceivedFrom="@(String.Format(CTS.FormatDateEdit, Model.DateReceivedFrom))"
+                   asp-route-DateReceivedTo="@(String.Format(CTS.FormatDateEdit, Model.DateReceivedTo))"
                    asp-route-ReceivedById="@(Model.ReceivedById)"
-                   asp-route-DateComplaintClosedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedFrom))"
-                   asp-route-DateComplaintClosedTo="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedTo))"
+                   asp-route-DateComplaintClosedFrom="@(String.Format(CTS.FormatDateEdit, Model.DateComplaintClosedFrom))"
+                   asp-route-DateComplaintClosedTo="@(String.Format(CTS.FormatDateEdit, Model.DateComplaintClosedTo))"
                    asp-route-CallerName="@(Model.CallerName)"
                    asp-route-CallerRepresents="@(Model.CallerRepresents)"
                    asp-route-ComplaintNature="@(Model.ComplaintNature)"
@@ -438,11 +440,11 @@
                        asp-route-sort="@Model.Sort"
                        asp-route-complaintStatus="@(Model.ComplaintStatus.ToString())"
                        asp-route-deleteStatus="@(Model.DeleteStatus.ToString())"
-                       asp-route-DateReceivedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedFrom))"
-                       asp-route-DateReceivedTo="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedTo))"
+                       asp-route-DateReceivedFrom="@(String.Format(CTS.FormatDateEdit, Model.DateReceivedFrom))"
+                       asp-route-DateReceivedTo="@(String.Format(CTS.FormatDateEdit, Model.DateReceivedTo))"
                        asp-route-ReceivedById="@(Model.ReceivedById)"
-                       asp-route-DateComplaintClosedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedFrom))"
-                       asp-route-DateComplaintClosedTo="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedTo))"
+                       asp-route-DateComplaintClosedFrom="@(String.Format(CTS.FormatDateEdit, Model.DateComplaintClosedFrom))"
+                       asp-route-DateComplaintClosedTo="@(String.Format(CTS.FormatDateEdit, Model.DateComplaintClosedTo))"
                        asp-route-CallerName="@(Model.CallerName)"
                        asp-route-CallerRepresents="@(Model.CallerRepresents)"
                        asp-route-ComplaintNature="@(Model.ComplaintNature)"
@@ -479,11 +481,11 @@
                    asp-route-sort="@Model.Sort"
                    asp-route-complaintStatus="@(Model.ComplaintStatus.ToString())"
                    asp-route-deleteStatus="@(Model.DeleteStatus.ToString())"
-                   asp-route-DateReceivedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedFrom))"
-                   asp-route-DateReceivedTo="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedTo))"
+                   asp-route-DateReceivedFrom="@(String.Format(CTS.FormatDateEdit, Model.DateReceivedFrom))"
+                   asp-route-DateReceivedTo="@(String.Format(CTS.FormatDateEdit, Model.DateReceivedTo))"
                    asp-route-ReceivedById="@(Model.ReceivedById)"
-                   asp-route-DateComplaintClosedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedFrom))"
-                   asp-route-DateComplaintClosedTo="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedTo))"
+                   asp-route-DateComplaintClosedFrom="@(String.Format(CTS.FormatDateEdit, Model.DateComplaintClosedFrom))"
+                   asp-route-DateComplaintClosedTo="@(String.Format(CTS.FormatDateEdit, Model.DateComplaintClosedTo))"
                    asp-route-CallerName="@(Model.CallerName)"
                    asp-route-CallerRepresents="@(Model.CallerRepresents)"
                    asp-route-ComplaintNature="@(Model.ComplaintNature)"
@@ -510,11 +512,11 @@
                    asp-route-sort="@Model.Sort"
                    asp-route-complaintStatus="@(Model.ComplaintStatus.ToString())"
                    asp-route-deleteStatus="@(Model.DeleteStatus.ToString())"
-                   asp-route-DateReceivedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedFrom))"
-                   asp-route-DateReceivedTo="@(String.Format(CTS.FormatDateEdit,Model.DateReceivedTo))"
+                   asp-route-DateReceivedFrom="@(String.Format(CTS.FormatDateEdit, Model.DateReceivedFrom))"
+                   asp-route-DateReceivedTo="@(String.Format(CTS.FormatDateEdit, Model.DateReceivedTo))"
                    asp-route-ReceivedById="@(Model.ReceivedById)"
-                   asp-route-DateComplaintClosedFrom="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedFrom))"
-                   asp-route-DateComplaintClosedTo="@(String.Format(CTS.FormatDateEdit,Model.DateComplaintClosedTo))"
+                   asp-route-DateComplaintClosedFrom="@(String.Format(CTS.FormatDateEdit, Model.DateComplaintClosedFrom))"
+                   asp-route-DateComplaintClosedTo="@(String.Format(CTS.FormatDateEdit, Model.DateComplaintClosedTo))"
                    asp-route-CallerName="@(Model.CallerName)"
                    asp-route-CallerRepresents="@(Model.CallerRepresents)"
                    asp-route-ComplaintNature="@(Model.ComplaintNature)"

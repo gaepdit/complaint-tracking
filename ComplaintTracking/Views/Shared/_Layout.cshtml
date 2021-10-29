@@ -27,132 +27,100 @@
 </script>
     <script>(function (e, t, n) { var r = e.querySelectorAll("html")[0]; r.className = r.className.replace(/(^|\s)no-js(\s|$)/, "$1js$2") })(document, window, 0);</script>
     <meta name="google-site-verification" content="sxgavCGK6mG0GOiW6aJThcM3_U2U8_nm6E97mnACtQQ" />
-    <style>
-        body {
-            overflow-x: auto;
-        }
-
-        .gaepd-preserve-linebreaks {
-            word-break: break-word;
-        }
-        
-        a.no-visited, .no-visited a {
-            color: #0071bc;
-        }
-
-        a.no-visited:hover, a.no-visited:active,
-        .no-visited a:hover, .no-visited a:active {
-            color: #205493;
-        }
-        .no-visited .gaepd-pagination-inner a:hover,
-        .no-visited .gaepd-pagination-inner a:focus, 
-        .no-visited .gaepd-pagination-active, 
-        .no-visited .gaepd-pagination-active:visited {
-            background: #0071bc;
-            color: #ffffff;
-        }
-    </style>
 </head>
 <body>
-    <a class="usa-skipnav" href="#main-content">Skip to main content</a>
-    @if (User?.Identity is null || !User.Identity.IsAuthenticated)
-    {
-        <script type="text/javascript" src="https://georgia.gov/gagov_external_blocks/topper"></script>
-    }
-
-    <environment names="Development">
-        <div class="usa-grid">
-            <div class="usa-alert usa-alert-error">
-                <div class="usa-alert-body">
-                    <h3 class="usa-alert-heading">CTS development site</h3>
-                    <p class="usa-alert-text">
-                        This site is for development use only.
-                        Use the <a href="https://cts.gaepd.org">☆ CTS Production Site ☆</a> for production work.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </environment>
-
-    <environment names="Staging">
-        <div class="usa-grid">
-            <div class="usa-alert usa-alert-warning">
-                <div class="usa-alert-body">
-                    <h3 class="usa-alert-heading">Welcome to the CTS test site</h3>
-                    <p class="usa-alert-text">
-                        This site is only for <a asp-controller="Support" asp-action="Index">testing new features</a>.
-                        Use the <a href="https://cts.gaepd.org">☆ CTS Production Site ☆</a> for production work.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </environment>
-
-    @if (ViewData["NoHeader"] == null)
-    {
-        <header class="usa-header usa-header-basic" role="banner">
-            <div class="usa-nav-container">
-                <div class="usa-navbar gaepd-navbar">
-                    @if (User?.Identity is not null && User.Identity.IsAuthenticated)
-                    {
-                        <button class="usa-menu-btn">Menu</button>
-                    }
-                    <div class="usa-logo gaepd-logo" id="logo">
-                        <em class="usa-logo-text">
-                            @if (ViewData["Public"] == null)
-                            {
-                                <a accesskey="1" title="Home" aria-label="Home" class="gaepd-logo-link" asp-controller="Home" asp-action="Index">
-                                    <img src="~/assets/logos/epd-icon.svg" alt="" />
-                                    <environment names="Development"><span class="usa-label-big gaepd-label-dev">DEV</span></environment>
-                                    <environment names="Staging"><span class="usa-label-big gaepd-label-dev gaepd-label-uat">UAT</span></environment>
-                                    Complaint Tracking System
-                                </a>
-                            }
-                            else
-                            {
-                                <a accesskey="1" title="Public Portal" aria-label="Public Portal" class="gaepd-logo-link" asp-controller="Public" asp-action="Index">
-                                    <img src="~/assets/logos/epd-icon.svg" alt="" />
-                                    <environment names="Development"><span class="usa-label-big gaepd-label-dev">DEV</span></environment>
-                                    <environment names="Staging"><span class="usa-label-big gaepd-label-dev gaepd-label-uat">UAT</span></environment>
-                                    Complaint Tracking System Public Portal
-                                </a>
-                            }
-                        </em>
-                    </div>
-                </div>
-                @await Html.PartialAsync("_MenuPartial")
-            </div>
-        </header>
-    }
-
-    <main class="usa-grid usa-section usa-content" id="main-content">
-        @if (ViewData["AlertMessage"] != null)
-        {
-            @await Html.PartialAsync("_AlertPartial", ViewData["AlertMessage"])
-        }
-        @RenderBody()
-    </main>
-
-    <div class="usa-footer usa-footer-medium" role="contentinfo">
-        <div class="usa-grid usa-footer-return-to-top">
-            <a href="#" class="no-visited">Return to top</a>
-        </div>
+<environment exclude="Production">
+    <div style="position:sticky;top:0;z-index:10200;font-weight:700;text-transform:uppercase;text-align:center;text-shadow: 0 0 4px white;opacity:0.8;background:repeating-linear-gradient(135deg,#f6da52,#f6da52 10px,#ffef80 10px,#ffef80 20px);">
+        Test Site
     </div>
-    @if (User?.Identity is null || !User.Identity.IsAuthenticated)
-    {
-        <div class="gaepd-footer">
-            <ul class="gaepd-footer-menu">
-                <li><a href="https://epd.georgia.gov/">Environmental Protection Division</a></li>
-                <li><a href="https://georgia.gov/accessibility">Accessibility</a></li>
-                <li><a href="https://www.gadnr.org/ada">DNR Accessibility Notice</a></li>
-                <li><a href="https://georgia.gov/privacysecurity">Privacy/Security</a></li>
-            </ul>
-            <script type="text/javascript" src="https://georgia.gov/gagov_external_blocks/footer"></script>
-        </div>
-    }
+</environment>
+<a class="usa-skipnav" href="#main-content">Skip to main content</a>
+@if (User?.Identity is null || !User.Identity.IsAuthenticated)
+{
+    <script type="text/javascript" src="https://georgia.gov/gagov_external_blocks/topper"></script>
+}
 
-    @await Html.PartialAsync("_StandardScriptsPartial")
-    @RenderSection("PageScripts", required: false)
+@if (ViewData["NoHeader"] == null)
+{
+    <header class="usa-header usa-header-basic" role="banner">
+        <div class="usa-nav-container">
+            <div class="usa-navbar gaepd-navbar">
+                @if (User?.Identity is not null && User.Identity.IsAuthenticated)
+                {
+                    <button class="usa-menu-btn">Menu</button>
+                }
+                <div class="usa-logo gaepd-logo" id="logo">
+                    <em class="usa-logo-text">
+                        @if (ViewData["Public"] == null)
+                        {
+                            <a accesskey="1" title="Home" aria-label="Home" class="gaepd-logo-link" asp-controller="Home" asp-action="Index">
+                                <img src="~/assets/logos/epd-icon.svg" alt="" />
+                                <environment names="Development">
+                                    <span class="usa-label-big gaepd-label-dev">DEV</span>
+                                </environment>
+                                <environment names="Staging">
+                                    <span class="usa-label-big gaepd-label-dev gaepd-label-uat">Test</span>
+                                </environment>
+                                Complaint Tracking System
+                            </a>
+                        }
+                        else
+                        {
+                            <a accesskey="1" title="Public Portal" aria-label="Public Portal" class="gaepd-logo-link" asp-controller="Public" asp-action="Index">
+                                <img src="~/assets/logos/epd-icon.svg" alt="" />
+                                <environment names="Development">
+                                    <span class="usa-label-big gaepd-label-dev">DEV</span>
+                                </environment>
+                                <environment names="Staging">
+                                    <span class="usa-label-big gaepd-label-dev gaepd-label-uat">Test</span>
+                                </environment>
+                                Complaint Tracking System Public Portal
+                            </a>
+                        }
+                    </em>
+                </div>
+            </div>
+            @await Html.PartialAsync("_MenuPartial")
+        </div>
+    </header>
+}
+
+<main class="usa-grid usa-section usa-content" id="main-content">
+    @if (ViewData["AlertMessage"] != null)
+    {
+        @await Html.PartialAsync("_AlertPartial", ViewData["AlertMessage"])
+    }
+    @RenderBody()
+</main>
+
+<div class="usa-footer usa-footer-medium" role="contentinfo">
+    <div class="usa-grid usa-footer-return-to-top">
+        <a href="#" class="no-visited">Return to top</a>
+    </div>
+</div>
+@if (User?.Identity is null || !User.Identity.IsAuthenticated)
+{
+    <div class="gaepd-footer">
+        <ul class="gaepd-footer-menu">
+            <li>
+                <a href="https://epd.georgia.gov/">Environmental Protection Division</a>
+            </li>
+            <li>
+                <a href="https://georgia.gov/accessibility">Accessibility</a>
+            </li>
+            <li>
+                <a href="https://www.gadnr.org/ada">DNR Accessibility Notice</a>
+            </li>
+            <li>
+                <a href="https://georgia.gov/privacysecurity">Privacy/Security</a>
+            </li>
+        </ul>
+        <script type="text/javascript" src="https://georgia.gov/gagov_external_blocks/footer"></script>
+    </div>
+}
+
+@await Html.PartialAsync("_StandardScriptsPartial")
+@RenderSection("PageScripts", required: false)
 <script type="text/javascript">
   rg4js('apiKey', '@Configuration["RaygunSettings:ApiKey"]');
   rg4js('enableCrashReporting', true);
@@ -161,7 +129,7 @@
   rg4js('whitelistCrossOriginDomains', ['cdnjs.cloudflare.com','cdn.jsdelivr.net']);
 @if (User?.Identity?.IsAuthenticated == true)
 {
-  <text>
+    <text>
   rg4js('setUser', {
     isAnonymous: false,
     identifier: '@User.Identity.Name'

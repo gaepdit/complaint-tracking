@@ -4,111 +4,46 @@ namespace ComplaintTracking
 {
     public static class FileTypes
     {
-        public const string CsvContentType = "text/csv";
+        // Special content types
+        public const string ExcelContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
         public const string ZipContentType = "application/zip";
 
-        public static bool FileUploadAllowed(string fileName)
-        {
-            switch (Path.GetExtension(fileName).ToLower())
+        public static bool FileUploadAllowed(string fileName) =>
+            Path.GetExtension(fileName).ToLower() switch
             {
-                case ".txt":
-                case ".jpg":
-                case ".jpeg":
-                case ".png":
-                case ".gif":
-                case ".svg":
-                case ".pdf":
-                case ".html":
-                case ".htm":
-                case ".csv":
-                case ".xlsx":
-                case ".xls":
-                case ".rtf":
-                case ".docx":
-                case ".doc":
-                case ".ppt":
-                case ".pptx":
-                    return true;
-            }
+                ".txt" or ".jpg" or ".jpeg" or ".png" or ".gif" or ".svg" or ".pdf" or ".html" or ".htm" or
+                ".csv" or ".xlsx" or ".xls" or ".rtf" or ".docx" or ".doc" or ".ppt" or ".pptx" => true,
+                _ => false,
+            };
 
-            return false;
-        }
-
-        public static bool FilenameImpliesImage(string fileName)
-        {
-            switch (Path.GetExtension(fileName).ToLower())
+        public static bool FilenameImpliesImage(string fileName) =>
+            Path.GetExtension(fileName).ToLower() switch
             {
-                case ".bmp":
-                case ".jpg":
-                case ".jpeg":
-                case ".png":
-                case ".gif":
-                    return true;
-            }
+                ".bmp" or ".jpg" or ".jpeg" or ".png" or ".gif" => true,
+                _ => false,
+            };
 
-            return false;
-        }
-
-        public static string GetContentType(string fileName)
-        {
-            switch (Path.GetExtension(fileName).ToLower())
+        public static string GetContentType(string fileName) =>
+            Path.GetExtension(fileName).ToLower() switch
             {
-                case ".txt":
-                    return "text/plain";
-
-                case ".xlsx":
-                    return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-
-                case ".xls":
-                    return "application/ms-excel";
-
-                case ".docx":
-                    return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-
-                case ".doc":
-                    return "application/msword";
-
-                case ".pdf":
-                    return "application/pdf";
-
-                case ".jpg":
-                case ".jpeg":
-                    return "image/jpeg";
-
-                case ".png":
-                    return "image/png";
-
-                case ".bmp":
-                    return "image/bmp";
-
-                case ".gif":
-                    return "image/gif";
-
-                case ".svg":
-                    return "image/svg+xml";
-
-                case ".html":
-                case ".htm":
-                    return "text/html";
-
-                case ".rtf":
-                    return "application/rtf";
-
-                case ".zip":
-                    return ZipContentType;
-
-                case ".csv":
-                    return CsvContentType;
-
-                case ".ppt":
-                    return "application/vnd.ms-powerpoint";
-
-                case ".pptx":
-                    return "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-
-            }
-
-            return "application/octet-stream";
-        }
+                ".txt" => "text/plain",
+                ".xlsx" => ExcelContentType,
+                ".xls" => "application/ms-excel",
+                ".docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                ".doc" => "application/msword",
+                ".pdf" => "application/pdf",
+                ".jpg" or ".jpeg" => "image/jpeg",
+                ".png" => "image/png",
+                ".bmp" => "image/bmp",
+                ".gif" => "image/gif",
+                ".svg" => "image/svg+xml",
+                ".html" or ".htm" => "text/html",
+                ".rtf" => "application/rtf",
+                ".zip" => ZipContentType,
+                ".csv" => "text/csv",
+                ".ppt" => "application/vnd.ms-powerpoint",
+                ".pptx" => "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                _ => "application/octet-stream",
+            };
     }
 }

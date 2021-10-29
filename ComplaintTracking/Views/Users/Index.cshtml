@@ -47,7 +47,7 @@
             @Html.LabelFor(m => m.Role)
             @Html.DropDownListFor(m => m.Role, Html.GetEnumSelectList(typeof(CtsRole)), "(any)")
             <small>
-                <a href="~/Users/Roles#cts-roles" target="_blank">Description of CTS Roles</a>
+                <a asp-controller="Users" asp-action="Roles" asp-fragment="cts-roles" target="_blank">Description of CTS Roles</a>
             </small>
         </div>
     </fieldset>

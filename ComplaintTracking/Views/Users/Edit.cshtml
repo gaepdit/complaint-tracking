@@ -34,7 +34,7 @@
 
     <fieldset class="usa-fieldset-inputs">
         <legend>CTS Roles</legend>
-        <p>View a detailed description of <a href="~/Users/Roles#cts-roles" target="_blank">user roles and capabilities</a>.</p>
+        <p>View a detailed description of <a asp-controller="Users" asp-action="Roles" asp-fragment="cts-roles" target="_blank">user roles and capabilities</a>.</p>
 
         <ul class="usa-unstyled-list">
             @if (Model.CurrentUserIsDivisionManager)

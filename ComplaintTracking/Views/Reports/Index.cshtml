@@ -26,7 +26,7 @@
 </ul>
 
 
-@if (User.Identity.IsAuthenticated && User.IsInRole(nameof(CtsRole.DataExport)))
+@if (User?.Identity != null && User.Identity.IsAuthenticated && User.IsInRole(nameof(CtsRole.DataExport)))
 {
     <h1>Data Export</h1>
 
