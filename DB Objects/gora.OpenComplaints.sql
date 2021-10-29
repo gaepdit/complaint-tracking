@@ -9,7 +9,7 @@ GO
 
 Author:     Doug Waldron
 Created:    2017-12-21
-Overview:   Redacted view of closed CTS complaints
+Overview:   Redacted view of open CTS complaints
 
 Part of a set of queries used to respond to a public GORA request for 
 an updated copy of the CTS database 

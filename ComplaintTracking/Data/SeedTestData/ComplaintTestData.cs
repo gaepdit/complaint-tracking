@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
 using ComplaintTracking.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace ComplaintTracking.Data
 {
@@ -17,8 +17,10 @@ namespace ComplaintTracking.Data
             var concern1 = await _context.LookupConcerns.FirstOrDefaultAsync(e => e.Name == "Sewage spill");
             var concern2 = await _context.LookupConcerns.FirstOrDefaultAsync(e => e.Name == "Hazardous Site Response");
 
-            Complaint[] c = {
-                new Complaint {
+            Complaint[] c =
+            {
+                new()
+                {
                     DateReceived = DateTime.Parse("2017-06-13"),
                     ReceivedBy = user,
                     DateEntered = DateTime.Parse("2017-06-28 15:49:01"),
@@ -74,7 +76,8 @@ namespace ComplaintTracking.Data
                     SourceTertiaryPhoneType = null,
                     Status = ComplaintStatus.Closed,
                 },
-                new Complaint {
+                new()
+                {
                     DateReceived = DateTime.Parse("2017-06-13"),
                     ReceivedBy = user,
                     DateEntered = DateTime.Parse("2017-06-28 15:49:01"),
@@ -128,7 +131,8 @@ namespace ComplaintTracking.Data
                     SourceTertiaryPhoneType = null,
                     Status = ComplaintStatus.New,
                 },
-                new Complaint {
+                new()
+                {
                     DateReceived = DateTime.Parse("2017-06-13"),
                     ReceivedBy = user,
                     DateEntered = DateTime.Parse("2017-06-28 15:49:01"),
@@ -185,7 +189,8 @@ namespace ComplaintTracking.Data
                     SourceTertiaryPhoneType = null,
                     Status = ComplaintStatus.ReviewPending,
                 },
-                new Complaint {
+                new()
+                {
                     DateReceived = DateTime.Parse("2017-06-13"),
                     ReceivedBy = user,
                     DateEntered = DateTime.Parse("2017-06-28 15:49:01"),
@@ -240,7 +245,8 @@ namespace ComplaintTracking.Data
                     SourceTertiaryPhoneType = null,
                     Status = ComplaintStatus.UnderInvestigation,
                 },
-                new Complaint {
+                new()
+                {
                     DateReceived = DateTime.Parse("2017-06-13"),
                     ReceivedBy = user,
                     DateEntered = DateTime.Parse("2017-06-28 15:49:01"),
@@ -296,7 +302,8 @@ namespace ComplaintTracking.Data
                     SourceTertiaryPhoneType = null,
                     Status = ComplaintStatus.ReviewPending,
                 },
-                new Complaint {
+                new()
+                {
                     DateReceived = DateTime.Parse("2018-06-13"),
                     ReceivedBy = user,
                     DateEntered = DateTime.Parse("2018-06-28 15:49:01"),
@@ -352,7 +359,64 @@ namespace ComplaintTracking.Data
                     SourceTertiaryPhoneType = null,
                     Status = ComplaintStatus.Closed,
                 },
-           };
+                new()
+                {
+                    DateReceived = DateTime.Parse("2015-06-13"),
+                    ReceivedBy = user,
+                    DateEntered = DateTime.Parse("2015-06-28 15:49:01"),
+                    EnteredBy = user,
+                    CurrentOffice = office,
+                    CallerCity = "ATLANTA",
+                    CallerEmail = null,
+                    CallerName = "Joe Newman",
+                    CallerPhoneNumber = "(678) 555-1212",
+                    CallerPhoneType = PhoneType.Home,
+                    CallerPostalCode = "30121",
+                    CallerRepresents = "himself",
+                    CallerSecondaryPhoneNumber = "(678) 848-8033",
+                    CallerSecondaryPhoneType = PhoneType.Cell,
+                    CallerState = state,
+                    CallerStreet = "123 Street Name",
+                    CallerStreet2 = null,
+                    CallerTertiaryPhoneNumber = null,
+                    CallerTertiaryPhoneType = null,
+                    ReviewBy = user,
+                    ComplaintActions = null,
+                    ComplaintCity = "Atlanta",
+                    ComplaintClosed = true,
+                    ComplaintCounty = county,
+                    ComplaintDirections = null,
+                    ComplaintLocation = "123 Street Name" + Environment.NewLine + "Atlanta, GA 30121",
+                    ComplaintNature = "Random complaint (to be closed administratively)",
+                    PrimaryConcern = concern1,
+                    SecondaryConcern = concern2,
+                    ComplaintTransitions = null,
+                    CurrentOwner = user,
+                    DateCurrentOwnerAssigned = DateTime.Parse("2015-06-28 15:49:01"),
+                    DateCurrentOwnerAccepted = DateTime.Parse("2015-06-28 15:49:01"),
+                    DateComplaintClosed = DateTime.Parse("Jul 6, 2015"),
+                    DateDeleted = null,
+                    DeleteComments = null,
+                    Deleted = false,
+                    ReviewComments = "Administratively closed",
+                    SourceCity = "ATLANTA",
+                    SourceContactName = null,
+                    SourceEmail = null,
+                    SourceFacilityId = null,
+                    SourceFacilityName = null,
+                    SourcePhoneNumber = null,
+                    SourcePhoneType = null,
+                    SourcePostalCode = null,
+                    SourceSecondaryPhoneNumber = null,
+                    SourceSecondaryPhoneType = null,
+                    SourceState = state,
+                    SourceStreet = null,
+                    SourceStreet2 = null,
+                    SourceTertiaryPhoneNumber = null,
+                    SourceTertiaryPhoneType = null,
+                    Status = ComplaintStatus.AdministrativelyClosed,
+                },
+            };
 
             return c;
         }

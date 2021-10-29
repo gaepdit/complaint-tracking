@@ -75,7 +75,7 @@ namespace ComplaintTracking
             string SourcePostalCode = null,
             Guid? Office = null,
             string Owner = null
-            )
+        )
         {
             var complaints = _context.Complaints.AsNoTracking();
 
@@ -84,13 +84,17 @@ namespace ComplaintTracking
             {
                 complaints = complaintStatus.Value switch
                 {
-                    SearchComplaintStatus.Closed => complaints.Where(e => e.Status == ComplaintStatus.Closed),
+                    SearchComplaintStatus.Closed => complaints.Where(e =>
+                        e.Status == ComplaintStatus.Closed),
+                    SearchComplaintStatus.AdministrativelyClosed => complaints.Where(e =>
+                        e.Status == ComplaintStatus.AdministrativelyClosed),
+                    SearchComplaintStatus.AllClosed => complaints.Where(e => e.ComplaintClosed),
                     SearchComplaintStatus.New => complaints.Where(e => e.Status == ComplaintStatus.New),
                     SearchComplaintStatus.ReviewPending => complaints.Where(e =>
                         e.Status == ComplaintStatus.ReviewPending),
                     SearchComplaintStatus.UnderInvestigation => complaints.Where(e =>
                         e.Status == ComplaintStatus.UnderInvestigation),
-                    SearchComplaintStatus.Open => complaints.Where(e => e.Status != ComplaintStatus.Closed),
+                    SearchComplaintStatus.AllOpen => complaints.Where(e => !e.ComplaintClosed),
                     _ => complaints
                 };
             }
@@ -126,12 +130,14 @@ namespace ComplaintTracking
 
             if (DateComplaintClosedFrom.HasValue)
             {
-                complaints = complaints.Where(e => e.DateComplaintClosed.HasValue && DateComplaintClosedFrom.Value <= e.DateComplaintClosed.Value);
+                complaints = complaints.Where(e =>
+                    e.DateComplaintClosed.HasValue && DateComplaintClosedFrom.Value <= e.DateComplaintClosed.Value);
             }
 
             if (DateComplaintClosedTo.HasValue)
             {
-                complaints = complaints.Where(e => e.DateComplaintClosed.HasValue && e.DateComplaintClosed.Value.Date <= DateComplaintClosedTo.Value);
+                complaints = complaints.Where(e =>
+                    e.DateComplaintClosed.HasValue && e.DateComplaintClosed.Value.Date <= DateComplaintClosedTo.Value);
             }
 
             if (!string.IsNullOrEmpty(CallerName))
@@ -156,7 +162,8 @@ namespace ComplaintTracking
 
             if (!string.IsNullOrEmpty(ComplaintDirections))
             {
-                complaints = complaints.Where(e => e.ComplaintDirections.ToLower().Contains(ComplaintDirections.ToLower()));
+                complaints = complaints.Where(e =>
+                    e.ComplaintDirections.ToLower().Contains(ComplaintDirections.ToLower()));
             }
 
             if (!string.IsNullOrEmpty(ComplaintCity))
@@ -166,7 +173,8 @@ namespace ComplaintTracking
 
             if (ComplaintCountyId.HasValue)
             {
-                complaints = complaints.Where(e => e.ComplaintCountyId.HasValue && e.ComplaintCountyId.Value == ComplaintCountyId.Value);
+                complaints = complaints.Where(e =>
+                    e.ComplaintCountyId.HasValue && e.ComplaintCountyId.Value == ComplaintCountyId.Value);
             }
 
             if (ConcernId.HasValue)
@@ -183,7 +191,8 @@ namespace ComplaintTracking
 
             if (!string.IsNullOrEmpty(SourceFacilityName))
             {
-                complaints = complaints.Where(e => e.SourceFacilityName.ToLower().Contains(SourceFacilityName.ToLower()));
+                complaints =
+                    complaints.Where(e => e.SourceFacilityName.ToLower().Contains(SourceFacilityName.ToLower()));
             }
 
             if (!string.IsNullOrEmpty(SourceContactName))
@@ -205,7 +214,8 @@ namespace ComplaintTracking
 
             if (SourceStateId.HasValue)
             {
-                complaints = complaints.Where(e => e.SourceStateId.HasValue && e.SourceStateId.Value == SourceStateId.Value);
+                complaints = complaints.Where(e =>
+                    e.SourceStateId.HasValue && e.SourceStateId.Value == SourceStateId.Value);
             }
 
             if (!string.IsNullOrEmpty(SourcePostalCode))

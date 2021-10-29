@@ -136,13 +136,18 @@ namespace ComplaintTracking.ViewModels
             StatusDesc,
         }
 
+        // The order of the values in this enum is intentional:
+        // The listed order of the items determines the order they appear in the search form dropdown,
+        // and the hard-coded integer values ensure that previous bookmarks don't break.
         public enum SearchComplaintStatus
         {
-            New,
+            [Display(Name = "All Open")] AllOpen,
+            [Display(Name = "All Closed")] AllClosed,
+            [Display(Name = "New")] New,
             [Display(Name = "Under Investigation")] UnderInvestigation,
             [Display(Name = "Review Pending")] ReviewPending,
             [Display(Name = "Approved/Closed")] Closed,
-            [Display(Name = "All Open")] Open,
+            [Display(Name = "Administratively Closed")] AdministrativelyClosed,
         }
 
         public enum SearchDeleteStatus
