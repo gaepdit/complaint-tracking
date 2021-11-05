@@ -248,7 +248,8 @@ namespace ComplaintTracking
                 .Include(e => e.CurrentOffice)
                 .Include(e => e.CurrentOwner)
                 .Include(e => e.ReceivedBy)
-                .Include(e => e.SourceState);
+                .Include(e => e.SourceState)
+                .Include(e => e.PrimaryConcern);
         }
     }
 }

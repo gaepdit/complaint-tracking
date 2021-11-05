@@ -19,6 +19,7 @@ namespace ComplaintTracking.ViewModels
             SetStatus(e.Status);
             CurrentOfficeName = e.CurrentOffice?.Name;
             CurrentOwnerName = e.CurrentOwner?.SortableFullName;
+            PrimaryConcern = e.PrimaryConcern.Name;
         }
 
         #region ID column
@@ -87,6 +88,13 @@ namespace ComplaintTracking.ViewModels
             NullDisplayText = CTS.NoOfficeDisplayText,
             ConvertEmptyStringToNull = true)]
         public string CurrentOfficeName { get; set; }
+
+        #endregion
+
+        #region Details column
+
+        [Display(Name = "Primary Area of Concern")]
+        public string PrimaryConcern { get; set; }
 
         #endregion
 
