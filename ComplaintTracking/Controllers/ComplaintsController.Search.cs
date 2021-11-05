@@ -163,12 +163,22 @@ namespace ComplaintTracking.Controllers
                 // Export
                 if (export)
                 {
-                    var list = await complaints
-                        .Select(e => new SearchResultsExportViewModel(e))
-                        .ToListAsync().ConfigureAwait(false);
-
                     var fileName = $"cts_search_{DateTime.Now:yyyy-MM-dd-HH-mm-ss.FFF}.xlsx";
-                    return File(list.ExportExcelAsByteArray(), FileTypes.ExcelContentType, fileName);
+                    
+                    if (includeDeleted && deleteStatus is not null)
+                    {
+                        var list = await complaints
+                            .Select(e => new SearchResultsWithDeleteExportViewModel(e))
+                            .ToListAsync().ConfigureAwait(false);
+                        return File(list.ExportExcelAsByteArray(), FileTypes.ExcelContentType, fileName);
+                    }
+                    else
+                    {
+                        var list = await complaints
+                            .Select(e => new SearchResultsExportViewModel(e))
+                            .ToListAsync().ConfigureAwait(false);
+                        return File(list.ExportExcelAsByteArray(), FileTypes.ExcelContentType, fileName);
+                    }
                 }
 
                 // Paging

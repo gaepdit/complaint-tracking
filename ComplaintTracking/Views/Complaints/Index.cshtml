@@ -298,7 +298,7 @@
                 <th scope="col">@Html.DisplayNameFor(m => m.Complaints.FirstOrDefault().SourceFacilityName)</th>
                 <th scope="col">@Html.DisplayNameFor(m => m.Complaints.FirstOrDefault().CurrentOwnerName)</th>
                 <th scope="col">@Html.DisplayNameFor(m => m.Complaints.FirstOrDefault().PrimaryConcern)</th>
-                @if (Model.IncludeDeleted)
+                @if (Model.IncludeDeleted && Model.DeleteStatus is not null)
                 {
                     <th scope="col">@Html.DisplayNameFor(m => m.Complaints.FirstOrDefault().Deleted)</th>
                 }
@@ -340,7 +340,7 @@
                         @Html.DisplayFor(m => item.CurrentOfficeName)
                     </td>
                     <td data-label="@Html.DisplayNameFor(m => item.PrimaryConcern)">@item.PrimaryConcern</td>
-                    @if (Model.IncludeDeleted)
+                    @if (Model.IncludeDeleted && Model.DeleteStatus is not null)
                     {
                         <td data-label="@Html.DisplayNameFor(m => item.Deleted)">@Html.DisplayFor(m => item.Deleted)</td>
                     }
