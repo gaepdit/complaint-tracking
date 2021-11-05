@@ -1,6 +1,7 @@
 ﻿using ClosedXML.Attributes;
 using ComplaintTracking.Models;
 using System;
+using System.Linq;
 
 namespace ComplaintTracking.ViewModels
 {
@@ -18,6 +19,13 @@ namespace ComplaintTracking.ViewModels
             CurrentOfficeName = e.CurrentOffice?.Name;
             CurrentOwnerName = e.CurrentOwner?.SortableFullName;
             ReviewComments = e.ReviewComments;
+            PrimaryConcern = e.PrimaryConcern.Name;
+            ComplaintNature = e.ComplaintNature;
+
+            var _firstComplaintAction = e.ComplaintActions.FirstOrDefault();
+            ActionDate = _firstComplaintAction?.ActionDate;
+            ActionType = _firstComplaintAction?.ActionType.Name;
+            ActionComments = _firstComplaintAction?.Comments;
         }
 
         [XLColumn(Header = "Complaint ID")]
@@ -31,6 +39,9 @@ namespace ComplaintTracking.ViewModels
 
         [XLColumn(Header = "Status")]
         public string Status { get; set; }
+
+        [XLColumn(Header = "Review Comments")]
+        public string ReviewComments { get; set; }
 
         [XLColumn(Header = "Source Name")]
         public string SourceFacilityName { get; set; }
@@ -47,7 +58,19 @@ namespace ComplaintTracking.ViewModels
         [XLColumn(Header = "EPD Office")]
         public string CurrentOfficeName { get; set; }
 
-        [XLColumn(Header = "Review Comments")]
-        public string ReviewComments { get; set; }
+        [XLColumn(Header = "Primary Area of Concern")]
+        public string PrimaryConcern { get; set; }
+
+        [XLColumn(Header = "Nature of Complaint")]
+        public string ComplaintNature { get; set; }
+
+        [XLColumn(Header = "Most Recent Action")]
+        public DateTime? ActionDate { get; set; }
+
+        [XLColumn(Header = "Action Type")]
+        public string ActionType { get; set; }
+
+        [XLColumn(Header = "Action Comments")]
+        public string ActionComments { get; set; }
     }
 }
