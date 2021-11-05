@@ -159,34 +159,36 @@
                 </th>
                 <th scope="col">@Html.DisplayNameFor(m => m.Complaints.FirstOrDefault().SourceFacilityName)</th>
                 <th scope="col">@Html.DisplayNameFor(m => m.Complaints.FirstOrDefault().CurrentOfficeName)</th>
+                <th scope="col">@Html.DisplayNameFor(m => m.Complaints.FirstOrDefault().PrimaryConcern)</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model.Complaints)
             {
-                <tr>
-                    <th scope="row" data-label="@Html.DisplayNameFor(m => item.ComplaintId)">
-                        <a class="usa-button usa-button-outline" asp-action="ComplaintDetails" asp-route-id="@item.ComplaintId">@Html.DisplayFor(m => item.ComplaintId)</a>
-                    </th>
-                    <td data-label="@Html.DisplayNameFor(m => item.DateReceived)">@Html.DisplayFor(m => item.DateReceived)</td>
-                    <td data-label="@Html.DisplayNameFor(m => item.SourceFacilityName)">
-                        @if (string.IsNullOrEmpty(item.SourceFacilityName) && string.IsNullOrEmpty(item.SourceLocation))
+            <tr>
+                <th scope="row" data-label="@Html.DisplayNameFor(m => item.ComplaintId)">
+                    <a class="usa-button usa-button-outline" asp-action="ComplaintDetails" asp-route-id="@item.ComplaintId">@Html.DisplayFor(m => item.ComplaintId)</a>
+                </th>
+                <td data-label="@Html.DisplayNameFor(m => item.DateReceived)">@Html.DisplayFor(m => item.DateReceived)</td>
+                <td data-label="@Html.DisplayNameFor(m => item.SourceFacilityName)">
+                    @if (string.IsNullOrEmpty(item.SourceFacilityName) && string.IsNullOrEmpty(item.SourceLocation))
+                    {
+                        @CTS.NotEnteredDisplayText
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(m => item.SourceFacilityName)
+                        @if (item.SourceLocation != null)
                         {
-                            @CTS.NotEnteredDisplayText
+                            <br />@Html.DisplayFor(m => item.SourceLocation)
                         }
-                        else
-                        {
-                            @Html.DisplayFor(m => item.SourceFacilityName)
-                            @if (item.SourceLocation != null)
-                            {
-                                <br />@Html.DisplayFor(m => item.SourceLocation)
-                            }
-                        }
-                    </td>
-                    <td data-label="@Html.DisplayNameFor(m => item.CurrentOfficeName)">
-                        @Html.DisplayFor(m => item.CurrentOfficeName)
-                    </td>
-                </tr>
+                    }
+                </td>
+                <td data-label="@Html.DisplayNameFor(m => item.CurrentOfficeName)">
+                    @Html.DisplayFor(m => item.CurrentOfficeName)
+                </td>
+                <td data-label="@Html.DisplayNameFor(m => item.PrimaryConcern)">@item.PrimaryConcern</td>
+            </tr>
             }
         </tbody>
     </table>
