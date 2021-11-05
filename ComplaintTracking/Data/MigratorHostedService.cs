@@ -32,7 +32,7 @@ namespace ComplaintTracking.Data
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
             // Initialize database
-            if (dbContext.Database.IsSqlite())
+            if (Startup.IsLocal || dbContext.Database.IsSqlite())
             {
                 await InitializeLocalAsync(dbContext, roleManager, userManager);
             }
