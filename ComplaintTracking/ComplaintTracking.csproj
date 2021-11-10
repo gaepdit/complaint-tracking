@@ -1,12 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Configurations>Debug;Release</Configurations>
     <AssemblyVersion>2021.11.1</AssemblyVersion>
     <UserSecretsId>aspnet-ComplaintTracking-8e46fb5a-9a0a-4c6d-9c94-1676097ed2f4</UserSecretsId>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="AsyncFixer" Version="1.5.1" Condition="'$(Configuration)' == 'Debug'">
       <PrivateAssets>all</PrivateAssets>
@@ -31,19 +29,15 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-
   <ItemGroup>
     <None Include="wwwroot\static\Complaint-Tracking-System-Instructions.pdf" />
   </ItemGroup>
-
   <Target Name="CreateLogsFolderDuringCliPublish" AfterTargets="AfterPublish">
     <MakeDir Directories="$(PublishDir)logs" Condition="!Exists('$(PublishDir)logs')" />
   </Target>
-
   <Target Name="CreateLogsFolderDuringVSPublish" AfterTargets="FileSystemPublish">
     <MakeDir Directories="$(PublishUrl)logs" Condition="!Exists('$(PublishUrl)logs')" />
   </Target>
-
   <Target Name="ApplyXdtConfigTransform" BeforeTargets="_TransformWebConfig">
     <PropertyGroup>
       <_SourceWebConfig>$(MSBuildThisFileDirectory)Web.config</_SourceWebConfig>
@@ -52,5 +46,4 @@
     </PropertyGroup>
     <Exec Command="dotnet xdt --source &quot;$(_SourceWebConfig)&quot; --transform &quot;$(_XdtTransform)&quot; --output &quot;$(_TargetWebConfig)&quot;" Condition="Exists('$(_XdtTransform)')" />
   </Target>
-
 </Project>
