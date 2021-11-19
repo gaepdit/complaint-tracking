@@ -1,14 +1,14 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using ComplaintTracking.AlertMessages;
+﻿using ComplaintTracking.AlertMessages;
 using ComplaintTracking.Data;
 using ComplaintTracking.Generic;
 using ComplaintTracking.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using static ComplaintTracking.ViewModels.PublicSearchViewModel;
 
 namespace ComplaintTracking.Controllers
@@ -29,7 +29,7 @@ namespace ComplaintTracking.Controllers
         {
             if (model.FindComplaint.HasValue && ModelState.IsValid)
             {
-                return RedirectToAction("ComplaintDetails", "Public", new {id = model.FindComplaint});
+                return RedirectToAction("ComplaintDetails", "Public", new { id = model.FindComplaint });
             }
 
             const string msg = "Please enter a Complaint ID first.";
@@ -193,7 +193,8 @@ namespace ComplaintTracking.Controllers
                 // Include
                 complaints = complaints
                     .Include(e => e.CurrentOffice)
-                    .Include(e => e.SourceState);
+                    .Include(e => e.SourceState)
+                    .Include(e => e.PrimaryConcern);
 
                 // Paging
                 complaints = complaints
@@ -252,7 +253,7 @@ namespace ComplaintTracking.Controllers
                 return NotFound();
             }
 
-            return RedirectToAction(nameof(Attachment), new {attachmentId, fileName});
+            return RedirectToAction(nameof(Attachment), new { attachmentId, fileName });
         }
 
         [Route("/Public/Attachment/{attachmentId}/{fileName}")]

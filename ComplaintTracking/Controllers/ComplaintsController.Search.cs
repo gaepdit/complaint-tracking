@@ -157,31 +157,44 @@ namespace ComplaintTracking.Controllers
                         break;
                 }
 
-                // Count
-                var count = await complaints.CountAsync().ConfigureAwait(false);
-
                 // Export
                 if (export)
                 {
-                    var list = await complaints
-                        .Select(e => new SearchResultsExportViewModel(e))
-                        .ToListAsync().ConfigureAwait(false);
-
                     var fileName = $"cts_search_{DateTime.Now:yyyy-MM-dd-HH-mm-ss.FFF}.xlsx";
-                    return File(list.ExportExcelAsByteArray(), FileTypes.ExcelContentType, fileName);
+                    complaints = complaints
+                        .Include(e => e.ComplaintActions.OrderByDescending(e => e.ActionDate)
+                        .ThenByDescending(e => e.DateEntered).Take(1))
+                        // including the action type navigation property causes this query to fail on SQLite
+                        .ThenInclude(e => e.ActionType); 
+
+                    if (includeDeleted && deleteStatus is not null)
+                    {
+                        var list = await complaints
+                            .Select(e => new SearchResultsWithDeleteExportViewModel(e))
+                            .ToListAsync().ConfigureAwait(false);
+                        return File(list.ExportExcelAsByteArray(), FileTypes.ExcelContentType, fileName);
+                    }
+                    else
+                    {
+                        var list = await complaints
+                            .Select(e => new SearchResultsExportViewModel(e))
+                            .ToListAsync().ConfigureAwait(false);
+                        return File(list.ExportExcelAsByteArray(), FileTypes.ExcelContentType, fileName);
+                    }
                 }
 
                 // Paging
+                var totalCount = await complaints.CountAsync().ConfigureAwait(false);
+
                 complaints = complaints
                     .Skip((page - 1) * CTS.PageSize)
                     .Take(CTS.PageSize);
 
-                // Select
                 var items = await complaints
                     .Select(e => new ComplaintListViewModel(e))
                     .ToListAsync().ConfigureAwait(false);
 
-                model.Complaints = new PaginatedList<ComplaintListViewModel>(items, count, page);
+                model.Complaints = new PaginatedList<ComplaintListViewModel>(items, totalCount, page);
             }
 
             return View(model);

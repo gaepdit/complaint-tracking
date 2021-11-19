@@ -10,7 +10,7 @@ namespace ComplaintTracking
 {
     public static class DataExport
     {
-        public static async Task<MemoryStream> GetCsvMemoryStreamAsync<T>(this List<T> records)
+        public static async Task<MemoryStream> GetCsvMemoryStreamAsync<T>(this IEnumerable<T> records)
         {
             var config = new CsvConfiguration(CultureInfo.InvariantCulture) { SanitizeForInjection = true };
             var ms = new MemoryStream();
@@ -26,7 +26,7 @@ namespace ComplaintTracking
             return ms;
         }
 
-        public static byte[] ExportExcelAsByteArray<T>(this List<T> records)
+        public static byte[] ExportExcelAsByteArray<T>(this IEnumerable<T> records)
         {
             var wb = new XLWorkbook();
             var ws = wb.AddWorksheet("CTS Search Results");

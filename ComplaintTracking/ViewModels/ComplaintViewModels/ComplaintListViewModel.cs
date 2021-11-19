@@ -10,25 +10,23 @@ namespace ComplaintTracking.ViewModels
         {
             ComplaintId = e.Id;
             DateReceived = e.DateReceived;
-            SetDeleted(e.Deleted);
+            Deleted = e.Deleted ? "Deleted" : "No";
             ReceivedByName = e.ReceivedBy?.SortableFullName;
             SourceFacilityId = e.SourceFacilityId;
             SourceFacilityName = e.SourceFacilityName;
-            SetSourceCity(e.SourceCity);
-            SetSourceStateName(e.SourceState?.Name);
-            SetStatus(e.Status);
+            SourceLocation = StringFunctions.ConcatNonEmptyStrings(new[] { e.SourceCity, e.SourceState?.Name }, ", ");
+            Status = e.Status.GetDisplayName();
             CurrentOfficeName = e.CurrentOffice?.Name;
             CurrentOwnerName = e.CurrentOwner?.SortableFullName;
+            PrimaryConcern = e.PrimaryConcern.Name;
         }
 
-        #region ID column
+        // ID column
 
         [Display(Name = "Complaint ID")]
         public int ComplaintId { get; set; }
 
-        #endregion
-
-        #region Received column
+        // Received column
 
         [Display(Name = "Received By")]
         public string ReceivedByName { get; set; }
@@ -37,34 +35,19 @@ namespace ComplaintTracking.ViewModels
         [DisplayFormat(DataFormatString = CTS.FormatDateShortDisplay)]
         public DateTime DateReceived { get; set; }
 
-        #endregion
+        // Status column
 
-        #region Status column
+        public string Status { get; set; }
 
-        private ComplaintStatus _status;
-
-        private void SetStatus(ComplaintStatus value) => _status = value;
-
-        public string Status => _status.GetDisplayName();
-
-        #endregion
-
-        #region Source column
+        // Source column
 
         [Display(Name = "Source Name")]
         [DisplayFormat(ConvertEmptyStringToNull = true)]
         public string SourceFacilityName { get; set; }
 
-        private string _sourceStateName;
-        private void SetSourceStateName(string value) => _sourceStateName = value;
-
-        private string _sourceCity;
-        private void SetSourceCity(string value) => _sourceCity = value;
-
         [Display(Name = "Source Location")]
         [DisplayFormat(ConvertEmptyStringToNull = true)]
-        public string SourceLocation =>
-            StringFunctions.ConcatNonEmptyStrings(new[] { _sourceCity, _sourceStateName }, ", ");
+        public string SourceLocation { get; set; }
 
         [Display(Name = "Facility ID")]
         [DisplayFormat(
@@ -72,9 +55,7 @@ namespace ComplaintTracking.ViewModels
             ConvertEmptyStringToNull = true)]
         public string SourceFacilityId { get; set; }
 
-        #endregion
-
-        #region Assignment column
+        // Assignment column
 
         [Display(Name = "Current Assignment")]
         [DisplayFormat(
@@ -88,17 +69,14 @@ namespace ComplaintTracking.ViewModels
             ConvertEmptyStringToNull = true)]
         public string CurrentOfficeName { get; set; }
 
-        #endregion
+        // Area of Concern column
 
-        #region Deleted column
+        [Display(Name = "Primary Area of Concern")]
+        public string PrimaryConcern { get; set; }
 
-        private bool _deleted;
-
-        private void SetDeleted(bool value) => _deleted = value;
+        // Deleted column
 
         [Display(Name = "Deleted?")]
-        public string Deleted => _deleted ? "Deleted" : "No";
-
-        #endregion
+        public string Deleted { get; set; }
     }
 }

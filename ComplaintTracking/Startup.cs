@@ -23,6 +23,7 @@ namespace ComplaintTracking
 {
     public class Startup
     {
+        public static bool IsLocal { get; set; }
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -41,7 +42,9 @@ namespace ComplaintTracking
             {
                 if (string.IsNullOrEmpty(connectionString))
                 {
-                    opts.UseSqlite($"Data Source='{Path.Combine(FilePaths.BasePath, "cts-local.db")}'");
+                    //opts.UseSqlite($"Data Source='{Path.Combine(FilePaths.BasePath, "cts-local.db")}'");
+                    opts.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Integrated Security=true;Initial Catalog=cts-temp");
+                    IsLocal = true;
                 }
                 else
                 {
