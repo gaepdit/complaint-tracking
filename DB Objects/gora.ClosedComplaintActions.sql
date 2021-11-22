@@ -5,6 +5,9 @@ GO
 SET QUOTED_IDENTIFIER ON;
 GO
 
+CREATE OR ALTER VIEW gora.ClosedComplaintActions
+AS
+
 /*******************************************************************************
 
 Author:     Doug Waldron
@@ -32,9 +35,6 @@ Email RegEx: https://regexr.com/670vn
 Replacement email based on https://tools.ietf.org/html/rfc2606#section-2
 
 *******************************************************************************/
-
-CREATE OR ALTER VIEW gora.ClosedComplaintActions
-AS
 
 SELECT ca.ComplaintId,
        -- ca.Id,
@@ -69,6 +69,6 @@ FROM ComplaintActions ca
     ON ca.EnteredById = enteredBy.Id
 WHERE ca.Deleted = 0 -- Not deleted
   AND c.Deleted = 0  -- Not deleted
-  AND c.ComplaintClosed = 1 -- Closed
+  AND c.ComplaintClosed = 1; -- Closed
 
 GO

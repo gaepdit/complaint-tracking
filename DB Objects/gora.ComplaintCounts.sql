@@ -5,6 +5,9 @@ GO
 SET QUOTED_IDENTIFIER ON;
 GO
 
+CREATE OR ALTER VIEW gora.ComplaintCounts
+AS
+
 /*******************************************************************************
 
 Author:     Doug Waldron
@@ -17,9 +20,6 @@ When        Who                 What
 2017-12-21  DWaldron            Initial Version
 
 *******************************************************************************/
-
-CREATE OR ALTER VIEW gora.ComplaintCounts
-AS
 
 SELECT 'Open Complaints' AS [Table],
        count(*)          AS [Count]
