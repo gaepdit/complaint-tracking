@@ -46,6 +46,7 @@ Modification History:
 When        Who                 What
 ----------  ------------------  ------------------------------------------------
 2021-11-22  DWaldron            Initial version (complaint-tracking#496)
+2021-12-08  DWaldron            Trim comments
 
 *******************************************************************************/
 
@@ -71,7 +72,7 @@ BEGIN TRY
          TransferredByUserId,
          TransitionType)
     select newid(),
-           t.ReviewComment,
+           trim(t.ReviewComment),
            c.Id,
            @adminId,
            sysdatetime(),
@@ -86,7 +87,7 @@ BEGIN TRY
 
     update c
     set ReviewById          = @adminId,
-        ReviewComments      = t.ReviewComment,
+        ReviewComments      = trim(t.ReviewComment),
         ComplaintClosed     = 1,
         DateComplaintClosed = sysdatetime(),
         Status              = 4 -- Administratively Closed
