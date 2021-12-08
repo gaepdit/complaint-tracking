@@ -2,6 +2,9 @@
 
 The Complaint Tracking System (CTS) is an online application to allow EPD staff to enter, assign, review, and close complaints received from the public.
 
+[![CodeQL](https://github.com/gaepdit/complaint-tracking/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/gaepdit/complaint-tracking/actions/workflows/codeql-analysis.yml)
+[![Raygun Deployment Tracking](https://github.com/gaepdit/complaint-tracking/actions/workflows/raygun-deployment.yml/badge.svg)](https://github.com/gaepdit/complaint-tracking/actions/workflows/raygun-deployment.yml)
+
 ## General project requirements
 
 Public complaints are time-critical and high-profile public information. The CTS is used by staff throughout EPD.
@@ -14,16 +17,12 @@ Public complaints are time-critical and high-profile public information. The CTS
 
 # Info for developers
 
-CTS is an ASP.NET Core web application located at the following URLs:
-
-* [Production](https://cts.gaepd.org/)
-* [UAT](https://cts-uat.gaepd.org/)
-* [Development](https://cts-dev.gaepd.org/)
+CTS is an ASP.NET 6 web application.
 
 ## Prerequisites for development
 
-+ [Visual Studio](https://www.visualstudio.com/vs/) or [Visual Studio Code](https://code.visualstudio.com/)
-+ [.NET Core SDK](https://www.microsoft.com/net/download/windows/)
++ [Visual Studio](https://www.visualstudio.com/vs/) or similar
++ [.NET SDK](https://dotnet.microsoft.com/download/download)
 + Node/NPM must be installed
 + Gulp must be installed as a global package: `npm install -g gulp`
 
