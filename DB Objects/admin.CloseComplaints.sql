@@ -100,6 +100,7 @@ BEGIN TRY
 
     select c.Id,
            c.ComplaintClosed,
+           c.Deleted,
            c.CreatedDate,
            c.DateComplaintClosed,
            c.ReviewById,
