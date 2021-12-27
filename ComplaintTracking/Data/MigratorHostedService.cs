@@ -1,11 +1,12 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using ComplaintTracking.Models;
+﻿using ComplaintTracking.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ComplaintTracking.Data
 {
@@ -15,10 +16,14 @@ namespace ComplaintTracking.Data
         // We need to inject the IServiceProvider so we can create 
         // the scoped service, MyDbContext
         private readonly IServiceProvider _serviceProvider;
+        private readonly IConfiguration _configuration;
 
-        public MigratorHostedService(IServiceProvider serviceProvider)
+        public MigratorHostedService(
+            IServiceProvider serviceProvider,
+            IConfiguration configuration)
         {
             _serviceProvider = serviceProvider;
+            _configuration = configuration;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -34,7 +39,7 @@ namespace ComplaintTracking.Data
             // Initialize database
             if (Startup.IsLocal || dbContext.Database.IsSqlite())
             {
-                await InitializeLocalAsync(dbContext, roleManager, userManager);
+                await InitializeLocalAsync(dbContext, roleManager, userManager, _configuration);
             }
             else if (dbContext.Database.IsSqlServer())
             {
@@ -65,7 +70,8 @@ namespace ComplaintTracking.Data
         private static async Task InitializeLocalAsync(
             ApplicationDbContext context,
             RoleManager<IdentityRole> roleManager,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            IConfiguration configuration)
         {
             // Test data: will not run in production
 
@@ -84,7 +90,7 @@ namespace ComplaintTracking.Data
 
             // Create Default Admin User
             var email = CTS.AdminEmail;
-            const string password = "Abc123!!";
+            string password = configuration.GetValue<string>("DefaultAdminPassword");
             if (!await context.Users.AnyAsync(e => e.Email == email))
             {
                 var user = new ApplicationUser
