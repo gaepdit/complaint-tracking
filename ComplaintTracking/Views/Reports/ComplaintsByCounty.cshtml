@@ -6,7 +6,7 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<p><em>Warning: report may load slowly.</em></p>
+<p class="gaepd-noprint"><em>Warning: report may load slowly.</em></p>
 
 <form asp-action="@Model.CurrentAction" method="get">
     <div role="search" class="usa-grid-full">
@@ -34,7 +34,7 @@
             i = i + 1;
 
             <h2>@county.Name</h2>
-            <p>
+            <p class="gaepd-noprint">
                 Total complaints: @county.Complaints.Count()
             </p>
             <table class="gaepd-table-autowidth gaepd-table-responsive gaepd-table-compact">
