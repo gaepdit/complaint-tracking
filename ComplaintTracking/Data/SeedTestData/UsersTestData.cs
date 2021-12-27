@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
-using ComplaintTracking.Models;
+﻿using ComplaintTracking.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace ComplaintTracking.Data
 {
@@ -131,7 +131,7 @@ namespace ComplaintTracking.Data
             }
         }
 
-        private class NewUser
+        private sealed class NewUser
         {
             public string FirstName { get; init; }
             public string LastName { get; init; }

@@ -1,9 +1,9 @@
 ﻿@{
-    string statusCode = ViewData["statusCode"].ForceToString();
+    string statusCode = StringFunctions.ForceToString(ViewData["statusCode"]);
 
-    string statusCodeDesc = ViewData["statusCodeDesc"].ForceToString();
+    string statusCodeDesc = StringFunctions.ForceToString(ViewData["statusCodeDesc"]);
 
-    string shortId = ViewData["shortId"].ForceToString();
+    string shortId = StringFunctions.ForceToString(ViewData["shortId"]);
 
     string mailto = CTS.AdminEmail + "?subject=CTS Support";
     if (shortId != "")

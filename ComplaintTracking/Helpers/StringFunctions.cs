@@ -18,7 +18,7 @@ namespace ComplaintTracking
             return String.Join(separator, items.Where(s => !String.IsNullOrEmpty(s)));
         }
 
-        public static string RedactPII(this string input)
+        public static string RedactPII(string input)
         {
             if (string.IsNullOrWhiteSpace(input))
             {
@@ -32,7 +32,7 @@ namespace ComplaintTracking
         }
 
         [System.Diagnostics.DebuggerStepThrough]
-        public static string ForceToString(this object input)
+        public static string ForceToString(object input)
         {
             if (input != null && !string.IsNullOrEmpty(input.ToString()))
             {

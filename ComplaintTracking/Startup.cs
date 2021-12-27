@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using ComplaintTracking.Data;
+﻿using ComplaintTracking.Data;
 using ComplaintTracking.Models;
 using ComplaintTracking.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -18,6 +16,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Mindscape.Raygun4Net.AspNetCore;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
 
 namespace ComplaintTracking
 {
@@ -161,7 +161,7 @@ namespace ComplaintTracking
             // Base path for all generated/uploaded files
             FilePaths.BasePath = string.IsNullOrWhiteSpace(Configuration["UserFilesBasePath"])
                 ? "../_UserFiles"
-                : Configuration["UserFilesBasePath"].ForceToString();
+                : StringFunctions.ForceToString(Configuration["UserFilesBasePath"]);
 
             // Set file paths
             FilePaths.AttachmentsFolder = Path.Combine(FilePaths.BasePath, "UserFiles", "attachments");
@@ -182,10 +182,10 @@ namespace ComplaintTracking
 
         private void SetContacts()
         {
-            CTS.AdminEmail = Configuration["Contacts:AdminEmail"].ForceToString();
-            CTS.DevEmail = Configuration["Contacts:DevEmail"].ForceToString();
-            CTS.SupportEmail = Configuration["Contacts:SupportEmail"].ForceToString();
-            CTS.AccountAdminEmail = Configuration["Contacts:AccountAdminEmail"].ForceToString();
+            CTS.AdminEmail = StringFunctions.ForceToString(Configuration["Contacts:AdminEmail"]);
+            CTS.DevEmail = StringFunctions.ForceToString(Configuration["Contacts:DevEmail"]);
+            CTS.SupportEmail = StringFunctions.ForceToString(Configuration["Contacts:SupportEmail"]);
+            CTS.AccountAdminEmail = StringFunctions.ForceToString(Configuration["Contacts:AccountAdminEmail"]);
         }
     }
 }

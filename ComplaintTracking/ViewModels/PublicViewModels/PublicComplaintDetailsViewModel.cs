@@ -52,7 +52,7 @@ namespace ComplaintTracking.ViewModels
             ConvertEmptyStringToNull = true)]
         public string ComplaintNature
         {
-            get => _complaintNature.RedactPII();
+            get => StringFunctions.RedactPII(_complaintNature);
             set => _complaintNature = value;
         }
 
@@ -64,7 +64,7 @@ namespace ComplaintTracking.ViewModels
             ConvertEmptyStringToNull = true)]
         public string ComplaintLocation
         {
-            get => _complaintLocation.RedactPII();
+            get => StringFunctions.RedactPII(_complaintLocation);
             set => _complaintLocation = value;
         }
 
@@ -145,7 +145,7 @@ namespace ComplaintTracking.ViewModels
             ConvertEmptyStringToNull = true)]
         public string ReviewComments
         {
-            get => _reviewComments.RedactPII();
+            get => StringFunctions.RedactPII(_reviewComments);
             set => _reviewComments = value;
         }
 

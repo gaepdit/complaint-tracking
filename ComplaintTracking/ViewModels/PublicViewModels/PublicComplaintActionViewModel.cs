@@ -26,7 +26,7 @@ namespace ComplaintTracking.ViewModels
 
         public string Comments
         {
-            get => _comments.RedactPII();
+            get => StringFunctions.RedactPII(_comments);
             set => _comments = value;
         }
         private string _comments;
