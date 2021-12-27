@@ -8,6 +8,10 @@ body {
     word-break: break-word;
 }
 
+.gaepd-text-nowrap {
+    white-space: nowrap !important;
+}
+
 a.no-visited, .no-visited a {
     color: #0071bc;
 }
@@ -23,6 +27,12 @@ a.no-visited, .no-visited a {
 .no-visited .gaepd-pagination-active:visited {
     background: #0071bc;
     color: #ffffff;
+}
+
+/* Table fix */
+
+.gaepd-table-rowheadings th {
+    width: 25rem;
 }
 
 /* Menu fix */
@@ -74,7 +84,9 @@ a.no-visited, .no-visited a {
 }
 
 @media print {
-    .usa-search {
+    .usa-search,
+    .test-site-banner,
+    .gaepd-form-fileupload {
         display: none;
     }
 
@@ -92,12 +104,8 @@ a.no-visited, .no-visited a {
     }
 
     h1, h2, h3, h4, h5, h6 {
-        margin-top: 1em;
-    }
-
-    .gaepd-table-compact th, .gaepd-table-compact td {
-        padding: 0.25em 1em 0.25em 0;
-        text-align: left;
+        margin-top: 1.5em;
+        margin-bottom: 0.5em;
     }
 
     a.usa-button {
@@ -105,5 +113,16 @@ a.no-visited, .no-visited a {
         padding: 0;
         color: #000;
         width: auto;
+    }
+
+    .gaepd-table-compact th, .gaepd-table-compact td {
+        padding: 0.1em 1em 0.1em 0;
+        text-align: left;
+    }
+
+    .gaepd-table-compact {
+        margin: 0.5em 0;
+        font-size: 11px;
+        width: 100%;
     }
 }
