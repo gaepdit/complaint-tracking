@@ -1,14 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ComplaintTracking.AlertMessages;
+﻿using ComplaintTracking.AlertMessages;
 using ComplaintTracking.Data;
 using ComplaintTracking.Models;
 using ComplaintTracking.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ComplaintTracking.Controllers
 {
@@ -275,26 +275,22 @@ namespace ComplaintTracking.Controllers
             });
         }
 
-        public async Task<IActionResult> DaysSinceLastActionByStaff(string office)
+        public async Task<IActionResult> DaysSinceLastAction(string office, int threshold = 30)
         {
-            var currentUser = await GetCurrentUserAsync();
 
             if (string.IsNullOrEmpty(office)
                 || !Guid.TryParse(office, out var officeId)
                 || officeId == default
                 || !await _dal.OfficeExists(officeId))
             {
-                if (!currentUser.OfficeId.HasValue) return BadRequest();
-                officeId = currentUser.OfficeId.Value;
+                officeId = (await GetCurrentUserAsync()).OfficeId ??
+                    (await _context.LookupOffices.FirstOrDefaultAsync(e => e.Name == "Director's Office")).Id;
             }
 
-            var officeStaff = _context.Users.AsNoTracking()
-                .Where(e => e.OfficeId == officeId);
-
-            IEnumerable<ReportDaysSinceLastActionByStaffViewModel.StaffList> staffList = await officeStaff
-                .OrderBy(e => e.LastName)
-                .ThenBy(e => e.FirstName)
-                .Select(e => new ReportDaysSinceLastActionByStaffViewModel.StaffList(e))
+            var staffList = await _context.Users.AsNoTracking()
+                .Where(e => e.OfficeId == officeId)
+                .OrderBy(e => e.LastName).ThenBy(e => e.FirstName)
+                .Select(e => new ReportDaysSinceLastActionViewModel.StaffList(e))
                 .ToListAsync();
 
             foreach (var user in staffList)
@@ -312,17 +308,19 @@ namespace ComplaintTracking.Controllers
                     WHERE c.Deleted = 0 and c.ComplaintClosed = 0 AND c.CurrentOwnerId = '{user.Id}'
                     ORDER BY c.Id desc";
 
-                user.Complaints = await DataSqlHelper
-                    .ExecSQL<ReportDaysSinceLastActionByStaffViewModel.ComplaintList>(query, _context);
+                user.Complaints = (await DataSqlHelper
+                    .ExecSQL<ReportDaysSinceLastActionViewModel.ComplaintList>(query, _context))
+                    .Where(e => e.DaysSinceLastAction >= threshold);
             }
 
-            return View("DaysSinceLastActionByStaff", new ReportDaysSinceLastActionByStaffViewModel
+            return View("DaysSinceLastAction", new ReportDaysSinceLastActionViewModel
             {
-                Title = "Days Since Last Action By Staff",
+                Title = "Days Since Last Action",
                 Staff = staffList,
                 OfficeSelectList = await _dal.GetOfficesSelectListAsync(),
                 Office = officeId.ToString(),
-                CurrentAction = nameof(DaysSinceLastActionByStaff)
+                Threshold = threshold,
+                CurrentAction = nameof(DaysSinceLastAction)
             });
         }
 

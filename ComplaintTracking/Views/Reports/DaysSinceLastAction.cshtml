@@ -1,4 +1,4 @@
-﻿@model ReportDaysSinceLastActionByStaffViewModel
+﻿@model ReportDaysSinceLastActionViewModel
 
 @{
     ViewData["Title"] = "Report: " + Model.Title;
@@ -9,9 +9,16 @@
 <p><em>Warning: report may load slowly.</em></p>
 
 <form class="usa-search usa-search-big" asp-action="@Model.CurrentAction" method="get">
-    <div role="search">
+    <div role="search" class="usa-grid-full">
+        <div class="usa-width-one-sixth">
+            <label for="Threshold">Threshold</label>
+            <select asp-for="Threshold" asp-items="Model.ThresholdSelectList"></select>
+        </div>
+        <div class="usa-width-five-sixths">
+            <label for="Office">Office</label>
             <select asp-for="Office" asp-items="Model.OfficeSelectList" type="search"></select>
             <button type="submit"><span class="usa-search-submit-text">Open</span></button>
+        </div>
     </div>
 </form>
 
@@ -25,10 +32,7 @@
             i += 1;
 
             <h2>@staff.Name</h2>
-            <p>
-                Total complaints: @staff.Complaints.Count() <br />
-                Average days since last action: @Html.DisplayFor(m => staff.AverageDaysSinceLastAction)
-            </p>
+            <p>Total complaints: @staff.Complaints.Count()</p>
             <table class="gaepd-table-autowidth gaepd-table-responsive gaepd-table-compact">
                 <thead>
                     <tr>

@@ -1,13 +1,14 @@
 ﻿using ComplaintTracking.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace ComplaintTracking.ViewModels
 {
-    public class ReportDaysSinceLastActionByStaffViewModel
+    public class ReportDaysSinceLastActionViewModel
     {
         public string Title { get; init; }
         public string CurrentAction { get; init; }
@@ -15,6 +16,21 @@ namespace ComplaintTracking.ViewModels
 
         public SelectList OfficeSelectList { get; init; }
         public string Office { get; init; }
+        public SelectList ThresholdSelectList { get; init; } = GetThresholdSelectList();
+
+        private static SelectList GetThresholdSelectList()
+        {
+            IEnumerable items = new[]
+            {
+                new { Value = "0", Text = "All" },
+                new { Value = "30", Text = "30 days" },
+                new { Value = "60", Text = "60 days" },
+                new { Value = "90", Text = "90 days" },
+            };
+            return new SelectList(items, "Value", "Text");
+        }
+
+        public int? Threshold { get; init; }
 
         public class StaffList
         {
