@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Configurations>Debug;Release</Configurations>
-    <AssemblyVersion>2021.11.19</AssemblyVersion>
+    <AssemblyVersion>2022.1.5</AssemblyVersion>
     <UserSecretsId>aspnet-ComplaintTracking-8e46fb5a-9a0a-4c6d-9c94-1676097ed2f4</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
