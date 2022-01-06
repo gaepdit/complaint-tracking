@@ -2,6 +2,9 @@
 
 The Complaint Tracking System (CTS) is an online application to allow EPD staff to enter, assign, review, and close complaints received from the public.
 
+![Uptime](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/gaepdit/status/main/api/complaint-tracking-system/uptime.json)
+![Response time](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/gaepdit/status/main/api/complaint-tracking-system/response-time.json)
+
 [![CodeQL](https://github.com/gaepdit/complaint-tracking/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/gaepdit/complaint-tracking/actions/workflows/codeql-analysis.yml)
 [![Raygun Deployment Tracking](https://github.com/gaepdit/complaint-tracking/actions/workflows/raygun-deployment.yml/badge.svg)](https://github.com/gaepdit/complaint-tracking/actions/workflows/raygun-deployment.yml)
 
