@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ComplaintTracking.Data
 {
-    public partial class SeedTestData
+    public static partial class SeedTestData
     {
         public static async Task<ComplaintAction[]> GetComplaintActions(
             ApplicationDbContext _context, ApplicationUser user)

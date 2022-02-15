@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ComplaintTracking.Data
 {
-    public partial class SeedTestData
+    public static partial class SeedTestData
     {
         public static async Task<Complaint[]> GetComplaintsAsync(
             ApplicationDbContext _context, ApplicationUser user)

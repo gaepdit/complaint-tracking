@@ -90,7 +90,7 @@ namespace ComplaintTracking.Data
 
             // Create Default Admin User
             var email = CTS.AdminEmail;
-            string password = configuration.GetValue<string>("DefaultAdminPassword");
+            var password = configuration.GetValue<string>("DefaultAdminPassword");
             if (!await context.Users.AnyAsync(e => e.Email == email))
             {
                 var user = new ApplicationUser
@@ -134,7 +134,7 @@ namespace ComplaintTracking.Data
             await context.SaveChangesAsync();
 
             // Add additional users
-            if (await context.Users.CountAsync() <= 1) await SeedTestData.AddUsersAsync(context, userManager);
+            if (await context.Users.CountAsync() <= 1) await SeedTestData.AddUsersAsync(context, userManager, password);
         }
     }
 }

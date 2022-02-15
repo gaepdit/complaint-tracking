@@ -3,7 +3,7 @@ using ComplaintTracking.Models;
 
 namespace ComplaintTracking.Data
 {
-    public partial class SeedTestData
+    public static partial class SeedTestData
     {
         public static County[] GetCounties()
         {
