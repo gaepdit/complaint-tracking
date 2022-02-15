@@ -8,6 +8,7 @@ namespace ComplaintTracking
         [Display(Name = "Manager")] Manager,
         [Display(Name = "User Account Admin")] UserAdmin,
         [Display(Name = "Data Export")] DataExport,
+        [Display(Name = "Attachments Editor")] AttachmentsEditor,
     }
 
     internal enum ServerEnvironment

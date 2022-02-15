@@ -44,8 +44,9 @@ namespace ComplaintTracking.Controllers
 
                 if (currentUser.Id != complaint.CurrentOwnerId
                     && !(User.IsInRole(CtsRole.Manager.ToString()) && currentUser.OfficeId == complaint.CurrentOfficeId)
-                    && !(User.IsInRole(CtsRole.DivisionManager.ToString()))
-                    && !(complaint.EnteredById == currentUser.Id && complaint.DateEntered.AddHours(1) > DateTime.Now))
+                    && !User.IsInRole(CtsRole.DivisionManager.ToString())
+                    && !(complaint.EnteredById == currentUser.Id && complaint.DateEntered.AddHours(1) > DateTime.Now)
+                    && !User.IsInRole(CtsRole.AttachmentsEditor.ToString()))
                 {
                     msg = "You do not have permission to edit this Complaint.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
@@ -59,7 +60,7 @@ namespace ComplaintTracking.Controllers
                     return RedirectToAction("Details", new {id});
                 }
 
-                if (complaint.ComplaintClosed)
+                if (complaint.ComplaintClosed && !User.IsInRole(CtsRole.AttachmentsEditor.ToString()))
                 {
                     msg = "This Complaint has been closed and cannot be edited unless it is reopened.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
@@ -252,8 +253,9 @@ namespace ComplaintTracking.Controllers
 
             if (currentUser.Id != complaint.CurrentOwnerId
                 && !(User.IsInRole(CtsRole.Manager.ToString()) && currentUser.OfficeId == complaint.CurrentOfficeId)
-                && !(User.IsInRole(CtsRole.DivisionManager.ToString()))
-                && !(complaint.EnteredById == currentUser.Id && complaint.DateEntered.AddHours(1) > DateTime.Now))
+                && !User.IsInRole(CtsRole.DivisionManager.ToString())
+                && !(complaint.EnteredById == currentUser.Id && complaint.DateEntered.AddHours(1) > DateTime.Now)
+                && !User.IsInRole(CtsRole.AttachmentsEditor.ToString()))
             {
                 msg = "You do not have permission to edit this Complaint.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
@@ -268,7 +270,7 @@ namespace ComplaintTracking.Controllers
                 return RedirectToAction("Details", new {id = model.ComplaintId});
             }
 
-            if (complaint.ComplaintClosed)
+            if (complaint.ComplaintClosed && !User.IsInRole(CtsRole.AttachmentsEditor.ToString()))
             {
                 msg = "This Complaint has been closed and cannot be edited unless it is reopened.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
@@ -317,8 +319,9 @@ namespace ComplaintTracking.Controllers
 
                 if (currentUser.Id != complaint.CurrentOwnerId
                     && !(User.IsInRole(CtsRole.Manager.ToString()) && currentUser.OfficeId == complaint.CurrentOfficeId)
-                    && !(User.IsInRole(CtsRole.DivisionManager.ToString()))
-                    && !(complaint.EnteredById == currentUser.Id && complaint.DateEntered.AddHours(1) > DateTime.Now))
+                    && !User.IsInRole(CtsRole.DivisionManager.ToString())
+                    && !(complaint.EnteredById == currentUser.Id && complaint.DateEntered.AddHours(1) > DateTime.Now)
+                    && !User.IsInRole(CtsRole.AttachmentsEditor.ToString()))
                 {
                     msg = "You do not have permission to edit this Complaint.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
@@ -333,7 +336,7 @@ namespace ComplaintTracking.Controllers
                     return RedirectToAction("Details", new {id = attachment.ComplaintId});
                 }
 
-                if (complaint.ComplaintClosed)
+                if (complaint.ComplaintClosed && !User.IsInRole(CtsRole.AttachmentsEditor.ToString()))
                 {
                     msg = "This Complaint has been closed and cannot be edited unless it is reopened.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");

@@ -26,6 +26,6 @@
     <div class="gaepd-buttonrow">
         <button type="submit" class="usa-button-secondary">Delete Attachment</button>
         <input asp-for="Id" type="hidden" />
-        <a asp-action="Details" asp-route-id="@Model.ComplaintId" class="usa-button usa-button-outline">Cancel</a>
+        <a asp-action="Details" asp-route-id="@Model.ComplaintId" asp-fragment="attachments" class="usa-button usa-button-outline">Cancel</a>
     </div>
 </form>
