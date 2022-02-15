@@ -1,0 +1,15 @@
+{
+  "ServerUri": "https://sonarcloud.io/",
+  "Organization": {
+    "Key": "gaepdit",
+    "Name": "Georgia EPD IT"
+  },
+  "ProjectKey": "gaepdit.complaint-tracking",
+  "ProjectName": "complaint-tracking",
+  "Profiles": {
+    "CSharp": {
+      "ProfileKey": "AX6cU2Nlc6yHdIzagTnC",
+      "ProfileTimestamp": "2021-11-22T10:44:23Z"
+    }
+  }
+}
