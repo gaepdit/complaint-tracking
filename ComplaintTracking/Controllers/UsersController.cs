@@ -246,6 +246,15 @@ namespace ComplaintTracking.Controllers
                         await _userManager.RemoveFromRoleAsync(user, nameof(CtsRole.DataExport));
                     }
 
+                    if (model.IsAttachmentEditor)
+                    {
+                        await _userManager.AddToRoleAsync(user, nameof(CtsRole.AttachmentsEditor));
+                    }
+                    else
+                    {
+                        await _userManager.RemoveFromRoleAsync(user, nameof(CtsRole.AttachmentsEditor));
+                    }
+
                     if (model.IsManager)
                     {
                         await _userManager.AddToRoleAsync(user, nameof(CtsRole.Manager));
@@ -333,6 +342,7 @@ namespace ComplaintTracking.Controllers
                 IsManager = await _userManager.IsInRoleAsync(user, nameof(CtsRole.Manager)),
                 IsUserAdmin = await _userManager.IsInRoleAsync(user, nameof(CtsRole.UserAdmin)),
                 IsDataExporter = await _userManager.IsInRoleAsync(user, nameof(CtsRole.DataExport)),
+                IsAttachmentEditor = await _userManager.IsInRoleAsync(user, nameof(CtsRole.AttachmentsEditor)),
                 OfficeSelectList = await _dal.GetOfficesSelectListAsync(),
                 CurrentUserIsDivisionManager =
                     await _userManager.IsInRoleAsync(currentUser, nameof(CtsRole.DivisionManager)),
@@ -402,6 +412,15 @@ namespace ComplaintTracking.Controllers
                     else
                     {
                         await _userManager.RemoveFromRoleAsync(user, nameof(CtsRole.DataExport));
+                    }
+
+                    if (model.IsAttachmentEditor)
+                    {
+                        await _userManager.AddToRoleAsync(user, nameof(CtsRole.AttachmentsEditor));
+                    }
+                    else
+                    {
+                        await _userManager.RemoveFromRoleAsync(user, nameof(CtsRole.AttachmentsEditor));
                     }
 
                     if (model.IsManager)

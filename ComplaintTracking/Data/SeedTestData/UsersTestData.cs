@@ -62,6 +62,7 @@ namespace ComplaintTracking.Data
                     LastName = "Staff2",
                     Email = "example2@dnr.ga.gov",
                     OfficeName = "Mountain District",
+                    CtsRole = CtsRole.UserAdmin,
                 },
                 new NewUser
                 {

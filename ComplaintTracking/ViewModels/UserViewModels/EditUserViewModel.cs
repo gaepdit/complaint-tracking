@@ -45,6 +45,9 @@ namespace ComplaintTracking.ViewModels
         [Display(Name = "Data Export")]
         public bool IsDataExporter { get; set; }
 
+        [Display(Name = "Attachment Editor")]
+        public bool IsAttachmentEditor { get; set; }
+
         public bool Active { get; set; }
 
         public SelectList OfficeSelectList { get; set; }
