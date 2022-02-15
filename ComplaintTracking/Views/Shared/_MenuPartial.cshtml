@@ -1,6 +1,6 @@
-﻿@if (User?.Identity != null && User.Identity.IsAuthenticated)
+﻿@if (User.Identity is {IsAuthenticated: true })
 {
-    var Email = User?.Identity?.Name;
+    var Email = User.Identity.Name;
     var EmailMD5Hash = string.IsNullOrEmpty(Email) 
         ? "" 
         : string.Join("",

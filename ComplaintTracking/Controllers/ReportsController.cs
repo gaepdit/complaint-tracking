@@ -284,7 +284,7 @@ namespace ComplaintTracking.Controllers
                 || !await _dal.OfficeExists(officeId))
             {
                 officeId = (await GetCurrentUserAsync()).OfficeId ??
-                    (await _context.LookupOffices.FirstOrDefaultAsync(e => e.Name == "Director's Office")).Id;
+                    (await _context.LookupOffices.FirstOrDefaultAsync())!.Id;
             }
 
             var staffList = await _context.Users.AsNoTracking()

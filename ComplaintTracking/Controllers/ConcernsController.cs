@@ -17,7 +17,7 @@ namespace ComplaintTracking.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IMemoryCache _cache;
-        private const string _objectDisplayName = "Area of Concern";
+        private const string ObjectDisplayName = "Area of Concern";
 
         public ConcernsController(
             ApplicationDbContext context,
@@ -92,19 +92,19 @@ namespace ComplaintTracking.Controllers
                     _context.Add(item);
                     await _context.SaveChangesAsync();
 
-                    msg = $"The {_objectDisplayName} has been created.";
+                    msg = $"The {ObjectDisplayName} has been created.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
 
                     return RedirectToAction("Details", new { id = item.Id });
                 }
                 catch
                 {
-                    msg = $"There was an error saving the {_objectDisplayName}. Please try again or contact support.";
+                    msg = $"There was an error saving the {ObjectDisplayName}. Please try again or contact support.";
                 }
             }
             else
             {
-                msg = $"The {_objectDisplayName} was not created. Please fix the errors shown below.";
+                msg = $"The {ObjectDisplayName} was not created. Please fix the errors shown below.";
             }
 
             ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
@@ -176,13 +176,13 @@ namespace ComplaintTracking.Controllers
                     }
                 }
 
-                msg = $"The {_objectDisplayName} was updated.";
+                msg = $"The {ObjectDisplayName} was updated.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Success, "Success");
 
                 return RedirectToAction("Details", new { id = model.Id });
             }
 
-            msg = $"The {_objectDisplayName} was not updated. Please fix the errors shown below.";
+            msg = $"The {ObjectDisplayName} was not updated. Please fix the errors shown below.";
             ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
 
             return View(model);

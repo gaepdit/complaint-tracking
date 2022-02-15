@@ -4,21 +4,21 @@ namespace ComplaintTracking.AlertMessages
 {
     public static class TempDataDictionaryExtensions
     {
-        public static void SaveAlertForSession(this ITempDataDictionary TempData, string message, AlertStatus status, string title = null)
+        public static void SaveAlertForSession(this ITempDataDictionary tempData, string message, AlertStatus status, string title = null)
         {
-            TempData["alertMessage"] = message;
-            TempData["alertTitle"] = title;
-            TempData["alertStatus"] = status.ToString();
+            tempData["alertMessage"] = message;
+            tempData["alertTitle"] = title;
+            tempData["alertStatus"] = status.ToString();
         }
 
-        public static AlertViewModel GetAlertFromSession(this ITempDataDictionary TempData)
+        public static AlertViewModel GetAlertFromSession(this ITempDataDictionary tempData)
         {
-            if (TempData["alertMessage"] != null)
+            if (tempData["alertMessage"] != null)
             {
                 return new AlertViewModel(
-                    TempData["alertMessage"].ToString(),
-                    TempData["alertStatus"]?.ToString(),
-                    TempData["alertTitle"]?.ToString());
+                    tempData["alertMessage"].ToString(),
+                    tempData["alertStatus"]?.ToString(),
+                    tempData["alertTitle"]?.ToString());
             }
 
             return null;

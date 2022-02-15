@@ -35,8 +35,8 @@ namespace ComplaintTracking.Controllers
         public async Task<IActionResult> ErrorStatusAsync(int statusCode)
         {
             // Get status code details
-            var statusCodeDesc = _statusCodeDescriptions.ContainsKey(statusCode)
-                ? _statusCodeDescriptions[statusCode]
+            var statusCodeDesc = StatusCodeDescriptions.ContainsKey(statusCode)
+                ? StatusCodeDescriptions[statusCode]
                 : "";
 
             ViewData["statusCode"] = statusCode.ToString();
@@ -102,7 +102,7 @@ namespace ComplaintTracking.Controllers
         //}
 #pragma warning restore S125 // Sections of code should not be commented out
 
-        private static readonly Dictionary<int, string> _statusCodeDescriptions = new()
+        private static readonly Dictionary<int, string> StatusCodeDescriptions = new()
         {
             {100, "Continue"},
             {101, "Switching Protocols"},

@@ -13,7 +13,7 @@ namespace ComplaintTracking.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Details(int? id, bool PublicCopy = false)
         {
-            if (User?.Identity != null && (PublicCopy || !User.Identity.IsAuthenticated))
+            if (User.Identity != null && (PublicCopy || !User.Identity.IsAuthenticated))
             {
                 return RedirectToAction("ComplaintDetails", "Public", new {id});
             }

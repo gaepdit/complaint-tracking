@@ -43,11 +43,11 @@ namespace ComplaintTracking
                 entry =>
                 {
                     entry.AbsoluteExpiration = new DateTimeOffset(DateTime.Now.AddDays(LONG_CACHE_TIME));
-                    return usersSelectList();
+                    return UsersSelectList();
                 }
             );
 
-            async Task<SelectList> usersSelectList()
+            async Task<SelectList> UsersSelectList()
             {
                 var items = await _context.Users.AsNoTracking()
                     .Where(t => t.Active || includeInactive)

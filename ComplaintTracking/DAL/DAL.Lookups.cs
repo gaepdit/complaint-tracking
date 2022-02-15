@@ -43,10 +43,10 @@ namespace ComplaintTracking
                 entry =>
                 {
                     entry.SlidingExpiration = EXTRA_LONG_CACHE_TIMESPAN;
-                    return countiesSelectList();
+                    return CountiesSelectList();
                 });
 
-            async Task<SelectList> countiesSelectList()
+            async Task<SelectList> CountiesSelectList()
             {
                 var items = await _context.LookupCounties.AsNoTracking()
                     .OrderBy(t => t.Name)
@@ -62,10 +62,10 @@ namespace ComplaintTracking
                 entry =>
                 {
                     entry.SlidingExpiration = EXTRA_LONG_CACHE_TIMESPAN;
-                    return statesSelectList();
+                    return StatesSelectList();
                 });
 
-            async Task<SelectList> statesSelectList()
+            async Task<SelectList> StatesSelectList()
             {
                 var items = await _context.LookupStates.AsNoTracking()
                     .OrderBy(t => t.Name)
@@ -84,10 +84,10 @@ namespace ComplaintTracking
                 entry =>
                 {
                     entry.SlidingExpiration = EXTRA_LONG_CACHE_TIMESPAN;
-                    return concernsSelectList();
+                    return ConcernsSelectList();
                 });
 
-            async Task<SelectList> concernsSelectList()
+            async Task<SelectList> ConcernsSelectList()
             {
                 var items = await _context.LookupConcerns.AsNoTracking()
                     .Where(t => t.Active)
@@ -104,10 +104,10 @@ namespace ComplaintTracking
                 entry =>
                 {
                     entry.SlidingExpiration = LONG_CACHE_TIMESPAN;
-                    return actionsSelectList();
+                    return ActionsSelectList();
                 });
 
-            async Task<SelectList> actionsSelectList()
+            async Task<SelectList> ActionsSelectList()
             {
                 var items = await _context.LookupActionTypes.AsNoTracking()
                     .Where(t => t.Active)
