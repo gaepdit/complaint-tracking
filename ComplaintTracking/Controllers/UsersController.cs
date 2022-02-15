@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ComplaintTracking.AlertMessages;
+﻿using ComplaintTracking.AlertMessages;
 using ComplaintTracking.Data;
 using ComplaintTracking.Generic;
 using ComplaintTracking.Models;
@@ -14,6 +10,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Threading.Tasks;
 using static ComplaintTracking.Caching;
 using static ComplaintTracking.ViewModels.UserIndexViewModel;
 
@@ -475,45 +475,9 @@ namespace ComplaintTracking.Controllers
 
         private static string GenerateNewPassword()
         {
-            // Password must:
-            // be at least six characters and
-            // contain at least one each of:
-            //   * lowercase letter
-            //   * uppercase letter
-            //   * digit
-            //   * non alphanumeric character
-
-            var pwd = new StringBuilder();
-            var rnd = new Random();
-
-            const int cnt = 12;
-            int id;
-
-            const string passNumber = "23456789";
-            const string passLower = "abcdefghkmnpqrstuvwxyz";
-            const string passUpper = "ABCDEFGHJKLMNPQRSTUVWXYZ";
-            const string passAlphaNum = passLower + passNumber + passUpper;
-            const string passSpecialChar = "@!#$%^&*";
-
-            for (var i = 1; i <= cnt; i++)
-            {
-                id = rnd.Next(0, passAlphaNum.Length);
-                pwd.Append(passAlphaNum.Substring(id, 1));
-            }
-
-            id = rnd.Next(0, passNumber.Length);
-            pwd.Append(passNumber.Substring(id, 1));
-
-            id = rnd.Next(0, passSpecialChar.Length);
-            pwd.Append(passSpecialChar.Substring(id, 1));
-
-            id = rnd.Next(0, passLower.Length);
-            pwd.Append(passLower.Substring(id, 1));
-
-            id = rnd.Next(0, passUpper.Length);
-            pwd.Append(passUpper.Substring(id, 1));
-
-            return pwd.ToString();
+            var data = new byte[16];
+            RandomNumberGenerator.Create().GetBytes(data);
+            return BitConverter.ToString(data);
         }
 
         public IActionResult Roles()
