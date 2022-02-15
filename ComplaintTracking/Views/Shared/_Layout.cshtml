@@ -1,10 +1,7 @@
-@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@inject Microsoft.Extensions.Configuration.IConfiguration _configuration
 @using ComplaintTracking.AlertMessages;
 @{
-    if (ViewData["AlertMessage"] == null)
-    {
-        ViewData["AlertMessage"] = TempData.GetAlertFromSession();
-    }
+    ViewData["AlertMessage"] ??= TempData.GetAlertFromSession();
 }
 <!DOCTYPE html>
 <html lang="en-us" class="no-js">
@@ -17,7 +14,7 @@
     <title>@StringFunctions.ConcatNonEmptyStrings(new[] { ViewData["Title"].ToString(), "Georgia EPD Complaint Tracking System" }, " · ")</title>
     @await Html.PartialAsync("_FaviconPartial")
     @await Html.PartialAsync("_StandardStylesheetsPartial")
-    @RenderSection("PageStyles", required: false)
+    @await RenderSectionAsync("PageStyles", required: false)
     <script type="text/javascript">
   !function(a,b,c,d,e,f,g,h){a.RaygunObject=e,a[e]=a[e]||function(){
   (a[e].o=a[e].o||[]).push(arguments)},f=b.createElement(c),g=b.getElementsByTagName(c)[0],
@@ -35,7 +32,7 @@
     </div>
 </environment>
 <a class="usa-skipnav" href="#main-content">Skip to main content</a>
-@if (User?.Identity is null || !User.Identity.IsAuthenticated)
+@if (User.Identity is null || !User.Identity.IsAuthenticated)
 {
     <script type="text/javascript" src="https://georgia.gov/gagov_external_blocks/topper"></script>
 }
@@ -45,7 +42,7 @@
     <header class="usa-header usa-header-basic" role="banner">
         <div class="usa-nav-container">
             <div class="usa-navbar gaepd-navbar">
-                @if (User?.Identity is not null && User.Identity.IsAuthenticated)
+                @if (User.Identity is not null && User.Identity.IsAuthenticated)
                 {
                     <button class="usa-menu-btn">Menu</button>
                 }
@@ -98,7 +95,7 @@
         <a href="#" class="no-visited">Return to top</a>
     </div>
 </div>
-@if (User?.Identity is null || !User.Identity.IsAuthenticated)
+@if (User.Identity is null || !User.Identity.IsAuthenticated)
 {
     <div class="gaepd-footer">
         <ul class="gaepd-footer-menu">
@@ -122,12 +119,12 @@
 @await Html.PartialAsync("_StandardScriptsPartial")
 @RenderSection("PageScripts", required: false)
 <script type="text/javascript">
-  rg4js('apiKey', '@Configuration["RaygunSettings:ApiKey"]');
+  rg4js('apiKey', '@_configuration["RaygunSettings:ApiKey"]');
   rg4js('enableCrashReporting', true);
   rg4js('enablePulse', true);
   rg4js('options', {ignore3rdPartyErrors: true});
   rg4js('whitelistCrossOriginDomains', ['cdnjs.cloudflare.com','cdn.jsdelivr.net']);
-@if (User?.Identity?.IsAuthenticated == true)
+@if (User.Identity?.IsAuthenticated == true)
 {
     <text>
   rg4js('setUser', {

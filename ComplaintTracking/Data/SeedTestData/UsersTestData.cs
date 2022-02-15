@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 
 namespace ComplaintTracking.Data
 {
-    public partial class SeedTestData
+    public static partial class SeedTestData
     {
         public static async Task AddUsersAsync(
-            ApplicationDbContext _context, UserManager<ApplicationUser> _userManager)
+            ApplicationDbContext context, 
+            UserManager<ApplicationUser> userManager,
+            string password)
         {
-            const string password = "Abc123!!";
-
             NewUser[] users =
             {
                 new NewUser
@@ -103,7 +103,7 @@ namespace ComplaintTracking.Data
 
             foreach (var u in users)
             {
-                if (await _context.Users.AnyAsync(e => e.Email == u.Email)) continue;
+                if (await context.Users.AnyAsync(e => e.Email == u.Email)) continue;
 
                 var user = new ApplicationUser
                 {
@@ -113,21 +113,25 @@ namespace ComplaintTracking.Data
                     FirstName = u.FirstName,
                     LastName = u.LastName,
                     Active = u.Active,
-                    Office = await _context.LookupOffices.FirstOrDefaultAsync(e => e.Name == u.OfficeName),
+                    Office = await context.LookupOffices.FirstOrDefaultAsync(e => e.Name == u.OfficeName),
                 };
-                await _userManager.CreateAsync(user, password);
-                var tempUser = await _userManager.FindByNameAsync(u.Email);
+                await userManager.CreateAsync(user, password);
+                var tempUser = await userManager.FindByNameAsync(u.Email);
                 if (u.CtsRole.HasValue)
                 {
-                    await _userManager.AddToRoleAsync(tempUser, u.CtsRole.Value.ToString());
+                    await userManager.AddToRoleAsync(tempUser, u.CtsRole.Value.ToString());
                 }
 
                 if (!u.IsMaster) continue;
 
-                var office = await _context.LookupOffices.FirstOrDefaultAsync(e => e.Name == u.OfficeName);
-                office.MasterUserId = tempUser.Id;
-                _context.Update(office);
-                await _context.SaveChangesAsync();
+                var office = await context.LookupOffices.FirstOrDefaultAsync(e => e.Name == u.OfficeName);
+                if (office != null)
+                {
+                    office.MasterUserId = tempUser.Id;
+                    context.Update(office);
+                }
+
+                await context.SaveChangesAsync();
             }
         }
 

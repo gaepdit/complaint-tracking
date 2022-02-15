@@ -162,8 +162,8 @@ namespace ComplaintTracking.Controllers
                 {
                     var fileName = $"cts_search_{DateTime.Now:yyyy-MM-dd-HH-mm-ss.FFF}.xlsx";
                     complaints = complaints
-                        .Include(e => e.ComplaintActions.OrderByDescending(e => e.ActionDate)
-                        .ThenByDescending(e => e.DateEntered).Take(1))
+                        .Include(e => e.ComplaintActions.OrderByDescending(r => r.ActionDate)
+                        .ThenByDescending(r => r.DateEntered).Take(1))
                         // including the action type navigation property causes this query to fail on SQLite
                         .ThenInclude(e => e.ActionType); 
 

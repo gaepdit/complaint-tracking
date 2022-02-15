@@ -11,11 +11,11 @@
 <form class="usa-search usa-search-big" asp-action="@Model.CurrentAction" method="get">
     <div role="search" class="usa-grid-full">
         <div class="usa-width-one-sixth">
-            <label for="Threshold">Threshold</label>
+            <label asp-for="Threshold"></label>
             <select asp-for="Threshold" asp-items="Model.ThresholdSelectList"></select>
         </div>
         <div class="usa-width-five-sixths">
-            <label for="Office">Office</label>
+            <label asp-for="Office"></label>
             <select asp-for="Office" asp-items="Model.OfficeSelectList" type="search"></select>
             <button type="submit"><span class="usa-search-submit-text">Open</span></button>
         </div>

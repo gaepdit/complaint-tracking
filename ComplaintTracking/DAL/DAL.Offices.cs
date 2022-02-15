@@ -59,11 +59,11 @@ namespace ComplaintTracking
                 entry =>
                 {
                     entry.SlidingExpiration = EXTRA_LONG_CACHE_TIMESPAN;
-                    return officesSelectList();
+                    return OfficesSelectList();
                 }
             );
 
-            async Task<SelectList> officesSelectList()
+            async Task<SelectList> OfficesSelectList()
             {
                 var items = await _context.LookupOffices.AsNoTracking()
                     .Where(t => t.Active)

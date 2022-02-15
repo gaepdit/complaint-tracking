@@ -5,17 +5,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ComplaintTracking.Data
 {
-    public partial class SeedTestData
+    public static partial class SeedTestData
     {
         public static async Task<Complaint[]> GetComplaintsAsync(
-            ApplicationDbContext _context, ApplicationUser user)
+            ApplicationDbContext context, ApplicationUser user)
         {
-            var office = await _context.LookupOffices.FirstOrDefaultAsync(e => e.Name == "Director's Office");
-            var state = await _context.LookupStates.FirstOrDefaultAsync(e => e.PostalAbbreviation == "GA");
-            var county = await _context.LookupCounties.FirstOrDefaultAsync(e => e.Name == "Bartow");
-            var county2 = await _context.LookupCounties.FirstOrDefaultAsync(e => e.Name == "Fulton");
-            var concern1 = await _context.LookupConcerns.FirstOrDefaultAsync(e => e.Name == "Sewage spill");
-            var concern2 = await _context.LookupConcerns.FirstOrDefaultAsync(e => e.Name == "Hazardous Site Response");
+            var office = await context.LookupOffices.FirstOrDefaultAsync(e => e.Name == "Director's Office");
+            var state = await context.LookupStates.FirstOrDefaultAsync(e => e.PostalAbbreviation == "GA");
+            var county = await context.LookupCounties.FirstOrDefaultAsync(e => e.Name == "Bartow");
+            var county2 = await context.LookupCounties.FirstOrDefaultAsync(e => e.Name == "Fulton");
+            var concern1 = await context.LookupConcerns.FirstOrDefaultAsync(e => e.Name == "Sewage spill");
+            var concern2 = await context.LookupConcerns.FirstOrDefaultAsync(e => e.Name == "Hazardous Site Response");
 
             Complaint[] c =
             {

@@ -2,7 +2,7 @@
 
 namespace ComplaintTracking.Data
 {
-    public partial class SeedTestData
+    public static partial class SeedTestData
     {
         public static State[] GetStates()
         {

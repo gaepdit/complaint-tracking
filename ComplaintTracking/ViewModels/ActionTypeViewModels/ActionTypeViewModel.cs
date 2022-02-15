@@ -8,12 +8,10 @@ namespace ComplaintTracking.ViewModels
     {
         public ActionTypeViewModel(ActionType item)
         {
-            if (item != null)
-            {
-                Id = item.Id;
-                Active = item.Active;
-                Name = item.Name;
-            }
+            if (item == null) return;
+            Id = item.Id;
+            Active = item.Active;
+            Name = item.Name;
         }
 
         public Guid Id { get; set; }

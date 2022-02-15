@@ -851,11 +851,11 @@ namespace ComplaintTracking.Controllers
             ViewData["AlertMessage"] = new AlertViewModel(msg, AlertStatus.Error, "Error");
 
             // Populate the select lists before returning the model
-            var officeID = (await _context.Complaints.AsNoTracking()
+            var officeId = (await _context.Complaints.AsNoTracking()
                     .Where(e => e.Id == id)
-                    .SingleOrDefaultAsync())
+                    .SingleOrDefaultAsync())!
                 .CurrentOfficeId;
-            model.ManagersInOfficeSelectList = await _dal.GetUsersInRoleSelectListAsync(CtsRole.Manager, officeID);
+            model.ManagersInOfficeSelectList = await _dal.GetUsersInRoleSelectListAsync(CtsRole.Manager, officeId);
             if (model.ManagersInOfficeSelectList != null && model.ManagersInOfficeSelectList.Any())
             {
                 return View(model);

@@ -5,13 +5,13 @@ using System.Text.RegularExpressions;
 namespace ComplaintTracking.Validation
 {
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
-    sealed public class DnrEmailAddressAttribute : ValidationAttribute
+    public sealed class DnrEmailAddressAttribute : ValidationAttribute
     {
-        private const int _matchTimeoutInSeconds = 2;
+        private const int MatchTimeoutInSeconds = 2;
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            if (value == null || !IsValidDnrEmailAddress(value.ToString().Trim()))
+            if (value == null || !IsValidDnrEmailAddress(value.ToString()!.Trim()))
             {
                 return new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
             }
@@ -20,7 +20,7 @@ namespace ComplaintTracking.Validation
 
         private bool IsValidDnrEmailAddress(string emailAddress)
         {
-            var regex = new Regex(RegexPatterns.DnrEmailPattern, default, TimeSpan.FromSeconds(_matchTimeoutInSeconds));
+            var regex = new Regex(RegexPatterns.DnrEmailPattern, default, TimeSpan.FromSeconds(MatchTimeoutInSeconds));
             return !string.IsNullOrEmpty(emailAddress) && regex.IsMatch(emailAddress);
         }
     }

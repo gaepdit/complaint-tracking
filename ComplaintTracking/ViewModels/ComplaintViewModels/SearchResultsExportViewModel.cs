@@ -22,10 +22,10 @@ namespace ComplaintTracking.ViewModels
             PrimaryConcern = e.PrimaryConcern.Name;
             ComplaintNature = e.ComplaintNature;
 
-            var _firstComplaintAction = e.ComplaintActions.FirstOrDefault();
-            ActionDate = _firstComplaintAction?.ActionDate;
-            ActionType = _firstComplaintAction?.ActionType.Name;
-            ActionComments = _firstComplaintAction?.Comments;
+            var firstComplaintAction = e.ComplaintActions.FirstOrDefault();
+            ActionDate = firstComplaintAction?.ActionDate;
+            ActionType = firstComplaintAction?.ActionType.Name;
+            ActionComments = firstComplaintAction?.Comments;
         }
 
         [XLColumn(Header = "Complaint ID")]
