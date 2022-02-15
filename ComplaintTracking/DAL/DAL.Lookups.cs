@@ -14,7 +14,7 @@ namespace ComplaintTracking
     {
         public async Task<CommonSelectLists> GetCommonSelectListsAsync(Guid? officeId)
         {
-            officeId ??= default;
+            officeId ??= Guid.Empty;
 
             var areasOfConcern = await GetAreasOfConcernSelectListAsync();
             var offices = await GetOfficesSelectListAsync(true);
