@@ -1,10 +1,10 @@
-﻿@model ReturnComplaintViewModel
+@model ReturnComplaintViewModel
 
 @{
     ViewData["Title"] = $"Return Complaint ID {Model.Id}";
 }
 
-<h1>@ViewData["Title"] to staff <i>(not approved)</i></h1>
+<h1>@ViewData["Title"] to staff <em>(not approved)</em></h1>
 
 <form asp-action="Return">
     <label asp-for="CurrentOfficeId"></label>

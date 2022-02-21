@@ -6,7 +6,7 @@
 }
 
 <h1 id="details">
-    @ViewData["Title"] <i>&mdash; Public Copy</i>
+    @ViewData["Title"] <em>&mdash; Public Copy</em>
 </h1>
 
 <p><small>Report generated on @String.Format(CTS.FormatDateTimeDisplay, DateTime.Now).</small></p>
@@ -95,7 +95,7 @@
 
 @if (Model.ComplaintActions == null || Model.ComplaintActions.Count == 0)
 {
-    <p><i>None.</i></p>
+    <p><em>None.</em></p>
 }
 else
 {
