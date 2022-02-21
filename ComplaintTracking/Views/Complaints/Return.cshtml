@@ -1,4 +1,4 @@
-@model ReturnComplaintViewModel
+﻿@model ReturnComplaintViewModel
 
 @{
     ViewData["Title"] = $"Return Complaint ID {Model.Id}";
@@ -40,7 +40,7 @@
 
 @section PageScripts {
     <script type="text/javascript">
-        $(document).ready(function domReady() {
+        $(function domReady() {
             // Make staff (owner) select hierarchical from Office select
             var OfficeIdSource = "#CurrentOfficeId";
             var OwnerIdDest = "#CurrentOwnerId";
