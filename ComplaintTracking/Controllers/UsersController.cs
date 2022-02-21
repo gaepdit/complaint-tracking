@@ -209,11 +209,11 @@ namespace ComplaintTracking.Controllers
             {
                 var user = new ApplicationUser
                 {
-                    UserName = model.Email?.Trim(),
-                    Email = model.Email?.Trim(),
+                    UserName = model.Email!.Trim(),
+                    Email = model.Email.Trim(),
                     Phone = model.Phone?.Trim(),
-                    FirstName = model.FirstName?.Trim(),
-                    LastName = model.LastName?.Trim(),
+                    FirstName = model.FirstName!.Trim(),
+                    LastName = model.LastName!.Trim(),
                     OfficeId = model.OfficeId,
                 };
 
@@ -376,14 +376,14 @@ namespace ComplaintTracking.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByIdAsync(model.Id);
-                var oldEmail = user.Email?.Trim();
+                var oldEmail = user.Email!.Trim();
 
                 user.Active = model.Active;
-                user.Email = model.Email?.Trim();
+                user.Email = model.Email.Trim();
                 user.Phone = model.Phone?.Trim();
-                user.FirstName = model.FirstName?.Trim();
-                user.LastName = model.LastName?.Trim();
-                user.UserName = model.Email?.Trim();
+                user.FirstName = model.FirstName!.Trim();
+                user.LastName = model.LastName!.Trim();
+                user.UserName = model.Email.Trim();
                 user.OfficeId = model.OfficeId;
 
                 _cache.Remove(CacheKeys.UsersSelectList);
@@ -442,7 +442,7 @@ namespace ComplaintTracking.Controllers
                     }
 
                     // check if the email address was changed; send notification emails to both if changed
-                    if (oldEmail.ToUpper() != user.Email.ToUpper() && user.Active)
+                    if (!string.Equals(oldEmail!, user.Email, StringComparison.CurrentCultureIgnoreCase) && user.Active)
                     {
                         await _emailSender.SendEmailAsync(
                             oldEmail,
