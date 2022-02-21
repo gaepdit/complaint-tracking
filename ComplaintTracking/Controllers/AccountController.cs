@@ -435,13 +435,13 @@ namespace ComplaintTracking.Controllers
 
             if (ModelState.IsValid)
             {
-                var oldEmail = user.Email.Trim();
+                var oldEmail = user.Email?.Trim();
 
-                user.Email = model.Email.Trim();
-                user.Phone = model.Phone;
-                user.FirstName = model.FirstName;
-                user.LastName = model.LastName;
-                user.UserName = model.Email;
+                user.Email = model.Email?.Trim();
+                user.Phone = model.Phone?.Trim();
+                user.FirstName = model.FirstName?.Trim();
+                user.LastName = model.LastName?.Trim();
+                user.UserName = model.Email?.Trim();
                 user.OfficeId = model.OfficeId;
 
                 _cache.Remove(CacheKeys.UsersSelectList);
