@@ -2,13 +2,15 @@
 
 @if (Model == null || Model.Count == 0)
 {
-    <p><em>None.</em></p>
+    <p>
+        <em>None.</em>
+    </p>
 }
 
 <p>
     <em>
-        (Attachments are only available for complaints created after April 2018.
-        Please note that not every complaint will necessarily have attachments.)
+        (Attachments may not be available for complaints resolved before April 2018.
+        Please note that not every complaint has attachments.)
     </em>
 </p>
 
@@ -27,7 +29,9 @@
                     </div>
                     <div class="gaepd-file_item-body">
                         @Html.DisplayFor(m => item.FileName)<br />
-                        <em><small>@Html.DisplayFor(m => item.Size)</small></em>
+                        <em>
+                            <small>@Html.DisplayFor(m => item.Size)</small>
+                        </em>
                     </div>
                 </a>
             }
@@ -40,7 +44,9 @@
                     </div>
                     <div class="gaepd-file_item-body">
                         @Html.DisplayFor(m => item.FileName)<br />
-                        <em><small>@Html.DisplayFor(m => item.Size)</small></em>
+                        <em>
+                            <small>@Html.DisplayFor(m => item.Size)</small>
+                        </em>
                     </div>
                 </a>
             }
