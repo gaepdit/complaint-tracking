@@ -24,29 +24,17 @@ namespace ComplaintTracking.Models
         public virtual ApplicationUser UploadedBy { get; set; }
         public string UploadedById { get; set; }
 
-        public bool IsImage { get; set; } = false;
+        public bool IsImage { get; set; }
         
-        public bool Deleted { get; set; } = false;
+        public bool Deleted { get; set; }
 
         public DateTime? DateDeleted { get; set; }
 
         public virtual ApplicationUser DeletedBy { get; set; }
         public string DeletedById { get; set; }
 
-        public string FilePath
-        {
-            get
-            {
-                return Path.Combine(FilePaths.AttachmentsFolder, Id + FileExtension);
-            }
-        }
+        public string FilePath => Path.Combine(FilePaths.AttachmentsFolder, Id + FileExtension);
 
-        public string ThumbnailPath
-        {
-            get
-            {
-                return IsImage ? null : Path.Combine(FilePaths.ThumbnailsFolder, Id + FileExtension);
-            }
-        }
+        public string ThumbnailPath => IsImage ? Path.Combine(FilePaths.ThumbnailsFolder, Id + FileExtension) : null;
     }
 }

@@ -37,6 +37,7 @@ namespace ComplaintTracking.Data
                     LastName = "Staff12",
                     Email = "example12@dnr.ga.gov",
                     OfficeName = "Air Protection Branch",
+                    CtsRole = CtsRole.AttachmentsEditor,
                     IsMaster = true,
                 },
                 new NewUser
@@ -61,6 +62,7 @@ namespace ComplaintTracking.Data
                     LastName = "Staff2",
                     Email = "example2@dnr.ga.gov",
                     OfficeName = "Mountain District",
+                    CtsRole = CtsRole.UserAdmin,
                 },
                 new NewUser
                 {

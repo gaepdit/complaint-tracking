@@ -1,26 +1,26 @@
-﻿@model ValueTuple<List<AttachmentViewModel>, bool>
+﻿@model (List<AttachmentViewModel> Attachments, bool AttachmentsEditable)
 @*Boolean describes whether to show the delete button*@
 
-@if (Model.Item1 == null || Model.Item1.Count == 0)
+@if (Model.Attachments == null || Model.Attachments.Count == 0)
 {
-    <p><i>None.</i></p>
+    <p><em>None.</em></p>
 }
 else
 {
     <table class="usa-table-borderless gaepd-table-responsive">
         <thead>
             <tr>
-                <th scope="col">@Html.DisplayNameFor(m => m.Item1.FirstOrDefault().FileName)</th>
-                <th scope="col">@Html.DisplayNameFor(m => m.Item1.FirstOrDefault().Size)</th>
-                <th scope="col">@Html.DisplayNameFor(m => m.Item1.FirstOrDefault().UploadedBy)</th>
-                @if (Model.Item2)
+                <th scope="col">@Html.DisplayNameFor(m => m.Attachments.FirstOrDefault().FileName)</th>
+                <th scope="col">@Html.DisplayNameFor(m => m.Attachments.FirstOrDefault().Size)</th>
+                <th scope="col">@Html.DisplayNameFor(m => m.Attachments.FirstOrDefault().UploadedBy)</th>
+                @if (Model.AttachmentsEditable)
                 {
                     <th scope="col">Actions</th>
                 }
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.Item1)
+            @foreach (var item in Model.Attachments)
             {
                 <tr>
                     <th scope="row" data-label="@Html.DisplayNameFor(m => item.FileName)">
@@ -47,7 +47,7 @@ else
                         @Html.DisplayFor(m => item.UploadedBy.FullName)<br />
                         on @Html.DisplayFor(m => item.DateUploaded)
                     </td>
-                    @if (Model.Item2)
+                    @if (Model.AttachmentsEditable)
                     {
                         <td data-label="Actions">
                             <a class="usa-button usa-button-outline gaepd-button-inline-action" asp-action="DeleteAttachment" asp-route-id="@item.Id">Delete</a>

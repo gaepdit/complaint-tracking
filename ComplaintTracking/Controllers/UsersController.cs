@@ -209,12 +209,12 @@ namespace ComplaintTracking.Controllers
             {
                 var user = new ApplicationUser
                 {
-                    UserName = model.Email,
-                    Email = model.Email,
-                    Phone = model.Phone,
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                    OfficeId = model.OfficeId
+                    UserName = model.Email!.Trim(),
+                    Email = model.Email.Trim(),
+                    Phone = model.Phone?.Trim(),
+                    FirstName = model.FirstName!.Trim(),
+                    LastName = model.LastName!.Trim(),
+                    OfficeId = model.OfficeId,
                 };
 
                 var pwd = GenerateNewPassword();
@@ -244,6 +244,15 @@ namespace ComplaintTracking.Controllers
                     else
                     {
                         await _userManager.RemoveFromRoleAsync(user, nameof(CtsRole.DataExport));
+                    }
+
+                    if (model.IsAttachmentEditor)
+                    {
+                        await _userManager.AddToRoleAsync(user, nameof(CtsRole.AttachmentsEditor));
+                    }
+                    else
+                    {
+                        await _userManager.RemoveFromRoleAsync(user, nameof(CtsRole.AttachmentsEditor));
                     }
 
                     if (model.IsManager)
@@ -333,6 +342,7 @@ namespace ComplaintTracking.Controllers
                 IsManager = await _userManager.IsInRoleAsync(user, nameof(CtsRole.Manager)),
                 IsUserAdmin = await _userManager.IsInRoleAsync(user, nameof(CtsRole.UserAdmin)),
                 IsDataExporter = await _userManager.IsInRoleAsync(user, nameof(CtsRole.DataExport)),
+                IsAttachmentEditor = await _userManager.IsInRoleAsync(user, nameof(CtsRole.AttachmentsEditor)),
                 OfficeSelectList = await _dal.GetOfficesSelectListAsync(),
                 CurrentUserIsDivisionManager =
                     await _userManager.IsInRoleAsync(currentUser, nameof(CtsRole.DivisionManager)),
@@ -366,14 +376,14 @@ namespace ComplaintTracking.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByIdAsync(model.Id);
-                var oldEmail = user.Email.Trim();
+                var oldEmail = user.Email!.Trim();
 
                 user.Active = model.Active;
                 user.Email = model.Email.Trim();
-                user.Phone = model.Phone;
-                user.FirstName = model.FirstName;
-                user.LastName = model.LastName;
-                user.UserName = model.Email;
+                user.Phone = model.Phone?.Trim();
+                user.FirstName = model.FirstName!.Trim();
+                user.LastName = model.LastName!.Trim();
+                user.UserName = model.Email.Trim();
                 user.OfficeId = model.OfficeId;
 
                 _cache.Remove(CacheKeys.UsersSelectList);
@@ -404,6 +414,15 @@ namespace ComplaintTracking.Controllers
                         await _userManager.RemoveFromRoleAsync(user, nameof(CtsRole.DataExport));
                     }
 
+                    if (model.IsAttachmentEditor)
+                    {
+                        await _userManager.AddToRoleAsync(user, nameof(CtsRole.AttachmentsEditor));
+                    }
+                    else
+                    {
+                        await _userManager.RemoveFromRoleAsync(user, nameof(CtsRole.AttachmentsEditor));
+                    }
+
                     if (model.IsManager)
                     {
                         await _userManager.AddToRoleAsync(user, nameof(CtsRole.Manager));
@@ -423,7 +442,7 @@ namespace ComplaintTracking.Controllers
                     }
 
                     // check if the email address was changed; send notification emails to both if changed
-                    if (oldEmail.ToUpper() != user.Email.ToUpper() && user.Active)
+                    if (!string.Equals(oldEmail!, user.Email, StringComparison.CurrentCultureIgnoreCase) && user.Active)
                     {
                         await _emailSender.SendEmailAsync(
                             oldEmail,

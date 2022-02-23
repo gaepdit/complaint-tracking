@@ -18,7 +18,7 @@ namespace ComplaintTracking.Validation
             return null;
         }
 
-        private bool IsValidDnrEmailAddress(string emailAddress)
+        private static bool IsValidDnrEmailAddress(string emailAddress)
         {
             var regex = new Regex(RegexPatterns.DnrEmailPattern, default, TimeSpan.FromSeconds(MatchTimeoutInSeconds));
             return !string.IsNullOrEmpty(emailAddress) && regex.IsMatch(emailAddress);

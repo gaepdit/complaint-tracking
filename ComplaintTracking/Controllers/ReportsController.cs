@@ -39,10 +39,10 @@ namespace ComplaintTracking.Controllers
 
             if (string.IsNullOrEmpty(office)
                 || !Guid.TryParse(office, out var officeId)
-                || officeId == default
+                || officeId == Guid.Empty
                 || !(await _dal.OfficeExists(officeId)))
             {
-                officeId = currentUser.OfficeId ?? default;
+                officeId = currentUser.OfficeId ?? Guid.Empty;
             }
 
             return View("Report", new ReportViewModel
@@ -68,11 +68,11 @@ namespace ComplaintTracking.Controllers
             var currentUser = await GetCurrentUserAsync();
 
             if (string.IsNullOrEmpty(office)
-                || !Guid.TryParse(office, out Guid officeId)
-                || officeId == default
+                || !Guid.TryParse(office, out var officeId)
+                || officeId == Guid.Empty
                 || !await _dal.OfficeExists(officeId))
             {
-                officeId = currentUser.OfficeId ?? default;
+                officeId = currentUser.OfficeId ?? Guid.Empty;
             }
 
             return View("Report", new ReportViewModel
@@ -97,11 +97,11 @@ namespace ComplaintTracking.Controllers
             var currentUser = await GetCurrentUserAsync();
 
             if (string.IsNullOrEmpty(office)
-                || !Guid.TryParse(office, out Guid officeId)
-                || officeId == default
+                || !Guid.TryParse(office, out var officeId)
+                || officeId == Guid.Empty
                 || !await _dal.OfficeExists(officeId))
             {
-                officeId = currentUser.OfficeId ?? default;
+                officeId = currentUser.OfficeId ?? Guid.Empty;
             }
 
             return View("Report", new ReportViewModel
@@ -153,10 +153,10 @@ namespace ComplaintTracking.Controllers
 
             if (string.IsNullOrEmpty(office)
                 || !Guid.TryParse(office, out var officeId)
-                || officeId == default
+                || officeId == Guid.Empty
                 || !await _dal.OfficeExists(officeId))
             {
-                officeId = currentUser.OfficeId ?? default;
+                officeId = currentUser.OfficeId ?? Guid.Empty;
             }
 
             var today = DateTime.Today;
@@ -213,11 +213,11 @@ namespace ComplaintTracking.Controllers
             var currentUser = await GetCurrentUserAsync();
 
             if (string.IsNullOrEmpty(office)
-                || !Guid.TryParse(office, out Guid officeId)
-                || officeId == default
+                || !Guid.TryParse(office, out var officeId)
+                || officeId == Guid.Empty
                 || !await _dal.OfficeExists(officeId))
             {
-                officeId = currentUser.OfficeId ?? default;
+                officeId = currentUser.OfficeId ?? Guid.Empty;
             }
 
             var today = DateTime.Today;
@@ -280,7 +280,7 @@ namespace ComplaintTracking.Controllers
 
             if (string.IsNullOrEmpty(office)
                 || !Guid.TryParse(office, out var officeId)
-                || officeId == default
+                || officeId == Guid.Empty
                 || !await _dal.OfficeExists(officeId))
             {
                 officeId = (await GetCurrentUserAsync()).OfficeId ??
@@ -374,11 +374,11 @@ namespace ComplaintTracking.Controllers
             var currentUser = await GetCurrentUserAsync();
 
             if (string.IsNullOrEmpty(office)
-                || !Guid.TryParse(office, out Guid officeId)
-                || officeId == default
+                || !Guid.TryParse(office, out var officeId)
+                || officeId == Guid.Empty
                 || !await _dal.OfficeExists(officeId))
             {
-                officeId = currentUser.OfficeId ?? default;
+                officeId = currentUser.OfficeId ?? Guid.Empty;
             }
 
             var today = DateTime.Today;

@@ -442,7 +442,7 @@ namespace ComplaintTracking.Controllers
 
                 // update complaint action
                 complaintAction.ActionDate = model.ActionDate ?? default;
-                complaintAction.ActionTypeId = model.ActionTypeId ?? default;
+                complaintAction.ActionTypeId = model.ActionTypeId ?? Guid.Empty;
                 complaintAction.Investigator = model.Investigator;
                 complaintAction.Comments = model.Comments;
 

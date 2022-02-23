@@ -29,7 +29,7 @@ namespace ComplaintTracking.Controllers.Api
         [HttpGet("ByOffice/{id}")]
         public async Task<JsonResult> ByOffice(string id)
         {
-            if (string.IsNullOrEmpty(id) || !Guid.TryParse(id, out var officeGuid) || officeGuid == default)
+            if (string.IsNullOrEmpty(id) || !Guid.TryParse(id, out var officeGuid) || officeGuid == Guid.Empty)
                 return Json(null);
 
             var user = await GetCurrentUserAsync();
@@ -64,7 +64,7 @@ namespace ComplaintTracking.Controllers.Api
         {
             if (string.IsNullOrEmpty(id) || !Guid.TryParse(id, out var officeGuid)) return Json(null);
 
-            return officeGuid != default
+            return officeGuid != Guid.Empty
                 ? Json(await _dal.GetUsersSelectListAsync(officeGuid, true))
                 : Json(null);
         }

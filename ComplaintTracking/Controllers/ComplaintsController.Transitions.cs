@@ -231,7 +231,7 @@ namespace ComplaintTracking.Controllers
                 }
 
                 // Update complaint properties
-                complaint.CurrentOfficeId = model.CurrentOfficeId ?? default;
+                complaint.CurrentOfficeId = model.CurrentOfficeId ?? Guid.Empty;
                 complaint.CurrentOwnerId = model.CurrentOwnerId;
                 complaint.DateCurrentOwnerAssigned = (model.CurrentOwnerId != null) ? DateTime.Now : null;
                 complaint.DateCurrentOwnerAccepted =
@@ -597,7 +597,7 @@ namespace ComplaintTracking.Controllers
 
                 if (model.CurrentOwnerId != fromOwnerId)
                 {
-                    complaint.CurrentOfficeId = model.CurrentOfficeId ?? default;
+                    complaint.CurrentOfficeId = model.CurrentOfficeId ?? Guid.Empty;
                     complaint.CurrentOwnerId = model.CurrentOwnerId;
                     complaint.DateCurrentOwnerAssigned = model.CurrentOwnerId != null ? DateTime.Now : null;
                     complaint.DateCurrentOwnerAccepted =
