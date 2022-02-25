@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using static ComplaintTracking.Caching;
 using static ComplaintTracking.ViewModels.UserIndexViewModel;
@@ -217,12 +218,10 @@ namespace ComplaintTracking.Controllers
                     OfficeId = model.OfficeId,
                 };
 
-                var pwd = GenerateNewPassword();
-
                 _cache.Remove(CacheKeys.UsersSelectList);
                 _cache.Remove(CacheKeys.UsersIncludeInactiveSelectList);
 
-                var result = await _userManager.CreateAsync(user, pwd);
+                var result = await _userManager.CreateAsync(user, GenerateTemporaryPassword());
                 if (result.Succeeded)
                 {
                     if (currentUserIsDivisionManager) // Only Division Manager can create new Division Managers
@@ -492,11 +491,39 @@ namespace ComplaintTracking.Controllers
 
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
-        private static string GenerateNewPassword()
+        private static string GenerateTemporaryPassword()
         {
-            var data = new byte[16];
-            RandomNumberGenerator.Create().GetBytes(data);
-            return BitConverter.ToString(data);
+            // Password must:
+            // be at least six characters and
+            // contain at least one each of:
+            //   * lowercase letter
+            //   * uppercase letter
+            //   * digit
+            //   * non alphanumeric character
+
+            var pwd = new StringBuilder();
+
+            const string passNumber = "1234567890";
+            const string passLower = "abcdefghijklmnopqrstuvwxyz";
+            const string passUpper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const string passSpecialChar = "@!#$%^&*";
+            const string passAll = passLower + passNumber + passUpper + passSpecialChar;
+
+            const int passwordLength = 20; // final password will be 24 characters
+
+            for (var i = 0; i < passwordLength; i++)
+            {
+                var j = RandomNumberGenerator.GetInt32(passAll.Length);
+                pwd.Append(passAll.AsSpan(j, 1));
+            }
+
+            // Ensure all pw requirements are met (adds four additional characters)
+            pwd.Append(passNumber.AsSpan(RandomNumberGenerator.GetInt32(passNumber.Length), 1));
+            pwd.Append(passLower.AsSpan(RandomNumberGenerator.GetInt32(passLower.Length), 1));
+            pwd.Append(passUpper.AsSpan(RandomNumberGenerator.GetInt32(passUpper.Length), 1));
+            pwd.Append(passSpecialChar.AsSpan(RandomNumberGenerator.GetInt32(passSpecialChar.Length), 1));
+
+            return pwd.ToString();
         }
 
         public IActionResult Roles()
