@@ -16,10 +16,10 @@ a.no-visited, .no-visited a {
     color: #0071bc;
 }
 
-    a.no-visited:hover, a.no-visited:active,
-    .no-visited a:hover, .no-visited a:active {
-        color: #205493;
-    }
+a.no-visited:hover, a.no-visited:active,
+.no-visited a:hover, .no-visited a:active {
+    color: #205493;
+}
 
 .no-visited .gaepd-pagination-inner a:hover,
 .no-visited .gaepd-pagination-inner a:focus,
@@ -83,9 +83,25 @@ a.no-visited, .no-visited a {
     }
 }
 
+/* Test site banner */
+
+.banner-test-site {
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+    opacity: .9;
+    color: #333;
+    font-weight: 700;
+    font-size: 16px;
+    font-family: system-ui;
+    text-transform: uppercase;
+    text-align: center;
+    text-shadow: 0 0 4px white;
+    background: repeating-linear-gradient(135deg, #f6da52bb, #f6da52bb 10px, #ffef80bb 10px, #ffef80bb 20px);
+}
+
 @media print {
     .usa-search,
-    .test-site-banner,
     .gaepd-form-fileupload {
         display: none;
     }
@@ -124,5 +140,15 @@ a.no-visited, .no-visited a {
         margin: 0.5em 0;
         font-size: 11px;
         width: 100%;
+    }
+
+    .banner-test-site {
+        position: static;
+        text-shadow: none;
+        border: 1px solid;
+    }
+
+    .banner-test-site::after {
+        content: "—Not for public distribution";
     }
 }
