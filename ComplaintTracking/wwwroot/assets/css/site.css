@@ -3462,39 +3462,6 @@ form.usa-section {
 .ui-timepicker-standard {
   font-size: .9em; }
 
-/* 
-GeorgiaGov Interactive 
-Web Standards and Guidelines » 6.0 Brand Standards » 6.2 Shared Elements
-http://portal.georgia.gov/interactive/web-standards/62-shared-elements
-*/
-.gaepd-footer {
-  color: #fff;
-  border-top: 3px solid HSL(195, 2%, 32%);
-  background: #948d84;
-  font-family: Verdana, sans-serif;
-  font-size: 1.2rem;
-  text-align: center; }
-
-.gaepd-footer-menu {
-  list-style: none;
-  margin: 10px auto 0; }
-  .gaepd-footer-menu li {
-    display: inline; }
-    .gaepd-footer-menu li::before {
-      content: " | "; }
-    .gaepd-footer-menu li:first-child::before {
-      content: ""; }
-  .gaepd-footer-menu a {
-    color: #fff; }
-    .gaepd-footer-menu a:hover {
-      text-decoration: none; }
-
-#gagov_external_blocks-topper {
-  box-sizing: content-box; }
-
-#gagov_external_blocks-footer #zone-footer-wrapper {
-  min-height: 200px; }
-
 .gaepd-avatar {
   vertical-align: middle;
   border-radius: 0.3rem;
@@ -3502,12 +3469,7 @@ http://portal.georgia.gov/interactive/web-standards/62-shared-elements
   .gaepd-avatar-small {
     vertical-align: text-bottom;
     border-radius: 1px; }
-
-/* 
-GeorgiaGov Interactive 
-Web Standards and Guidelines » 6.0 Brand Standards » 6.1 Logo Usage
-http://portal.georgia.gov/interactive/web-standards/61-logo-usage
-*/
+  
 @media screen and (min-width: 951px) {
   .usa-header-basic .gaepd-logo {
     bottom: 0;

@@ -32,10 +32,6 @@
     </div>
 </environment>
 <a class="usa-skipnav" href="#main-content">Skip to main content</a>
-@if (User.Identity is null || !User.Identity.IsAuthenticated)
-{
-    <script type="text/javascript" src="https://georgia.gov/gagov_external_blocks/topper"></script>
-}
 
 @if (ViewData["NoHeader"] == null)
 {
@@ -95,26 +91,6 @@
         <a href="#" class="no-visited">Return to top</a>
     </div>
 </div>
-@if (User.Identity is null || !User.Identity.IsAuthenticated)
-{
-    <div class="gaepd-footer">
-        <ul class="gaepd-footer-menu">
-            <li>
-                <a href="https://epd.georgia.gov/">Environmental Protection Division</a>
-            </li>
-            <li>
-                <a href="https://georgia.gov/accessibility">Accessibility</a>
-            </li>
-            <li>
-                <a href="https://www.gadnr.org/ada">DNR Accessibility Notice</a>
-            </li>
-            <li>
-                <a href="https://georgia.gov/privacysecurity">Privacy/Security</a>
-            </li>
-        </ul>
-        <script type="text/javascript" src="https://georgia.gov/gagov_external_blocks/footer"></script>
-    </div>
-}
 
 @await Html.PartialAsync("_StandardScriptsPartial")
 @RenderSection("PageScripts", required: false)
