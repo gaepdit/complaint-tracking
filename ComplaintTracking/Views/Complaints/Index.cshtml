@@ -169,7 +169,7 @@
                 {
                     <text>@Model.Complaints.TotalItems.ToString("N0") total results; showing results @Model.Complaints.FirstItemIndex.ToString("N0") – @Model.Complaints.LastItemIndex.ToString("N0")</text>
                 }
-                <form asp-action="Download" asp-controller="Complaints" class="usa-form" style="float:right">
+                <form asp-action="Download" asp-controller="Complaints" class="usa-form float-right">
                     <input type="hidden" asp-for="Sort" />
                     <input type="hidden" asp-for="ComplaintStatus" />
                     <input type="hidden" asp-for="DeleteStatus" />
@@ -551,7 +551,7 @@
 }
 
 @section PageScripts {
-    <script type="text/javascript">
+    <script asp-add-content-to-csp>
         $(function domReady() {
 
             // Make owner select list hierarchical from Office select list

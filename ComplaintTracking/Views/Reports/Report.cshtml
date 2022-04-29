@@ -13,11 +13,11 @@
         <div role="search">
             @if (Model.UseDate && Model.UseOfficeSelect)
             {
-                <div style="display:inline-block">
+                <div class="display-inline-block">
                     @Html.LabelFor(m => m.SelectedDate)
                     @Html.EditorFor(m => m.SelectedDate, new { htmlAttributes = new { @class = "datepicker usa-input-medium" } })
                 </div>
-                <div style="display:inline-block">
+                <div class="display-inline-block">
                     @Html.LabelFor(m => m.Office)
                     @Html.DropDownListFor(m => m.Office, Model.OfficeSelectList, selectText, htmlAttributes: new { @type = "search" })
                     <button type="submit"><span class="usa-search-submit-text">Open</span></button>
@@ -161,7 +161,7 @@ else
 @if (Model.UseDate)
 {
     @section PageScripts {
-        <script type="text/javascript">
+        <script asp-add-content-to-csp>
             $(function domReady() {
                 // Set up date picker
                 $('.datepicker')

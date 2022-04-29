@@ -111,7 +111,7 @@ else
 @await Html.PartialAsync("_AttachmentsPublicPartial", Model.Attachments)
 
 @section PageScripts {
-    <script type="text/javascript">
+    <script asp-add-content-to-csp>
         (function (document, window, index) {
 
             // Set fancyBox defaults

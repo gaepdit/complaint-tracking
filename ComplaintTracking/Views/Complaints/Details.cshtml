@@ -331,7 +331,7 @@ else
             <tr>
                 <th scope="row">@Html.DisplayNameFor(m => item.Comments)</th>
                 <td>
-                    <p style="margin-top:0" class="gaepd-preserve-linebreaks">@Html.DisplayFor(m => item.Comments)</p>
+                    <p class="gaepd-preserve-linebreaks mt0">@Html.DisplayFor(m => item.Comments)</p>
                 </td>
             </tr>
             </tbody>
@@ -446,7 +446,7 @@ else
 }
 
 @section PageScripts {
-    <script type="text/javascript">
+    <script asp-add-content-to-csp>
         (function (document, window, index) {
 
             // Set fancyBox defaults

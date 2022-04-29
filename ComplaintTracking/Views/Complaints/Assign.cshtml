@@ -39,7 +39,7 @@
 </form>
 
 @section PageScripts {
-    <script type="text/javascript">
+    <script asp-add-content-to-csp>
         $(function domReady() {
             // Make staff (owner) select hierarchical from Office select
             var OfficeIdSource = "#CurrentOfficeId";
