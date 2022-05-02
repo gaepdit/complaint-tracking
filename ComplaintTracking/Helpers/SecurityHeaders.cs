@@ -39,7 +39,9 @@ internal static class SecurityHeaders
         builder.AddImgSrc()
             .Self()
             .From("https://www.gravatar.com/avatar/");
-        builder.AddConnectSrc().From("https://api.raygun.io");
+        builder.AddConnectSrc()
+            .Self()
+            .From("https://api.raygun.io");
         builder.AddFontSrc().Self();
         builder.AddFormAction().Self();
         builder.AddManifestSrc().Self();
