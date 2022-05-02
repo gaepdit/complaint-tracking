@@ -29,6 +29,7 @@ internal static class SecurityHeaders
             .Self()
             .From("https://cdn.raygun.io/raygun4js/raygun.min.js")
             .WithHash256("lyolOjFEpwMenK+1PNbcwjIW7ZjHzw+EN8xe4louCcE=") // Raygun CDN
+            .WithHash256("k8lqom5XjWiHpIL9TqKQ7DpRVbQNTtRtBFIKZ0iQaBk=") // Raygun pulse
             .WithHash256("tTnPz8pqP3Qkgh24aJLdbf1uukxpTUbfsHypqPsdkY4=") // no-js helper
             .WithHash256("P7+P37YsIAcgJJLpGI97Gb6NxOEps50FoJUPSqdDAqs=") // Close alerts
             .WithHashTagHelper()
