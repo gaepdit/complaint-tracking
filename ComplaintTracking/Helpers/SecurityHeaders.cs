@@ -17,7 +17,7 @@ internal static class SecurityHeaders
         policies.AddCustomHeader("Report-To",
             $"{{\"group\":\"raygun\",\"max_age\":2592000,\"endpoints\":[{{\"url\":\"https://report-to-api.raygun.com/reports-csp?apikey={ApplicationSettings.Raygun.ApiKey}\"}}]}}");
         policies.AddCustomHeader("NEL",
-            "{\"report_to\": \"network-errors\", \"max_age\": 2592000}");
+            "{\"report_to\": \"raygun\", \"max_age\": 2592000}");
     }
 
 #pragma warning disable S1075 // "URIs should not be hardcoded"
