@@ -42,29 +42,27 @@
     <script asp-add-content-to-csp>
         $(function domReady() {
             // Make staff (owner) select hierarchical from Office select
-            var OfficeIdSource = "#CurrentOfficeId";
-            var OwnerIdDest = "#CurrentOwnerId";
+            const OfficeIdSource = "#CurrentOfficeId";
+            const OwnerIdDest = "#CurrentOwnerId";
             $(OfficeIdSource).change(function loadUsersList() {
-                if ($(OfficeIdSource).val() != "") {
-                    var url = '@Url.Content("~/")' + "api/Users/ByOffice/" + $(OfficeIdSource).val();
+                let items = "<option selected value=''>@CTS.SelectUserMasterText</option>";
+                if ($(OfficeIdSource).val() !== "") {
+                    const url = '@Url.Content("~/")' + "api/Users/ByOffice/" + $(OfficeIdSource).val();
                     $.getJSON(url, function processJsonResult(result) {
-                        if (result == null || result.length == 0) {
-                            var items = "<option selected value=''>@CTS.SelectUserMasterText</option>";
+                        if (result == null || result.length === 0) {
                             $(OwnerIdDest).empty().html(items).prop('disabled', true);
                         } else {
-                            var items = "<option selected value=''>@CTS.SelectUserMasterText</option>";
                             $.each(result, function (i, item) {
                                 items += "<option value='" + item.value + "'>" + item.text + "</option>";
                             });
                             $(OwnerIdDest).empty().html(items).prop('disabled', false);
                         }
-                    }).fail(function jsonRequestFailed(d, textStatus, error) {
-                        console.error("getJSON failed, status: " + textStatus + ", error: " + error);
-                        var items = "<option selected value=''>Error</option>";
-                        $(OwnerIdDest).empty().html(items).prop('disabled', true);
+                    }).fail(function errorHandler(jqXHR, statusText, errorThrown) {
+                        const error = errorThrown instanceof Error ? errorThrown : new Error('Bad response from server: ' + jqXHR.responseText);
+                        rg4js('send', {error: error, tags: ['jquery-ajax-handled']});
+                        $(OwnerIdDest).empty().html("<option selected value=''>Error</option>").prop('disabled', true);
                     });
                 } else {
-                    var items = "<option selected value=''>@CTS.SelectUserMasterText</option>";
                     $(OwnerIdDest).empty().html(items).prop('disabled', true);
                 }
             });
