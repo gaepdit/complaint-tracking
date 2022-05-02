@@ -56,6 +56,20 @@ a.no-visited:hover, a.no-visited:active,
     }
 }
 
+/* Support page */
+details summary { cursor: pointer; }
+summary { display: list-item; }
+summary h2 { display: inline-block; margin-top: .5em; }
+summary::marker { font-size: 3rem; }
+
+/* Text utilities */
+.display-none {display: none;}
+.display-inline-block {display: inline-block;}
+.float-right {float: right;}
+.pt3 {padding-top: 3rem;}
+.pb0 {padding-bottom: 0;}
+.mt0 {margin-top: 0;}
+
 /* Dev label */
 .gaepd-label-dev {
     text-transform: none;

@@ -1,29 +1,25 @@
-﻿using ComplaintTracking.Data;
+using ComplaintTracking.App;
+using ComplaintTracking.Data;
+using ComplaintTracking.Helpers;
 using ComplaintTracking.Models;
 using ComplaintTracking.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Mindscape.Raygun4Net.AspNetCore;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 
 namespace ComplaintTracking
 {
     public class Startup
     {
-        public static bool IsLocal { get; set; }
+        internal static bool IsLocal { get; private set; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -35,6 +31,9 @@ namespace ComplaintTracking
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Set Application Settings
+            Configuration.GetSection(ApplicationSettings.RaygunSettingsSection).Bind(ApplicationSettings.Raygun);
+
             // Add database context
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
 
@@ -120,6 +119,9 @@ namespace ComplaintTracking
                 app.UseHsts();
                 app.UseExceptionHandler("/Error");
             }
+
+            // Configure security HTTP headers
+            app.UseSecurityHeaders(policies => policies.AddSecurityHeaderPolicies());
 
             app.UseRaygun();
 

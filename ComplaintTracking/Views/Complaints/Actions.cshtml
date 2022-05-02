@@ -5,7 +5,7 @@
 }
 
 <h1>@ViewData["Title"]</h1>
-<section class="usa-section usa-section-light usa-grid" style="padding-top:3rem;padding-bottom:0;">
+<section class="usa-section usa-section-light usa-grid pt3 pb0">
     <h2 id="newaction">Add a New Action</h2>
 
     <form asp-action="AddAction" class="usa-form-large">
@@ -114,7 +114,7 @@
 }
 
 @section PageScripts {
-    <script type="text/javascript">
+    <script asp-add-content-to-csp>
         $(function domReady() {
             // Set up datepicker
             $('.datepicker')

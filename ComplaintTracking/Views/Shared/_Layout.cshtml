@@ -1,5 +1,4 @@
-@inject Microsoft.Extensions.Configuration.IConfiguration _configuration
-@using ComplaintTracking.AlertMessages;
+@using ComplaintTracking.AlertMessages
 @{
     ViewData["AlertMessage"] ??= TempData.GetAlertFromSession();
 }
@@ -8,22 +7,12 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <environment names="Development,Staging">
-        <meta name="robots" content="noindex, nofollow">
-    </environment>
     <title>@StringFunctions.ConcatNonEmptyStrings(new[] { ViewData["Title"].ToString(), "Georgia EPD Complaint Tracking System" }, " · ")</title>
     @await Html.PartialAsync("_FaviconPartial")
     @await Html.PartialAsync("_StandardStylesheetsPartial")
     @await RenderSectionAsync("PageStyles", required: false)
-    <script type="text/javascript">
-  !function(a,b,c,d,e,f,g,h){a.RaygunObject=e,a[e]=a[e]||function(){
-  (a[e].o=a[e].o||[]).push(arguments)},f=b.createElement(c),g=b.getElementsByTagName(c)[0],
-  f.async=1,f.src=d,g.parentNode.insertBefore(f,g),h=a.onerror,a.onerror=function(b,c,d,f,g){
-  h&&h(b,c,d,f,g),g||(g=new Error(b)),a[e].q=a[e].q||[],a[e].q.push({
-  e:g})}}(window,document,"script","//cdn.raygun.io/raygun4js/raygun.min.js","rg4js");
-</script>
+    <partial name="_RaygunScriptsPartial" />
     <script>(function (e, t, n) { var r = e.querySelectorAll("html")[0]; r.className = r.className.replace(/(^|\s)no-js(\s|$)/, "$1js$2") })(document, window, 0);</script>
-    <meta name="google-site-verification" content="sxgavCGK6mG0GOiW6aJThcM3_U2U8_nm6E97mnACtQQ" />
 </head>
 <body>
 <environment exclude="Production">
@@ -93,22 +82,6 @@
 </div>
 
 @await Html.PartialAsync("_StandardScriptsPartial")
-@RenderSection("PageScripts", required: false)
-<script type="text/javascript">
-  rg4js('apiKey', '@_configuration["RaygunSettings:ApiKey"]');
-  rg4js('enableCrashReporting', true);
-  rg4js('enablePulse', true);
-  rg4js('options', {ignore3rdPartyErrors: true});
-  rg4js('whitelistCrossOriginDomains', ['cdnjs.cloudflare.com','cdn.jsdelivr.net']);
-@if (User.Identity?.IsAuthenticated == true)
-{
-    <text>
-  rg4js('setUser', {
-    isAnonymous: false,
-    identifier: '@User.Identity.Name'
-  });
-  </text>
-}
-</script>
+@await RenderSectionAsync("PageScripts", required: false)
 </body>
 </html>
