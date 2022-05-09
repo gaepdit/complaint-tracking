@@ -1,4 +1,4 @@
-using ComplaintTracking.App;
+﻿using ComplaintTracking.App;
 
 namespace ComplaintTracking.Helpers;
 
@@ -36,6 +36,7 @@ internal static class SecurityHeaders
             .ReportSample();
         builder.AddStyleSrc()
             .Self()
+            .WithHash256("FDaFJEfUmeNNDmh1mlkOgFQnyhlZzheSSA3oNe8/JRE=")
             .ReportSample();
         builder.AddImgSrc()
             .Self()
