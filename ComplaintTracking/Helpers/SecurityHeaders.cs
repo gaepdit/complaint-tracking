@@ -1,4 +1,4 @@
-﻿using ComplaintTracking.App;
+using ComplaintTracking.App;
 
 namespace ComplaintTracking.Helpers;
 
@@ -39,6 +39,7 @@ internal static class SecurityHeaders
             .ReportSample();
         builder.AddImgSrc()
             .Self()
+            .Data()
             .From("https://www.gravatar.com/avatar/");
         builder.AddConnectSrc()
             .Self()
