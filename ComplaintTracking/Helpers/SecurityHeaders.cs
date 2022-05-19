@@ -16,8 +16,6 @@ internal static class SecurityHeaders
             $"default=\"https://report-to-api.raygun.com/reports?apikey={ApplicationSettings.Raygun.ApiKey}\",csp-endpoint=\"https://report-to-api.raygun.com/reports-csp?apikey={ApplicationSettings.Raygun.ApiKey}\"");
         policies.AddCustomHeader("Report-To",
             $"{{\"group\":\"default\",\"max_age\":10886400,\"endpoints\":[{{\"url\":\"https://report-to-api.raygun.com/reports?apikey={ApplicationSettings.Raygun.ApiKey}\"}}]}},{{\"group\":\"csp-endpoint\",\"max_age\":10886400,\"endpoints\":[{{\"url\":\"https://report-to-api.raygun.com/reports-csp?apikey={ApplicationSettings.Raygun.ApiKey}\"}}]}}");
-        policies.AddCustomHeader("NEL", 
-            "{\"report_to\":\"default\", \"max_age\":2592000}");
     }
 
 #pragma warning disable S1075 // "URIs should not be hardcoded"
