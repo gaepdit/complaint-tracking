@@ -105,6 +105,8 @@ namespace ComplaintTracking.Data
                 await userManager.CreateAsync(user, password);
                 await userManager.AddToRoleAsync(await userManager.FindByNameAsync(email),
                     CtsRole.DivisionManager.ToString());
+                await userManager.AddToRoleAsync(await userManager.FindByNameAsync(email),
+                    CtsRole.DataExport.ToString());
             }
 
             var adminUser = await userManager.FindByNameAsync(email);
