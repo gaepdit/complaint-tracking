@@ -46,6 +46,13 @@ namespace ComplaintTracking.Controllers
                 return RedirectToAction("Details", new {id});
             }
 
+            if (complaint.Status == ComplaintStatus.ReviewPending)
+            {
+                msg = "This Complaint has been submitted for review so you cannot accept it.";
+                TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
+                return RedirectToAction("Details", new {id});
+            }
+
             if (complaint.ComplaintClosed)
             {
                 msg = "This Complaint has been closed and cannot be edited unless it is reopened.";

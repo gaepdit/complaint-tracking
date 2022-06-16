@@ -73,7 +73,8 @@ namespace ComplaintTracking.Controllers
             model.UserCanReview = User.IsInRole(CtsRole.DivisionManager.ToString()) // Division Managers can review all
                 || User.IsInRole(CtsRole.Manager.ToString()) &&
                 currentUser.OfficeId == model.CurrentOffice.Id; // Managers can review within their office
-            model.MustAccept = currentUser.Id == model.CurrentOwner?.Id && model.DateCurrentOwnerAccepted == null;
+            model.MustAccept = currentUser.Id == model.CurrentOwner?.Id && model.DateCurrentOwnerAccepted == null
+                && model.Status != ComplaintStatus.ReviewPending;
             model.UserIsOwner = currentUser.Id == model.CurrentOwner?.Id;
             model.IsAssigned = model.CurrentOwner != null;
 
