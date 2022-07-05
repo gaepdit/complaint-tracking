@@ -77,6 +77,8 @@
         <div class="usa-width-one-half">
             @Html.LabelFor(m => m.Investigator)
             @Html.EditorFor(m => m.Investigator)
+            @Html.LabelFor(m => m.ConcernId)
+            @Html.DropDownListFor(m => m.ConcernId, Model.ConcernSelectList, selectText)
         </div>
         <div class="usa-width-one-half">
             @Html.LabelFor(m => m.Comments)
@@ -104,91 +106,93 @@
             }
             else
             {
-                @Model.ComplaintActions.TotalItems.ToString("N0")<text> total results; showing results </text> @Model.ComplaintActions.FirstItemIndex.ToString("N0")<text> – </text>@Model.ComplaintActions.LastItemIndex.ToString("N0")
+                @Model.ComplaintActions.TotalItems.ToString("N0")<text> total results; showing results </text>
+                @Model.ComplaintActions.FirstItemIndex.ToString("N0")<text> – </text>
+                @Model.ComplaintActions.LastItemIndex.ToString("N0")
             }
         </caption>
         <thead>
-            <tr>
-                <th scope="col" class="gaepd-sortable" data-label="Sort by" @complaintIdColAria>
-                    <a asp-route-submit="Sort"
-                       asp-route-sort="@Model.ComplaintIdSortAction"
-                       asp-route-deleteStatus="@(Model.DeleteStatus.ToString())"
-                       asp-route-ActionDateFrom="@(String.Format(CTS.FormatDateEdit, Model.ActionDateFrom))"
-                       asp-route-ActionDateTo="@(String.Format(CTS.FormatDateEdit, Model.ActionDateTo))"
-                       asp-route-ActionType="@(Model.ActionType)"
-                       asp-route-Investigator="@(Model.Investigator)"
-                       asp-route-DateEnteredFrom="@(String.Format(CTS.FormatDateEdit, Model.DateEnteredFrom))"
-                       asp-route-DateEnteredTo="@(String.Format(CTS.FormatDateEdit, Model.DateEnteredTo))"
-                       asp-route-EnteredBy="@(Model.EnteredBy)"
-                       asp-route-Comments="@(Model.Comments)"
-                       asp-fragment="search-results">
-                        @Html.DisplayNameFor(model => model.ComplaintActions.FirstOrDefault().ComplaintId)
-                    </a>
-                </th>
-                <th scope="col" class="gaepd-sortable" data-label="Sort by" @typeColAria>
-                    <a asp-route-submit="Sort"
-                       asp-route-sort="@Model.TypeSortAction"
-                       asp-route-deleteStatus="@(Model.DeleteStatus.ToString())"
-                       asp-route-ActionDateFrom="@(String.Format(CTS.FormatDateEdit, Model.ActionDateFrom))"
-                       asp-route-ActionDateTo="@(String.Format(CTS.FormatDateEdit, Model.ActionDateTo))"
-                       asp-route-ActionType="@(Model.ActionType)"
-                       asp-route-Investigator="@(Model.Investigator)"
-                       asp-route-DateEnteredFrom="@(String.Format(CTS.FormatDateEdit, Model.DateEnteredFrom))"
-                       asp-route-DateEnteredTo="@(String.Format(CTS.FormatDateEdit, Model.DateEnteredTo))"
-                       asp-route-EnteredBy="@(Model.EnteredBy)"
-                       asp-route-Comments="@(Model.Comments)"
-                       asp-fragment="search-results">
-                        @Html.DisplayNameFor(model => model.ComplaintActions.FirstOrDefault().ActionType)
-                    </a>
-                </th>
-                <th scope="col" class="gaepd-sortable" data-label="Sort by" @actionDateColAria>
-                    <a asp-route-submit="Sort"
-                       asp-route-sort="@Model.DateSortAction"
-                       asp-route-deleteStatus="@(Model.DeleteStatus.ToString())"
-                       asp-route-ActionDateFrom="@(String.Format(CTS.FormatDateEdit, Model.ActionDateFrom))"
-                       asp-route-ActionDateTo="@(String.Format(CTS.FormatDateEdit, Model.ActionDateTo))"
-                       asp-route-ActionType="@(Model.ActionType)"
-                       asp-route-Investigator="@(Model.Investigator)"
-                       asp-route-DateEnteredFrom="@(String.Format(CTS.FormatDateEdit, Model.DateEnteredFrom))"
-                       asp-route-DateEnteredTo="@(String.Format(CTS.FormatDateEdit, Model.DateEnteredTo))"
-                       asp-route-EnteredBy="@(Model.EnteredBy)"
-                       asp-route-Comments="@(Model.Comments)"
-                       asp-fragment="search-results">
-                        @Html.DisplayNameFor(model => model.ComplaintActions.FirstOrDefault().ActionDate)
-                    </a>
-                </th>
-                <th scope="col">@Html.DisplayNameFor(m => m.ComplaintActions.FirstOrDefault().Investigator)</th>
-                <th scope="col">@Html.DisplayNameFor(m => m.ComplaintActions.FirstOrDefault().EnteredBy)</th>
-                <th scope="col">@Html.DisplayNameFor(m => m.ComplaintActions.FirstOrDefault().Comments)</th>
-                @if (Model.IncludeDeleted)
-                {
-                    <th scope="col">@Html.DisplayNameFor(m => m.ComplaintActions.FirstOrDefault().Deleted)</th>
-                }
-            </tr>
+        <tr>
+            <th scope="col" class="gaepd-sortable" data-label="Sort by" @complaintIdColAria>
+                <a asp-route-submit="Sort"
+                   asp-route-sort="@Model.ComplaintIdSortAction"
+                   asp-route-deleteStatus="@(Model.DeleteStatus.ToString())"
+                   asp-route-ActionDateFrom="@(String.Format(CTS.FormatDateEdit, Model.ActionDateFrom))"
+                   asp-route-ActionDateTo="@(String.Format(CTS.FormatDateEdit, Model.ActionDateTo))"
+                   asp-route-ActionType="@(Model.ActionType)"
+                   asp-route-Investigator="@(Model.Investigator)"
+                   asp-route-DateEnteredFrom="@(String.Format(CTS.FormatDateEdit, Model.DateEnteredFrom))"
+                   asp-route-DateEnteredTo="@(String.Format(CTS.FormatDateEdit, Model.DateEnteredTo))"
+                   asp-route-EnteredBy="@(Model.EnteredBy)"
+                   asp-route-Comments="@(Model.Comments)"
+                   asp-fragment="search-results">
+                    @Html.DisplayNameFor(model => model.ComplaintActions.FirstOrDefault().ComplaintId)
+                </a>
+            </th>
+            <th scope="col" class="gaepd-sortable" data-label="Sort by" @typeColAria>
+                <a asp-route-submit="Sort"
+                   asp-route-sort="@Model.TypeSortAction"
+                   asp-route-deleteStatus="@(Model.DeleteStatus.ToString())"
+                   asp-route-ActionDateFrom="@(String.Format(CTS.FormatDateEdit, Model.ActionDateFrom))"
+                   asp-route-ActionDateTo="@(String.Format(CTS.FormatDateEdit, Model.ActionDateTo))"
+                   asp-route-ActionType="@(Model.ActionType)"
+                   asp-route-Investigator="@(Model.Investigator)"
+                   asp-route-DateEnteredFrom="@(String.Format(CTS.FormatDateEdit, Model.DateEnteredFrom))"
+                   asp-route-DateEnteredTo="@(String.Format(CTS.FormatDateEdit, Model.DateEnteredTo))"
+                   asp-route-EnteredBy="@(Model.EnteredBy)"
+                   asp-route-Comments="@(Model.Comments)"
+                   asp-fragment="search-results">
+                    @Html.DisplayNameFor(model => model.ComplaintActions.FirstOrDefault().ActionType)
+                </a>
+            </th>
+            <th scope="col" class="gaepd-sortable" data-label="Sort by" @actionDateColAria>
+                <a asp-route-submit="Sort"
+                   asp-route-sort="@Model.DateSortAction"
+                   asp-route-deleteStatus="@(Model.DeleteStatus.ToString())"
+                   asp-route-ActionDateFrom="@(String.Format(CTS.FormatDateEdit, Model.ActionDateFrom))"
+                   asp-route-ActionDateTo="@(String.Format(CTS.FormatDateEdit, Model.ActionDateTo))"
+                   asp-route-ActionType="@(Model.ActionType)"
+                   asp-route-Investigator="@(Model.Investigator)"
+                   asp-route-DateEnteredFrom="@(String.Format(CTS.FormatDateEdit, Model.DateEnteredFrom))"
+                   asp-route-DateEnteredTo="@(String.Format(CTS.FormatDateEdit, Model.DateEnteredTo))"
+                   asp-route-EnteredBy="@(Model.EnteredBy)"
+                   asp-route-Comments="@(Model.Comments)"
+                   asp-fragment="search-results">
+                    @Html.DisplayNameFor(model => model.ComplaintActions.FirstOrDefault().ActionDate)
+                </a>
+            </th>
+            <th scope="col">@Html.DisplayNameFor(m => m.ComplaintActions.FirstOrDefault().Investigator)</th>
+            <th scope="col">@Html.DisplayNameFor(m => m.ComplaintActions.FirstOrDefault().EnteredBy)</th>
+            <th scope="col">@Html.DisplayNameFor(m => m.ComplaintActions.FirstOrDefault().Comments)</th>
+            @if (Model.IncludeDeleted)
+            {
+                <th scope="col">@Html.DisplayNameFor(m => m.ComplaintActions.FirstOrDefault().Deleted)</th>
+            }
+        </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.ComplaintActions)
+        @foreach (var item in Model.ComplaintActions)
+        {
+            rowclass = "";
+            if (item.Deleted)
             {
-                rowclass = "";
-                if (item.Deleted)
-                {
-                    rowclass = "gaepd-tablerow-dimmed";
-                }
-                <tr class="@rowclass">
-                    <th scope="row" data-label="@Html.DisplayNameFor(m => item.ComplaintId)">
-                        <a class="usa-button usa-button-outline" asp-controller="Complaints" asp-action="Details" asp-route-id="@item.ComplaintId">@Html.DisplayFor(m => item.ComplaintId)</a>
-                    </th>
-                    <td data-label="@Html.DisplayNameFor(m => item.ActionType)">@Html.DisplayFor(m => item.ActionType.Name)</td>
-                    <td data-label="@Html.DisplayNameFor(m => item.ActionDate)">@Html.DisplayFor(m => item.ActionDate)</td>
-                    <td data-label="@Html.DisplayNameFor(m => item.Investigator)">@Html.DisplayFor(m => item.Investigator)</td>
-                    <td data-label="@Html.DisplayNameFor(m => item.EnteredBy)">@Html.DisplayFor(m => item.EnteredBy.SortableFullName)</td>
-                    <td data-label="@Html.DisplayNameFor(m => item.Comments)">@Html.DisplayFor(m => item.Comments)</td>
-                    @if (Model.IncludeDeleted)
-                    {
-                        <td data-label="@Html.DisplayNameFor(m => item.Deleted)">@Html.DisplayFor(m => item.Deleted)</td>
-                    }
-                </tr>
+                rowclass = "gaepd-tablerow-dimmed";
             }
+            <tr class="@rowclass">
+                <th scope="row" data-label="@Html.DisplayNameFor(m => item.ComplaintId)">
+                    <a class="usa-button usa-button-outline" asp-controller="Complaints" asp-action="Details" asp-route-id="@item.ComplaintId">@Html.DisplayFor(m => item.ComplaintId)</a>
+                </th>
+                <td data-label="@Html.DisplayNameFor(m => item.ActionType)">@Html.DisplayFor(m => item.ActionType.Name)</td>
+                <td data-label="@Html.DisplayNameFor(m => item.ActionDate)">@Html.DisplayFor(m => item.ActionDate)</td>
+                <td data-label="@Html.DisplayNameFor(m => item.Investigator)">@Html.DisplayFor(m => item.Investigator)</td>
+                <td data-label="@Html.DisplayNameFor(m => item.EnteredBy)">@Html.DisplayFor(m => item.EnteredBy.SortableFullName)</td>
+                <td data-label="@Html.DisplayNameFor(m => item.Comments)">@Html.DisplayFor(m => item.Comments)</td>
+                @if (Model.IncludeDeleted)
+                {
+                    <td data-label="@Html.DisplayNameFor(m => item.Deleted)">@Html.DisplayFor(m => item.Deleted)</td>
+                }
+            </tr>
+        }
         </tbody>
     </table>
 

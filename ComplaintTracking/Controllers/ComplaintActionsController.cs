@@ -37,6 +37,7 @@ namespace ComplaintTracking.Controllers
             DateTime? DateEnteredTo = null,
             string EnteredBy = null,
             string Comments = null,
+            Guid? ConcernId = null,
             SearchDeleteStatus? deleteStatus = null
         )
         {
@@ -56,10 +57,12 @@ namespace ComplaintTracking.Controllers
                 DateEnteredTo = DateEnteredTo,
                 EnteredBy = EnteredBy,
                 Comments = Comments,
+                ConcernId = ConcernId,
                 DeleteStatus = deleteStatus,
                 Sort = sort,
                 AllUsersSelectList = await _dal.GetAllUsersSelectListAsync(true),
-                ActionTypesSelectList = await _dal.GetActionTypesSelectListAsync()
+                ActionTypesSelectList = await _dal.GetActionTypesSelectListAsync(),
+                ConcernSelectList = await _dal.GetAreasOfConcernSelectListAsync(),
             };
 
             if (string.IsNullOrEmpty(submit))
@@ -98,6 +101,7 @@ namespace ComplaintTracking.Controllers
                  DateEnteredTo,
                  EnteredBy,
                  Comments,
+                 ConcernId,
                  deleteStatus);
 
                 // Sorters

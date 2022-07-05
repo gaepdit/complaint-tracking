@@ -1,7 +1,5 @@
 ﻿using ComplaintTracking.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
 using static ComplaintTracking.ViewModels.SearchComplaintActionsViewModel;
 
 namespace ComplaintTracking
@@ -40,8 +38,9 @@ namespace ComplaintTracking
             DateTime? DateEnteredTo = null,
             string EnteredBy = null,
             string Comments = null,
+            Guid? ConcernId = null,
             SearchDeleteStatus? deleteStatus = null
-            )
+        )
         {
             var complaintActions = _context.ComplaintActions.AsNoTracking();
 
@@ -76,7 +75,8 @@ namespace ComplaintTracking
 
             if (!string.IsNullOrEmpty(Investigator))
             {
-                complaintActions = complaintActions.Where(e => e.Investigator.ToLower().Contains(Investigator.ToLower()));
+                complaintActions =
+                    complaintActions.Where(e => e.Investigator.ToLower().Contains(Investigator.ToLower()));
             }
 
             if (DateEnteredFrom.HasValue)
@@ -99,12 +99,22 @@ namespace ComplaintTracking
                 complaintActions = complaintActions.Where(e => e.Comments.ToLower().Contains(Comments.ToLower()));
             }
 
+            if (ConcernId.HasValue)
+            {
+                complaintActions = complaintActions
+                    .Where(e => (e.Complaint.PrimaryConcernId.HasValue &&
+                            e.Complaint.PrimaryConcernId.Value == ConcernId.Value)
+                        || (e.Complaint.SecondaryConcernId.HasValue &&
+                            e.Complaint.SecondaryConcernId.Value == ConcernId.Value));
+            }
+
             // Sort
             complaintActions = sort switch
             {
                 SortBy.ActionDateAsc => complaintActions.OrderBy(e => e.ActionDate).ThenBy(e => e.ComplaintId),
                 SortBy.ActionTypeAsc => complaintActions.OrderBy(e => e.ActionType.Name).ThenBy(e => e.ComplaintId),
-                SortBy.ActionTypeDesc => complaintActions.OrderByDescending(e => e.ActionType.Name).ThenBy(e => e.ComplaintId),
+                SortBy.ActionTypeDesc => complaintActions.OrderByDescending(e => e.ActionType.Name)
+                    .ThenBy(e => e.ComplaintId),
                 SortBy.ComplaintIdAsc => complaintActions.OrderBy(e => e.ComplaintId),
                 SortBy.ComplaintIdDesc => complaintActions.OrderByDescending(e => e.ComplaintId),
                 _ => complaintActions.OrderByDescending(e => e.ActionDate).ThenBy(e => e.ComplaintId),
