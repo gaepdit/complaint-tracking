@@ -10,10 +10,10 @@ public sealed class ApplicationUser : IdentityUser
     public IEnumerable<IdentityUserRole<string>> Roles { get; } = new List<IdentityUserRole<string>>();
 
     [StringLength(50)]
-    public string FirstName { get; set; } = "";
+    public string FirstName { get; set; } = string.Empty;
 
     [StringLength(50)]
-    public string LastName { get; set; } = "";
+    public string LastName { get; set; } = string.Empty;
 
     [StringLength(25)]
     public string? Phone { get; set; }

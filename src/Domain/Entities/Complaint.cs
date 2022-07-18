@@ -11,51 +11,22 @@ public class Complaint : IAuditable
     public DateTime DateEntered { get; set; }
 
     public ApplicationUser EnteredBy { get; set; } = null!;
-    public string EnteredById { get; set; } = "";
+    public string EnteredById { get; set; } = string.Empty;
 
     public DateTime DateReceived { get; set; }
 
     public ApplicationUser ReceivedBy { get; set; } = null!;
-    public string ReceivedById { get; set; } = "";
+    public string ReceivedById { get; set; } = string.Empty;
 
     // Caller
 
     public string? CallerName { get; set; }
-
     public string? CallerRepresents { get; set; }
+    public Address? CallerAddress { get; set; }
 
-    [StringLength(100)]
-    public string? CallerStreet { get; set; }
-
-    [StringLength(100)]
-    public string? CallerStreet2 { get; set; }
-
-    [StringLength(50)]
-    public string? CallerCity { get; set; }
-
-    public string? CallerState { get; set; }
-
-    [StringLength(10)]
-    [DataType(DataType.PostalCode)]
-    public string? CallerPostalCode { get; set; }
-
-    [StringLength(25)]
-    [DataType(DataType.PhoneNumber)]
-    public string? CallerPhoneNumber { get; set; }
-
-    public PhoneType? CallerPhoneType { get; set; }
-
-    [StringLength(25)]
-    [DataType(DataType.PhoneNumber)]
-    public string? CallerSecondaryPhoneNumber { get; set; }
-
-    public PhoneType? CallerSecondaryPhoneType { get; set; }
-
-    [StringLength(25)]
-    [DataType(DataType.PhoneNumber)]
-    public string? CallerTertiaryPhoneNumber { get; set; }
-
-    public PhoneType? CallerTertiaryPhoneType { get; set; }
+    public PhoneNumber? CallerPhoneNumber { get; set; }
+    public PhoneNumber? CallerSecondaryPhoneNumber { get; set; }
+    public PhoneNumber? CallerTertiaryPhoneNumber { get; set; }
 
     [EmailAddress]
     [StringLength(150)]
@@ -98,38 +69,11 @@ public class Complaint : IAuditable
     [StringLength(100)]
     public string? SourceContactName { get; set; }
 
-    [StringLength(100)]
-    public string? SourceStreet { get; set; }
-
-    [StringLength(100)]
-    public string? SourceStreet2 { get; set; }
-
-    [StringLength(50)]
-    public string? SourceCity { get; set; }
-
-    public string? SourceState { get; set; }
-
-    [StringLength(10)]
-    [DataType(DataType.PostalCode)]
-    public string? SourcePostalCode { get; set; }
-
-    [StringLength(25)]
-    [DataType(DataType.PhoneNumber)]
-    public string? SourcePhoneNumber { get; set; }
-
-    public PhoneType? SourcePhoneType { get; set; }
-
-    [StringLength(25)]
-    [DataType(DataType.PhoneNumber)]
-    public string? SourceSecondaryPhoneNumber { get; set; }
-
-    public PhoneType? SourceSecondaryPhoneType { get; set; }
-
-    [StringLength(25)]
-    [DataType(DataType.PhoneNumber)]
-    public string? SourceTertiaryPhoneNumber { get; set; }
-
-    public PhoneType? SourceTertiaryPhoneType { get; set; }
+    public Address? SourceAddress { get; set; }
+    
+    public PhoneNumber? SourcePhoneNumber { get; set; }
+    public PhoneNumber? SourceSecondaryPhoneNumber { get; set; }
+    public PhoneNumber? SourceTertiaryPhoneNumber { get; set; }
 
     [EmailAddress]
     [StringLength(150)]
@@ -187,44 +131,34 @@ public class Complaint : IAuditable
     // Attachments
 
     public List<Attachment> Attachments { get; set; } = new();
-}
 
-// enums
+    public enum ComplaintStatus
+    {
+        /// <summary>
+        /// Represents a new complaint that has not been accepted.
+        /// </summary>
+        New = 0,
 
-public enum PhoneType
-{
-    Cell = 0,
-    Fax = 1,
-    Home = 2,
-    Office = 3,
-}
+        /// <summary>
+        ///  Represents a new complaint that has been accepted.
+        /// </summary>
+        [Display(Name = "Under Investigation")]
+        UnderInvestigation = 1,
 
-public enum ComplaintStatus
-{
-    /// <summary>
-    /// Represents a new complaint that has not been accepted.
-    /// </summary>
-    New = 0,
+        /// <summary>
+        ///  Represents a complaint that has been submitted for review.
+        /// </summary>
+        [Display(Name = "Review Pending")] ReviewPending = 2,
 
-    /// <summary>
-    ///  Represents a new complaint that has been accepted.
-    /// </summary>
-    [Display(Name = "Under Investigation")]
-    UnderInvestigation = 1,
+        /// <summary>
+        ///  Represents a complaint that has been approved by a reviewer.
+        /// </summary>
+        [Display(Name = "Approved/Closed")] Closed = 3,
 
-    /// <summary>
-    ///  Represents a complaint that has been submitted for review.
-    /// </summary>
-    [Display(Name = "Review Pending")] ReviewPending = 2,
-
-    /// <summary>
-    ///  Represents a complaint that has been approved by a reviewer.
-    /// </summary>
-    [Display(Name = "Approved/Closed")] Closed = 3,
-
-    /// <summary>
-    ///  Represents a complaint that has been administratively closed (e.g., by EPD-IT).
-    /// </summary>
-    [Display(Name = "Administratively Closed")]
-    AdministrativelyClosed = 4,
+        /// <summary>
+        ///  Represents a complaint that has been administratively closed (e.g., by EPD-IT).
+        /// </summary>
+        [Display(Name = "Administratively Closed")]
+        AdministrativelyClosed = 4,
+    }
 }

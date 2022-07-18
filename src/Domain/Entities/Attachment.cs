@@ -8,10 +8,10 @@ public class Attachment
     public int ComplaintId { get; set; }
 
     [StringLength(245)]
-    public string FileName { get; set; } = "";
+    public string FileName { get; set; } = string.Empty;
 
     [StringLength(10)]
-    public string FileExtension { get; set; } = "";
+    public string FileExtension { get; set; } = string.Empty;
 
     public long Size { get; set; }
 

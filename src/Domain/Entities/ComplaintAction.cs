@@ -18,7 +18,7 @@ public class ComplaintAction : IAuditable
     public DateTime? DateEntered { get; set; }
 
     public ApplicationUser EnteredBy { get; set; } = null!;
-    public string EnteredById { get; set; } = "";
+    public string EnteredById { get; set; } = string.Empty;
 
     public string? Comments { get; set; }
 
