@@ -4,6 +4,8 @@ public class Office : IAuditable
 {
     public Guid Id { get; set; }
 
+    [Required]
+    [StringLength(450)]
     public string Name { get; set; } = string.Empty;
 
     public bool Active { get; set; } = true;

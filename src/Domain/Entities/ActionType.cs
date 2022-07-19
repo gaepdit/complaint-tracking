@@ -4,6 +4,7 @@ public class ActionType : IAuditable
 {
     public Guid Id { get; set; }
 
+    [Required]
     [StringLength(50)]
     public string Name { get; set; } = string.Empty;
 
