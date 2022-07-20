@@ -520,19 +520,8 @@ FodyWeavers.xsd
 # Web deploy settings
 !**/PublishProfiles/*.pubxml
 
-# Webpack build artifacts
-**/wwwroot/dist/
-
 # Environment settings files
 appsettings.*.json
 
-# SonarLint Rider plugin
-.idea/sonarlint/issuestore/
-.idea/.idea.enforcement-orders/.idea/sonarlint-state.xml
-
-# CTS content folders
-_UserFiles/
-
-# Cypress.io config files
-cypress.env.json
-tests/config/*.json
+# Build folders
+.artifacts/
