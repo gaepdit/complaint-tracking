@@ -513,14 +513,14 @@ FodyWeavers.xsd
 appsettings.*.json
 
 # Logs
-src/ComplaintTracking.Web/Logs/*
-src/ComplaintTracking.Web.Host/Logs/*
-src/ComplaintTracking.IdentityServer/Logs/*
-src/ComplaintTracking.HttpApi.Host/Logs/*
-src/ComplaintTracking.HttpApi.HostWithIds/Logs/*
-src/ComplaintTracking.DbMigrator/Logs/*
-src/ComplaintTracking.Blazor.Server/Logs/*
-src/ComplaintTracking.Blazor.Server.Tiered/Logs/*
+src/Web/Logs/*
+src/Web.Host/Logs/*
+src/IdentityServer/Logs/*
+src/HttpApi.Host/Logs/*
+src/HttpApi.HostWithIds/Logs/*
+src/DbMigrator/Logs/*
+src/Blazor.Server/Logs/*
+src/Blazor.Server.Tiered/Logs/*
 
 # Use abp install-libs to restore.
 **/wwwroot/libs/*
