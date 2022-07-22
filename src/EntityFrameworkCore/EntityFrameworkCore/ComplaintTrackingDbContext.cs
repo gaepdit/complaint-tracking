@@ -1,9 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ComplaintTracking.Entities.ActionTypes;
+using ComplaintTracking.Entities.Concerns;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
@@ -24,6 +29,9 @@ public class ComplaintTrackingDbContext :
     ITenantManagementDbContext
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
+
+    public DbSet<ActionType> ActionTypes { get; set; }
+    public DbSet<Concern> Concerns { get; set; }
 
     #region Entities from the modules
 
@@ -58,28 +66,45 @@ public class ComplaintTrackingDbContext :
 
     }
 
-    protected override void OnModelCreating(ModelBuilder builder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(builder);
+        base.OnModelCreating(modelBuilder);
 
         /* Include modules to your migration db context */
 
-        builder.ConfigurePermissionManagement();
-        builder.ConfigureSettingManagement();
-        builder.ConfigureBackgroundJobs();
-        builder.ConfigureAuditLogging();
-        builder.ConfigureIdentity();
-        builder.ConfigureIdentityServer();
-        builder.ConfigureFeatureManagement();
-        builder.ConfigureTenantManagement();
+        modelBuilder.ConfigurePermissionManagement();
+        modelBuilder.ConfigureSettingManagement();
+        modelBuilder.ConfigureBackgroundJobs();
+        modelBuilder.ConfigureAuditLogging();
+        modelBuilder.ConfigureIdentity();
+        modelBuilder.ConfigureIdentityServer();
+        modelBuilder.ConfigureFeatureManagement();
+        modelBuilder.ConfigureTenantManagement();
 
         /* Configure your own tables/entities inside here */
 
-        //builder.Entity<YourEntity>(b =>
-        //{
-        //    b.ToTable(ComplaintTrackingConsts.DbTablePrefix + "YourEntities", ComplaintTrackingConsts.DbSchema);
-        //    b.ConfigureByConvention(); //auto configure for the base class props
-        //    //...
-        //});
+        modelBuilder.Entity<ActionType>(b =>
+        {
+            b.ConfigureTable(nameof(ActionTypes));
+            b.ConfigureByConvention();
+        });
+
+        modelBuilder.Entity<Concern>(b =>
+        {
+            b.ConfigureTable(nameof(Concerns));
+            b.ConfigureByConvention();
+        });
     }
+}
+internal static class CtsEntityTypeBuilderExtensions
+{
+    public static void ConfigureTable<T>(this EntityTypeBuilder<T> b, string dbSetName) where T : class =>
+        b.As<EntityTypeBuilder>().ToTable(GetTableName(dbSetName), ComplaintTrackingConsts.DbSchema);
+
+    public static void ConfigureTemporalTable<T>(this EntityTypeBuilder<T> b, string dbSetName) where T : class =>
+        b.As<EntityTypeBuilder>().ToTable(GetTableName(dbSetName), ComplaintTrackingConsts.DbSchema,
+            t => t.IsTemporal(t => t.UseHistoryTable(GetHistoryTableName(dbSetName))));
+
+    static string GetTableName(string dbSetName) => $"{ComplaintTrackingConsts.DbTablePrefix}{dbSetName}";
+    static string GetHistoryTableName(string dbSetName) => $"{ComplaintTrackingConsts.DbTablePrefix}{dbSetName}{ComplaintTrackingConsts.DbHistoryTableSuffix}";
 }
