@@ -6,5 +6,5 @@ namespace ComplaintTracking.Web;
 [Dependency(ReplaceServices = true)]
 public class ComplaintTrackingBrandingProvider : DefaultBrandingProvider
 {
-    public override string AppName => "ComplaintTracking";
+    public override string AppName => "Complaint Tracking System";
 }

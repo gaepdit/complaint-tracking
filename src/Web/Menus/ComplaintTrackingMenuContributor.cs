@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using ComplaintTracking.Localization;
+﻿using ComplaintTracking.Localization;
 using ComplaintTracking.MultiTenancy;
 using Volo.Abp.Identity.Web.Navigation;
 using Volo.Abp.SettingManagement.Web.Navigation;
@@ -23,27 +22,16 @@ public class ComplaintTrackingMenuContributor : IMenuContributor
         var administration = context.Menu.GetAdministration();
         var l = context.GetLocalizer<ComplaintTrackingResource>();
 
-        context.Menu.Items.Insert(
-            0,
-            new ApplicationMenuItem(
-                ComplaintTrackingMenus.Home,
-                l["Menu:Home"],
-                "~/",
-                icon: "fas fa-home",
-                order: 0
-            )
-        );
-
-        if (MultiTenancyConsts.IsEnabled)
-        {
-            administration.SetSubItemOrder(TenantManagementMenuNames.GroupName, 1);
-        }
-        else
-        {
-            administration.TryRemoveMenuItem(TenantManagementMenuNames.GroupName);
-        }
+        if (!MultiTenancyConsts.IsEnabled) administration.TryRemoveMenuItem(TenantManagementMenuNames.GroupName);
 
         administration.SetSubItemOrder(IdentityMenuNames.GroupName, 2);
         administration.SetSubItemOrder(SettingManagementMenuNames.GroupName, 3);
+
+        context.Menu.Items.Insert(0, new ApplicationMenuItem(ComplaintTrackingMenus.Home, l["Menu:Home"], "~/", icon: "fas fa-home", order: 0));
+        context.Menu
+            .AddItem(new ApplicationMenuItem(ComplaintTrackingMenus.Maintenance, l["Menu:Maintenance"], icon: "fa fa-wrench")
+                .AddItem(new ApplicationMenuItem(ComplaintTrackingMenus.ActionTypes, l["Menu:ActionTypes"], url: "~/Maintenance/ActionTypes"))
+                .AddItem(new ApplicationMenuItem(ComplaintTrackingMenus.Concerns, l["Menu:Concerns"], url: "~/Maintenance/Concerns"))
+            );
     }
 }

@@ -1,10 +1,12 @@
 ﻿namespace ComplaintTracking.Web.Menus;
 
-public class ComplaintTrackingMenus
+public static class ComplaintTrackingMenus
 {
     private const string Prefix = "ComplaintTracking";
-    public const string Home = Prefix + ".Home";
+    public const string Home = $"{Prefix}.Home";
 
-    //Add your menu items here...
-
+    // Maintenance menu items
+    public const string Maintenance = $"{Prefix}.Maintenance";
+    public const string ActionTypes = $"{Maintenance}.ActionTypes";
+    public const string Concerns = $"{Maintenance}.Concerns";
 }

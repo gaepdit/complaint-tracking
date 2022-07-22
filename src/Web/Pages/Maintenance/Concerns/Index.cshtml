@@ -1,0 +1,23 @@
+﻿@page
+@using ComplaintTracking.Localization
+@using ComplaintTracking.Web.Pages.Maintenance.Concerns
+@using Microsoft.Extensions.Localization
+@model IndexModel
+@inject IStringLocalizer<ComplaintTrackingResource> L
+
+@{
+    ViewData["Title"] = @L["Title:Maintenance"] + " : " + @L["Title:Concerns"];
+}
+
+@section scripts{
+    <abp-script src="/Pages/Maintenance/Concerns/Index.js" />
+}
+
+<abp-card>
+    <abp-card-header>
+        <h2>@ViewData["Title"]</h2>
+    </abp-card-header>
+    <abp-card-body>
+        <abp-table striped-rows="true" id="ConcernsTable"></abp-table>
+    </abp-card-body>
+</abp-card>

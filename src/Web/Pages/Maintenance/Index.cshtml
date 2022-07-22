@@ -1,0 +1,16 @@
+﻿@page
+@using ComplaintTracking.Localization
+@using Microsoft.Extensions.Localization
+@model ComplaintTracking.Web.Pages.Maintenance.IndexModel
+@inject IStringLocalizer<ComplaintTrackingResource> L
+
+@{
+    ViewData["Title"] = @L["Title:Maintenance"];
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<ul>
+    <li><a asp-page="ActionTypes">@L["Title:ActionTypes"]</a></li>
+    <li><a asp-page="Concerns">@L["Title:Concerns"]</a></li>
+</ul>

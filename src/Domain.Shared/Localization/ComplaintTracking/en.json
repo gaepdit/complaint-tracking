@@ -2,6 +2,14 @@
   "culture": "en",
   "texts": {
     "Menu:Home": "Home",
+    "Menu:Maintenance": "Site Maintenance",
+    "Menu:ActionTypes": "Action Types",
+    "Menu:Concerns": "Concerns",
+
+    "Title:Maintenance": "Site Maintenance",
+    "Title:ActionTypes": "Complaint Action Types",
+    "Title:Concerns": "Complaint Areas of Concern",
+
     "Welcome": "Welcome",
     "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io."
   }
