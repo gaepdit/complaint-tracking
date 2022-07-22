@@ -2,10 +2,12 @@
 
   <Import Project="..\..\common.props" />
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>ComplaintTracking</RootNamespace>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>ComplaintTracking</RootNamespace>
+	</PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Domain.Shared\Domain.Shared.csproj" />
