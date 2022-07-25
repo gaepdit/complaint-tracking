@@ -517,6 +517,9 @@ FodyWeavers.xsd
 ########################
 ### Project-specific ###
 
+# SonarLint plugin
+.idea/**/sonarlint/
+
 # Web deploy settings
 !**/PublishProfiles/*.pubxml
 
