@@ -1,9 +1,10 @@
+using Cts.Domain.Offices;
+using Cts.Domain.Users;
+
 namespace Cts.Domain.Entities;
 
-public class Complaint : IAuditable
+public class Complaint : SoftDeleteEntity<int>
 {
-    public int Id { get; set; }
-
     // Meta-data
 
     public ComplaintStatus Status { get; set; } = ComplaintStatus.New;
@@ -11,12 +12,10 @@ public class Complaint : IAuditable
     public DateTime DateEntered { get; set; }
 
     public ApplicationUser EnteredBy { get; set; } = null!;
-    public string EnteredById { get; set; } = string.Empty;
 
     public DateTime DateReceived { get; set; }
 
     public ApplicationUser ReceivedBy { get; set; } = null!;
-    public string ReceivedById { get; set; } = string.Empty;
 
     // Caller
 
@@ -90,7 +89,6 @@ public class Complaint : IAuditable
     public string? CurrentProgram { get; set; }
 
     public virtual ApplicationUser? CurrentOwner { get; set; }
-    public string? CurrentOwnerId { get; set; }
 
     public DateTime? DateCurrentOwnerAssigned { get; set; }
 
@@ -107,7 +105,6 @@ public class Complaint : IAuditable
     // Review/Closure
 
     public ApplicationUser? ReviewBy { get; set; }
-    public string? ReviewById { get; set; }
 
     [StringLength(4000)]
     public string? ReviewComments { get; set; }
@@ -117,13 +114,6 @@ public class Complaint : IAuditable
     public DateTime? DateComplaintClosed { get; set; }
 
     // Deletion
-
-    public bool Deleted { get; set; }
-
-    public ApplicationUser? DeletedBy { get; set; }
-    public string? DeletedById { get; set; }
-
-    public DateTime? DateDeleted { get; set; }
 
     [StringLength(4000)]
     public string? DeleteComments { get; set; }

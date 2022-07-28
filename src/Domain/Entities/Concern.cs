@@ -1,9 +1,7 @@
 ﻿namespace Cts.Domain.Entities;
 
-public class Concern : IAuditable
+public class Concern : AuditableEntity
 {
-    public Guid Id { get; set; }
-
     [StringLength(50)]
     public string Name { get; set; } = string.Empty;
 

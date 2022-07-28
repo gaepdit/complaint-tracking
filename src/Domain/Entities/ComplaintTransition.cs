@@ -1,25 +1,23 @@
-﻿namespace Cts.Domain.Entities;
+﻿using Cts.Domain.Offices;
+using Cts.Domain.Users;
 
-public class ComplaintTransition : IAuditable
+namespace Cts.Domain.Entities;
+
+public class ComplaintTransition : AuditableEntity
 {
-    public Guid Id { get; set; }
-
     [Required]
     public Complaint Complaint { get; set; } = null!;
 
     public int ComplaintId { get; set; }
 
     public ApplicationUser? TransferredByUser { get; set; }
-    public string? TransferredByUserId { get; set; }
 
     public ApplicationUser? TransferredFromUser { get; set; }
-    public string? TransferredFromUserId { get; set; }
 
     public Office? TransferredFromOffice { get; set; }
     public Guid? TransferredFromOfficeId { get; set; }
 
     public ApplicationUser? TransferredToUser { get; set; }
-    public string? TransferredToUserId { get; set; }
 
     public Office? TransferredToOffice { get; set; }
     public Guid? TransferredToOfficeId { get; set; } = null;

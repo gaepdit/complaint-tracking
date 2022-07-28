@@ -1,9 +1,9 @@
+using Cts.Domain.Users;
+
 namespace Cts.Domain.Entities;
 
-public class Attachment
+public class Attachment : SoftDeleteEntity
 {
-    public Guid Id { get; set; }
-
     public virtual Complaint Complaint { get; set; } = null!;
     public int ComplaintId { get; set; }
 
@@ -18,16 +18,8 @@ public class Attachment
     public DateTime DateUploaded { get; set; }
 
     public virtual ApplicationUser? UploadedBy { get; set; }
-    public string? UploadedById { get; set; }
 
     public bool IsImage { get; set; }
-
-    public bool Deleted { get; set; }
-
-    public DateTime? DateDeleted { get; set; }
-
-    public virtual ApplicationUser? DeletedBy { get; set; }
-    public string? DeletedById { get; set; }
 
 #pragma warning disable S125
     // public string FilePath => Path.Combine(FilePaths.AttachmentsFolder, Id + FileExtension);

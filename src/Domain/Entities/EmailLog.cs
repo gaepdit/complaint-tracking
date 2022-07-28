@@ -1,8 +1,7 @@
 namespace Cts.Domain.Entities;
 
-public class EmailLog
+public class EmailLog : Entity<Guid>
 {
-    public Guid Id { get; set; }
     public DateTime DateSent { get; set; }
     public string? To { get; set; }
     public string? From { get; set; }

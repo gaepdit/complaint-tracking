@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using GaEpd.Library.Domain.ValueObjects;
+using Microsoft.EntityFrameworkCore;
 
 namespace Cts.Domain.ValueObjects;
 
 [Owned]
-public class PhoneNumber
+public record PhoneNumber : ValueObject
 {
     [StringLength(25)]
     [DataType(DataType.PhoneNumber)]
@@ -17,5 +18,12 @@ public class PhoneNumber
         Fax = 1,
         Home = 2,
         Office = 3,
+        Unknown = 4,
+    }
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return CallerPhoneNumber;
+        yield return CallerPhoneType ?? PhoneType.Unknown;
     }
 }

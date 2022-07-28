@@ -1,9 +1,10 @@
-﻿namespace Cts.Domain.Entities;
+﻿using Cts.Domain.ActionTypes;
+using Cts.Domain.Users;
 
-public class ComplaintAction : IAuditable
+namespace Cts.Domain.Entities;
+
+public class ComplaintAction : SoftDeleteEntity
 {
-    public Guid Id { get; set; }
-
     public Complaint Complaint { get; set; } = null!;
     public int ComplaintId { get; set; }
 
@@ -18,14 +19,6 @@ public class ComplaintAction : IAuditable
     public DateTime? DateEntered { get; set; }
 
     public ApplicationUser EnteredBy { get; set; } = null!;
-    public string EnteredById { get; set; } = string.Empty;
 
     public string? Comments { get; set; }
-
-    public bool Deleted { get; set; }
-
-    public DateTime? DateDeleted { get; set; }
-
-    public ApplicationUser? DeletedBy { get; set; }
-    public string? DeletedById { get; set; }
 }
