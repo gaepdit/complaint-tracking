@@ -5,6 +5,7 @@ namespace Cts.Domain.ActionTypes;
 public class ActionType : AuditableEntity
 {
     public const int MaxNameLength = 50;
+    public const int MinNameLength = 2;
 
     [StringLength(MaxNameLength)]
     public string Name { get; private set; } = string.Empty;
@@ -19,5 +20,5 @@ public class ActionType : AuditableEntity
     internal void ChangeName(string name) => SetName(name);
 
     private void SetName(string name) =>
-        Name = Guard.ValidLength(name.Trim(), minLength: 1, maxLength: MaxNameLength);
+        Name = Guard.ValidLength(name.Trim(), minLength: MinNameLength, maxLength: MaxNameLength, nameof(name));
 }

@@ -1,0 +1,42 @@
+using Cts.Domain.ActionTypes;
+
+namespace DomainTests.ActionTypes;
+
+public class ChangeName
+{
+    [Test]
+    public void WithValidInput_ReturnsNewEntity()
+    {
+        var newGuid = Guid.NewGuid();
+        var result = new ActionType(newGuid, newGuid.ToString());
+        var newName = Guid.NewGuid().ToString();
+
+        result.ChangeName(newName);
+
+        result.Name.Should().Be(newName);
+    }
+
+    [Test]
+    public void WithEmptyName_Throws()
+    {
+        var newGuid = Guid.NewGuid();
+        var result = new ActionType(newGuid, newGuid.ToString());
+
+        var action = () => result.ChangeName(string.Empty);
+
+        action.Should().Throw<ArgumentException>()
+            .WithMessage("Value cannot be null, empty, or white space.*");
+    }
+
+    [Test]
+    public void WithShortName_Throws()
+    {
+        var newGuid = Guid.NewGuid();
+        var result = new ActionType(newGuid, newGuid.ToString());
+
+        var action = () => result.ChangeName("a");
+
+        action.Should().Throw<ArgumentException>()
+            .WithMessage($"The length must be at least the minimum length '{ActionType.MinNameLength}'.*");
+    }
+}

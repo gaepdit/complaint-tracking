@@ -6,6 +6,7 @@ namespace Cts.Domain.Offices;
 public class Office : AuditableEntity
 {
     public const int MaxNameLength = 450;
+    public const int MinNameLength = 2;
 
     [StringLength(MaxNameLength)]
     public string Name { get; private set; } = string.Empty;
@@ -22,7 +23,7 @@ public class Office : AuditableEntity
     internal Office(
         Guid id,
         string name,
-        ApplicationUser? masterUser
+        ApplicationUser? masterUser = null
     ) : base(id)
     {
         SetName(name);
@@ -32,5 +33,5 @@ public class Office : AuditableEntity
     internal void ChangeName(string name) => SetName(name);
 
     private void SetName(string name) =>
-        Name = Guard.ValidLength(name.Trim(), minLength: 1, maxLength: MaxNameLength);
+        Name = Guard.ValidLength(name.Trim(), minLength: MinNameLength, maxLength: MaxNameLength, nameof(name));
 }
