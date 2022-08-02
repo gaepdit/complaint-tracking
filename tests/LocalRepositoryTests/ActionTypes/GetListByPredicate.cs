@@ -1,0 +1,35 @@
+using Cts.LocalRepository;
+
+namespace LocalRepositoryTests.ActionTypes;
+
+public class GetListByPredicate
+{
+    private ActionTypeRepository _repository = default!;
+
+    [SetUp]
+    public void SetUp() => _repository = new ActionTypeRepository();
+
+    [TearDown]
+    public void TearDown() => _repository.Dispose();
+
+    [Test]
+    public async Task WhenItemsExist_ReturnsList()
+    {
+        var item = _repository.Items.First();
+
+        var result = await _repository.GetListAsync(e => e.Name == item.Name);
+
+        Assert.Multiple(() =>
+        {
+            result.Count.Should().Be(1);
+            result[0].Should().BeEquivalentTo(item);
+        });
+    }
+
+    [Test]
+    public async Task WhenDoesNotExist_ReturnsEmptyList()
+    {
+        var result = await _repository.GetListAsync(e => e.Name == Constants.NonExistentName);
+        result.Should().BeEmpty();
+    }
+}

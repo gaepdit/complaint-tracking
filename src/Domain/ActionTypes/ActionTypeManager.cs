@@ -10,7 +10,7 @@ public class ActionTypeManager : IActionTypeManager
     public async Task<ActionType> CreateAsync(string name)
     {
         // Validate the name
-        var existing = await _repository.FindByName(name.Trim());
+        var existing = await _repository.FindByNameAsync(name.Trim());
         if (existing is not null) throw new ActionTypeAlreadyExistsException(name);
 
         return new ActionType(Guid.NewGuid(), name);
@@ -18,7 +18,7 @@ public class ActionTypeManager : IActionTypeManager
 
     public async Task ChangeNameAsync(ActionType actionType, string name)
     {
-        var existing = await _repository.FindByName(name.Trim());
+        var existing = await _repository.FindByNameAsync(name.Trim());
         if (existing is not null && existing.Id == actionType.Id)
             throw new ActionTypeAlreadyExistsException(name);
 
