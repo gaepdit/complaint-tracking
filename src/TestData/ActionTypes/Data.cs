@@ -1,8 +1,8 @@
 ﻿using Cts.Domain.ActionTypes;
 
-namespace Cts.TestData;
+namespace Cts.TestData.ActionTypes;
 
-internal static partial class TestData
+internal static class Data
 {
     private static readonly string[] ActionTypeItems =
     {
@@ -19,7 +19,7 @@ internal static partial class TestData
 
     private static ICollection<ActionType>? _actionTypes;
 
-    public static ICollection<ActionType> ActionTypes
+    public static IEnumerable<ActionType> ActionTypes
     {
         get
         {

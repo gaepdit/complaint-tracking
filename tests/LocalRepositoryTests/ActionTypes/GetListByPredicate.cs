@@ -1,4 +1,5 @@
 using Cts.LocalRepository;
+using Cts.TestData.ActionTypes;
 
 namespace LocalRepositoryTests.ActionTypes;
 
@@ -29,7 +30,7 @@ public class GetListByPredicate
     [Test]
     public async Task WhenDoesNotExist_ReturnsEmptyList()
     {
-        var result = await _repository.GetListAsync(e => e.Name == Constants.NonExistentName);
+        var result = await _repository.GetListAsync(e => e.Name == ActionTypeConstants.NonExistentName);
         result.Should().BeEmpty();
     }
 }

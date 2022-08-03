@@ -26,7 +26,7 @@ public class Get
     public async Task WhenDoesNotExist_Throws()
     {
         var id = Guid.Empty;
-        
+
         var action = async () => await _repository.GetAsync(id);
 
         (await action.Should().ThrowAsync<EntityNotFoundException>())

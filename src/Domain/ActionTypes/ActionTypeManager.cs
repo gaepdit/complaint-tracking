@@ -1,5 +1,6 @@
 ﻿namespace Cts.Domain.ActionTypes;
 
+/// <inheritdoc />
 public class ActionTypeManager : IActionTypeManager
 {
     private readonly IActionTypeRepository _repository;
@@ -11,7 +12,7 @@ public class ActionTypeManager : IActionTypeManager
     {
         // Validate the name
         var existing = await _repository.FindByNameAsync(name.Trim());
-        if (existing is not null) throw new ActionTypeAlreadyExistsException(name);
+        if (existing is not null) throw new ActionTypeNameAlreadyExistsException(name);
 
         return new ActionType(Guid.NewGuid(), name);
     }
@@ -19,8 +20,8 @@ public class ActionTypeManager : IActionTypeManager
     public async Task ChangeNameAsync(ActionType actionType, string name)
     {
         var existing = await _repository.FindByNameAsync(name.Trim());
-        if (existing is not null && existing.Id == actionType.Id)
-            throw new ActionTypeAlreadyExistsException(name);
+        if (existing is not null && existing.Id != actionType.Id)
+            throw new ActionTypeNameAlreadyExistsException(name);
 
         actionType.ChangeName(name);
     }

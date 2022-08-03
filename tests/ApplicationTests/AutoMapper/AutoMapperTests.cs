@@ -2,9 +2,8 @@ using AutoMapper;
 using Cts.Application.ActionTypes;
 using Cts.Application.Offices;
 using Cts.Domain.ActionTypes;
-using FluentAssertions;
 
-namespace ApplicationTests;
+namespace ApplicationTests.AutoMapper;
 
 public class AutoMapperTests
 {

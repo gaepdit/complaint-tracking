@@ -1,5 +1,6 @@
 using Cts.Domain.ActionTypes;
 using Cts.LocalRepository;
+using Cts.TestData.ActionTypes;
 using GaEpd.Library.Domain.Repositories;
 
 namespace LocalRepositoryTests.ActionTypes;
@@ -19,7 +20,7 @@ public class Update
     {
         var item = _repository.Items.First();
 
-        item.ChangeName(Constants.ValidName);
+        item.ChangeName(ActionTypeConstants.ValidName);
         var updateResult = await _repository.UpdateAsync(item);
         var getResult = await _repository.GetAsync(item.Id);
 
@@ -34,7 +35,7 @@ public class Update
     [Test]
     public async Task WhenItemDoesNotExist_Throws()
     {
-        var item = new ActionType(Guid.Empty, Constants.ValidName);
+        var item = new ActionType(Guid.Empty, ActionTypeConstants.ValidName);
 
         var action = async () => await _repository.UpdateAsync(item);
 

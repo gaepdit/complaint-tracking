@@ -1,4 +1,5 @@
 using Cts.LocalRepository;
+using Cts.TestData.ActionTypes;
 
 namespace LocalRepositoryTests.ActionTypes;
 
@@ -23,7 +24,7 @@ public class FindByPredicate
     [Test]
     public async Task WhenDoesNotExist_ReturnsNull()
     {
-        var result = await _repository.FindAsync(e => e.Name == Constants.NonExistentName);
+        var result = await _repository.FindAsync(e => e.Name == ActionTypeConstants.NonExistentName);
         result.Should().BeNull();
     }
 }

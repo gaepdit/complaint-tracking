@@ -1,4 +1,5 @@
 using Cts.LocalRepository;
+using Cts.TestData.ActionTypes;
 using GaEpd.Library.Pagination;
 
 namespace LocalRepositoryTests.ActionTypes;
@@ -47,7 +48,7 @@ public class GetPagedListByPredicate
     public async Task WhenDoesNotExist_ReturnsEmptyList()
     {
         var paging = new PaginatedRequest(1, _repository.Items.Count);
-        var result = await _repository.GetPagedListAsync(e => e.Name == Constants.NonExistentName, paging);
+        var result = await _repository.GetPagedListAsync(e => e.Name == ActionTypeConstants.NonExistentName, paging);
         result.Should().BeEmpty();
     }
 
