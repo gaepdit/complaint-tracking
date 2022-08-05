@@ -7,23 +7,20 @@ namespace Cts.AppServices.Users;
 
 public interface IUserService
 {
-    public Task<UserViewDto> GetCurrentUserAsync();
+    public Task<UserViewDto?> GetCurrentUserAsync();
     public Task<IList<string>> GetCurrentUserRolesAsync();
-
-    // TODO: Replace parameters with a filter DTO.
-    public Task<List<UserViewDto>> GetUsersAsync(string nameFilter, string emailFilter, string role);
-
-    public Task<UserViewDto> GetUserByIdAsync(string id);
+    public Task<List<UserViewDto>> FindUsersAsync(string? nameFilter, string? emailFilter, string? role);
+    public Task<UserViewDto?> GetUserByIdAsync(string id);
     public Task<IList<string>> GetUserRolesAsync(string id);
     public Task<IdentityResult> UpdateUserRolesAsync(string id, Dictionary<string, bool> roleUpdates);
 }
 
 public class UserViewDto
 {
-    public string Id { get; } = string.Empty;
-    public string FirstName { get; } = string.Empty;
-    public string LastName { get; } = string.Empty;
-    public string Email { get; } = string.Empty;
+    public string Id { get; set; } = string.Empty;
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
     public Office? Office { get; set; }
     public bool Active { get; set; }
 
@@ -42,8 +39,5 @@ public class UserViewDto
 
 public class UsersMappingProfile : Profile
 {
-    public UsersMappingProfile()
-    {
-        CreateMap<ApplicationUser, UserViewDto>();
-    }
+    public UsersMappingProfile() => CreateMap<ApplicationUser, UserViewDto>();
 }

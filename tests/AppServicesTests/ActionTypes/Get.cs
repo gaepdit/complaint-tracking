@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Cts.AppServices.ActionTypes;
+using Cts.AppServices.Users;
 using Cts.Domain.ActionTypes;
 using Cts.TestData.ActionTypes;
 using GaEpd.Library.Domain.Repositories;
@@ -16,7 +17,11 @@ public class Get
         repoMock.Setup(l => l.GetAsync(item.Id, default))
             .ReturnsAsync(item);
         var managerMock = new Mock<IActionTypeManager>();
-        var appService = new ActionTypeAppService(repoMock.Object, managerMock.Object, AppServicesTestsGlobal.Mapper!);
+        var userServiceMock = new Mock<IUserService>();
+        userServiceMock.Setup(l => l.GetCurrentUserAsync())
+            .ReturnsAsync((UserViewDto?)null);
+        var appService = new ActionTypeAppService(repoMock.Object, managerMock.Object,
+            AppServicesTestsGlobal.Mapper!, userServiceMock.Object);
 
         var result = await appService.GetAsync(Guid.Empty);
 
@@ -32,7 +37,11 @@ public class Get
             .ThrowsAsync(new EntityNotFoundException(typeof(ActionType), id));
         var managerMock = new Mock<IActionTypeManager>();
         var mapperMock = new Mock<IMapper>();
-        var appService = new ActionTypeAppService(repoMock.Object, managerMock.Object, mapperMock.Object);
+        var userServiceMock = new Mock<IUserService>();
+        userServiceMock.Setup(l => l.GetCurrentUserAsync())
+            .ReturnsAsync((UserViewDto?)null);
+        var appService = new ActionTypeAppService(repoMock.Object, managerMock.Object,
+            mapperMock.Object, userServiceMock.Object);
 
         var action = async () => await appService.GetAsync(Guid.Empty);
 

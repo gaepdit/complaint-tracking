@@ -19,7 +19,7 @@ internal static class Data
 
     private static ICollection<ActionType>? _actionTypes;
 
-    public static IEnumerable<ActionType> ActionTypes
+    public static IEnumerable<ActionType> GetActionTypes
     {
         get
         {

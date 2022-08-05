@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Cts.AppServices.ActionTypes;
 using Cts.AppServices.Offices;
+using Cts.AppServices.Users;
 
 namespace AppServicesTests;
 
@@ -18,7 +19,9 @@ public class AppServicesTestsGlobal
         {
             c.AddProfile(new ActionTypeMappingProfile());
             c.AddProfile(new OfficeMappingProfile());
+            c.AddProfile(new UsersMappingProfile());
         });
+
         Mapper = MapperConfig.CreateMapper();
 
         // Setting this option globally since our DTOs generally exclude properties, e.g., audit properties.

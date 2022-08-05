@@ -23,8 +23,7 @@ public class Office : AuditableEntity
     internal Office(
         Guid id,
         string name,
-        ApplicationUser? masterUser = null
-    ) : base(id)
+        ApplicationUser? masterUser = null) : base(id)
     {
         SetName(name);
         MasterUser = masterUser;
