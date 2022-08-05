@@ -1,5 +1,5 @@
 using System.Runtime.CompilerServices;
-[assembly:InternalsVisibleTo("ApplicationTests")]
+[assembly:InternalsVisibleTo("AppServicesTests")]
 [assembly:InternalsVisibleTo("DomainTests")]
 [assembly:InternalsVisibleTo("LocalRepositoryTests")]
 [assembly:InternalsVisibleTo("TestData")]

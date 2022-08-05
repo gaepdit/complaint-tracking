@@ -1,5 +1,6 @@
 using Cts.Domain.ActionTypes;
 using Cts.LocalRepository;
+using Cts.TestData.ActionTypes;
 
 namespace LocalRepositoryTests.ActionTypes;
 
@@ -17,7 +18,7 @@ public class Insert
     public async Task WhenItemIsValid_InsertsItem()
     {
         var initialCount = _repository.Items.Count;
-        var newItem = new ActionType(Guid.NewGuid(), Guid.NewGuid().ToString());
+        var newItem = new ActionType(Guid.NewGuid(), ActionTypeConstants.ValidName);
 
         var insertResult = await _repository.InsertAsync(newItem);
         var getResult = await _repository.GetAsync(newItem.Id);

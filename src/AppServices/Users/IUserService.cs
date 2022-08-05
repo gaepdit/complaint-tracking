@@ -3,7 +3,7 @@ using Cts.Domain.Offices;
 using Cts.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 
-namespace Cts.Application.Users;
+namespace Cts.AppServices.Users;
 
 public interface IUserService
 {

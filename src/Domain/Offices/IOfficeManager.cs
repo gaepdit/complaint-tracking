@@ -13,11 +13,11 @@ public interface IOfficeManager
 /// The exception that is thrown if an office is added/updated with a name that already exists.
 /// </summary>
 [Serializable]
-public class OfficeAlreadyExistsException : Exception
+public class OfficeNameAlreadyExistsException : Exception
 {
-    public OfficeAlreadyExistsException(string name)
+    public OfficeNameAlreadyExistsException(string name)
         : base($"An Office with that name already exists. Name: {name}") { }
 
-    protected OfficeAlreadyExistsException(SerializationInfo info, StreamingContext context)
+    protected OfficeNameAlreadyExistsException(SerializationInfo info, StreamingContext context)
         : base(info, context) { }
 }

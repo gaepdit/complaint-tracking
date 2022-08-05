@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using Cts.Application.Users;
+using Cts.AppServices.Users;
 using Cts.Domain.Offices;
 using Cts.Domain.Users;
 
-namespace Cts.Application.Offices;
+namespace Cts.AppServices.Offices;
 
 public interface IOfficeAppService : IDisposable
 {

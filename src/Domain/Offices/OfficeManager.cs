@@ -12,17 +12,17 @@ public class OfficeManager : IOfficeManager
     public async Task<Office> CreateAsync(string name, ApplicationUser? user = null)
     {
         // Validate the name
-        var existing = await _repository.FindByName(name.Trim());
-        if (existing is not null) throw new OfficeAlreadyExistsException(name);
+        var existing = await _repository.FindByNameAsync(name.Trim());
+        if (existing is not null) throw new OfficeNameAlreadyExistsException(name);
 
         return new Office(Guid.NewGuid(), name, user);
     }
 
     public async Task ChangeNameAsync(Office office, string name)
     {
-        var existing = await _repository.FindByName(name.Trim());
+        var existing = await _repository.FindByNameAsync(name.Trim());
         if (existing is not null && existing.Id == office.Id)
-            throw new OfficeAlreadyExistsException(name);
+            throw new OfficeNameAlreadyExistsException(name);
 
         office.ChangeName(name);
     }

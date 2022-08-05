@@ -19,11 +19,12 @@ public class Update
     public async Task WhenItemIsValid_UpdatesItem()
     {
         var item = _repository.Items.First();
-
         item.ChangeName(ActionTypeConstants.ValidName);
-        var updateResult = await _repository.UpdateAsync(item);
-        var getResult = await _repository.GetAsync(item.Id);
+        item.Active = !item.Active;
 
+        var updateResult = await _repository.UpdateAsync(item);
+
+        var getResult = await _repository.GetAsync(item.Id);
         Assert.Multiple(() =>
         {
             updateResult.Should().BeEquivalentTo(item);

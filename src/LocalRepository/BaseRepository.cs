@@ -4,13 +4,13 @@ using GaEpd.Library.Pagination;
 
 namespace Cts.LocalRepository;
 
-public abstract class Repository<TEntity, TKey> : IRepository<TEntity, TKey>
+public abstract class BaseRepository<TEntity, TKey> : IRepository<TEntity, TKey>
     where TEntity : IEntity<TKey>
     where TKey : IEquatable<TKey>
 {
     internal ICollection<TEntity> Items { get; }
 
-    protected Repository(IEnumerable<TEntity> items) => Items = items.ToList();
+    protected BaseRepository(IEnumerable<TEntity> items) => Items = items.ToList();
 
     public Task<TEntity> GetAsync(TKey id, CancellationToken cancellationToken = default) =>
         Items.Any(e => e.Id.Equals(id))

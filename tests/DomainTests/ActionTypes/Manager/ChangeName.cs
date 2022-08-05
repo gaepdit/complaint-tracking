@@ -9,10 +9,10 @@ public class ChangeName
     public async Task WhenNewNameIsValid_ChangesName()
     {
         var item = new ActionType(Guid.Empty, ActionTypeConstants.ValidName);
-        var repo = new Mock<IActionTypeRepository>();
-        repo.Setup(l => l.FindByNameAsync(ActionTypeConstants.NewValidName, default))
+        var repoMock = new Mock<IActionTypeRepository>();
+        repoMock.Setup(l => l.FindByNameAsync(ActionTypeConstants.NewValidName, default))
             .ReturnsAsync((ActionType?)null);
-        var manager = new ActionTypeManager(repo.Object);
+        var manager = new ActionTypeManager(repoMock.Object);
 
         await manager.ChangeNameAsync(item, ActionTypeConstants.NewValidName);
 
@@ -23,10 +23,10 @@ public class ChangeName
     public async Task WhenNewNameIsUnchanged_CompletesWithNoChange()
     {
         var item = new ActionType(Guid.Empty, ActionTypeConstants.ValidName);
-        var repo = new Mock<IActionTypeRepository>();
-        repo.Setup(l => l.FindByNameAsync(ActionTypeConstants.ValidName, default))
+        var repoMock = new Mock<IActionTypeRepository>();
+        repoMock.Setup(l => l.FindByNameAsync(ActionTypeConstants.ValidName, default))
             .ReturnsAsync(item);
-        var manager = new ActionTypeManager(repo.Object);
+        var manager = new ActionTypeManager(repoMock.Object);
 
         await manager.ChangeNameAsync(item, ActionTypeConstants.ValidName);
 
@@ -38,10 +38,10 @@ public class ChangeName
     {
         var item = new ActionType(Guid.Empty, ActionTypeConstants.ValidName);
         var existingItem = new ActionType(Guid.NewGuid(), ActionTypeConstants.NewValidName);
-        var repo = new Mock<IActionTypeRepository>();
-        repo.Setup(l => l.FindByNameAsync(ActionTypeConstants.NewValidName, default))
+        var repoMock = new Mock<IActionTypeRepository>();
+        repoMock.Setup(l => l.FindByNameAsync(ActionTypeConstants.NewValidName, default))
             .ReturnsAsync(existingItem);
-        var manager = new ActionTypeManager(repo.Object);
+        var manager = new ActionTypeManager(repoMock.Object);
 
         var action = async () => await manager.ChangeNameAsync(item, ActionTypeConstants.NewValidName);
 
@@ -53,10 +53,10 @@ public class ChangeName
     public async Task WhenNewNameIsInvalid_Throws()
     {
         var item = new ActionType(Guid.Empty, ActionTypeConstants.ValidName);
-        var repo = new Mock<IActionTypeRepository>();
-        repo.Setup(l => l.FindByNameAsync(ActionTypeConstants.NewValidName, default))
+        var repoMock = new Mock<IActionTypeRepository>();
+        repoMock.Setup(l => l.FindByNameAsync(ActionTypeConstants.NewValidName, default))
             .ReturnsAsync((ActionType?)null);
-        var manager = new ActionTypeManager(repo.Object);
+        var manager = new ActionTypeManager(repoMock.Object);
 
         var action = async () => await manager.ChangeNameAsync(item, ActionTypeConstants.ShortName);
 

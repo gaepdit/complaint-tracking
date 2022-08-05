@@ -23,9 +23,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "tests\I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAppTests", "tests\WebAppTests\WebAppTests.csproj", "{F0C5E7D5-43A6-4B5E-BF69-7F4BB3A47F58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "src\Application\Application.csproj", "{8888623F-C7C5-4DF2-848C-5E209024AE6B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppServices", "src\AppServices\AppServices.csproj", "{8888623F-C7C5-4DF2-848C-5E209024AE6B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationTests", "tests\ApplicationTests\ApplicationTests.csproj", "{A798DFB7-D284-4BE7-89F6-1C2B06CD2EBF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppServicesTests", "tests\AppServicesTests\AppServicesTests.csproj", "{A798DFB7-D284-4BE7-89F6-1C2B06CD2EBF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GaEpd.Library", "..\gaepd-library\src\GaEpd.Library.csproj", "{2EFFBDF0-FD86-4D1A-828A-110737399322}"
 EndProject

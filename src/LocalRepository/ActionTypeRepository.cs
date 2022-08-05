@@ -3,7 +3,7 @@ using static Cts.TestData.ActionTypes.Data;
 
 namespace Cts.LocalRepository;
 
-public sealed class ActionTypeRepository : Repository<ActionType, Guid>, IActionTypeRepository
+public sealed class ActionTypeRepository : BaseRepository<ActionType, Guid>, IActionTypeRepository
 {
     public ActionTypeRepository() : base(ActionTypes) { }
 

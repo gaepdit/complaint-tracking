@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Cts.Domain.ActionTypes;
 
-namespace Cts.Application.ActionTypes;
+namespace Cts.AppServices.ActionTypes;
 
 public sealed class ActionTypeAppService : IActionTypeAppService
 {
@@ -31,10 +31,10 @@ public sealed class ActionTypeAppService : IActionTypeAppService
         return _mapper.Map<List<ActionTypeViewDto>>(actionTypes);
     }
 
-    public async Task<ActionTypeViewDto> CreateAsync(ActionTypeCreateDto resource)
+    public async Task<ActionTypeViewDto> CreateAsync(string name)
     {
         // Create and insert the new item
-        var actionType = await _manager.CreateAsync(resource.Name);
+        var actionType = await _manager.CreateAsync(name);
         await _repository.InsertAsync(actionType);
 
         // Return DTO

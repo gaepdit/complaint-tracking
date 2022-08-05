@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Cts.Application.Users;
+using Cts.AppServices.Users;
 using Cts.Domain.Offices;
 
-namespace Cts.Application.Offices;
+namespace Cts.AppServices.Offices;
 
 public sealed class OfficeAppService : IOfficeAppService
 {
@@ -57,7 +57,7 @@ public sealed class OfficeAppService : IOfficeAppService
 
     public async Task<IReadOnlyList<UserViewDto>> GetUsersAsync(Guid id)
     {
-        var users = await _repository.GetUsersList(id);
+        var users = await _repository.GetUsersListAsync(id);
         return _mapper.Map<IReadOnlyList<UserViewDto>>(users);
     }
 

@@ -4,9 +4,7 @@
 public class ActionTypeManager : IActionTypeManager
 {
     private readonly IActionTypeRepository _repository;
-
-    public ActionTypeManager(IActionTypeRepository repository) =>
-        _repository = repository;
+    public ActionTypeManager(IActionTypeRepository repository) => _repository = repository;
 
     public async Task<ActionType> CreateAsync(string name)
     {
