@@ -67,3 +67,10 @@ Users in the User Account Admin role can:
 Users in the Data Export role can:
 
 * Generate a ZIP archive of Complaints.
+
+### Attachments Editor
+
+Users in the Attachments Editor role can:
+
+* Edit attachments for all complaints, including closed complaints. (Normally, attachments can only be edited for open complaints the user is already able to edit.)
+
