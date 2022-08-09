@@ -6,6 +6,6 @@ namespace Cts.Domain.Offices;
 
 public interface IOfficeRepository : IRepository<Office, Guid>
 {
-    Task<Office> FindByNameAsync(string name);
-    Task<List<ApplicationUser>> GetUsersListAsync(Guid id);
+    Task<Office> FindByNameAsync(string name, CancellationToken token = default);
+    Task<List<ApplicationUser>> GetUsersListAsync(Guid id, CancellationToken token = default);
 }

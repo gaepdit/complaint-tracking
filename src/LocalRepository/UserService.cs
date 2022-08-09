@@ -29,13 +29,13 @@ public class UserService : IUserService
         return principal == null ? null : await _userManager.GetUserAsync(principal);
     }
 
-    public async Task<UserViewDto?> GetCurrentUserAsync()
+    public async Task<UserViewDto?> GetCurrentUserAsync(CancellationToken token = default)
     {
         var user = await GetCurrentApplicationUserAsync();
         return _mapper.Map<UserViewDto?>(user);
     }
 
-    public async Task<IList<string>> GetCurrentUserRolesAsync()
+    public async Task<IList<string>> GetCurrentUserRolesAsync(CancellationToken token = default)
     {
         var user = await GetCurrentApplicationUserAsync();
         return user is null ? new List<string>() : await _userManager.GetRolesAsync(user);
@@ -58,21 +58,28 @@ public class UserService : IUserService
         return _mapper.Map<List<UserViewDto>>(users);
     }
 
-    public async Task<List<UserViewDto>> FindUsersAsync(string? nameFilter, string? emailFilter, string? role) =>
+    public async Task<List<UserViewDto>> FindUsersAsync(
+        string? nameFilter,
+        string? emailFilter,
+        string? role,
+        CancellationToken token = default) =>
         string.IsNullOrEmpty(role)
             ? FilterUsers(UsersList, nameFilter, emailFilter)
             : FilterUsers(await _userManager.GetUsersInRoleAsync(role), nameFilter, emailFilter);
 
-    public Task<UserViewDto?> GetUserByIdAsync(string id) =>
+    public Task<UserViewDto?> GetUserByIdAsync(string id, CancellationToken token = default) =>
         Task.FromResult(_mapper.Map<UserViewDto?>(UsersList.SingleOrDefault(e => e.Id == id)));
 
-    public async Task<IList<string>> GetUserRolesAsync(string id)
+    public async Task<IList<string>> GetUserRolesAsync(string id, CancellationToken token = default)
     {
         var user = await _userManager.FindByIdAsync(id);
         return user == null ? new List<string>() : await _userManager.GetRolesAsync(user);
     }
 
-    public async Task<IdentityResult> UpdateUserRolesAsync(string id, Dictionary<string, bool> roleUpdates)
+    public async Task<IdentityResult> UpdateUserRolesAsync(
+        string id,
+        Dictionary<string, bool> roleUpdates,
+        CancellationToken token = default)
     {
         foreach (var (key, value) in roleUpdates)
         {

@@ -7,12 +7,22 @@ namespace Cts.AppServices.Users;
 
 public interface IUserService
 {
-    public Task<UserViewDto?> GetCurrentUserAsync();
-    public Task<IList<string>> GetCurrentUserRolesAsync();
-    public Task<List<UserViewDto>> FindUsersAsync(string? nameFilter, string? emailFilter, string? role);
-    public Task<UserViewDto?> GetUserByIdAsync(string id);
-    public Task<IList<string>> GetUserRolesAsync(string id);
-    public Task<IdentityResult> UpdateUserRolesAsync(string id, Dictionary<string, bool> roleUpdates);
+    public Task<UserViewDto?> GetCurrentUserAsync(CancellationToken token = default);
+    public Task<IList<string>> GetCurrentUserRolesAsync(CancellationToken token = default);
+
+    public Task<List<UserViewDto>> FindUsersAsync(
+        string? nameFilter, 
+        string? emailFilter, 
+        string? role,
+        CancellationToken token = default);
+
+    public Task<UserViewDto?> GetUserByIdAsync(string id, CancellationToken token = default);
+    public Task<IList<string>> GetUserRolesAsync(string id, CancellationToken token = default);
+
+    public Task<IdentityResult> UpdateUserRolesAsync(
+        string id, 
+        Dictionary<string, bool> roleUpdates,
+        CancellationToken token = default);
 }
 
 public class UserViewDto

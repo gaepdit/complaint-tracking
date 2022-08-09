@@ -6,8 +6,8 @@ namespace Cts.Domain.Offices;
 
 public interface IOfficeManager
 {
-    Task<Office> CreateAsync(string name, ApplicationUser? user = null);
-    Task ChangeNameAsync(Office office, string name);
+    Task<Office> CreateAsync(string name, ApplicationUser? user = null, CancellationToken token = default);
+    Task ChangeNameAsync(Office office, string name, CancellationToken token = default);
 }
 
 /// <summary>

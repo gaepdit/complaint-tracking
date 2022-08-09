@@ -18,7 +18,7 @@ public class Get
             .ReturnsAsync(item);
         var managerMock = new Mock<IActionTypeManager>();
         var userServiceMock = new Mock<IUserService>();
-        userServiceMock.Setup(l => l.GetCurrentUserAsync())
+        userServiceMock.Setup(l => l.GetCurrentUserAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync((UserViewDto?)null);
         var appService = new ActionTypeAppService(repoMock.Object, managerMock.Object,
             AppServicesTestsGlobal.Mapper!, userServiceMock.Object);
@@ -38,7 +38,7 @@ public class Get
         var managerMock = new Mock<IActionTypeManager>();
         var mapperMock = new Mock<IMapper>();
         var userServiceMock = new Mock<IUserService>();
-        userServiceMock.Setup(l => l.GetCurrentUserAsync())
+        userServiceMock.Setup(l => l.GetCurrentUserAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync((UserViewDto?)null);
         var appService = new ActionTypeAppService(repoMock.Object, managerMock.Object,
             mapperMock.Object, userServiceMock.Object);

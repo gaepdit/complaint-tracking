@@ -17,7 +17,7 @@ public class GetList
             .ReturnsAsync(itemList);
         var managerMock = new Mock<IActionTypeManager>();
         var userServiceMock = new Mock<IUserService>();
-        userServiceMock.Setup(l => l.GetCurrentUserAsync())
+        userServiceMock.Setup(l => l.GetCurrentUserAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync((UserViewDto?)null);
         var appService = new ActionTypeAppService(repoMock.Object, managerMock.Object,
             AppServicesTestsGlobal.Mapper!, userServiceMock.Object);

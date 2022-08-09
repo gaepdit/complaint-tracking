@@ -7,11 +7,11 @@ namespace Cts.AppServices.Offices;
 
 public interface IOfficeAppService : IDisposable
 {
-    Task<OfficeUpdateDto?> FindForUpdateAsync(Guid id);
-    Task<IReadOnlyList<OfficeViewDto>> GetListAsync();
-    Task<OfficeViewDto> CreateAsync(OfficeCreateDto resource);
-    Task UpdateAsync(OfficeUpdateDto resource);
-    Task<IReadOnlyList<UserViewDto>> GetUsersAsync(Guid id);
+    Task<OfficeUpdateDto?> FindForUpdateAsync(Guid id, CancellationToken token = default);
+    Task<IReadOnlyList<OfficeViewDto>> GetListAsync(CancellationToken token = default);
+    Task<OfficeViewDto> CreateAsync(OfficeCreateDto resource, CancellationToken token = default);
+    Task UpdateAsync(OfficeUpdateDto resource, CancellationToken token = default);
+    Task<IReadOnlyList<UserViewDto>> GetUsersAsync(Guid id, CancellationToken token = default);
 }
 
 public class OfficeViewDto

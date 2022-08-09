@@ -8,6 +8,6 @@ public sealed class ActionTypeRepository : BaseRepository<ActionType, Guid>, IAc
 {
     public ActionTypeRepository() : base(GetActionTypes) { }
 
-    public Task<ActionType?> FindByNameAsync(string name, CancellationToken cancellationToken = default) =>
+    public Task<ActionType?> FindByNameAsync(string name, CancellationToken token = default) =>
         Task.FromResult(Items.SingleOrDefault(e => e.Name == name));
 }
