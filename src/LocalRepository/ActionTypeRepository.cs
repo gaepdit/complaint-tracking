@@ -1,4 +1,5 @@
 ﻿using Cts.Domain.ActionTypes;
+using Cts.Domain.Entities;
 using static Cts.TestData.ActionTypes.Data;
 
 namespace Cts.LocalRepository;

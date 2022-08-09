@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Cts.Domain.Offices;
+using Cts.Domain.Entities;
 using Cts.Domain.Users;
 using Microsoft.AspNetCore.Identity;
 

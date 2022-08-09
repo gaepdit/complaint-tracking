@@ -1,4 +1,6 @@
-﻿namespace Cts.Domain.ActionTypes;
+﻿using Cts.Domain.Entities;
+
+namespace Cts.Domain.ActionTypes;
 
 /// <inheritdoc />
 public class ActionTypeManager : IActionTypeManager

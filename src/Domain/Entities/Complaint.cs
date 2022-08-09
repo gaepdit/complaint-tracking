@@ -1,4 +1,4 @@
-using Cts.Domain.Offices;
+using Cts.Domain.Entities.BaseEntities;
 using Cts.Domain.Users;
 
 namespace Cts.Domain.Entities;

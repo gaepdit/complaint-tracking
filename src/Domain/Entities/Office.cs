@@ -1,7 +1,8 @@
-﻿using Cts.Domain.Users;
+﻿using Cts.Domain.Entities.BaseEntities;
+using Cts.Domain.Users;
 using JetBrains.Annotations;
 
-namespace Cts.Domain.Offices;
+namespace Cts.Domain.Entities;
 
 public class Office : AuditableEntity
 {

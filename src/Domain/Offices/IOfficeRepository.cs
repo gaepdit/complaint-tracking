@@ -1,4 +1,5 @@
-﻿using Cts.Domain.Users;
+﻿using Cts.Domain.Entities;
+using Cts.Domain.Users;
 using GaEpd.Library.Domain.Repositories;
 
 namespace Cts.Domain.Offices;

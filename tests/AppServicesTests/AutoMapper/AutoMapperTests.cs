@@ -1,8 +1,7 @@
 using Cts.AppServices.ActionTypes;
 using Cts.AppServices.Offices;
 using Cts.AppServices.Users;
-using Cts.Domain.ActionTypes;
-using Cts.Domain.Offices;
+using Cts.Domain.Entities;
 using Cts.Domain.Users;
 
 namespace AppServicesTests.AutoMapper;

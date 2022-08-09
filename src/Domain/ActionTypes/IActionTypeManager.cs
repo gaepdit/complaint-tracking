@@ -1,3 +1,4 @@
+using Cts.Domain.Entities;
 using System.Runtime.Serialization;
 
 namespace Cts.Domain.ActionTypes;

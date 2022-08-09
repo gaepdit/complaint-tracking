@@ -1,4 +1,4 @@
-using Cts.Domain.ActionTypes;
+using Cts.Domain.Entities;
 using Cts.LocalRepository;
 using Cts.TestData.ActionTypes;
 using GaEpd.Library.Domain.Repositories;

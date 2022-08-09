@@ -1,4 +1,4 @@
-﻿namespace Cts.Domain.BaseEntities;
+﻿namespace Cts.Domain.Entities.BaseEntities;
 
 /// <summary>
 /// The default implementation of <see cref="AuditableEntity{TKey}"/> using Guid as the primary key.

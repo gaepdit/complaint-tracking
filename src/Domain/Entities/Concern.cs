@@ -1,4 +1,6 @@
-﻿namespace Cts.Domain.Entities;
+﻿using Cts.Domain.Entities.BaseEntities;
+
+namespace Cts.Domain.Entities;
 
 public class Concern : AuditableEntity
 {

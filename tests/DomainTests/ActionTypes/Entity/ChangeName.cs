@@ -1,4 +1,4 @@
-using Cts.Domain.ActionTypes;
+using Cts.Domain.Entities;
 using Cts.TestData.ActionTypes;
 
 namespace DomainTests.ActionTypes.Entity;

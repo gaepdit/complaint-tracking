@@ -1,7 +1,8 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Cts.AppServices.ActionTypes;
 using Cts.AppServices.Users;
 using Cts.Domain.ActionTypes;
+using Cts.Domain.Entities;
 using Cts.TestData.ActionTypes;
 using GaEpd.Library.Domain.Repositories;
 

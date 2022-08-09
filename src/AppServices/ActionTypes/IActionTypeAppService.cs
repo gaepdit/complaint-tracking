@@ -1,5 +1,5 @@
-﻿using AutoMapper;
-using Cts.Domain.ActionTypes;
+using AutoMapper;
+using Cts.Domain.Entities;
 
 namespace Cts.AppServices.ActionTypes;
 

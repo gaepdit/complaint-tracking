@@ -1,6 +1,7 @@
-﻿using JetBrains.Annotations;
+﻿using Cts.Domain.Entities.BaseEntities;
+using JetBrains.Annotations;
 
-namespace Cts.Domain.ActionTypes;
+namespace Cts.Domain.Entities;
 
 public class ActionType : AuditableEntity
 {

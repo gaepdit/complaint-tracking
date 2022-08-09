@@ -1,4 +1,5 @@
-﻿using GaEpd.Library.Domain.Repositories;
+﻿using Cts.Domain.Entities;
+using GaEpd.Library.Domain.Repositories;
 
 namespace Cts.Domain.ActionTypes;
 
