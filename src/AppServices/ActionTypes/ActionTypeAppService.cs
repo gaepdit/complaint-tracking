@@ -23,10 +23,10 @@ public sealed class ActionTypeAppService : IActionTypeAppService
         _userService = userService;
     }
 
-    public async Task<ActionTypeViewDto> GetAsync(Guid id)
+    public async Task<ActionTypeUpdateDto?> FindForUpdateAsync(Guid id)
     {
-        var actionType = await _repository.GetAsync(id);
-        return _mapper.Map<ActionTypeViewDto>(actionType);
+        var actionType = await _repository.FindAsync(id);
+        return _mapper.Map<ActionTypeUpdateDto>(actionType);
     }
 
     public async Task<IReadOnlyList<ActionTypeViewDto>> GetListAsync()
@@ -47,9 +47,9 @@ public sealed class ActionTypeAppService : IActionTypeAppService
         return _mapper.Map<ActionTypeViewDto>(actionType);
     }
 
-    public async Task UpdateAsync(Guid id, ActionTypeUpdateDto resource)
+    public async Task UpdateAsync(ActionTypeUpdateDto resource)
     {
-        var actionType = await _repository.GetAsync(id);
+        var actionType = await _repository.GetAsync(resource.Id);
         if (actionType.Name != resource.Name.Trim()) 
             await _manager.ChangeNameAsync(actionType, resource.Name);
         actionType.Active = resource.Active;

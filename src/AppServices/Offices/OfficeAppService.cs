@@ -26,6 +26,12 @@ public sealed class OfficeAppService : IOfficeAppService
         return _mapper.Map<OfficeViewDto>(office);
     }
 
+    public async Task<OfficeUpdateDto?> FindForUpdateAsync(Guid id)
+    {
+        var office = await _repository.FindAsync(id);
+        return _mapper.Map<OfficeUpdateDto>(office);
+    }
+
     public async Task<IReadOnlyList<OfficeViewDto>> GetListAsync()
     {
         var offices = await _repository.GetListAsync();
@@ -42,9 +48,9 @@ public sealed class OfficeAppService : IOfficeAppService
         return _mapper.Map<OfficeViewDto>(office);
     }
 
-    public async Task UpdateAsync(Guid id, OfficeUpdateDto resource)
+    public async Task UpdateAsync(OfficeUpdateDto resource)
     {
-        var office = await _repository.GetAsync(id);
+        var office = await _repository.GetAsync(resource.Id);
 
         if (office.Name != resource.Name.Trim())
             await _manager.ChangeNameAsync(office, resource.Name);
