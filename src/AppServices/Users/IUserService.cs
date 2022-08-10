@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using Cts.Domain.Entities;
-using Cts.Domain.Users;
+﻿using Cts.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace Cts.AppServices.Users;
@@ -11,8 +9,8 @@ public interface IUserService
     public Task<IList<string>> GetCurrentUserRolesAsync(CancellationToken token = default);
 
     public Task<List<UserViewDto>> FindUsersAsync(
-        string? nameFilter, 
-        string? emailFilter, 
+        string? nameFilter,
+        string? emailFilter,
         string? role,
         CancellationToken token = default);
 
@@ -20,7 +18,7 @@ public interface IUserService
     public Task<IList<string>> GetUserRolesAsync(string id, CancellationToken token = default);
 
     public Task<IdentityResult> UpdateUserRolesAsync(
-        string id, 
+        string id,
         Dictionary<string, bool> roleUpdates,
         CancellationToken token = default);
 }
@@ -45,9 +43,4 @@ public class UserViewDto
 
     public string SelectableNameWithOffice =>
         SelectableName + (Office != null ? $" - {Office.Name}" : "");
-}
-
-public class UsersMappingProfile : Profile
-{
-    public UsersMappingProfile() => CreateMap<ApplicationUser, UserViewDto>();
 }

@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using Cts.AppServices.Users;
-using Cts.Domain.Entities;
+﻿using Cts.AppServices.Users;
 using Cts.Domain.Users;
 
 namespace Cts.AppServices.Offices;
@@ -34,13 +32,4 @@ public class OfficeUpdateDto
     public string Name { get; set; } = string.Empty;
     public ApplicationUser? MasterUser { get; set; }
     public bool Active { get; set; }
-}
-
-public class OfficeMappingProfile : Profile
-{
-    public OfficeMappingProfile()
-    {
-        CreateMap<Office, OfficeViewDto>();
-        CreateMap<Office, OfficeUpdateDto>();
-    }
 }
