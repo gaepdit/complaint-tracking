@@ -7,13 +7,7 @@ public interface IUserService
 {
     public Task<UserViewDto?> GetCurrentUserAsync(CancellationToken token = default);
     public Task<IList<string>> GetCurrentUserRolesAsync(CancellationToken token = default);
-
-    public Task<List<UserViewDto>> FindUsersAsync(
-        string? nameFilter,
-        string? emailFilter,
-        string? role,
-        CancellationToken token = default);
-
+    public Task<List<UserViewDto>> FindUsersAsync(UserSearchDto filter, CancellationToken token = default);
     public Task<UserViewDto?> GetUserByIdAsync(string id, CancellationToken token = default);
     public Task<IList<string>> GetUserRolesAsync(string id, CancellationToken token = default);
 
@@ -21,6 +15,13 @@ public interface IUserService
         string id,
         Dictionary<string, bool> roleUpdates,
         CancellationToken token = default);
+}
+
+public record UserSearchDto
+{
+    public string? NameFilter { get; set; }
+    public string? EmailFilter { get; set; }
+    public string? Role { get; set; }
 }
 
 public class UserViewDto

@@ -4,7 +4,7 @@ namespace Cts.TestData.ActionTypes;
 
 internal static class Data
 {
-    private static readonly string[] ActionTypeItems =
+    private static readonly string[] ActionTypeSeedItems =
     {
         "Initial investigation",
         "Follow-up investigation",
@@ -24,7 +24,7 @@ internal static class Data
         get
         {
             if (_actionTypes is not null) return _actionTypes;
-            _actionTypes = ActionTypeItems.Select(i => new ActionType(Guid.NewGuid(), i)).ToList();
+            _actionTypes = ActionTypeSeedItems.Select(i => new ActionType(Guid.NewGuid(), i)).ToList();
             return _actionTypes;
         }
     }

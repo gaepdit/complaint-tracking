@@ -7,10 +7,10 @@ namespace LocalRepositoryTests.ActionTypes;
 
 public class Update
 {
-    private ActionTypeRepository _repository = default!;
+    private LocalActionTypeRepository _repository = default!;
 
     [SetUp]
-    public void SetUp() => _repository = new ActionTypeRepository();
+    public void SetUp() => _repository = new LocalActionTypeRepository();
 
     [TearDown]
     public void TearDown() => _repository.Dispose();

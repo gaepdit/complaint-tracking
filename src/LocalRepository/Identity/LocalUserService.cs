@@ -1,19 +1,19 @@
 ﻿using AutoMapper;
 using Cts.AppServices.Users;
 using Cts.Domain.Users;
+using Cts.TestData.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using static Cts.TestData.Users.Data;
 
-namespace Cts.LocalRepository;
+namespace Cts.LocalRepository.Identity;
 
-public class UserService : IUserService
+public class LocalUserService : IUserService
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IMapper _mapper;
 
-    public UserService(
+    public LocalUserService(
         UserManager<ApplicationUser> userManager,
         IHttpContextAccessor httpContextAccessor,
         IMapper mapper)
@@ -58,17 +58,13 @@ public class UserService : IUserService
         return _mapper.Map<List<UserViewDto>>(users);
     }
 
-    public async Task<List<UserViewDto>> FindUsersAsync(
-        string? nameFilter,
-        string? emailFilter,
-        string? role,
-        CancellationToken token = default) =>
-        string.IsNullOrEmpty(role)
-            ? FilterUsers(UsersList, nameFilter, emailFilter)
-            : FilterUsers(await _userManager.GetUsersInRoleAsync(role), nameFilter, emailFilter);
+    public async Task<List<UserViewDto>> FindUsersAsync(UserSearchDto filter, CancellationToken token = default) =>
+        string.IsNullOrEmpty(filter.Role)
+            ? FilterUsers(Data.GetUsers, filter.NameFilter, filter.EmailFilter)
+            : FilterUsers(await _userManager.GetUsersInRoleAsync(filter.Role), filter.NameFilter, filter.EmailFilter);
 
     public Task<UserViewDto?> GetUserByIdAsync(string id, CancellationToken token = default) =>
-        Task.FromResult(_mapper.Map<UserViewDto?>(UsersList.SingleOrDefault(e => e.Id == id)));
+        Task.FromResult(_mapper.Map<UserViewDto?>(Data.GetUsers.SingleOrDefault(e => e.Id == id)));
 
     public async Task<IList<string>> GetUserRolesAsync(string id, CancellationToken token = default)
     {

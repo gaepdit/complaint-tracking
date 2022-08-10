@@ -1,12 +1,12 @@
 ﻿using Cts.Domain.ActionTypes;
 using Cts.Domain.Entities;
-using static Cts.TestData.ActionTypes.Data;
+using Cts.TestData.ActionTypes;
 
 namespace Cts.LocalRepository;
 
-public sealed class ActionTypeRepository : BaseRepository<ActionType, Guid>, IActionTypeRepository
+public sealed class LocalActionTypeRepository : BaseRepository<ActionType, Guid>, IActionTypeRepository
 {
-    public ActionTypeRepository() : base(GetActionTypes) { }
+    public LocalActionTypeRepository() : base(Data.GetActionTypes) { }
 
     public Task<ActionType?> FindByNameAsync(string name, CancellationToken token = default) =>
         Task.FromResult(Items.SingleOrDefault(e => e.Name == name));
