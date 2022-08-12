@@ -2,14 +2,14 @@ using Cts.Domain.Entities;
 using Cts.LocalRepository;
 using GaEpd.Library.Domain.Repositories;
 
-namespace LocalRepositoryTests.ActionTypes;
+namespace LocalRepositoryTests.Offices;
 
 public class Delete
 {
-    private LocalActionTypeRepository _repository = default!;
+    private LocalOfficeRepository _repository = default!;
 
     [SetUp]
-    public void SetUp() => _repository = new LocalActionTypeRepository();
+    public void SetUp() => _repository = new LocalOfficeRepository();
 
     [TearDown]
     public void TearDown() => _repository.Dispose();
@@ -34,7 +34,8 @@ public class Delete
     public async Task WhenItemDoesNotExist_Throws()
     {
         var action = async () => await _repository.DeleteAsync(Guid.Empty);
+
         (await action.Should().ThrowAsync<EntityNotFoundException>())
-            .WithMessage($"Entity not found. Entity type: {typeof(ActionType).FullName}, id: {Guid.Empty}");
+            .WithMessage($"Entity not found. Entity type: {typeof(Office).FullName}, id: {Guid.Empty}");
     }
 }

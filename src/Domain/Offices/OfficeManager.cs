@@ -3,6 +3,7 @@ using Cts.Domain.Users;
 
 namespace Cts.Domain.Offices;
 
+/// <inheritdoc />
 public class OfficeManager : IOfficeManager
 {
     private readonly IOfficeRepository _repository;

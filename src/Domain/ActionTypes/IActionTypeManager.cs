@@ -9,7 +9,7 @@ namespace Cts.Domain.ActionTypes;
 public interface IActionTypeManager
 {
     /// <summary>
-    /// Creates a new Action Type.
+    /// Creates a new <see cref="ActionType"/>.
     /// Throws <see cref="ActionTypeNameAlreadyExistsException"/> if an Action Type already exists with the given name.
     /// </summary>
     /// <param name="name">The name of the Action Type to create.</param>
@@ -18,7 +18,7 @@ public interface IActionTypeManager
     Task<ActionType> CreateAsync(string name, CancellationToken token = default);
 
     /// <summary>
-    /// Changes the name of an Action Type.
+    /// Changes the name of an <see cref="ActionType"/>.
     /// Throws <see cref="ActionTypeNameAlreadyExistsException"/> if another Action Type already exists with the
     /// given name.
     /// </summary>
@@ -29,7 +29,7 @@ public interface IActionTypeManager
 }
 
 /// <summary>
-/// The exception that is thrown if an action type is added/updated with a name that already exists.
+/// The exception that is thrown if an <see cref="ActionType"/> is added/updated with a name that already exists.
 /// </summary>
 [Serializable]
 public class ActionTypeNameAlreadyExistsException : Exception

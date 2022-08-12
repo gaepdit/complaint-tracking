@@ -2,14 +2,14 @@ using Cts.Domain.Entities;
 using Cts.LocalRepository;
 using GaEpd.Library.Domain.Repositories;
 
-namespace LocalRepositoryTests.ActionTypes;
+namespace LocalRepositoryTests.Offices;
 
 public class Get
 {
-    private LocalActionTypeRepository _repository = default!;
+    private LocalOfficeRepository _repository = default!;
 
     [SetUp]
-    public void SetUp() => _repository = new LocalActionTypeRepository();
+    public void SetUp() => _repository = new LocalOfficeRepository();
 
     [TearDown]
     public void TearDown() => _repository.Dispose();
@@ -28,6 +28,6 @@ public class Get
         var id = Guid.Empty;
         var action = async () => await _repository.GetAsync(id);
         (await action.Should().ThrowAsync<EntityNotFoundException>())
-            .WithMessage($"Entity not found. Entity type: {typeof(ActionType).FullName}, id: {id}");
+            .WithMessage($"Entity not found. Entity type: {typeof(Office).FullName}, id: {id}");
     }
 }
