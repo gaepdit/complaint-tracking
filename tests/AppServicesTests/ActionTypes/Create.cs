@@ -9,7 +9,7 @@ namespace AppServicesTests.ActionTypes;
 public class Create
 {
     [Test]
-    public async Task WhenResourceIsValid_ReturnsViewDto()
+    public async Task WhenResourceIsValid_ReturnsId()
     {
         var item = new ActionType(Guid.NewGuid(), ActionTypeConstants.ValidName);
         var repoMock = new Mock<IActionTypeRepository>();
@@ -24,6 +24,6 @@ public class Create
 
         var result = await appService.CreateAsync(item.Name);
 
-        result.Should().BeEquivalentTo(item);
+        result.Should().Be(item.Id);
     }
 }

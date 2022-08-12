@@ -22,15 +22,10 @@ public class Update
         item.ChangeName(ActionTypeConstants.ValidName);
         item.Active = !item.Active;
 
-        var updateResult = await _repository.UpdateAsync(item);
+        await _repository.UpdateAsync(item);
 
         var getResult = await _repository.GetAsync(item.Id);
-        Assert.Multiple(() =>
-        {
-            updateResult.Should().BeEquivalentTo(item);
-            getResult.Should().BeEquivalentTo(item);
-            updateResult.Should().BeEquivalentTo(getResult);
-        });
+        getResult.Should().BeEquivalentTo(item);
     }
 
     [Test]

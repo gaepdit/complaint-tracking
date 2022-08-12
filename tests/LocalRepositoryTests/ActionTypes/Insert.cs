@@ -20,14 +20,12 @@ public class Insert
         var initialCount = _repository.Items.Count;
         var newItem = new ActionType(Guid.NewGuid(), ActionTypeConstants.ValidName);
 
-        var insertResult = await _repository.InsertAsync(newItem);
-        var getResult = await _repository.GetAsync(newItem.Id);
+        await _repository.InsertAsync(newItem);
 
+        var getResult = await _repository.GetAsync(newItem.Id);
         Assert.Multiple(() =>
         {
-            insertResult.Should().BeEquivalentTo(newItem);
             getResult.Should().BeEquivalentTo(newItem);
-            insertResult.Should().BeEquivalentTo(getResult);
             _repository.Items.Count.Should().Be(initialCount + 1);
         });
     }

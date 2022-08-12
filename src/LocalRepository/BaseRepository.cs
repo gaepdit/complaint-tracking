@@ -39,21 +39,17 @@ public abstract class BaseRepository<TEntity, TKey> : IRepository<TEntity, TKey>
         CancellationToken token = default) =>
         Task.FromResult(Items.Where(predicate).Skip(paging.Skip).Take(paging.Take).ToList() as IList<TEntity>);
 
-    public async Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken token = default)
+    public Task InsertAsync(TEntity entity, bool autoSave = false, CancellationToken token = default)
     {
-        if (await FindAsync(entity.Id, token) != null)
-            throw new EntityAlreadyExistsException(typeof(TEntity), entity.Id);
-
         Items.Add(entity);
-        return entity;
+        return Task.CompletedTask;
     }
 
-    public async Task<TEntity> UpdateAsync(TEntity entity, bool autoSave = false, CancellationToken token = default)
+    public async Task UpdateAsync(TEntity entity, bool autoSave = false, CancellationToken token = default)
     {
         var item = await GetAsync(entity.Id, token);
         Items.Remove(item);
         Items.Add(entity);
-        return entity;
     }
 
     public async Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken token = default) =>

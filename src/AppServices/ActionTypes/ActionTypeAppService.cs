@@ -35,21 +35,19 @@ public sealed class ActionTypeAppService : IActionTypeAppService
         return _mapper.Map<List<ActionTypeViewDto>>(actionTypes);
     }
 
-    public async Task<ActionTypeViewDto> CreateAsync(string name, CancellationToken token = default)
+    public async Task<Guid> CreateAsync(string name, CancellationToken token = default)
     {
         // Create and insert the new item
         var actionType = await _manager.CreateAsync(name, token);
         actionType.SetCreator((await _userService.GetCurrentUserAsync(token))?.Id);
-
         await _repository.InsertAsync(actionType, token: token);
-
-        // Return DTO
-        return _mapper.Map<ActionTypeViewDto>(actionType);
+        return actionType.Id;
     }
 
     public async Task UpdateAsync(ActionTypeUpdateDto resource, CancellationToken token = default)
     {
         var actionType = await _repository.GetAsync(resource.Id, token);
+        
         if (actionType.Name != resource.Name.Trim())
             await _manager.ChangeNameAsync(actionType, resource.Name, token);
         actionType.Active = resource.Active;
