@@ -1,4 +1,4 @@
-namespace Cts.AppServices.ActionTypes;
+﻿namespace Cts.AppServices.ActionTypes;
 
 public interface IActionTypeAppService : IDisposable
 {
@@ -13,6 +13,11 @@ public class ActionTypeViewDto
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public bool Active { get; set; }
+}
+
+public class ActionTypeCreateDto
+{
+    public string Name { get; set; } = string.Empty;
 }
 
 public class ActionTypeUpdateDto
