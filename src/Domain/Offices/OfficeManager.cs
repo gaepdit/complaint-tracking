@@ -12,19 +12,21 @@ public class OfficeManager : IOfficeManager
 
     public async Task<Office> CreateAsync(string name, ApplicationUser? user = null, CancellationToken token = default)
     {
-        // Validate the name
-        var existing = await _repository.FindByNameAsync(name.Trim(), token);
-        if (existing is not null) throw new OfficeNameAlreadyExistsException(name);
-
+        await ThrowIfDuplicateName(name, ignoreId: null, token: token);
         return new Office(Guid.NewGuid(), name, user);
     }
 
     public async Task ChangeNameAsync(Office office, string name, CancellationToken token = default)
     {
-        var existing = await _repository.FindByNameAsync(name.Trim(), token);
-        if (existing is not null && existing.Id == office.Id)
-            throw new OfficeNameAlreadyExistsException(name);
-
+        await ThrowIfDuplicateName(name, office.Id, token);
         office.ChangeName(name);
+    }
+
+    private async Task ThrowIfDuplicateName(string name, Guid? ignoreId, CancellationToken token)
+    {
+        // Validate the name is not a duplicate
+        var existing = await _repository.FindByNameAsync(name.Trim(), token);
+        if (existing is not null && (ignoreId is null || existing.Id != ignoreId))
+            throw new OfficeNameAlreadyExistsException(name);
     }
 }
