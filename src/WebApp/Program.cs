@@ -1,8 +1,33 @@
+using Cts.AppServices.ActionTypes;
+using Cts.AppServices.ServiceCollectionExtensions;
+using Cts.AppServices.Users;
+using Cts.Domain.ActionTypes;
+using Cts.Domain.Offices;
+using Cts.Domain.Users;
+using Cts.LocalRepository;
+using Cts.LocalRepository.Identity;
+using Microsoft.AspNetCore.Identity;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Configure Identity
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>();
+
+// Configure local Identity
+builder.Services.AddLocalIdentity();
+
+// Configure UI
 builder.Services.AddRazorPages();
 
+// Uses static data when running locally
+builder.Services.AddScoped<IUserService, LocalUserService>();
+builder.Services.AddSingleton<IActionTypeRepository, LocalActionTypeRepository>();
+builder.Services.AddSingleton<IOfficeRepository, LocalOfficeRepository>();
+
+// Add App Services
+builder.Services.AddAppServices();
+
+// Build the application
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -1,0 +1,31 @@
+﻿@page
+@model Index
+@{
+    ViewData["Title"] = $"Site Maintenance: {Index.ThisOption.PluralName}";
+}
+
+<p><a asp-page="../Index">← Site Maintenance</a></p>
+
+<partial name="_AlertPartial" for="Message" />
+
+<h1>
+    @Index.ThisOption.PluralName
+</h1>
+
+<p class="lead">The @Index.ThisOption.PluralName listed below are available for selection when adding or editing Complaint Actions.</p>
+<p><a asp-page="Create" class="btn btn-outline-primary btn-sm">Create New</a></p>
+<p>
+    The "Site Maintenance" role is needed to create or edit action types. Select an action type to edit it. Setting an action
+    type as "inactive" makes it unavailable for use in future Complaint Actions but does not affect any existing Actions.
+</p>
+
+<div class="list-group">
+    @foreach (var item in Model.Items)
+    {
+        <a asp-page="Edit" asp-route-id="@item.Id"
+           class="list-group-item list-group-item-action @(item.Id == Model.HighlightId ? "list-group-item-warning" : !item.Active ? "bg-secondary bg-opacity-25" : "")">
+            @Html.DisplayFor(m => item.Name, "StringOrNone")
+            <em>@Html.DisplayFor(m => item.Active, "BoolInactive")</em>
+        </a>
+    }
+</div>
