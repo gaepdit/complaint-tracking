@@ -37,7 +37,7 @@ public sealed class OfficeAppService : IOfficeAppService
 
     public async Task<IReadOnlyList<OfficeViewDto>> GetListAsync(CancellationToken token = default)
     {
-        var offices = await _repository.GetListAsync(token);
+        var offices = (await _repository.GetListAsync(token)).OrderBy(e => e.Name).ToList();
         return _mapper.Map<IReadOnlyList<OfficeViewDto>>(offices);
     }
 
@@ -53,7 +53,7 @@ public sealed class OfficeAppService : IOfficeAppService
     public async Task UpdateAsync(OfficeUpdateDto resource, CancellationToken token = default)
     {
         var office = await _repository.GetAsync(resource.Id, token);
-        
+
         if (office.Name != resource.Name.Trim())
             await _manager.ChangeNameAsync(office, resource.Name, token);
         office.Active = resource.Active;

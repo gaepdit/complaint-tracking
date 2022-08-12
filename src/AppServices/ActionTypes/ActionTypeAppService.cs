@@ -31,7 +31,7 @@ public sealed class ActionTypeAppService : IActionTypeAppService
 
     public async Task<IReadOnlyList<ActionTypeViewDto>> GetListAsync(CancellationToken token = default)
     {
-        var actionTypes = await _repository.GetListAsync(token);
+        var actionTypes = (await _repository.GetListAsync(token)).OrderBy(e => e.Name).ToList();
         return _mapper.Map<List<ActionTypeViewDto>>(actionTypes);
     }
 
@@ -47,7 +47,7 @@ public sealed class ActionTypeAppService : IActionTypeAppService
     public async Task UpdateAsync(ActionTypeUpdateDto resource, CancellationToken token = default)
     {
         var actionType = await _repository.GetAsync(resource.Id, token);
-        
+
         if (actionType.Name != resource.Name.Trim())
             await _manager.ChangeNameAsync(actionType, resource.Name, token);
         actionType.Active = resource.Active;
