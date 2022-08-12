@@ -13,7 +13,7 @@ public class GetList
     {
         var itemList = new List<ActionType> { new(Guid.Empty, ActionTypeConstants.ValidName) };
         var repoMock = new Mock<IActionTypeRepository>();
-        repoMock.Setup(l => l.GetListAsync(default))
+        repoMock.Setup(l => l.GetListAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(itemList);
         var managerMock = new Mock<IActionTypeManager>();
         var userServiceMock = new Mock<IUserService>();

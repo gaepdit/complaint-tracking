@@ -10,7 +10,7 @@ public class Create
     public async Task WhenItemIsValid_CreatesItem()
     {
         var repoMock = new Mock<IActionTypeRepository>();
-        repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), default))
+        repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((ActionType?)null);
         var manager = new ActionTypeManager(repoMock.Object);
 
@@ -23,7 +23,7 @@ public class Create
     public async Task WhenItemIsInvalid_Throws()
     {
         var repoMock = new Mock<IActionTypeRepository>();
-        repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), default))
+        repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new ActionType(Guid.Empty, ActionTypeConstants.ValidName));
         var manager = new ActionTypeManager(repoMock.Object);
 

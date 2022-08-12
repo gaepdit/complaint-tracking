@@ -11,7 +11,7 @@ public class ChangeName
     {
         var item = new ActionType(Guid.Empty, ActionTypeConstants.ValidName);
         var repoMock = new Mock<IActionTypeRepository>();
-        repoMock.Setup(l => l.FindByNameAsync(ActionTypeConstants.NewValidName, default))
+        repoMock.Setup(l => l.FindByNameAsync(ActionTypeConstants.NewValidName, It.IsAny<CancellationToken>()))
             .ReturnsAsync((ActionType?)null);
         var manager = new ActionTypeManager(repoMock.Object);
 
@@ -25,7 +25,7 @@ public class ChangeName
     {
         var item = new ActionType(Guid.Empty, ActionTypeConstants.ValidName);
         var repoMock = new Mock<IActionTypeRepository>();
-        repoMock.Setup(l => l.FindByNameAsync(ActionTypeConstants.ValidName, default))
+        repoMock.Setup(l => l.FindByNameAsync(ActionTypeConstants.ValidName, It.IsAny<CancellationToken>()))
             .ReturnsAsync(item);
         var manager = new ActionTypeManager(repoMock.Object);
 
@@ -40,7 +40,7 @@ public class ChangeName
         var item = new ActionType(Guid.Empty, ActionTypeConstants.ValidName);
         var existingItem = new ActionType(Guid.NewGuid(), ActionTypeConstants.NewValidName);
         var repoMock = new Mock<IActionTypeRepository>();
-        repoMock.Setup(l => l.FindByNameAsync(ActionTypeConstants.NewValidName, default))
+        repoMock.Setup(l => l.FindByNameAsync(ActionTypeConstants.NewValidName, It.IsAny<CancellationToken>()))
             .ReturnsAsync(existingItem);
         var manager = new ActionTypeManager(repoMock.Object);
 
@@ -55,7 +55,7 @@ public class ChangeName
     {
         var item = new ActionType(Guid.Empty, ActionTypeConstants.ValidName);
         var repoMock = new Mock<IActionTypeRepository>();
-        repoMock.Setup(l => l.FindByNameAsync(ActionTypeConstants.NewValidName, default))
+        repoMock.Setup(l => l.FindByNameAsync(ActionTypeConstants.NewValidName, It.IsAny<CancellationToken>()))
             .ReturnsAsync((ActionType?)null);
         var manager = new ActionTypeManager(repoMock.Object);
 

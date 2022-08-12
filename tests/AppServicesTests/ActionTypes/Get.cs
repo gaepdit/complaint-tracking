@@ -14,7 +14,7 @@ public class Get
     {
         var item = new ActionType(Guid.Empty, ActionTypeConstants.ValidName);
         var repoMock = new Mock<IActionTypeRepository>();
-        repoMock.Setup(l => l.FindAsync(item.Id, default))
+        repoMock.Setup(l => l.FindAsync(item.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(item);
         var managerMock = new Mock<IActionTypeManager>();
         var userServiceMock = new Mock<IUserService>();
@@ -33,7 +33,7 @@ public class Get
     {
         var id = Guid.Empty;
         var repoMock = new Mock<IActionTypeRepository>();
-        repoMock.Setup(l => l.FindAsync(id, default))
+        repoMock.Setup(l => l.FindAsync(id, It.IsAny<CancellationToken>()))
             .ReturnsAsync((ActionType?)null);
         var managerMock = new Mock<IActionTypeManager>();
         var mapperMock = new Mock<IMapper>();
