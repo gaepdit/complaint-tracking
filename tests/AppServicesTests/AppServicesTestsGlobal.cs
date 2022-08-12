@@ -13,7 +13,7 @@ public class AppServicesTestsGlobal
     public void OneTimeSetUp()
     {
         // AutoMapper profiles are added here.
-        MapperConfig = new MapperConfiguration(c => c.AddProfile(new AutoMapperProfiles()));
+        MapperConfig = new MapperConfiguration(c => c.AddProfile(new AutoMapperProfile()));
         Mapper = MapperConfig.CreateMapper();
 
         // Setting this option globally since our DTOs generally exclude properties, e.g., audit properties.
