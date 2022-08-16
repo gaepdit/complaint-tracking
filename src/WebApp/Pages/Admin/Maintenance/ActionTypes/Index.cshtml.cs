@@ -4,9 +4,9 @@ using Cts.WebApp.Platform.RazorHelpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace App.Pages.Admin.Maintenance.ActionTypes;
+namespace Cts.WebApp.Pages.Admin.Maintenance.ActionTypes;
 
-public class Index : PageModel
+public class IndexModel : PageModel
 {
     public IReadOnlyList<ActionTypeViewDto> Items { get; private set; } = default!;
     public static MaintenanceOption ThisOption => MaintenanceOption.ActionType;

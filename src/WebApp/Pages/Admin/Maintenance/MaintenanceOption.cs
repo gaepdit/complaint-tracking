@@ -1,4 +1,4 @@
-﻿namespace App.Pages.Admin.Maintenance;
+namespace Cts.WebApp.Pages.Admin.Maintenance;
 
 public class MaintenanceOption
 {

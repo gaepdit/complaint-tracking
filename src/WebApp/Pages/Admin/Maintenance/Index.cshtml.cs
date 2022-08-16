@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace App.Pages.Admin.Maintenance;
+namespace Cts.WebApp.Pages.Admin.Maintenance;
 
-public class Index : PageModel
+public class IndexModel : PageModel
 {
     public void OnGet()
     {

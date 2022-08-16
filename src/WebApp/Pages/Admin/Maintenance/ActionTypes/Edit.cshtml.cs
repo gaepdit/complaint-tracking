@@ -6,7 +6,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace App.Pages.Admin.Maintenance.ActionTypes;
+namespace Cts.WebApp.Pages.Admin.Maintenance.ActionTypes;
 
 public class Edit : PageModel
 {
