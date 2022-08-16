@@ -1,22 +1,22 @@
-﻿using Cts.AppServices.Offices;
+﻿using Cts.AppServices.ActionTypes;
+using Cts.Domain.ActionTypes;
 using Cts.Domain.Entities;
-using Cts.Domain.Offices;
-using Cts.TestData.Offices;
+using Cts.TestData.ActionTypes;
 using FluentValidation.TestHelper;
 
-namespace AppServicesTests.Offices;
+namespace AppServicesTests.ActionTypes.Validators;
 
 public class CreateValidator
 {
     [Test]
     public async Task ValidDto_ReturnsAsValid()
     {
-        var repoMock = new Mock<IOfficeRepository>();
+        var repoMock = new Mock<IActionTypeRepository>();
         repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((Office?)null);
-        var model = new OfficeCreateDto { Name = OfficeConstants.ValidName };
+            .ReturnsAsync((ActionType?)null);
+        var model = new ActionTypeCreateDto { Name = ActionTypeConstants.ValidName };
 
-        var validator = new OfficeCreateValidator(repoMock.Object);
+        var validator = new ActionTypeCreateValidator(repoMock.Object);
         var result = await validator.TestValidateAsync(model);
 
         result.ShouldNotHaveValidationErrorFor(e => e.Name);
@@ -25,12 +25,12 @@ public class CreateValidator
     [Test]
     public async Task DuplicateName_ReturnsAsInvalid()
     {
-        var repoMock = new Mock<IOfficeRepository>();
+        var repoMock = new Mock<IActionTypeRepository>();
         repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new Office(Guid.Empty, OfficeConstants.ValidName));
-        var model = new OfficeCreateDto { Name = OfficeConstants.ValidName };
+            .ReturnsAsync(new ActionType(Guid.Empty, ActionTypeConstants.ValidName));
+        var model = new ActionTypeCreateDto { Name = ActionTypeConstants.ValidName };
 
-        var validator = new OfficeCreateValidator(repoMock.Object);
+        var validator = new ActionTypeCreateValidator(repoMock.Object);
         var result = await validator.TestValidateAsync(model);
 
         result.ShouldHaveValidationErrorFor(e => e.Name)
@@ -40,12 +40,12 @@ public class CreateValidator
     [Test]
     public async Task NameTooShort_ReturnsAsInvalid()
     {
-        var repoMock = new Mock<IOfficeRepository>();
+        var repoMock = new Mock<IActionTypeRepository>();
         repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((Office?)null);
-        var model = new OfficeCreateDto { Name = OfficeConstants.ShortName };
+            .ReturnsAsync((ActionType?)null);
+        var model = new ActionTypeCreateDto { Name = ActionTypeConstants.ShortName };
 
-        var validator = new OfficeCreateValidator(repoMock.Object);
+        var validator = new ActionTypeCreateValidator(repoMock.Object);
         var result = await validator.TestValidateAsync(model);
 
         result.ShouldHaveValidationErrorFor(e => e.Name);

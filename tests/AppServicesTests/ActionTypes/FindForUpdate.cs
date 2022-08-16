@@ -7,7 +7,7 @@ using Cts.TestData.ActionTypes;
 
 namespace AppServicesTests.ActionTypes;
 
-public class Get
+public class FindForUpdate
 {
     [Test]
     public async Task WhenItemExists_ReturnsViewDto()

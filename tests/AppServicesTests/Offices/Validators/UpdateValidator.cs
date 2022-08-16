@@ -4,7 +4,7 @@ using Cts.Domain.Offices;
 using Cts.TestData.Offices;
 using FluentValidation.TestHelper;
 
-namespace AppServicesTests.Offices;
+namespace AppServicesTests.Offices.Validators;
 
 public class UpdateValidator
 {

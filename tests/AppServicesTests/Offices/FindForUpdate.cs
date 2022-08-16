@@ -1,21 +1,33 @@
 ﻿using AutoMapper;
 using Cts.AppServices.Offices;
 using Cts.AppServices.Users;
-using Cts.Domain.Offices;
 using Cts.Domain.Entities;
+using Cts.Domain.Offices;
+using Cts.Domain.Users;
 using Cts.TestData.Offices;
 
 namespace AppServicesTests.Offices;
 
-public class Get
+public class FindForUpdate
 {
     [Test]
     public async Task WhenItemExists_ReturnsViewDto()
     {
-        var item = new Office(Guid.Empty, OfficeConstants.ValidName);
+        var office = new Office(Guid.Empty, OfficeConstants.ValidName);
+        var user = new ApplicationUser
+        {
+            Id = Guid.NewGuid().ToString(),
+            FirstName = "Local",
+            LastName = "User",
+            Email = "local.user@example.net",
+            UserName = "local.user@example.net",
+            NormalizedUserName = "local.user@example.net".ToUpperInvariant(),
+        };
+        office.MasterUser = user;
+        
         var repoMock = new Mock<IOfficeRepository>();
-        repoMock.Setup(l => l.FindAsync(item.Id, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(item);
+        repoMock.Setup(l => l.FindAsync(office.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(office);
         var managerMock = new Mock<IOfficeManager>();
         var userServiceMock = new Mock<IUserService>();
         userServiceMock.Setup(l => l.GetCurrentUserAsync(It.IsAny<CancellationToken>()))
@@ -25,7 +37,7 @@ public class Get
 
         var result = await appService.FindForUpdateAsync(Guid.Empty);
 
-        result.Should().BeEquivalentTo(item);
+        result.Should().BeEquivalentTo(office);
     }
 
     [Test]
