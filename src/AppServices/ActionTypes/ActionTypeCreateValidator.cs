@@ -14,7 +14,7 @@ public class ActionTypeCreateValidator : AbstractValidator<ActionTypeCreateDto>
 
         RuleFor(e => e.Name)
             .Length(ActionType.MinNameLength, ActionType.MaxNameLength)
-            .MustAsync(async (e, name, token) => await NotDuplicateName(name, token))
+            .MustAsync(async (_, name, token) => await NotDuplicateName(name, token))
             .WithMessage("The name entered already exists.");
     }
 

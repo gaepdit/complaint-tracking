@@ -7,22 +7,3 @@ public interface IActionTypeAppService : IDisposable
     Task<Guid> CreateAsync(string name, CancellationToken token = default);
     Task UpdateAsync(ActionTypeUpdateDto resource, CancellationToken token = default);
 }
-
-public class ActionTypeViewDto
-{
-    public Guid Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public bool Active { get; set; }
-}
-
-public class ActionTypeCreateDto
-{
-    public string Name { get; set; } = string.Empty;
-}
-
-public class ActionTypeUpdateDto
-{
-    public Guid Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public bool Active { get; set; }
-}

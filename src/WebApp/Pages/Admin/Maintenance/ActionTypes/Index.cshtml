@@ -19,17 +19,36 @@
     <a asp-page="Create" class="btn btn-outline-primary btn-sm">Create New</a>
 </p>
 <p>
-    The "Site Maintenance" role is needed to create or edit action types. Select an action type to edit it. Setting an action
-    type as "inactive" makes it unavailable for use in future Complaint Actions but does not affect any existing Actions.
+    The "Site Maintenance" role is needed to create or edit @IndexModel.ThisOption.PluralName. Select an action type to
+    edit it. Setting an item as "inactive" makes it unavailable for use in future Complaint Actions but does not affect
+    any existing Actions.
 </p>
 
-<div class="list-group">
-    @foreach (var item in Model.Items)
-    {
-        <a asp-page="Edit" asp-route-id="@item.Id"
-           class="list-group-item list-group-item-action @(item.Id == Model.HighlightId ? "list-group-item-warning" : !item.Active ? "bg-secondary bg-opacity-25" : "")">
-            @Html.DisplayFor(m => item.Name, "StringOrNone")
-            <em>@Html.DisplayFor(m => item.Active, "BoolInactive")</em>
-        </a>
-    }
-</div>
+@if (Model.Items.Count == 0)
+{
+    <em class="text-muted">None</em>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <th scope="col">Name</th>
+        <th scope="col">Active</th>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr class="@(item.Id == Model.HighlightId ? "list-group-item-warning" : !item.Active ? "bg-secondary bg-opacity-25" : "")">
+                <td>
+                    <a asp-page="Edit" asp-route-id="@item.Id">
+                        @Html.DisplayFor(m => item.Name, "StringOrNone")
+                    </a>
+                </td>
+                <td>
+                    @Html.DisplayFor(m => item.Active)
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
