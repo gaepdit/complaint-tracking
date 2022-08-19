@@ -43,14 +43,14 @@
 
 * `/Admin/Complaints/Create`
 * `/Admin/Complaints/Details/{id}`
-* `/Admin/Complaints/Details/{id}/Approve`
-* `/Admin/Complaints/Details/{id}/Assign`
-* `/Admin/Complaints/Details/{id}/Delete`
-* `/Admin/Complaints/Details/{id}/Edit`
-* `/Admin/Complaints/Details/{id}/Reopen`
-* `/Admin/Complaints/Details/{id}/RequestReview`
-* `/Admin/Complaints/Details/{id}/Restore`
-* `/Admin/Complaints/Details/{id}/Return`
+* `/Admin/Complaints/Details/Approve/{id}`
+* `/Admin/Complaints/Details/Assign/{id}`
+* `/Admin/Complaints/Details/Delete/{id}`
+* `/Admin/Complaints/Details/Edit/{id}`
+* `/Admin/Complaints/Details/Reopen/{id}`
+* `/Admin/Complaints/Details/RequestReview/{id}`
+* `/Admin/Complaints/Details/Restore/{id}`
+* `/Admin/Complaints/Details/Return/{id}`
 
 ### Redirects
 
@@ -81,7 +81,7 @@
 
 * `/Admin/Users` (search)
 * `/Admin/Users/Details/{id}`
-* `/Admin/Users/Details/{id}/Edit` (edit roles)
+* `/Admin/Users/Details/Edit/{id}` (edit roles)
 
 ### Redirects
 
