@@ -1,5 +1,4 @@
 using Cts.Domain.Entities;
-using Cts.Domain.Users;
 using System.Runtime.Serialization;
 
 namespace Cts.Domain.Offices;

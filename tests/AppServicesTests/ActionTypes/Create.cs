@@ -1,5 +1,5 @@
 ﻿using Cts.AppServices.ActionTypes;
-using Cts.AppServices.Users;
+using Cts.AppServices.UserServices;
 using Cts.Domain.ActionTypes;
 using Cts.Domain.Entities;
 using Cts.TestData.ActionTypes;
@@ -17,8 +17,8 @@ public class Create
         managerMock.Setup(l => l.CreateAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(item);
         var userServiceMock = new Mock<IUserService>();
-        userServiceMock.Setup(l => l.GetCurrentUserAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync((UserViewDto?)null);
+        userServiceMock.Setup(l => l.GetCurrentUserAsync())
+            .ReturnsAsync((ApplicationUser?)null);
         var appService = new ActionTypeAppService(repoMock.Object, managerMock.Object,
             AppServicesTestsGlobal.Mapper!, userServiceMock.Object);
 

@@ -1,4 +1,4 @@
-using Cts.Domain.Users;
+using Cts.Domain.Entities;
 using Cts.LocalRepository.Identity;
 using Cts.TestData.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -37,6 +37,28 @@ public class UserStore
         var user = Data.GetUsers.First();
         var result = await _store.GetNormalizedUserNameAsync(user, CancellationToken.None);
         result.Should().BeEquivalentTo(user.NormalizedUserName);
+    }
+
+    [Test]
+    public async Task Update_WhenItemIsValid_UpdatesItem()
+    {
+        var user = Data.GetUsers.First();
+        user.Phone = "1";
+        user.Office = new Office(Guid.NewGuid(), "abc");
+
+        await _store.UpdateAsync(user, CancellationToken.None);
+
+        var result = await _store.FindByIdAsync(user.Id, CancellationToken.None);
+        result.Should().BeEquivalentTo(user);
+    }
+
+    [Test]
+    public async Task Update_WhenItemDoesNotExist_Throws()
+    {
+        var user = new ApplicationUser { Id = Guid.Empty.ToString() };
+        var action = async () => await _store.UpdateAsync(user, CancellationToken.None);
+        (await action.Should().ThrowAsync<InvalidOperationException>())
+            .WithMessage("Sequence contains no matching element");
     }
 
     [Test]

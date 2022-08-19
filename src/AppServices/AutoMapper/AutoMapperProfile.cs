@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using Cts.AppServices.ActionTypes;
 using Cts.AppServices.Offices;
-using Cts.AppServices.Users;
+using Cts.AppServices.StaffServices;
 using Cts.Domain.Entities;
-using Cts.Domain.Users;
 
-namespace Cts.AppServices.ServiceCollectionExtensions;
+namespace Cts.AppServices.AutoMapper;
 
 public class AutoMapperProfile : Profile
 {
@@ -17,6 +16,7 @@ public class AutoMapperProfile : Profile
         CreateMap<Office, OfficeViewDto>();
         CreateMap<Office, OfficeUpdateDto>();
 
-        CreateMap<ApplicationUser, UserViewDto>();
+        CreateMap<ApplicationUser, StaffViewDto>().ReverseMap();
+        CreateMap<ApplicationUser, StaffUpdateDto>();
     }
 }

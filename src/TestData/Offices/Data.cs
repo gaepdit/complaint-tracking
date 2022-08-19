@@ -1,5 +1,4 @@
 ﻿using Cts.Domain.Entities;
-using Cts.Domain.Users;
 
 namespace Cts.TestData.Offices;
 
@@ -23,7 +22,8 @@ internal static class Data
             new Office(Guid.NewGuid(), "Water Resources Branch", user) { Active = true },
             new Office(Guid.NewGuid(), "Watershed Protection Branch", user) { Active = true },
             new Office(Guid.NewGuid(), "Air Laboratory", user) { Active = false },
-            new Office(Guid.NewGuid(), "Air Protection Branch (Not used)", user) { Active = false },
+            // null user in "Air Protection Branch (Not used)"
+            new Office(Guid.NewGuid(), "Air Protection Branch (Not used)") { Active = false },
             new Office(Guid.NewGuid(), "Bacteriology Laboratory", user) { Active = false },
             new Office(Guid.NewGuid(), "Environmental Toxicology", user) { Active = false },
             new Office(Guid.NewGuid(), "Information Management", user) { Active = false },
@@ -45,8 +45,12 @@ internal static class Data
         get
         {
             if (_offices is not null) return _offices;
+
+            // Seed offices and user data.
             _offices = OfficeSeedItems(Identity.Data.GetUsers.First());
-            _offices.First().Users = Identity.Data.GetUsers.ToList();
+            _offices.First(e => e.Active).Users = Identity.Data.GetUsers.Where(e => e.Active).ToList();
+            Identity.Data.GetUsers.First().Office = _offices.First();
+
             return _offices;
         }
     }

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Cts.AppServices.Users;
+using Cts.AppServices.UserServices;
 using Cts.Domain.ActionTypes;
 
 namespace Cts.AppServices.ActionTypes;
@@ -37,9 +37,8 @@ public sealed class ActionTypeAppService : IActionTypeAppService
 
     public async Task<Guid> CreateAsync(string name, CancellationToken token = default)
     {
-        // Create and insert the new item
         var actionType = await _manager.CreateAsync(name, token);
-        actionType.SetCreator((await _userService.GetCurrentUserAsync(token))?.Id);
+        actionType.SetCreator((await _userService.GetCurrentUserAsync())?.Id);
         await _repository.InsertAsync(actionType, token: token);
         return actionType.Id;
     }
@@ -51,7 +50,7 @@ public sealed class ActionTypeAppService : IActionTypeAppService
         if (actionType.Name != resource.Name.Trim())
             await _manager.ChangeNameAsync(actionType, resource.Name, token);
         actionType.Active = resource.Active;
-        actionType.SetUpdater((await _userService.GetCurrentUserAsync(token))?.Id);
+        actionType.SetUpdater((await _userService.GetCurrentUserAsync())?.Id);
 
         await _repository.UpdateAsync(actionType, token: token);
     }

@@ -1,16 +1,16 @@
-using Cts.Domain.Users;
+using Cts.Domain.Entities;
 using Cts.TestData.Identity;
 using Microsoft.AspNetCore.Identity;
 
 namespace Cts.LocalRepository.Identity;
 
 /// <summary>
-/// This store is only partially implemented. UserStore is read-only. UserRoleStore is read/write.
+/// This store is only partially implemented. UserStore is read-only, except Update. UserRoleStore is read/write.
 /// </summary>
 public sealed class LocalUserStore : IUserRoleStore<ApplicationUser> // inherits IUserStore<ApplicationUser>
 {
-    internal ICollection<ApplicationUser> Users { get; }
-    internal ICollection<IdentityUserRole<string>> UserRoles { get; }
+    private ICollection<ApplicationUser> Users { get; }
+    private ICollection<IdentityUserRole<string>> UserRoles { get; }
 
     public LocalUserStore()
     {
@@ -33,13 +33,18 @@ public sealed class LocalUserStore : IUserRoleStore<ApplicationUser> // inherits
 
     public Task SetNormalizedUserNameAsync(ApplicationUser user, string normalizedName,
         CancellationToken cancellationToken) =>
-        throw new NotImplementedException();
+        Task.CompletedTask;
 
     public Task<IdentityResult> CreateAsync(ApplicationUser user, CancellationToken cancellationToken) =>
         throw new NotImplementedException();
 
-    public Task<IdentityResult> UpdateAsync(ApplicationUser user, CancellationToken cancellationToken) =>
-        throw new NotImplementedException();
+    public async Task<IdentityResult> UpdateAsync(ApplicationUser user, CancellationToken cancellationToken)
+    {
+        var existingUser = await FindByIdAsync(user.Id, cancellationToken);
+        Users.Remove(existingUser);
+        Users.Add(user);
+        return IdentityResult.Success;
+    }
 
     public Task<IdentityResult> DeleteAsync(ApplicationUser user, CancellationToken cancellationToken) =>
         throw new NotImplementedException();

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
-using Cts.AppServices.Users;
+using Cts.AppServices.StaffServices;
+using Cts.AppServices.UserServices;
+using Cts.Domain.Entities;
 using Cts.Domain.Offices;
 
 namespace Cts.AppServices.Offices;
@@ -23,12 +25,6 @@ public sealed class OfficeAppService : IOfficeAppService
         _userService = userService;
     }
 
-    public async Task<OfficeViewDto> GetAsync(Guid id, CancellationToken token = default)
-    {
-        var office = await _repository.GetAsync(id, token);
-        return _mapper.Map<OfficeViewDto>(office);
-    }
-
     public async Task<OfficeUpdateDto?> FindForUpdateAsync(Guid id, CancellationToken token = default)
     {
         var office = await _repository.FindAsync(id, token);
@@ -43,9 +39,8 @@ public sealed class OfficeAppService : IOfficeAppService
 
     public async Task<Guid> CreateAsync(OfficeCreateDto resource, CancellationToken token = default)
     {
-        // Create and insert the new item
         var office = await _manager.CreateAsync(resource.Name, token: token);
-        office.SetCreator((await _userService.GetCurrentUserAsync(token))?.Id);
+        office.SetCreator((await _userService.GetCurrentUserAsync())?.Id);
         await _repository.InsertAsync(office, token: token);
         return office.Id;
     }
@@ -57,16 +52,16 @@ public sealed class OfficeAppService : IOfficeAppService
         if (office.Name != resource.Name.Trim())
             await _manager.ChangeNameAsync(office, resource.Name, token);
         office.Active = resource.Active;
-        office.MasterUser = resource.MasterUser;
-        office.SetUpdater((await _userService.GetCurrentUserAsync(token))?.Id);
+        office.MasterUser =_mapper.Map<ApplicationUser>(resource.MasterUser);
+        office.SetUpdater((await _userService.GetCurrentUserAsync())?.Id);
 
         await _repository.UpdateAsync(office, token: token);
     }
 
-    public async Task<IReadOnlyList<UserViewDto>> GetUsersAsync(Guid id, CancellationToken token = default)
+    public async Task<IReadOnlyList<StaffViewDto>> GetActiveStaffAsync(Guid id, CancellationToken token = default)
     {
-        var users = await _repository.GetUsersListAsync(id, token);
-        return _mapper.Map<IReadOnlyList<UserViewDto>>(users);
+        var users = await _repository.GetActiveUsersListAsync(id, token);
+        return _mapper.Map<IReadOnlyList<StaffViewDto>>(users);
     }
 
     public void Dispose() => _repository.Dispose();

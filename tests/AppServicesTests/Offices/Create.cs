@@ -1,8 +1,7 @@
 ﻿using Cts.AppServices.Offices;
-using Cts.AppServices.Users;
+using Cts.AppServices.UserServices;
 using Cts.Domain.Offices;
 using Cts.Domain.Entities;
-using Cts.Domain.Users;
 using Cts.TestData.Offices;
 
 namespace AppServicesTests.Offices;
@@ -19,8 +18,8 @@ public class Create
                 l.CreateAsync(It.IsAny<string>(), It.IsAny<ApplicationUser?>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(item);
         var userServiceMock = new Mock<IUserService>();
-        userServiceMock.Setup(l => l.GetCurrentUserAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync((UserViewDto?)null);
+        userServiceMock.Setup(l => l.GetCurrentUserAsync())
+            .ReturnsAsync((ApplicationUser?)null);
         var appService = new OfficeAppService(repoMock.Object, managerMock.Object,
             AppServicesTestsGlobal.Mapper!, userServiceMock.Object);
         var resource = new OfficeCreateDto{Name = OfficeConstants.ValidName};

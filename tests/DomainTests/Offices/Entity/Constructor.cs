@@ -1,6 +1,6 @@
 using Cts.Domain.Entities;
 
-namespace DomainTests.Offices;
+namespace DomainTests.Offices.Entity;
 
 public class Constructor
 {

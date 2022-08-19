@@ -1,8 +1,7 @@
 ﻿using Cts.AppServices.Offices;
-using Cts.AppServices.Users;
+using Cts.AppServices.UserServices;
 using Cts.Domain.Entities;
 using Cts.Domain.Offices;
-using Cts.Domain.Users;
 using Cts.TestData.Offices;
 
 namespace AppServicesTests.Offices;
@@ -24,19 +23,24 @@ public class GetList
         };
         office.MasterUser = user;
         var itemList = new List<Office> { office };
-        
+
         var repoMock = new Mock<IOfficeRepository>();
         repoMock.Setup(l => l.GetListAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(itemList);
         var managerMock = new Mock<IOfficeManager>();
         var userServiceMock = new Mock<IUserService>();
-        userServiceMock.Setup(l => l.GetCurrentUserAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync((UserViewDto?)null);
+        userServiceMock.Setup(l => l.GetCurrentUserAsync())
+            .ReturnsAsync((ApplicationUser?)null);
         var appService = new OfficeAppService(repoMock.Object, managerMock.Object,
             AppServicesTestsGlobal.Mapper!, userServiceMock.Object);
 
         var result = await appService.GetListAsync();
 
-        result.Should().BeEquivalentTo(itemList);
+        Assert.Multiple(() =>
+        {
+            result.Should().BeEquivalentTo(itemList, options => options
+                .Excluding(ctx => ctx.Path.EndsWith("MasterUser.Id")));
+            result[0].MasterUser!.Id.ToString().Should().Be(office.MasterUser.Id);
+        });
     }
 }

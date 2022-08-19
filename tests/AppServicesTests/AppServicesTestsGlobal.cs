@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Cts.AppServices.ServiceCollectionExtensions;
+using Cts.AppServices.AutoMapper;
 
 namespace AppServicesTests;
 

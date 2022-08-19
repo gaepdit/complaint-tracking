@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using Cts.AppServices.Users;
-using Cts.Domain.Users;
-using Cts.TestData.Identity;
+﻿using Cts.AppServices.UserServices;
+using Cts.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 
@@ -11,93 +9,48 @@ public class LocalUserService : IUserService
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IMapper _mapper;
 
     public LocalUserService(
         UserManager<ApplicationUser> userManager,
-        IHttpContextAccessor httpContextAccessor,
-        IMapper mapper)
+        IHttpContextAccessor httpContextAccessor)
     {
         _userManager = userManager;
         _httpContextAccessor = httpContextAccessor;
-        _mapper = mapper;
     }
 
-    private async Task<ApplicationUser?> GetCurrentApplicationUserAsync()
+    public async Task<ApplicationUser?> GetCurrentUserAsync()
     {
         var principal = _httpContextAccessor.HttpContext?.User;
         return principal == null ? null : await _userManager.GetUserAsync(principal);
     }
 
-    public async Task<UserViewDto?> GetCurrentUserAsync(CancellationToken token = default)
+    public async Task<IList<string>> GetCurrentUserRolesAsync()
     {
-        var user = await GetCurrentApplicationUserAsync();
-        return _mapper.Map<UserViewDto?>(user);
-    }
-
-    public async Task<IList<string>> GetCurrentUserRolesAsync(CancellationToken token = default)
-    {
-        var user = await GetCurrentApplicationUserAsync();
+        var user = await GetCurrentUserAsync();
         return user is null ? new List<string>() : await _userManager.GetRolesAsync(user);
     }
 
-    private List<UserViewDto> FilterUsers(
-        IEnumerable<ApplicationUser> usersList,
-        string? nameFilter,
-        string? emailFilter)
+    public async Task<ApplicationUser?> FindUserByIdAsync(string userId)
     {
-        var users = usersList
-            .Where(m => string.IsNullOrEmpty(nameFilter)
-                || m.FirstName.Contains(nameFilter)
-                || m.LastName.Contains(nameFilter))
-            .Where(m => string.IsNullOrEmpty(emailFilter)
-                || m.Email == emailFilter)
-            .OrderBy(m => m.LastName).ThenBy(m => m.FirstName)
-            .ToList();
-
-        return _mapper.Map<List<UserViewDto>>(users);
+        var user = await _userManager.FindByIdAsync(userId);
+        return user;
     }
 
-    public async Task<List<UserViewDto>> FindUsersAsync(UserSearchDto filter, CancellationToken token = default) =>
-        string.IsNullOrEmpty(filter.Role)
-            ? FilterUsers(Data.GetUsers, filter.NameFilter, filter.EmailFilter)
-            : FilterUsers(await _userManager.GetUsersInRoleAsync(filter.Role), filter.NameFilter, filter.EmailFilter);
+    public Task<IdentityResult> UpdateUserAsync(ApplicationUser user) =>
+        _userManager.UpdateAsync(user);
 
-    public Task<UserViewDto?> GetUserByIdAsync(string id, CancellationToken token = default) =>
-        Task.FromResult(_mapper.Map<UserViewDto?>(Data.GetUsers.SingleOrDefault(e => e.Id == id)));
+    public async Task<IList<string>> GetUserRolesAsync(string userId) =>
+        await _userManager.GetRolesAsync(await _userManager.FindByIdAsync(userId));
 
-    public async Task<IList<string>> GetUserRolesAsync(string id, CancellationToken token = default)
-    {
-        var user = await _userManager.FindByIdAsync(id);
-        return user == null ? new List<string>() : await _userManager.GetRolesAsync(user);
-    }
+    public Task<IList<ApplicationUser>> GetUsersInRoleAsync(string roleName) =>
+        _userManager.GetUsersInRoleAsync(roleName);
 
-    public async Task<IdentityResult> UpdateUserRolesAsync(
-        string id,
-        Dictionary<string, bool> roleUpdates,
-        CancellationToken token = default)
-    {
-        foreach (var (key, value) in roleUpdates)
-        {
-            var result = await UpdateUserRoleAsync(id, key, value);
-            if (result != IdentityResult.Success) return result;
-        }
+    public Task<bool> IsInRoleAsync(ApplicationUser user, string role) =>
+        _userManager.IsInRoleAsync(user, role);
 
-        return IdentityResult.Success;
-    }
+    public Task<IdentityResult> AddToRoleAsync(ApplicationUser user, string role) =>
+        _userManager.AddToRoleAsync(user, role);
 
-    private async Task<IdentityResult> UpdateUserRoleAsync(string id, string role, bool addToRole)
-    {
-        var user = await _userManager.FindByIdAsync(id);
-        if (user == null) return IdentityResult.Failed(_userManager.ErrorDescriber.DefaultError());
-
-        var isInRole = await _userManager.IsInRoleAsync(user, role);
-        if (addToRole == isInRole) return IdentityResult.Success;
-
-        return addToRole switch
-        {
-            true => await _userManager.AddToRoleAsync(user, role),
-            false => await _userManager.RemoveFromRoleAsync(user, role),
-        };
-    }
+    public Task<IdentityResult> RemoveFromRoleAsync(ApplicationUser user, string role) =>
+        _userManager.RemoveFromRoleAsync(user, role);
 }

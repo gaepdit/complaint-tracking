@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Cts.AppServices.ActionTypes;
-using Cts.AppServices.Users;
+using Cts.AppServices.UserServices;
 using Cts.Domain.ActionTypes;
 using Cts.Domain.Entities;
 using Cts.TestData.ActionTypes;
@@ -18,8 +18,8 @@ public class FindForUpdate
             .ReturnsAsync(item);
         var managerMock = new Mock<IActionTypeManager>();
         var userServiceMock = new Mock<IUserService>();
-        userServiceMock.Setup(l => l.GetCurrentUserAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync((UserViewDto?)null);
+        userServiceMock.Setup(l => l.GetCurrentUserAsync())
+            .ReturnsAsync((ApplicationUser?)null);
         var appService = new ActionTypeAppService(repoMock.Object, managerMock.Object,
             AppServicesTestsGlobal.Mapper!, userServiceMock.Object);
 
@@ -38,8 +38,8 @@ public class FindForUpdate
         var managerMock = new Mock<IActionTypeManager>();
         var mapperMock = new Mock<IMapper>();
         var userServiceMock = new Mock<IUserService>();
-        userServiceMock.Setup(l => l.GetCurrentUserAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync((UserViewDto?)null);
+        userServiceMock.Setup(l => l.GetCurrentUserAsync())
+            .ReturnsAsync((ApplicationUser?)null);
         var appService = new ActionTypeAppService(repoMock.Object, managerMock.Object,
             mapperMock.Object, userServiceMock.Object);
 

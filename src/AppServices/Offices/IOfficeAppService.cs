@@ -1,5 +1,4 @@
-﻿using Cts.AppServices.Users;
-using Cts.Domain.Users;
+﻿using Cts.AppServices.StaffServices;
 
 namespace Cts.AppServices.Offices;
 
@@ -9,27 +8,5 @@ public interface IOfficeAppService : IDisposable
     Task<IReadOnlyList<OfficeViewDto>> GetListAsync(CancellationToken token = default);
     Task<Guid> CreateAsync(OfficeCreateDto resource, CancellationToken token = default);
     Task UpdateAsync(OfficeUpdateDto resource, CancellationToken token = default);
-    Task<IReadOnlyList<UserViewDto>> GetUsersAsync(Guid id, CancellationToken token = default);
-}
-
-public class OfficeViewDto
-{
-    public Guid Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public bool Active { get; set; }
-    public ApplicationUser? MasterUser { get; set; }
-}
-
-public class OfficeCreateDto
-{
-    public string Name { get; set; } = string.Empty;
-    public ApplicationUser? MasterUser { get; set; }
-}
-
-public class OfficeUpdateDto
-{
-    public Guid Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public ApplicationUser? MasterUser { get; set; }
-    public bool Active { get; set; }
+    Task<IReadOnlyList<StaffViewDto>> GetActiveStaffAsync(Guid id, CancellationToken token = default);
 }

@@ -14,7 +14,7 @@ public class OfficeCreateValidator : AbstractValidator<OfficeCreateDto>
 
         RuleFor(e => e.Name)
             .Length(Office.MinNameLength, Office.MaxNameLength)
-            .MustAsync(async (e, name, token) => await NotDuplicateName(name, token))
+            .MustAsync(async (_, name, token) => await NotDuplicateName(name, token))
             .WithMessage("The name entered already exists.");
     }
 

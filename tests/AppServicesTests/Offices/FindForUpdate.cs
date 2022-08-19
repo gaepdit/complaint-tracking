@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using Cts.AppServices.Offices;
-using Cts.AppServices.Users;
+using Cts.AppServices.UserServices;
 using Cts.Domain.Entities;
 using Cts.Domain.Offices;
-using Cts.Domain.Users;
 using Cts.TestData.Offices;
 
 namespace AppServicesTests.Offices;
@@ -24,20 +23,25 @@ public class FindForUpdate
             NormalizedUserName = "local.user@example.net".ToUpperInvariant(),
         };
         office.MasterUser = user;
-        
+
         var repoMock = new Mock<IOfficeRepository>();
         repoMock.Setup(l => l.FindAsync(office.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(office);
         var managerMock = new Mock<IOfficeManager>();
         var userServiceMock = new Mock<IUserService>();
-        userServiceMock.Setup(l => l.GetCurrentUserAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync((UserViewDto?)null);
+        userServiceMock.Setup(l => l.GetCurrentUserAsync())
+            .ReturnsAsync((ApplicationUser?)null);
         var appService = new OfficeAppService(repoMock.Object, managerMock.Object,
             AppServicesTestsGlobal.Mapper!, userServiceMock.Object);
 
         var result = await appService.FindForUpdateAsync(Guid.Empty);
 
-        result.Should().BeEquivalentTo(office);
+        Assert.Multiple(() =>
+        {
+            result.Should().BeEquivalentTo(office, options => options
+                .Excluding(e => e.MasterUser.Id));
+            result!.MasterUser!.Id.ToString().Should().Be(office.MasterUser.Id);
+        });
     }
 
     [Test]
@@ -50,8 +54,8 @@ public class FindForUpdate
         var managerMock = new Mock<IOfficeManager>();
         var mapperMock = new Mock<IMapper>();
         var userServiceMock = new Mock<IUserService>();
-        userServiceMock.Setup(l => l.GetCurrentUserAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync((UserViewDto?)null);
+        userServiceMock.Setup(l => l.GetCurrentUserAsync())
+            .ReturnsAsync((ApplicationUser?)null);
         var appService = new OfficeAppService(repoMock.Object, managerMock.Object,
             mapperMock.Object, userServiceMock.Object);
 

@@ -1,4 +1,4 @@
-using Cts.Domain.Users;
+using Cts.Domain.Entities;
 using Cts.LocalRepository.Identity;
 using Cts.TestData.Identity;
 using Microsoft.AspNetCore.Identity;

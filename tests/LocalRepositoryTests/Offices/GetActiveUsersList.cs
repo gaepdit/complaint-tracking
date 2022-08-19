@@ -4,7 +4,7 @@ using GaEpd.Library.Domain.Repositories;
 
 namespace LocalRepositoryTests.Offices;
 
-public class GetUsersList
+public class GetActiveUsersList
 {
     private LocalOfficeRepository _repository = default!;
 
@@ -17,8 +17,9 @@ public class GetUsersList
     [Test]
     public async Task WhenUsersExist_ReturnsList()
     {
-        var office = _repository.Items.First();
-        var result = await _repository.GetUsersListAsync(office.Id);
+        // First active office was seeded with active users.
+        var office = _repository.Items.First(e => e.Active);
+        var result = await _repository.GetActiveUsersListAsync(office.Id);
         result.Should().BeEquivalentTo(office.Users);
     }
 
@@ -26,7 +27,7 @@ public class GetUsersList
     public async Task WhenUsersDoNotExist_ReturnsEmptyList()
     {
         var office = _repository.Items.Last();
-        var result = await _repository.GetUsersListAsync(office.Id);
+        var result = await _repository.GetActiveUsersListAsync(office.Id);
         result.Should().BeEmpty();
     }
 
@@ -34,7 +35,7 @@ public class GetUsersList
     public async Task WhenOfficeDoesNotExist_Throws()
     {
         var id = Guid.Empty;
-        var action = async () => await _repository.GetUsersListAsync(id);
+        var action = async () => await _repository.GetActiveUsersListAsync(id);
         (await action.Should().ThrowAsync<EntityNotFoundException>())
             .WithMessage($"Entity not found. Entity type: {typeof(Office).FullName}, id: {id}");
     }
