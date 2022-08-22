@@ -1,9 +1,6 @@
 ﻿using ComplaintTracking.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
 namespace ComplaintTracking.ViewModels
 {
@@ -28,6 +25,9 @@ namespace ComplaintTracking.ViewModels
         [Display(Name = "Through")]
         public DateTime? EndDate { get; set; }
 
+        [Display(Name = "Include Administratively Closed Complaints")]
+        public bool IncludeAdminClosed { get; set; } = false;
+
         public class StaffList
         {
             public StaffList(ApplicationUser user)
@@ -43,9 +43,9 @@ namespace ComplaintTracking.ViewModels
             public IEnumerable<ComplaintList> Complaints { get; set; }
 
             [DisplayFormat(DataFormatString = "{0:N1}")]
-            public double AverageDaysToClosure => 
+            public double AverageDaysToClosure =>
                 Complaints != null && Complaints.Any()
-                    ? Complaints.Average(e => e.DaysToClosure) 
+                    ? Complaints.Average(e => e.DaysToClosure)
                     : 0;
         }
 

@@ -5,10 +5,6 @@ using ComplaintTracking.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ComplaintTracking.Controllers
 {
@@ -147,7 +143,7 @@ namespace ComplaintTracking.Controllers
             });
         }
 
-        public async Task<IActionResult> DaysToClosureByStaff(DateTime? beginDate, DateTime? endDate, string office)
+        public async Task<IActionResult> DaysToClosureByStaff(DateTime? beginDate, DateTime? endDate, string office, bool includeAdminClosed)
         {
             var currentUser = await GetCurrentUserAsync();
 
@@ -190,6 +186,7 @@ namespace ComplaintTracking.Controllers
                         .Where(e => e.CurrentOwnerId == user.Id)
                         .Where(e => e.DateComplaintClosed >= beginDate)
                         .Where(e => e.DateComplaintClosed <= endDate)
+                        .Where(e => includeAdminClosed || e.Status != ComplaintStatus.AdministrativelyClosed)
                         .OrderBy(e => e.DateComplaintClosed)
                         .Select(e => new ReportDaysToClosureByStaffViewModel.ComplaintList(e))
                         .ToListAsync();
@@ -324,7 +321,7 @@ namespace ComplaintTracking.Controllers
             });
         }
 
-        public async Task<IActionResult> DaysToClosureByOffice(DateTime? beginDate, DateTime? endDate)
+        public async Task<IActionResult> DaysToClosureByOffice(DateTime? beginDate, DateTime? endDate, bool includeAdminClosed)
         {
             var today = DateTime.Today;
             endDate ??= new DateTime(today.Year - Convert.ToInt32(today.Month < 7), 6, 30);
@@ -353,6 +350,7 @@ namespace ComplaintTracking.Controllers
                         .Where(e => e.CurrentOfficeId == office.Id)
                         .Where(e => e.DateComplaintClosed >= beginDate)
                         .Where(e => e.DateComplaintClosed <= endDate)
+                        .Where(e => includeAdminClosed || e.Status != ComplaintStatus.AdministrativelyClosed)
                         .OrderBy(e => e.DateComplaintClosed)
                         .Select(e => new ReportDaysToClosureByOfficeViewModel.ComplaintList(e))
                         .ToListAsync();

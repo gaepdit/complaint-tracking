@@ -24,6 +24,10 @@
             <button type="submit"><span class="usa-search-submit-text">Open</span></button>
         </div>
     </div>
+    <div class="usa-grid-full">
+        <input asp-for="IncludeAdminClosed" />
+        <label asp-for="IncludeAdminClosed"></label>
+    </div>
 </form>
 
 @if (Model.Staff != null && Model.Staff.Count() > 0)

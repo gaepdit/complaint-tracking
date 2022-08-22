@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ComplaintTracking.Models;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using ComplaintTracking.Models;
 
 namespace ComplaintTracking.ViewModels
 {
@@ -23,6 +20,9 @@ namespace ComplaintTracking.ViewModels
         [DataType(DataType.Text)]
         [Display(Name = "Through")]
         public DateTime? EndDate { get; set; }
+
+        [Display(Name = "Include Administratively Closed Complaints")]
+        public bool IncludeAdminClosed { get; set; } = false;
 
         public int TotalComplaints =>
             Offices == null || !Offices.Any()
@@ -49,14 +49,14 @@ namespace ComplaintTracking.ViewModels
             public IEnumerable<ComplaintList> Complaints { get; set; }
 
             [DisplayFormat(DataFormatString = "{0:N1}")]
-            public double AverageDaysToClosure => 
-                Complaints == null || !Complaints.Any() 
-                    ? 0 
+            public double AverageDaysToClosure =>
+                Complaints == null || !Complaints.Any()
+                    ? 0
                     : Complaints.Average(e => e.DaysToClosure);
 
-            public int TotalDaysToClosure => 
+            public int TotalDaysToClosure =>
                 Complaints == null || !Complaints.Any()
-                    ? 0 
+                    ? 0
                     : Complaints.Sum(e => e.DaysToClosure);
         }
 
