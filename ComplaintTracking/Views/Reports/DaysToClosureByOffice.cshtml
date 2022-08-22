@@ -1,4 +1,4 @@
-﻿@model ReportDaysToClosureByOfficeViewModel
+@model ReportDaysToClosureByOfficeViewModel
 
 @{
     ViewData["Title"] = "Report: " + Model.Title;
@@ -18,6 +18,10 @@
             <label asp-for="EndDate"></label>
             <input asp-for="EndDate" class="datepicker" />
         </div>
+    </div>
+    <div class="usa-grid-full">
+        <input asp-for="IncludeAdminClosed" />
+        <label asp-for="IncludeAdminClosed"></label>
     </div>
     <div>
         <button type="submit"><span class="usa-search-submit-text">Open</span></button>
