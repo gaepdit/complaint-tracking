@@ -143,7 +143,7 @@ namespace ComplaintTracking.Controllers
             });
         }
 
-        public async Task<IActionResult> DaysToClosureByStaff(DateTime? beginDate, DateTime? endDate, string office)
+        public async Task<IActionResult> DaysToClosureByStaff(DateTime? beginDate, DateTime? endDate, string office, bool includeAdminClosed)
         {
             var currentUser = await GetCurrentUserAsync();
 
@@ -186,6 +186,7 @@ namespace ComplaintTracking.Controllers
                         .Where(e => e.CurrentOwnerId == user.Id)
                         .Where(e => e.DateComplaintClosed >= beginDate)
                         .Where(e => e.DateComplaintClosed <= endDate)
+                        .Where(e => includeAdminClosed || e.Status != ComplaintStatus.AdministrativelyClosed)
                         .OrderBy(e => e.DateComplaintClosed)
                         .Select(e => new ReportDaysToClosureByStaffViewModel.ComplaintList(e))
                         .ToListAsync();
