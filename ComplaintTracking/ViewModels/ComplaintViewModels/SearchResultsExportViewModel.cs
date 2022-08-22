@@ -1,7 +1,5 @@
 ﻿using ClosedXML.Attributes;
 using ComplaintTracking.Models;
-using System;
-using System.Linq;
 
 namespace ComplaintTracking.ViewModels
 {
@@ -21,6 +19,7 @@ namespace ComplaintTracking.ViewModels
             ReviewComments = e.ReviewComments;
             PrimaryConcern = e.PrimaryConcern.Name;
             ComplaintNature = e.ComplaintNature;
+            DateComplaintClosed = e.DateComplaintClosed;
 
             var firstComplaintAction = e.ComplaintActions.FirstOrDefault();
             ActionDate = firstComplaintAction?.ActionDate;
@@ -72,5 +71,8 @@ namespace ComplaintTracking.ViewModels
 
         [XLColumn(Header = "Action Comments")]
         public string ActionComments { get; set; }
+
+        [XLColumn(Header = "Date Complaint Closed")]
+        public DateTime? DateComplaintClosed { get; set; }
     }
 }
