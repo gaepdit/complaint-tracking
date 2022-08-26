@@ -23,7 +23,7 @@ namespace Cts.WebApp.Platform.RazorHelpers
         /// <remarks>Adds text indicating the field is required if the property has the RequiredAttribute.</remarks>
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            if (Model.Metadata.IsRequired && Model.Metadata.ModelType != typeof(bool))
+            if (Model.Metadata.IsRequired && Model.Metadata.ModelType != typeof(bool) && !Model.Metadata.ModelType.IsEnum)
                 output.Content.AppendHtml(@" <span class=""text-danger"">*</span>");
         }
     }
