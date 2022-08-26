@@ -1,0 +1,48 @@
+﻿@page "{id:Guid?}"
+@model Details
+@{
+    ViewData["Title"] = "User Profile: " + Model.DisplayUser.DisplayName;
+}
+
+<h1>CTS User Profile</h1>
+<hr />
+<partial name="_AlertPartial" for="Message" />
+
+<h2>
+    @if (!Model.DisplayUser.Active)
+    {
+        <em class="text-muted">Inactive:</em>
+    }
+    @Model.DisplayUser.DisplayName
+    @* @if (User.IsInRole(CtsRole.UserAdmin)) *@
+    @* { *@
+        <a asp-page="./Edit" asp-route-id="@Model.DisplayUser.Id" class="btn btn-outline-primary btn-sm">Edit User</a>
+    @* } *@
+</h2>
+
+<dl class="row">
+    <dt class="col-sm-3">Email</dt>
+    <dd class="col-sm-9">@Model.DisplayUser.Email</dd>
+
+    <dt class="col-sm-3">Phone</dt>
+    <dd class="col-sm-9">@Html.DisplayFor(m => m.DisplayUser.Phone, "StringOrNone")</dd>
+
+    <dt class="col-sm-3">Office</dt>
+    <dd class="col-sm-9">@Html.DisplayFor(m => m.OfficeName, "StringOrNone")</dd>
+</dl>
+
+@if (Model.Roles.Count > 0)
+{
+    <h3>Roles</h3>
+    <p>This account has the following application roles.</p>
+
+    <dl class="p-3 border rounded-3 bg-light">
+        @foreach (var role in Model.Roles)
+        {
+            <dt>@role.DisplayName</dt>
+            <dd>
+                <p class="text-muted">@role.Description</p>
+            </dd>
+        }
+    </dl>
+}
