@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Cts.Domain.Identity;
+using Microsoft.AspNetCore.Identity;
 
 namespace Cts.AppServices.StaffServices;
 
 public interface IStaffAppService : IDisposable
 {
-    Task<StaffUpdateDto?> FindForUpdateAsync(Guid id);
-    public Task<List<StaffViewDto>> FindUsersAsync(StaffSearchDto filter);
-    public Task<IList<string>> GetUserRolesAsync(string id);
-    public Task<IdentityResult> UpdateUserRolesAsync(string id, Dictionary<string, bool> roleUpdates);
+    Task<StaffViewDto?> FindAsync(Guid id);
+    public Task<List<StaffViewDto>> GetListAsync(StaffSearchDto filter);
+    public Task<IList<string>> GetRolesAsync(Guid id);
+    public Task<IList<CtsRole>> GetCtsRolesAsync(Guid id);
+    public Task<IdentityResult> UpdateRolesAsync(Guid id, Dictionary<CtsRole, bool> roles);
     Task<IdentityResult> UpdateAsync(StaffUpdateDto resource);
 }

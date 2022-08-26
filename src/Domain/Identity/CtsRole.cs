@@ -1,4 +1,6 @@
-﻿namespace Cts.Domain.Identity;
+﻿using GaEpd.Library.ListItems;
+
+namespace Cts.Domain.Identity;
 
 /// <summary>
 /// Authorization Roles for the application.
@@ -14,11 +16,13 @@ public class CtsRole
         Name = name;
         DisplayName = displayName;
         Description = description;
-        AllRoles.Add(this);
+        AllRoles.Add(name.ToUpperInvariant(), this);
+        AllRolesList.Add(new ListItem<string>(name.ToUpperInvariant(), displayName));
     }
 
     // This declaration must appear before the list of static instance types.
-    public static ICollection<CtsRole> AllRoles { get; } = new List<CtsRole>();
+    public static Dictionary<string, CtsRole> AllRoles { get; } = new();
+    public static List<ListItem<string>> AllRolesList { get; } = new();
 
     // Roles
     // These are the strings that are stored in the database. Avoid modifying!

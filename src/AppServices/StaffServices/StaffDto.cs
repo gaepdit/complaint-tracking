@@ -40,11 +40,14 @@ public class StaffViewDto
     [UIHint("BoolActive")]
     public bool Active { get; init; } = true;
 
-    public string FullName =>
+    public string DisplayName =>
         string.Join(" ", new[] { FirstName, LastName }.Where(s => !string.IsNullOrEmpty(s)));
 
     public string SortableFullName =>
         string.Join(", ", new[] { LastName, FirstName }.Where(s => !string.IsNullOrEmpty(s)));
+
+    public StaffUpdateDto AsUpdateDto() =>
+        new() { Id = Id, Phone = Phone, Office = Office, Active = Active, };
 }
 
 public class StaffUpdateDto
@@ -54,6 +57,9 @@ public class StaffUpdateDto
     [StringLength(ApplicationUser.MaxPhoneLength)]
     public string? Phone { get; init; }
 
+    [Required]
     public Office? Office { get; init; }
+
+    [Required]
     public bool Active { get; init; }
 }

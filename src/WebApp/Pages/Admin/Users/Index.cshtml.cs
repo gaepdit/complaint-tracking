@@ -1,6 +1,7 @@
 ﻿using Cts.AppServices.Offices;
 using Cts.AppServices.StaffServices;
 using Cts.Domain.Identity;
+using GaEpd.Library.ListItems;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -35,16 +36,14 @@ public class IndexModel : PageModel
         filter.TrimAll();
         Filter = filter;
         if (!ModelState.IsValid) return Page();
-        SearchResults = await _userService.FindUsersAsync(filter);
+        SearchResults = await _userService.GetListAsync(filter);
         ShowResults = true;
         return Page();
     }
 
     private async Task PopulateSelectListsAsync()
     {
-        OfficeItems = new SelectList(await _officeService.GetListAsync(),
-            nameof(OfficeViewDto.Id), nameof(OfficeViewDto.Name));
-        RoleItems = new SelectList(CtsRole.AllRoles,
-            nameof(CtsRole.Name), nameof(CtsRole.DisplayName));
+        OfficeItems = (await _officeService.GetActiveListItemsAsync()).ToSelectList();
+        RoleItems = CtsRole.AllRolesList.ToSelectList();
     }
 }

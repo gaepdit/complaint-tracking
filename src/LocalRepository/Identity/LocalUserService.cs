@@ -39,8 +39,8 @@ public class LocalUserService : IUserService
     public Task<IdentityResult> UpdateUserAsync(ApplicationUser user) =>
         _userManager.UpdateAsync(user);
 
-    public async Task<IList<string>> GetUserRolesAsync(string userId) =>
-        await _userManager.GetRolesAsync(await _userManager.FindByIdAsync(userId));
+    public async Task<IList<string>> GetUserRolesAsync(Guid userId) =>
+        await _userManager.GetRolesAsync(await _userManager.FindByIdAsync(userId.ToString()));
 
     public Task<IList<ApplicationUser>> GetUsersInRoleAsync(string roleName) =>
         _userManager.GetUsersInRoleAsync(roleName);

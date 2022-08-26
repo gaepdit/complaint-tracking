@@ -17,7 +17,7 @@ public interface IUserService
 
     // Roles
 
-    public Task<IList<string>> GetUserRolesAsync(string userId);
+    public Task<IList<string>> GetUserRolesAsync(Guid userId);
     public Task<IList<ApplicationUser>> GetUsersInRoleAsync(string roleName);
     public Task<bool> IsInRoleAsync(ApplicationUser user, string role);
     public Task<IdentityResult> AddToRoleAsync(ApplicationUser user, string role);

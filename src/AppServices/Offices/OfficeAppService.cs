@@ -3,6 +3,7 @@ using Cts.AppServices.StaffServices;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities;
 using Cts.Domain.Offices;
+using GaEpd.Library.ListItems;
 
 namespace Cts.AppServices.Offices;
 
@@ -37,6 +38,10 @@ public sealed class OfficeAppService : IOfficeAppService
         return _mapper.Map<IReadOnlyList<OfficeViewDto>>(offices);
     }
 
+    public async Task<IReadOnlyList<ListItem>> GetActiveListItemsAsync(CancellationToken token = default) =>
+        (await _repository.GetListAsync(e => e.Active, token)).OrderBy(e => e.Name)
+        .Select(e => new ListItem(e.Id, e.Name)).ToList();
+
     public async Task<Guid> CreateAsync(OfficeCreateDto resource, CancellationToken token = default)
     {
         var office = await _manager.CreateAsync(resource.Name, token: token);
@@ -52,7 +57,7 @@ public sealed class OfficeAppService : IOfficeAppService
         if (office.Name != resource.Name.Trim())
             await _manager.ChangeNameAsync(office, resource.Name, token);
         office.Active = resource.Active;
-        office.MasterUser =_mapper.Map<ApplicationUser>(resource.MasterUser);
+        office.MasterUser = _mapper.Map<ApplicationUser>(resource.MasterUser);
         office.SetUpdater((await _userService.GetCurrentUserAsync())?.Id);
 
         await _repository.UpdateAsync(office, token: token);

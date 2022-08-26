@@ -19,7 +19,7 @@ public class UserRoleStore
     public async Task AddToRole_AddsRole()
     {
         var user = Data.GetUsers.Last();
-        var roleName = Data.GetRoles.First().Name;
+        var roleName = Data.GetIdentityRoles.First().Name;
         var resultBefore = await _store.IsInRoleAsync(user, roleName, CancellationToken.None);
 
         await _store.AddToRoleAsync(user, roleName, CancellationToken.None);
@@ -36,7 +36,7 @@ public class UserRoleStore
     public async Task RemoveFromRole_RemovesRole()
     {
         var user = Data.GetUsers.First();
-        var roleName = Data.GetRoles.First().Name;
+        var roleName = Data.GetIdentityRoles.First().Name;
         var resultBefore = await _store.IsInRoleAsync(user, roleName, CancellationToken.None);
 
         await _store.RemoveFromRoleAsync(user, roleName, CancellationToken.None);
@@ -58,7 +58,7 @@ public class UserRoleStore
         Assert.Multiple(() =>
         {
             result.Should().NotBeNull();
-            result.Should().HaveCount(Data.GetRoles.Count());
+            result.Should().HaveCount(Data.GetIdentityRoles.Count());
         });
     }
 
@@ -79,7 +79,7 @@ public class UserRoleStore
     public async Task IsInRole_IfSo_ReturnsTrue()
     {
         var user = Data.GetUsers.First();
-        var roleName = Data.GetRoles.First().Name;
+        var roleName = Data.GetIdentityRoles.First().Name;
         var result = await _store.IsInRoleAsync(user, roleName, CancellationToken.None);
         result.Should().BeTrue();
     }
@@ -88,7 +88,7 @@ public class UserRoleStore
     public async Task IsInRole_IfNot_ReturnsFalse()
     {
         var user = Data.GetUsers.Last();
-        var roleName = Data.GetRoles.First().Name;
+        var roleName = Data.GetIdentityRoles.First().Name;
         var result = await _store.IsInRoleAsync(user, roleName, CancellationToken.None);
         result.Should().BeFalse();
     }
@@ -96,7 +96,7 @@ public class UserRoleStore
     [Test]
     public async Task GetUsersInRole_IfSome_ReturnsListOfUsers()
     {
-        var roleName = Data.GetRoles.First().Name;
+        var roleName = Data.GetIdentityRoles.First().Name;
         var result = await _store.GetUsersInRoleAsync(roleName, CancellationToken.None);
 
         Assert.Multiple(() =>

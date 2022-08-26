@@ -7,13 +7,13 @@ internal static partial class Data
 {
     private static IEnumerable<IdentityRole>? _roles;
 
-    public static IEnumerable<IdentityRole> GetRoles
+    public static IEnumerable<IdentityRole> GetIdentityRoles
     {
         get
         {
             if (_roles is not null) return _roles;
             _roles = CtsRole.AllRoles
-                .Select(r => new IdentityRole(r.Name) { NormalizedName = r.Name.ToUpperInvariant() })
+                .Select(r => new IdentityRole(r.Value.Name) { NormalizedName = r.Key })
                 .ToList();
             return _roles;
         }

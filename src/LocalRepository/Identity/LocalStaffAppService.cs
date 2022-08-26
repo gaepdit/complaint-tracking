@@ -2,6 +2,7 @@
 using Cts.AppServices.StaffServices;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities;
+using Cts.Domain.Identity;
 using Cts.TestData.Identity;
 using GaEpd.Library.Domain.Repositories;
 using Microsoft.AspNetCore.Identity;
@@ -21,13 +22,13 @@ public sealed class LocalStaffAppService : IStaffAppService
         _errorDescriber = errorDescriber;
     }
 
-    public Task<StaffUpdateDto?> FindForUpdateAsync(Guid id)
+    public Task<StaffViewDto?> FindAsync(Guid id)
     {
         var user = Data.GetUsers.SingleOrDefault(e => e.Id == id.ToString());
-        return Task.FromResult(_mapper.Map<StaffUpdateDto?>(user));
+        return Task.FromResult(_mapper.Map<StaffViewDto?>(user));
     }
 
-    public async Task<List<StaffViewDto>> FindUsersAsync(StaffSearchDto filter)
+    public async Task<List<StaffViewDto>> GetListAsync(StaffSearchDto filter)
     {
         return string.IsNullOrEmpty(filter.Role)
             ? FilterUsers(Data.GetUsers)
@@ -53,17 +54,33 @@ public sealed class LocalStaffAppService : IStaffAppService
         }
     }
 
-    public Task<IList<string>> GetUserRolesAsync(string id) =>
+    public Task<IList<string>> GetRolesAsync(Guid id) =>
         _userService.GetUserRolesAsync(id);
 
-    public async Task<IdentityResult> UpdateUserRolesAsync(string id, Dictionary<string, bool> roleUpdates)
+    public async Task<IList<CtsRole>> GetCtsRolesAsync(Guid id)
     {
-        var user = await _userService.FindUserByIdAsync(id);
+        var roles = await GetRolesAsync(id);
+        var ctsRoles = new List<CtsRole>();
+
+        foreach (var role in roles)
+        {
+            if (CtsRole.AllRoles.TryGetValue(role.ToUpperInvariant(), out var ctsRole))
+            {
+                ctsRoles.Add(ctsRole);
+            }
+        }
+
+        return ctsRoles;
+    }
+
+    public async Task<IdentityResult> UpdateRolesAsync(Guid id, Dictionary<CtsRole, bool> roles)
+    {
+        var user = await _userService.FindUserByIdAsync(id.ToString());
         if (user == null) return IdentityResult.Failed(_errorDescriber.DefaultError());
 
-        foreach (var (key, value) in roleUpdates)
+        foreach (var (role, value) in roles)
         {
-            var result = await UpdateUserRoleAsync(user, key, value);
+            var result = await UpdateUserRoleAsync(user, role.Name, value);
             if (result != IdentityResult.Success) return result;
         }
 
@@ -87,9 +104,9 @@ public sealed class LocalStaffAppService : IStaffAppService
         var user = await _userService.FindUserByIdAsync(resource.Id.ToString());
         if (user is null) throw new EntityNotFoundException(typeof(ApplicationUser), resource.Id);
 
-        user.Active = resource.Active;
-        user.Office = resource.Office;
         user.Phone = resource.Phone;
+        user.Office = resource.Office;
+        user.Active = resource.Active;
 
         return await _userService.UpdateUserAsync(user);
     }

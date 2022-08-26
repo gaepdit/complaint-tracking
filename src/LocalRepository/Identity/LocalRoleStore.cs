@@ -34,10 +34,10 @@ public sealed class LocalRoleStore : IRoleStore<IdentityRole>
         throw new NotImplementedException();
 
     public Task<IdentityRole> FindByIdAsync(string roleId, CancellationToken cancellationToken) =>
-        Task.FromResult(Data.GetRoles.Single(r => r.Id == roleId));
+        Task.FromResult(Data.GetIdentityRoles.Single(r => r.Id == roleId));
 
     public Task<IdentityRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken) =>
-        Task.FromResult(Data.GetRoles.Single(r => r.NormalizedName == normalizedRoleName));
+        Task.FromResult(Data.GetIdentityRoles.Single(r => r.NormalizedName == normalizedRoleName));
 
     public void Dispose()
     {

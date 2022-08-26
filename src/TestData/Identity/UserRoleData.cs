@@ -21,14 +21,14 @@ internal static partial class Data
     {
         // Add all roles to first user
         var user = GetUsers.First();
-        _userRoles = GetRoles
+        _userRoles = GetIdentityRoles
             .Select(role => new IdentityUserRole<string> { RoleId = role.Id, UserId = user.Id, })
             .ToList();
     }
 
     public static void AddUserRole(this ICollection<IdentityUserRole<string>> userRoles, string userId, string roleName)
     {
-        var roleId = GetRoles.SingleOrDefault(r => r.NormalizedName == roleName.ToUpperInvariant())?.Id;
+        var roleId = GetIdentityRoles.SingleOrDefault(r => r.NormalizedName == roleName.ToUpperInvariant())?.Id;
         if (roleId is null) return;
         var exists = userRoles.Any(e => e.UserId == userId && e.RoleId == roleId);
         if (!exists) userRoles.Add(new IdentityUserRole<string> { RoleId = roleId, UserId = userId });
@@ -37,7 +37,7 @@ internal static partial class Data
     public static void RemoveUserRole(this ICollection<IdentityUserRole<string>> userRoles, string userId,
         string roleName)
     {
-        var roleId = GetRoles.SingleOrDefault(r => r.NormalizedName == roleName.ToUpperInvariant())?.Id;
+        var roleId = GetIdentityRoles.SingleOrDefault(r => r.NormalizedName == roleName.ToUpperInvariant())?.Id;
         if (roleId is null) return;
         var userRole = userRoles.SingleOrDefault(e => e.UserId == userId && e.RoleId == roleId);
         if (userRole is not null) userRoles.Remove(userRole);
