@@ -27,10 +27,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="appsettings.Development.json">
+    <Content Update="appsettings.Development.json" CopyToPublishDirectory="Never">
       <DependentUpon>appsettings.json</DependentUpon>
     </Content>
-    <Content Update="appsettings.Local.json">
+    <Content Update="appsettings.Local.json" CopyToPublishDirectory="Never">
       <DependentUpon>appsettings.json</DependentUpon>
     </Content>
   </ItemGroup>

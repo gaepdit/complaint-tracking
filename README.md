@@ -2,19 +2,18 @@
 
 The Complaint Tracking System (CTS) is an online application to allow EPD staff to enter, assign, review, and close complaints received from the public.
 
+[![.NET Test](https://github.com/gaepdit/complaint-tracking/actions/workflows/dotnet.yml/badge.svg)](https://github.com/gaepdit/complaint-tracking/actions/workflows/dotnet.yml)
 [![CodeQL](https://github.com/gaepdit/complaint-tracking/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/gaepdit/complaint-tracking/actions/workflows/codeql-analysis.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=gaepdit.complaint-tracking&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=gaepdit.complaint-tracking)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=gaepdit.complaint-tracking&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=gaepdit.complaint-tracking)
 
-## General project requirements
+## Background and project requirements
 
 Public complaints are time-critical and high-profile public information. The CTS is used by staff throughout EPD.
 
 * The application will allow EPD staff to enter new complaints, review and update existing complaints, and remove complaints erroneously entered.
-
-* The application will be restricted to authenticated EPD employees.
-
-* A public web site for review or entry of complaints is under consideration.
+* The admin side of the application will be restricted to authenticated EPD employees.
+* A public web site will be available for reviewing or searching for complaints.
 
 # Info for developers
 
@@ -23,45 +22,42 @@ CTS is an ASP.NET 6 web application.
 ## Prerequisites for development
 
 + [Visual Studio](https://www.visualstudio.com/vs/) or similar
-+ [.NET SDK](https://dotnet.microsoft.com/download/download)
-+ Node/NPM must be installed
-+ Gulp must be installed as a global package: `npm install -g gulp`
++ [.NET 6.0 SDK](https://dotnet.microsoft.com/download)
++ [NPM](https://www.npmjs.com/) or [PNPM](https://pnpm.io/)
+
+## Project organization
+
+The solution contains the following projects:
+
+* **Domain** — A class library containing the data models and business logic.
+* **AppServices** — A class library containing the services used by an application to interact with the domain.
+* **LocalRepository** — A class library implementing the repository and services without using a database.
+* **Infrastructure** — A class library implementing the repository and services using Entity Framework.
+* **WebApp** — The front end web application written in ASP.NET Razor Pages.
+
+There are also corresponding unit test projects for each, plus a **TestData** project containing test data for development/testing purposes.
 
 ## Getting started
 
-Clone the repo and check out the `develop` branch:
+In the web app folder, run `pnpm install` or `npm install` to install dependencies.
 
 ```
-git clone git@bitbucket.org:gaepdit/complaint-tracking-system.git
-cd complaint-tracking
-git checkout develop
-```
-
-Restore packages, build, and run:
-
-```
-cd ComplaintTracking
+cd src/WebApp
 npm install
-gulp
-dotnet restore
-dotnet build
 dotnet run
 ```
 
-## Configuration
+### Launch profiles
 
-Optionally, add `appsettings.{configuration}.json` files to modify settings for different configurations. If "DefaultConnection" Connection String is added, then SQL Server will be used with that string. Otherwise a Sqlite database will be created and seeded with test data.
+There are two launch profiles:
 
-## UI testing
+* **WebApp Local** — This profile does not connect to any external server. A local user account is used for authentication.
 
-Cypress.io is used for UI tests. Restore packages and start the Cypress app (requires app to be running -- see above):
+    You can modify these settings in the "appsettings.json" file to test various scenarios:
 
-```
-cd tests
-npm install
-npm run cypress
-```
+    - *AuthenticatedUser* — Set to `true` to simulate a successful login with the test account. Set to `false` to simulate a failed login.
+    - *BuildLocalDb* — Uses LocalDB when `true` or in-memory data when `false`.
 
-## Versioning
+* **WebApp Dev Server** — This profile connects to the remote Dev database server for data and requires an SOG account to log in. *To use this profile, you must add the "appsettings.Development.json" file from the "app-config" repo.*
 
-Releases are tagged with the environment and date like `ENV/yyyy.m.d`. For example, `prod/2020.4.1`.
+Most development should be done using the Local profile. The Dev Server profile is only needed when specifically troubleshooting issues with the database server or SOG account.
