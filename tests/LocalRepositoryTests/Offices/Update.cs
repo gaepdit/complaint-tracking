@@ -1,6 +1,6 @@
 using Cts.Domain.Entities;
 using Cts.LocalRepository;
-using Cts.TestData.Offices;
+using Cts.TestData.Constants;
 using GaEpd.Library.Domain.Repositories;
 
 namespace LocalRepositoryTests.Offices;
@@ -19,7 +19,7 @@ public class Update
     public async Task WhenItemIsValid_UpdatesItem()
     {
         var item = _repository.Items.First();
-        item.ChangeName(OfficeConstants.ValidName);
+        item.ChangeName(TestConstants.ValidName);
         item.Active = !item.Active;
 
         await _repository.UpdateAsync(item);
@@ -31,7 +31,7 @@ public class Update
     [Test]
     public async Task WhenItemDoesNotExist_Throws()
     {
-        var item = new Office(Guid.Empty, OfficeConstants.ValidName);
+        var item = new Office(Guid.Empty, TestConstants.ValidName);
         var action = async () => await _repository.UpdateAsync(item);
         (await action.Should().ThrowAsync<EntityNotFoundException>())
             .WithMessage($"Entity not found. Entity type: {typeof(Office).FullName}, id: {item.Id}");

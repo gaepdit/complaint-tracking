@@ -1,7 +1,7 @@
 ﻿using Cts.AppServices.Offices;
 using Cts.Domain.Entities;
 using Cts.Domain.Offices;
-using Cts.TestData.Offices;
+using Cts.TestData.Constants;
 using FluentValidation.TestHelper;
 
 namespace AppServicesTests.Offices.Validators;
@@ -17,7 +17,7 @@ public class UpdateValidator
         var model = new OfficeUpdateDto
         {
             Id = Guid.Empty,
-            Name = OfficeConstants.ValidName,
+            Name = TestConstants.ValidName,
             Active = true,
         };
 
@@ -32,11 +32,11 @@ public class UpdateValidator
     {
         var repoMock = new Mock<IOfficeRepository>();
         repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new Office(Guid.NewGuid(), OfficeConstants.ValidName));
+            .ReturnsAsync(new Office(Guid.NewGuid(), TestConstants.ValidName));
         var model = new OfficeUpdateDto
         {
             Id = Guid.Empty,
-            Name = OfficeConstants.ValidName,
+            Name = TestConstants.ValidName,
             Active = true,
         };
 
@@ -52,11 +52,11 @@ public class UpdateValidator
     {
         var repoMock = new Mock<IOfficeRepository>();
         repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new Office(Guid.Empty, OfficeConstants.ValidName));
+            .ReturnsAsync(new Office(Guid.Empty, TestConstants.ValidName));
         var model = new OfficeUpdateDto
         {
             Id = Guid.Empty,
-            Name = OfficeConstants.ValidName,
+            Name = TestConstants.ValidName,
             Active = true,
         };
 
@@ -72,7 +72,7 @@ public class UpdateValidator
         var repoMock = new Mock<IOfficeRepository>();
         repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((Office?)null);
-        var model = new OfficeUpdateDto() { Name = OfficeConstants.ShortName };
+        var model = new OfficeUpdateDto() { Name = TestConstants.ShortName };
 
         var validator = new OfficeUpdateValidator(repoMock.Object);
         var result = await validator.TestValidateAsync(model);

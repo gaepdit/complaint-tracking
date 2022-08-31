@@ -13,7 +13,7 @@ public class AutoMapperProfile : Profile
         CreateMap<ActionType, ActionTypeViewDto>();
         CreateMap<ActionType, ActionTypeUpdateDto>();
 
-        CreateMap<Office, OfficeViewDto>();
+        CreateMap<Office, OfficeViewDto>().ReverseMap();
         CreateMap<Office, OfficeUpdateDto>();
 
         CreateMap<ApplicationUser, StaffViewDto>().ReverseMap();

@@ -75,7 +75,7 @@ public sealed class LocalUserStore : IUserRoleStore<ApplicationUser> // inherits
             .Select(e => e.RoleId);
         var rolesForUser = Data.GetIdentityRoles
             .Where(r => roleIdsForUser.Contains(r.Id))
-            .Select(r => r.Name).ToList();
+            .Select(r => r.NormalizedName).ToList();
         return Task.FromResult<IList<string>>(rolesForUser);
     }
 

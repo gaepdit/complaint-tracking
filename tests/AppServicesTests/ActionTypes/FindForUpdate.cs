@@ -3,7 +3,7 @@ using Cts.AppServices.ActionTypes;
 using Cts.AppServices.UserServices;
 using Cts.Domain.ActionTypes;
 using Cts.Domain.Entities;
-using Cts.TestData.ActionTypes;
+using Cts.TestData.Constants;
 
 namespace AppServicesTests.ActionTypes;
 
@@ -12,7 +12,7 @@ public class FindForUpdate
     [Test]
     public async Task WhenItemExists_ReturnsViewDto()
     {
-        var item = new ActionType(Guid.Empty, ActionTypeConstants.ValidName);
+        var item = new ActionType(Guid.Empty, TestConstants.ValidName);
         var repoMock = new Mock<IActionTypeRepository>();
         repoMock.Setup(l => l.FindAsync(item.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(item);

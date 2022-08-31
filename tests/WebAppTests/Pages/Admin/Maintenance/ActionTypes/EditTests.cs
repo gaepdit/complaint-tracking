@@ -1,5 +1,5 @@
 using Cts.AppServices.ActionTypes;
-using Cts.TestData.ActionTypes;
+using Cts.TestData.Constants;
 using Cts.WebApp.Models;
 using Cts.WebApp.Pages.Admin.Maintenance.ActionTypes;
 using Cts.WebApp.Platform.RazorHelpers;
@@ -12,22 +12,22 @@ namespace WebAppTests.Pages.Admin.Maintenance.ActionTypes;
 
 public class EditTests
 {
-    private readonly ActionTypeUpdateDto _item = new() { Id = Guid.Empty, Name = ActionTypeConstants.ValidName };
+    private static readonly ActionTypeUpdateDto ItemTest = new() { Id = Guid.Empty, Name = TestConstants.ValidName };
 
     [Test]
     public async Task OnGet_ReturnsWithItem()
     {
         var service = new Mock<IActionTypeAppService>();
-        service.Setup(l => l.FindForUpdateAsync(_item.Id, CancellationToken.None)).ReturnsAsync(_item);
+        service.Setup(l => l.FindForUpdateAsync(ItemTest.Id, CancellationToken.None)).ReturnsAsync(ItemTest);
         var page = new Edit(service.Object, Mock.Of<IValidator<ActionTypeUpdateDto>>())
             { TempData = WebAppTestsGlobal.GetPageTempData() };
 
-        await page.OnGetAsync(_item.Id);
+        await page.OnGetAsync(ItemTest.Id);
 
         Assert.Multiple(() =>
         {
-            page.Item.Should().BeEquivalentTo(_item);
-            page.OriginalName.Should().Be(_item.Name);
+            page.Item.Should().BeEquivalentTo(ItemTest);
+            page.OriginalName.Should().Be(ItemTest.Name);
             page.HighlightId.Should().Be(Guid.Empty);
         });
     }
@@ -41,11 +41,7 @@ public class EditTests
 
         var result = await page.OnGetAsync(null);
 
-        Assert.Multiple(() =>
-        {
-            result.Should().BeOfType<NotFoundResult>();
-            page.Item.Should().BeNull();
-        });
+        result.Should().BeOfType<NotFoundResult>();
     }
 
     [Test]
@@ -63,7 +59,6 @@ public class EditTests
         {
             result.Should().BeOfType<NotFoundObjectResult>();
             ((NotFoundObjectResult)result).Value.Should().Be("ID not found.");
-            page.Item.Should().BeNull();
         });
     }
 
@@ -75,15 +70,15 @@ public class EditTests
         validator.Setup(l => l.ValidateAsync(It.IsAny<ActionTypeUpdateDto>(), CancellationToken.None))
             .ReturnsAsync(new ValidationResult());
         var page = new Edit(service.Object, validator.Object)
-            { Item = _item, TempData = WebAppTestsGlobal.GetPageTempData() };
+            { Item = ItemTest, TempData = WebAppTestsGlobal.GetPageTempData() };
         var expectedMessage =
-            new DisplayMessage(DisplayMessage.AlertContext.Success, $"\"{_item.Name}\" successfully updated.");
+            new DisplayMessage(DisplayMessage.AlertContext.Success, $"\"{ItemTest.Name}\" successfully updated.");
 
         var result = await page.OnPostAsync();
 
         Assert.Multiple(() =>
         {
-            page.HighlightId.Should().Be(_item.Id);
+            page.HighlightId.Should().Be(ItemTest.Id);
             page.TempData.GetDisplayMessage().Should().BeEquivalentTo(expectedMessage);
             result.Should().BeOfType<RedirectToPageResult>();
             ((RedirectToPageResult)result).PageName.Should().Be("Index");
@@ -99,7 +94,7 @@ public class EditTests
         validator.Setup(l => l.ValidateAsync(It.IsAny<ActionTypeUpdateDto>(), CancellationToken.None))
             .ReturnsAsync(new ValidationResult(validationFailures));
         var page = new Edit(service.Object, validator.Object)
-            { Item = _item, TempData = WebAppTestsGlobal.GetPageTempData() };
+            { Item = ItemTest, TempData = WebAppTestsGlobal.GetPageTempData() };
 
         var result = await page.OnPostAsync();
 

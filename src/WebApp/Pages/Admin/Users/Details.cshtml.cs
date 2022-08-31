@@ -9,19 +9,19 @@ namespace Cts.WebApp.Pages.Admin.Users;
 
 public class Details : PageModel
 {
-    public StaffViewDto DisplayUser { get; private set; } = default!;
-    public string? OfficeName => DisplayUser.Office?.Name;
+    public StaffViewDto DisplayStaff { get; private set; } = default!;
+    public string? OfficeName => DisplayStaff.Office?.Name;
     public IList<CtsRole> Roles { get; private set; } = default!;
     public DisplayMessage? Message { get; private set; }
 
     public async Task<IActionResult> OnGetAsync([FromServices] IStaffAppService staffService, Guid? id)
     {
         if (id == null) return NotFound();
-        var user = await staffService.FindAsync(id.Value);
-        if (user == null) return NotFound("ID not found.");
+        var staff = await staffService.FindAsync(id.Value);
+        if (staff == null) return NotFound("ID not found.");
 
-        DisplayUser = user;
-        Roles = await staffService.GetCtsRolesAsync(DisplayUser.Id);
+        DisplayStaff = staff;
+        Roles = await staffService.GetCtsRolesAsync(DisplayStaff.Id);
         Message = TempData.GetDisplayMessage();
 
         return Page();

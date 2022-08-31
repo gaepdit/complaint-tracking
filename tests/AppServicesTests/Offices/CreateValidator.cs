@@ -1,7 +1,7 @@
 ﻿using Cts.AppServices.Offices;
 using Cts.Domain.Entities;
 using Cts.Domain.Offices;
-using Cts.TestData.Offices;
+using Cts.TestData.Constants;
 using FluentValidation.TestHelper;
 
 namespace AppServicesTests.Offices.Validators;
@@ -14,7 +14,7 @@ public class CreateValidator
         var repoMock = new Mock<IOfficeRepository>();
         repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((Office?)null);
-        var model = new OfficeCreateDto { Name = OfficeConstants.ValidName };
+        var model = new OfficeCreateDto { Name = TestConstants.ValidName };
 
         var validator = new OfficeCreateValidator(repoMock.Object);
         var result = await validator.TestValidateAsync(model);
@@ -27,8 +27,8 @@ public class CreateValidator
     {
         var repoMock = new Mock<IOfficeRepository>();
         repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new Office(Guid.Empty, OfficeConstants.ValidName));
-        var model = new OfficeCreateDto { Name = OfficeConstants.ValidName };
+            .ReturnsAsync(new Office(Guid.Empty, TestConstants.ValidName));
+        var model = new OfficeCreateDto { Name = TestConstants.ValidName };
 
         var validator = new OfficeCreateValidator(repoMock.Object);
         var result = await validator.TestValidateAsync(model);
@@ -43,7 +43,7 @@ public class CreateValidator
         var repoMock = new Mock<IOfficeRepository>();
         repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((Office?)null);
-        var model = new OfficeCreateDto { Name = OfficeConstants.ShortName };
+        var model = new OfficeCreateDto { Name = TestConstants.ShortName };
 
         var validator = new OfficeCreateValidator(repoMock.Object);
         var result = await validator.TestValidateAsync(model);

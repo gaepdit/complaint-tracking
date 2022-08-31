@@ -1,7 +1,7 @@
 ﻿using Cts.AppServices.ActionTypes;
 using Cts.Domain.ActionTypes;
 using Cts.Domain.Entities;
-using Cts.TestData.ActionTypes;
+using Cts.TestData.Constants;
 using FluentValidation.TestHelper;
 
 namespace AppServicesTests.ActionTypes.Validators;
@@ -17,7 +17,7 @@ public class UpdateValidator
         var model = new ActionTypeUpdateDto
         {
             Id = Guid.Empty,
-            Name = ActionTypeConstants.ValidName,
+            Name = TestConstants.ValidName,
             Active = true,
         };
 
@@ -32,11 +32,11 @@ public class UpdateValidator
     {
         var repoMock = new Mock<IActionTypeRepository>();
         repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new ActionType(Guid.NewGuid(), ActionTypeConstants.ValidName));
+            .ReturnsAsync(new ActionType(Guid.NewGuid(), TestConstants.ValidName));
         var model = new ActionTypeUpdateDto
         {
             Id = Guid.Empty,
-            Name = ActionTypeConstants.ValidName,
+            Name = TestConstants.ValidName,
             Active = true,
         };
 
@@ -52,11 +52,11 @@ public class UpdateValidator
     {
         var repoMock = new Mock<IActionTypeRepository>();
         repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new ActionType(Guid.Empty, ActionTypeConstants.ValidName));
+            .ReturnsAsync(new ActionType(Guid.Empty, TestConstants.ValidName));
         var model = new ActionTypeUpdateDto
         {
             Id = Guid.Empty,
-            Name = ActionTypeConstants.ValidName,
+            Name = TestConstants.ValidName,
             Active = true,
         };
 
@@ -72,7 +72,7 @@ public class UpdateValidator
         var repoMock = new Mock<IActionTypeRepository>();
         repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((ActionType?)null);
-        var model = new ActionTypeUpdateDto() { Name = ActionTypeConstants.ShortName };
+        var model = new ActionTypeUpdateDto() { Name = TestConstants.ShortName };
 
         var validator = new ActionTypeUpdateValidator(repoMock.Object);
         var result = await validator.TestValidateAsync(model);

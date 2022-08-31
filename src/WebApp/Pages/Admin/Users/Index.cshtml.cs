@@ -11,12 +11,12 @@ namespace Cts.WebApp.Pages.Admin.Users;
 public class IndexModel : PageModel
 {
     private readonly IOfficeAppService _officeService;
-    private readonly IStaffAppService _userService;
+    private readonly IStaffAppService _staffService;
 
-    public IndexModel(IOfficeAppService officeService, IStaffAppService userService)
+    public IndexModel(IOfficeAppService officeService, IStaffAppService staffService)
     {
         _officeService = officeService;
-        _userService = userService;
+        _staffService = staffService;
     }
 
     public StaffSearchDto Filter { get; set; } = default!;
@@ -36,7 +36,7 @@ public class IndexModel : PageModel
         filter.TrimAll();
         Filter = filter;
         if (!ModelState.IsValid) return Page();
-        SearchResults = await _userService.GetListAsync(filter);
+        SearchResults = await _staffService.GetListAsync(filter);
         ShowResults = true;
         return Page();
     }

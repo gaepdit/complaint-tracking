@@ -1,5 +1,5 @@
 using Cts.LocalRepository;
-using Cts.TestData.Offices;
+using Cts.TestData.Constants;
 
 namespace LocalRepositoryTests.Offices;
 
@@ -24,7 +24,7 @@ public class FindByName
     [Test]
     public async Task WhenDoesNotExist_ReturnsNull()
     {
-        var result = await _repository.FindByNameAsync(OfficeConstants.NonExistentName);
+        var result = await _repository.FindByNameAsync(TestConstants.NonExistentName);
         result.Should().BeNull();
     }
 }

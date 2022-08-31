@@ -1,5 +1,5 @@
 using Cts.LocalRepository;
-using Cts.TestData.Offices;
+using Cts.TestData.Constants;
 
 namespace LocalRepositoryTests.Offices;
 
@@ -30,7 +30,7 @@ public class GetListByPredicate
     [Test]
     public async Task WhenDoesNotExist_ReturnsEmptyList()
     {
-        var result = await _repository.GetListAsync(e => e.Name == OfficeConstants.NonExistentName);
+        var result = await _repository.GetListAsync(e => e.Name == TestConstants.NonExistentName);
         result.Should().BeEmpty();
     }
 }

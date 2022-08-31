@@ -2,7 +2,7 @@
 
 namespace Cts.TestData.Offices;
 
-internal static class Data
+internal static class OfficeData
 {
     private static List<Office> OfficeSeedItems(ApplicationUser user) =>
         new()

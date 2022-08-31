@@ -1,3 +1,4 @@
+using Cts.AppServices.Offices;
 using Cts.AppServices.StaffServices;
 using Cts.Domain.Entities;
 
@@ -27,7 +28,7 @@ public class UserMapping
             result.LastName.Should().Be(item.LastName);
             result.Email.Should().Be(item.Email);
             result.Phone.Should().Be(item.Phone);
-            result.Office.Should().Be(item.Office);
+            result.Office.Should().BeEquivalentTo(item.Office);
             result.Active.Should().BeTrue();
         });
     }
@@ -42,7 +43,7 @@ public class UserMapping
             LastName = "User",
             Email = "local.user@example.net",
             Phone = "123-456-780",
-            Office = new Office(Guid.NewGuid(), "Office"),
+            Office = new OfficeViewDto { Id = Guid.NewGuid(), Name = "Office" },
         };
 
         var result = AppServicesTestsGlobal.Mapper!.Map<ApplicationUser>(item);
@@ -54,7 +55,7 @@ public class UserMapping
             result.LastName.Should().Be(item.LastName);
             result.Email.Should().Be(item.Email);
             result.Phone.Should().Be(item.Phone);
-            result.Office.Should().Be(item.Office);
+            result.Office.Should().BeEquivalentTo(item.Office);
             result.Active.Should().BeTrue();
         });
     }
@@ -78,7 +79,7 @@ public class UserMapping
         {
             result.Id.Should().Be(item.Id);
             result.Phone.Should().Be(item.Phone);
-            result.Office.Should().Be(item.Office);
+            result.OfficeId.Should().Be(item.Office.Id);
             result.Active.Should().BeTrue();
         });
     }

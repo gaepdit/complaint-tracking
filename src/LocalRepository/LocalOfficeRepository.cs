@@ -6,7 +6,7 @@ namespace Cts.LocalRepository;
 
 public sealed class LocalOfficeRepository : BaseRepository<Office, Guid>, IOfficeRepository
 {
-    public LocalOfficeRepository() : base(Data.GetOffices) { }
+    public LocalOfficeRepository() : base(OfficeData.GetOffices) { }
 
     public Task<Office?> FindByNameAsync(string name, CancellationToken token = default) =>
         Task.FromResult(Items.SingleOrDefault(e => e.Name == name));

@@ -2,7 +2,7 @@
 
 namespace Cts.TestData.ActionTypes;
 
-internal static class Data
+internal static class ActionTypeData
 {
     private static readonly string[] ActionTypeSeedItems =
     {

@@ -12,14 +12,14 @@
         <div class="row">
             <div class="col-md mb-3">
                 <div class="form-floating">
-                    <input asp-for="Filter.Name" name="@nameof(Model.Filter.Name)" class="form-control" aria-describedby="nameHelpBlock" placeholder="name" />
+                    <input asp-for="Filter.Name" name="@nameof(Model.Filter.Name)" class="form-control" aria-describedby="name-help-block" />
                     <label asp-for="Filter.Name" class="form-label"></label>
-                    <small id="nameHelpBlock" class="form-text">First <em>or</em> last name</small>
+                    <small id="name-help-block" class="form-text">First <em>or</em> last name</small>
                 </div>
             </div>
             <div class="col-md mb-3">
                 <div class="form-floating">
-                    <input asp-for="Filter.Email" name="@nameof(Model.Filter.Email)" class="form-control" placeholder="email" />
+                    <input asp-for="Filter.Email" name="@nameof(Model.Filter.Email)" class="form-control" />
                     <label asp-for="Filter.Email" class="form-label"></label>
                 </div>
             </div>

@@ -1,5 +1,5 @@
 using Cts.AppServices.ActionTypes;
-using Cts.TestData.ActionTypes;
+using Cts.TestData.Constants;
 using Cts.WebApp.Models;
 using Cts.WebApp.Pages.Admin.Maintenance.ActionTypes;
 using Cts.WebApp.Platform.RazorHelpers;
@@ -12,7 +12,7 @@ namespace WebAppTests.Pages.Admin.Maintenance.ActionTypes;
 
 public class CreateTests
 {
-    private readonly ActionTypeCreateDto _item = new() { Name = ActionTypeConstants.ValidName };
+    private static readonly ActionTypeCreateDto ItemTest = new() { Name = TestConstants.ValidName };
 
     [Test]
     public async Task OnPost_GivenSuccess_ReturnsRedirectWithDisplayMessage()
@@ -23,9 +23,9 @@ public class CreateTests
         var validator = new Mock<IValidator<ActionTypeCreateDto>>();
         validator.Setup(l => l.ValidateAsync(It.IsAny<ActionTypeCreateDto>(), CancellationToken.None))
             .ReturnsAsync(new ValidationResult());
-        var page = new Create { Item = _item, TempData = WebAppTestsGlobal.GetPageTempData() };
+        var page = new Create { Item = ItemTest, TempData = WebAppTestsGlobal.GetPageTempData() };
         var expectedMessage =
-            new DisplayMessage(DisplayMessage.AlertContext.Success, $"\"{_item.Name}\" successfully added.");
+            new DisplayMessage(DisplayMessage.AlertContext.Success, $"\"{ItemTest.Name}\" successfully added.");
 
         var result = await page.OnPostAsync(service.Object, validator.Object);
 
@@ -46,7 +46,7 @@ public class CreateTests
         var validationFailures = new List<ValidationFailure> { new("property", "message") };
         validator.Setup(l => l.ValidateAsync(It.IsAny<ActionTypeCreateDto>(), CancellationToken.None))
             .ReturnsAsync(new ValidationResult(validationFailures));
-        var page = new Create { Item = _item, TempData = WebAppTestsGlobal.GetPageTempData() };
+        var page = new Create { Item = ItemTest, TempData = WebAppTestsGlobal.GetPageTempData() };
 
         var result = await page.OnPostAsync(service.Object, validator.Object);
 

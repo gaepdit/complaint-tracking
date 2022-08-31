@@ -81,7 +81,8 @@
 
 * `/Admin/Users` (search)
 * `/Admin/Users/Details/{id}`
-* `/Admin/Users/Edit/{id}` (edit roles)
+* `/Admin/Users/Edit/{id}` (edit contact info)
+* `/Admin/Users/EditRoles/{id}` (edit roles)
 
 ### Redirects
 

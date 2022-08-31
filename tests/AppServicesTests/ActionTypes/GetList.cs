@@ -2,7 +2,7 @@
 using Cts.AppServices.UserServices;
 using Cts.Domain.ActionTypes;
 using Cts.Domain.Entities;
-using Cts.TestData.ActionTypes;
+using Cts.TestData.Constants;
 
 namespace AppServicesTests.ActionTypes;
 
@@ -11,7 +11,7 @@ public class GetList
     [Test]
     public async Task WhenItemsExist_ReturnsViewDtoList()
     {
-        var itemList = new List<ActionType> { new(Guid.Empty, ActionTypeConstants.ValidName) };
+        var itemList = new List<ActionType> { new(Guid.Empty, TestConstants.ValidName) };
         var repoMock = new Mock<IActionTypeRepository>();
         repoMock.Setup(l => l.GetListAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(itemList);

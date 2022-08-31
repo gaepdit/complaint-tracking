@@ -1,6 +1,6 @@
 using Cts.Domain.ActionTypes;
 using Cts.Domain.Entities;
-using Cts.TestData.ActionTypes;
+using Cts.TestData.Constants;
 
 namespace DomainTests.ActionTypes.Manager;
 
@@ -14,9 +14,9 @@ public class Create
             .ReturnsAsync((ActionType?)null);
         var manager = new ActionTypeManager(repoMock.Object);
 
-        var newItem = await manager.CreateAsync(ActionTypeConstants.ValidName);
+        var newItem = await manager.CreateAsync(TestConstants.ValidName);
 
-        newItem.Name.Should().BeEquivalentTo(ActionTypeConstants.ValidName);
+        newItem.Name.Should().BeEquivalentTo(TestConstants.ValidName);
     }
 
     [Test]
@@ -24,12 +24,12 @@ public class Create
     {
         var repoMock = new Mock<IActionTypeRepository>();
         repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new ActionType(Guid.Empty, ActionTypeConstants.ValidName));
+            .ReturnsAsync(new ActionType(Guid.Empty, TestConstants.ValidName));
         var manager = new ActionTypeManager(repoMock.Object);
 
-        var action = async () => await manager.CreateAsync(ActionTypeConstants.ValidName);
+        var action = async () => await manager.CreateAsync(TestConstants.ValidName);
 
         (await action.Should().ThrowAsync<ActionTypeNameAlreadyExistsException>())
-            .WithMessage($"An Action Type with that name already exists. Name: {ActionTypeConstants.ValidName}");
+            .WithMessage($"An Action Type with that name already exists. Name: {TestConstants.ValidName}");
     }
 }

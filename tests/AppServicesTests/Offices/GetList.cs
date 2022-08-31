@@ -2,7 +2,7 @@
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities;
 using Cts.Domain.Offices;
-using Cts.TestData.Offices;
+using Cts.TestData.Constants;
 
 namespace AppServicesTests.Offices;
 
@@ -11,7 +11,7 @@ public class GetList
     [Test]
     public async Task WhenItemsExist_ReturnsViewDtoList()
     {
-        var office = new Office(Guid.Empty, OfficeConstants.ValidName);
+        var office = new Office(Guid.Empty, TestConstants.ValidName);
         var user = new ApplicationUser
         {
             Id = Guid.NewGuid().ToString(),

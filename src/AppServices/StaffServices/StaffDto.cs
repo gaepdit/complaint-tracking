@@ -1,4 +1,5 @@
-﻿using Cts.Domain.Entities;
+﻿using Cts.AppServices.Offices;
+using Cts.Domain.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace Cts.AppServices.StaffServices;
@@ -35,7 +36,7 @@ public class StaffViewDto
     public string LastName { get; init; } = string.Empty;
     public string Email { get; init; } = string.Empty;
     public string? Phone { get; init; }
-    public Office? Office { get; init; }
+    public OfficeViewDto? Office { get; init; }
 
     [UIHint("BoolActive")]
     public bool Active { get; init; } = true;
@@ -47,7 +48,7 @@ public class StaffViewDto
         string.Join(", ", new[] { LastName, FirstName }.Where(s => !string.IsNullOrEmpty(s)));
 
     public StaffUpdateDto AsUpdateDto() =>
-        new() { Id = Id, Phone = Phone, Office = Office, Active = Active, };
+        new() { Id = Id, Phone = Phone, OfficeId = Office?.Id, Active = Active, };
 }
 
 public class StaffUpdateDto
@@ -58,7 +59,8 @@ public class StaffUpdateDto
     public string? Phone { get; init; }
 
     [Required]
-    public Office? Office { get; init; }
+    [Display(Name = "Office")]
+    public Guid? OfficeId { get; init; }
 
     [Required]
     public bool Active { get; init; }

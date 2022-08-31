@@ -6,12 +6,12 @@ namespace Cts.AppServices.UserServices;
 public interface IUserService
 {
     // Current user
-    
+
     public Task<ApplicationUser?> GetCurrentUserAsync();
     public Task<IList<string>> GetCurrentUserRolesAsync();
-    
+
     // All users
-    
+
     public Task<ApplicationUser?> FindUserByIdAsync(string userId);
     public Task<IdentityResult> UpdateUserAsync(ApplicationUser user);
 

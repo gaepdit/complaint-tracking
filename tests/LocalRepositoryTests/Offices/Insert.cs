@@ -1,6 +1,6 @@
 using Cts.Domain.Entities;
 using Cts.LocalRepository;
-using Cts.TestData.Offices;
+using Cts.TestData.Constants;
 
 namespace LocalRepositoryTests.Offices;
 
@@ -18,7 +18,7 @@ public class Insert
     public async Task WhenItemIsValid_InsertsItem()
     {
         var initialCount = _repository.Items.Count;
-        var newItem = new Office(Guid.NewGuid(), OfficeConstants.ValidName);
+        var newItem = new Office(Guid.NewGuid(), TestConstants.ValidName);
 
         await _repository.InsertAsync(newItem);
 

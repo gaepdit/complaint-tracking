@@ -1,5 +1,5 @@
 using Cts.Domain.Entities;
-using Cts.TestData.ActionTypes;
+using Cts.TestData.Constants;
 
 namespace DomainTests.ActionTypes.Entity;
 
@@ -8,15 +8,15 @@ public class ChangeName
     [Test]
     public void WithValidInput_ReturnsNewEntity()
     {
-        var result = new ActionType(Guid.NewGuid(), ActionTypeConstants.ValidName);
-        result.ChangeName(ActionTypeConstants.NewValidName);
-        result.Name.Should().Be(ActionTypeConstants.NewValidName);
+        var result = new ActionType(Guid.NewGuid(), TestConstants.ValidName);
+        result.ChangeName(TestConstants.NewValidName);
+        result.Name.Should().Be(TestConstants.NewValidName);
     }
 
     [Test]
     public void WithEmptyName_Throws()
     {
-        var result = new ActionType(Guid.NewGuid(), ActionTypeConstants.ValidName);
+        var result = new ActionType(Guid.NewGuid(), TestConstants.ValidName);
 
         var action = () => result.ChangeName(string.Empty);
 
@@ -27,9 +27,9 @@ public class ChangeName
     [Test]
     public void WithShortName_Throws()
     {
-        var result = new ActionType(Guid.NewGuid(), ActionTypeConstants.ValidName);
+        var result = new ActionType(Guid.NewGuid(), TestConstants.ValidName);
 
-        var action = () => result.ChangeName(ActionTypeConstants.ShortName);
+        var action = () => result.ChangeName(TestConstants.ShortName);
 
         action.Should().Throw<ArgumentException>()
             .WithMessage($"The length must be at least the minimum length '{ActionType.MinNameLength}'.*");

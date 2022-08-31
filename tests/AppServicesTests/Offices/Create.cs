@@ -1,8 +1,8 @@
 ﻿using Cts.AppServices.Offices;
 using Cts.AppServices.UserServices;
-using Cts.Domain.Offices;
 using Cts.Domain.Entities;
-using Cts.TestData.Offices;
+using Cts.Domain.Offices;
+using Cts.TestData.Constants;
 
 namespace AppServicesTests.Offices;
 
@@ -11,7 +11,7 @@ public class Create
     [Test]
     public async Task WhenResourceIsValid_ReturnsId()
     {
-        var item = new Office(Guid.NewGuid(), OfficeConstants.ValidName);
+        var item = new Office(Guid.NewGuid(), TestConstants.ValidName);
         var repoMock = new Mock<IOfficeRepository>();
         var managerMock = new Mock<IOfficeManager>();
         managerMock.Setup(l =>
@@ -22,7 +22,7 @@ public class Create
             .ReturnsAsync((ApplicationUser?)null);
         var appService = new OfficeAppService(repoMock.Object, managerMock.Object,
             AppServicesTestsGlobal.Mapper!, userServiceMock.Object);
-        var resource = new OfficeCreateDto{Name = OfficeConstants.ValidName};
+        var resource = new OfficeCreateDto { Name = TestConstants.ValidName };
 
         var result = await appService.CreateAsync(resource);
 

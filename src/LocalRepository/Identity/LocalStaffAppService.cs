@@ -3,6 +3,7 @@ using Cts.AppServices.StaffServices;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities;
 using Cts.Domain.Identity;
+using Cts.Domain.Offices;
 using Cts.TestData.Identity;
 using GaEpd.Library.Domain.Repositories;
 using Microsoft.AspNetCore.Identity;
@@ -14,12 +15,18 @@ public sealed class LocalStaffAppService : IStaffAppService
     private readonly IUserService _userService;
     private readonly IMapper _mapper;
     private readonly IdentityErrorDescriber _errorDescriber;
+    private readonly IOfficeRepository _officeRepository;
 
-    public LocalStaffAppService(IUserService userService, IMapper mapper, IdentityErrorDescriber errorDescriber)
+    public LocalStaffAppService(
+        IUserService userService,
+        IMapper mapper,
+        IdentityErrorDescriber errorDescriber,
+        IOfficeRepository officeRepository)
     {
         _userService = userService;
         _mapper = mapper;
         _errorDescriber = errorDescriber;
+        _officeRepository = officeRepository;
     }
 
     public Task<StaffViewDto?> FindAsync(Guid id)
@@ -73,14 +80,14 @@ public sealed class LocalStaffAppService : IStaffAppService
         return ctsRoles;
     }
 
-    public async Task<IdentityResult> UpdateRolesAsync(Guid id, Dictionary<CtsRole, bool> roles)
+    public async Task<IdentityResult> UpdateRolesAsync(Guid id, Dictionary<string, bool> roles)
     {
         var user = await _userService.FindUserByIdAsync(id.ToString());
         if (user == null) return IdentityResult.Failed(_errorDescriber.DefaultError());
 
         foreach (var (role, value) in roles)
         {
-            var result = await UpdateUserRoleAsync(user, role.Name, value);
+            var result = await UpdateUserRoleAsync(user, role, value);
             if (result != IdentityResult.Success) return result;
         }
 
@@ -105,10 +112,10 @@ public sealed class LocalStaffAppService : IStaffAppService
         if (user is null) throw new EntityNotFoundException(typeof(ApplicationUser), resource.Id);
 
         user.Phone = resource.Phone;
-        user.Office = resource.Office;
+        user.Office = await _officeRepository.GetAsync(resource.OfficeId!.Value);
         user.Active = resource.Active;
 
-        return await _userService.UpdateUserAsync(user);
+        return IdentityResult.Success;
     }
 
     public void Dispose()

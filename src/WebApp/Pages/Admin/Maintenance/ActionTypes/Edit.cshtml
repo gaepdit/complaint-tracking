@@ -2,13 +2,13 @@
 @model Edit
 
 @{
-    ViewData["Title"] = $"Edit {Edit.ThisOption.SingularName}: {Model.OriginalName}";
+    ViewData["Title"] = $"Edit {Edit.ThisOption.SingularName}";
 }
 
-<h1>
-    Edit @Edit.ThisOption.SingularName: <br>
-    <small class="text-muted">@Model.OriginalName</small>
-</h1>
+<h1>Edit @Edit.ThisOption.SingularName</h1>
+<hr />
+
+<h2>@Model.OriginalName</h2>
 
 <div class="p-3 border rounded-3 bg-light">
     <form method="post">
@@ -24,12 +24,12 @@
             <input asp-for="Item.Active" class="form-check-input" />
             <label asp-for="Item.Active" class="form-check-label"></label>
         </div>
-        <p class="text-danger">* denotes a required field</p>
         <div class="mt-3 mb-1">
             <input asp-for="Item.Id" type="hidden" /><input asp-for="OriginalName" />
-            <button type="submit" class="btn btn-primary col-sm-3">Save Changes</button>
+            <button type="submit" class="btn btn-primary col-sm-3 me-1">Save Changes</button>
             <a asp-page="Index" class="btn btn-outline-secondary col-md-2">Cancel</a>
         </div>
+        <div class="text-danger mt-3">* denotes a required field</div>
     </form>
 </div>
 
