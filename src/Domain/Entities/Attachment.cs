@@ -2,7 +2,7 @@ using Cts.Domain.Entities.BaseEntities;
 
 namespace Cts.Domain.Entities;
 
-public class Attachment : SoftDeleteEntity
+public class Attachment : AuditableSoftDeleteEntity
 {
     public virtual Complaint Complaint { get; set; } = null!;
     public int ComplaintId { get; set; }

@@ -2,7 +2,7 @@
 
 namespace Cts.Domain.Entities;
 
-public class ComplaintAction : SoftDeleteEntity
+public class ComplaintAction : AuditableSoftDeleteEntity
 {
     public Complaint Complaint { get; set; } = null!;
     public int ComplaintId { get; set; }

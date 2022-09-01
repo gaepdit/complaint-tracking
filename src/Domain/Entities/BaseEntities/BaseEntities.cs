@@ -1,7 +1,10 @@
 ﻿namespace Cts.Domain.Entities.BaseEntities;
 
+// This file contains slightly more specific implementations of AuditableEntity and AuditableSoftDeleteEntity
+// with default data types for Entity and User primary keys.
+
 /// <summary>
-/// The default implementation of <see cref="AuditableEntity{TKey}"/> using Guid as the primary key.
+/// The default implementation of <see cref="AuditableEntity{TKey}"/> using Guid as the Entity primary key.
 /// </summary>
 public abstract class AuditableEntity : AuditableEntity<Guid>
 {
@@ -10,8 +13,8 @@ public abstract class AuditableEntity : AuditableEntity<Guid>
 }
 
 /// <summary>
-/// The default <see cref="IEntity{TKey}"/> implementation for the project, which also implements
-/// <see cref="IAuditableEntity{TUserKey}"/>. A <see cref="string"/> is used for the User primary key.
+/// An implementation of <see cref="IEntity{TKey}"/> that also implements <see cref="IAuditableEntity{TUserKey}"/>.
+/// A <see cref="string"/> is used for the User primary key.
 /// </summary>
 /// <typeparam name="TKey">The type of the primary key.</typeparam>
 public abstract class AuditableEntity<TKey> : AuditableEntity<TKey, string>
@@ -22,23 +25,18 @@ public abstract class AuditableEntity<TKey> : AuditableEntity<TKey, string>
 }
 
 /// <summary>
-/// The default implementation of <see cref="SoftDeleteEntity{TKey}"/> using Guid as the primary key.
+/// The default implementation of <see cref="AuditableSoftDeleteEntity{TKey}"/> using Guid as the Entity primary key.
 /// </summary>
-public abstract class SoftDeleteEntity : SoftDeleteEntity<Guid> { }
+public abstract class AuditableSoftDeleteEntity : AuditableSoftDeleteEntity<Guid> { }
 
 /// <summary>
-/// An <see cref="IEntity{TKey}"/> implementation for this project, which also implements
-/// <see cref="IAuditableEntity{TUserKey}"/> and <see cref="ISoftDelete{TUserKey}"/>.
-/// A <see cref="string"/> is used for the User primary key.
+/// An implementation of <see cref="IEntity{TKey}"/> that also implements <see cref="IAuditableEntity{TUserKey}"/>
+/// and <see cref="ISoftDelete{TUserKey}"/>. A <see cref="string"/> is used for the User primary key.
 /// </summary>
 /// <typeparam name="TKey">The type of the primary key.</typeparam>
-public abstract class SoftDeleteEntity<TKey> : AuditableEntity<TKey>, ISoftDelete<string>
+public abstract class AuditableSoftDeleteEntity<TKey> : AuditableSoftDeleteEntity<TKey, string>
     where TKey : IEquatable<TKey>
 {
-    public bool IsDeleted { get; set; }
-    public DateTimeOffset? DeletedAt { get; set; }
-    public string? DeletedBy { get; set; }
-
-    protected SoftDeleteEntity() { }
-    protected SoftDeleteEntity(TKey id) : base(id) { }
+    protected AuditableSoftDeleteEntity() { }
+    protected AuditableSoftDeleteEntity(TKey id) : base(id) { }
 }

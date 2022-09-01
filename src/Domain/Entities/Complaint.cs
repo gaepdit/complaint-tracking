@@ -2,7 +2,7 @@ using Cts.Domain.Entities.BaseEntities;
 
 namespace Cts.Domain.Entities;
 
-public class Complaint : SoftDeleteEntity<int>
+public class Complaint : AuditableSoftDeleteEntity<int>
 {
     // Meta-data
 

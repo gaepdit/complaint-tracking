@@ -1,5 +1,6 @@
 using Cts.Domain.Entities;
 using Cts.LocalRepository.Repositories;
+using Cts.TestData.TestDataConstants;
 using GaEpd.Library.Domain.Repositories;
 
 namespace LocalRepositoryTests.Offices;
@@ -18,10 +19,10 @@ public class Delete
     public async Task WhenItemExists_DeletesItem()
     {
         var initialCount = _repository.Items.Count;
-        var itemId = _repository.Items.First().Id;
+        var item = _repository.Items.First();
 
-        await _repository.DeleteAsync(itemId);
-        var result = await _repository.FindAsync(itemId);
+        await _repository.DeleteAsync(item);
+        var result = await _repository.FindAsync(item.Id);
 
         Assert.Multiple(() =>
         {
@@ -33,8 +34,8 @@ public class Delete
     [Test]
     public async Task WhenItemDoesNotExist_Throws()
     {
-        var action = async () => await _repository.DeleteAsync(Guid.Empty);
-
+        var item = new Office(Guid.Empty, TestConstants.ValidName);
+        var action = async () => await _repository.DeleteAsync(item);
         (await action.Should().ThrowAsync<EntityNotFoundException>())
             .WithMessage($"Entity not found. Entity type: {typeof(Office).FullName}, id: {Guid.Empty}");
     }

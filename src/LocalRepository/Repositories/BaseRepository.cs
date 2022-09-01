@@ -1,8 +1,9 @@
 ﻿using GaEpd.Library.Domain.Entities;
+using GaEpd.Library.Domain.Repositories;
 
 namespace Cts.LocalRepository.Repositories;
 
-public abstract class BaseRepository<TEntity, TKey> : BaseReadOnlyRepository<TEntity, TKey>
+public abstract class BaseRepository<TEntity, TKey> : BaseReadOnlyRepository<TEntity, TKey>, IRepository<TEntity, TKey>
     where TEntity : IEntity<TKey>
     where TKey : IEquatable<TKey>
 {
@@ -21,6 +22,6 @@ public abstract class BaseRepository<TEntity, TKey> : BaseReadOnlyRepository<TEn
         Items.Add(entity);
     }
 
-    public async Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken token = default) =>
-        Items.Remove(await GetAsync(id, token));
+    public async Task DeleteAsync(TEntity entity, bool autoSave = false, CancellationToken token = default) =>
+        Items.Remove(await GetAsync(entity.Id, token));
 }
