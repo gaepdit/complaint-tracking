@@ -48,7 +48,7 @@ internal static class OfficeData
 
             // Seed offices and user data.
             _offices = OfficeSeedItems(Identity.Data.GetUsers.First());
-            _offices.First(e => e.Active).Users = Identity.Data.GetUsers.Where(e => e.Active).ToList();
+            _offices.First(e => e.Active).StaffMembers = Identity.Data.GetUsers.Where(e => e.Active).ToList();
             Identity.Data.GetUsers.First().Office = _offices.First();
 
             return _offices;

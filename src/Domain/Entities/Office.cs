@@ -15,7 +15,7 @@ public class Office : AuditableEntity
 
     public ApplicationUser? MasterUser { get; set; }
 
-    public List<ApplicationUser> Users { get; set; } = new();
+    public List<ApplicationUser> StaffMembers { get; set; } = new();
 
     [UsedImplicitly] // Used by ORM.
     private Office() { }

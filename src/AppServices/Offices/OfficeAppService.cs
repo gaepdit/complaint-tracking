@@ -65,7 +65,7 @@ public sealed class OfficeAppService : IOfficeAppService
 
     public async Task<IReadOnlyList<StaffViewDto>> GetActiveStaffAsync(Guid id, CancellationToken token = default)
     {
-        var users = await _repository.GetActiveUsersListAsync(id, token);
+        var users = await _repository.GetActiveStaffMembersListAsync(id, token);
         return _mapper.Map<IReadOnlyList<StaffViewDto>>(users);
     }
 

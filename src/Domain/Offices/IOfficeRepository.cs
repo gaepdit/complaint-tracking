@@ -22,5 +22,5 @@ public interface IOfficeRepository : IRepository<Office, Guid>
     /// <param name="id">The ID of the Office.</param>
     /// <param name="token"><see cref="T:System.Threading.CancellationToken"/></param>
     /// <returns>A list of Users.</returns>
-    Task<List<ApplicationUser>> GetActiveUsersListAsync(Guid id, CancellationToken token = default);
+    Task<List<ApplicationUser>> GetActiveStaffMembersListAsync(Guid id, CancellationToken token = default);
 }

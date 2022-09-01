@@ -11,6 +11,6 @@ public sealed class LocalOfficeRepository : BaseRepository<Office, Guid>, IOffic
     public Task<Office?> FindByNameAsync(string name, CancellationToken token = default) =>
         Task.FromResult(Items.SingleOrDefault(e => e.Name == name));
 
-    public async Task<List<ApplicationUser>> GetActiveUsersListAsync(Guid id, CancellationToken token = default) =>
-        (await GetAsync(id, token)).Users.Where(e => e.Active).ToList();
+    public async Task<List<ApplicationUser>> GetActiveStaffMembersListAsync(Guid id, CancellationToken token = default) =>
+        (await GetAsync(id, token)).StaffMembers.Where(e => e.Active).ToList();
 }
