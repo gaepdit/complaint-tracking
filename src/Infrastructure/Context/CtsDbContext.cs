@@ -1,5 +1,4 @@
 ﻿using Cts.Domain.Entities;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,13 +16,4 @@ public class CtsDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Concern> Concerns { get; set; } = null!;
     public DbSet<Office> Offices { get; set; } = null!;
     public DbSet<EmailLog> EmailLogs { get; set; } = null!;
-
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-        base.OnModelCreating(builder ?? throw new ArgumentNullException(nameof(builder)));
-
-        // Rename ASP.NET Identity Tables
-        builder.Entity<ApplicationUser>().ToTable("ApplicationUsers");
-        builder.Entity<IdentityRole>().ToTable("ApplicationRoles");
-    }
 }

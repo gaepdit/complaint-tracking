@@ -1,50 +1,67 @@
 using Cts.AppServices.ServiceCollectionExtensions;
-using Cts.AppServices.UserServices;
-using Cts.Domain.ActionTypes;
-using Cts.Domain.Entities;
-using Cts.Domain.Offices;
-using Cts.LocalRepository.Identity;
-using Cts.LocalRepository.Repositories;
-using Cts.LocalRepository.ServiceCollectionExtensions;
-using Microsoft.AspNetCore.Identity;
+using Cts.WebApp.Platform.Local;
+using Cts.WebApp.Platform.Program;
+using Cts.WebApp.Platform.Settings;
+using Microsoft.AspNetCore.DataProtection;
 
 var builder = WebApplication.CreateBuilder(args);
+var isLocal = builder.Environment.IsLocalEnv();
 
-// Configure Identity
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>();
+// Bind application settings.
+builder.Configuration.GetSection(nameof(ApplicationSettings.LocalDevSettings))
+    .Bind(ApplicationSettings.LocalDevSettings);
 
-// Configure local Identity
-builder.Services.AddLocalIdentity();
+// Configure Identity.
+builder.Services.AddIdentityStores(isLocal);
 
-// Configure UI
+// Configure cookies (SameSiteMode.None is needed to get single sign-out to work).
+builder.Services.Configure<CookiePolicyOptions>(opts => opts.MinimumSameSitePolicy = SameSiteMode.None);
+
+// Configure Authentication.
+builder.Services.AddAuthenticationServices(builder.Configuration, isLocal);
+
+// Persist data protection keys.
+var keysFolder = Path.Combine(builder.Configuration["PersistedFilesBasePath"], "DataProtectionKeys");
+builder.Services.AddDataProtection().PersistKeysToFileSystem(Directory.CreateDirectory(keysFolder));
+builder.Services.AddAuthorization();
+
+// Configure UI services.
 builder.Services.AddRazorPages();
+if (!isLocal) builder.Services.AddHsts(opts => opts.MaxAge = TimeSpan.FromMinutes(300));
 
-// Uses static data when running locally
-builder.Services.AddScoped<IUserService, LocalUserService>();
-builder.Services.AddSingleton<IActionTypeRepository, LocalActionTypeRepository>();
-builder.Services.AddSingleton<IOfficeRepository, LocalOfficeRepository>();
-
-// Add App Services
+// Add App and data services.
 builder.Services.AddAppServices();
+builder.Services.AddDataServices(builder.Configuration, isLocal);
+
+// Initialize database
+builder.Services.AddHostedService<MigratorHostedService>();
 
 // Build the application
 var app = builder.Build();
+var env = app.Environment;
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (env.IsDevelopment() || env.IsLocalEnv())
 {
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    // Production or Staging
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
+// Configure the application
+app.UseStatusCodePages();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
+// Map endpoints.
 app.MapRazorPages();
 
+// Make it so.
 app.Run();
