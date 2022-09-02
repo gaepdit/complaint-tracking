@@ -21,5 +21,5 @@ public class ActionType : AuditableEntity
     internal void ChangeName(string name) => SetName(name);
 
     private void SetName(string name) =>
-        Name = Guard.ValidLength(name.Trim(), minLength: MinNameLength, maxLength: MaxNameLength, nameof(name));
+        Name = Guard.ValidLength(name.Trim(), minLength: MinNameLength, maxLength: MaxNameLength);
 }

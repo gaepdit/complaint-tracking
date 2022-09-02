@@ -3,8 +3,8 @@ using Cts.AppServices.UserServices;
 using Cts.Domain.ActionTypes;
 using Cts.Domain.Entities;
 using Cts.Domain.Offices;
-using Cts.LocalRepository;
 using Cts.LocalRepository.Identity;
+using Cts.LocalRepository.Repositories;
 using Cts.LocalRepository.ServiceCollectionExtensions;
 using Microsoft.AspNetCore.Identity;
 

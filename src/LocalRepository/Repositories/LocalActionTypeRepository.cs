@@ -2,7 +2,7 @@
 using Cts.Domain.Entities;
 using Cts.TestData.ActionTypes;
 
-namespace Cts.LocalRepository;
+namespace Cts.LocalRepository.Repositories;
 
 public sealed class LocalActionTypeRepository : BaseRepository<ActionType, Guid>, IActionTypeRepository
 {

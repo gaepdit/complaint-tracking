@@ -1,4 +1,4 @@
-using Cts.LocalRepository;
+using Cts.LocalRepository.Repositories;
 
 namespace LocalRepositoryTests.ActionTypes;
 

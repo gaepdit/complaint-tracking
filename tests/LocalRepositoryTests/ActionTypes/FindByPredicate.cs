@@ -1,4 +1,4 @@
-using Cts.LocalRepository;
+using Cts.LocalRepository.Repositories;
 using Cts.TestData.Constants;
 
 namespace LocalRepositoryTests.ActionTypes;

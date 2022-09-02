@@ -2,15 +2,15 @@
 using GaEpd.Library.Domain.Repositories;
 using GaEpd.Library.Pagination;
 
-namespace Cts.LocalRepository;
+namespace Cts.LocalRepository.Repositories;
 
-public abstract class BaseRepository<TEntity, TKey> : IRepository<TEntity, TKey>
+public class BaseReadOnlyRepository<TEntity, TKey> : IReadOnlyRepository<TEntity, TKey>
     where TEntity : IEntity<TKey>
     where TKey : IEquatable<TKey>
 {
     internal ICollection<TEntity> Items { get; }
 
-    protected BaseRepository(IEnumerable<TEntity> items) => Items = items.ToList();
+    protected BaseReadOnlyRepository(IEnumerable<TEntity> items) => Items = items.ToList();
 
     public Task<TEntity> GetAsync(TKey id, CancellationToken token = default) =>
         Items.Any(e => e.Id.Equals(id))
@@ -38,22 +38,6 @@ public abstract class BaseRepository<TEntity, TKey> : IRepository<TEntity, TKey>
         PaginatedRequest paging,
         CancellationToken token = default) =>
         Task.FromResult(Items.Where(predicate).Skip(paging.Skip).Take(paging.Take).ToList() as IList<TEntity>);
-
-    public Task InsertAsync(TEntity entity, bool autoSave = false, CancellationToken token = default)
-    {
-        Items.Add(entity);
-        return Task.CompletedTask;
-    }
-
-    public async Task UpdateAsync(TEntity entity, bool autoSave = false, CancellationToken token = default)
-    {
-        var item = await GetAsync(entity.Id, token);
-        Items.Remove(item);
-        Items.Add(entity);
-    }
-
-    public async Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken token = default) =>
-        Items.Remove(await GetAsync(id, token));
 
     // ReSharper disable once VirtualMemberNeverOverridden.Global
     protected virtual void Dispose(bool disposing)

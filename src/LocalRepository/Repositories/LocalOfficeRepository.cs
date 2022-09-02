@@ -2,7 +2,7 @@
 using Cts.Domain.Offices;
 using Cts.TestData.Offices;
 
-namespace Cts.LocalRepository;
+namespace Cts.LocalRepository.Repositories;
 
 public sealed class LocalOfficeRepository : BaseRepository<Office, Guid>, IOfficeRepository
 {
