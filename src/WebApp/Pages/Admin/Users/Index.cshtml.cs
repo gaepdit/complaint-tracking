@@ -44,6 +44,6 @@ public class IndexModel : PageModel
     private async Task PopulateSelectListsAsync()
     {
         OfficeItems = (await _officeService.GetActiveListItemsAsync()).ToSelectList();
-        RoleItems = CtsRole.AllRolesList.ToSelectList();
+        RoleItems = CtsRole.AllRolesList().ToSelectList();
     }
 }

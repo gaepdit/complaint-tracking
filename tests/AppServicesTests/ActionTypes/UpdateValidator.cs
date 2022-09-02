@@ -4,7 +4,7 @@ using Cts.Domain.Entities;
 using Cts.TestData.Constants;
 using FluentValidation.TestHelper;
 
-namespace AppServicesTests.ActionTypes.Validators;
+namespace AppServicesTests.ActionTypes;
 
 public class UpdateValidator
 {

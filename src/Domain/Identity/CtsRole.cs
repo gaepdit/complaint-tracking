@@ -16,16 +16,21 @@ public class CtsRole
         Name = name;
         DisplayName = displayName;
         Description = description;
-        AllRoles.Add(name.ToUpperInvariant(), this);
-        AllRolesList.Add(new ListItem<string>(name.ToUpperInvariant(), displayName));
+        AllRoles.Add(name, this);
     }
 
-    // This declaration must appear before the list of static instance types.
+    /// <summary>
+    /// A Dictionary of all roles used by the CTS. The Dictionary key is a string containing the
+    /// <see cref="Microsoft.AspNetCore.Identity.IdentityRole.Name"/> of the role.
+    /// (This declaration must appear before the list of static instance types.)
+    /// </summary>
     public static Dictionary<string, CtsRole> AllRoles { get; } = new();
-    public static List<ListItem<string>> AllRolesList { get; } = new();
+
+    public static IEnumerable<ListItem<string>> AllRolesList() =>
+        AllRoles.Select(r => new ListItem<string>(r.Key, r.Value.DisplayName));
 
     // Roles
-    // These are the strings that are stored in the database. Avoid modifying!
+    // These are the strings that are stored in the database. Avoid modifying these!
     public const string DivisionManager = nameof(DivisionManager);
     public const string Manager = nameof(Manager);
     public const string UserAdmin = nameof(UserAdmin);

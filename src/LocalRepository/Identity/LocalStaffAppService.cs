@@ -71,7 +71,7 @@ public sealed class LocalStaffAppService : IStaffAppService
 
         foreach (var role in roles)
         {
-            if (CtsRole.AllRoles.TryGetValue(role.ToUpperInvariant(), out var ctsRole))
+            if (CtsRole.AllRoles.TryGetValue(role, out var ctsRole))
             {
                 ctsRoles.Add(ctsRole);
             }

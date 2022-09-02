@@ -1,4 +1,4 @@
-﻿namespace LocalRepositoryTests.Identity;
+﻿namespace IntegrationTests.Identity;
 
 public class StaffAppService
 {

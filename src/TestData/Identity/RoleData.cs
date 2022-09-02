@@ -13,7 +13,7 @@ internal static partial class Data
         {
             if (_roles is not null) return _roles;
             _roles = CtsRole.AllRoles
-                .Select(r => new IdentityRole(r.Value.Name) { NormalizedName = r.Key })
+                .Select(r => new IdentityRole(r.Value.Name) { NormalizedName = r.Key.ToUpperInvariant() })
                 .ToList();
             return _roles;
         }

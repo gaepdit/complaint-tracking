@@ -81,13 +81,13 @@ public sealed class LocalUserStore : IUserRoleStore<ApplicationUser> // inherits
 
     public Task<bool> IsInRoleAsync(ApplicationUser user, string roleName, CancellationToken cancellationToken)
     {
-        var roleId = Data.GetIdentityRoles.SingleOrDefault(r => r.NormalizedName == roleName.ToUpperInvariant())?.Id;
+        var roleId = Data.GetIdentityRoles.SingleOrDefault(r => r.Name == roleName)?.Id;
         return Task.FromResult(UserRoles.Any(e => e.UserId == user.Id && e.RoleId == roleId));
     }
 
     public Task<IList<ApplicationUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
     {
-        var roleId = Data.GetIdentityRoles.SingleOrDefault(r => r.NormalizedName == roleName.ToUpperInvariant())?.Id;
+        var roleId = Data.GetIdentityRoles.SingleOrDefault(r => r.Name == roleName)?.Id;
         var userIdsInRole = UserRoles
             .Where(e => e.RoleId == roleId)
             .Select(e => e.UserId);

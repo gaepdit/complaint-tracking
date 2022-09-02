@@ -2,7 +2,7 @@ using Cts.LocalRepository.Repositories;
 
 namespace LocalRepositoryTests.ActionTypes;
 
-public class FindById
+public class Find
 {
     private LocalActionTypeRepository _repository = default!;
 
