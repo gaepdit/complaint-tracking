@@ -4,45 +4,54 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - CTS</title>
+    <partial name="_FaviconPartial" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/App.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">CTS</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+<environment exclude="Production">
+    <div class="banner-test-site">
+        Test Site
     </div>
+</environment>
+<a class="skip-nav shadow border border-info" href="#main-content">Skip to main content</a>
 
-    <footer class="border-top footer text-muted">
+<header role="banner">
+    <div class="container h3 my-2">
+        <img src="~/images/epd-icon.svg" alt="Georgia EPD" class="img-logo" />
+        <a href="/" aria-label="Home" class="nav-link text-dark d-inline-block">Complaint Tracking System</a>
+    </div>
+    <partial name="_MenuPartial" />
+</header>
+
+<div class="container">
+    <main id="main-content" role="main" class="pb-3">
+        @RenderBody()
+    </main>
+</div>
+
+<footer class="border-top footer text-muted">
+    <div class="bg-light d-print-none">
         <div class="container">
-            &copy; 2022 State of Georgia
+            <a href="#main-nav">↑ Return to top</a>
         </div>
-    </footer>
+    </div>
+    <div class="bg-brand text-light">
+        <div class="container">
+            &copy; @DateTime.Now.Year State of Georgia
+            <span class="d-print-none">
+                | <a href="https://georgia.gov/accessibility" target="_blank">Accessibility</a>
+                | <a href="https://gadnr.org/ada" target="_blank">DNR Accessibility Notice</a>
+                | <a href="https://georgia.gov/privacysecurity" target="_blank">Privacy/Security</a>
+            </span>
+        </div>
+    </div>
+</footer>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
 
-    @await RenderSectionAsync("Scripts", required: false)
+@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
