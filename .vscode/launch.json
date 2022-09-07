@@ -1,56 +1,51 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch",
+            // Use IntelliSense to find out which attributes exist for C# debugging
+            // Use hover for the description of the existing attributes
+            // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
+            "name": "WebApp Local",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/ComplaintTracking/bin/Debug/netcoreapp3.1/ComplaintTracking.dll",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/.artifacts/WebApp/bin/Debug/net6.0/WebApp.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/ComplaintTracking",
+            "cwd": "${workspaceFolder}/src/WebApp",
             "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
                 "action": "openExternally",
-                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
             },
             "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development",
-                "ASPNETCORE_URLS": "https://localhost:61054;http://localhost:61053"
+                "ASPNETCORE_ENVIRONMENT": "Local"
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"
             }
         },
         {
-            "name": "Launch (Firefox Dev)",
+            "name": "WebApp Dev Server",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/ComplaintTracking/bin/Debug/netcoreapp3.1/ComplaintTracking.dll",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/.artifacts/WebApp/bin/Debug/net6.0/WebApp.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/ComplaintTracking",
+            "cwd": "${workspaceFolder}/src/WebApp",
             "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
             "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development",
-                "ASPNETCORE_URLS": "https://localhost:61054;http://localhost:61053"
+                "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"
-            },
-            "launchBrowser": {
-                "enabled": true,
-                "osx": {
-                    "command": "/Applications/Firefox Developer Edition.app/Contents/MacOS/firefox",
-                    "args": "${auto-detect-url}"
-                },
-                "windows": {
-                    "command": "\"C:\\Program Files\\Firefox Developer Edition\\firefox.exe\"",
-                    "args": "${auto-detect-url}"
-                }
             }
         }
     ]
