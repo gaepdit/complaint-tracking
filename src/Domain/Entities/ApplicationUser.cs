@@ -4,16 +4,16 @@ namespace Cts.Domain.Entities;
 
 public class ApplicationUser : IdentityUser, IEntity<string>
 {
-    // Properties from external login provider
-    // (Email is part of IdentityUser)
+    // Properties from external login provider (email is part of IdentityUser)
     [ProtectedPersonalData]
     [StringLength(150)]
-    public string FirstName { get; internal init; } = string.Empty;
+    public string FirstName { get; init; } = string.Empty;
 
     [ProtectedPersonalData]
     [StringLength(150)]
-    public string LastName { get; internal init; } = string.Empty;
+    public string LastName { get; init; } = string.Empty;
 
+    
     // Editable user/staff properties
     public const int MaxPhoneLength = 25;
 
@@ -24,4 +24,6 @@ public class ApplicationUser : IdentityUser, IEntity<string>
     public Office? Office { get; set; }
 
     public bool Active { get; set; } = true;
+
+    public Guid IdGuid => new(Id);
 }

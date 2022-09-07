@@ -1,0 +1,50 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Account Profile";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+<partial name="_AlertPartial" for="Message" />
+
+<h2>@Model.DisplayStaff.DisplayName</h2>
+
+<dl class="row">
+    <dt class="col-sm-3">Email</dt>
+    <dd class="col-sm-9">@Model.DisplayStaff.Email</dd>
+
+    <dt class="col-sm-3">Phone</dt>
+    <dd class="col-sm-9">@Html.DisplayFor(m => m.DisplayStaff.Phone, "StringOrNone")</dd>
+
+    <dt class="col-sm-3">Office</dt>
+    <dd class="col-sm-9">@Html.DisplayFor(m => m.OfficeName, "StringOrNone")</dd>
+</dl>
+
+<div class="mb-3">
+    <a asp-page="./Edit" asp-route-id="@Model.DisplayStaff.Id" class="btn btn-outline-primary me-2">Edit Contact Info</a>
+    <form class="form-inline d-inline-block" asp-page="./Logout" asp-route-returnUrl="@Url.Page("/")" method="post">
+        <button type="submit" class="btn btn-danger">Sign out</button>
+    </form>
+</div>
+
+<h3>Roles</h3>
+
+@if (Model.Roles.Count == 0)
+{
+    <p>Your account has no application roles.</p>
+}
+else
+{
+    <p>Your account has the following application roles.</p>
+
+    <dl class="p-3 border rounded-3 bg-light">
+        @foreach (var role in Model.Roles)
+        {
+            <dt>@role.DisplayName</dt>
+            <dd>
+                <p class="text-muted">@role.Description</p>
+            </dd>
+        }
+    </dl>
+}

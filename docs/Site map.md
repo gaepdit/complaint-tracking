@@ -17,6 +17,7 @@
 
 * `/Account` (view profile)
 * `/Account/Login`
+* `/Account/Edit` (edit contact info)
 
 ## Admin Dashboard
 
