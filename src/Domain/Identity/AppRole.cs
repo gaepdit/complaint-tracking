@@ -5,13 +5,13 @@ namespace Cts.Domain.Identity;
 /// <summary>
 /// Authorization Roles for the application.
 /// </summary>
-public class CtsRole
+public class AppRole
 {
     public string Name { get; }
     public string DisplayName { get; }
     public string Description { get; }
 
-    private CtsRole(string name, string displayName, string description)
+    private AppRole(string name, string displayName, string description)
     {
         Name = name;
         DisplayName = displayName;
@@ -20,47 +20,45 @@ public class CtsRole
     }
 
     /// <summary>
-    /// A Dictionary of all roles used by the CTS. The Dictionary key is a string containing the
-    /// <see cref="Microsoft.AspNetCore.Identity.IdentityRole.Name"/> of the role.
+    /// A Dictionary of all roles used by the app. The Dictionary key is a string containing 
+    /// the <see cref="Microsoft.AspNetCore.Identity.IdentityRole.Name"/> of the role.
     /// (This declaration must appear before the list of static instance types.)
     /// </summary>
-    public static Dictionary<string, CtsRole> AllRoles { get; } = new();
-
-    public static IEnumerable<ListItem<string>> AllRolesList() =>
-        AllRoles.Select(r => new ListItem<string>(r.Key, r.Value.DisplayName));
+    public static Dictionary<string, AppRole> AllRoles { get; } = new();
 
     // Roles
     // These are the strings that are stored in the database. Avoid modifying these!
     public const string DivisionManager = nameof(DivisionManager);
     public const string Manager = nameof(Manager);
     public const string UserAdmin = nameof(UserAdmin);
+    public const string SiteMaintenance = nameof(SiteMaintenance);
     public const string DataExport = nameof(DataExport);
     public const string AttachmentsEditor = nameof(AttachmentsEditor);
 
-    // These static UserRole objects are used for displaying role information in the UI.
-    public static CtsRole DivisionManagerRole { get; } = new(
+    // These static Role objects are used for displaying role information in the UI.
+    public static AppRole DivisionManagerRole { get; } = new(
         DivisionManager, "Division Manager",
         "Can register and edit all users and roles. Can manage all complaints. Can delete and restore " +
         "complaints and complaint actions. Can edit offices, master users, and lookup tables."
     );
 
-    public static CtsRole ManagerRole { get; } = new(
+    public static AppRole ManagerRole { get; } = new(
         Manager, "Manager",
         "Can manage complaints for all users assigned to the same office. Can delete and restore " +
         "complaint actions."
     );
 
-    public static CtsRole CtsAdminRole { get; } = new(
+    public static AppRole AppAdminRole { get; } = new(
         UserAdmin, "User Account Admin",
         "Can register and edit all users and roles, excluding the Division Manager role."
     );
 
-    public static CtsRole DataExportRole { get; } = new(
+    public static AppRole DataExportRole { get; } = new(
         DataExport, "Data Export",
         "Can generate a ZIP archive of complaints."
     );
 
-    public static CtsRole AttachmentsEditorRole { get; } = new(
+    public static AppRole AttachmentsEditorRole { get; } = new(
         AttachmentsEditor, "Attachments Editor",
         "Can edit attachments for all complaints, including closed complaints."
     );

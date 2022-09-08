@@ -64,20 +64,16 @@ public sealed class LocalStaffAppService : IStaffAppService
     public Task<IList<string>> GetRolesAsync(Guid id) =>
         _userService.GetUserRolesAsync(id);
 
-    public async Task<IList<CtsRole>> GetCtsRolesAsync(Guid id)
+    public async Task<IList<AppRole>> GetAppRolesAsync(Guid id)
     {
         var roles = await GetRolesAsync(id);
-        var ctsRoles = new List<CtsRole>();
+        var appRoles = new List<AppRole>();
 
         foreach (var role in roles)
-        {
-            if (CtsRole.AllRoles.TryGetValue(role, out var ctsRole))
-            {
-                ctsRoles.Add(ctsRole);
-            }
-        }
+            if (AppRole.AllRoles.TryGetValue(role, out var appRole))
+                appRoles.Add(appRole);
 
-        return ctsRoles;
+        return appRoles;
     }
 
     public async Task<IdentityResult> UpdateRolesAsync(Guid id, Dictionary<string, bool> roles)

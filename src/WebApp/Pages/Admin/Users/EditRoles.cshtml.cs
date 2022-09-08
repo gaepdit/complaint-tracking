@@ -1,4 +1,4 @@
-﻿using Cts.AppServices.StaffServices;
+using Cts.AppServices.StaffServices;
 using Cts.Domain.Identity;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.RazorHelpers;
@@ -60,7 +60,7 @@ public class EditRoles : PageModel
     {
         var roles = await _staffService.GetRolesAsync(DisplayStaff.Id);
 
-        RoleSettings.AddRange(CtsRole.AllRoles.Select(r => new RoleSetting
+        RoleSettings.AddRange(AppRole.AllRoles.Select(r => new RoleSetting
         {
             Name = r.Key,
             DisplayName = r.Value.DisplayName,

@@ -37,7 +37,8 @@ public sealed class LocalRoleStore : IRoleStore<IdentityRole>
         Task.FromResult(Data.GetIdentityRoles.Single(r => r.Id == roleId));
 
     public Task<IdentityRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken) =>
-        Task.FromResult(Data.GetIdentityRoles.Single(r => r.NormalizedName == normalizedRoleName));
+        Task.FromResult(Data.GetIdentityRoles.Single(r =>
+            string.Equals(r.NormalizedName, normalizedRoleName, StringComparison.InvariantCultureIgnoreCase)));
 
     public void Dispose()
     {

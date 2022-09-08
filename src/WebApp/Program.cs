@@ -1,6 +1,6 @@
 using Cts.AppServices.ServiceCollectionExtensions;
 using Cts.WebApp.Platform.Local;
-using Cts.WebApp.Platform.Program;
+using Cts.WebApp.Platform.Services;
 using Cts.WebApp.Platform.Settings;
 using Microsoft.AspNetCore.DataProtection;
 

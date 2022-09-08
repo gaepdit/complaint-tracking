@@ -35,20 +35,20 @@ public class EditRolesTests
     [Test]
     public async Task OnGet_PopulatesThePageModel()
     {
-        var expectedRoleSettings = CtsRole.AllRoles
+        var expectedRoleSettings = AppRole.AllRoles
             .Select(r => new EditRoles.RoleSetting
             {
                 Name = r.Key,
                 DisplayName = r.Value.DisplayName,
                 Description = r.Value.Description,
-                IsSelected = r.Key == CtsRole.Manager,
+                IsSelected = r.Key == AppRole.Manager,
             }).ToList();
 
         var staffService = new Mock<IStaffAppService>();
         staffService.Setup(l => l.FindAsync(It.IsAny<Guid>()))
             .ReturnsAsync(StaffViewTest);
         staffService.Setup(l => l.GetRolesAsync(It.IsAny<Guid>()))
-            .ReturnsAsync(new List<string> { CtsRole.Manager });
+            .ReturnsAsync(new List<string> { AppRole.Manager });
         var pageModel = new EditRoles(staffService.Object) { TempData = WebAppTestsGlobal.GetPageTempData() };
 
         var result = await pageModel.OnGetAsync(StaffViewTest.Id);
@@ -101,7 +101,7 @@ public class EditRolesTests
         staffService.Setup(l => l.UpdateRolesAsync(It.IsAny<Guid>(), It.IsAny<Dictionary<string, bool>>()))
             .ReturnsAsync(IdentityResult.Success);
         staffService.Setup(l => l.GetRolesAsync(It.IsAny<Guid>()))
-            .ReturnsAsync(new List<string> { CtsRole.Manager });
+            .ReturnsAsync(new List<string> { AppRole.Manager });
         var page = new EditRoles(staffService.Object)
             { RoleSettings = RoleSettingsTest, UserId = Guid.Empty, TempData = WebAppTestsGlobal.GetPageTempData() };
 
@@ -142,7 +142,7 @@ public class EditRolesTests
         staffService.Setup(l => l.FindAsync(It.IsAny<Guid>()))
             .ReturnsAsync(StaffViewTest);
         staffService.Setup(l => l.GetRolesAsync(It.IsAny<Guid>()))
-            .ReturnsAsync(new List<string> { CtsRole.Manager });
+            .ReturnsAsync(new List<string> { AppRole.Manager });
         var page = new EditRoles(staffService.Object)
             { RoleSettings = RoleSettingsTest, UserId = Guid.Empty, TempData = WebAppTestsGlobal.GetPageTempData() };
 

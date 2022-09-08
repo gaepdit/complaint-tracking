@@ -1,4 +1,4 @@
-﻿using Cts.AppServices.Offices;
+using Cts.AppServices.Offices;
 using Cts.AppServices.StaffServices;
 using Cts.Domain.Identity;
 using GaEpd.Library.ListItems;
@@ -44,6 +44,8 @@ public class IndexModel : PageModel
     private async Task PopulateSelectListsAsync()
     {
         OfficeItems = (await _officeService.GetActiveListItemsAsync()).ToSelectList();
-        RoleItems = CtsRole.AllRolesList().ToSelectList();
+        RoleItems = AppRole.AllRoles
+            .Select(r => new ListItem<string>(r.Key, r.Value.DisplayName))
+            .ToSelectList();
     }
 }

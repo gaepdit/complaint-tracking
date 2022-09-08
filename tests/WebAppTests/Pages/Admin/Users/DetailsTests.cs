@@ -20,8 +20,8 @@ public class DetailsTests
         var service = new Mock<IStaffAppService>();
         service.Setup(l => l.FindAsync(It.IsAny<Guid>()))
             .ReturnsAsync(staffView);
-        service.Setup(l => l.GetCtsRolesAsync(It.IsAny<Guid>()))
-            .ReturnsAsync(new List<CtsRole>());
+        service.Setup(l => l.GetAppRolesAsync(It.IsAny<Guid>()))
+            .ReturnsAsync(new List<AppRole>());
         var pageModel = new Details { TempData = WebAppTestsGlobal.GetPageTempData() };
 
         var result = await pageModel.OnGetAsync(service.Object, staffView.Id);

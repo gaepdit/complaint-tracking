@@ -5,7 +5,7 @@ using Cts.WebApp.Platform.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace Cts.WebApp.Platform.Program;
+namespace Cts.WebApp.Platform.Services;
 
 public class MigratorHostedService : IHostedService
 {
@@ -43,8 +43,8 @@ public class MigratorHostedService : IHostedService
 
         // Initialize any new roles.
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-        foreach (var role in CtsRole.AllRoles.Keys)
-            if (!await context.Roles.AnyAsync(e => e.NormalizedName == role, cancellationToken))
+        foreach (var role in AppRole.AllRoles.Keys)
+            if (!await context.Roles.AnyAsync(e => e.Name == role, cancellationToken))
                 await roleManager.CreateAsync(new IdentityRole(role));
     }
 

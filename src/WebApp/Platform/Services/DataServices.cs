@@ -9,7 +9,7 @@ using Cts.LocalRepository.Repositories;
 using Cts.WebApp.Platform.Settings;
 using Microsoft.EntityFrameworkCore;
 
-namespace Cts.WebApp.Platform.Program;
+namespace Cts.WebApp.Platform.Services;
 
 public static class DataServices
 {

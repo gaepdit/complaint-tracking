@@ -53,7 +53,8 @@ public sealed class LocalUserStore : IUserRoleStore<ApplicationUser> // inherits
         Task.FromResult(Users.Single(u => u.Id == userId));
 
     public Task<ApplicationUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken) =>
-        Task.FromResult(Users.Single(u => u.NormalizedUserName == normalizedUserName));
+        Task.FromResult(Users.Single(u =>
+            string.Equals(u.NormalizedUserName, normalizedUserName, StringComparison.InvariantCultureIgnoreCase)));
 
     // IUserRoleStore
     public Task AddToRoleAsync(ApplicationUser user, string roleName, CancellationToken cancellationToken)
@@ -81,13 +82,15 @@ public sealed class LocalUserStore : IUserRoleStore<ApplicationUser> // inherits
 
     public Task<bool> IsInRoleAsync(ApplicationUser user, string roleName, CancellationToken cancellationToken)
     {
-        var roleId = Data.GetIdentityRoles.SingleOrDefault(r => r.Name == roleName)?.Id;
+        var roleId = Data.GetIdentityRoles.SingleOrDefault(r =>
+            string.Equals(r.Name, roleName, StringComparison.InvariantCultureIgnoreCase))?.Id;
         return Task.FromResult(UserRoles.Any(e => e.UserId == user.Id && e.RoleId == roleId));
     }
 
     public Task<IList<ApplicationUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
     {
-        var roleId = Data.GetIdentityRoles.SingleOrDefault(r => r.Name == roleName)?.Id;
+        var roleId = Data.GetIdentityRoles.SingleOrDefault(r =>
+            string.Equals(r.Name, roleName, StringComparison.InvariantCultureIgnoreCase))?.Id;
         var userIdsInRole = UserRoles
             .Where(e => e.RoleId == roleId)
             .Select(e => e.UserId);

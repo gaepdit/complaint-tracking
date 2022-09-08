@@ -8,31 +8,25 @@ internal static partial class Data
     {
         new ApplicationUser
         {
-            Id = Guid.NewGuid().ToString(),
-            FirstName = "Local",
+            Id = "00000000-0000-0000-0000-000000000001",
+            FirstName = "Admin",
             LastName = "User",
-            Email = "local.user@example.net",
-            UserName = "local.user@example.net",
-            NormalizedUserName = "local.user@example.net".ToUpperInvariant(),
+            Email = "admin.user@example.net",
             Phone = "123-456-7890",
         },
         new ApplicationUser
         {
-            Id = Guid.NewGuid().ToString(),
-            FirstName = "Another",
+            Id = "00000000-0000-0000-0000-000000000002",
+            FirstName = "General",
             LastName = "User",
-            Email = "another.user@example.net",
-            UserName = "another.user@example.net",
-            NormalizedUserName = "another.user@example.net".ToUpperInvariant(),
+            Email = "general.user@example.net",
         },
         new ApplicationUser
         {
-            Id = Guid.NewGuid().ToString(),
+            Id = "00000000-0000-0000-0000-000000000003",
             FirstName = "Inactive",
             LastName = "User",
             Email = "inactive.user@example.net",
-            UserName = "inactive.user@example.net",
-            NormalizedUserName = "inactive.user@example.net".ToUpperInvariant(),
             Active = false,
         },
     };
@@ -44,6 +38,12 @@ internal static partial class Data
         get
         {
             if (_users is not null) return _users;
+            UserSeedItems.ForEach(delegate(ApplicationUser user)
+            {
+                user.UserName = user.Email;
+                user.NormalizedEmail = user.Email.ToUpperInvariant();
+                user.NormalizedUserName = user.Email.ToUpperInvariant();
+            });
             _users = UserSeedItems;
             return _users;
         }

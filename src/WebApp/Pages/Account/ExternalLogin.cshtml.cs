@@ -27,7 +27,6 @@ public class ExternalLogin : PageModel
     private readonly IConfiguration _configuration;
     private readonly IWebHostEnvironment _environment;
     private readonly IStaffAppService _staffService;
-    private readonly IMapper _mapper;
 
 
     public ExternalLogin(
@@ -35,15 +34,13 @@ public class ExternalLogin : PageModel
         UserManager<ApplicationUser> userManager,
         IConfiguration configuration,
         IWebHostEnvironment environment,
-        IStaffAppService staffService,
-        IMapper mapper)
+        IStaffAppService staffService)
     {
         _signInManager = signInManager;
         _userManager = userManager;
         _configuration = configuration;
         _environment = environment;
         _staffService = staffService;
-        _mapper = mapper;
     }
 
     // Don't call the page directly
@@ -67,15 +64,11 @@ public class ExternalLogin : PageModel
         {
             if (!ApplicationSettings.LocalDevSettings.AuthenticatedUser) return Forbid();
 
-            var staff = (await _staffService.GetListAsync(new StaffSearchDto { Name = "Local" })).First();
+            var staff = ApplicationSettings.LocalDevSettings.AuthenticatedUserIsAdmin
+                ? (await _staffService.GetListAsync(new StaffSearchDto { Name = "Admin" })).First()
+                : (await _staffService.GetListAsync(new StaffSearchDto { Name = "General" })).First();
 
             var user = await _userManager.FindByIdAsync(staff.Id.ToString());
-            if (user is null)
-            {
-                user = _mapper.Map<ApplicationUser>(staff);
-                await _userManager.CreateAsync(user);
-                foreach (var role in CtsRole.AllRoles) await _userManager.AddToRoleAsync(user, role.Key);
-            }
 
             await _signInManager.SignInAsync(user, false);
             return LocalRedirect(returnUrl ?? "/");
@@ -128,7 +121,7 @@ public class ExternalLogin : PageModel
         // Add new user to application Roles if seeded in app settings.
         var seedUsers = _configuration.GetSection("SeedAdminUsers").Get<string[]>().AsEnumerable();
         if (seedUsers.Contains(newUser.Email, StringComparer.InvariantCultureIgnoreCase))
-            foreach (var role in CtsRole.AllRoles)
+            foreach (var role in AppRole.AllRoles)
                 await _userManager.AddToRoleAsync(newUser, role.Key);
 
         // Add the external provider info to the user and sign in.

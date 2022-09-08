@@ -28,7 +28,8 @@ internal static partial class Data
 
     public static void AddUserRole(this ICollection<IdentityUserRole<string>> userRoles, string userId, string roleName)
     {
-        var roleId = GetIdentityRoles.SingleOrDefault(r => r.Name == roleName)?.Id;
+        var roleId = GetIdentityRoles.SingleOrDefault(r =>
+            string.Equals(r.Name, roleName, StringComparison.InvariantCultureIgnoreCase))?.Id;
         if (roleId is null) return;
         var exists = userRoles.Any(e => e.UserId == userId && e.RoleId == roleId);
         if (!exists) userRoles.Add(new IdentityUserRole<string> { RoleId = roleId, UserId = userId });
@@ -37,7 +38,8 @@ internal static partial class Data
     public static void RemoveUserRole(this ICollection<IdentityUserRole<string>> userRoles, string userId,
         string roleName)
     {
-        var roleId = GetIdentityRoles.SingleOrDefault(r => r.Name == roleName)?.Id;
+        var roleId = GetIdentityRoles.SingleOrDefault(r =>
+            string.Equals(r.Name, roleName, StringComparison.InvariantCultureIgnoreCase))?.Id;
         if (roleId is null) return;
         var userRole = userRoles.SingleOrDefault(e => e.UserId == userId && e.RoleId == roleId);
         if (userRole is not null) userRoles.Remove(userRole);

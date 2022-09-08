@@ -12,8 +12,8 @@ internal static partial class Data
         get
         {
             if (_roles is not null) return _roles;
-            _roles = CtsRole.AllRoles
-                .Select(r => new IdentityRole(r.Value.Name) { NormalizedName = r.Key.ToUpperInvariant() })
+            _roles = AppRole.AllRoles
+                .Select(r => new IdentityRole(r.Value.Name) { NormalizedName = r.Key })
                 .ToList();
             return _roles;
         }

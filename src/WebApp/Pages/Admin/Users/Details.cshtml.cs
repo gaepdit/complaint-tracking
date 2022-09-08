@@ -1,4 +1,4 @@
-﻿using Cts.AppServices.StaffServices;
+using Cts.AppServices.StaffServices;
 using Cts.Domain.Identity;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.RazorHelpers;
@@ -11,7 +11,7 @@ public class Details : PageModel
 {
     public StaffViewDto DisplayStaff { get; private set; } = default!;
     public string? OfficeName => DisplayStaff.Office?.Name;
-    public IList<CtsRole> Roles { get; private set; } = default!;
+    public IList<AppRole> Roles { get; private set; } = default!;
     public DisplayMessage? Message { get; private set; }
 
     public async Task<IActionResult> OnGetAsync([FromServices] IStaffAppService staffService, Guid? id)
@@ -21,7 +21,7 @@ public class Details : PageModel
         if (staff == null) return NotFound("ID not found.");
 
         DisplayStaff = staff;
-        Roles = await staffService.GetCtsRolesAsync(DisplayStaff.Id);
+        Roles = await staffService.GetAppRolesAsync(DisplayStaff.Id);
         Message = TempData.GetDisplayMessage();
 
         return Page();
