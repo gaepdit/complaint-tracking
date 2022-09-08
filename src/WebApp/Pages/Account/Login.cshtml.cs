@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace Cts.WebApp.Pages.Account;
 
 [AllowAnonymous]
-public class Login : PageModel
+public class LoginModel : PageModel
 {
     public string? ReturnUrl { get; private set; }
     public DisplayMessage? Message { get; private set; }

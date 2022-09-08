@@ -19,7 +19,7 @@ public class EditTests
     {
         var service = new Mock<IActionTypeAppService>();
         service.Setup(l => l.FindForUpdateAsync(ItemTest.Id, CancellationToken.None)).ReturnsAsync(ItemTest);
-        var page = new Edit(service.Object, Mock.Of<IValidator<ActionTypeUpdateDto>>())
+        var page = new EditModel(service.Object, Mock.Of<IValidator<ActionTypeUpdateDto>>())
             { TempData = WebAppTestsGlobal.GetPageTempData() };
 
         await page.OnGetAsync(ItemTest.Id);
@@ -36,7 +36,7 @@ public class EditTests
     public async Task OnGet_GivenNullId_ReturnsNotFound()
     {
         var service = new Mock<IActionTypeAppService>();
-        var page = new Edit(service.Object, Mock.Of<IValidator<ActionTypeUpdateDto>>())
+        var page = new EditModel(service.Object, Mock.Of<IValidator<ActionTypeUpdateDto>>())
             { TempData = WebAppTestsGlobal.GetPageTempData() };
 
         var result = await page.OnGetAsync(null);
@@ -50,7 +50,7 @@ public class EditTests
         var service = new Mock<IActionTypeAppService>();
         service.Setup(l => l.FindForUpdateAsync(It.IsAny<Guid>(), CancellationToken.None))
             .ReturnsAsync((ActionTypeUpdateDto?)null);
-        var page = new Edit(service.Object, Mock.Of<IValidator<ActionTypeUpdateDto>>())
+        var page = new EditModel(service.Object, Mock.Of<IValidator<ActionTypeUpdateDto>>())
             { TempData = WebAppTestsGlobal.GetPageTempData() };
 
         var result = await page.OnGetAsync(Guid.Empty);
@@ -69,7 +69,7 @@ public class EditTests
         var validator = new Mock<IValidator<ActionTypeUpdateDto>>();
         validator.Setup(l => l.ValidateAsync(It.IsAny<ActionTypeUpdateDto>(), CancellationToken.None))
             .ReturnsAsync(new ValidationResult());
-        var page = new Edit(service.Object, validator.Object)
+        var page = new EditModel(service.Object, validator.Object)
             { Item = ItemTest, TempData = WebAppTestsGlobal.GetPageTempData() };
         var expectedMessage =
             new DisplayMessage(DisplayMessage.AlertContext.Success, $"\"{ItemTest.Name}\" successfully updated.");
@@ -93,7 +93,7 @@ public class EditTests
         var validationFailures = new List<ValidationFailure> { new("property", "message") };
         validator.Setup(l => l.ValidateAsync(It.IsAny<ActionTypeUpdateDto>(), CancellationToken.None))
             .ReturnsAsync(new ValidationResult(validationFailures));
-        var page = new Edit(service.Object, validator.Object)
+        var page = new EditModel(service.Object, validator.Object)
             { Item = ItemTest, TempData = WebAppTestsGlobal.GetPageTempData() };
 
         var result = await page.OnPostAsync();

@@ -16,7 +16,7 @@ using System.Security.Claims;
 namespace Cts.WebApp.Pages.Account;
 
 [AllowAnonymous]
-public class ExternalLogin : PageModel
+public class ExternalLoginModel : PageModel
 {
     [BindProperty]
     public ApplicationUser? DisplayFailedUser { get; private set; }
@@ -27,7 +27,7 @@ public class ExternalLogin : PageModel
     private readonly IWebHostEnvironment _environment;
     private readonly IStaffAppService _staffService;
     
-    public ExternalLogin(
+    public ExternalLoginModel(
         SignInManager<ApplicationUser> signInManager,
         UserManager<ApplicationUser> userManager,
         IConfiguration configuration,

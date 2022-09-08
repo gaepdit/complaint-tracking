@@ -11,12 +11,12 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace Cts.WebApp.Pages.Admin.Maintenance.ActionTypes;
 
 [Authorize(Roles = AppRole.SiteMaintenance)]
-public class Edit : PageModel
+public class EditModel : PageModel
 {
     private readonly IActionTypeAppService _service;
     private readonly IValidator<ActionTypeUpdateDto> _validator;
 
-    public Edit(IActionTypeAppService service, IValidator<ActionTypeUpdateDto> validator)
+    public EditModel(IActionTypeAppService service, IValidator<ActionTypeUpdateDto> validator)
     {
         _service = service;
         _validator = validator;

@@ -14,13 +14,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace Cts.WebApp.Pages.Admin.Users;
 
 [Authorize(Roles = AppRole.UserAdmin)]
-public class Edit : PageModel
+public class EditModel : PageModel
 {
     private readonly IStaffAppService _staffService;
     private readonly IOfficeAppService _officeService;
     private readonly IValidator<StaffUpdateDto> _validator;
 
-    public Edit(IStaffAppService staffService, IOfficeAppService officeService, IValidator<StaffUpdateDto> validator)
+    public EditModel(IStaffAppService staffService, IOfficeAppService officeService, IValidator<StaffUpdateDto> validator)
     {
         _staffService = staffService;
         _officeService = officeService;

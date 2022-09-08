@@ -21,9 +21,9 @@ public class EditRolesTests
         LastName = TestConstants.ValidName, Office = OfficeViewTest,
     };
 
-    private static readonly List<EditRoles.RoleSetting> RoleSettingsTest = new()
+    private static readonly List<EditRolesModel.RoleSetting> RoleSettingsTest = new()
     {
-        new EditRoles.RoleSetting
+        new EditRolesModel.RoleSetting
         {
             Name = TestConstants.ValidName,
             DisplayName = TestConstants.ValidName,
@@ -36,7 +36,7 @@ public class EditRolesTests
     public async Task OnGet_PopulatesThePageModel()
     {
         var expectedRoleSettings = AppRole.AllRoles
-            .Select(r => new EditRoles.RoleSetting
+            .Select(r => new EditRolesModel.RoleSetting
             {
                 Name = r.Key,
                 DisplayName = r.Value.DisplayName,
@@ -49,7 +49,7 @@ public class EditRolesTests
             .ReturnsAsync(StaffViewTest);
         staffService.Setup(l => l.GetRolesAsync(It.IsAny<Guid>()))
             .ReturnsAsync(new List<string> { AppRole.Manager });
-        var pageModel = new EditRoles(staffService.Object) { TempData = WebAppTestsGlobal.GetPageTempData() };
+        var pageModel = new EditRolesModel(staffService.Object) { TempData = WebAppTestsGlobal.GetPageTempData() };
 
         var result = await pageModel.OnGetAsync(StaffViewTest.Id);
 
@@ -67,7 +67,7 @@ public class EditRolesTests
     public async Task OnGet_MissingIdReturnsNotFound()
     {
         var staffService = new Mock<IStaffAppService>();
-        var pageModel = new EditRoles(staffService.Object) { TempData = WebAppTestsGlobal.GetPageTempData() };
+        var pageModel = new EditRolesModel(staffService.Object) { TempData = WebAppTestsGlobal.GetPageTempData() };
 
         var result = await pageModel.OnGetAsync(null);
 
@@ -80,7 +80,7 @@ public class EditRolesTests
         var staffService = new Mock<IStaffAppService>();
         staffService.Setup(l => l.FindAsync(It.IsAny<Guid>()))
             .ReturnsAsync((StaffViewDto?)null);
-        var pageModel = new EditRoles(staffService.Object) { TempData = WebAppTestsGlobal.GetPageTempData() };
+        var pageModel = new EditRolesModel(staffService.Object) { TempData = WebAppTestsGlobal.GetPageTempData() };
 
         var result = await pageModel.OnGetAsync(Guid.Empty);
 
@@ -102,7 +102,7 @@ public class EditRolesTests
             .ReturnsAsync(IdentityResult.Success);
         staffService.Setup(l => l.GetRolesAsync(It.IsAny<Guid>()))
             .ReturnsAsync(new List<string> { AppRole.Manager });
-        var page = new EditRoles(staffService.Object)
+        var page = new EditRolesModel(staffService.Object)
             { RoleSettings = RoleSettingsTest, UserId = Guid.Empty, TempData = WebAppTestsGlobal.GetPageTempData() };
 
         var result = await page.OnPostAsync();
@@ -125,7 +125,7 @@ public class EditRolesTests
             .ReturnsAsync(IdentityResult.Failed());
         staffService.Setup(l => l.FindAsync(It.IsAny<Guid>()))
             .ReturnsAsync((StaffViewDto?)null);
-        var page = new EditRoles(staffService.Object)
+        var page = new EditRolesModel(staffService.Object)
             { RoleSettings = RoleSettingsTest, UserId = Guid.Empty, TempData = WebAppTestsGlobal.GetPageTempData() };
 
         var result = await page.OnPostAsync();
@@ -143,7 +143,7 @@ public class EditRolesTests
             .ReturnsAsync(StaffViewTest);
         staffService.Setup(l => l.GetRolesAsync(It.IsAny<Guid>()))
             .ReturnsAsync(new List<string> { AppRole.Manager });
-        var page = new EditRoles(staffService.Object)
+        var page = new EditRolesModel(staffService.Object)
             { RoleSettings = RoleSettingsTest, UserId = Guid.Empty, TempData = WebAppTestsGlobal.GetPageTempData() };
 
         var result = await page.OnPostAsync();

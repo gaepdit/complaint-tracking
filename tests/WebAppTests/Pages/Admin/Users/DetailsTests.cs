@@ -22,7 +22,7 @@ public class DetailsTests
             .ReturnsAsync(staffView);
         service.Setup(l => l.GetAppRolesAsync(It.IsAny<Guid>()))
             .ReturnsAsync(new List<AppRole>());
-        var pageModel = new Details { TempData = WebAppTestsGlobal.GetPageTempData() };
+        var pageModel = new DetailsModel { TempData = WebAppTestsGlobal.GetPageTempData() };
 
         var result = await pageModel.OnGetAsync(service.Object, staffView.Id);
 
@@ -39,7 +39,7 @@ public class DetailsTests
     public async Task OnGet_MissingIdReturnsNotFound()
     {
         var service = new Mock<IStaffAppService>();
-        var pageModel = new Details { TempData = WebAppTestsGlobal.GetPageTempData() };
+        var pageModel = new DetailsModel { TempData = WebAppTestsGlobal.GetPageTempData() };
 
         var result = await pageModel.OnGetAsync(service.Object, null);
 
@@ -52,7 +52,7 @@ public class DetailsTests
         var service = new Mock<IStaffAppService>();
         service.Setup(l => l.FindAsync(It.IsAny<Guid>()))
             .ReturnsAsync((StaffViewDto?)null);
-        var pageModel = new Details { TempData = WebAppTestsGlobal.GetPageTempData() };
+        var pageModel = new DetailsModel { TempData = WebAppTestsGlobal.GetPageTempData() };
 
         var result = await pageModel.OnGetAsync(service.Object, Guid.Empty);
 

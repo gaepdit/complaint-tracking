@@ -9,10 +9,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace Cts.WebApp.Pages.Admin.Users;
 
 [Authorize(Roles = AppRole.UserAdmin)]
-public class EditRoles : PageModel
+public class EditRolesModel : PageModel
 {
     private readonly IStaffAppService _staffService;
-    public EditRoles(IStaffAppService staffService) => _staffService = staffService;
+    public EditRolesModel(IStaffAppService staffService) => _staffService = staffService;
 
     public StaffViewDto DisplayStaff { get; private set; } = default!;
     public string? OfficeName => DisplayStaff.Office?.Name;

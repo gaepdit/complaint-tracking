@@ -9,12 +9,12 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace Cts.WebApp.Pages.Account;
 
 [AllowAnonymous]
-public class Logout : PageModel
+public class LogoutModel : PageModel
 {
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly IWebHostEnvironment _environment;
 
-    public Logout(SignInManager<ApplicationUser> signInManager, IWebHostEnvironment environment)
+    public LogoutModel(SignInManager<ApplicationUser> signInManager, IWebHostEnvironment environment)
     {
         _signInManager = signInManager;
         _environment = environment;

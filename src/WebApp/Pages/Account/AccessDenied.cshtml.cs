@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace Cts.WebApp.Pages.Account;
 
 [AllowAnonymous]
-public class AccessDenied : PageModel
+public class AccessDeniedModel : PageModel
 {
     public static void OnGet()
     {

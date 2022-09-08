@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace Cts.WebApp.Pages.Account;
 
 [AllowAnonymous]
-public class Unavailable : PageModel
+public class UnavailableModel : PageModel
 {
     public static void OnGet()
     {

@@ -1,11 +1,11 @@
 ﻿@page "{id:Guid?}"
-@model Edit
+@model EditModel
 
 @{
-    ViewData["Title"] = $"Edit {Edit.ThisOption.SingularName}";
+    ViewData["Title"] = $"Edit {EditModel.ThisOption.SingularName}";
 }
 
-<h1>Edit @Edit.ThisOption.SingularName</h1>
+<h1>Edit @EditModel.ThisOption.SingularName</h1>
 <hr />
 
 <h2>@Model.OriginalName</h2>
