@@ -22,6 +22,10 @@ a {
   border-color: #1861ac;
 }
 
+.text-warning{
+  color: rgb(150, 113, 0) !important;
+}
+
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
   color: #fff;
   background-color: #1b6ec2;

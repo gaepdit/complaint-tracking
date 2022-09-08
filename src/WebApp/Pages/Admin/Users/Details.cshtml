@@ -13,7 +13,7 @@
 <h2>
     @if (!Model.DisplayStaff.Active)
     {
-        <em class="text-muted">Inactive:</em>
+        <em class="text-warning">Inactive:</em>
     }
     @Model.DisplayStaff.DisplayName
 </h2>
@@ -21,7 +21,7 @@
 @if (User.IsInRole(AppRole.UserAdmin))
 {
     <p>
-        <a asp-page="./Edit" asp-route-id="@Model.DisplayStaff.Id" class="btn btn-outline-primary btn-sm">Edit Contact Info</a>
+        <a asp-page="./Edit" asp-route-id="@Model.DisplayStaff.Id" class="btn btn-outline-primary btn-sm">Edit Profile</a>
     </p>
 }
 

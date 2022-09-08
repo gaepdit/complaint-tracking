@@ -25,7 +25,7 @@ public class Edit : PageModel
     [BindProperty]
     public ActionTypeUpdateDto Item { get; set; } = default!;
 
-    [BindProperty, HiddenInput]
+    [BindProperty]
     public string OriginalName { get; set; } = string.Empty;
 
     [TempData]

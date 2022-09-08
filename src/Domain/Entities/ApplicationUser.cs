@@ -25,5 +25,5 @@ public class ApplicationUser : IdentityUser, IEntity<string>
 
     public bool Active { get; set; } = true;
 
-    public Guid IdGuid => new(Id);
+    public Guid IdAsGuid => new(Id);
 }

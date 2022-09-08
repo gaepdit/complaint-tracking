@@ -1,4 +1,5 @@
 ﻿using Cts.Domain.Entities;
+using Cts.TestData.Offices;
 
 namespace Cts.TestData.Identity;
 
@@ -38,13 +39,16 @@ internal static partial class Data
         get
         {
             if (_users is not null) return _users;
+            var office = OfficeData.GetOffices.First();
             UserSeedItems.ForEach(delegate(ApplicationUser user)
             {
+                user.Office = office;
                 user.UserName = user.Email;
                 user.NormalizedEmail = user.Email.ToUpperInvariant();
                 user.NormalizedUserName = user.Email.ToUpperInvariant();
             });
             _users = UserSeedItems;
+            office.MasterUser = _users.First();
             return _users;
         }
     }
