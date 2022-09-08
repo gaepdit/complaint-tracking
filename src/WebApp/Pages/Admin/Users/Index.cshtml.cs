@@ -1,13 +1,15 @@
-using Cts.AppServices.Offices;
+﻿using Cts.AppServices.Offices;
 using Cts.AppServices.StaffServices;
 using Cts.Domain.Identity;
 using GaEpd.Library.ListItems;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Cts.WebApp.Pages.Admin.Users;
 
+[Authorize]
 public class IndexModel : PageModel
 {
     private readonly IOfficeAppService _officeService;

@@ -1,11 +1,13 @@
 ﻿using Cts.AppServices.ActionTypes;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.RazorHelpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Cts.WebApp.Pages.Admin.Maintenance.ActionTypes;
 
+[Authorize]
 public class IndexModel : PageModel
 {
     public IReadOnlyList<ActionTypeViewDto> Items { get; private set; } = default!;

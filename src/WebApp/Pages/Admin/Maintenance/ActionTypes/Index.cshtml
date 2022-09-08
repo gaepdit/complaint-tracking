@@ -1,4 +1,5 @@
 ﻿@page
+@using Cts.Domain.Identity
 @model IndexModel
 @{
     ViewData["Title"] = $"Site Maintenance: {IndexModel.ThisOption.PluralName}";
@@ -13,13 +14,20 @@
 <h1>@IndexModel.ThisOption.PluralName</h1>
 
 <p class="lead">The @IndexModel.ThisOption.PluralName listed below are available for selection when adding or editing Complaint Actions.</p>
+@if (User.IsInRole(AppRole.SiteMaintenance))
+{
+    <p>
+        <a asp-page="Create" class="btn btn-outline-primary btn-sm">Create New</a>
+    </p>
+}
+
 <p>
-    <a asp-page="Create" class="btn btn-outline-primary btn-sm">Create New</a>
-</p>
-<p>
-    The "Site Maintenance" role is needed to create or edit @IndexModel.ThisOption.PluralName. Select an action type to
-    edit it. Setting an item as "inactive" makes it unavailable for use in future Complaint Actions but does not affect
-    any existing Actions.
+    The "Site Maintenance" role is needed to create or edit @IndexModel.ThisOption.PluralName.
+    @if (User.IsInRole(AppRole.SiteMaintenance))
+    {
+        @:Select an item to edit it. Setting an item as "inactive" makes it unavailable for future use but does not 
+        @:affect any existing use.
+    }
 </p>
 
 @if (Model.Items.Count == 0)
@@ -38,9 +46,16 @@ else
         {
             <tr class="@(item.Id == Model.HighlightId ? "list-group-item-warning" : !item.Active ? "bg-secondary bg-opacity-25" : "")">
                 <td>
-                    <a asp-page="Edit" asp-route-id="@item.Id">
+                    @if (User.IsInRole(AppRole.SiteMaintenance))
+                    {
+                        <a asp-page="Edit" asp-route-id="@item.Id">
+                            @Html.DisplayFor(m => item.Name, "StringOrNone")
+                        </a>
+                    }
+                    else
+                    {
                         @Html.DisplayFor(m => item.Name, "StringOrNone")
-                    </a>
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(m => item.Active)

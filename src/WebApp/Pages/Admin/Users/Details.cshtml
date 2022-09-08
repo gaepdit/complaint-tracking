@@ -1,10 +1,12 @@
 ﻿@page "{id:Guid?}"
+@using Cts.Domain.Identity
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Details
 @{
     ViewData["Title"] = "User Profile: " + Model.DisplayStaff.DisplayName;
 }
 
-<h1>CTS User Profile</h1>
+<h1>User Profile</h1>
 <hr />
 <partial name="_AlertPartial" for="Message" />
 
@@ -16,12 +18,12 @@
     @Model.DisplayStaff.DisplayName
 </h2>
 
-@* @if (User.IsInRole(CtsRole.UserAdmin)) *@
-@* { *@
-<p>
-    <a asp-page="./Edit" asp-route-id="@Model.DisplayStaff.Id" class="btn btn-outline-primary btn-sm">Edit Contact Info</a>
-</p>
-@* } *@
+@if (User.IsInRole(AppRole.UserAdmin))
+{
+    <p>
+        <a asp-page="./Edit" asp-route-id="@Model.DisplayStaff.Id" class="btn btn-outline-primary btn-sm">Edit Contact Info</a>
+    </p>
+}
 
 <dl class="row">
     <dt class="col-sm-3">Email</dt>
@@ -37,12 +39,12 @@
 
 <h3>Roles</h3>
 
-@* @if (User.IsInRole(CtsRole.UserAdmin)) *@
-@* { *@
-<p>
-    <a asp-page="./EditRoles" asp-route-id="@Model.DisplayStaff.Id" class="btn btn-outline-primary btn-sm">Edit User Roles</a>
-</p>
-@* } *@
+@if (User.IsInRole(AppRole.UserAdmin))
+{
+    <p>
+        <a asp-page="./EditRoles" asp-route-id="@Model.DisplayStaff.Id" class="btn btn-outline-primary btn-sm">Edit User Roles</a>
+    </p>
+}
 
 @if (Model.Roles.Count == 0)
 {

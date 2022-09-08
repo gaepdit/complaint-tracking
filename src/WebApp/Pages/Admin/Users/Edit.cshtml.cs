@@ -1,16 +1,19 @@
 ﻿using Cts.AppServices.Offices;
 using Cts.AppServices.StaffServices;
+using Cts.Domain.Identity;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.RazorHelpers;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using GaEpd.Library.ListItems;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Cts.WebApp.Pages.Admin.Users;
 
+[Authorize(Roles = AppRole.UserAdmin)]
 public class Edit : PageModel
 {
     private readonly IStaffAppService _staffService;

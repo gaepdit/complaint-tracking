@@ -62,4 +62,9 @@ public class AppRole
         AttachmentsEditor, "Attachments Editor",
         "Can edit attachments for all complaints, including closed complaints."
     );
+    
+    public static AppRole SiteMaintenanceRole { get; } = new(
+        SiteMaintenance, "Site Maintenance",
+        "Can update values in lookup tables (drop-down lists)."
+    );
 }

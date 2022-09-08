@@ -78,7 +78,7 @@
                     <td>
                         @if (item.Email.Equals(User.Identity?.Name))
                         {
-                            <span class="badge badge-primary">YOU</span>
+                            <span class="badge bg-secondary">YOU</span>
                         }
                         <a asp-page="./Details" asp-route-id="@item.Id">@item.DisplayName</a>
                     </td>

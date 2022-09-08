@@ -6,8 +6,10 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<p class="lead">These lists are used to populate the options lists when adding or editing Complaints.</p>
-<p>Select a list to view it. The "Site Maintenance" role is needed to edit a list.</p>
+<p class="lead">
+    These lists are used to populate the options lists when adding or editing Complaints.
+    Select a list to view it.
+</p>
 
 <div class="list-group">
     <a asp-page="ActionTypes/Index" class="list-group-item list-group-item-action">@MaintenanceOption.ActionType.PluralName</a>

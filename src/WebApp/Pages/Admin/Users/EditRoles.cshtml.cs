@@ -1,12 +1,14 @@
-using Cts.AppServices.StaffServices;
+﻿using Cts.AppServices.StaffServices;
 using Cts.Domain.Identity;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.RazorHelpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Cts.WebApp.Pages.Admin.Users;
 
+[Authorize(Roles = AppRole.UserAdmin)]
 public class EditRoles : PageModel
 {
     private readonly IStaffAppService _staffService;
