@@ -1,4 +1,5 @@
 ﻿using Cts.Domain.ActionTypes;
+using Cts.Domain.Offices;
 using Cts.Infrastructure.Contexts;
 using Cts.Infrastructure.Repositories;
 using Cts.TestData.SeedData;
@@ -29,6 +30,13 @@ namespace IntegrationTests
             DbSeedDataHelpers.SeedActionTypeData(_context);
             DbContext = new CtsDbContext(_options);
             return new ActionTypeRepository(DbContext);
+        }
+
+        public IOfficeRepository GetOfficeRepository()
+        {
+            DbSeedDataHelpers.SeedOfficeData(_context);
+            DbContext = new CtsDbContext(_options);
+            return new OfficeRepository(DbContext);
         }
 
         public void Dispose() => _context.Dispose();

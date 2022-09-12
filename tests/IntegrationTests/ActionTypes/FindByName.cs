@@ -1,15 +1,15 @@
-using Cts.Domain.Offices;
+using Cts.Domain.ActionTypes;
+using Cts.TestData.ActionTypes;
 using Cts.TestData.Constants;
-using Cts.TestData.Offices;
 
-namespace IntegrationTests.Offices;
+namespace IntegrationTests.ActionTypes;
 
 public class FindByName
 {
-    private IOfficeRepository _repository = default!;
+    private IActionTypeRepository _repository = default!;
 
     [SetUp]
-    public void SetUp() => _repository = RepositoryHelper.CreateRepositoryHelper().GetOfficeRepository();
+    public void SetUp() => _repository = RepositoryHelper.CreateRepositoryHelper().GetActionTypeRepository();
 
     [TearDown]
     public void TearDown() => _repository.Dispose();
@@ -17,7 +17,7 @@ public class FindByName
     [Test]
     public async Task WhenItemExists_ReturnsItem()
     {
-        var item = OfficeData.GetOffices.First(e => e.Active);
+        var item = ActionTypeData.GetActionTypes.First(e => e.Active);
         var result = await _repository.FindByNameAsync(item.Name);
         result.Should().BeEquivalentTo(item);
     }
