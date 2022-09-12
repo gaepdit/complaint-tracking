@@ -31,14 +31,14 @@ public sealed class LocalStaffAppService : IStaffAppService
 
     public Task<StaffViewDto?> FindAsync(Guid id)
     {
-        var user = Data.GetUsers.SingleOrDefault(e => e.Id == id.ToString());
+        var user = IdentityData.GetUsers.SingleOrDefault(e => e.Id == id.ToString());
         return Task.FromResult(_mapper.Map<StaffViewDto?>(user));
     }
 
     public async Task<List<StaffViewDto>> GetListAsync(StaffSearchDto filter)
     {
         return string.IsNullOrEmpty(filter.Role)
-            ? FilterUsers(Data.GetUsers)
+            ? FilterUsers(IdentityData.GetUsers)
             : FilterUsers(await _userService.GetUsersInRoleAsync(filter.Role));
 
         List<StaffViewDto> FilterUsers(IEnumerable<ApplicationUser> usersList)

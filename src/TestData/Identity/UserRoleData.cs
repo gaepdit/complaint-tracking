@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Cts.TestData.Identity;
 
-internal static partial class Data
+internal static partial class IdentityData
 {
     private static ICollection<IdentityUserRole<string>>? _userRoles;
 

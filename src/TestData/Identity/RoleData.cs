@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Cts.TestData.Identity;
 
-internal static partial class Data
+internal static partial class IdentityData
 {
     private static IEnumerable<IdentityRole>? _roles;
 

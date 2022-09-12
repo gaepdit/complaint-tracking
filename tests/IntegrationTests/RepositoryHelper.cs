@@ -1,7 +1,7 @@
 ﻿using Cts.Domain.ActionTypes;
 using Cts.Infrastructure.Contexts;
 using Cts.Infrastructure.Repositories;
-using Cts.TestData.ActionTypes;
+using Cts.TestData.SeedData;
 using Microsoft.EntityFrameworkCore;
 using TestSupport.EfHelpers;
 
@@ -24,16 +24,9 @@ namespace IntegrationTests
 
         public void ClearChangeTracker() => _context.ChangeTracker.Clear();
 
-        private void SeedActionTypeData()
-        {
-            if (_context.ActionTypes.Any()) return;
-            _context.ActionTypes.AddRange(ActionTypeData.GetActionTypes);
-            _context.SaveChanges();
-        }
-        
         public IActionTypeRepository GetActionTypeRepository()
         {
-            SeedActionTypeData();
+            DbSeedDataHelpers.SeedActionTypeData(_context);
             DbContext = new CtsDbContext(_options);
             return new ActionTypeRepository(DbContext);
         }

@@ -18,7 +18,7 @@ public class UserStore
     [Test]
     public async Task GetUserId_ReturnsId()
     {
-        var user = Data.GetUsers.First();
+        var user = IdentityData.GetUsers.First();
         var result = await _store.GetUserIdAsync(user, CancellationToken.None);
         result.Should().BeEquivalentTo(user.Id);
     }
@@ -26,7 +26,7 @@ public class UserStore
     [Test]
     public async Task GetUserName_ReturnsUserName()
     {
-        var user = Data.GetUsers.First();
+        var user = IdentityData.GetUsers.First();
         var result = await _store.GetUserNameAsync(user, CancellationToken.None);
         result.Should().BeEquivalentTo(user.UserName);
     }
@@ -34,7 +34,7 @@ public class UserStore
     [Test]
     public async Task GetNormalizedUserName_ReturnsNormalizedUserName()
     {
-        var user = Data.GetUsers.First();
+        var user = IdentityData.GetUsers.First();
         var result = await _store.GetNormalizedUserNameAsync(user, CancellationToken.None);
         result.Should().BeEquivalentTo(user.NormalizedUserName);
     }
@@ -42,7 +42,7 @@ public class UserStore
     [Test]
     public async Task Update_WhenItemIsValid_UpdatesItem()
     {
-        var user = Data.GetUsers.First();
+        var user = IdentityData.GetUsers.First();
         user.Phone = "1";
         user.Office = new Office(Guid.NewGuid(), "abc");
 
@@ -64,7 +64,7 @@ public class UserStore
     [Test]
     public async Task FindById_ReturnsUser()
     {
-        var user = Data.GetUsers.First();
+        var user = IdentityData.GetUsers.First();
         var result = await _store.FindByIdAsync(user.Id, CancellationToken.None);
         result.Should().BeEquivalentTo(user);
     }
@@ -72,7 +72,7 @@ public class UserStore
     [Test]
     public async Task FindByName_ReturnsUser()
     {
-        var user = Data.GetUsers.First();
+        var user = IdentityData.GetUsers.First();
         var result = await _store.FindByNameAsync(user.NormalizedUserName, CancellationToken.None);
         result.Should().BeEquivalentTo(user);
     }
