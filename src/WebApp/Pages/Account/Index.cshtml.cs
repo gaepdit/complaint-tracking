@@ -1,5 +1,4 @@
-using Cts.AppServices.StaffServices;
-using Cts.AppServices.UserServices;
+using Cts.AppServices.Staff;
 using Cts.Domain.Identity;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.RazorHelpers;
@@ -17,14 +16,9 @@ public class IndexModel : PageModel
     public IList<AppRole> Roles { get; private set; } = default!;
     public DisplayMessage? Message { get; private set; }
 
-    public async Task<IActionResult> OnGetAsync(
-        [FromServices] IUserService userService,
-        [FromServices] IStaffAppService staffService)
+    public async Task<IActionResult> OnGetAsync([FromServices] IStaffAppService staffService)
     {
-        var currentUser = await userService.GetCurrentUserAsync();
-        if (currentUser is null) return Forbid();
-
-        var staff = await staffService.FindAsync(currentUser.IdAsGuid);
+        var staff = await staffService.GetCurrentUserAsync();
         if (staff == null) return Forbid();
 
         DisplayStaff = staff;

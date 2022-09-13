@@ -1,4 +1,5 @@
-﻿using Cts.AppServices.StaffServices;
+﻿using Cts.AppServices.Staff;
+using Cts.AppServices.UserServices;
 using Cts.Domain.Entities;
 using Cts.Infrastructure.Contexts;
 using Cts.Infrastructure.Identity;
@@ -28,5 +29,7 @@ public static class IdentityStores
             // Add Staff App Services
             services.AddTransient<IStaffAppService, StaffAppService>();
         }
+
+        services.AddScoped<IUserService, UserService>();
     }
 }

@@ -1,6 +1,4 @@
-﻿using GaEpd.Library.ListItems;
-
-namespace Cts.Domain.Identity;
+﻿namespace Cts.Domain.Identity;
 
 /// <summary>
 /// Authorization Roles for the application.
@@ -25,6 +23,22 @@ public class AppRole
     /// (This declaration must appear before the list of static instance types.)
     /// </summary>
     public static Dictionary<string, AppRole> AllRoles { get; } = new();
+
+    /// <summary>
+    /// Converts a list of role strings to a list of <see cref="AppRole"/> objects.
+    /// </summary>
+    /// <param name="roles">A list of role strings.</param>
+    /// <returns>A list of AppRoles.</returns>
+    public static IList<AppRole> RolesAsAppRoles(IEnumerable<string> roles)
+    {
+        var appRoles = new List<AppRole>();
+
+        foreach (var role in roles)
+            if (AllRoles.TryGetValue(role, out var appRole))
+                appRoles.Add(appRole);
+
+        return appRoles;
+    }
 
     // Roles
     // These are the strings that are stored in the database. Avoid modifying these!
@@ -62,7 +76,7 @@ public class AppRole
         AttachmentsEditor, "Attachments Editor",
         "Can edit attachments for all complaints, including closed complaints."
     );
-    
+
     public static AppRole SiteMaintenanceRole { get; } = new(
         SiteMaintenance, "Site Maintenance",
         "Can update values in lookup tables (drop-down lists)."

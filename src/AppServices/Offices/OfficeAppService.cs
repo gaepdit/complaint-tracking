@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Cts.AppServices.StaffServices;
+using Cts.AppServices.Staff;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities;
 using Cts.Domain.Offices;

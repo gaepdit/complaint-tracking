@@ -1,4 +1,4 @@
-﻿using Cts.AppServices.StaffServices;
+﻿using Cts.AppServices.Staff;
 using Cts.Domain.Entities;
 using Cts.LocalRepository.Identity;
 using Microsoft.AspNetCore.Identity;

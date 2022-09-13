@@ -1,4 +1,4 @@
-﻿using Cts.AppServices.StaffServices;
+﻿using Cts.AppServices.Staff;
 
 namespace Cts.AppServices.Offices;
 

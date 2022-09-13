@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Cts.AppServices.ActionTypes;
 using Cts.AppServices.Offices;
-using Cts.AppServices.StaffServices;
+using Cts.AppServices.Staff;
 using Cts.Domain.Entities;
 
 namespace Cts.AppServices.AutoMapper;

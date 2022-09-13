@@ -1,8 +1,7 @@
-﻿using Cts.AppServices.StaffServices;
-using Cts.Domain.Entities;
+﻿using Cts.Domain.Entities;
 using FluentValidation;
 
-namespace Cts.AppServices.ActionTypes;
+namespace Cts.AppServices.Staff;
 
 public class StaffUpdateValidator : AbstractValidator<StaffUpdateDto>
 {

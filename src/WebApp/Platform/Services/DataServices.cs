@@ -1,10 +1,7 @@
-﻿using Cts.AppServices.UserServices;
-using Cts.Domain.ActionTypes;
+﻿using Cts.Domain.ActionTypes;
 using Cts.Domain.Offices;
 using Cts.Infrastructure.Contexts;
-using Cts.Infrastructure.Identity;
 using Cts.Infrastructure.Repositories;
-using Cts.LocalRepository.Identity;
 using Cts.LocalRepository.Repositories;
 using Cts.WebApp.Platform.Settings;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +21,6 @@ public static class DataServices
                 opts.UseInMemoryDatabase("CTS_DB"));
 
             // Uses static data if no database is built.
-            services.AddScoped<IUserService, LocalUserService>();
             services.AddSingleton<IActionTypeRepository, LocalActionTypeRepository>();
             services.AddSingleton<IOfficeRepository, LocalOfficeRepository>();
         }
@@ -34,7 +30,6 @@ public static class DataServices
                 opts.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                     x => x.MigrationsAssembly("Infrastructure")));
 
-            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IActionTypeRepository, ActionTypeRepository>();
             services.AddScoped<IOfficeRepository, OfficeRepository>();
         }
