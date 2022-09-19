@@ -13,7 +13,7 @@ public class ApplicationUser : IdentityUser, IEntity<string>
     [StringLength(150)]
     public string LastName { get; init; } = string.Empty;
 
-    
+
     // Editable user/staff properties
     public const int MaxPhoneLength = 25;
 
@@ -24,6 +24,4 @@ public class ApplicationUser : IdentityUser, IEntity<string>
     public Office? Office { get; set; }
 
     public bool Active { get; set; } = true;
-
-    public Guid IdAsGuid => new(Id);
 }

@@ -94,7 +94,7 @@ public sealed class StaffAppService : IStaffAppService
         if (user is null) throw new EntityNotFoundException(typeof(ApplicationUser), resource.Id);
 
         user.Phone = resource.Phone;
-        user.Office = await _officeRepository.GetAsync(resource.OfficeId!.Value);
+        user.Office = resource.OfficeId == null ? null : await _officeRepository.GetAsync(resource.OfficeId.Value);
         user.Active = resource.Active;
 
         _context.Attach(user);
