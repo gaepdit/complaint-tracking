@@ -17,12 +17,12 @@
 @if (User.IsInRole(AppRole.SiteMaintenance))
 {
     <p>
-        <a asp-page="Create" class="btn btn-outline-primary btn-sm">Create New</a>
+        <a asp-page="Add" class="btn btn-outline-primary btn-sm">Add New</a>
     </p>
 }
 
 <p>
-    The "Site Maintenance" role is needed to create or edit @IndexModel.ThisOption.PluralName.
+    The "Site Maintenance" role is needed to add or edit @IndexModel.ThisOption.PluralName.
     @if (User.IsInRole(AppRole.SiteMaintenance))
     {
         @:Select an item to edit it. Setting an item as "inactive" makes it unavailable for future use but does not 

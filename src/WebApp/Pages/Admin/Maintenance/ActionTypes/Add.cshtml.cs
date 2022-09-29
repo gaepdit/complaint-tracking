@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace Cts.WebApp.Pages.Admin.Maintenance.ActionTypes;
 
 [Authorize(Roles = AppRole.SiteMaintenance)]
-public class CreateModel : PageModel
+public class AddModel : PageModel
 {
     [BindProperty]
     public ActionTypeCreateDto Item { get; set; } = default!;

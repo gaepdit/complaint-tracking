@@ -1,7 +1,7 @@
 ﻿@page
-@model CreateModel
+@model AddModel
 @{
-    ViewData["Title"] = $"Add a new {CreateModel.ThisOption.SingularName}";
+    ViewData["Title"] = $"Add a new {AddModel.ThisOption.SingularName}";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="mt-3 mb-1">
-            <button id="SubmitButton" type="submit" class="btn btn-primary col-md-5 me-2">Add New @CreateModel.ThisOption.SingularName</button>
+            <button id="SubmitButton" type="submit" class="btn btn-primary col-md-5 me-2">Add New @AddModel.ThisOption.SingularName</button>
             <a asp-page="Index" class="btn btn-outline-secondary col-md-2">Cancel</a>
         </div>
         <div class="text-danger mt-3">* denotes a required field</div>

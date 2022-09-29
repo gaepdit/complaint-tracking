@@ -42,7 +42,7 @@
 
 ## Complaint details & user actions
 
-* `/Admin/Complaints/Create`
+* `/Admin/Complaints/Add`
 * `/Admin/Complaints/Details/{id}`
 * `/Admin/Complaints/Details/Approve/{id}`
 * `/Admin/Complaints/Details/Assign/{id}`
@@ -100,7 +100,7 @@
 * `/Admin/Maintenance/Offices`
 * `/Admin/Maintenance/ActionTypes`
 * `/Admin/Maintenance/Concerns`
-* `/Admin/Maintenance/[type]/Create`
+* `/Admin/Maintenance/[type]/Add`
 * `/Admin/Maintenance/[type]/Edit/{id}`
 
 ### Redirects

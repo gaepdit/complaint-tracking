@@ -6,7 +6,7 @@ using Cts.TestData.Constants;
 
 namespace AppServicesTests.ActionTypes;
 
-public class Create
+public class Add
 {
     [Test]
     public async Task WhenResourceIsValid_ReturnsId()
