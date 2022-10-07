@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Cts.AppServices.Offices;
+using Cts.WebApp.Models;
+using Cts.WebApp.Platform.RazorHelpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MyAppRoot.AppServices.Offices;
-using MyAppRoot.WebApp.Models;
-using MyAppRoot.WebApp.Platform.RazorHelpers;
 
-namespace MyAppRoot.WebApp.Pages.Admin.Maintenance.Offices;
+namespace Cts.WebApp.Pages.Admin.Maintenance.Offices;
 
 [Authorize]
 public class IndexModel : PageModel

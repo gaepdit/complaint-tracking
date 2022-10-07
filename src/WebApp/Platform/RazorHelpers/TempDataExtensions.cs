@@ -1,8 +1,8 @@
+using Cts.WebApp.Models;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using MyAppRoot.WebApp.Models;
 using System.Text.Json;
 
-namespace MyAppRoot.WebApp.Platform.RazorHelpers;
+namespace Cts.WebApp.Platform.RazorHelpers;
 
 public static class TempDataExtensions
 {

@@ -1,11 +1,11 @@
-﻿using FluentValidation;
+﻿using Cts.AppServices.AutoMapper;
+using Cts.AppServices.Offices;
+using Cts.AppServices.Staff;
+using Cts.Domain.Offices;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using MyAppRoot.AppServices.AutoMapper;
-using MyAppRoot.AppServices.Offices;
-using MyAppRoot.AppServices.Staff;
-using MyAppRoot.Domain.Offices;
 
-namespace MyAppRoot.AppServices.ServiceCollectionExtensions;
+namespace Cts.AppServices.ServiceCollectionExtensions;
 
 public static class AppServices
 {

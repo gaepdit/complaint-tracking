@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication.AzureAD.UI;
+﻿using Cts.Domain.Identity;
+using Cts.WebApp.Platform.Local;
+using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MyAppRoot.Domain.Identity;
-using MyAppRoot.WebApp.Platform.Local;
 
-namespace MyAppRoot.WebApp.Pages.Account;
+namespace Cts.WebApp.Pages.Account;
 
 [AllowAnonymous]
 public class LogoutModel : PageModel

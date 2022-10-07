@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Diagnostics.CodeAnalysis;
 
-namespace MyAppRoot.TestData.Identity;
+namespace Cts.TestData.Identity;
 
 internal static partial class IdentityData
 {

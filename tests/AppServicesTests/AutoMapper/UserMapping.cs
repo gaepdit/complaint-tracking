@@ -1,8 +1,8 @@
-using MyAppRoot.AppServices.Offices;
-using MyAppRoot.AppServices.Staff;
-using MyAppRoot.Domain.Identity;
-using MyAppRoot.Domain.Offices;
-using MyAppRoot.TestData.Constants;
+using Cts.AppServices.Offices;
+using Cts.AppServices.Staff;
+using Cts.Domain.Identity;
+using Cts.Domain.Offices;
+using Cts.TestData.Constants;
 
 namespace AppServicesTests.AutoMapper;
 

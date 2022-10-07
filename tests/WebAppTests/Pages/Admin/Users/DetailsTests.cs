@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MyAppRoot.AppServices.Staff;
-using MyAppRoot.Domain.Identity;
-using MyAppRoot.TestData.Constants;
-using MyAppRoot.WebApp.Pages.Admin.Users;
+using Cts.AppServices.Staff;
+using Cts.Domain.Identity;
+using Cts.TestData.Constants;
+using Cts.WebApp.Pages.Admin.Users;
 
 namespace WebAppTests.Pages.Admin.Users;
 

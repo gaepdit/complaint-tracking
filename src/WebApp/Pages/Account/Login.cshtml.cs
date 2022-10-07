@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Cts.WebApp.Models;
+using Cts.WebApp.Platform.RazorHelpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MyAppRoot.WebApp.Models;
-using MyAppRoot.WebApp.Platform.RazorHelpers;
 
-namespace MyAppRoot.WebApp.Pages.Account;
+namespace Cts.WebApp.Pages.Account;
 
 [AllowAnonymous]
 public class LoginModel : PageModel

@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Cts.AppServices.Staff;
+using Cts.Domain.Identity;
+using Cts.LocalRepository.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using MyAppRoot.AppServices.Staff;
-using MyAppRoot.Domain.Identity;
-using MyAppRoot.LocalRepository.Identity;
 
-namespace MyAppRoot.LocalRepository.ServiceCollectionExtensions;
+namespace Cts.LocalRepository.ServiceCollectionExtensions;
 
 public static class IdentityServices
 {

@@ -1,6 +1,6 @@
-﻿using MyAppRoot.Domain.Identity;
+﻿using Cts.Domain.Identity;
 
-namespace MyAppRoot.AppServices.UserServices;
+namespace Cts.AppServices.UserServices;
 
 public interface IUserService
 {

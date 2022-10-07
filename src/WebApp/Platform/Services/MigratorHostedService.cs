@@ -1,12 +1,12 @@
+using Cts.Domain.Identity;
+using Cts.Infrastructure.Contexts;
+using Cts.TestData.SeedData;
+using Cts.WebApp.Platform.Local;
+using Cts.WebApp.Platform.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using MyAppRoot.Domain.Identity;
-using MyAppRoot.Infrastructure.Contexts;
-using MyAppRoot.TestData.SeedData;
-using MyAppRoot.WebApp.Platform.Local;
-using MyAppRoot.WebApp.Platform.Settings;
 
-namespace MyAppRoot.WebApp.Platform.Services;
+namespace Cts.WebApp.Platform.Services;
 
 public class MigratorHostedService : IHostedService
 {

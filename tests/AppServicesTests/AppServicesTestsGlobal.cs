@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using MyAppRoot.AppServices.AutoMapper;
+using Cts.AppServices.AutoMapper;
 
 namespace AppServicesTests;
 

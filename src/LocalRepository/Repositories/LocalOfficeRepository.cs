@@ -1,8 +1,8 @@
-﻿using MyAppRoot.Domain.Identity;
-using MyAppRoot.Domain.Offices;
-using MyAppRoot.TestData.Offices;
+﻿using Cts.Domain.Identity;
+using Cts.Domain.Offices;
+using Cts.TestData.Offices;
 
-namespace MyAppRoot.LocalRepository.Repositories;
+namespace Cts.LocalRepository.Repositories;
 
 public sealed class LocalOfficeRepository : BaseRepository<Office, Guid>, IOfficeRepository
 {

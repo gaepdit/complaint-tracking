@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
-namespace MyAppRoot.WebApp.Platform.Services;
+namespace Cts.WebApp.Platform.Services;
 
 public static class AuthenticationServices
 {

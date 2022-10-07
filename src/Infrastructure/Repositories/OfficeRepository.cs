@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MyAppRoot.Domain.Identity;
-using MyAppRoot.Domain.Offices;
-using MyAppRoot.Infrastructure.Contexts;
+﻿using Cts.Domain.Identity;
+using Cts.Domain.Offices;
+using Cts.Infrastructure.Contexts;
+using Microsoft.EntityFrameworkCore;
 
-namespace MyAppRoot.Infrastructure.Repositories;
+namespace Cts.Infrastructure.Repositories;
 
 public sealed class OfficeRepository : BaseRepository<Office, Guid>, IOfficeRepository
 {

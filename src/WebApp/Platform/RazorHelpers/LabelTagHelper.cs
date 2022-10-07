@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace MyAppRoot.WebApp.Platform.RazorHelpers;
+namespace Cts.WebApp.Platform.RazorHelpers;
 
 /// <summary>
 /// <see cref="ITagHelper"/> implementation targeting <c>&lt;label&gt;</c> elements with an <c>asp-for</c> attribute.

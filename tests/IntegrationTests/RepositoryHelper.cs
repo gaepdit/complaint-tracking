@@ -1,9 +1,9 @@
 ﻿using GaEpd.AppLibrary.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using MyAppRoot.Domain.Offices;
-using MyAppRoot.Infrastructure.Contexts;
-using MyAppRoot.Infrastructure.Repositories;
-using MyAppRoot.TestData.SeedData;
+using Cts.Domain.Offices;
+using Cts.Infrastructure.Contexts;
+using Cts.Infrastructure.Repositories;
+using Cts.TestData.SeedData;
 using TestSupport.EfHelpers;
 
 namespace IntegrationTests;

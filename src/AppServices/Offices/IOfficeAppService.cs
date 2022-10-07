@@ -1,7 +1,7 @@
-﻿using GaEpd.AppLibrary.ListItems;
-using MyAppRoot.AppServices.Staff;
+﻿using Cts.AppServices.Staff;
+using GaEpd.AppLibrary.ListItems;
 
-namespace MyAppRoot.AppServices.Offices;
+namespace Cts.AppServices.Offices;
 
 public interface IOfficeAppService : IDisposable
 {

@@ -1,7 +1,7 @@
-﻿using JetBrains.Annotations;
-using MyAppRoot.Domain.Identity;
+﻿using Cts.Domain.Identity;
+using JetBrains.Annotations;
 
-namespace MyAppRoot.Domain.Offices;
+namespace Cts.Domain.Offices;
 
 public class Office : AuditableEntity
 {

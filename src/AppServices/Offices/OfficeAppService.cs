@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
+using Cts.AppServices.Staff;
+using Cts.AppServices.UserServices;
+using Cts.Domain.Offices;
 using GaEpd.AppLibrary.ListItems;
-using MyAppRoot.AppServices.Staff;
-using MyAppRoot.AppServices.UserServices;
-using MyAppRoot.Domain.Offices;
 
-namespace MyAppRoot.AppServices.Offices;
+namespace Cts.AppServices.Offices;
 
 public sealed class OfficeAppService : IOfficeAppService
 {

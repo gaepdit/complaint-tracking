@@ -1,7 +1,7 @@
+using Cts.Domain.Offices;
 using Microsoft.AspNetCore.Identity;
-using MyAppRoot.Domain.Offices;
 
-namespace MyAppRoot.Domain.Identity;
+namespace Cts.Domain.Identity;
 
 public class ApplicationUser : IdentityUser, IEntity<string>
 {

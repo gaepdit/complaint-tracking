@@ -1,18 +1,18 @@
+using Cts.AppServices.Staff;
+using Cts.Domain.Identity;
+using Cts.WebApp.Models;
+using Cts.WebApp.Platform.Local;
+using Cts.WebApp.Platform.RazorHelpers;
+using Cts.WebApp.Platform.Settings;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MyAppRoot.AppServices.Staff;
-using MyAppRoot.Domain.Identity;
-using MyAppRoot.WebApp.Models;
-using MyAppRoot.WebApp.Platform.Local;
-using MyAppRoot.WebApp.Platform.RazorHelpers;
-using MyAppRoot.WebApp.Platform.Settings;
 using System.Security.Claims;
 
-namespace MyAppRoot.WebApp.Pages.Account;
+namespace Cts.WebApp.Pages.Account;
 
 [AllowAnonymous]
 public class ExternalLoginModel : PageModel

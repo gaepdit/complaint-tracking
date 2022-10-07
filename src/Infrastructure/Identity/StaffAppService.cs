@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
+using Cts.AppServices.Staff;
+using Cts.AppServices.UserServices;
+using Cts.Domain.Identity;
+using Cts.Domain.Offices;
+using Cts.Infrastructure.Contexts;
 using GaEpd.AppLibrary.Domain.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using MyAppRoot.AppServices.Staff;
-using MyAppRoot.AppServices.UserServices;
-using MyAppRoot.Domain.Identity;
-using MyAppRoot.Domain.Offices;
-using MyAppRoot.Infrastructure.Contexts;
 
-namespace MyAppRoot.Infrastructure.Identity;
+namespace Cts.Infrastructure.Identity;
 
 public sealed class StaffAppService : IStaffAppService
 {

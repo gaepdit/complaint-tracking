@@ -1,7 +1,7 @@
-﻿using MyAppRoot.Domain.Offices;
+﻿using Cts.Domain.Offices;
 using System.ComponentModel.DataAnnotations;
 
-namespace MyAppRoot.AppServices.Offices;
+namespace Cts.AppServices.Offices;
 
 public class OfficeViewDto
 {

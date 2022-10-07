@@ -1,4 +1,4 @@
-﻿namespace MyAppRoot.Domain.Offices;
+﻿namespace Cts.Domain.Offices;
 
 /// <inheritdoc />
 public class OfficeManager : IOfficeManager

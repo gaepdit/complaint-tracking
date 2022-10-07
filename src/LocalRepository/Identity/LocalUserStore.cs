@@ -1,8 +1,8 @@
+using Cts.Domain.Identity;
+using Cts.TestData.Identity;
 using Microsoft.AspNetCore.Identity;
-using MyAppRoot.Domain.Identity;
-using MyAppRoot.TestData.Identity;
 
-namespace MyAppRoot.LocalRepository.Identity;
+namespace Cts.LocalRepository.Identity;
 
 /// <summary>
 /// This store is only partially implemented. UserStore is read-only, except Update. UserRoleStore is read/write.

@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MyAppRoot.Domain.Offices;
-using MyAppRoot.Infrastructure.Contexts;
-using MyAppRoot.Infrastructure.Repositories;
-using MyAppRoot.LocalRepository.Repositories;
-using MyAppRoot.WebApp.Platform.Settings;
+﻿using Cts.Domain.Offices;
+using Cts.Infrastructure.Contexts;
+using Cts.Infrastructure.Repositories;
+using Cts.LocalRepository.Repositories;
+using Cts.WebApp.Platform.Settings;
+using Microsoft.EntityFrameworkCore;
 
-namespace MyAppRoot.WebApp.Platform.Services;
+namespace Cts.WebApp.Platform.Services;
 
 public static class DataServices
 {

@@ -1,6 +1,6 @@
 using GaEpd.AppLibrary.Pagination;
-using MyAppRoot.LocalRepository.Repositories;
-using MyAppRoot.TestData.Constants;
+using Cts.LocalRepository.Repositories;
+using Cts.TestData.Constants;
 
 namespace LocalRepositoryTests.BaseReadOnlyRepository;
 

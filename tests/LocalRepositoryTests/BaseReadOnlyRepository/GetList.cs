@@ -1,4 +1,4 @@
-using MyAppRoot.LocalRepository.Repositories;
+using Cts.LocalRepository.Repositories;
 
 namespace LocalRepositoryTests.BaseReadOnlyRepository;
 

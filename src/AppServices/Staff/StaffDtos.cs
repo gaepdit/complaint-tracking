@@ -1,8 +1,8 @@
-﻿using MyAppRoot.AppServices.Offices;
-using MyAppRoot.Domain.Identity;
+﻿using Cts.AppServices.Offices;
+using Cts.Domain.Identity;
 using System.ComponentModel.DataAnnotations;
 
-namespace MyAppRoot.AppServices.Staff;
+namespace Cts.AppServices.Staff;
 
 public record StaffSearchDto
 {

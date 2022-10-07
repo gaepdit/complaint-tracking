@@ -1,4 +1,4 @@
-﻿namespace MyAppRoot.Domain.Data;
+﻿namespace Cts.Domain.Data;
 
 public static partial class Data
 {

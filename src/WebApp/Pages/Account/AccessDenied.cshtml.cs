@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace MyAppRoot.WebApp.Pages.Account;
+namespace Cts.WebApp.Pages.Account;
 
 [AllowAnonymous]
 public class AccessDeniedModel : PageModel

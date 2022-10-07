@@ -1,4 +1,4 @@
-﻿namespace MyAppRoot.TestData.Constants;
+﻿namespace Cts.TestData.Constants;
 
 public static class TestConstants
 {

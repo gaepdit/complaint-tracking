@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
-using MyAppRoot.Domain.Identity;
-using MyAppRoot.LocalRepository.Identity;
-using MyAppRoot.TestData.Identity;
+using Cts.Domain.Identity;
+using Cts.LocalRepository.Identity;
+using Cts.TestData.Identity;
 
 namespace LocalRepositoryTests.Identity;
 

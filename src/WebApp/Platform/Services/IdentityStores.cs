@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
-using MyAppRoot.AppServices.Staff;
-using MyAppRoot.AppServices.UserServices;
-using MyAppRoot.Domain.Identity;
-using MyAppRoot.Infrastructure.Contexts;
-using MyAppRoot.Infrastructure.Identity;
-using MyAppRoot.LocalRepository.ServiceCollectionExtensions;
-using MyAppRoot.WebApp.Platform.Settings;
+﻿using Cts.AppServices.Staff;
+using Cts.AppServices.UserServices;
+using Cts.Domain.Identity;
+using Cts.Infrastructure.Contexts;
+using Cts.Infrastructure.Identity;
+using Cts.LocalRepository.ServiceCollectionExtensions;
+using Cts.WebApp.Platform.Settings;
+using Microsoft.AspNetCore.Identity;
 
-namespace MyAppRoot.WebApp.Platform.Services;
+namespace Cts.WebApp.Platform.Services;
 
 public static class IdentityStores
 {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using Mindscape.Raygun4Net.AspNetCore;
 
-namespace MyAppRoot.WebApp.Platform.Raygun;
+namespace Cts.WebApp.Platform.Raygun;
 
 /// <inheritdoc />
 public class ErrorLogger : IErrorLogger

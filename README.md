@@ -1,71 +1,30 @@
-# Template Application
+# Complaint Tracking System Application
 
-This repository contains a template for use in creating new web applications.
+The Complaint Tracking System (CTS) is an online application to allow EPD staff to enter, assign, review, and close complaints received from the public.
 
-[![.NET Test](https://github.com/gaepdit/template-app/actions/workflows/dotnet-test.yml/badge.svg)](https://github.com/gaepdit/template-app/actions/workflows/dotnet-test.yml)
-[![CodeQL](https://github.com/gaepdit/template-app/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/gaepdit/template-app/actions/workflows/codeql-analysis.yml)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=gaepdit_template-app&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=gaepdit_GITHUB_REPO_NAME)
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=gaepdit_template-app&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=gaepdit_GITHUB_REPO_NAME)
-
-*[The SonarCloud badges require a SonarCloud project to be configured.]*
-
-
----
-
-## Template use and setup
-
-Do the following steps to customize the app:
-
-* Update this README file with details on the new application.
-
-* Rename the solution file from "template-app.sln".
-
-* Rename or search and replace the following terms:
-
-    - *MY_APP_NAME* - Search and replace with the readable display name of the app.
-    - `MyAppRoot` - Rename with the root namespace for the app.
-        - Update the `<RootNamespace>` element in each csproj file.
-        - Update the coverlet commands in the "sonarcloud-scan.yml" file.
-        - Update the exclusions in the "finecodecoverage-settings.xml" file.
-    - "template-app" - Search and replace with the repository name. This will affect the following:
-        - The LocalDB database name in the "appsettings.json" and "AppDbContextFactory" files.
-        - The project key in the "sonarcloud-scan.yml" workflow file.
-        - The URLs in the GitHub and SonarCloud badges above.
-
-* Update the "docs/Site map.md" file.
-
-* Change branding colors in "src\WebApp\wwwroot\css\site.css".
-
-* Put copies of "appsettings.*.json" and "web.config" files in the "app-config" repository.
-
-
-## External services
-
-The following external services can be configured for new applications:
-
-* [Azure App registration](https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade) to manage employee authentication. *(Add configuration settings in the "AzureAd" section in app settings.)*
-* [Raygun](https://app.raygun.com/) for crash reporting and performance monitoring. *(Add the API key to the "RaygunSettings" section in app settings.)*
-* [SonarCloud](https://sonarcloud.io/projects) for code quality and security scanning. *(Update the project key in the "sonarcloud-scan.yml" workflow file and in the badges above.)*
-* [Better Uptime](https://betterstack.com/better-uptime) for site uptime monitoring. *(No app configuration needed.)*
-
+[![.NET Test](https://github.com/gaepdit/complaint-tracking/actions/workflows/dotnet-test.yml/badge.svg)](https://github.com/gaepdit/complaint-tracking/actions/workflows/dotnet-test.yml)
+[![CodeQL](https://github.com/gaepdit/complaint-tracking/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/gaepdit/complaint-tracking/actions/workflows/codeql-analysis.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=gaepdit.complaint-tracking&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=gaepdit.complaint-tracking)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=gaepdit.complaint-tracking&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=gaepdit.complaint-tracking)
 
 ---
 
 ## Background and project requirements
 
-TODO
+Public complaints are time-critical and high-profile public information. The CTS is used by staff throughout EPD.
 
+* The application will allow EPD staff to enter new complaints, review and update existing complaints, and remove complaints erroneously entered.
+* The admin side of the application will be restricted to authenticated EPD employees.
+* A public web site will be available for reviewing or searching for complaints.
 
 ## Info for developers
 
 This is an ASP.NET 6 web application.
 
-
 ### Prerequisites for development
 
 + [Visual Studio](https://www.visualstudio.com/vs/) or similar
 + [.NET 6.0 SDK](https://dotnet.microsoft.com/download)
-
 
 ### Project organization
 
@@ -78,7 +37,6 @@ The solution contains the following projects:
 * **WebApp** — The front end web application.
 
 There are also corresponding unit test projects for each, plus a **TestData** project containing test data for development and testing.
-
 
 ### Launch profiles
 

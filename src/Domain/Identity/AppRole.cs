@@ -1,4 +1,4 @@
-﻿namespace MyAppRoot.Domain.Identity;
+﻿namespace Cts.Domain.Identity;
 
 /// <summary>
 /// Authorization Roles for the application.

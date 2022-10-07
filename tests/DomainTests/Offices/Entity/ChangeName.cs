@@ -1,4 +1,4 @@
-using MyAppRoot.Domain.Offices;
+using Cts.Domain.Offices;
 
 namespace DomainTests.Offices.Entity;
 

@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Cts.Domain.Identity;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using MyAppRoot.Domain.Identity;
 
-namespace MyAppRoot.AppServices.UserServices;
+namespace Cts.AppServices.UserServices;
 
 public class UserService : IUserService
 {

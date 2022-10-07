@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace MyAppRoot.Infrastructure.Contexts;
+namespace Cts.Infrastructure.Contexts;
 
 /// <summary>
 /// Facilitates some EF Core Tools commands. See "Design-time DbContext Creation":
@@ -12,7 +12,7 @@ public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
     public AppDbContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-        optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=template-app;");
+        optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=cts-local;");
         return new AppDbContext(optionsBuilder.Options);
     }
 }

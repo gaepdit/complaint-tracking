@@ -2,11 +2,11 @@ using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MyAppRoot.AppServices.Offices;
-using MyAppRoot.TestData.Constants;
-using MyAppRoot.WebApp.Models;
-using MyAppRoot.WebApp.Pages.Admin.Maintenance.Offices;
-using MyAppRoot.WebApp.Platform.RazorHelpers;
+using Cts.AppServices.Offices;
+using Cts.TestData.Constants;
+using Cts.WebApp.Models;
+using Cts.WebApp.Pages.Admin.Maintenance.Offices;
+using Cts.WebApp.Platform.RazorHelpers;
 
 namespace WebAppTests.Pages.Admin.Maintenance.Offices;
 

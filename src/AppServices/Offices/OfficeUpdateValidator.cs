@@ -1,7 +1,7 @@
-﻿using FluentValidation;
-using MyAppRoot.Domain.Offices;
+﻿using Cts.Domain.Offices;
+using FluentValidation;
 
-namespace MyAppRoot.AppServices.Offices;
+namespace Cts.AppServices.Offices;
 
 public class OfficeUpdateValidator : AbstractValidator<OfficeUpdateDto>
 {

@@ -2,7 +2,7 @@
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 
-namespace MyAppRoot.Domain.ValueObjects;
+namespace Cts.Domain.ValueObjects;
 
 [Owned]
 public record Address : ValueObject

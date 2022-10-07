@@ -1,5 +1,5 @@
-using MyAppRoot.Domain.Offices;
-using MyAppRoot.TestData.Offices;
+using Cts.Domain.Offices;
+using Cts.TestData.Offices;
 
 namespace IntegrationTests.BaseReadOnlyRepository;
 

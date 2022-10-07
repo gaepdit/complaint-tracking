@@ -4,7 +4,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <RootNamespace>MyAppRoot.WebApp</RootNamespace>
+        <RootNamespace>Cts.WebApp</RootNamespace>
         <AssemblyVersion>2022.10.6</AssemblyVersion>
     </PropertyGroup>
 

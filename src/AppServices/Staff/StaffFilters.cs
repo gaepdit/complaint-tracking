@@ -1,6 +1,6 @@
-﻿using MyAppRoot.Domain.Identity;
+﻿using Cts.Domain.Identity;
 
-namespace MyAppRoot.AppServices.Staff;
+namespace Cts.AppServices.Staff;
 
 public static class StaffFilters
 {

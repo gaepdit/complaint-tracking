@@ -1,9 +1,9 @@
+using Cts.Domain.Identity;
+using Cts.Domain.Offices;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using MyAppRoot.Domain.Identity;
-using MyAppRoot.Domain.Offices;
 
-namespace MyAppRoot.Infrastructure.Contexts;
+namespace Cts.Infrastructure.Contexts;
 
 public class AppDbContext : IdentityDbContext<ApplicationUser>
 {

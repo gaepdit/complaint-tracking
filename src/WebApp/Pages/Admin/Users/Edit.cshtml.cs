@@ -1,17 +1,17 @@
-﻿using FluentValidation;
+﻿using Cts.AppServices.Offices;
+using Cts.AppServices.Staff;
+using Cts.Domain.Identity;
+using Cts.WebApp.Models;
+using Cts.WebApp.Platform.RazorHelpers;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using GaEpd.AppLibrary.ListItems;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using MyAppRoot.AppServices.Offices;
-using MyAppRoot.AppServices.Staff;
-using MyAppRoot.Domain.Identity;
-using MyAppRoot.WebApp.Models;
-using MyAppRoot.WebApp.Platform.RazorHelpers;
 
-namespace MyAppRoot.WebApp.Pages.Admin.Users;
+namespace Cts.WebApp.Pages.Admin.Users;
 
 [Authorize(Roles = AppRole.UserAdmin)]
 public class EditModel : PageModel

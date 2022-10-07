@@ -9,6 +9,6 @@
         [LocalRepositoryTests]*
         [WebAppTests]*
         [TestData]*
-        [Infrastructure]MyAppRoot.Infrastructure.Migrations.*
+        [Infrastructure]Cts.Infrastructure.Migrations.*
   </Exclude>
 </FineCodeCoverage>

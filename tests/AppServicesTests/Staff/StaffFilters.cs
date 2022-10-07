@@ -1,5 +1,5 @@
-﻿using MyAppRoot.AppServices.Staff;
-using MyAppRoot.TestData.Identity;
+﻿using Cts.AppServices.Staff;
+using Cts.TestData.Identity;
 
 namespace AppServicesTests.Staff;
 

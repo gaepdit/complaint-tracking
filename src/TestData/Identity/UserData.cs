@@ -1,7 +1,7 @@
-﻿using MyAppRoot.Domain.Identity;
-using MyAppRoot.TestData.Offices;
+﻿using Cts.Domain.Identity;
+using Cts.TestData.Offices;
 
-namespace MyAppRoot.TestData.Identity;
+namespace Cts.TestData.Identity;
 
 internal static partial class IdentityData
 {

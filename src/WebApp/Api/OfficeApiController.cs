@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MyAppRoot.AppServices.Offices;
+﻿using Cts.AppServices.Offices;
+using Microsoft.AspNetCore.Mvc;
 
-namespace MyAppRoot.WebApp.Api;
+namespace Cts.WebApp.Api;
 
 [ApiController]
 [Route("api/office")]

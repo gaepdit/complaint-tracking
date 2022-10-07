@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
-using MyAppRoot.Domain.Identity;
+﻿using Cts.Domain.Identity;
+using Microsoft.AspNetCore.Identity;
 
-namespace MyAppRoot.AppServices.Staff;
+namespace Cts.AppServices.Staff;
 
 public interface IStaffAppService : IDisposable
 {

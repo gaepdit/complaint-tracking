@@ -1,7 +1,7 @@
-﻿using FluentValidation;
-using MyAppRoot.Domain.Identity;
+﻿using Cts.Domain.Identity;
+using FluentValidation;
 
-namespace MyAppRoot.AppServices.Staff;
+namespace Cts.AppServices.Staff;
 
 public class StaffUpdateValidator : AbstractValidator<StaffUpdateDto>
 {

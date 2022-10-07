@@ -1,6 +1,6 @@
-﻿using MyAppRoot.Domain.Offices;
+﻿using Cts.Domain.Offices;
 
-namespace MyAppRoot.TestData.Offices;
+namespace Cts.TestData.Offices;
 
 internal static class OfficeData
 {

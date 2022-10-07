@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MyAppRoot.AppServices.Offices;
-using MyAppRoot.AppServices.Staff;
-using MyAppRoot.Domain.Identity;
-using MyAppRoot.TestData.Constants;
-using MyAppRoot.WebApp.Models;
-using MyAppRoot.WebApp.Pages.Admin.Users;
-using MyAppRoot.WebApp.Platform.RazorHelpers;
+using Cts.AppServices.Offices;
+using Cts.AppServices.Staff;
+using Cts.Domain.Identity;
+using Cts.TestData.Constants;
+using Cts.WebApp.Models;
+using Cts.WebApp.Pages.Admin.Users;
+using Cts.WebApp.Platform.RazorHelpers;
 
 namespace WebAppTests.Pages.Admin.Users;
 

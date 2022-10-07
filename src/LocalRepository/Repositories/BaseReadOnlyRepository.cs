@@ -3,7 +3,7 @@ using GaEpd.AppLibrary.Domain.Repositories;
 using GaEpd.AppLibrary.Pagination;
 using System.Linq.Expressions;
 
-namespace MyAppRoot.LocalRepository.Repositories;
+namespace Cts.LocalRepository.Repositories;
 
 public class BaseReadOnlyRepository<TEntity, TKey> : IReadOnlyRepository<TEntity, TKey>
     where TEntity : IEntity<TKey>

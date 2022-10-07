@@ -146,15 +146,15 @@ a:focus:not(.btn) {
 /* Branding
 -------------------------------------------------- */
 .bg-brand {
-    background-color: #671010;
+    background-color: #105367;
 }
 
 .bg-brand a {
-    color: #ffd5d5;
+    color: #c0f1ff;
 }
 
 .bg-brand a:hover, .bg-brand a:focus {
-    color: #ffb6b6;
+    color: #ddecf0;
 }
 
 /* Header logo */

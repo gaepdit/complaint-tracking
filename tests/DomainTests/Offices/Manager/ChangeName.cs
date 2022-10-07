@@ -1,5 +1,5 @@
-using MyAppRoot.Domain.Offices;
-using MyAppRoot.TestData.Constants;
+using Cts.Domain.Offices;
+using Cts.TestData.Constants;
 
 namespace DomainTests.Offices.Manager;
 

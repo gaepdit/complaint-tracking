@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace MyAppRoot.WebApp.Pages.Admin.Maintenance;
+namespace Cts.WebApp.Pages.Admin.Maintenance;
 
 [Authorize]
 public class IndexModel : PageModel

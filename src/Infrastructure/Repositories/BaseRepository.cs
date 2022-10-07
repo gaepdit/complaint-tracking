@@ -1,9 +1,9 @@
-﻿using GaEpd.AppLibrary.Domain.Entities;
+﻿using Cts.Infrastructure.Contexts;
+using GaEpd.AppLibrary.Domain.Entities;
 using GaEpd.AppLibrary.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
-using MyAppRoot.Infrastructure.Contexts;
 
-namespace MyAppRoot.Infrastructure.Repositories;
+namespace Cts.Infrastructure.Repositories;
 
 public abstract class BaseRepository<TEntity, TKey> : BaseReadOnlyRepository<TEntity, TKey>, IRepository<TEntity, TKey>
     where TEntity : class, IEntity<TKey>

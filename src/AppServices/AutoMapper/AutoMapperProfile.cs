@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using MyAppRoot.AppServices.Offices;
-using MyAppRoot.AppServices.Staff;
-using MyAppRoot.Domain.Identity;
-using MyAppRoot.Domain.Offices;
+using Cts.AppServices.Offices;
+using Cts.AppServices.Staff;
+using Cts.Domain.Identity;
+using Cts.Domain.Offices;
 
-namespace MyAppRoot.AppServices.AutoMapper;
+namespace Cts.AppServices.AutoMapper;
 
 public class AutoMapperProfile : Profile
 {

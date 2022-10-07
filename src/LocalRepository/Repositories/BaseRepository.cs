@@ -1,7 +1,7 @@
 ﻿using GaEpd.AppLibrary.Domain.Entities;
 using GaEpd.AppLibrary.Domain.Repositories;
 
-namespace MyAppRoot.LocalRepository.Repositories;
+namespace Cts.LocalRepository.Repositories;
 
 public abstract class BaseRepository<TEntity, TKey> : BaseReadOnlyRepository<TEntity, TKey>, IRepository<TEntity, TKey>
     where TEntity : IEntity<TKey>

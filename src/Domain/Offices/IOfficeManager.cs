@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 
-namespace MyAppRoot.Domain.Offices;
+namespace Cts.Domain.Offices;
 
 /// <summary>
 /// A manager for managing Offices.

@@ -1,6 +1,6 @@
-using MyAppRoot.Domain.Offices;
-using MyAppRoot.TestData.Constants;
-using MyAppRoot.TestData.Offices;
+using Cts.Domain.Offices;
+using Cts.TestData.Constants;
+using Cts.TestData.Offices;
 
 namespace IntegrationTests.Offices;
 
