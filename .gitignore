@@ -541,9 +541,6 @@ FodyWeavers.xsd
 ########################
 ### Project-specific ###
 
-# Note: Remove the next line if you want to check in JetBrains configuration files.
-.idea/
-
 # Web deploy settings
 !**/PublishProfiles/*.pubxml
 
