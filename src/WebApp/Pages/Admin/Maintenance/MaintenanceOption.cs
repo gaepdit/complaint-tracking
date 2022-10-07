@@ -7,6 +7,9 @@ public class MaintenanceOption
 
     private MaintenanceOption() { }
 
+    public static MaintenanceOption ActionType { get; } =
+        new() { SingularName = "Complaint Action Type", PluralName = "Complaint Action Types" };
+
     public static MaintenanceOption Office { get; } =
         new() { SingularName = "Office", PluralName = "Offices" };
 }

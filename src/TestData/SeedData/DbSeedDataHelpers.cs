@@ -1,4 +1,5 @@
 ﻿using Cts.Infrastructure.Contexts;
+using Cts.TestData.ActionTypes;
 using Cts.TestData.Identity;
 using Cts.TestData.Offices;
 
@@ -8,8 +9,16 @@ public static class DbSeedDataHelpers
 {
     public static void SeedAllData(AppDbContext context)
     {
+        SeedActionTypeData(context);
         SeedOfficeData(context);
         SeedIdentityData(context);
+    }
+
+    public static void SeedActionTypeData(AppDbContext context)
+    {
+        if (context.ActionTypes.Any()) return;
+        context.ActionTypes.AddRange(ActionTypeData.GetActionTypes);
+        context.SaveChanges();
     }
 
     public static void SeedOfficeData(AppDbContext context)

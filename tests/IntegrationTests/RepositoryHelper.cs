@@ -1,9 +1,10 @@
-﻿using GaEpd.AppLibrary.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Cts.Domain.ActionTypes;
 using Cts.Domain.Offices;
 using Cts.Infrastructure.Contexts;
 using Cts.Infrastructure.Repositories;
 using Cts.TestData.SeedData;
+using GaEpd.AppLibrary.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using TestSupport.EfHelpers;
 
 namespace IntegrationTests;
@@ -30,6 +31,13 @@ public sealed class RepositoryHelper : IDisposable
         _context.RemoveRange(_context.Set<TEntity>());
         await _context.SaveChangesAsync();
         ClearChangeTracker();
+    }
+
+    public IActionTypeRepository GetActionTypeRepository()
+    {
+        DbSeedDataHelpers.SeedActionTypeData(_context);
+        Context = new AppDbContext(_options);
+        return new ActionTypeRepository(Context);
     }
 
     public IOfficeRepository GetOfficeRepository()

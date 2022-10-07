@@ -1,7 +1,7 @@
-﻿using FluentValidation.TestHelper;
-using Cts.AppServices.Offices;
+﻿using Cts.AppServices.Offices;
 using Cts.Domain.Offices;
 using Cts.TestData.Constants;
+using FluentValidation.TestHelper;
 
 namespace AppServicesTests.Offices;
 

@@ -1,4 +1,5 @@
-﻿using Cts.Domain.Offices;
+﻿using Cts.AppServices.Staff;
+using Cts.Domain.Offices;
 using System.ComponentModel.DataAnnotations;
 
 namespace Cts.AppServices.Offices;
@@ -10,6 +11,8 @@ public class OfficeViewDto
 
     [UIHint("BoolActive")]
     public bool Active { get; init; }
+
+    public StaffViewDto? MasterUser { get; init; }
 }
 
 public class OfficeCreateDto
@@ -18,6 +21,7 @@ public class OfficeCreateDto
     [StringLength(Office.MaxNameLength, MinimumLength = Office.MinNameLength,
         ErrorMessage = "The Name must be at least {2} characters but no longer than {1}.")]
     public string Name { get; init; } = string.Empty;
+    public StaffViewDto? MasterUser { get; init; }
 }
 
 public class OfficeUpdateDto
@@ -29,5 +33,6 @@ public class OfficeUpdateDto
         ErrorMessage = "The Name must be at least {2} characters but no longer than {1}.")]
     public string Name { get; init; } = string.Empty;
 
+    public StaffViewDto? MasterUser { get; init; }
     public bool Active { get; init; }
 }

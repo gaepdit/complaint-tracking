@@ -1,4 +1,5 @@
-﻿global using GaEpd.AppLibrary.Domain.Entities;
+﻿global using Cts.Domain.ValueObjects;
+global using GaEpd.AppLibrary.Domain.Entities;
 global using GaEpd.AppLibrary.Domain.Repositories;
 global using GaEpd.AppLibrary.GuardClauses;
 global using System.ComponentModel.DataAnnotations;

@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Identity;
 using Cts.LocalRepository.Identity;
 using Cts.TestData.Identity;
+using Microsoft.AspNetCore.Identity;
 
 namespace LocalRepositoryTests.Identity;
 

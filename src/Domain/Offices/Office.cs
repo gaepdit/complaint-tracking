@@ -13,12 +13,21 @@ public class Office : AuditableEntity
 
     public bool Active { get; set; } = true;
 
+    public ApplicationUser? MasterUser { get; set; }
+
     public List<ApplicationUser> StaffMembers { get; set; } = new();
 
     [UsedImplicitly] // Used by ORM.
     private Office() { }
 
-    internal Office(Guid id, string name) : base(id) => SetName(name);
+    internal Office(
+        Guid id,
+        string name,
+        ApplicationUser? masterUser = null) : base(id)
+    {
+        SetName(name);
+        MasterUser = masterUser;
+    }
 
     internal void ChangeName(string name) => SetName(name);
 

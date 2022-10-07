@@ -1,3 +1,4 @@
+using Cts.Domain.Identity;
 using System.Runtime.Serialization;
 
 namespace Cts.Domain.Offices;
@@ -11,10 +12,11 @@ public interface IOfficeManager
     /// Creates a new <see cref="Office"/>.
     /// </summary>
     /// <param name="name">The name of the Office to create.</param>
+    /// <param name="user">The <see cref="Office.MasterUser"/> for the Office.</param>
     /// <param name="token"><see cref="T:System.Threading.CancellationToken"/></param>
     /// <exception cref="OfficeNameAlreadyExistsException">Thrown if an Office already exists with the given name.</exception>
     /// <returns>The Office that was created.</returns>
-    Task<Office> CreateAsync(string name, CancellationToken token = default);
+    Task<Office> CreateAsync(string name, ApplicationUser? user = null, CancellationToken token = default);
 
     /// <summary>
     /// Changes the name of an <see cref="Office"/>.

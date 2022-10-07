@@ -13,6 +13,15 @@ public class FindForUpdate
     public async Task WhenItemExists_ReturnsViewDto()
     {
         var office = new Office(Guid.Empty, TestConstants.ValidName);
+        var user = new ApplicationUser
+        {
+            Id = Guid.NewGuid().ToString(),
+            FirstName = TestConstants.ValidName,
+            LastName = TestConstants.NewValidName,
+            Email = TestConstants.ValidEmail,
+        };
+        office.MasterUser = user;
+
         var repoMock = new Mock<IOfficeRepository>();
         repoMock.Setup(l => l.FindAsync(office.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(office);
@@ -25,7 +34,8 @@ public class FindForUpdate
 
         var result = await appService.FindForUpdateAsync(Guid.Empty);
 
-        result.Should().BeEquivalentTo(office);
+        result.Should().BeEquivalentTo(office, options => options
+            .Excluding(ctx => ctx.Path.EndsWith("MasterUser.Id")));
     }
 
     [Test]

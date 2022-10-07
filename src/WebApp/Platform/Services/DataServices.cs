@@ -1,4 +1,5 @@
-﻿using Cts.Domain.Offices;
+﻿using Cts.Domain.ActionTypes;
+using Cts.Domain.Offices;
 using Cts.Infrastructure.Contexts;
 using Cts.Infrastructure.Repositories;
 using Cts.LocalRepository.Repositories;
@@ -19,6 +20,7 @@ public static class DataServices
                 opts.UseInMemoryDatabase("TEMP_DB"));
 
             // Uses static data if no database is built.
+            services.AddSingleton<IActionTypeRepository, LocalActionTypeRepository>();
             services.AddSingleton<IOfficeRepository, LocalOfficeRepository>();
         }
         else
@@ -27,6 +29,8 @@ public static class DataServices
                 opts.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                     x => x.MigrationsAssembly("Infrastructure")));
 
+
+            services.AddScoped<IActionTypeRepository, ActionTypeRepository>();
             services.AddScoped<IOfficeRepository, OfficeRepository>();
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Cts.AppServices.Offices;
 using Cts.AppServices.UserServices;
+using Cts.Domain.Identity;
 using Cts.Domain.Offices;
 using Cts.TestData.Constants;
 
@@ -11,6 +12,14 @@ public class GetList
     public async Task WhenItemsExist_ReturnsViewDtoList()
     {
         var office = new Office(Guid.Empty, TestConstants.ValidName);
+        var user = new ApplicationUser
+        {
+            Id = Guid.NewGuid().ToString(),
+            FirstName = TestConstants.ValidName,
+            LastName = TestConstants.NewValidName,
+            Email = TestConstants.ValidEmail,
+        };
+        office.MasterUser = user;
         var itemList = new List<Office> { office };
 
         var repoMock = new Mock<IOfficeRepository>();
@@ -18,12 +27,19 @@ public class GetList
             .ReturnsAsync(itemList);
         var managerMock = new Mock<IOfficeManager>();
         var userServiceMock = new Mock<IUserService>();
+        userServiceMock.Setup(l => l.GetCurrentUserAsync())
+            .ReturnsAsync((ApplicationUser?)null);
         var appService = new OfficeAppService(repoMock.Object, managerMock.Object,
             AppServicesTestsGlobal.Mapper!, userServiceMock.Object);
 
         var result = await appService.GetListAsync();
 
-        result.Should().BeEquivalentTo(itemList);
+        Assert.Multiple(() =>
+        {
+            result.Should().BeEquivalentTo(itemList, options => options
+                .Excluding(ctx => ctx.Path.EndsWith("MasterUser.Id")));
+            result[0].MasterUser!.Id.ToString().Should().Be(office.MasterUser.Id);
+        });
     }
 
     [Test]

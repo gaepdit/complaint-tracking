@@ -48,6 +48,7 @@ internal static partial class IdentityData
                 user.NormalizedUserName = user.Email.ToUpperInvariant();
             });
             _users = UserSeedItems;
+            office.MasterUser = _users.First();
             return _users;
         }
     }
