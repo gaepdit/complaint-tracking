@@ -1,0 +1,73 @@
+﻿@page
+@using MyAppRoot.Domain.Identity
+@model IndexModel
+@{
+    ViewData["Title"] = $"Site Maintenance: {IndexModel.ThisOption.PluralName}";
+}
+
+<p>
+    <a asp-page="../Index">← Site Maintenance</a>
+</p>
+
+<partial name="_AlertPartial" for="Message" />
+
+<h1>@IndexModel.ThisOption.PluralName</h1>
+
+<p class="lead">
+    The @IndexModel.ThisOption.PluralName listed below are available for selection in
+    @IndexModel.ThisOption.SingularName dropdown lists.
+</p>
+
+@if (User.IsInRole(AppRole.SiteMaintenance))
+{
+    <p>
+        <a asp-page="Add" class="btn btn-outline-primary btn-sm">Add New</a>
+    </p>
+}
+
+<p id="table-description">
+    The &ldquo;@AppRole.SiteMaintenanceRole.DisplayName&rdquo; role is needed to add or edit @IndexModel.ThisOption.PluralName.
+    @if (User.IsInRole(AppRole.SiteMaintenance))
+    {
+        @:Select an item to edit it. Setting an item as &ldquo;inactive&rdquo; makes it unavailable for future use but does not 
+        @:affect any existing use.
+    }
+</p>
+
+@if (Model.Items.Count == 0)
+{
+    <em class="text-muted">None</em>
+}
+else
+{
+    <table class="table" aria-describedby="table-description">
+        <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Active</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr class="@(item.Id == Model.HighlightId ? "list-group-item-warning" : !item.Active ? "bg-secondary bg-opacity-25" : "")">
+                <td>
+                    @if (User.IsInRole(AppRole.SiteMaintenance))
+                    {
+                        <a asp-page="Edit" asp-route-id="@item.Id">
+                            @Html.DisplayFor(m => item.Name, "StringOrNone")
+                        </a>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(m => item.Name, "StringOrNone")
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(m => item.Active)
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

@@ -1,0 +1,25 @@
+﻿@page
+@model LoginModel
+@{
+    ViewData["Title"] = "Agency Login";
+}
+
+<h1>@ViewData["Title"]</h1>
+<p>
+    The MY_APP_NAME admin site is a State of Georgia application.
+    It is intended for conducting official State business and is available for use by
+    State of Georgia employees only.
+</p>
+
+<partial name="_AlertPartial" for="Message" />
+
+<div class="p-5 bg-light border rounded-3 mt-5 mb-5">
+    <h1 class="display-4">Sign in using your work account</h1>
+
+    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+        <button type="submit" class="btn btn-lg btn-outline-primary btn-img my-3 py-3 px-4" title="Sign in using your work account">
+            <img src="~/images/ms-symbol.svg" alt="" /> Sign in
+        </button>
+    </form>
+</div>

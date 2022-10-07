@@ -1,0 +1,14 @@
+﻿<FineCodeCoverage>
+  <Enabled>
+		True
+  </Enabled>
+  <Exclude>
+        [AppServicesTests]*
+        [DomainTests]*
+        [IntegrationTests]*
+        [LocalRepositoryTests]*
+        [WebAppTests]*
+        [TestData]*
+        [Infrastructure]MyAppRoot.Infrastructure.Migrations.*
+  </Exclude>
+</FineCodeCoverage>

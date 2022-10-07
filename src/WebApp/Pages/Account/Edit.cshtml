@@ -1,0 +1,47 @@
+﻿@page
+@model EditModel
+@{
+    ViewData["Title"] = "Edit Your Profile";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+
+<h2>@Model.DisplayStaff.DisplayName</h2>
+
+<div class="p-3 border rounded-3 bg-light mb-3">
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert">
+            Update failed:
+        </div>
+        <div class="row">
+            <div class="col-lg mb-3">
+                <div class="form-floating">
+                    <input asp-for="DisplayStaff.Email" class="form-control" disabled />
+                    <label class="form-label">Email cannot be changed</label>
+                </div>
+            </div>
+            <div class="col-md mb-3">
+                <div class="form-floating">
+                    <input asp-for="UpdateStaff.Phone" class="form-control" />
+                    <label asp-for="UpdateStaff.Phone" class="form-label"></label>
+                    <span asp-validation-for="UpdateStaff.Phone" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md mb-3">
+                <div class="form-floating">
+                    <select asp-for="UpdateStaff.OfficeId" asp-items="Model.OfficeItems" class="form-select"></select>
+                    <label asp-for="UpdateStaff.OfficeId" class="form-label"></label>
+                    <span asp-validation-for="UpdateStaff.OfficeId" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="mt-3">
+            <input asp-for="UpdateStaff.Id" type="hidden" />
+            <input asp-for="UpdateStaff.Active" type="hidden" />
+            <button type="submit" class="btn btn-primary col-sm-3 me-2">Update Info</button>
+            <a asp-page="Index" class="btn btn-outline-secondary col-md-2">Cancel</a>
+        </div>
+        <div class="text-danger mt-3">* denotes a required field</div>
+    </form>
+</div>

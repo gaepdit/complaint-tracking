@@ -1,0 +1,253 @@
+/* Adjust font sizing
+-------------------------------------------------- */
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+/* Fix color accessibility
+-------------------------------------------------- */
+a {
+    color: #0366d6;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.text-warning{
+    color: rgb(150, 113, 0) !important;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+/* Sticky footer
+-------------------------------------------------- */
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    /* Margin bottom by footer height */
+    /*margin-bottom: 60px;*/ /* Single height for one footer section */
+    margin-bottom: 120px; /* Double height for two footer sections */
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px; /* Vertically center the text there */
+}
+
+/* Fix missing :focus styles
+-------------------------------------------------- */
+a:focus {
+    color: #0056b3;
+}
+
+a:focus:not(.btn) {
+    text-decoration: underline;
+}
+
+.btn-primary:focus {
+    color: #fff;
+    background-color: #0069d9;
+}
+
+.btn-secondary:focus {
+    color: #fff;
+    background-color: #5a6268;
+}
+
+.btn-success:focus {
+    color: #fff;
+    background-color: #218838;
+}
+
+.btn-info:focus {
+    color: #fff;
+    background-color: #138496;
+}
+
+.btn-warning:focus {
+    color: #212529;
+    background-color: #e0a800;
+}
+
+.btn-danger:focus {
+    color: #fff;
+    background-color: #c82333;
+}
+
+.btn-light:focus {
+    color: #212529;
+    background-color: #e2e6ea;
+}
+
+.btn-dark:focus {
+    color: #fff;
+    background-color: #23272b;
+}
+
+.btn-outline-primary:focus {
+    color: #fff;
+    background-color: #007bff;
+}
+
+.btn-outline-secondary:focus {
+    color: #fff;
+    background-color: #6c757d;
+}
+
+.btn-outline-success:focus {
+    color: #fff;
+    background-color: #28a745;
+}
+
+.btn-outline-info:focus {
+    color: #fff;
+    background-color: #17a2b8;
+}
+
+.btn-outline-warning:focus {
+    color: #212529;
+    background-color: #ffc107;
+}
+
+.btn-outline-danger:focus {
+    color: #fff;
+    background-color: #dc3545;
+}
+
+.btn-outline-light:focus {
+    color: #212529;
+    background-color: #f8f9fa;
+}
+
+.btn-outline-dark:focus {
+    color: #fff;
+    background-color: #343a40;
+}
+
+/* Branding
+-------------------------------------------------- */
+.bg-brand {
+    background-color: #671010;
+}
+
+.bg-brand a {
+    color: #ffd5d5;
+}
+
+.bg-brand a:hover, .bg-brand a:focus {
+    color: #ffb6b6;
+}
+
+/* Header logo */
+.img-logo {
+    height: 60px;
+}
+
+/* Nav bar text
+-------------------------------------------------- */
+.nav-link:hover, .nav-link:focus {
+    text-decoration: underline;
+}
+
+/* Skip to content link
+-------------------------------------------------- */
+.skip-nav {
+    background: transparent;
+    color: #212121;
+    text-decoration: underline;
+    left: 0;
+    padding: 1rem 1.5rem;
+    position: absolute;
+    top: -4.2rem;
+    transition: all 0.2s ease-in-out;
+    z-index: 100;
+}
+
+.skip-nav:focus {
+    background: #fff;
+    left: 0;
+    outline: 0;
+    position: absolute;
+    top: 0;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Button with image 
+-------------------------------------------------- */
+.btn-img {
+    line-height: 1;
+}
+
+.btn-img img {
+    height: 25px;
+}
+
+/* Additional font style utilities
+-------------------------------------------------- */
+.font-weight-medium {
+    font-weight: 500 !important;
+}
+
+.text-pre-line {
+    white-space: pre-line !important;
+}
+
+/* External links
+-------------------------------------------------- */
+a[target]::after {
+    content: ' \1f5d7';
+}
+
+/* Banner for test site
+-------------------------------------------------- */
+.banner-test-site {
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+    opacity: .9;
+    color: #333;
+    font-weight: 700;
+    font-size: 16px;
+    font-family: system-ui;
+    text-transform: uppercase;
+    text-align: center;
+    text-shadow: 0 0 4px white;
+    background: repeating-linear-gradient(135deg, #f6da52bb, #f6da52bb 10px, #ffef80bb 10px, #ffef80bb 20px);
+    box-shadow: inset 0 -3px 7px rgba(130, 106, 15, 0.37);
+    padding: 1px 0;
+}
+
+/* Print styles
+-------------------------------------------------- */
+@media print {
+    .banner-test-site {
+        position: static;
+        text-shadow: none;
+        box-shadow: none;
+        border: 1px solid;
+        margin-top: 1rem;
+    }
+
+    .banner-test-site::after {
+        content: "—Not for public distribution";
+    }
+}

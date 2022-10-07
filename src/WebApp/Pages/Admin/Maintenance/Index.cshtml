@@ -1,0 +1,15 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Site Maintenance";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p class="lead">
+    These lists are used to populate dropdown lists on the site. Select a list to view it.
+</p>
+
+<div class="list-group">
+    <a asp-page="Offices/Index" class="list-group-item list-group-item-action">@MaintenanceOption.Office.PluralName</a>
+</div>

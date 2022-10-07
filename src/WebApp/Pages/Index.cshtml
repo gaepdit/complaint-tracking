@@ -1,0 +1,30 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h2>Some helpful development links</h2>
+    </div>
+    <div class="card-body">
+        <ul>
+            <li>
+                <a asp-page="/Account/Login">Login Page</a>
+            </li>
+            <li>
+                <a asp-page="/Account/Index">Account Page</a>
+            </li>
+            <li>
+                <a asp-page="/Admin/Users/Index">All Users</a>
+            </li>
+            <li>
+                <a asp-page="/Admin/Maintenance/Index">Site Maintenance</a>
+            </li>
+            <li>
+                <a href="/api-docs">API Docs</a>
+            </li>
+        </ul>
+    </div>
+</div>

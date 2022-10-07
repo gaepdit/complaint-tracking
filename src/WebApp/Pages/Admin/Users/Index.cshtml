@@ -1,0 +1,108 @@
+﻿@page
+@using MyAppRoot.AppServices.Staff
+@model IndexModel
+@{
+    ViewData["Title"] = "User Search";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="p-3 rounded-3 bg-light">
+    <form method="get" asp-fragment="SearchResults">
+        <div class="row">
+            <div class="col-md mb-3">
+                <div class="form-floating">
+                    <input asp-for="Filter.Name" name="@nameof(Model.Filter.Name)" class="form-control" aria-describedby="name-help-block" />
+                    <label asp-for="Filter.Name" class="form-label"></label>
+                    <small id="name-help-block" class="form-text">First <em>or</em> last name</small>
+                </div>
+            </div>
+            <div class="col-md mb-3">
+                <div class="form-floating">
+                    <input asp-for="Filter.Email" name="@nameof(Model.Filter.Email)" class="form-control" />
+                    <label asp-for="Filter.Email" class="form-label"></label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md mb-3">
+                <div class="form-floating">
+                    <select asp-for="Filter.Office" asp-items="Model.OfficeItems" name="@nameof(Model.Filter.Office)" class="form-select">
+                        <option value="">(any)</option>
+                    </select>
+                    <label asp-for="Filter.Office" class="form-label"></label>
+                </div>
+            </div>
+            <div class="col-md mb-3">
+                <div class="form-floating">
+                    <select asp-for="Filter.Role" asp-items="Model.RoleItems" name="@nameof(Model.Filter.Role)" class="form-select">
+                        <option value="">(any)</option>
+                    </select>
+                    <label asp-for="Filter.Role" class="form-label"></label>
+                </div>
+            </div>
+            <div class="col-md mb-3">
+                <div class="form-floating">
+                    <select asp-for="Filter.Status" asp-items="Html.GetEnumSelectList<StaffSearchDto.ActiveStatus>()" name="@nameof(Model.Filter.Status)" class="form-select"></select>
+                    <label asp-for="Filter.Status" class="form-label"></label>
+                </div>
+            </div>
+        </div>
+        <div class="mt-3 mb-1">
+            <input type="hidden" name="handler" value="search" />
+            <button id="SearchButton" type="submit" class="btn btn-primary col-sm-3 me-2">Search</button>
+            <a asp-page="./Index" class="btn btn-outline-secondary col-sm-3 col-md-2">Clear Form</a>
+        </div>
+    </form>
+</div>
+
+@if (Model.ShowResults)
+{
+    <a id="SearchResults"></a>
+
+    @if (Model.SearchResults is { Count: > 0 })
+    {
+        <table class="table" aria-label="User search results">
+            <thead>
+            <tr>
+                <th scope="col">@Html.DisplayNameFor(m => m.Filter.Name)</th>
+                <th scope="col">@Html.DisplayNameFor(m => m.Filter.Email)</th>
+                <th scope="col">@Html.DisplayNameFor(m => m.Filter.Office)</th>
+                <th scope="col">@Html.DisplayNameFor(m => m.Filter.Status)</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model.SearchResults)
+            {
+                <tr class="@(item.Id == Model.HighlightId ? "list-group-item-warning" : !item.Active ? "bg-secondary bg-opacity-25" : "")">
+                    <td>
+                        @if (item.Email.Equals(User.Identity?.Name))
+                        {
+                            <span class="badge bg-secondary">YOU</span>
+                        }
+                        <a asp-page="./Details" asp-route-id="@item.Id">@item.DisplayName</a>
+                    </td>
+                    <td>@item.Email</td>
+                    <td>
+                        @{
+                            var name = item.Office?.Name;
+                        }
+                        @Html.DisplayFor(m => name, "StringOrNone")
+                    </td>
+                    <td>@Html.DisplayFor(m => item.Active)</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="container mt-2">
+            <p class="lead text-info">No search results found.</p>
+        </div>
+    }
+}
+
+@section Scripts {
+    <script src="~/js/formSearch.js"></script>
+}

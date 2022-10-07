@@ -1,0 +1,32 @@
+﻿@page
+@model AddModel
+@{
+    ViewData["Title"] = $"Add a new {AddModel.ThisOption.SingularName}";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="p-3 border rounded-3 bg-light">
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+        <div class="row">
+            <div class="col-md-10 mb-3">
+                <div class="form-floating">
+                    <input asp-for="Item.Name" class="form-control" />
+                    <label asp-for="Item.Name" class="form-label"></label>
+                    <span asp-validation-for="Item.Name" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="mt-3 mb-1">
+            <button id="SubmitButton" type="submit" class="btn btn-primary col-md-3 me-2">Add New @AddModel.ThisOption.SingularName</button>
+            <a asp-page="Index" class="btn btn-outline-secondary col-md-2">Cancel</a>
+        </div>
+        <div class="text-danger mt-3">* denotes a required field</div>
+    </form>
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

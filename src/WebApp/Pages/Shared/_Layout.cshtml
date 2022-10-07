@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MY_APP_NAME</title>
+    <partial name="_FaviconPartial" />
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <partial name="_RaygunScriptsPartial" />
+</head>
+
+<body>
+<environment exclude="Production">
+    <div class="banner-test-site">
+        Test Site
+    </div>
+</environment>
+<a class="skip-nav shadow border border-info" href="#main-content">Skip to main content</a>
+
+<header role="banner">
+    <div class="container h3 my-2">
+        <img src="~/images/epd-icon.svg" alt="Georgia EPD" class="img-logo" />
+        <a href="/" aria-label="Home" class="nav-link text-dark d-inline-block">MY_APP_NAME</a>
+    </div>
+    <partial name="_MenuPartial" />
+</header>
+
+<div class="container">
+    <main id="main-content" role="main" class="pb-3">
+        @RenderBody()
+    </main>
+</div>
+
+<footer class="border-top footer text-muted">
+    <div class="bg-light d-print-none">
+        <div class="container">
+            <a href="#main-nav">↑ Return to top</a>
+        </div>
+    </div>
+    <div class="bg-brand text-light">
+        <div class="container">
+            &copy; @DateTime.Now.Year State of Georgia
+            <span class="d-print-none">
+                | <a href="https://georgia.gov/accessibility" target="_blank" rel="noopener">Accessibility</a>
+                | <a href="https://gadnr.org/ada" target="_blank" rel="noopener">DNR Accessibility Notice</a>
+                | <a href="https://georgia.gov/privacysecurity" target="_blank" rel="noopener">Privacy/Security</a>
+            </span>
+        </div>
+    </div>
+</footer>
+
+<script src="~/lib/jquery/jquery.min.js"></script>
+<script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js"></script>
+@await RenderSectionAsync("Scripts", false)
+</body>
+</html>

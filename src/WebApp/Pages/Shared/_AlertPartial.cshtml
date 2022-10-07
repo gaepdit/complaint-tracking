@@ -1,0 +1,9 @@
+﻿@model MyAppRoot.WebApp.Models.DisplayMessage?
+
+@if (Model != null)
+{
+    <div class="alert @Model.AlertClass alert-dismissible fade show" role="alert">
+        @Model.Message
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}

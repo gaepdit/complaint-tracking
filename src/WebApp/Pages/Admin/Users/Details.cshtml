@@ -1,0 +1,66 @@
+﻿@page "{id:Guid?}"
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using MyAppRoot.Domain.Identity
+@model DetailsModel
+@{
+    ViewData["Title"] = "User Profile: " + Model.DisplayStaff.DisplayName;
+}
+
+<h1>User Profile</h1>
+<hr />
+<partial name="_AlertPartial" for="Message" />
+
+<h2>
+    @if (!Model.DisplayStaff.Active)
+    {
+        <em class="text-warning">Inactive:</em>
+    }
+    @Model.DisplayStaff.DisplayName
+</h2>
+
+@if (User.IsInRole(AppRole.UserAdmin))
+{
+    <p>
+        <a asp-page="./Edit" asp-route-id="@Model.DisplayStaff.Id" class="btn btn-outline-primary btn-sm">Edit Profile</a>
+    </p>
+}
+
+<dl class="row">
+    <dt class="col-sm-3">Email</dt>
+    <dd class="col-sm-9">@Model.DisplayStaff.Email</dd>
+
+    <dt class="col-sm-3">Phone</dt>
+    <dd class="col-sm-9">@Html.DisplayFor(m => m.DisplayStaff.Phone, "StringOrNone")</dd>
+
+    <dt class="col-sm-3">Office</dt>
+    <dd class="col-sm-9">@Html.DisplayFor(m => m.OfficeName, "StringOrNone")</dd>
+</dl>
+<hr />
+
+<h3>Roles</h3>
+
+@if (User.IsInRole(AppRole.UserAdmin))
+{
+    <p>
+        <a asp-page="./EditRoles" asp-route-id="@Model.DisplayStaff.Id" class="btn btn-outline-primary btn-sm">Edit User Roles</a>
+    </p>
+}
+
+@if (Model.Roles.Count == 0)
+{
+    <p>This account has no application roles.</p>
+}
+else
+{
+    <p>This account has the following application roles.</p>
+
+    <dl class="p-3 border rounded-3 bg-light">
+        @foreach (var role in Model.Roles)
+        {
+            <dt>@role.DisplayName</dt>
+            <dd>
+                <p class="text-muted">@role.Description</p>
+            </dd>
+        }
+    </dl>
+}
