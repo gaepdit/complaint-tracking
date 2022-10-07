@@ -1,6 +1,7 @@
-﻿using GaEpd.Library.Domain.Entities;
-using GaEpd.Library.Domain.Repositories;
-using GaEpd.Library.Pagination;
+﻿using GaEpd.AppLibrary.Domain.Entities;
+using GaEpd.AppLibrary.Domain.Repositories;
+using GaEpd.AppLibrary.Pagination;
+using System.Linq.Expressions;
 
 namespace Cts.LocalRepository.Repositories;
 
@@ -9,7 +10,6 @@ public class BaseReadOnlyRepository<TEntity, TKey> : IReadOnlyRepository<TEntity
     where TKey : IEquatable<TKey>
 {
     internal ICollection<TEntity> Items { get; }
-
     protected BaseReadOnlyRepository(IEnumerable<TEntity> items) => Items = items.ToList();
 
     public Task<TEntity> GetAsync(TKey id, CancellationToken token = default) =>
@@ -20,24 +20,30 @@ public class BaseReadOnlyRepository<TEntity, TKey> : IReadOnlyRepository<TEntity
     public Task<TEntity?> FindAsync(TKey id, CancellationToken token = default) =>
         Task.FromResult(Items.SingleOrDefault(e => e.Id.Equals(id)));
 
-    public Task<TEntity?> FindAsync(Func<TEntity, bool> predicate,
+    public Task<TEntity?> FindAsync(
+        Expression<Func<TEntity, bool>> predicate,
         CancellationToken token = default) =>
-        Task.FromResult(Items.SingleOrDefault(predicate));
+        Task.FromResult(Items.SingleOrDefault(predicate.Compile()));
 
-    public Task<IList<TEntity>> GetListAsync(CancellationToken token = default) =>
-        Task.FromResult(Items.ToList() as IList<TEntity>);
+    public Task<IReadOnlyCollection<TEntity>> GetListAsync(CancellationToken token = default) =>
+        Task.FromResult(Items.ToList() as IReadOnlyCollection<TEntity>);
 
-    public Task<IList<TEntity>> GetListAsync(Func<TEntity, bool> predicate, CancellationToken token = default) =>
-        Task.FromResult(Items.Where(predicate).ToList() as IList<TEntity>);
+    public Task<IReadOnlyCollection<TEntity>> GetListAsync(
+        Expression<Func<TEntity, bool>> predicate,
+        CancellationToken token = default) =>
+        Task.FromResult(Items.Where(predicate.Compile()).ToList() as IReadOnlyCollection<TEntity>);
 
-    public Task<IList<TEntity>> GetPagedListAsync(PaginatedRequest paging, CancellationToken token = default) =>
-        Task.FromResult(Items.Skip(paging.Skip).Take(paging.Take).ToList() as IList<TEntity>);
-
-    public Task<IList<TEntity>> GetPagedListAsync(
-        Func<TEntity, bool> predicate,
+    public Task<IReadOnlyCollection<TEntity>> GetPagedListAsync(
+        Expression<Func<TEntity, bool>> predicate,
         PaginatedRequest paging,
         CancellationToken token = default) =>
-        Task.FromResult(Items.Where(predicate).Skip(paging.Skip).Take(paging.Take).ToList() as IList<TEntity>);
+        Task.FromResult(Items.Where(predicate.Compile())
+            .Skip(paging.Skip).Take(paging.Take).ToList() as IReadOnlyCollection<TEntity>);
+
+    public Task<IReadOnlyCollection<TEntity>> GetPagedListAsync(
+        PaginatedRequest paging,
+        CancellationToken token = default) =>
+        Task.FromResult(Items.Skip(paging.Skip).Take(paging.Take).ToList() as IReadOnlyCollection<TEntity>);
 
     // ReSharper disable once VirtualMemberNeverOverridden.Global
     protected virtual void Dispose(bool disposing)

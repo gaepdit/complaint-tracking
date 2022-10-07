@@ -1,5 +1,4 @@
-﻿using Cts.Domain.Entities.BaseEntities;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 
 namespace Cts.Domain.Entities;
 

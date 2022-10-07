@@ -1,6 +1,6 @@
 using Cts.LocalRepository.Repositories;
 using Cts.TestData.Constants;
-using GaEpd.Library.Pagination;
+using GaEpd.AppLibrary.Pagination;
 
 namespace LocalRepositoryTests.ActionTypes;
 
@@ -40,7 +40,7 @@ public class GetPagedListByPredicate
         Assert.Multiple(() =>
         {
             result.Count.Should().Be(1);
-            result[0].Should().BeEquivalentTo(item);
+            result.First().Should().BeEquivalentTo(item);
         });
     }
 

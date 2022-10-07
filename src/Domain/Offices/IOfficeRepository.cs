@@ -1,5 +1,5 @@
 ﻿using Cts.Domain.Entities;
-using GaEpd.Library.Domain.Repositories;
+using GaEpd.AppLibrary.Domain.Repositories;
 
 namespace Cts.Domain.Offices;
 

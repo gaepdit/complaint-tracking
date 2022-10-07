@@ -1,7 +1,7 @@
 using Cts.Domain.Entities;
 using Cts.Domain.Offices;
 using Cts.TestData.Offices;
-using GaEpd.Library.Domain.Repositories;
+using GaEpd.AppLibrary.Domain.Repositories;
 
 namespace IntegrationTests.Offices;
 

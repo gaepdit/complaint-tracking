@@ -1,4 +1,4 @@
-﻿using GaEpd.Library.Domain.ValueObjects;
+﻿using GaEpd.AppLibrary.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cts.Domain.ValueObjects;

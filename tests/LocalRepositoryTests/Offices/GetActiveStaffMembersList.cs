@@ -1,6 +1,6 @@
 using Cts.Domain.Entities;
 using Cts.LocalRepository.Repositories;
-using GaEpd.Library.Domain.Repositories;
+using GaEpd.AppLibrary.Domain.Repositories;
 
 namespace LocalRepositoryTests.Offices;
 

@@ -1,7 +1,7 @@
 using Cts.Domain.ActionTypes;
 using Cts.Domain.Entities;
 using Cts.TestData.ActionTypes;
-using GaEpd.Library.Domain.Repositories;
+using GaEpd.AppLibrary.Domain.Repositories;
 
 namespace IntegrationTests.BaseReadOnlyRepository;
 

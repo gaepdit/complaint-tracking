@@ -1,5 +1,5 @@
-﻿using GaEpd.Library.Domain.Entities;
-using GaEpd.Library.Domain.Repositories;
+﻿using GaEpd.AppLibrary.Domain.Entities;
+using GaEpd.AppLibrary.Domain.Repositories;
 
 namespace Cts.LocalRepository.Repositories;
 

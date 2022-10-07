@@ -1,5 +1,5 @@
 ﻿global using Cts.Domain.ValueObjects;
-global using GaEpd.Library.Domain.Entities;
-global using GaEpd.Library.GuardClauses;
+global using GaEpd.AppLibrary.Domain.Entities;
+global using GaEpd.AppLibrary.GuardClauses;
 global using System.ComponentModel.DataAnnotations;
 global using System.ComponentModel.DataAnnotations.Schema;

@@ -1,7 +1,7 @@
 using Cts.Domain.Entities;
 using Cts.LocalRepository.Repositories;
 using Cts.TestData.Constants;
-using GaEpd.Library.Domain.Repositories;
+using GaEpd.AppLibrary.Domain.Repositories;
 
 namespace LocalRepositoryTests.ActionTypes;
 

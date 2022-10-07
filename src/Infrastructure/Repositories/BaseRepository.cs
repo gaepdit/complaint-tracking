@@ -1,6 +1,6 @@
 ﻿using Cts.Infrastructure.Contexts;
-using GaEpd.Library.Domain.Entities;
-using GaEpd.Library.Domain.Repositories;
+using GaEpd.AppLibrary.Domain.Entities;
+using GaEpd.AppLibrary.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cts.Infrastructure.Repositories;
@@ -9,38 +9,46 @@ public abstract class BaseRepository<TEntity, TKey> : BaseReadOnlyRepository<TEn
     where TEntity : class, IEntity<TKey>
     where TKey : IEquatable<TKey>
 {
-    protected BaseRepository(CtsDbContext dbContext) : base(dbContext) { }
+    protected BaseRepository(CtsDbContext context) : base(context) { }
 
-    public async Task InsertAsync(TEntity entity, bool autoSave = false, CancellationToken token = default)
+    public async Task InsertAsync(TEntity entity, bool autoSave = true, CancellationToken token = default)
     {
-        await DbContext.Set<TEntity>().AddAsync(entity, token);
-        if (autoSave) await DbContext.SaveChangesAsync(token);
+        await Context.Set<TEntity>().AddAsync(entity, token);
+        if (autoSave) await Context.SaveChangesAsync(token);
     }
 
-    public async Task UpdateAsync(TEntity entity, bool autoSave = false, CancellationToken token = default)
+    public async Task UpdateAsync(TEntity entity, bool autoSave = true, CancellationToken token = default)
     {
-        DbContext.Attach(entity);
-        DbContext.Update(entity);
+        Context.Attach(entity);
+        Context.Update(entity);
 
-        if (autoSave)
+        if (!autoSave) return;
+
+        try
         {
-            try
-            {
-                await DbContext.SaveChangesAsync(token);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await DbContext.Set<TEntity>().AsNoTracking().AnyAsync(e => e.Id.Equals(entity.Id), token))
-                    throw new EntityNotFoundException(typeof(TEntity), entity.Id);
-
-                throw;
-            }
+            await Context.SaveChangesAsync(token);
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!await Context.Set<TEntity>().AsNoTracking().AnyAsync(e => e.Id.Equals(entity.Id), token))
+                throw new EntityNotFoundException(typeof(TEntity), entity.Id);
+            throw;
         }
     }
 
-    public async Task DeleteAsync(TEntity entity, bool autoSave = false, CancellationToken token = default)
+    public async Task DeleteAsync(TEntity entity, bool autoSave = true, CancellationToken token = default)
     {
-        DbContext.Set<TEntity>().Remove(entity);
-        if (autoSave) await DbContext.SaveChangesAsync(token);
+        Context.Set<TEntity>().Remove(entity);
+
+        try
+        {
+            if (autoSave) await Context.SaveChangesAsync(token);
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!await Context.Set<TEntity>().AsNoTracking().AnyAsync(e => e.Id.Equals(entity.Id), token))
+                throw new EntityNotFoundException(typeof(TEntity), entity.Id);
+            throw;
+        }
     }
 }

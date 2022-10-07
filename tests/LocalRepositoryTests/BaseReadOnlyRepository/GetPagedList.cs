@@ -1,5 +1,5 @@
 using Cts.LocalRepository.Repositories;
-using GaEpd.Library.Pagination;
+using GaEpd.AppLibrary.Pagination;
 
 namespace LocalRepositoryTests.ActionTypes;
 

@@ -5,7 +5,7 @@ using Cts.Domain.Entities;
 using Cts.Domain.Identity;
 using Cts.Domain.Offices;
 using Cts.TestData.Identity;
-using GaEpd.Library.Domain.Repositories;
+using GaEpd.AppLibrary.Domain.Repositories;
 using Microsoft.AspNetCore.Identity;
 
 namespace Cts.LocalRepository.Identity;

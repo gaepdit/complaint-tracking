@@ -10,5 +10,5 @@ public sealed class ActionTypeRepository : BaseRepository<ActionType, Guid>, IAc
     public ActionTypeRepository(CtsDbContext dbContext) : base(dbContext) { }
 
     public Task<ActionType?> FindByNameAsync(string name, CancellationToken token = default) =>
-        DbContext.ActionTypes.AsNoTracking().SingleOrDefaultAsync(e => e.Name == name, token);
+        Context.ActionTypes.AsNoTracking().SingleOrDefaultAsync(e => e.Name == name, token);
 }

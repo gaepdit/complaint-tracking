@@ -1,8 +1,9 @@
-﻿using Cts.Infrastructure.Contexts;
-using GaEpd.Library.Domain.Entities;
-using GaEpd.Library.Domain.Repositories;
-using GaEpd.Library.Pagination;
+﻿using GaEpd.AppLibrary.Domain.Entities;
+using GaEpd.AppLibrary.Domain.Repositories;
+using GaEpd.AppLibrary.Pagination;
 using Microsoft.EntityFrameworkCore;
+using Cts.Infrastructure.Contexts;
+using System.Linq.Expressions;
 
 namespace Cts.Infrastructure.Repositories;
 
@@ -10,39 +11,50 @@ public abstract class BaseReadOnlyRepository<TEntity, TKey> : IReadOnlyRepositor
     where TEntity : class, IEntity<TKey>
     where TKey : IEquatable<TKey>
 {
-    protected readonly CtsDbContext DbContext;
-    protected BaseReadOnlyRepository(CtsDbContext dbContext) => DbContext = dbContext;
+    protected readonly CtsDbContext Context;
+    protected BaseReadOnlyRepository(CtsDbContext context) => Context = context;
 
     public async Task<TEntity> GetAsync(TKey id, CancellationToken token = default)
     {
-        var item = await DbContext.Set<TEntity>().AsNoTracking()
+        var item = await Context.Set<TEntity>().AsNoTracking()
             .SingleOrDefaultAsync(e => e.Id.Equals(id), token);
         return item ?? throw new EntityNotFoundException(typeof(TEntity), id);
     }
 
-    public async Task<TEntity?> FindAsync(TKey id, CancellationToken token = default) =>
-        throw new NotImplementedException();
+    public Task<TEntity?> FindAsync(TKey id, CancellationToken token = default) =>
+        Context.Set<TEntity>().AsNoTracking().SingleOrDefaultAsync(e => e.Id.Equals(id), token);
 
-    public async Task<TEntity?> FindAsync(Func<TEntity, bool> predicate, CancellationToken token = default) =>
-        throw new NotImplementedException();
-
-    public async Task<IList<TEntity>> GetListAsync(CancellationToken token = default) =>
-        throw new NotImplementedException();
-
-    public async Task<IList<TEntity>> GetListAsync(Func<TEntity, bool> predicate, CancellationToken token = default) =>
-        throw new NotImplementedException();
-
-    public async Task<IList<TEntity>> GetPagedListAsync(Func<TEntity, bool> predicate, PaginatedRequest paging,
+    public Task<TEntity?> FindAsync(
+        Expression<Func<TEntity, bool>> predicate,
         CancellationToken token = default) =>
-        throw new NotImplementedException();
+        Context.Set<TEntity>().AsNoTracking().SingleOrDefaultAsync(predicate, token);
 
-    public async Task<IList<TEntity>> GetPagedListAsync(PaginatedRequest paging, CancellationToken token = default) =>
-        throw new NotImplementedException();
+    public async Task<IReadOnlyCollection<TEntity>> GetListAsync(CancellationToken token = default) =>
+        await Context.Set<TEntity>().AsNoTracking().ToListAsync(token);
+
+    public async Task<IReadOnlyCollection<TEntity>> GetListAsync(
+        Expression<Func<TEntity, bool>> predicate,
+        CancellationToken token = default) =>
+        await Context.Set<TEntity>().AsNoTracking().Where(predicate).ToListAsync(token);
+
+    public async Task<IReadOnlyCollection<TEntity>> GetPagedListAsync(
+        Expression<Func<TEntity, bool>> predicate,
+        PaginatedRequest paging,
+        CancellationToken token = default) =>
+        await Context.Set<TEntity>().AsNoTracking().Where(predicate)
+            .Skip(paging.Skip).Take(paging.Take).ToListAsync(token);
+
+    public async Task<IReadOnlyCollection<TEntity>> GetPagedListAsync(
+        PaginatedRequest paging,
+        CancellationToken token = default) =>
+        await Context.Set<TEntity>().AsNoTracking()
+            .Skip(paging.Skip).Take(paging.Take).ToListAsync(token);
+
 
     // ReSharper disable once VirtualMemberNeverOverridden.Global
     protected virtual void Dispose(bool disposing)
     {
-        if (disposing) DbContext.Dispose();
+        if (disposing) Context.Dispose();
     }
 
     public void Dispose()
