@@ -27,7 +27,6 @@ jobs:
       run: npm install -g gulp
 
     - name: Restore packages, build, and run Web Server in the background
-      shell: powershell
       run: |
         cd ComplaintTracking
         npm install
