@@ -10,7 +10,10 @@ jobs:
   lighthouse-check:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
     - name: Set up .NET
       uses: actions/setup-dotnet@v2
       with:
@@ -22,9 +25,11 @@ jobs:
         node-version: 16
     
     - name: Install Gulp as Global Package
+      shell: powershell
       run: npm install -g gulp
 
     - name: Restore packages, build, and run Web Server in the background
+      shell: powershell
       run: |
         cd ComplaintTracking
         npm install
@@ -34,13 +39,15 @@ jobs:
         dotnet run &
     
     - name: Create temporary folder for artifacts storage
-      run: mkdir /tmp/lighthouse-artifacts
+      shell: powershell
+      run: mkdir ./tmp/lighthouse-artifacts
 
     - name: Installing Lighthouse through NPM
-      run: |
-        npm install -g @foo-software/lighthouse-check
+      shell: powershell
+      run: npm install -g @foo-software/lighthouse-check
       
     - name: Run Lighthouse Check
+      shell: powershell
       run: |
         lighthouse-check \
         --verbose \
@@ -52,7 +59,9 @@ jobs:
         --overridesJsonFile ".github/workflows/lighthouse-config.json" \
         --urls "https://localhost:44312" \
         --outputDirectory /tmp/lighthouse-artifacts
+    
     - name: Handle Lighthouse Check results
+      shell: powershell
       run: |
         lighthouse-check-status --outputDirectory /tmp/lighthouse-artifacts \
         --minAccessibilityScore 40 \
