@@ -1,0 +1,54 @@
+
+name: Lighthouse Check
+on: [push, pull_request]
+jobs:
+  lighthouse-check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+
+    - name: Set up Node.js (npm)
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
+
+    - name: Build
+      run: dotnet build
+
+    - name: Run Web Server in the background
+      run: |
+        cd src/WebApp
+        dotnet run &
+    
+    - name: Create temporary folder for artifacts storage
+      run: mkdir /tmp/lighthouse-artifacts
+
+    - name: Installing Lighthouse through NPM
+      run: |
+        npm install -g @foo-software/lighthouse-check
+      
+    - name: Run Lighthouse Check
+      run: |
+        lighthouse-check \
+        --verbose \
+        --prCommentEnabled \
+        --emulatedFormFactor "all" \
+        --prCommentAccessToken "${{ secrets.LIGHTHOUSE_CHECK_GITHUB_ACCESS_TOKEN }}" \
+        --prCommentUrl "https://api.github.com/repos/gaepdit/template-app/pulls/$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')/reviews" \
+        --timeout "5" \
+        --overridesJsonFile ".github/workflows/lighthouse-config.json" \
+        --urls "https://localhost:7245/" \
+        --outputDirectory /tmp/lighthouse-artifacts
+    - name: Handle Lighthouse Check results
+      run: |
+        lighthouse-check-status --outputDirectory /tmp/lighthouse-artifacts \
+        --minAccessibilityScore 40 \
+        --minBestPracticesScore 40 \
+        --minPerformanceScore 40 \
+        --minSeoScore 40
+
+    
