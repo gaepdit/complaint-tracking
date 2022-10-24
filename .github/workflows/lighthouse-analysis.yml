@@ -50,7 +50,7 @@ jobs:
         --prCommentUrl "https://api.github.com/repos/gaepdit/template-app/pulls/$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')/reviews" \
         --timeout "5" \
         --overridesJsonFile ".github/workflows/lighthouse-config.json" \
-        --urls "https://localhost:44331" \
+        --urls "https://localhost:44312" \
         --outputDirectory /tmp/lighthouse-artifacts
     - name: Handle Lighthouse Check results
       run: |
