@@ -36,34 +36,5 @@ jobs:
         dotnet run &
     
     - name: Create temporary folder for artifacts storage
-      shell: powershell
-      run: mkdir ./tmp/lighthouse-artifacts
-
-    - name: Installing Lighthouse through NPM
-      shell: powershell
-      run: npm install -g @foo-software/lighthouse-check
-      
-    - name: Run Lighthouse Check
-      shell: powershell
-      run: |
-        lighthouse-check \
-        --verbose \
-        --prCommentEnabled \
-        --emulatedFormFactor "all" \
-        --prCommentAccessToken "${{ secrets.LIGHTHOUSE_CHECK_GITHUB_ACCESS_TOKEN }}" \
-        --prCommentUrl "https://api.github.com/repos/gaepdit/template-app/pulls/$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')/reviews" \
-        --timeout "5" \
-        --overridesJsonFile ".github/workflows/lighthouse-config.json" \
-        --urls "https://localhost:44312" \
-        --outputDirectory /tmp/lighthouse-artifacts
-    
-    - name: Handle Lighthouse Check results
-      shell: powershell
-      run: |
-        lighthouse-check-status --outputDirectory /tmp/lighthouse-artifacts \
-        --minAccessibilityScore 40 \
-        --minBestPracticesScore 40 \
-        --minPerformanceScore 40 \
-        --minSeoScore 40
-
+      run: curl https://localhost:44312
     
