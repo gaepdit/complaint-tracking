@@ -10,9 +10,7 @@ jobs:
   lighthouse-check:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+    - uses: actions/checkout@v3
 
     - name: Set up .NET
       uses: actions/setup-dotnet@v2
