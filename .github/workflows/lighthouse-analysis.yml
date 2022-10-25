@@ -36,6 +36,7 @@ jobs:
         lighthouse-check \
         --verbose \
         --prCommentEnabled \
+        --emulatedFormFactor "desktop" \
         --prCommentAccessToken "${{ secrets.LIGHTHOUSE_CHECK_GITHUB_ACCESS_TOKEN }}" \
         --prCommentUrl "https://api.github.com/repos/gaepdit/template-app/pulls/$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')/reviews" \
         --timeout "7" \
