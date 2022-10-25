@@ -30,13 +30,17 @@ jobs:
     - name: Installing Lighthouse through NPM
       run: |
         npm install -g @foo-software/lighthouse-check
+
+    - name: Test calling the website
+      run: |
+        curl https://localhost:7245
       
     - name: Run Lighthouse Check
       run: |
         lighthouse-check \
         --verbose \
         --prCommentEnabled \
-        --emulatedFormFactor "desktop" \
+        --emulatedFormFactor "all" \
         --prCommentAccessToken "${{ secrets.LIGHTHOUSE_CHECK_GITHUB_ACCESS_TOKEN }}" \
         --prCommentUrl "https://api.github.com/repos/gaepdit/template-app/pulls/$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')/reviews" \
         --timeout "7" \
