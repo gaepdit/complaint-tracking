@@ -1,14 +1,16 @@
-name: .NET Test
+name: .NET Unit Tests
 
 on:
-  push:
-    branches: ["main", "vNext"]
   pull_request:
-    branches: ["main", "vNext"]
+
 
 jobs:
-  build:
-    if: github.event.pull_request.draft == false
+  dotnet-test:
+    # ↓ Change this to "false" to disable the workflow without any alert messages.
+    if: ${{ true }}
+    # ↑ Change to "true" (or delete) to enable the workflow.
+    
+    name: Run unit tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

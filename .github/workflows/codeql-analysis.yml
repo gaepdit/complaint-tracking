@@ -1,28 +1,17 @@
-# For most projects, this workflow file will not need changing; you simply need
-# to commit it to your repository.
-#
-# You may wish to alter this file to override the set of languages analyzed,
-# or to provide custom queries or build logic.
-#
-# ******** NOTE ********
-# We have attempted to detect the languages in your repository. Please check
-# the `language` matrix defined below to confirm you have the correct set of
-# supported CodeQL languages.
-#
-name: "CodeQL"
+name: CodeQL Scan
 
 on:
-  push:
-    branches: ["main", "vNext"]
   pull_request:
-    # The branches below must be a subset of the branches above
-    branches: ["main", "vNext"]
   schedule:
-    - cron: "21 19 * * 6"
+    - cron: '26 6 * * 5'
 
 jobs:
-  analyze:
-    name: Analyze
+  codeql-analysis:
+    # ↓ Change this to "false" to disable the workflow without any alert messages.
+    if: ${{ true }}
+    # ↑ Change to "true" (or delete) to enable the workflow.
+
+    name: Analyze with CodeQL
     runs-on: ubuntu-latest
     permissions:
       actions: read
