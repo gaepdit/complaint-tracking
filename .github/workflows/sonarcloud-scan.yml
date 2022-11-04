@@ -1,15 +1,17 @@
-name: Build and scan with SonarCloud
+name: SonarCloud Scan
+
 on:
   push:
     branches: ["main", "vNext"]
   pull_request:
-    types: [opened, synchronize, reopened]
+
 jobs:
-  build:
+  sonarcloud-scan:
     # ↓ Change this to "false" to disable the workflow without any alert messages.
     if: ${{ true }}
-    # ↑ Change to "true" to enable the workflow.
-    name: Build
+    # ↑ Change to "true" (or delete) to enable the workflow.
+
+    name: Analyze with SonarCloud
     runs-on: windows-latest
     steps:
       - name: Set up JDK 11
