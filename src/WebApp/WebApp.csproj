@@ -23,7 +23,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Domain\Domain.csproj" />
         <ProjectReference Include="..\LocalRepository\LocalRepository.csproj" />
         <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
     </ItemGroup>
@@ -35,6 +34,7 @@
         <Content Update="appsettings.Local.json" CopyToPublishDirectory="Never">
             <DependentUpon>appsettings.json</DependentUpon>
         </Content>
+        <Content Include="wwwroot\.well-known\security.txt" />
     </ItemGroup>
 
 </Project>

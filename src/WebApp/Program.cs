@@ -79,7 +79,7 @@ var app = builder.Build();
 var env = app.Environment;
 
 // Configure the HTTP request pipeline.
-if (env.IsProduction() && env.IsStaging())
+if (env.IsProduction() || env.IsStaging())
 {
     // Production or Staging
     app.UseExceptionHandler("/Error");
@@ -105,7 +105,7 @@ app.UseAuthorization();
 app.UseSwagger(c => { c.RouteTemplate = "api-docs/{documentName}/openapi.json"; });
 app.UseSwaggerUI(c =>
 {
-    c.SwaggerEndpoint("/api-docs/v1/openapi.json", "Complaint Tracking System API v1");
+    c.SwaggerEndpoint("v1/openapi.json", "Complaint Tracking System API v1");
     c.RoutePrefix = "api-docs";
     c.DocumentTitle = "Complaint Tracking System API";
 });

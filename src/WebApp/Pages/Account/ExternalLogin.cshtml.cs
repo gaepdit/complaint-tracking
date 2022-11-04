@@ -68,7 +68,7 @@ public class ExternalLoginModel : PageModel
             var user = await _userManager.FindByIdAsync(staff.Id.ToString());
 
             await _signInManager.SignInAsync(user, false);
-            return LocalRedirect(returnUrl ?? "/");
+            return string.IsNullOrEmpty(returnUrl) ? RedirectToPage("/Index") : LocalRedirect(returnUrl);
         }
     }
 
@@ -93,7 +93,10 @@ public class ExternalLoginModel : PageModel
         // Sign in the user with the external provider.
         var signInResult = await _signInManager.ExternalLoginSignInAsync(externalLoginInfo.LoginProvider,
             externalLoginInfo.ProviderKey, true);
-        if (signInResult.Succeeded) return LocalRedirect(returnUrl ?? "/");
+        
+        if (signInResult.Succeeded) 
+            return string.IsNullOrEmpty(returnUrl) ? RedirectToPage("/Index") : LocalRedirect(returnUrl);
+            
         if (signInResult.IsLockedOut || signInResult.IsNotAllowed || signInResult.RequiresTwoFactor)
             return RedirectToPage("./Unavailable");
 
@@ -141,7 +144,7 @@ public class ExternalLoginModel : PageModel
         props.IsPersistent = true;
 
         await _signInManager.SignInAsync(user, true);
-        return LocalRedirect(returnUrl ?? "/");
+        return string.IsNullOrEmpty(returnUrl) ? RedirectToPage("/Index") : LocalRedirect(returnUrl);
     }
 
     // Add errors from failed login and return this Page.

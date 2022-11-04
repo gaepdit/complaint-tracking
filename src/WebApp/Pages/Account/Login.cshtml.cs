@@ -14,9 +14,10 @@ public class LoginModel : PageModel
 
     public IActionResult OnGet(string? returnUrl = null)
     {
-        ReturnUrl = returnUrl ?? "/Index";
-
-        if (User.Identity?.IsAuthenticated ?? false) return LocalRedirect(ReturnUrl);
+        if (User.Identity?.IsAuthenticated ?? false) 
+            return string.IsNullOrEmpty(returnUrl) ? RedirectToPage("/Index") : LocalRedirect(returnUrl);
+            
+        ReturnUrl = returnUrl;
 
         Message = TempData.GetDisplayMessage();
         return Page();

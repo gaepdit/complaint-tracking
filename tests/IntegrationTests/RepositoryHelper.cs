@@ -2,7 +2,7 @@
 using Cts.Domain.Offices;
 using Cts.Infrastructure.Contexts;
 using Cts.Infrastructure.Repositories;
-using Cts.TestData.SeedData;
+using Cts.Infrastructure.Contexts.SeedDevData;
 using GaEpd.AppLibrary.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using TestSupport.EfHelpers;

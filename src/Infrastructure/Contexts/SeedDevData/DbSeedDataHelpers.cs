@@ -1,9 +1,8 @@
-﻿using Cts.Infrastructure.Contexts;
-using Cts.TestData.ActionTypes;
+﻿using Cts.TestData.ActionTypes;
 using Cts.TestData.Identity;
 using Cts.TestData.Offices;
 
-namespace Cts.TestData.SeedData;
+namespace Cts.Infrastructure.Contexts.SeedDevData;
 
 public static class DbSeedDataHelpers
 {
