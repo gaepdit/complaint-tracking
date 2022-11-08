@@ -10,12 +10,12 @@
 
     <ItemGroup>
         <PackageReference Include="LigerShark.WebOptimizer.Core" Version="3.0.372" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.AzureAD.UI" Version="6.0.9" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.9" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.9" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.AzureAD.UI" Version="6.0.11" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.11" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.11" />
         <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
         <PackageReference Include="Mindscape.Raygun4Net.AspNetCore" Version="6.6.6" />
-        <PackageReference Include="SonarAnalyzer.CSharp" Version="8.46.0.54807">
+        <PackageReference Include="SonarAnalyzer.CSharp" Version="8.48.0.56517">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
