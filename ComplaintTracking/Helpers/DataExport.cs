@@ -12,7 +12,7 @@ namespace ComplaintTracking
     {
         public static async Task<MemoryStream> GetCsvMemoryStreamAsync<T>(this IEnumerable<T> records)
         {
-            var config = new CsvConfiguration(CultureInfo.InvariantCulture) { SanitizeForInjection = true };
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture) { InjectionOptions = InjectionOptions.Escape };
             var ms = new MemoryStream();
             await using var sw = new StreamWriter(ms);
             await using var csv = new CsvWriter(sw, config);
