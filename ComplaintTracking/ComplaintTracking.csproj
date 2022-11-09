@@ -11,9 +11,6 @@
     <AdditionalFiles Include="..\.sonarlint\gaepdit.complaint-tracking\CSharp\SonarLint.xml" Link="SonarLint.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="wwwroot\.well-known\security.txt" CopyToPublishDirectory="PreserveNewest" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.97.0" />
     <PackageReference Include="CsvHelper" Version="30.0.0" />
     <PackageReference Include="JetBrains.Annotations" Version="2022.3.1" />
