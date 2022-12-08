@@ -10,7 +10,7 @@ public sealed class OfficeRepository : BaseRepository<Office, Guid>, IOfficeRepo
     public OfficeRepository(AppDbContext context) : base(context) { }
 
     public Task<Office?> FindByNameAsync(string name, CancellationToken token = default) =>
-        Context.Offices.AsNoTracking().SingleOrDefaultAsync(e => e.Name == name, token);
+        Context.Offices.AsNoTracking().SingleOrDefaultAsync(e => string.Equals(e.Name.ToUpper(), name.ToUpper()), token);
 
     public async Task<List<ApplicationUser>> GetActiveStaffMembersListAsync(
         Guid id, CancellationToken token = default) =>

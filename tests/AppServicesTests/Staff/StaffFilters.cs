@@ -22,7 +22,9 @@ public class StaffFilters
         var name = IdentityData.GetUsers.First(e => e.Active).FirstName;
         var filter = new StaffSearchDto { Name = name };
         var expected = IdentityData.GetUsers
-            .Where(e => e.Active && (e.FirstName == name || e.LastName == name));
+            .Where(e => e.Active &&
+                (string.Equals(e.FirstName, name, StringComparison.CurrentCultureIgnoreCase) ||
+                    string.Equals(e.LastName, name, StringComparison.CurrentCultureIgnoreCase)));
 
         var result = IdentityData.GetUsers.AsQueryable().ApplyFilter(filter);
 

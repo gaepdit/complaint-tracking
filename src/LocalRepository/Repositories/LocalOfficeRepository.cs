@@ -9,7 +9,7 @@ public sealed class LocalOfficeRepository : BaseRepository<Office, Guid>, IOffic
     public LocalOfficeRepository() : base(OfficeData.GetOffices) { }
 
     public Task<Office?> FindByNameAsync(string name, CancellationToken token = default) =>
-        Task.FromResult(Items.SingleOrDefault(e => e.Name == name));
+        Task.FromResult(Items.SingleOrDefault(e => string.Equals(e.Name.ToUpper(), name.ToUpper())));
 
     public async Task<List<ApplicationUser>> GetActiveStaffMembersListAsync(
         Guid id, CancellationToken token = default) =>

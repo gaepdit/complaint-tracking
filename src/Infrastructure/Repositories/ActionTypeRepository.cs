@@ -9,5 +9,6 @@ public sealed class ActionTypeRepository : BaseRepository<ActionType, Guid>, IAc
     public ActionTypeRepository(AppDbContext dbContext) : base(dbContext) { }
 
     public Task<ActionType?> FindByNameAsync(string name, CancellationToken token = default) =>
-        Context.ActionTypes.AsNoTracking().SingleOrDefaultAsync(e => e.Name == name, token);
+        Context.ActionTypes.AsNoTracking()
+            .SingleOrDefaultAsync(e => string.Equals(e.Name.ToUpper(), name.ToUpper()), token);
 }

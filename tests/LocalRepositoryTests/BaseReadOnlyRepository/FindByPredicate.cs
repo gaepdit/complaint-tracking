@@ -1,5 +1,6 @@
 using Cts.LocalRepository.Repositories;
 using Cts.TestData.Constants;
+using FluentAssertions.Execution;
 
 namespace LocalRepositoryTests.BaseReadOnlyRepository;
 
@@ -26,5 +27,22 @@ public class FindByPredicate
     {
         var result = await _repository.FindAsync(e => e.Name == TestConstants.NonExistentName);
         result.Should().BeNull();
+    }
+
+    [Test]
+    public async Task LocalRepositoryIsCaseSensitive()
+    {
+        var item = _repository.Items.First();
+
+        var resultIgnoreCase = await _repository.FindAsync(e =>
+            e.Name.ToUpperInvariant().Equals(item.Name.ToLowerInvariant(), StringComparison.CurrentCultureIgnoreCase));
+        var resultCaseSensitive = await _repository.FindAsync(e =>
+            e.Name.ToUpperInvariant().Equals(item.Name.ToLowerInvariant(), StringComparison.CurrentCulture));
+
+        using (new AssertionScope())
+        {
+            resultIgnoreCase.Should().BeEquivalentTo(item);
+            resultCaseSensitive.Should().BeNull();
+        }
     }
 }

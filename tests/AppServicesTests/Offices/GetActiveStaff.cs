@@ -31,6 +31,8 @@ public class GetActiveStaff
         var result = await appService.GetActiveStaffAsync(Guid.Empty);
 
         result.Should().ContainSingle(e =>
-            e.FirstName == user.FirstName && e.LastName == user.LastName && e.Email == user.Email);
+            string.Equals(e.FirstName, user.FirstName, StringComparison.Ordinal) &&
+            string.Equals(e.LastName, user.LastName, StringComparison.Ordinal) &&
+            string.Equals(e.Email, user.Email, StringComparison.Ordinal));
     }
 }
