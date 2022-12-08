@@ -1,7 +1,6 @@
 ﻿using Cts.AppServices.ActionTypes;
 using Cts.AppServices.AutoMapper;
 using Cts.AppServices.Offices;
-using Cts.AppServices.Staff;
 using Cts.Domain.ActionTypes;
 using Cts.Domain.Offices;
 using FluentValidation;
@@ -18,16 +17,12 @@ public static class AppServices
         // Action Types
         services.AddScoped<IActionTypeManager, ActionTypeManager>();
         services.AddScoped<IActionTypeAppService, ActionTypeAppService>();
-        services.AddScoped<IValidator<ActionTypeUpdateDto>, ActionTypeUpdateValidator>();
-        services.AddScoped<IValidator<ActionTypeCreateDto>, ActionTypeCreateValidator>();
 
         // Offices
         services.AddScoped<IOfficeManager, OfficeManager>();
         services.AddScoped<IOfficeAppService, OfficeAppService>();
-        services.AddScoped<IValidator<OfficeUpdateDto>, OfficeUpdateValidator>();
-        services.AddScoped<IValidator<OfficeCreateDto>, OfficeCreateValidator>();
 
-        // Staff
-        services.AddScoped<IValidator<StaffUpdateDto>, StaffUpdateValidator>();
+        // Add all validators
+        services.AddValidatorsFromAssemblyContaining(typeof(AppServices));
     }
 }
