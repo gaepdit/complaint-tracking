@@ -4,6 +4,7 @@ using Cts.TestData.Constants;
 using Cts.WebApp.Models;
 using Cts.WebApp.Pages.Admin.Users;
 using Cts.WebApp.Platform.RazorHelpers;
+using FluentAssertions.Execution;
 using FluentValidation;
 using FluentValidation.Results;
 using GaEpd.AppLibrary.ListItems;
@@ -39,13 +40,13 @@ public class EditTests
 
         var result = await pageModel.OnGetAsync(StaffViewTest.Id);
 
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             result.Should().BeOfType<PageResult>();
             pageModel.DisplayStaff.Should().Be(StaffViewTest);
             pageModel.UpdateStaff.Should().BeEquivalentTo(StaffViewTest.AsUpdateDto());
             pageModel.OfficeItems.Should().BeEmpty();
-        });
+        }
     }
 
     [Test]
@@ -75,11 +76,11 @@ public class EditTests
 
         var result = await pageModel.OnGetAsync(Guid.Empty);
 
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             result.Should().BeOfType<NotFoundObjectResult>();
             ((NotFoundObjectResult)result).Value.Should().Be("ID not found.");
-        });
+        }
     }
 
     [Test]
@@ -98,14 +99,14 @@ public class EditTests
 
         var result = await page.OnPostAsync();
 
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             page.ModelState.IsValid.Should().BeTrue();
             result.Should().BeOfType<RedirectToPageResult>();
             ((RedirectToPageResult)result).PageName.Should().Be("Details");
             ((RedirectToPageResult)result).RouteValues!["id"].Should().Be(Guid.Empty);
             page.TempData.GetDisplayMessage().Should().BeEquivalentTo(expectedMessage);
-        });
+        }
     }
 
     [Test]
@@ -127,13 +128,13 @@ public class EditTests
 
         var result = await page.OnPostAsync();
 
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             result.Should().BeOfType<PageResult>();
             page.ModelState.IsValid.Should().BeFalse();
             page.DisplayStaff.Should().Be(StaffViewTest);
             page.UpdateStaff.Should().Be(StaffUpdateTest);
-        });
+        }
     }
 
     [Test]

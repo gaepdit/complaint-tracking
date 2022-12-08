@@ -1,5 +1,6 @@
 using Cts.LocalRepository.Repositories;
 using Cts.TestData.Constants;
+using FluentAssertions.Execution;
 
 namespace LocalRepositoryTests.BaseReadOnlyRepository;
 
@@ -18,11 +19,11 @@ public class GetListByPredicate
     {
         var item = _repository.Items.First();
         var result = await _repository.GetListAsync(e => e.Name == item.Name);
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             result.Count.Should().Be(1);
             result.First().Should().BeEquivalentTo(item);
-        });
+        }
     }
 
     [Test]

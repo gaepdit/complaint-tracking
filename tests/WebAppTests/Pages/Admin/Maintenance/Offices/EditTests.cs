@@ -3,6 +3,7 @@ using Cts.TestData.Constants;
 using Cts.WebApp.Models;
 using Cts.WebApp.Pages.Admin.Maintenance.Offices;
 using Cts.WebApp.Platform.RazorHelpers;
+using FluentAssertions.Execution;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
@@ -24,12 +25,12 @@ public class EditTests
 
         await page.OnGetAsync(ItemTest.Id);
 
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             page.Item.Should().BeEquivalentTo(ItemTest);
             page.OriginalName.Should().Be(ItemTest.Name);
             page.HighlightId.Should().Be(Guid.Empty);
-        });
+        }
     }
 
     [Test]
@@ -55,11 +56,11 @@ public class EditTests
 
         var result = await page.OnGetAsync(Guid.Empty);
 
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             result.Should().BeOfType<NotFoundObjectResult>();
             ((NotFoundObjectResult)result).Value.Should().Be("ID not found.");
-        });
+        }
     }
 
     [Test]
@@ -76,13 +77,13 @@ public class EditTests
 
         var result = await page.OnPostAsync();
 
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             page.HighlightId.Should().Be(ItemTest.Id);
             page.TempData.GetDisplayMessage().Should().BeEquivalentTo(expectedMessage);
             result.Should().BeOfType<RedirectToPageResult>();
             ((RedirectToPageResult)result).PageName.Should().Be("Index");
-        });
+        }
     }
 
     [Test]
@@ -98,10 +99,10 @@ public class EditTests
 
         var result = await page.OnPostAsync();
 
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             result.Should().BeOfType<PageResult>();
             page.ModelState.IsValid.Should().BeFalse();
-        });
+        }
     }
 }

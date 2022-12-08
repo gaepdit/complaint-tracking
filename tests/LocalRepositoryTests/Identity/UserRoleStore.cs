@@ -1,6 +1,7 @@
 using Cts.Domain.Identity;
 using Cts.LocalRepository.Identity;
 using Cts.TestData.Identity;
+using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Identity;
 
 namespace LocalRepositoryTests.Identity;
@@ -25,11 +26,11 @@ public class UserRoleStore
         await _store.AddToRoleAsync(user, roleName, CancellationToken.None);
         var resultAfter = await _store.IsInRoleAsync(user, roleName, CancellationToken.None);
 
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             resultBefore.Should().BeFalse();
             resultAfter.Should().BeTrue();
-        });
+        }
     }
 
     [Test]
@@ -42,11 +43,11 @@ public class UserRoleStore
         await _store.RemoveFromRoleAsync(user, roleName, CancellationToken.None);
         var resultAfter = await _store.IsInRoleAsync(user, roleName, CancellationToken.None);
 
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             resultBefore.Should().BeTrue();
             resultAfter.Should().BeFalse();
-        });
+        }
     }
 
     [Test]
@@ -55,11 +56,11 @@ public class UserRoleStore
         var user = IdentityData.GetUsers.First();
         var result = await _store.GetRolesAsync(user, CancellationToken.None);
 
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             result.Should().NotBeNull();
             result.Should().HaveCount(IdentityData.GetIdentityRoles.Count());
-        });
+        }
     }
 
     [Test]
@@ -68,11 +69,11 @@ public class UserRoleStore
         var user = IdentityData.GetUsers.Last();
         var result = await _store.GetRolesAsync(user, CancellationToken.None);
 
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             result.Should().NotBeNull();
             result.Should().HaveCount(0);
-        });
+        }
     }
 
     [Test]
@@ -99,11 +100,11 @@ public class UserRoleStore
         var roleName = IdentityData.GetIdentityRoles.First().Name;
         var result = await _store.GetUsersInRoleAsync(roleName, CancellationToken.None);
 
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             result.Should().HaveCount(1);
             result[0].Should().Be(IdentityData.GetUsers.First());
-        });
+        }
     }
 
     [Test]

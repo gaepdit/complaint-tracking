@@ -2,6 +2,7 @@ using GaEpd.AppLibrary.Domain.Repositories;
 using Cts.Domain.Offices;
 using Cts.LocalRepository.Repositories;
 using Cts.TestData.Constants;
+using FluentAssertions.Execution;
 
 namespace LocalRepositoryTests.BaseRepository;
 
@@ -24,11 +25,11 @@ public class Delete
         await _repository.DeleteAsync(item);
         var result = await _repository.FindAsync(item.Id);
 
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             _repository.Items.Count.Should().Be(initialCount - 1);
             result.Should().BeNull();
-        });
+        }
     }
 
     [Test]

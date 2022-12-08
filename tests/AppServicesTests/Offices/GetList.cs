@@ -3,6 +3,7 @@ using Cts.AppServices.UserServices;
 using Cts.Domain.Identity;
 using Cts.Domain.Offices;
 using Cts.TestData.Constants;
+using FluentAssertions.Execution;
 
 namespace AppServicesTests.Offices;
 
@@ -34,12 +35,12 @@ public class GetList
 
         var result = await appService.GetListAsync();
 
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             result.Should().BeEquivalentTo(itemList, options => options
                 .Excluding(ctx => ctx.Path.EndsWith("MasterUser.Id")));
             result[0].MasterUser!.Id.ToString().Should().Be(office.MasterUser.Id);
-        });
+        }
     }
 
     [Test]

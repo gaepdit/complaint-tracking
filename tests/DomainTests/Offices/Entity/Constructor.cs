@@ -1,4 +1,5 @@
 using Cts.Domain.Offices;
+using FluentAssertions.Execution;
 
 namespace DomainTests.Offices.Entity;
 
@@ -9,12 +10,12 @@ public class Constructor
     {
         var newGuid = Guid.NewGuid();
         var result = new Office(newGuid, newGuid.ToString());
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             result.Id.Should().Be(newGuid);
             result.Name.Should().Be(newGuid.ToString());
             result.Active.Should().BeTrue();
-        });
+        }
     }
 
     [Test]

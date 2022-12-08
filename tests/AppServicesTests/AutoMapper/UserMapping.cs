@@ -3,6 +3,7 @@ using Cts.AppServices.Staff;
 using Cts.Domain.Identity;
 using Cts.Domain.Offices;
 using Cts.TestData.Constants;
+using FluentAssertions.Execution;
 
 namespace AppServicesTests.AutoMapper;
 
@@ -23,7 +24,7 @@ public class UserMapping
     {
         var result = AppServicesTestsGlobal.Mapper!.Map<StaffViewDto>(_item);
 
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             result.Id.Should().Be(_item.Id);
             result.FirstName.Should().Be(_item.FirstName);
@@ -32,7 +33,7 @@ public class UserMapping
             result.Phone.Should().Be(_item.Phone);
             result.Office.Should().BeEquivalentTo(_item.Office);
             result.Active.Should().BeTrue();
-        });
+        }
     }
 
     [Test]
@@ -50,7 +51,7 @@ public class UserMapping
 
         var result = AppServicesTestsGlobal.Mapper!.Map<ApplicationUser>(item);
 
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             result.Id.Should().Be(item.Id.ToString());
             result.FirstName.Should().Be(item.FirstName);
@@ -59,7 +60,7 @@ public class UserMapping
             result.Phone.Should().Be(item.Phone);
             result.Office.Should().BeEquivalentTo(item.Office);
             result.Active.Should().BeTrue();
-        });
+        }
     }
 
     [Test]
@@ -67,13 +68,13 @@ public class UserMapping
     {
         var result = AppServicesTestsGlobal.Mapper!.Map<StaffUpdateDto>(_item);
 
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             result.Id.Should().Be(_item.Id);
             result.Phone.Should().Be(_item.Phone);
             result.OfficeId.Should().Be(_item.Office!.Id);
             result.Active.Should().BeTrue();
-        });
+        }
     }
 
     [Test]

@@ -1,6 +1,7 @@
 using GaEpd.AppLibrary.Pagination;
 using Cts.LocalRepository.Repositories;
 using Cts.TestData.Constants;
+using FluentAssertions.Execution;
 
 namespace LocalRepositoryTests.BaseReadOnlyRepository;
 
@@ -22,11 +23,11 @@ public class GetPagedListByPredicate
 
         var result = await _repository.GetPagedListAsync(e => e.Name.Length > 0, paging);
 
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             result.Count.Should().Be(itemsCount);
             result.Should().BeEquivalentTo(_repository.Items);
-        });
+        }
     }
 
     [Test]
@@ -37,11 +38,11 @@ public class GetPagedListByPredicate
 
         var result = await _repository.GetPagedListAsync(e => e.Name == item.Name, paging);
 
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             result.Count.Should().Be(1);
             result.First().Should().BeEquivalentTo(item);
-        });
+        }
     }
 
     [Test]

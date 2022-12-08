@@ -1,5 +1,6 @@
 using Cts.Domain.ActionTypes;
 using Cts.TestData.Constants;
+using FluentAssertions.Execution;
 
 namespace DomainTests.ActionTypes.Entity;
 
@@ -10,12 +11,12 @@ public class Constructor
     {
         var newGuid = Guid.NewGuid();
         var result = new ActionType(newGuid, TestConstants.ValidName);
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             result.Id.Should().Be(newGuid);
             result.Name.Should().Be(TestConstants.ValidName);
             result.Active.Should().BeTrue();
-        });
+        }
     }
 
     [Test]

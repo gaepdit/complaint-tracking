@@ -3,6 +3,7 @@ using Cts.TestData.Constants;
 using Cts.WebApp.Models;
 using Cts.WebApp.Pages.Admin.Maintenance.Offices;
 using Cts.WebApp.Platform.RazorHelpers;
+using FluentAssertions.Execution;
 
 namespace WebAppTests.Pages.Admin.Maintenance.Offices;
 
@@ -20,12 +21,12 @@ public class IndexTests
 
         await page.OnGetAsync(service.Object);
 
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             page.Items.Should().BeEquivalentTo(ListTest);
             page.Message.Should().BeNull();
             page.HighlightId.Should().BeNull();
-        });
+        }
     }
 
     [Test]

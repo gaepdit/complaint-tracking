@@ -5,6 +5,7 @@ using Cts.TestData.Constants;
 using Cts.WebApp.Models;
 using Cts.WebApp.Pages.Admin.Users;
 using Cts.WebApp.Platform.RazorHelpers;
+using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -56,14 +57,14 @@ public class EditRolesTests
 
         var result = await pageModel.OnGetAsync(StaffViewTest.Id);
 
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             result.Should().BeOfType<PageResult>();
             pageModel.DisplayStaff.Should().Be(StaffViewTest);
             pageModel.OfficeName.Should().Be(TestConstants.ValidName);
             pageModel.UserId.Should().Be(Guid.Empty);
             pageModel.RoleSettings.Should().BeEquivalentTo(expectedRoleSettings);
-        });
+        }
     }
 
     [Test]
@@ -87,11 +88,11 @@ public class EditRolesTests
 
         var result = await pageModel.OnGetAsync(Guid.Empty);
 
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             result.Should().BeOfType<NotFoundObjectResult>();
             ((NotFoundObjectResult)result).Value.Should().Be("ID not found.");
-        });
+        }
     }
 
     [Test]
@@ -110,14 +111,14 @@ public class EditRolesTests
 
         var result = await page.OnPostAsync();
 
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             page.ModelState.IsValid.Should().BeTrue();
             result.Should().BeOfType<RedirectToPageResult>();
             ((RedirectToPageResult)result).PageName.Should().Be("Details");
             ((RedirectToPageResult)result).RouteValues!["id"].Should().Be(Guid.Empty);
             page.TempData.GetDisplayMessage().Should().BeEquivalentTo(expectedMessage);
-        });
+        }
     }
 
     [Test]
@@ -151,7 +152,7 @@ public class EditRolesTests
 
         var result = await page.OnPostAsync();
 
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             result.Should().BeOfType<PageResult>();
             page.ModelState.IsValid.Should().BeFalse();
@@ -159,6 +160,6 @@ public class EditRolesTests
             page.DisplayStaff.Should().Be(StaffViewTest);
             page.UserId.Should().Be(Guid.Empty);
             page.RoleSettings.Should().BeEquivalentTo(RoleSettingsTest);
-        });
+        }
     }
 }

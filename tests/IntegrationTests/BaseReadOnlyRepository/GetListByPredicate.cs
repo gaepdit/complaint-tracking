@@ -1,6 +1,7 @@
 using Cts.Domain.Offices;
 using Cts.TestData.Constants;
 using Cts.TestData.Offices;
+using FluentAssertions.Execution;
 
 namespace IntegrationTests.BaseReadOnlyRepository;
 
@@ -19,11 +20,11 @@ public class GetListByPredicate
     {
         var item = OfficeData.GetOffices.First(e => e.Active);
         var result = await _repository.GetListAsync(e => e.Name == item.Name);
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             result.Count.Should().Be(1);
             result.First().Should().BeEquivalentTo(item);
-        });
+        }
     }
 
     [Test]

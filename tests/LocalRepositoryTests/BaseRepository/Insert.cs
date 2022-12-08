@@ -1,6 +1,7 @@
 using Cts.Domain.Offices;
 using Cts.LocalRepository.Repositories;
 using Cts.TestData.Constants;
+using FluentAssertions.Execution;
 
 namespace LocalRepositoryTests.BaseRepository;
 
@@ -23,10 +24,10 @@ public class Insert
         await _repository.InsertAsync(newItem);
 
         var getResult = await _repository.GetAsync(newItem.Id);
-        Assert.Multiple(() =>
+        using (new AssertionScope())
         {
             getResult.Should().BeEquivalentTo(newItem);
             _repository.Items.Count.Should().Be(initialCount + 1);
-        });
+        }
     }
 }
