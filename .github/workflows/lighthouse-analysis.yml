@@ -2,6 +2,7 @@ name: Lighthouse Check
 
 on:
   pull_request:
+    branches: ["main", "vNext"]
 
 jobs:
   lighthouse-analysis:

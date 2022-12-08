@@ -1,7 +1,10 @@
 name: .NET Unit Tests
 
 on:
+  push:
+    branches: ["main", "vNext"]
   pull_request:
+    branches: ["main", "vNext"]
 
 
 jobs:
