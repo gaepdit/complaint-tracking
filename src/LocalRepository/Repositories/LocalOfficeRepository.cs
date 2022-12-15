@@ -1,6 +1,6 @@
 ﻿using Cts.Domain.Identity;
 using Cts.Domain.Offices;
-using Cts.TestData.Offices;
+using Cts.TestData;
 
 namespace Cts.LocalRepository.Repositories;
 

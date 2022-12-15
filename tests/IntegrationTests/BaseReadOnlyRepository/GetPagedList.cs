@@ -1,7 +1,7 @@
-using GaEpd.AppLibrary.Pagination;
 using Cts.Domain.Offices;
-using Cts.TestData.Offices;
+using Cts.TestData;
 using FluentAssertions.Execution;
+using GaEpd.AppLibrary.Pagination;
 
 namespace IntegrationTests.BaseReadOnlyRepository;
 

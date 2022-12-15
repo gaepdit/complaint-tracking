@@ -1,4 +1,4 @@
-﻿using Cts.TestData.Offices;
+﻿using Cts.TestData;
 using FluentAssertions.Execution;
 
 namespace IntegrationTests.BaseReadOnlyRepository;

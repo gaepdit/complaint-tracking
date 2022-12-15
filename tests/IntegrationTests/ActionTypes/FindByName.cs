@@ -1,5 +1,5 @@
 using Cts.Domain.ActionTypes;
-using Cts.TestData.ActionTypes;
+using Cts.TestData;
 using Cts.TestData.Constants;
 
 namespace IntegrationTests.ActionTypes;

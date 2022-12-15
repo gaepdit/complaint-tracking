@@ -1,6 +1,6 @@
-using GaEpd.AppLibrary.Pagination;
 using Cts.LocalRepository.Repositories;
 using FluentAssertions.Execution;
+using GaEpd.AppLibrary.Pagination;
 
 namespace LocalRepositoryTests.BaseReadOnlyRepository;
 

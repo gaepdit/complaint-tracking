@@ -1,6 +1,6 @@
-using GaEpd.AppLibrary.Domain.Repositories;
 using Cts.Domain.Offices;
-using Cts.TestData.Offices;
+using Cts.TestData;
+using GaEpd.AppLibrary.Domain.Repositories;
 
 namespace IntegrationTests.Offices;
 

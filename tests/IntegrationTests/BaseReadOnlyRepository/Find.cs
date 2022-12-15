@@ -1,5 +1,5 @@
 using Cts.Domain.Offices;
-using Cts.TestData.Offices;
+using Cts.TestData;
 
 namespace IntegrationTests.BaseReadOnlyRepository;
 

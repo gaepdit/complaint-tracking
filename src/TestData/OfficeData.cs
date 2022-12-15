@@ -1,6 +1,6 @@
 ﻿using Cts.Domain.Offices;
 
-namespace Cts.TestData.Offices;
+namespace Cts.TestData;
 
 internal static class OfficeData
 {
@@ -12,7 +12,7 @@ internal static class OfficeData
         new Office(new Guid("00000000-0000-0000-0000-000000000007"), "Closed Office") { Active = false },
     };
 
-    private static ICollection<Office>? _offices;
+    private static IEnumerable<Office>? _offices;
 
     public static IEnumerable<Office> GetOffices
     {

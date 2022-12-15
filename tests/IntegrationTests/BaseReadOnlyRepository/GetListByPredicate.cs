@@ -1,6 +1,6 @@
 using Cts.Domain.Offices;
+using Cts.TestData;
 using Cts.TestData.Constants;
-using Cts.TestData.Offices;
 using FluentAssertions.Execution;
 
 namespace IntegrationTests.BaseReadOnlyRepository;

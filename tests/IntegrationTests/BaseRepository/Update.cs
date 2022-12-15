@@ -1,7 +1,7 @@
-using GaEpd.AppLibrary.Domain.Repositories;
 using Cts.Domain.Offices;
+using Cts.TestData;
 using Cts.TestData.Constants;
-using Cts.TestData.Offices;
+using GaEpd.AppLibrary.Domain.Repositories;
 
 namespace IntegrationTests.BaseRepository;
 
