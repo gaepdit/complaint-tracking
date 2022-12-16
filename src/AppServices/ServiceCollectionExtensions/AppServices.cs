@@ -1,7 +1,9 @@
-﻿using Cts.AppServices.ActionTypes;
+using Cts.AppServices.ActionTypes;
 using Cts.AppServices.AutoMapper;
+using Cts.AppServices.Concerns;
 using Cts.AppServices.Offices;
 using Cts.Domain.ActionTypes;
+using Cts.Domain.Concerns;
 using Cts.Domain.Offices;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +19,10 @@ public static class AppServices
         // Action Types
         services.AddScoped<IActionTypeManager, ActionTypeManager>();
         services.AddScoped<IActionTypeAppService, ActionTypeAppService>();
+
+        // Concerns
+        services.AddScoped<IConcernManager, ConcernManager>();
+        services.AddScoped<IConcernAppService, ConcernAppService>();
 
         // Offices
         services.AddScoped<IOfficeManager, OfficeManager>();

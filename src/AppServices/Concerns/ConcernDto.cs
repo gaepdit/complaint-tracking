@@ -1,9 +1,9 @@
 ﻿using Cts.Domain.BaseEntities;
 using System.ComponentModel.DataAnnotations;
 
-namespace Cts.AppServices.ActionTypes;
+namespace Cts.AppServices.Concerns;
 
-public class ActionTypeViewDto
+public class ConcernViewDto
 {
     public Guid Id { get; init; }
     public string Name { get; init; } = string.Empty;
@@ -12,14 +12,14 @@ public class ActionTypeViewDto
     public bool Active { get; init; }
 }
 
-public class ActionTypeCreateDto
+public class ConcernCreateDto
 {
     [Required(AllowEmptyStrings = false)]
     [StringLength(SimpleNamedEntity.MaxNameLength, MinimumLength = SimpleNamedEntity.MinNameLength)]
     public string Name { get; init; } = string.Empty;
 }
 
-public class ActionTypeUpdateDto
+public class ConcernUpdateDto
 {
     public Guid Id { get; init; }
 

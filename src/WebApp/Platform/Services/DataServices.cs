@@ -1,4 +1,5 @@
 ﻿using Cts.Domain.ActionTypes;
+using Cts.Domain.Concerns;
 using Cts.Domain.Offices;
 using Cts.Infrastructure.Contexts;
 using Cts.Infrastructure.Repositories;
@@ -21,6 +22,7 @@ public static class DataServices
 
             // Uses static data if no database is built.
             services.AddSingleton<IActionTypeRepository, LocalActionTypeRepository>();
+            services.AddSingleton<IConcernRepository, LocalConcernRepository>();
             services.AddSingleton<IOfficeRepository, LocalOfficeRepository>();
         }
         else
@@ -31,6 +33,7 @@ public static class DataServices
 
 
             services.AddScoped<IActionTypeRepository, ActionTypeRepository>();
+            services.AddScoped<IConcernRepository, ConcernRepository>();
             services.AddScoped<IOfficeRepository, OfficeRepository>();
         }
     }

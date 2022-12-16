@@ -1,9 +1,8 @@
-﻿namespace Cts.Domain.Concerns;
+﻿using Cts.Domain.BaseEntities;
 
-public class Concern : AuditableEntity
+namespace Cts.Domain.Concerns;
+
+public class Concern : SimpleNamedEntity
 {
-    [StringLength(50)]
-    public string Name { get; set; } = string.Empty;
-
-    public bool Active { get; set; } = true;
+    public Concern(Guid id, string name) : base(id, name) { }
 }

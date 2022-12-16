@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Cts.AppServices.ActionTypes;
+using Cts.AppServices.Concerns;
 using Cts.AppServices.Offices;
 using Cts.AppServices.Staff;
 using Cts.Domain.ActionTypes;
+using Cts.Domain.Concerns;
 using Cts.Domain.Identity;
 using Cts.Domain.Offices;
 
@@ -14,6 +16,9 @@ public class AutoMapperProfile : Profile
     {
         CreateMap<ActionType, ActionTypeViewDto>();
         CreateMap<ActionType, ActionTypeUpdateDto>();
+
+        CreateMap<Concern, ConcernViewDto>();
+        CreateMap<Concern, ConcernUpdateDto>();
 
         CreateMap<Office, OfficeViewDto>().ReverseMap();
         CreateMap<Office, OfficeUpdateDto>();

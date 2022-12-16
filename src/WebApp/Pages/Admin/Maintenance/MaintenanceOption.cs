@@ -10,6 +10,9 @@ public class MaintenanceOption
     public static MaintenanceOption ActionType { get; } =
         new() { SingularName = "Complaint Action Type", PluralName = "Complaint Action Types" };
 
+    public static MaintenanceOption Concern { get; } =
+        new() { SingularName = "Environmental Area of Concern", PluralName = "Environmental Areas of Concern" };
+
     public static MaintenanceOption Office { get; } =
         new() { SingularName = "Office", PluralName = "Offices" };
 }

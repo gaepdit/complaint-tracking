@@ -18,6 +18,12 @@ public static class DbSeedDataHelpers
         context.ActionTypes.AddRange(ActionTypeData.GetActionTypes);
         context.SaveChanges();
     }
+    public static void SeedConcernData(AppDbContext context)
+    {
+        if (context.Concerns.Any()) return;
+        context.Concerns.AddRange(ConcernData.GetConcerns);
+        context.SaveChanges();
+    }
 
     public static void SeedOfficeData(AppDbContext context)
     {
