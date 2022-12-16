@@ -1,4 +1,5 @@
 using Cts.Domain.ActionTypes;
+using Cts.Domain.Exceptions;
 using Cts.TestData.Constants;
 
 namespace DomainTests.ActionTypes.Manager;
@@ -28,7 +29,7 @@ public class Create
 
         var action = async () => await manager.CreateAsync(TestConstants.ValidName);
 
-        (await action.Should().ThrowAsync<ActionTypeNameAlreadyExistsException>())
-            .WithMessage($"An Action Type with that name already exists. Name: {TestConstants.ValidName}");
+        (await action.Should().ThrowAsync<NameAlreadyExistsException>())
+            .WithMessage($"An entity with that name already exists. Name: {TestConstants.ValidName}");
     }
 }

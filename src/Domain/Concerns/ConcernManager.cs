@@ -1,3 +1,5 @@
+using Cts.Domain.Exceptions;
+
 namespace Cts.Domain.Concerns;
 
 /// <inheritdoc />
@@ -23,6 +25,6 @@ public class ConcernManager : IConcernManager
         // Validate the name is not a duplicate
         var existing = await _repository.FindByNameAsync(name.Trim(), token);
         if (existing is not null && (ignoreId is null || existing.Id != ignoreId))
-            throw new ConcernNameAlreadyExistsException(name);
+            throw new NameAlreadyExistsException(name);
     }
 }

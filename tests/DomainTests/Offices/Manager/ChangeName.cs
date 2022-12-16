@@ -1,3 +1,4 @@
+using Cts.Domain.Exceptions;
 using Cts.Domain.Offices;
 using Cts.TestData.Constants;
 
@@ -45,8 +46,8 @@ public class ChangeName
 
         var action = async () => await manager.ChangeNameAsync(item, TestConstants.NewValidName);
 
-        (await action.Should().ThrowAsync<OfficeNameAlreadyExistsException>())
-            .WithMessage($"An Office with that name already exists. Name: {TestConstants.NewValidName}");
+        (await action.Should().ThrowAsync<NameAlreadyExistsException>())
+            .WithMessage($"An entity with that name already exists. Name: {TestConstants.NewValidName}");
     }
 
     [Test]

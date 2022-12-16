@@ -1,4 +1,5 @@
-﻿using Cts.Domain.Identity;
+﻿using Cts.Domain.Exceptions;
+using Cts.Domain.Identity;
 
 namespace Cts.Domain.Offices;
 
@@ -25,6 +26,6 @@ public class OfficeManager : IOfficeManager
         // Validate the name is not a duplicate
         var existing = await _repository.FindByNameAsync(name.Trim(), token);
         if (existing is not null && (ignoreId is null || existing.Id != ignoreId))
-            throw new OfficeNameAlreadyExistsException(name);
+            throw new NameAlreadyExistsException(name);
     }
 }

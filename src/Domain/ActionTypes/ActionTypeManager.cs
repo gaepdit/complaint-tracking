@@ -1,4 +1,6 @@
-﻿namespace Cts.Domain.ActionTypes;
+using Cts.Domain.Exceptions;
+
+namespace Cts.Domain.ActionTypes;
 
 /// <inheritdoc />
 public class ActionTypeManager : IActionTypeManager
@@ -23,6 +25,6 @@ public class ActionTypeManager : IActionTypeManager
         // Validate the name is not a duplicate
         var existing = await _repository.FindByNameAsync(name.Trim(), token);
         if (existing is not null && (ignoreId is null || existing.Id != ignoreId))
-            throw new ActionTypeNameAlreadyExistsException(name);
+            throw new NameAlreadyExistsException(name);
     }
 }
