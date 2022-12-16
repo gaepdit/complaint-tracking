@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Cts.AppServices.ActionTypes;
+using Cts.AppServices.Complaints;
 using Cts.AppServices.Concerns;
 using Cts.AppServices.Offices;
 using Cts.AppServices.Staff;
 using Cts.Domain.ActionTypes;
+using Cts.Domain.Complaints;
 using Cts.Domain.Concerns;
 using Cts.Domain.Identity;
 using Cts.Domain.Offices;
@@ -17,6 +19,7 @@ public class AutoMapperProfile : Profile
         CreateMap<ActionType, ActionTypeViewDto>();
         CreateMap<ActionType, ActionTypeUpdateDto>();
 
+        CreateMap<Complaint, ComplaintPublicViewDto>();
         CreateMap<Concern, ConcernViewDto>();
         CreateMap<Concern, ConcernUpdateDto>();
 

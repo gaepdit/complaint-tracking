@@ -4,12 +4,25 @@ using Cts.Domain.ComplaintTransitions;
 using Cts.Domain.Concerns;
 using Cts.Domain.Identity;
 using Cts.Domain.Offices;
+using JetBrains.Annotations;
 
 namespace Cts.Domain.Complaints;
 
 public class Complaint : AuditableSoftDeleteEntity<int>
 {
-    // Meta-data
+    // Constants
+
+
+    // Constructors
+
+    [UsedImplicitly] // Used by ORM.
+    private Complaint() { }
+
+    internal Complaint(int id) : base(id) { }
+
+    // Properties
+
+    // Properties: Meta-data
 
     public ComplaintStatus Status { get; set; } = ComplaintStatus.New;
 
@@ -21,7 +34,7 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     public ApplicationUser ReceivedBy { get; set; } = null!;
 
-    // Caller
+    // Properties: Caller
 
     public string? CallerName { get; set; }
     public string? CallerRepresents { get; set; }
@@ -36,7 +49,7 @@ public class Complaint : AuditableSoftDeleteEntity<int>
     [DataType(DataType.EmailAddress)]
     public string? CallerEmail { get; set; }
 
-    // Complaint
+    // Properties: Complaint
 
     [DataType(DataType.MultilineText)]
     public string? ComplaintNature { get; set; }
@@ -61,7 +74,7 @@ public class Complaint : AuditableSoftDeleteEntity<int>
     public Concern? SecondaryConcern { get; set; }
     public Guid? SecondaryConcernId { get; set; }
 
-    // Source
+    // Properties: Source
 
     [StringLength(50)]
     public string? SourceFacilityId { get; set; }
@@ -83,7 +96,7 @@ public class Complaint : AuditableSoftDeleteEntity<int>
     [DataType(DataType.EmailAddress)]
     public string? SourceEmail { get; set; }
 
-    // Assignment/History
+    // Properties: Assignment/History
 
     public virtual Office CurrentOffice { get; set; } = null!;
     public Guid CurrentOfficeId { get; set; }
@@ -102,11 +115,11 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     public List<ComplaintTransition> ComplaintTransitions { get; set; } = new();
 
-    // Actions
+    // Properties: Actions
 
     public List<ComplaintAction> ComplaintActions { get; set; } = new();
 
-    // Review/Closure
+    // Properties: Review/Closure
 
     public ApplicationUser? ReviewBy { get; set; }
 
@@ -117,14 +130,19 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     public DateTime? DateComplaintClosed { get; set; }
 
-    // Deletion
+    // Properties: Deletion
 
     [StringLength(4000)]
     public string? DeleteComments { get; set; }
 
-    // Attachments
+    // Properties: Attachments
 
     public List<Attachment> Attachments { get; set; } = new();
+
+    // Methods
+
+
+    // Enums
 
     public enum ComplaintStatus
     {

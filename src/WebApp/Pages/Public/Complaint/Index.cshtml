@@ -1,0 +1,14 @@
+﻿@page "{id:int?}"
+@using System.Globalization
+@model IndexModel
+@{
+    ViewData["Title"] = $"Complaint ID {Model.Item.Id}";
+}
+
+<h1>@ViewData["Title"] <em class="text-muted">— Public Copy</em></h1>
+
+<p><small>Report generated on @DateTime.Now.ToString(CultureInfo.CurrentCulture.DateTimeFormat.FullDateTimePattern).</small></p>
+
+<h2 id="complaint">Complaint</h2>
+
+<p class="gaepd-preserve-linebreaks">@Model.Item.ComplaintNature</p>

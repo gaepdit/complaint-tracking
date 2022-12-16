@@ -1,8 +1,10 @@
 using Cts.AppServices.ActionTypes;
 using Cts.AppServices.AutoMapper;
+using Cts.AppServices.Complaints;
 using Cts.AppServices.Concerns;
 using Cts.AppServices.Offices;
 using Cts.Domain.ActionTypes;
+using Cts.Domain.Complaints;
 using Cts.Domain.Concerns;
 using Cts.Domain.Offices;
 using FluentValidation;
@@ -19,6 +21,10 @@ public static class AppServices
         // Action Types
         services.AddScoped<IActionTypeManager, ActionTypeManager>();
         services.AddScoped<IActionTypeAppService, ActionTypeAppService>();
+
+        // Complaints
+        services.AddScoped<IComplaintAppService, ComplaintAppService>();
+        services.AddScoped<IComplaintManager, ComplaintManager>();
 
         // Concerns
         services.AddScoped<IConcernManager, ConcernManager>();
