@@ -25,34 +25,34 @@ public sealed class ActionTypeAppService : IActionTypeAppService
 
     public async Task<ActionTypeUpdateDto?> FindForUpdateAsync(Guid id, CancellationToken token = default)
     {
-        var actionType = await _repository.FindAsync(id, token);
-        return _mapper.Map<ActionTypeUpdateDto>(actionType);
+        var item = await _repository.FindAsync(id, token);
+        return _mapper.Map<ActionTypeUpdateDto>(item);
     }
 
     public async Task<IReadOnlyList<ActionTypeViewDto>> GetListAsync(CancellationToken token = default)
     {
-        var actionTypes = (await _repository.GetListAsync(token)).OrderBy(e => e.Name).ToList();
-        return _mapper.Map<List<ActionTypeViewDto>>(actionTypes);
+        var list = (await _repository.GetListAsync(token)).OrderBy(e => e.Name).ToList();
+        return _mapper.Map<List<ActionTypeViewDto>>(list);
     }
 
     public async Task<Guid> CreateAsync(string name, CancellationToken token = default)
     {
-        var actionType = await _manager.CreateAsync(name, token);
-        actionType.SetCreator((await _userService.GetCurrentUserAsync())?.Id);
-        await _repository.InsertAsync(actionType, token: token);
-        return actionType.Id;
+        var item = await _manager.CreateAsync(name, token);
+        item.SetCreator((await _userService.GetCurrentUserAsync())?.Id);
+        await _repository.InsertAsync(item, token: token);
+        return item.Id;
     }
 
     public async Task UpdateAsync(ActionTypeUpdateDto resource, CancellationToken token = default)
     {
-        var actionType = await _repository.GetAsync(resource.Id, token);
+        var item = await _repository.GetAsync(resource.Id, token);
 
-        if (actionType.Name != resource.Name.Trim())
-            await _manager.ChangeNameAsync(actionType, resource.Name, token);
-        actionType.Active = resource.Active;
-        actionType.SetUpdater((await _userService.GetCurrentUserAsync())?.Id);
+        if (item.Name != resource.Name.Trim())
+            await _manager.ChangeNameAsync(item, resource.Name, token);
+        item.Active = resource.Active;
+        item.SetUpdater((await _userService.GetCurrentUserAsync())?.Id);
 
-        await _repository.UpdateAsync(actionType, token: token);
+        await _repository.UpdateAsync(item, token: token);
     }
 
     public void Dispose() => _repository.Dispose();

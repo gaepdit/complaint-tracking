@@ -28,20 +28,20 @@ public sealed class OfficeAppService : IOfficeAppService
 
     public async Task<OfficeViewDto?> FindAsync(Guid id, CancellationToken token = default)
     {
-        var office = await _repository.FindAsync(id, token);
-        return _mapper.Map<OfficeViewDto>(office);
+        var item = await _repository.FindAsync(id, token);
+        return _mapper.Map<OfficeViewDto>(item);
     }
 
     public async Task<OfficeUpdateDto?> FindForUpdateAsync(Guid id, CancellationToken token = default)
     {
-        var office = await _repository.FindAsync(id, token);
-        return _mapper.Map<OfficeUpdateDto>(office);
+        var item = await _repository.FindAsync(id, token);
+        return _mapper.Map<OfficeUpdateDto>(item);
     }
 
     public async Task<IReadOnlyList<OfficeViewDto>> GetListAsync(CancellationToken token = default)
     {
-        var offices = (await _repository.GetListAsync(token)).OrderBy(e => e.Name).ToList();
-        return _mapper.Map<IReadOnlyList<OfficeViewDto>>(offices);
+        var list = (await _repository.GetListAsync(token)).OrderBy(e => e.Name).ToList();
+        return _mapper.Map<IReadOnlyList<OfficeViewDto>>(list);
     }
 
     public async Task<IReadOnlyList<ListItem>> GetActiveListItemsAsync(CancellationToken token = default) =>
@@ -51,22 +51,22 @@ public sealed class OfficeAppService : IOfficeAppService
     public async Task<Guid> CreateAsync(OfficeCreateDto resource, CancellationToken token = default)
     {
         var masterUser = _mapper.Map<ApplicationUser>(resource.MasterUser);
-        var office = await _manager.CreateAsync(resource.Name, masterUser, token);
-        office.SetCreator((await _userService.GetCurrentUserAsync())?.Id);
-        await _repository.InsertAsync(office, token: token);
-        return office.Id;
+        var item = await _manager.CreateAsync(resource.Name, masterUser, token);
+        item.SetCreator((await _userService.GetCurrentUserAsync())?.Id);
+        await _repository.InsertAsync(item, token: token);
+        return item.Id;
     }
 
     public async Task UpdateAsync(OfficeUpdateDto resource, CancellationToken token = default)
     {
-        var office = await _repository.GetAsync(resource.Id, token);
+        var item = await _repository.GetAsync(resource.Id, token);
 
-        if (office.Name != resource.Name.Trim())
-            await _manager.ChangeNameAsync(office, resource.Name, token);
-        office.Active = resource.Active;
-        office.SetUpdater((await _userService.GetCurrentUserAsync())?.Id);
+        if (item.Name != resource.Name.Trim())
+            await _manager.ChangeNameAsync(item, resource.Name, token);
+        item.Active = resource.Active;
+        item.SetUpdater((await _userService.GetCurrentUserAsync())?.Id);
 
-        await _repository.UpdateAsync(office, token: token);
+        await _repository.UpdateAsync(item, token: token);
     }
 
     public async Task<IReadOnlyList<StaffViewDto>> GetActiveStaffAsync(Guid id, CancellationToken token = default)

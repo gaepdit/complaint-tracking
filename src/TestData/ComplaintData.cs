@@ -47,6 +47,26 @@ internal static class ComplaintData
             ComplaintClosed = false,
             DateComplaintClosed = null,
         },
+        new Complaint(3)
+        {
+            Status = ComplaintStatus.Closed,
+            DateReceived = DateTime.Now.AddDays(-20),
+            ComplaintNature = "PublicSearchSpec reference",
+            ComplaintLocation = TextData.Word,
+            ComplaintCity = TextData.Word,
+            ComplaintCounty = TextData.Word,
+            PrimaryConcern = ConcernData.GetConcerns.ElementAt(2),
+            SecondaryConcern = ConcernData.GetConcerns.ElementAt(3),
+            SourceFacilityId = TextData.Word,
+            SourceFacilityName = TextData.Word,
+            SourceContactName = TextData.Word,
+            SourceAddress = ValueObjectData.AlternateFullAddress,
+            SourcePhoneNumber = ValueObjectData.AlternateNumber,
+            CurrentOffice = OfficeData.GetOffices.ElementAt(1),
+            ReviewComments = TextData.Word,
+            ComplaintClosed = true,
+            DateComplaintClosed = DateTime.Now.AddDays(-10),
+        },
     };
 
     private static IEnumerable<Complaint>? _complaints;

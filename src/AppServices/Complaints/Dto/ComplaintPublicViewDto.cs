@@ -3,9 +3,9 @@ using Cts.Domain.Complaints;
 using Cts.Domain.Concerns;
 using Cts.Domain.DataProcessing;
 using Cts.Domain.ValueObjects;
-using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
-namespace Cts.AppServices.Complaints;
+namespace Cts.AppServices.Complaints.Dto;
 
 public class ComplaintPublicViewDto
 {
@@ -22,70 +22,71 @@ public class ComplaintPublicViewDto
 
     public ComplaintStatus Status { get; init; } = ComplaintStatus.New;
 
-    [DisplayName("Date Received")]
+    [Display(Name = "Date Received")]
     public DateTime DateReceived { get; init; }
 
     // Properties: Complaint details
 
-    [DisplayName("Nature of Complaint")]
+    [Display(Name = "Nature of Complaint")]
     public string? ComplaintNature
     {
         get => _complaintNature;
         init => _complaintNature = PersonalInformation.RedactPii(value);
     }
 
-    [DisplayName("Location of Complaint")]
+    [Display(Name = "Location of Complaint")]
     public string? ComplaintLocation
     {
         get => _complaintLocation;
         init => _complaintLocation = PersonalInformation.RedactPii(value);
     }
-    
-    [DisplayName("City of Complaint")]
+
+    [Display(Name = "City of Complaint")]
     public string? ComplaintCity { get; init; }
 
-    [DisplayName("County of Complaint")]
+    [Display(Name = "County of Complaint")]
     public string? ComplaintCounty { get; init; }
 
-    [DisplayName("Primary Concern")]
+    [Display(Name = "Primary Concern")]
     public Concern? PrimaryConcern { get; init; }
 
     public string? PrimaryConcernName => PrimaryConcern?.Name;
-    
-    [DisplayName("Secondary Concern")]
+
+    [Display(Name = "Secondary Concern")]
     public Concern? SecondaryConcern { get; init; }
+
     public string? SecondaryConcernName => SecondaryConcern?.Name;
 
     // Properties: Source
 
-    [DisplayName("Facility ID Number")]
+    [Display(Name = "Facility ID Number")]
     public string? SourceFacilityId { get; set; }
 
-    [DisplayName("Source Name")]
+    [Display(Name = "Source Name")]
     public string? SourceFacilityName { get; set; }
 
-    [DisplayName("Source Contact")]
+    [Display(Name = "Source Contact")]
     public string? SourceContactName { get; set; }
 
-    [DisplayName("Source Address")]
+    [Display(Name = "Source Address")]
     public Address? SourceAddress { get; set; }
-    
+
     // Properties: Assignment/History
 
-    [DisplayName("Assigned Office")]
+    [Display(Name = "Assigned Office")]
     public OfficeViewDto? CurrentOffice { get; init; }
 
     // Properties: Actions
     // TODO
-    // [DisplayName("Actions")]
+    // [Display(Name = "Actions")]
     // public List<ComplaintActionPublicViewDto> ComplaintActions { get; set; } = new();
 
     // Properties: Review/Closure
 
-    [DisplayName("Date Complaint Closed")]
+    [Display(Name = "Date Complaint Closed")]
     public DateTime? DateComplaintClosed { get; init; }
 
-    [DisplayName("Review Comments")]
+    [Display(Name = "Review Comments")]
     public string? ReviewComments
     {
         get => _reviewComments;
@@ -94,8 +95,6 @@ public class ComplaintPublicViewDto
 
     // Properties: Attachments
     // TODO
-    // [DisplayName("Attachments")]
+    // [Display(Name = "Attachments")]
     // public List<AttachmentPublicViewDto> Attachments { get; set; } = new();
-
-
 }
