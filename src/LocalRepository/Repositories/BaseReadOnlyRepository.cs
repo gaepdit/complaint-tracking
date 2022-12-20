@@ -1,4 +1,5 @@
-﻿using GaEpd.AppLibrary.Domain.Entities;
+﻿using Cts.Domain.AppLibraryExtra;
+using GaEpd.AppLibrary.Domain.Entities;
 using GaEpd.AppLibrary.Domain.Repositories;
 using GaEpd.AppLibrary.Pagination;
 using System.Linq.Expressions;
@@ -36,14 +37,23 @@ public class BaseReadOnlyRepository<TEntity, TKey> : IReadOnlyRepository<TEntity
     public Task<IReadOnlyCollection<TEntity>> GetPagedListAsync(
         Expression<Func<TEntity, bool>> predicate,
         PaginatedRequest paging,
-        CancellationToken token = default) =>
-        Task.FromResult(Items.Where(predicate.Compile())
-            .Skip(paging.Skip).Take(paging.Take).ToList() as IReadOnlyCollection<TEntity>);
+        CancellationToken token = default)
+    {
+        var result = Items.Where(predicate.Compile()).AsQueryable()
+            .OrderByIf(paging.Sorting)
+            .Skip(paging.Skip).Take(paging.Take);
+        return Task.FromResult(result.ToList() as IReadOnlyCollection<TEntity>);
+    }
 
     public Task<IReadOnlyCollection<TEntity>> GetPagedListAsync(
         PaginatedRequest paging,
-        CancellationToken token = default) =>
-        Task.FromResult(Items.Skip(paging.Skip).Take(paging.Take).ToList() as IReadOnlyCollection<TEntity>);
+        CancellationToken token = default)
+    {
+        var result = Items.AsQueryable()
+            .OrderByIf(paging.Sorting)
+            .Skip(paging.Skip).Take(paging.Take);
+        return Task.FromResult(result.ToList() as IReadOnlyCollection<TEntity>);
+    }
 
     // ReSharper disable once VirtualMemberNeverOverridden.Global
     protected virtual void Dispose(bool disposing)

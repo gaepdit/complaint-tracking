@@ -36,7 +36,7 @@ public class GetPagedListByPredicate
         var item = _repository.Items.First();
         var paging = new PaginatedRequest(1, _repository.Items.Count);
 
-        var result = await _repository.GetPagedListAsync(e => e.Name == item.Name, paging);
+        var result = await _repository.GetPagedListAsync(e => e.Id == item.Id, paging);
 
         using (new AssertionScope())
         {
@@ -59,5 +59,21 @@ public class GetPagedListByPredicate
         var paging = new PaginatedRequest(2, _repository.Items.Count);
         var result = await _repository.GetPagedListAsync(e => e.Name.Length > 0, paging);
         result.Should().BeEmpty();
+    }
+
+    [Test]
+    public async Task GivenSorting_ReturnsSortedList()
+    {
+        var itemsCount = _repository.Items.Count;
+        var paging = new PaginatedRequest(1, itemsCount, "Name desc");
+
+        var result = await _repository.GetPagedListAsync(e => e.Name.Length > 0, paging);
+
+        using (new AssertionScope())
+        {
+            result.Count.Should().Be(itemsCount);
+            result.Should().BeEquivalentTo(_repository.Items);
+            result.Should().BeInDescendingOrder(e => e.Name);
+        }
     }
 }
