@@ -4,7 +4,6 @@ using Cts.Domain.ComplaintTransitions;
 using Cts.Domain.Concerns;
 using Cts.Domain.Identity;
 using Cts.Domain.Offices;
-using JetBrains.Annotations;
 
 namespace Cts.Domain.Complaints;
 
@@ -15,20 +14,19 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     // Constructors
 
-    [UsedImplicitly] // Used by ORM.
-    private Complaint() { }
+    internal Complaint() { }
 
     internal Complaint(int id) : base(id) { }
 
     // Properties
 
-    // Properties: Meta-data
+    // Properties: Status & meta-data
 
     public ComplaintStatus Status { get; set; } = ComplaintStatus.New;
 
-    public DateTime DateEntered { get; set; }
+    public DateTime DateEntered { get; init; } = DateTime.Now;
 
-    public ApplicationUser EnteredBy { get; set; } = null!;
+    public ApplicationUser EnteredBy { get; init; } = null!;
 
     public DateTime DateReceived { get; set; }
 
@@ -49,7 +47,7 @@ public class Complaint : AuditableSoftDeleteEntity<int>
     [DataType(DataType.EmailAddress)]
     public string? CallerEmail { get; set; }
 
-    // Properties: Complaint
+    // Properties: Complaint details
 
     [DataType(DataType.MultilineText)]
     public string? ComplaintNature { get; set; }
@@ -68,11 +66,9 @@ public class Complaint : AuditableSoftDeleteEntity<int>
     [StringLength(15)]
     public string? ComplaintCounty { get; set; }
 
-    public Concern? PrimaryConcern { get; set; }
-    public Guid? PrimaryConcernId { get; set; }
+    public Concern PrimaryConcern { get; set; } = default!;
 
     public Concern? SecondaryConcern { get; set; }
-    public Guid? SecondaryConcernId { get; set; }
 
     // Properties: Source
 
@@ -98,14 +94,13 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     // Properties: Assignment/History
 
-    public virtual Office CurrentOffice { get; set; } = null!;
-    public Guid CurrentOfficeId { get; set; }
+    public Office CurrentOffice { get; set; } = null!;
 
     [StringLength(50)]
     [Obsolete("Holdover from old application")]
     public string? CurrentProgram { get; set; }
 
-    public virtual ApplicationUser? CurrentOwner { get; set; }
+    public ApplicationUser? CurrentOwner { get; set; }
 
     public DateTime? DateCurrentOwnerAssigned { get; set; }
 
@@ -140,37 +135,36 @@ public class Complaint : AuditableSoftDeleteEntity<int>
     public List<Attachment> Attachments { get; set; } = new();
 
     // Methods
+}
 
+// Enums
 
-    // Enums
+public enum ComplaintStatus
+{
+    /// <summary>
+    /// Represents a new complaint that has not been accepted.
+    /// </summary>
+    New = 0,
 
-    public enum ComplaintStatus
-    {
-        /// <summary>
-        /// Represents a new complaint that has not been accepted.
-        /// </summary>
-        New = 0,
+    /// <summary>
+    ///  Represents a new complaint that has been accepted.
+    /// </summary>
+    [Display(Name = "Under Investigation")]
+    UnderInvestigation = 1,
 
-        /// <summary>
-        ///  Represents a new complaint that has been accepted.
-        /// </summary>
-        [Display(Name = "Under Investigation")]
-        UnderInvestigation = 1,
+    /// <summary>
+    ///  Represents a complaint that has been submitted for review.
+    /// </summary>
+    [Display(Name = "Review Pending")] ReviewPending = 2,
 
-        /// <summary>
-        ///  Represents a complaint that has been submitted for review.
-        /// </summary>
-        [Display(Name = "Review Pending")] ReviewPending = 2,
+    /// <summary>
+    ///  Represents a complaint that has been approved by a reviewer.
+    /// </summary>
+    [Display(Name = "Approved/Closed")] Closed = 3,
 
-        /// <summary>
-        ///  Represents a complaint that has been approved by a reviewer.
-        /// </summary>
-        [Display(Name = "Approved/Closed")] Closed = 3,
-
-        /// <summary>
-        ///  Represents a complaint that has been administratively closed (e.g., by EPD-IT).
-        /// </summary>
-        [Display(Name = "Administratively Closed")]
-        AdministrativelyClosed = 4,
-    }
+    /// <summary>
+    ///  Represents a complaint that has been administratively closed (e.g., by EPD-IT).
+    /// </summary>
+    [Display(Name = "Administratively Closed")]
+    AdministrativelyClosed = 4,
 }

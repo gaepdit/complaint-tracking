@@ -16,7 +16,7 @@ public sealed class ComplaintAppService : IComplaintAppService
 
     public async Task<ComplaintPublicViewDto?> GetPublicViewAsync(int id, CancellationToken token = default)
     {
-        var item = await _repository.FindAsync(id, token);
+        var item = await _repository.FindAsync(e => e.Id == id && !e.IsDeleted && e.ComplaintClosed, token);
         return _mapper.Map<ComplaintPublicViewDto>(item);
     }
 

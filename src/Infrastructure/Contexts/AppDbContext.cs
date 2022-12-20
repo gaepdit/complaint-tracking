@@ -26,4 +26,15 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Concern> Concerns => Set<Concern>();
     public DbSet<Office> Offices => Set<Office>();
     public DbSet<EmailLog> EmailLogs => Set<EmailLog>();
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        // See https://learn.microsoft.com/en-us/ef/core/querying/related-data/eager#model-configuration-for-auto-including-navigations
+        var complaintEntity = builder.Entity<Complaint>();
+        complaintEntity.Navigation(e => e.PrimaryConcern).AutoInclude();
+        complaintEntity.Navigation(e => e.SecondaryConcern).AutoInclude();
+        complaintEntity.Navigation(e => e.CurrentOffice).AutoInclude();
+    }
 }

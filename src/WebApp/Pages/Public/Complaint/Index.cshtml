@@ -1,14 +1,86 @@
 ﻿@page "{id:int?}"
+@using Cts.WebApp.Platform.PageDisplayHelpers
 @using System.Globalization
 @model IndexModel
 @{
     ViewData["Title"] = $"Complaint ID {Model.Item.Id}";
 }
 
-<h1>@ViewData["Title"] <em class="text-muted">— Public Copy</em></h1>
+<h1>
+    @ViewData["Title"] <em class="text-brand">— Public Copy</em>
+</h1>
 
-<p><small>Report generated on @DateTime.Now.ToString(CultureInfo.CurrentCulture.DateTimeFormat.FullDateTimePattern).</small></p>
+<p>
+    <small class="text-muted">Report generated on @DateTime.Now.ToString(CultureInfo.CurrentCulture.DateTimeFormat.FullDateTimePattern).</small>
+</p>
 
-<h2 id="complaint">Complaint</h2>
+<div class="container">
+    <dl class="row">
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.DateReceived)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.DateReceived)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CurrentOffice)</dt>
+        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Model.Item.CurrentOffice?.Name</dd>
+    </dl>
+</div>
 
-<p class="gaepd-preserve-linebreaks">@Model.Item.ComplaintNature</p>
+<h2 id="status">Status: <em class="text-brand">@Model.Item.Status.GetDisplayName()</em></h2>
+
+<div class="container">
+    <dl class="row">
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.DateComplaintClosed)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.DateComplaintClosed, "DateOrNotEntered")</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ReviewComments)</dt>
+        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(m => Model.Item.ReviewComments, "StringOrNotEntered")</dd>
+    </dl>
+</div>
+
+<h2>@Html.DisplayNameFor(m => m.Item.ComplaintNature)</h2>
+
+<p class="container text-break text-pre-line">@Html.DisplayFor(m => Model.Item.ComplaintNature, "StringOrNotEntered")</p>
+
+<h2>Complaint Details</h2>
+
+<div class="container">
+    <dl class="row">
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.PrimaryConcern)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.PrimaryConcernName, "StringOrNotEntered")</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SecondaryConcern)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.SecondaryConcernName, "StringOrNotEntered")</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ComplaintLocation)</dt>
+        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(m => Model.Item.ComplaintLocation, "StringOrNotEntered")</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ComplaintCity)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.ComplaintCity, "StringOrNotEntered")</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ComplaintCounty)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.ComplaintCounty, "StringOrNotEntered")</dd>
+    </dl>
+</div>
+
+<h2>Source</h2>
+
+<div class="container">
+    <dl class="row">
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceFacilityId)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.SourceFacilityId, "StringOrNotEntered")</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceFacilityName)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.SourceFacilityName, "StringOrNotEntered")</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceContactName)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.SourceContactName, "StringOrNotEntered")</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceAddress)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.SourceAddress)</dd>
+    </dl>
+</div>
+
+<h2>Actions</h2>
+@* TODO *@
+<p>
+    <em>None.</em>
+</p>
+
+<h2>Attachments</h2>
+@* TODO *@
+<p>
+    <em>None.</em>
+</p>
+<p>
+    <em>(Attachments may not be available for complaints resolved before April 2018. Please note that not every complaint has attachments.)</em>
+</p>

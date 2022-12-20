@@ -22,7 +22,7 @@ a {
     border-color: #1861ac;
 }
 
-.text-warning{
+.text-warning {
     color: rgb(150, 113, 0) !important;
 }
 
@@ -157,6 +157,10 @@ a:focus:not(.btn) {
     color: #ddecf0;
 }
 
+.text-brand {
+    color: #105367;
+}
+
 /* Header logo */
 .img-logo {
     height: 60px;
@@ -248,6 +252,6 @@ a[target]::after {
     }
 
     .banner-test-site::after {
-        content: "—Not for public distribution";
+        content: "— Not for public distribution";
     }
 }

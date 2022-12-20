@@ -9,7 +9,7 @@ namespace AppServicesTests.Concerns;
 public class GetList
 {
     [Test]
-    public async Task WhenItemsExist_ReturnsViewDtoList()
+    public async Task ReturnsViewDtoList()
     {
         var itemList = new List<Concern> { new(Guid.Empty, TestConstants.ValidName) };
         var repoMock = new Mock<IConcernRepository>();

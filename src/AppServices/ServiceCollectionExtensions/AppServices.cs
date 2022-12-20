@@ -16,6 +16,7 @@ public static class AppServices
 {
     public static void AddAppServices(this IServiceCollection services)
     {
+        // Add AutoMapper profiles
         services.AddAutoMapper(cfg => cfg.AddProfile<AutoMapperProfile>());
 
         // Action Types

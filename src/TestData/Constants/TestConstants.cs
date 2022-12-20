@@ -7,4 +7,5 @@ public static class TestConstants
     public const string NewValidName = "def";
     public const string NonExistentName = "zzz";
     public const string ValidEmail = "test@example.net";
+    public const string ValidPhoneNumber = "404-555-1212";
 }

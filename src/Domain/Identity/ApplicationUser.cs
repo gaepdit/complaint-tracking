@@ -14,7 +14,6 @@ public class ApplicationUser : IdentityUser, IEntity<string>
     [StringLength(150)]
     public string LastName { get; init; } = string.Empty;
 
-
     // Editable user/staff properties
     public const int MaxPhoneLength = 25;
 

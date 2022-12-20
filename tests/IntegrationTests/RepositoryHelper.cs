@@ -1,4 +1,5 @@
 ﻿using Cts.Domain.ActionTypes;
+using Cts.Domain.Complaints;
 using Cts.Domain.Concerns;
 using Cts.Domain.Offices;
 using Cts.Infrastructure.Contexts;
@@ -123,6 +124,17 @@ public sealed class RepositoryHelper : IDisposable
         DbSeedDataHelpers.SeedActionTypeData(_context);
         Context = new AppDbContext(_options);
         return new ActionTypeRepository(Context);
+    }
+
+    /// <summary>
+    /// Seeds data for the ActionType entity and returns an instance of ActionTypeRepository.
+    /// </summary>
+    /// <returns>An <see cref="ComplaintRepository"/>.</returns>
+    public IComplaintRepository GetComplaintRepository()
+    {
+        DbSeedDataHelpers.SeedAllData(_context);
+        Context = new AppDbContext(_options);
+        return new ComplaintRepository(Context);
     }
 
     /// <summary>
