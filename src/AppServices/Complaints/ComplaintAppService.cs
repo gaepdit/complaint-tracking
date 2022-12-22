@@ -29,7 +29,7 @@ public sealed class ComplaintAppService : IComplaintAppService
     {
         var predicate = ComplaintFilters.PublicSearchPredicate(spec);
 
-        var count = await _repository.GetCountAsync(predicate, token);
+        var count = await _repository.CountAsync(predicate, token);
 
         var list = count > 0
             ? _mapper.Map<List<ComplaintPublicViewDto>>(await _repository.GetPagedListAsync(predicate, paging, token))

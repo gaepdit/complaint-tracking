@@ -1,8 +1,8 @@
-using Cts.AppServices.AppLibraryExtra;
 using Cts.AppServices.Complaints.Dto;
 using Cts.Domain.Complaints;
 using Cts.TestData;
 using FluentAssertions.Execution;
+using GaEpd.AppLibrary.Enums;
 using GaEpd.AppLibrary.Pagination;
 
 namespace IntegrationTests.Complaints;

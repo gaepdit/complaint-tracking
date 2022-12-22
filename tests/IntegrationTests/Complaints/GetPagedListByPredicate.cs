@@ -1,8 +1,8 @@
-using Cts.AppServices.AppLibraryExtra;
 using Cts.AppServices.Complaints.Dto;
 using Cts.Domain.Complaints;
 using Cts.TestData;
 using FluentAssertions.Execution;
+using GaEpd.AppLibrary.Enums;
 using GaEpd.AppLibrary.Pagination;
 
 namespace IntegrationTests.Complaints;
@@ -12,8 +12,7 @@ public class GetPagedListByPredicate
     private IComplaintRepository _repository = default!;
 
     [SetUp]
-    public void SetUp() =>
-        _repository = RepositoryHelper.CreateRepositoryHelper().GetComplaintRepository();
+    public void SetUp() => _repository = RepositoryHelper.CreateRepositoryHelper().GetComplaintRepository();
 
     [TearDown]
     public void TearDown() => _repository.Dispose();

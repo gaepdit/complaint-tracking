@@ -1,5 +1,4 @@
 using Cts.LocalRepository.Repositories;
-using Cts.TestData.Constants;
 using FluentAssertions.Execution;
 using GaEpd.AppLibrary.Pagination;
 
@@ -49,7 +48,7 @@ public class GetPagedListByPredicate
     public async Task WhenDoesNotExist_ReturnsEmptyList()
     {
         var paging = new PaginatedRequest(1, _repository.Items.Count);
-        var result = await _repository.GetPagedListAsync(e => e.Name == TestConstants.NonExistentName, paging);
+        var result = await _repository.GetPagedListAsync(e => e.Id == Guid.Empty, paging);
         result.Should().BeEmpty();
     }
 

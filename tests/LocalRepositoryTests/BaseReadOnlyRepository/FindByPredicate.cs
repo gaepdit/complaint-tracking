@@ -18,14 +18,14 @@ public class FindByPredicate
     public async Task WhenItemExists_ReturnsItem()
     {
         var item = _repository.Items.First();
-        var result = await _repository.FindAsync(e => e.Name == item.Name);
+        var result = await _repository.FindAsync(e => e.Id == item.Id);
         result.Should().BeEquivalentTo(item);
     }
 
     [Test]
     public async Task WhenDoesNotExist_ReturnsNull()
     {
-        var result = await _repository.FindAsync(e => e.Name == TestConstants.NonExistentName);
+        var result = await _repository.FindAsync(e => e.Id == Guid.Empty);
         result.Should().BeNull();
     }
 

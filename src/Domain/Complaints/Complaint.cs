@@ -1,4 +1,3 @@
-using Cts.Domain.AppLibraryExtra;
 using Cts.Domain.Attachments;
 using Cts.Domain.ComplaintActions;
 using Cts.Domain.ComplaintTransitions;
@@ -8,7 +7,7 @@ using Cts.Domain.Offices;
 
 namespace Cts.Domain.Complaints;
 
-public class Complaint : AuditableSoftDeleteEntity<int>, ISoftDelete
+public class Complaint : AuditableSoftDeleteEntity<int>
 {
     // Constants
 

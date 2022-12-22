@@ -1,7 +1,7 @@
-using Cts.AppServices.AppLibraryExtra;
 using Cts.AppServices.Complaints.Dto;
 using Cts.LocalRepository.Repositories;
 using FluentAssertions.Execution;
+using GaEpd.AppLibrary.Enums;
 using GaEpd.AppLibrary.Pagination;
 
 namespace LocalRepositoryTests.Complaints;

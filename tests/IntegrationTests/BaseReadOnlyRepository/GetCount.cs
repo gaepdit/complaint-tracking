@@ -1,13 +1,15 @@
-using Cts.LocalRepository.Repositories;
+using Cts.Domain.Offices;
+using Cts.TestData;
+using IntegrationTests;
 
 namespace LocalRepositoryTests.BaseReadOnlyRepository;
 
 public class GetCount
 {
-    private LocalOfficeRepository _repository = default!;
+    private IOfficeRepository _repository = default!;
 
     [SetUp]
-    public void SetUp() => _repository = new LocalOfficeRepository();
+    public void SetUp() => _repository = RepositoryHelper.CreateRepositoryHelper().GetOfficeRepository();
 
     [TearDown]
     public void TearDown() => _repository.Dispose();
@@ -15,7 +17,7 @@ public class GetCount
     [Test]
     public async Task WhenItemsExist_ReturnsCount()
     {
-        var item = _repository.Items.First();
+        var item = OfficeData.GetOffices.First();
         var result = await _repository.CountAsync(e => e.Id == item.Id);
         result.Should().Be(1);
     }
@@ -23,7 +25,6 @@ public class GetCount
     [Test]
     public async Task WhenDoesNotExist_ReturnsZero()
     {
-        _repository.Items.Clear();
         var result = await _repository.CountAsync(e => e.Id == Guid.Empty);
         result.Should().Be(0);
     }

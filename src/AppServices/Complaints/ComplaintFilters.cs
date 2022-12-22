@@ -1,6 +1,6 @@
 ﻿using Cts.AppServices.Complaints.Dto;
-using Cts.Domain.AppLibraryExtra;
 using Cts.Domain.Complaints;
+using GaEpd.AppLibrary.Domain.Predicates;
 using System.Linq.Expressions;
 
 namespace Cts.AppServices.Complaints;

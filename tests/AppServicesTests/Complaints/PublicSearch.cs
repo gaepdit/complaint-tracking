@@ -23,7 +23,7 @@ public class PublicSearch
                     It.IsAny<PaginatedRequest>(), CancellationToken.None))
             .ReturnsAsync(itemList);
         repoMock.Setup(l =>
-                l.GetCountAsync(It.IsAny<Expression<Func<Complaint, bool>>>(), CancellationToken.None))
+                l.CountAsync(It.IsAny<Expression<Func<Complaint, bool>>>(), CancellationToken.None))
             .ReturnsAsync(count);
         var appService = new ComplaintAppService(repoMock.Object, AppServicesTestsGlobal.Mapper!);
 
@@ -48,7 +48,7 @@ public class PublicSearch
                     It.IsAny<PaginatedRequest>(), CancellationToken.None))
             .ReturnsAsync(itemList);
         repoMock.Setup(l =>
-                l.GetCountAsync(It.IsAny<Expression<Func<Complaint, bool>>>(), CancellationToken.None))
+                l.CountAsync(It.IsAny<Expression<Func<Complaint, bool>>>(), CancellationToken.None))
             .ReturnsAsync(count);
         var appService = new ComplaintAppService(repoMock.Object, AppServicesTestsGlobal.Mapper!);
 
