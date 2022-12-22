@@ -1,3 +1,4 @@
+using Cts.Domain.BaseEntities;
 using Cts.Domain.Concerns;
 using Cts.TestData.Constants;
 
@@ -32,6 +33,6 @@ public class ChangeName
         var action = () => result.ChangeName(TestConstants.ShortName);
 
         action.Should().Throw<ArgumentException>()
-            .WithMessage($"The length must be at least the minimum length '{Concern.MinNameLength}'.*");
+            .WithMessage($"The length must be at least the minimum length '{SimpleNamedEntity.MinNameLength}'.*");
     }
 }

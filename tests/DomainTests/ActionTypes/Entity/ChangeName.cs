@@ -1,4 +1,5 @@
 using Cts.Domain.ActionTypes;
+using Cts.Domain.BaseEntities;
 using Cts.TestData.Constants;
 
 namespace DomainTests.ActionTypes.Entity;
@@ -32,6 +33,6 @@ public class ChangeName
         var action = () => result.ChangeName(TestConstants.ShortName);
 
         action.Should().Throw<ArgumentException>()
-            .WithMessage($"The length must be at least the minimum length '{ActionType.MinNameLength}'.*");
+            .WithMessage($"The length must be at least the minimum length '{SimpleNamedEntity.MinNameLength}'.*");
     }
 }

@@ -2,7 +2,6 @@
 using Cts.AppServices.Concerns;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Concerns;
-using Cts.Domain.Identity;
 using Cts.TestData.Constants;
 
 namespace AppServicesTests.Concerns;
@@ -18,8 +17,6 @@ public class FindForUpdate
             .ReturnsAsync(item);
         var managerMock = new Mock<IConcernManager>();
         var userServiceMock = new Mock<IUserService>();
-        userServiceMock.Setup(l => l.GetCurrentUserAsync())
-            .ReturnsAsync((ApplicationUser?)null);
         var appService = new ConcernAppService(repoMock.Object, managerMock.Object,
             AppServicesTestsGlobal.Mapper!, userServiceMock.Object);
 
@@ -38,8 +35,6 @@ public class FindForUpdate
         var managerMock = new Mock<IConcernManager>();
         var mapperMock = new Mock<IMapper>();
         var userServiceMock = new Mock<IUserService>();
-        userServiceMock.Setup(l => l.GetCurrentUserAsync())
-            .ReturnsAsync((ApplicationUser?)null);
         var appService = new ConcernAppService(repoMock.Object, managerMock.Object,
             mapperMock.Object, userServiceMock.Object);
 

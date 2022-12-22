@@ -11,7 +11,15 @@
     <div class="card-body">
         <ul>
             <li>
-                <a asp-page="/Public/Complaint/Index" asp-route-id="1">Public complaint</a>
+                <a asp-page="/Public/Index">Public search</a>
+                <ul>
+                    <li>
+                        <a asp-page="/Public/Complaint/Index" asp-route-id="1">Public complaint</a>
+                    </li>
+                    <li>
+                        <a asp-page="/Public/Complaint/Index" asp-route-id="2">Non-public complaint</a>
+                    </li>
+                </ul>
             </li>
             <li>
                 <a asp-page="/Account/Index">Account Page</a>

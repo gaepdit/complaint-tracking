@@ -1,0 +1,185 @@
+﻿@page
+@using Cts.AppServices.Complaints.Dto
+@using GaEpd.AppLibrary.Pagination
+@model IndexModel
+@{
+    ViewData["Title"] = "Public Complaint Search";
+}
+
+@section Scripts {
+    <script src="~/js/formSearch.js"></script>
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    The Complaint Tracking System Public Inquiry Portal includes information for all complaints received by EPD from
+    third parties after January 1, 1998, for which EPD’s investigation of the complaint has concluded.
+</p>
+
+<div class="container">
+    <div class="row">
+        <div class="p-3 rounded-3 bg-light mt-3 mb-5 border col-lg-6">
+            <h2 class="mb-3">Find by Complaint ID</h2>
+            <form method="post" class="row row-cols-sm-auto align-items-center" role="search">
+                <div class="col-12">
+                    <label class="visually-hidden" asp-for="FindId">Complaint ID</label>
+                    <div class="input-group input-group-lg">
+                        <input asp-for="FindId" class="form-control" type="search" placeholder="Complaint ID" aria-label="Search" />
+                        <button class="btn btn-primary" type="submit">View</button>
+                    </div>
+                </div>
+                <span asp-validation-for="FindId" class="text-danger"></span>
+            </form>
+        </div>
+    </div>
+</div>
+
+<h2 class="mb-3">Search by Complaint Details</h2>
+<div class="p-3 rounded-3 bg-light border">
+    <div class="text-muted">
+        <em>All fields are optional.</em>
+    </div>
+    <form method="get" asp-fragment="SearchResults">
+        <fieldset>
+            <legend>Date Received</legend>
+            <div class="row">
+                <div class="col-md mb-3">
+                    <label asp-for="Spec.DateFrom" class="form-label"></label>
+                    <input asp-for="Spec.DateFrom" name="@nameof(Model.Spec.DateFrom)" class="form-control" />
+                </div>
+                <div class="col-md mb-3">
+                    <label asp-for="Spec.DateTo" class="form-label"></label>
+                    <input asp-for="Spec.DateTo" name="@nameof(Model.Spec.DateTo)" class="form-control" />
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Complaint Details</legend>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Spec.Type" class="form-label"></label>
+                    <select asp-for="Spec.Type" asp-items="Model.ConcernsSelectList" class="form-select">
+                        <option value="">(any)</option>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Spec.Nature" class="form-label"></label>
+                    <input asp-for="Spec.Nature" name="@nameof(Model.Spec.Nature)" class="form-control" />
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Spec.SourceName" class="form-label"></label>
+                    <input asp-for="Spec.SourceName" name="@nameof(Model.Spec.SourceName)" class="form-control" aria-describedby="SourceNameHelpBlock" />
+                    <small id="SourceNameHelpBlock" class="form-text text-muted">The entity associated with the incident.</small>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Location</legend>
+            <div class="row">
+                <div class="col-lg-6 mb-3">
+                    <label asp-for="Spec.County" class="form-label"></label>
+                    <select asp-for="Spec.County" asp-items="Model.CountiesSelectList" class="form-select">
+                        <option value="">(any)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 mb-3">
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <label asp-for="Spec.Street" class="form-label"></label>
+                            <input asp-for="Spec.Street" name="@nameof(Model.Spec.Street)" class="form-control" />
+                        </div>
+                        <div class="col-sm-8 mb-3">
+                            <label asp-for="Spec.State" class="form-label"></label>
+                            <select asp-for="Spec.State" asp-items="Model.StatesSelectList" class="form-select">
+                                <option value="">(any)</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4 mb-3">
+                            <label asp-for="Spec.PostalCode" class="form-label"></label>
+                            <input asp-for="Spec.PostalCode" name="@nameof(Model.Spec.PostalCode)" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <div class="mt-3 mb-1">
+            <input type="hidden" name="handler" value="search" />
+            <button id="SearchButton" type="submit" class="btn btn-primary col-sm-3 me-2">Search</button>
+            <a asp-page="./Index" class="btn btn-outline-secondary col-sm-3 col-md-2">Clear Form</a>
+        </div>
+    </form>
+</div>
+
+@if (Model.ShowResults)
+{
+    <div id="SearchResults" class="mt-4">
+        <h3>Search Results</h3>
+
+        @if (Model.Results.TotalCount == 0)
+        {
+            <div class="container pt-3">
+                <p class="lead text-info">No matching results found.</p>
+            </div>
+        }
+        else
+        {
+            <table class="table" aria-label="Facility search results">
+                <caption class="caption-top container">
+                    <div class="d-md-flex align-items-center justify-content-between">
+                        <div class="small">
+                            <partial name="_PaginatedResultsCount" model="Model.Results" />
+                        </div>
+                        <div class="mt-3 mt-md-0">
+                            <partial name="_PaginationNav" model="((IPaginatedResult)Model.Results, Model.Spec.AsRouteValues)" />
+                        </div>
+                    </div>
+                </caption>
+
+                <thead class="table-light">
+                <tr>
+                    <th scope="col" class="text-nowrap">
+                        <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues" asp-route-handler="search"
+                           asp-route-Sort="@(Model.Spec.Sort == SortBy.Id ? SortBy.IdDesc : SortBy.Id)">
+                            Complaint ID @Html.DisplayFor(m => m.Spec.SortByName, "SortArrow",
+                                             new { up = SortBy.Id.ToString(), down = SortBy.IdDesc.ToString() })
+                        </a>
+                    </th>
+                    <th scope="col" class="text-nowrap">
+                        <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues" asp-route-handler="search"
+                           asp-route-Sort="@(Model.Spec.Sort == SortBy.ReceivedDate ? SortBy.ReceivedDateDesc : SortBy.ReceivedDate)">
+                            Date Received @Html.DisplayFor(m => m.Spec.SortByName, "SortArrow",
+                                              new { up = SortBy.ReceivedDate.ToString(), down = SortBy.ReceivedDateDesc.ToString() })
+                        </a>
+                    </th>
+                    <th scope="col">Source/Location</th>
+                    <th scope="col">EPD Office Assigned</th>
+                    <th scope="col">Primary Area of Concern</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                @foreach (var item in Model.Results.Items)
+                {
+                    <tr>
+                        <th scope="row">
+                            <a asp-page="Complaint/Index" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">@item.Id</a>
+                        </th>
+                        <td class="text-nowrap">@item.DateReceived.ToString("d")</td>
+                        <td>@Html.DisplayFor(m => item.SourceFacilityName, "StringOrNotEntered")</td>
+                        <td>@Html.DisplayFor(m => item.CurrentOfficeName, "StringOrNotEntered")</td>
+                        <td>@Html.DisplayFor(m => item.PrimaryConcernName, "StringOrNotEntered")</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+
+            <div class="d-md-flex align-items-center justify-content-end">
+                <partial name="_PaginationNav" model="((IPaginatedResult)Model.Results, Model.Spec.AsRouteValues)" />
+            </div>
+        }
+    </div>
+}

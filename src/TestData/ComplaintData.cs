@@ -1,4 +1,4 @@
-﻿using Cts.Domain.Complaints;
+using Cts.Domain.Complaints;
 using Cts.TestData.Constants;
 
 namespace Cts.TestData;

@@ -76,6 +76,8 @@ public class ComplaintPublicViewDto
     [Display(Name = "Assigned Office")]
     public OfficeViewDto? CurrentOffice { get; init; }
 
+    public string? CurrentOfficeName => CurrentOffice?.Name;
+
     // Properties: Actions
     // TODO
     // [Display(Name = "Actions")]

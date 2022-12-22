@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Cts.AppServices.UserServices;
 using Cts.Domain.ActionTypes;
+using GaEpd.AppLibrary.ListItems;
 
 namespace Cts.AppServices.ActionTypes;
 
@@ -34,6 +35,10 @@ public sealed class ActionTypeAppService : IActionTypeAppService
         var list = (await _repository.GetListAsync(token)).OrderBy(e => e.Name).ToList();
         return _mapper.Map<List<ActionTypeViewDto>>(list);
     }
+
+    public async Task<IReadOnlyList<ListItem>> GetActiveListItemsAsync(CancellationToken token = default) =>
+        (await _repository.GetListAsync(e => e.Active, token)).OrderBy(e => e.Name)
+        .Select(e => new ListItem(e.Id, e.Name)).ToList();
 
     public async Task<Guid> CreateAsync(string name, CancellationToken token = default)
     {

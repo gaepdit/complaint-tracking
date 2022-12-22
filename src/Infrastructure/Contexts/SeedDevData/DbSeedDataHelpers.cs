@@ -6,6 +6,8 @@ namespace Cts.Infrastructure.Contexts.SeedDevData;
 
 public static class DbSeedDataHelpers
 {
+    private const string SqlServerProvider = "Microsoft.EntityFrameworkCore.SqlServer";
+
     public static void SeedAllData(AppDbContext context)
     {
         SeedActionTypeData(context);
@@ -27,10 +29,12 @@ public static class DbSeedDataHelpers
         if (context.Complaints.Any()) return;
 
         context.Database.BeginTransaction();
-        context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Complaints ON");
+        if (context.Database.ProviderName == SqlServerProvider)
+            context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Complaints ON");
         context.Complaints.AddRange(ComplaintData.GetComplaints);
         context.SaveChanges();
-        context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Complaints OFF");
+        if (context.Database.ProviderName == SqlServerProvider)
+            context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Complaints OFF");
         context.Database.CommitTransaction();
     }
 

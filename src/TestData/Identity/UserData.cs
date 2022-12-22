@@ -13,6 +13,7 @@ internal static partial class IdentityData
             LastName = "User",
             Email = "admin.user@example.net",
             Phone = "123-456-7890",
+            Office = OfficeData.GetOffices.ElementAt(0),
         },
         new ApplicationUser
         {
@@ -20,6 +21,7 @@ internal static partial class IdentityData
             FirstName = "General",
             LastName = "User",
             Email = "general.user@example.net",
+            Office = OfficeData.GetOffices.ElementAt(1),
         },
         new ApplicationUser
         {
@@ -28,6 +30,7 @@ internal static partial class IdentityData
             LastName = "User",
             Email = "inactive.user@example.net",
             Active = false,
+            Office = OfficeData.GetOffices.ElementAt(1),
         },
     };
 
@@ -38,16 +41,13 @@ internal static partial class IdentityData
         get
         {
             if (_users is not null) return _users;
-            var office = OfficeData.GetOffices.First();
             UserSeedItems.ForEach(delegate(ApplicationUser user)
             {
-                user.Office = office;
                 user.UserName = user.Email;
                 user.NormalizedEmail = user.Email.ToUpperInvariant();
                 user.NormalizedUserName = user.Email.ToUpperInvariant();
             });
             _users = UserSeedItems;
-            office.MasterUser = _users.First();
             return _users;
         }
     }

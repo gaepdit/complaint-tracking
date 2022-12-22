@@ -8,6 +8,7 @@ public class ComplaintPublicSearchDto
     // Sorting
 
     public SortBy Sort { get; set; } = SortBy.Id;
+    public string SortByName => Sort.ToString();
 
     // Dates
 
@@ -30,7 +31,7 @@ public class ComplaintPublicSearchDto
 
     // Source
 
-    [Display(Name = "Source (the entity associated with the incident)")]
+    [Display(Name = "Source")]
     [StringLength(100)]
     public string? SourceName { get; set; }
 
@@ -69,6 +70,17 @@ public class ComplaintPublicSearchDto
             { nameof(State), State },
             { nameof(PostalCode), PostalCode },
         };
+
+    public void TrimAll()
+    {
+        Nature = Nature?.Trim();
+        SourceName = SourceName?.Trim();
+        County = County?.Trim();
+        Street = Street?.Trim();
+        City = City?.Trim();
+        State = State?.Trim();
+        PostalCode = PostalCode?.Trim();
+    }
 }
 
 public enum SortBy

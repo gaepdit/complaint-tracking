@@ -11,4 +11,7 @@ public class ComplaintRepository : BaseRepository<Complaint, int>, IComplaintRep
 
     public Task<int> GetCountAsync(Expression<Func<Complaint, bool>> predicate, CancellationToken token = default) =>
         Context.Set<Complaint>().AsNoTracking().CountAsync(predicate, token);
+
+    public Task<bool> ExistsAsync(Expression<Func<Complaint, bool>> predicate, CancellationToken token = default) =>
+        Context.Set<Complaint>().AsNoTracking().AnyAsync(predicate, token);
 }

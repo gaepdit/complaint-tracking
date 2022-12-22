@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace Cts.WebApp.Platform.PageDisplayHelpers;
+namespace Cts.AppServices.AppLibraryExtra;
 
 /// <summary>
 /// Enumeration type extension methods.

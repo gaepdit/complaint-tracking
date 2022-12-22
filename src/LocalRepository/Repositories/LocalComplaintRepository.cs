@@ -10,4 +10,7 @@ public sealed class LocalComplaintRepository : BaseRepository<Complaint, int>, I
 
     public Task<int> GetCountAsync(Expression<Func<Complaint, bool>> predicate, CancellationToken token = default) =>
         Task.FromResult(Items.Count(predicate.Compile()));
+
+    public Task<bool> ExistsAsync(Expression<Func<Complaint, bool>> predicate, CancellationToken token = default) =>
+        Task.FromResult(Items.Any(predicate.Compile()));
 }

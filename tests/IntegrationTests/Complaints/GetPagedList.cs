@@ -1,17 +1,19 @@
 using Cts.AppServices.AppLibraryExtra;
 using Cts.AppServices.Complaints.Dto;
-using Cts.LocalRepository.Repositories;
+using Cts.Domain.Complaints;
+using Cts.TestData;
 using FluentAssertions.Execution;
 using GaEpd.AppLibrary.Pagination;
 
-namespace LocalRepositoryTests.Complaints;
+namespace IntegrationTests.Complaints;
 
 public class GetPagedList
 {
-    private LocalComplaintRepository _repository = default!;
+    private IComplaintRepository _repository = default!;
 
     [SetUp]
-    public void SetUp() => _repository = new LocalComplaintRepository();
+    public void SetUp() =>
+        _repository = RepositoryHelper.CreateRepositoryHelper().GetComplaintRepository();
 
     [TearDown]
     public void TearDown() => _repository.Dispose();
@@ -19,7 +21,7 @@ public class GetPagedList
     [Test]
     public async Task GivenSorting_ReturnsSortedList()
     {
-        var itemsCount = _repository.Items.Count;
+        var itemsCount = ComplaintData.GetComplaints.Count();
         var sorting = SortBy.IdDesc.GetDescription();
         var paging = new PaginatedRequest(1, itemsCount, sorting);
 
@@ -28,7 +30,6 @@ public class GetPagedList
         using (new AssertionScope())
         {
             result.Count.Should().Be(itemsCount);
-            result.Should().BeEquivalentTo(_repository.Items);
             result.Should().BeInDescendingOrder(e => e.Id);
         }
     }

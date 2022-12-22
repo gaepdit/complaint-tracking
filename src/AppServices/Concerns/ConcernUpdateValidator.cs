@@ -1,4 +1,5 @@
-﻿using Cts.Domain.Concerns;
+﻿using Cts.Domain.BaseEntities;
+using Cts.Domain.Concerns;
 using FluentValidation;
 
 namespace Cts.AppServices.Concerns;
@@ -12,7 +13,7 @@ public class ConcernUpdateValidator : AbstractValidator<ConcernUpdateDto>
         _repository = repository;
 
         RuleFor(e => e.Name)
-            .Length(Concern.MinNameLength, Concern.MaxNameLength)
+            .Length(SimpleNamedEntity.MinNameLength, SimpleNamedEntity.MaxNameLength)
             .MustAsync(async (e, _, token) => await NotDuplicateName(e, token))
             .WithMessage("The name entered already exists.");
     }

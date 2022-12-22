@@ -4,8 +4,17 @@ namespace Cts.TestData.Constants;
 
 public static class ValueObjectData
 {
-    public static readonly PhoneNumber SampleNumber = new(TestConstants.ValidPhoneNumber, PhoneType.Office);
-    public static readonly PhoneNumber AlternateNumber = new(TestConstants.AlternatePhoneNumber, PhoneType.Cell);
+    public static readonly PhoneNumber SampleNumber = new()
+    {
+        Number = TestConstants.ValidPhoneNumber,
+        Type = PhoneType.Office,
+    };
+
+    public static readonly PhoneNumber AlternateNumber = new()
+    {
+        Number = TestConstants.AlternatePhoneNumber,
+        Type = PhoneType.Cell,
+    };
 
     public static readonly Address FullAddress = new()
     {
@@ -33,6 +42,7 @@ public static class ValueObjectData
         PostalCode = "",
         State = "GA",
     };
+
     public static readonly Address AlternateFullAddress = new()
     {
         Street = "2000 Alternate St.",

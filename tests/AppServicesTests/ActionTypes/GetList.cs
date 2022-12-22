@@ -1,7 +1,6 @@
 ﻿using Cts.AppServices.ActionTypes;
 using Cts.AppServices.UserServices;
 using Cts.Domain.ActionTypes;
-using Cts.Domain.Identity;
 using Cts.TestData.Constants;
 
 namespace AppServicesTests.ActionTypes;
@@ -17,8 +16,6 @@ public class GetList
             .ReturnsAsync(itemList);
         var managerMock = new Mock<IActionTypeManager>();
         var userServiceMock = new Mock<IUserService>();
-        userServiceMock.Setup(l => l.GetCurrentUserAsync())
-            .ReturnsAsync((ApplicationUser?)null);
         var appService = new ActionTypeAppService(repoMock.Object, managerMock.Object,
             AppServicesTestsGlobal.Mapper!, userServiceMock.Object);
 

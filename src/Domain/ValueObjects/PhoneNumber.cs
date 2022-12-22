@@ -1,22 +1,17 @@
 ﻿using GaEpd.AppLibrary.Domain.ValueObjects;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cts.Domain.ValueObjects;
 
 [Owned]
-public record PhoneNumber() : ValueObject
+public record PhoneNumber : ValueObject
 {
-    public PhoneNumber(string number, PhoneType type) : this()
-    {
-        Number = number;
-        Type = type;
-    }
-
     [StringLength(25)]
     [DataType(DataType.PhoneNumber)]
-    public string Number { get; } = string.Empty;
+    public string Number { get; [UsedImplicitly] init; } = string.Empty;
 
-    public PhoneType Type { get; } = PhoneType.Unknown;
+    public PhoneType Type { get; [UsedImplicitly] init; } = PhoneType.Unknown;
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

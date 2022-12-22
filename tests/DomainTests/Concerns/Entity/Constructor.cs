@@ -1,3 +1,4 @@
+using Cts.Domain.BaseEntities;
 using Cts.Domain.Concerns;
 using Cts.TestData.Constants;
 using FluentAssertions.Execution;
@@ -32,6 +33,6 @@ public class Constructor
     {
         var action = () => new Concern(Guid.Empty, TestConstants.ShortName);
         action.Should().Throw<ArgumentException>()
-            .WithMessage($"The length must be at least the minimum length '{Concern.MinNameLength}'.*");
+            .WithMessage($"The length must be at least the minimum length '{SimpleNamedEntity.MinNameLength}'.*");
     }
 }

@@ -5,6 +5,10 @@
     ViewData["Title"] = "User Search";
 }
 
+@section Scripts {
+    <script src="~/js/formSearch.js"></script>
+}
+
 <h1>@ViewData["Title"]</h1>
 
 <div class="p-3 rounded-3 bg-light">
@@ -58,51 +62,47 @@
 
 @if (Model.ShowResults)
 {
-    <a id="SearchResults"></a>
-
-    @if (Model.SearchResults is { Count: > 0 })
-    {
-        <table class="table" aria-label="User search results">
-            <thead>
-            <tr>
-                <th scope="col">@Html.DisplayNameFor(m => m.Filter.Name)</th>
-                <th scope="col">@Html.DisplayNameFor(m => m.Filter.Email)</th>
-                <th scope="col">@Html.DisplayNameFor(m => m.Filter.Office)</th>
-                <th scope="col">@Html.DisplayNameFor(m => m.Filter.Status)</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach (var item in Model.SearchResults)
-            {
-                <tr class="@(item.Id == Model.HighlightId ? "list-group-item-warning" : !item.Active ? "bg-secondary bg-opacity-25" : "")">
-                    <td>
-                        @if (item.Email.Equals(User.Identity?.Name))
-                        {
-                            <span class="badge bg-secondary">YOU</span>
-                        }
-                        <a asp-page="./Details" asp-route-id="@item.Id">@item.DisplayName</a>
-                    </td>
-                    <td>@item.Email</td>
-                    <td>
-                        @{
-                            var name = item.Office?.Name;
-                        }
-                        @Html.DisplayFor(m => name, "StringOrNone")
-                    </td>
-                    <td>@Html.DisplayFor(m => item.Active)</td>
+    <div class="border-top" id="SearchResults">
+        @if (Model.SearchResults is { Count: > 0 })
+        {
+            <table class="table" aria-label="User search results">
+                <thead>
+                <tr>
+                    <th scope="col">@Html.DisplayNameFor(m => m.Filter.Name)</th>
+                    <th scope="col">@Html.DisplayNameFor(m => m.Filter.Email)</th>
+                    <th scope="col">@Html.DisplayNameFor(m => m.Filter.Office)</th>
+                    <th scope="col">@Html.DisplayNameFor(m => m.Filter.Status)</th>
                 </tr>
-            }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <div class="container mt-2">
-            <p class="lead text-info">No search results found.</p>
-        </div>
-    }
-}
-
-@section Scripts {
-    <script src="~/js/formSearch.js"></script>
+                </thead>
+                <tbody>
+                @foreach (var item in Model.SearchResults)
+                {
+                    <tr class="@(item.Id == Model.HighlightId ? "list-group-item-warning" : !item.Active ? "bg-secondary bg-opacity-25" : "")">
+                        <td>
+                            @if (item.Email.Equals(User.Identity?.Name))
+                            {
+                                <span class="badge bg-secondary">YOU</span>
+                            }
+                            <a asp-page="./Details" asp-route-id="@item.Id">@item.DisplayName</a>
+                        </td>
+                        <td>@item.Email</td>
+                        <td>
+                            @{
+                                var name = item.Office?.Name;
+                            }
+                            @Html.DisplayFor(m => name, "StringOrNone")
+                        </td>
+                        <td>@Html.DisplayFor(m => item.Active)</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="container mt-2">
+                <p class="lead text-info">No search results found.</p>
+            </div>
+        }
+    </div>
 }

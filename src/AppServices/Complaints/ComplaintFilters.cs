@@ -7,6 +7,9 @@ namespace Cts.AppServices.Complaints;
 
 internal static class ComplaintFilters
 {
+    public static Expression<Func<Complaint, bool>> PublicIdPredicate(int id) =>
+        PredicateBuilder.True<Complaint>().WithId(id).IsPublic();
+
     public static Expression<Func<Complaint, bool>> PublicSearchPredicate(ComplaintPublicSearchDto spec) =>
         PredicateBuilder.True<Complaint>()
             .IsPublic()
@@ -31,13 +34,13 @@ internal static class ComplaintFilters
     // Since a null dateFrom value indicates no date filtering is desired, all entities pass this filter.
     private static Expression<Func<Complaint, bool>> FromDate(this Expression<Func<Complaint, bool>> predicate,
         DateTime? input) =>
-        predicate.And(e => !(e.DateReceived < input));
+        predicate.And(e => input == null || e.DateReceived >= input);
 
     // The inverted comparison returns true if the parameter is null.
     // Since a null dateFrom value indicates no date filtering is desired, all entities pass this filter.
     private static Expression<Func<Complaint, bool>> ToDate(this Expression<Func<Complaint, bool>> predicate,
         DateTime? input) =>
-        predicate.And(e => !(e.DateReceived > input));
+        predicate.And(e => input == null || e.DateReceived <= input);
 
     private static Expression<Func<Complaint, bool>> ContainsNature(this Expression<Func<Complaint, bool>> predicate,
         string? input) =>

@@ -1,0 +1,9 @@
+﻿@model string
+@if (string.Equals(Model, (string)ViewData["up"]!, StringComparison.Ordinal))
+{
+    @:▲
+}
+else if (string.Equals(Model, (string)ViewData["down"]!, StringComparison.Ordinal))
+{
+    @:▼
+}

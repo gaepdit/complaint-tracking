@@ -1,6 +1,5 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Cts.AppServices.Complaints.Dto;
-using Cts.Domain.AppLibraryExtra;
 using Cts.Domain.Complaints;
 using GaEpd.AppLibrary.Pagination;
 
@@ -17,14 +16,11 @@ public sealed class ComplaintAppService : IComplaintAppService
         _mapper = mapper;
     }
 
-    public async Task<ComplaintPublicViewDto?> GetPublicViewAsync(int id, CancellationToken token = default)
-    {
-        var predicate = PredicateBuilder.True<Complaint>()
-            .WithId(id)
-            .IsPublic();
+    public async Task<ComplaintPublicViewDto?> GetPublicViewAsync(int id, CancellationToken token = default) =>
+        _mapper.Map<ComplaintPublicViewDto>(await _repository.FindAsync(ComplaintFilters.PublicIdPredicate(id), token));
 
-        return _mapper.Map<ComplaintPublicViewDto>(await _repository.FindAsync(predicate, token));
-    }
+    public async Task<bool> PublicComplaintExistsAsync(int id, CancellationToken token = default) =>
+        await _repository.ExistsAsync(ComplaintFilters.PublicIdPredicate(id), token);
 
     public async Task<IPaginatedResult<ComplaintPublicViewDto>> PublicSearchAsync(
         ComplaintPublicSearchDto spec,
@@ -32,12 +28,14 @@ public sealed class ComplaintAppService : IComplaintAppService
         CancellationToken token = default)
     {
         var predicate = ComplaintFilters.PublicSearchPredicate(spec);
-        var resultsTask = _repository.GetPagedListAsync(predicate, paging, token);
-        var countTask = _repository.GetCountAsync(predicate, token);
 
-        var list = _mapper.Map<List<ComplaintPublicViewDto>>(await resultsTask);
+        var count = await _repository.GetCountAsync(predicate, token);
 
-        return new PaginatedResult<ComplaintPublicViewDto>(list, await countTask, paging);
+        var list = count > 0
+            ? _mapper.Map<List<ComplaintPublicViewDto>>(await _repository.GetPagedListAsync(predicate, paging, token))
+            : new List<ComplaintPublicViewDto>();
+
+        return new PaginatedResult<ComplaintPublicViewDto>(list, count, paging);
     }
 
     public void Dispose() => _repository.Dispose();
