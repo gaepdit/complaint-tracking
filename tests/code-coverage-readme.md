@@ -16,10 +16,10 @@ Then run the following commands from the root directory (the coverlet commands s
 ```
 dotnet build
 coverlet .\.artifacts\DomainTests\bin\Debug\net6.0\DomainTests.dll --target "dotnet" --targetargs "test tests/DomainTests --no-build" --exclude "[TestData]*"
-coverlet .\.artifacts\IntegrationTests\bin\Debug\net6.0\IntegrationTests.dll --target "dotnet" --targetargs "test tests/IntegrationTests --no-build" --exclude "[TestData]*" --exclude "[Infrastructure]MyAppRoot.Infrastructure.Migrations.*" --merge-with "coverage.json"
+coverlet .\.artifacts\IntegrationTests\bin\Debug\net6.0\IntegrationTests.dll --target "dotnet" --targetargs "test tests/IntegrationTests --no-build" --exclude "[TestData]*" --exclude "[Infrastructure]Cts.Infrastructure.Migrations.*" --merge-with "coverage.json"
 coverlet .\.artifacts\LocalRepositoryTests\bin\Debug\net6.0\LocalRepositoryTests.dll --target "dotnet" --targetargs "test tests/LocalRepositoryTests --no-build" --exclude "[TestData]*" --merge-with "coverage.json"
 coverlet .\.artifacts\AppServicesTests\bin\Debug\net6.0\AppServicesTests.dll --target "dotnet" --targetargs "test tests/AppServicesTests --no-build" --exclude "[TestData]*" --merge-with "coverage.json"
-coverlet .\.artifacts\WebAppTests\bin\Debug\net6.0\WebAppTests.dll --target "dotnet" --targetargs "test tests/WebAppTests --no-build" --exclude "[TestData]*" --exclude "[Infrastructure]MyAppRoot.Infrastructure.Migrations.*" --merge-with "coverage.json" -f=opencover -o="coverage.xml"
+coverlet .\.artifacts\WebAppTests\bin\Debug\net6.0\WebAppTests.dll --target "dotnet" --targetargs "test tests/WebAppTests --no-build" --exclude "[TestData]*" --exclude "[Infrastructure]Cts.Infrastructure.Migrations.*" --merge-with "coverage.json" -f=opencover -o="coverage.xml"
 reportgenerator -reports:coverage.xml -targetdir:coveragereport
 ```
 
