@@ -1,6 +1,6 @@
 ﻿using Cts.AppServices.Concerns;
 using Cts.Domain.Identity;
-using Cts.WebApp.Models;
+using Cts.WebApp.Platform.Models;
 using Cts.WebApp.Platform.PageDisplayHelpers;
 using FluentValidation;
 using FluentValidation.AspNetCore;

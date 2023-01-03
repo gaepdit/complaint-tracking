@@ -1,5 +1,5 @@
 ﻿using Cts.AppServices.ActionTypes;
-using Cts.WebApp.Models;
+using Cts.WebApp.Platform.Models;
 using Cts.WebApp.Platform.PageDisplayHelpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
