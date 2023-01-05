@@ -15,18 +15,15 @@ public class Office : AuditableEntity
     [UsedImplicitly] // Used by ORM.
     private Office() { }
 
-    internal Office(
-        Guid id,
-        string name,
-        ApplicationUser? masterUser = null) : base(id)
+    internal Office(Guid id, string name, ApplicationUser? masterUser = null) : base(id)
     {
         SetName(name);
         MasterUser = masterUser;
     }
 
     // Properties
-    
-    [StringLength(MaxNameLength)]
+
+    [StringLength(MaxNameLength, MinimumLength = MinNameLength)]
     public string Name { get; private set; } = string.Empty;
 
     public bool Active { get; set; } = true;
@@ -36,7 +33,7 @@ public class Office : AuditableEntity
     public List<ApplicationUser> StaffMembers { get; set; } = new();
 
     // Methods
-    
+
     internal void ChangeName(string name) => SetName(name);
 
     private void SetName(string name) =>
