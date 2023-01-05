@@ -1,8 +1,7 @@
 using Cts.Domain.Complaints;
 using Cts.TestData;
-using IntegrationTests;
 
-namespace LocalRepositoryTests.BaseReadOnlyRepository;
+namespace IntegrationTests.Complaints;
 
 public class Exists
 {

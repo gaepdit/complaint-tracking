@@ -1,8 +1,7 @@
 using Cts.Domain.Offices;
 using Cts.TestData;
-using IntegrationTests;
 
-namespace LocalRepositoryTests.BaseReadOnlyRepository;
+namespace IntegrationTests.BaseReadOnlyRepository;
 
 public class GetCount
 {
