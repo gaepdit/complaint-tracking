@@ -1,5 +1,6 @@
 ﻿using Cts.TestData;
 using Cts.TestData.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cts.Infrastructure.Contexts.SeedDevData;
@@ -54,9 +55,16 @@ public static class DbSeedDataHelpers
 
     private static void SeedIdentityData(AppDbContext context)
     {
-        if (!context.Roles.Any()) context.Roles.AddRange(IdentityData.GetIdentityRoles);
-        if (!context.Users.Any()) context.Users.AddRange(IdentityData.GetUsers);
-        if (!context.UserRoles.Any()) context.UserRoles.AddRange(IdentityData.GetUserRoles);
+        var roles = IdentityData.GetRoles.ToList();
+        var users = IdentityData.GetUsers;
+        var userRoles = roles
+            .Select(role => new IdentityUserRole<string> { RoleId = role.Id, UserId = users.First().Id })
+            .ToList();
+
+        if (!context.Roles.Any()) context.Roles.AddRange(roles);
+        if (!context.Users.Any()) context.Users.AddRange(users);
+        if (!context.UserRoles.Any()) context.UserRoles.AddRange(userRoles);
+
         context.SaveChanges();
     }
 }

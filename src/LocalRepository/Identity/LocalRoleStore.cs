@@ -8,6 +8,13 @@ namespace Cts.LocalRepository.Identity;
 /// </summary>
 public sealed class LocalRoleStore : IRoleStore<IdentityRole>
 {
+    internal IEnumerable<IdentityRole> Roles { get; }
+
+    public LocalRoleStore()
+    {
+        Roles = IdentityData.GetRoles;
+    }
+
     public Task<IdentityResult> CreateAsync(IdentityRole role, CancellationToken cancellationToken) =>
         Task.FromResult(new IdentityResult()); // Intentionally left unimplemented.
 
@@ -34,10 +41,10 @@ public sealed class LocalRoleStore : IRoleStore<IdentityRole>
         Task.CompletedTask; // Intentionally left unimplemented.
 
     public Task<IdentityRole> FindByIdAsync(string roleId, CancellationToken cancellationToken) =>
-        Task.FromResult(IdentityData.GetIdentityRoles.Single(r => r.Id == roleId));
+        Task.FromResult(Roles.Single(r => r.Id == roleId));
 
     public Task<IdentityRole> FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken) =>
-        Task.FromResult(IdentityData.GetIdentityRoles.Single(r =>
+        Task.FromResult(Roles.Single(r =>
             string.Equals(r.NormalizedName, normalizedRoleName, StringComparison.InvariantCultureIgnoreCase)));
 
     public void Dispose()

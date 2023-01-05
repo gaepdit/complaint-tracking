@@ -7,7 +7,7 @@ internal static partial class IdentityData
 {
     private static IEnumerable<IdentityRole>? _roles;
 
-    public static IEnumerable<IdentityRole> GetIdentityRoles
+    public static IEnumerable<IdentityRole> GetRoles
     {
         get
         {

@@ -10,7 +10,10 @@ public class BaseReadOnlyRepository<TEntity, TKey> : IReadOnlyRepository<TEntity
     where TKey : IEquatable<TKey>
 {
     internal ICollection<TEntity> Items { get; }
-    protected BaseReadOnlyRepository(IEnumerable<TEntity> items) => Items = items.ToList();
+    protected BaseReadOnlyRepository(IEnumerable<TEntity> items)
+    {
+        Items = items.ToList();
+    }
 
     public Task<TEntity> GetAsync(TKey id, CancellationToken token = default) =>
         Items.Any(e => e.Id.Equals(id))

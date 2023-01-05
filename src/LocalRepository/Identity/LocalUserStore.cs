@@ -9,13 +9,17 @@ namespace Cts.LocalRepository.Identity;
 /// </summary>
 public sealed class LocalUserStore : IUserRoleStore<ApplicationUser> // inherits IUserStore<ApplicationUser>
 {
-    private ICollection<ApplicationUser> Users { get; }
+    internal ICollection<ApplicationUser> Users { get; }
+    internal ICollection<IdentityRole> Roles { get; }
     private ICollection<IdentityUserRole<string>> UserRoles { get; }
 
     public LocalUserStore()
     {
         Users = IdentityData.GetUsers.ToList();
-        UserRoles = IdentityData.GetUserRoles.ToList();
+        Roles = IdentityData.GetRoles.ToList();
+        UserRoles = Roles
+            .Select(role => new IdentityUserRole<string> { RoleId = role.Id, UserId = Users.First().Id })
+            .ToList();
     }
 
     // IUserStore
@@ -59,13 +63,25 @@ public sealed class LocalUserStore : IUserRoleStore<ApplicationUser> // inherits
     // IUserRoleStore
     public Task AddToRoleAsync(ApplicationUser user, string roleName, CancellationToken cancellationToken)
     {
-        UserRoles.AddUserRole(user.Id, roleName);
+        var roleId = Roles.SingleOrDefault(r =>
+            string.Equals(r.Name, roleName, StringComparison.InvariantCultureIgnoreCase))?.Id;
+        if (roleId is null) return Task.CompletedTask;
+
+        var exists = UserRoles.Any(e => e.UserId == user.Id && e.RoleId == roleId);
+        if (!exists) UserRoles.Add(new IdentityUserRole<string> { RoleId = roleId, UserId = user.Id });
+
         return Task.CompletedTask;
     }
 
     public Task RemoveFromRoleAsync(ApplicationUser user, string roleName, CancellationToken cancellationToken)
     {
-        UserRoles.RemoveUserRole(user.Id, roleName);
+        var roleId = Roles.SingleOrDefault(r =>
+            string.Equals(r.Name, roleName, StringComparison.InvariantCultureIgnoreCase))?.Id;
+        if (roleId is null) return Task.CompletedTask;
+
+        var userRole = UserRoles.SingleOrDefault(e => e.UserId == user.Id && e.RoleId == roleId);
+        if (userRole is not null) UserRoles.Remove(userRole);
+
         return Task.CompletedTask;
     }
 
@@ -74,7 +90,7 @@ public sealed class LocalUserStore : IUserRoleStore<ApplicationUser> // inherits
         var roleIdsForUser = UserRoles
             .Where(e => e.UserId == user.Id)
             .Select(e => e.RoleId);
-        var rolesForUser = IdentityData.GetIdentityRoles
+        var rolesForUser = Roles
             .Where(r => roleIdsForUser.Contains(r.Id))
             .Select(r => r.NormalizedName).ToList();
         return Task.FromResult<IList<string>>(rolesForUser);
@@ -82,14 +98,14 @@ public sealed class LocalUserStore : IUserRoleStore<ApplicationUser> // inherits
 
     public Task<bool> IsInRoleAsync(ApplicationUser user, string roleName, CancellationToken cancellationToken)
     {
-        var roleId = IdentityData.GetIdentityRoles.SingleOrDefault(r =>
+        var roleId = Roles.SingleOrDefault(r =>
             string.Equals(r.Name, roleName, StringComparison.InvariantCultureIgnoreCase))?.Id;
         return Task.FromResult(UserRoles.Any(e => e.UserId == user.Id && e.RoleId == roleId));
     }
 
     public Task<IList<ApplicationUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
     {
-        var roleId = IdentityData.GetIdentityRoles.SingleOrDefault(r =>
+        var roleId = Roles.SingleOrDefault(r =>
             string.Equals(r.Name, roleName, StringComparison.InvariantCultureIgnoreCase))?.Id;
         var userIdsInRole = UserRoles
             .Where(e => e.RoleId == roleId)
