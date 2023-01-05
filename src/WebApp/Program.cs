@@ -93,7 +93,7 @@ else
 }
 
 // Configure the application pipeline.
-app.UseStatusCodePages();
+app.UseStatusCodePagesWithReExecute("/Error/{0}");
 app.UseHttpsRedirection();
 app.UseWebOptimizer();
 app.UseStaticFiles();

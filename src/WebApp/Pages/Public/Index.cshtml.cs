@@ -59,7 +59,8 @@ public class IndexModel : PageModel
         else if (!await _complaints.PublicComplaintExistsAsync(idInt))
         {
             ModelState.AddModelError(nameof(FindId),
-                "The Complaint ID entered does not exist or is not publicly available.");
+                "The Complaint ID entered does not exist or is not publicly available. " +
+                "(Complaints are only made available on this site after EPD’s investigation has concluded.) ");
         }
 
         if (!ModelState.IsValid) return Page();

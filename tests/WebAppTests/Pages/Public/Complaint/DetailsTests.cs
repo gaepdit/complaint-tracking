@@ -36,7 +36,8 @@ public class IndexTests
 
         var result = await pageModel.OnGetAsync(service.Object, null);
 
-        result.Should().BeOfType<NotFoundResult>();
+        result.Should().BeOfType<RedirectToPageResult>();
+        ((RedirectToPageResult)result).PageName.Should().Be("../Index");
     }
 
     [Test]
@@ -49,10 +50,6 @@ public class IndexTests
 
         var result = await pageModel.OnGetAsync(service.Object, 0);
 
-        using (new AssertionScope())
-        {
-            result.Should().BeOfType<NotFoundObjectResult>();
-            ((NotFoundObjectResult)result).Value.Should().Be("ID not found.");
-        }
+        result.Should().BeOfType<NotFoundResult>();
     }
 }
