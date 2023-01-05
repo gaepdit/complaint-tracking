@@ -1,31 +1,9 @@
-﻿using Cts.Domain.BaseEntities;
-using System.ComponentModel.DataAnnotations;
+﻿using Cts.AppServices.BaseDto;
 
 namespace Cts.AppServices.Concerns;
 
-public class ConcernViewDto
-{
-    public Guid Id { get; init; }
-    public string Name { get; init; } = string.Empty;
+public class ConcernViewDto : SimpleNamedEntityViewDto { }
 
-    [UIHint("BoolActive")]
-    public bool Active { get; init; }
-}
+public class ConcernCreateDto : SimpleNamedEntityCreateDto { }
 
-public class ConcernCreateDto
-{
-    [Required(AllowEmptyStrings = false)]
-    [StringLength(SimpleNamedEntity.MaxNameLength, MinimumLength = SimpleNamedEntity.MinNameLength)]
-    public string Name { get; init; } = string.Empty;
-}
-
-public class ConcernUpdateDto
-{
-    public Guid Id { get; init; }
-
-    [Required(AllowEmptyStrings = false)]
-    [StringLength(SimpleNamedEntity.MaxNameLength, MinimumLength = SimpleNamedEntity.MinNameLength)]
-    public string Name { get; init; } = string.Empty;
-
-    public bool Active { get; init; }
-}
+public class ConcernUpdateDto : SimpleNamedEntityUpdateDto { }
