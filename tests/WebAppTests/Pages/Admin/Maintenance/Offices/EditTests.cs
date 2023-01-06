@@ -42,7 +42,11 @@ public class EditTests
 
         var result = await page.OnGetAsync(null);
 
-        result.Should().BeOfType<NotFoundResult>();
+        using (new AssertionScope())
+        {
+            result.Should().BeOfType<RedirectToPageResult>();
+            ((RedirectToPageResult)result).PageName.Should().Be("Index");
+        }
     }
 
     [Test]
@@ -56,11 +60,7 @@ public class EditTests
 
         var result = await page.OnGetAsync(Guid.Empty);
 
-        using (new AssertionScope())
-        {
-            result.Should().BeOfType<NotFoundObjectResult>();
-            ((NotFoundObjectResult)result).Value.Should().Be("ID not found.");
-        }
+        result.Should().BeOfType<NotFoundResult>();
     }
 
     [Test]

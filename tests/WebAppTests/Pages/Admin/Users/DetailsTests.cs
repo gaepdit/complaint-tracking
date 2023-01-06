@@ -46,7 +46,11 @@ public class DetailsTests
 
         var result = await pageModel.OnGetAsync(service.Object, null);
 
-        result.Should().BeOfType<NotFoundResult>();
+        using (new AssertionScope())
+        {
+            result.Should().BeOfType<RedirectToPageResult>();
+            ((RedirectToPageResult)result).PageName.Should().Be("Index");
+        }
     }
 
     [Test]
@@ -59,10 +63,6 @@ public class DetailsTests
 
         var result = await pageModel.OnGetAsync(service.Object, Guid.Empty);
 
-        using (new AssertionScope())
-        {
-            result.Should().BeOfType<NotFoundObjectResult>();
-            ((NotFoundObjectResult)result).Value.Should().Be("ID not found.");
-        }
+        result.Should().BeOfType<NotFoundResult>();
     }
 }

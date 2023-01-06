@@ -36,8 +36,11 @@ public class IndexTests
 
         var result = await pageModel.OnGetAsync(service.Object, null);
 
-        result.Should().BeOfType<RedirectToPageResult>();
-        ((RedirectToPageResult)result).PageName.Should().Be("../Index");
+        using (new AssertionScope())
+        {
+            result.Should().BeOfType<RedirectToPageResult>();
+            ((RedirectToPageResult)result).PageName.Should().Be("../Index");
+        }
     }
 
     [Test]

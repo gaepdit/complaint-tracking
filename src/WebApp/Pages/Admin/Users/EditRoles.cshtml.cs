@@ -25,9 +25,9 @@ public class EditRolesModel : PageModel
 
     public async Task<IActionResult> OnGetAsync(Guid? id)
     {
-        if (id == null) return NotFound();
+        if (id == null) return RedirectToPage("Index");
         var staff = await _staffService.FindAsync(id.Value);
-        if (staff == null) return NotFound("ID not found.");
+        if (staff == null) return NotFound();
 
         DisplayStaff = staff;
         UserId = id.Value;

@@ -18,9 +18,9 @@ public class DetailsModel : PageModel
 
     public async Task<IActionResult> OnGetAsync([FromServices] IStaffAppService staffService, Guid? id)
     {
-        if (id == null) return NotFound();
+        if (id == null) return RedirectToPage("Index");
         var staff = await staffService.FindAsync(id.Value);
-        if (staff == null) return NotFound("ID not found.");
+        if (staff == null) return NotFound();
 
         DisplayStaff = staff;
         Roles = await staffService.GetAppRolesAsync(DisplayStaff.Id);
