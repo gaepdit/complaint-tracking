@@ -53,96 +53,6 @@ body {
     line-height: 60px; /* Vertically center the text there */
 }
 
-/* Fix missing :focus styles
--------------------------------------------------- */
-a:focus {
-    color: #0056b3;
-}
-
-a:focus:not(.btn) {
-    text-decoration: underline;
-}
-
-.btn-primary:focus {
-    color: #fff;
-    background-color: #0069d9;
-}
-
-.btn-secondary:focus {
-    color: #fff;
-    background-color: #5a6268;
-}
-
-.btn-success:focus {
-    color: #fff;
-    background-color: #218838;
-}
-
-.btn-info:focus {
-    color: #fff;
-    background-color: #138496;
-}
-
-.btn-warning:focus {
-    color: #212529;
-    background-color: #e0a800;
-}
-
-.btn-danger:focus {
-    color: #fff;
-    background-color: #c82333;
-}
-
-.btn-light:focus {
-    color: #212529;
-    background-color: #e2e6ea;
-}
-
-.btn-dark:focus {
-    color: #fff;
-    background-color: #23272b;
-}
-
-.btn-outline-primary:focus {
-    color: #fff;
-    background-color: #007bff;
-}
-
-.btn-outline-secondary:focus {
-    color: #fff;
-    background-color: #6c757d;
-}
-
-.btn-outline-success:focus {
-    color: #fff;
-    background-color: #28a745;
-}
-
-.btn-outline-info:focus {
-    color: #fff;
-    background-color: #17a2b8;
-}
-
-.btn-outline-warning:focus {
-    color: #212529;
-    background-color: #ffc107;
-}
-
-.btn-outline-danger:focus {
-    color: #fff;
-    background-color: #dc3545;
-}
-
-.btn-outline-light:focus {
-    color: #212529;
-    background-color: #f8f9fa;
-}
-
-.btn-outline-dark:focus {
-    color: #fff;
-    background-color: #343a40;
-}
-
 /* Branding
 -------------------------------------------------- */
 .bg-brand {
@@ -168,7 +78,7 @@ a:focus:not(.btn) {
 
 /* Nav bar text
 -------------------------------------------------- */
-.nav-link:hover, .nav-link:focus {
+.nav-link:hover {
     text-decoration: underline;
 }
 
@@ -240,6 +150,12 @@ a[target]::after {
     padding: 1px 0;
 }
 
+:target {
+    /* Prevent banner from covering up link target elements. 
+       See: https://www.bram.us/2020/03/01/prevent-content-from-being-hidden-underneath-a-fixed-header-by-using-scroll-margin-top/ */
+    scroll-margin-top: 1.5rem;
+}
+
 /* Print styles
 -------------------------------------------------- */
 @media print {
@@ -260,8 +176,12 @@ a[target]::after {
 -------------------------------------------------- */
 .anchorjs-link {
     transition: all .25s linear;
+    /* See https://github.com/bryanbraun/anchorjs/pull/192 */
+    margin-left: -1.25em !important;
+    padding-left: .25em;
+    padding-right: .25em !important;
 }
 
-*:hover > .anchorjs-link {
-    margin-left: -1.125em !important;
+*:hover > .anchorjs-link, .anchorjs-link:focus-visible {
+    margin-left: -1.375em !important;
 }
