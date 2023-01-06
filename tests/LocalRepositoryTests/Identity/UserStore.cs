@@ -2,7 +2,6 @@ using Cts.Domain.Identity;
 using Cts.Domain.Offices;
 using Cts.LocalRepository.Identity;
 using Cts.TestData.Identity;
-using Microsoft.AspNetCore.Identity;
 
 namespace LocalRepositoryTests.Identity;
 
