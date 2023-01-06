@@ -13,7 +13,6 @@
       ]
     },
     {
-
       "provider": "cdnjs",
       "library": "bootstrap@5.2.2",
       "destination": "wwwroot/lib/bootstrap/",
@@ -43,6 +42,11 @@
         "jquery.validate.unobtrusive.min.js",
         "jquery.validate.unobtrusive.js"
       ]
+    },
+    {
+      "provider": "cdnjs",
+      "library": "anchor-js@4.3.1",
+      "destination": "wwwroot/lib/anchor-js/"
     }
   ]
 }

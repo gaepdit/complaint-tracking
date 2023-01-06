@@ -255,3 +255,13 @@ a[target]::after {
         content: "— Not for public distribution";
     }
 }
+
+/* Anchor-JS
+-------------------------------------------------- */
+.anchorjs-link {
+    transition: all .25s linear;
+}
+
+*:hover > .anchorjs-link {
+    margin-left: -1.125em !important;
+}
