@@ -30,14 +30,14 @@ jobs:
       - name: Run Web Server in the background
         run: |
           cd src/WebApp
-          dotnet run &
+          dotnet run --no-build &
 
       - name: Create temporary folder for artifacts storage
         run: mkdir /tmp/lighthouse-artifacts
 
       - name: Install Lighthouse through NPM
         run: |
-          npm install -g @foo-software/lighthouse-check
+          npm install -g @foo-software/lighthouse-check@7.0.0
 
       - name: Run Lighthouse Check
         run: |
