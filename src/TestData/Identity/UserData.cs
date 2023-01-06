@@ -41,12 +41,14 @@ internal static partial class IdentityData
         get
         {
             if (_users is not null) return _users;
+
             UserSeedItems.ForEach(delegate(ApplicationUser user)
             {
                 user.UserName = user.Email;
                 user.NormalizedEmail = user.Email.ToUpperInvariant();
                 user.NormalizedUserName = user.Email.ToUpperInvariant();
             });
+
             _users = UserSeedItems;
             return _users;
         }
