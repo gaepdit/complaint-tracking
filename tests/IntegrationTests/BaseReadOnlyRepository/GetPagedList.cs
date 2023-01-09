@@ -50,7 +50,6 @@ public class GetPagedList
     public async Task GivenSorting_ReturnsSortedList()
     {
         using var repository = RepositoryHelper.CreateRepositoryHelper().GetOfficeRepository();
-        // TODO: check if any test change GetOffices (cant parallelize yet)
         var itemsCount = OfficeData.GetOffices.Count(); 
         var paging = new PaginatedRequest(1, itemsCount, "Name desc");
 

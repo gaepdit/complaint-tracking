@@ -14,6 +14,8 @@ public class Update
         using var repository = repositoryHelper.GetOfficeRepository();
         
         var item = OfficeData.GetOffices.First(e => e.Active);
+        var originalItem = new Office(item.Id, item.Name);
+        
         item.ChangeName(TestConstants.ValidName);
         item.Active = !item.Active;
 
@@ -22,6 +24,10 @@ public class Update
 
         var getResult = await repository.GetAsync(item.Id);
         getResult.Should().BeEquivalentTo(item);
+        
+        // revert the changes back
+        item.ChangeName(originalItem.Name);
+        item.Active = !item.Active;
     }
 
 
@@ -42,6 +48,10 @@ public class Update
 
         var getResult = await repository.GetAsync(item.Id);
         getResult.Should().BeEquivalentTo(originalItem);
+        
+        // revert the changes back
+        item.ChangeName(originalItem.Name);
+        item.Active = !item.Active;
     }
 
     [Test]

@@ -1,4 +1,5 @@
-﻿using Cts.TestData;
+﻿using System.Diagnostics;
+using Cts.TestData;
 using FluentAssertions.Execution;
 
 namespace IntegrationTests.BaseReadOnlyRepository;
