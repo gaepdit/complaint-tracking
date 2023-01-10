@@ -50,8 +50,8 @@ public sealed class OfficeAppService : IOfficeAppService
 
     public async Task<Guid> CreateAsync(OfficeCreateDto resource, CancellationToken token = default)
     {
-        var masterUser = _mapper.Map<ApplicationUser>(resource.MasterUser);
-        var item = await _manager.CreateAsync(resource.Name, masterUser, token);
+        var assignor = _mapper.Map<ApplicationUser>(resource.Assignor);
+        var item = await _manager.CreateAsync(resource.Name, assignor, token);
         item.SetCreator((await _userService.GetCurrentUserAsync())?.Id);
         await _repository.InsertAsync(item, token: token);
         return item.Id;

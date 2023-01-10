@@ -65,7 +65,7 @@ public class AppRole
     public static AppRole DivisionManagerRole { get; } = new(
         DivisionManager, "Division Manager",
         "Can register and edit all users and roles. Can manage all complaints. Can delete and restore " +
-        "complaints and complaint actions. Can edit offices, master users, and lookup tables."
+        "complaints and complaint actions. Can edit offices, assignors, and lookup tables."
     );
 
     public static AppRole ManagerRole { get; } = new(

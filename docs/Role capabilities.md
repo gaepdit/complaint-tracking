@@ -11,19 +11,19 @@ Visitors to this site who are not logged in can only do the following:
 
 All Users with CTS accounts who are logged into the application can:
 
-* Create new Complaints and either assign them to Users within the same Office or to the Master User of another Office.
+* Create new Complaints and either assign them to Users within the same Office or to the Assignor of another Office.
 * Edit Complaints assigned to them.
 * Add/edit Complaint Actions for Complaints assigned to them.
-* Transfer (reassign) their Complaints to other Users within the same Office or to the Master User of another Office.
+* Transfer (reassign) their Complaints to other Users within the same Office or to the Assignor of another Office.
 * Search for and view all info for all Complaints, excluding deleted Complaints and deleted Complaint Actions.
 * View a list of CTS Users.
 * View the lookup tables for Complaint Action Types and Areas of Concern.
 * View reports for self.
 * Edit account info for self, including changing assigned Office.
 
-## Master Users
+## Office Assignor
 
-One User in each Office is designated the "Master User" for that Office. The Master User can:
+One User in each Office is designated the "Assignor" for that Office. The Assignor can:
 
 * Assign unassigned Complaints to users within that Office.
 
@@ -48,7 +48,7 @@ Users in the Manager role can:
 Users in the Division Manager role have all of the capabilities of a Manager, plus they can:
 
 * Create and manage CTS User accounts and assign roles, including the Division Manager role.
-* Edit EPD Offices and designate the Master User for each Office.
+* Edit EPD Offices and designate the Assignor for each Office.
 * Edit the lookup tables for Complaint Action Types and Areas of Concern.
 * Edit all Complaints.
 * Reopen Complaints that have been closed.

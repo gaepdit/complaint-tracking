@@ -15,10 +15,10 @@ public class Office : AuditableEntity
     [UsedImplicitly] // Used by ORM.
     private Office() { }
 
-    internal Office(Guid id, string name, ApplicationUser? masterUser = null) : base(id)
+    internal Office(Guid id, string name, ApplicationUser? assignor = null) : base(id)
     {
         SetName(name);
-        MasterUser = masterUser;
+        Assignor = assignor;
     }
 
     // Properties
@@ -28,7 +28,7 @@ public class Office : AuditableEntity
 
     public bool Active { get; set; } = true;
 
-    public ApplicationUser? MasterUser { get; set; }
+    public ApplicationUser? Assignor { get; set; }
 
     public List<ApplicationUser> StaffMembers { get; set; } = new();
 

@@ -18,7 +18,7 @@ public class OfficeMapping
         {
             result.Id.Should().Be(item.Id);
             result.Name.Should().Be(item.Name);
-            result.MasterUser.Should().BeNull();
+            result.Assignor.Should().BeNull();
             result.Active.Should().BeTrue();
         }
     }
@@ -34,7 +34,7 @@ public class OfficeMapping
         {
             result.Id.Should().Be(item.Id);
             result.Name.Should().Be(item.Name);
-            result.MasterUser.Should().BeNull();
+            result.Assignor.Should().BeNull();
             result.Active.Should().BeTrue();
         }
     }
