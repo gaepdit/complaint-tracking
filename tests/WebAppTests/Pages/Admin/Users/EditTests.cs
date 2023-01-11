@@ -17,19 +17,19 @@ public class EditTests
 {
     private static readonly StaffViewDto StaffViewTest = new()
     {
-        Id = Guid.Empty,
+        Id = Guid.Empty.ToString(),
         Email = TestConstants.ValidEmail,
         FirstName = TestConstants.ValidName,
         LastName = TestConstants.ValidName,
     };
 
-    private static readonly StaffUpdateDto StaffUpdateTest = new() { Id = Guid.Empty };
+    private static readonly StaffUpdateDto StaffUpdateTest = new() { Id = Guid.Empty.ToString() };
 
     [Test]
     public async Task OnGet_PopulatesThePageModel()
     {
         var staffService = new Mock<IStaffAppService>();
-        staffService.Setup(l => l.FindAsync(It.IsAny<Guid>()))
+        staffService.Setup(l => l.FindAsync(It.IsAny<string>()))
             .ReturnsAsync(StaffViewTest);
         var officeService = new Mock<IOfficeAppService>();
         officeService.Setup(l => l.GetActiveListItemsAsync(CancellationToken.None))
@@ -71,14 +71,14 @@ public class EditTests
     public async Task OnGet_NonexistentIdReturnsNotFound()
     {
         var staffService = new Mock<IStaffAppService>();
-        staffService.Setup(l => l.FindAsync(It.IsAny<Guid>()))
+        staffService.Setup(l => l.FindAsync(It.IsAny<string>()))
             .ReturnsAsync((StaffViewDto?)null);
         var officeService = new Mock<IOfficeAppService>();
         var validator = new Mock<IValidator<StaffUpdateDto>>();
         var pageModel = new EditModel(staffService.Object, officeService.Object, validator.Object)
             { TempData = WebAppTestsGlobal.GetPageTempData() };
 
-        var result = await pageModel.OnGetAsync(Guid.Empty);
+        var result = await pageModel.OnGetAsync(Guid.Empty.ToString());
 
         result.Should().BeOfType<NotFoundResult>();
     }
@@ -104,7 +104,7 @@ public class EditTests
             page.ModelState.IsValid.Should().BeTrue();
             result.Should().BeOfType<RedirectToPageResult>();
             ((RedirectToPageResult)result).PageName.Should().Be("Details");
-            ((RedirectToPageResult)result).RouteValues!["id"].Should().Be(Guid.Empty);
+            ((RedirectToPageResult)result).RouteValues!["id"].Should().Be(Guid.Empty.ToString());
             page.TempData.GetDisplayMessage().Should().BeEquivalentTo(expectedMessage);
         }
     }
@@ -113,7 +113,7 @@ public class EditTests
     public async Task OnPost_GivenInvalidModel_ReturnsPageWithInvalidModelState()
     {
         var staffService = new Mock<IStaffAppService>();
-        staffService.Setup(l => l.FindAsync(It.IsAny<Guid>()))
+        staffService.Setup(l => l.FindAsync(It.IsAny<string>()))
             .ReturnsAsync(StaffViewTest);
         var officeService = new Mock<IOfficeAppService>();
         officeService.Setup(l => l.GetActiveListItemsAsync(CancellationToken.None))
@@ -141,7 +141,7 @@ public class EditTests
     public async Task OnPost_GivenMissingUser_ReturnsBadRequest()
     {
         var staffService = new Mock<IStaffAppService>();
-        staffService.Setup(l => l.FindAsync(It.IsAny<Guid>()))
+        staffService.Setup(l => l.FindAsync(It.IsAny<string>()))
             .ReturnsAsync((StaffViewDto?)null);
         var officeService = new Mock<IOfficeAppService>();
         var validator = new Mock<IValidator<StaffUpdateDto>>();

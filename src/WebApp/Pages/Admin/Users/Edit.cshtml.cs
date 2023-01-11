@@ -20,7 +20,10 @@ public class EditModel : PageModel
     private readonly IOfficeAppService _officeService;
     private readonly IValidator<StaffUpdateDto> _validator;
 
-    public EditModel(IStaffAppService staffService, IOfficeAppService officeService, IValidator<StaffUpdateDto> validator)
+    public EditModel(
+        IStaffAppService staffService,
+        IOfficeAppService officeService,
+        IValidator<StaffUpdateDto> validator)
     {
         _staffService = staffService;
         _officeService = officeService;
@@ -34,10 +37,10 @@ public class EditModel : PageModel
 
     public SelectList OfficeItems { get; private set; } = default!;
 
-    public async Task<IActionResult> OnGetAsync(Guid? id)
+    public async Task<IActionResult> OnGetAsync(string? id)
     {
         if (id == null) return RedirectToPage("Index");
-        var staff = await _staffService.FindAsync(id.Value);
+        var staff = await _staffService.FindAsync(id);
         if (staff == null) return NotFound();
 
         DisplayStaff = staff;

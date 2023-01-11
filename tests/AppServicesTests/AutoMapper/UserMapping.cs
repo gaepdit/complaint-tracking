@@ -41,7 +41,7 @@ public class UserMapping
     {
         var item = new StaffViewDto
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.NewGuid().ToString(),
             FirstName = TestConstants.ValidName,
             LastName = TestConstants.ValidName,
             Email = TestConstants.ValidEmail,
@@ -53,7 +53,7 @@ public class UserMapping
 
         using (new AssertionScope())
         {
-            result.Id.Should().Be(item.Id.ToString());
+            result.Id.Should().Be(item.Id);
             result.FirstName.Should().Be(item.FirstName);
             result.LastName.Should().Be(item.LastName);
             result.Email.Should().Be(item.Email);

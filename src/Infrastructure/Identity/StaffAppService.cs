@@ -41,9 +41,9 @@ public sealed class StaffAppService : IStaffAppService
         return _mapper.Map<StaffViewDto?>(user);
     }
 
-    public async Task<StaffViewDto?> FindAsync(Guid id)
+    public async Task<StaffViewDto?> FindAsync(string id)
     {
-        var user = await _userManager.FindByIdAsync(id.ToString());
+        var user = await _userManager.FindByIdAsync(id);
         return _mapper.Map<StaffViewDto?>(user);
     }
 
@@ -56,14 +56,14 @@ public sealed class StaffAppService : IStaffAppService
         return _mapper.Map<List<StaffViewDto>>(users);
     }
 
-    public async Task<IList<string>> GetRolesAsync(Guid id) =>
-        await _userManager.GetRolesAsync(await _userManager.FindByIdAsync(id.ToString()));
+    public async Task<IList<string>> GetRolesAsync(string id) =>
+        await _userManager.GetRolesAsync(await _userManager.FindByIdAsync(id));
 
-    public async Task<IList<AppRole>> GetAppRolesAsync(Guid id) => AppRole.RolesAsAppRoles(await GetRolesAsync(id));
+    public async Task<IList<AppRole>> GetAppRolesAsync(string id) => AppRole.RolesAsAppRoles(await GetRolesAsync(id));
 
-    public async Task<IdentityResult> UpdateRolesAsync(Guid id, Dictionary<string, bool> roles)
+    public async Task<IdentityResult> UpdateRolesAsync(string id, Dictionary<string, bool> roles)
     {
-        var user = await _userManager.FindByIdAsync(id.ToString());
+        var user = await _userManager.FindByIdAsync(id);
         if (user == null) return IdentityResult.Failed(_errorDescriber.DefaultError());
 
         foreach (var (role, value) in roles)
@@ -89,7 +89,7 @@ public sealed class StaffAppService : IStaffAppService
 
     public async Task<IdentityResult> UpdateAsync(StaffUpdateDto resource)
     {
-        var user = await _userManager.FindByIdAsync(resource.Id.ToString());
+        var user = await _userManager.FindByIdAsync(resource.Id);
         if (user is null) throw new EntityNotFoundException(typeof(ApplicationUser), resource.Id);
 
         user.Phone = resource.Phone;

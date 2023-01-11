@@ -65,7 +65,7 @@ public class ExternalLoginModel : PageModel
                 ? (await _staffService.GetListAsync(new StaffSearchDto { Name = "Admin" })).First()
                 : (await _staffService.GetListAsync(new StaffSearchDto { Name = "General" })).First();
 
-            var user = await _userManager.FindByIdAsync(staff.Id.ToString());
+            var user = await _userManager.FindByIdAsync(staff.Id);
 
             await _signInManager.SignInAsync(user, false);
             return string.IsNullOrEmpty(returnUrl) ? RedirectToPage("/Index") : LocalRedirect(returnUrl);
@@ -93,10 +93,10 @@ public class ExternalLoginModel : PageModel
         // Sign in the user with the external provider.
         var signInResult = await _signInManager.ExternalLoginSignInAsync(externalLoginInfo.LoginProvider,
             externalLoginInfo.ProviderKey, true);
-        
-        if (signInResult.Succeeded) 
+
+        if (signInResult.Succeeded)
             return string.IsNullOrEmpty(returnUrl) ? RedirectToPage("/Index") : LocalRedirect(returnUrl);
-            
+
         if (signInResult.IsLockedOut || signInResult.IsNotAllowed || signInResult.RequiresTwoFactor)
             return RedirectToPage("./Unavailable");
 

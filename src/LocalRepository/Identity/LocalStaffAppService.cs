@@ -37,9 +37,9 @@ public sealed class LocalStaffAppService : IStaffAppService
         return _mapper.Map<StaffViewDto?>(user);
     }
 
-    public Task<StaffViewDto?> FindAsync(Guid id)
+    public Task<StaffViewDto?> FindAsync(string id)
     {
-        var user = IdentityData.GetUsers.SingleOrDefault(e => e.Id == id.ToString());
+        var user = IdentityData.GetUsers.SingleOrDefault(e => e.Id == id);
         return Task.FromResult(_mapper.Map<StaffViewDto?>(user));
     }
 
@@ -52,14 +52,14 @@ public sealed class LocalStaffAppService : IStaffAppService
         return _mapper.Map<List<StaffViewDto>>(users);
     }
 
-    public async Task<IList<string>> GetRolesAsync(Guid id) =>
-        await _userManager.GetRolesAsync(await _userManager.FindByIdAsync(id.ToString()));
+    public async Task<IList<string>> GetRolesAsync(string id) =>
+        await _userManager.GetRolesAsync(await _userManager.FindByIdAsync(id));
 
-    public async Task<IList<AppRole>> GetAppRolesAsync(Guid id) => AppRole.RolesAsAppRoles(await GetRolesAsync(id));
+    public async Task<IList<AppRole>> GetAppRolesAsync(string id) => AppRole.RolesAsAppRoles(await GetRolesAsync(id));
 
-    public async Task<IdentityResult> UpdateRolesAsync(Guid id, Dictionary<string, bool> roles)
+    public async Task<IdentityResult> UpdateRolesAsync(string id, Dictionary<string, bool> roles)
     {
-        var user = await _userManager.FindByIdAsync(id.ToString());
+        var user = await _userManager.FindByIdAsync(id);
         if (user == null) return IdentityResult.Failed(_errorDescriber.DefaultError());
 
         foreach (var (role, value) in roles)
@@ -85,7 +85,7 @@ public sealed class LocalStaffAppService : IStaffAppService
 
     public async Task<IdentityResult> UpdateAsync(StaffUpdateDto resource)
     {
-        var user = await _userManager.FindByIdAsync(resource.Id.ToString());
+        var user = await _userManager.FindByIdAsync(resource.Id);
         if (user is null) throw new EntityNotFoundException(typeof(ApplicationUser), resource.Id);
 
         user.Phone = resource.Phone;

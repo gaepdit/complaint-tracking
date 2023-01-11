@@ -18,19 +18,19 @@ public class EditRolesModel : PageModel
     public string? OfficeName => DisplayStaff.Office?.Name;
 
     [BindProperty]
-    public Guid UserId { get; set; }
+    public string UserId { get; set; } = string.Empty;
 
     [BindProperty]
     public List<RoleSetting> RoleSettings { get; set; } = new();
 
-    public async Task<IActionResult> OnGetAsync(Guid? id)
+    public async Task<IActionResult> OnGetAsync(string? id)
     {
         if (id == null) return RedirectToPage("Index");
-        var staff = await _staffService.FindAsync(id.Value);
+        var staff = await _staffService.FindAsync(id);
         if (staff == null) return NotFound();
 
         DisplayStaff = staff;
-        UserId = id.Value;
+        UserId = id;
 
         await PopulateRoleSettingsAsync();
         return Page();

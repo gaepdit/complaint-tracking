@@ -28,7 +28,7 @@ public class IndexModel : PageModel
     public List<StaffViewDto> SearchResults { get; private set; } = default!;
 
     [TempData]
-    public Guid? HighlightId { get; set; }
+    public string? HighlightId { get; set; }
 
     public Task OnGetAsync() => PopulateSelectListsAsync();
 

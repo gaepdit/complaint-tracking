@@ -37,7 +37,7 @@ public class GetList
         {
             result.Should().BeEquivalentTo(itemList, options => options
                 .Excluding(ctx => ctx.Path.EndsWith("MasterUser.Id")));
-            result[0].MasterUser!.Id.ToString().Should().Be(office.MasterUser.Id);
+            result[0].MasterUser!.Id.Should().Be(office.MasterUser.Id);
         }
     }
 

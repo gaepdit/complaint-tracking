@@ -31,7 +31,7 @@ public record StaffSearchDto
 
 public class StaffViewDto
 {
-    public Guid Id { get; init; }
+    public string Id { get; init; } = string.Empty;
     public string FirstName { get; init; } = string.Empty;
     public string LastName { get; init; } = string.Empty;
     public string Email { get; init; } = string.Empty;
@@ -53,7 +53,7 @@ public class StaffViewDto
 
 public class StaffUpdateDto
 {
-    public Guid Id { get; init; }
+    public string Id { get; init; } = string.Empty;
 
     [StringLength(ApplicationUser.MaxPhoneLength,
         ErrorMessage = "The Phone Number must not be longer than {1} characters.")]
