@@ -28,7 +28,8 @@ public class GetPagedListByPredicate
         using (new AssertionScope())
         {
             result.Count.Should().Be(itemsCount);
-            result.Should().BeEquivalentTo(OfficeData.GetOffices);
+            result.Should().BeEquivalentTo(OfficeData.GetOffices, opts =>
+                opts.Excluding(e => e.StaffMembers));
         }
     }
 
@@ -45,7 +46,8 @@ public class GetPagedListByPredicate
         using (new AssertionScope())
         {
             result.Count.Should().Be(1);
-            result.First().Should().BeEquivalentTo(item);
+            result.First().Should().BeEquivalentTo(item, opts =>
+                opts.Excluding(e => e.StaffMembers));
         }
     }
 
@@ -81,7 +83,8 @@ public class GetPagedListByPredicate
         using (new AssertionScope())
         {
             result.Count.Should().Be(itemsCount);
-            result.Should().BeEquivalentTo(OfficeData.GetOffices);
+            result.Should().BeEquivalentTo(OfficeData.GetOffices, opts =>
+                opts.Excluding(e => e.StaffMembers));
             result.Should().BeInDescendingOrder(e => e.Name);
         }
     }

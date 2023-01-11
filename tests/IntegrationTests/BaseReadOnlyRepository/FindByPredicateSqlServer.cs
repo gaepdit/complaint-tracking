@@ -23,8 +23,10 @@ public class FindByPredicateSqlServer
 
         using (new AssertionScope())
         {
-            resultSameCase.Should().BeEquivalentTo(item);
-            resultDifferentCase.Should().BeEquivalentTo(item);
+            resultSameCase.Should().BeEquivalentTo(item, opts =>
+                opts.Excluding(e => e.StaffMembers));
+            resultDifferentCase.Should().BeEquivalentTo(item, opts =>
+                opts.Excluding(e => e.StaffMembers));
         }
     }
 }

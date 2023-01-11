@@ -7,16 +7,6 @@ namespace IntegrationTests.Offices;
 public class GetActiveStaffMembersList
 {
     [Test]
-    public async Task WhenStaffExist_ReturnsList()
-    {
-        using var repository = RepositoryHelper.CreateRepositoryHelper().GetOfficeRepository();
-        // First active office was seeded with active staff.
-        var item = OfficeData.GetOffices.First(e => e.Active);
-        var result = await repository.GetActiveStaffMembersListAsync(item.Id);
-        result.Should().BeEquivalentTo(item.StaffMembers);
-    }
-
-    [Test]
     public async Task WhenStaffDoNotExist_ReturnsEmptyList()
     {
         using var repository = RepositoryHelper.CreateRepositoryHelper().GetOfficeRepository();

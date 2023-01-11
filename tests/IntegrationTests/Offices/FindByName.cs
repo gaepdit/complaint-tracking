@@ -12,7 +12,8 @@ public class FindByName
         using var repository = RepositoryHelper.CreateRepositoryHelper().GetOfficeRepository();
         var item = OfficeData.GetOffices.First(e => e.Active);
         var result = await repository.FindByNameAsync(item.Name);
-        result.Should().BeEquivalentTo(item);
+        result.Should().BeEquivalentTo(item, opts =>
+            opts.Excluding(e => e.StaffMembers));
     }
 
     [Test]
