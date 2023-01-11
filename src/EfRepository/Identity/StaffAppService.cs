@@ -4,6 +4,7 @@ using Cts.AppServices.UserServices;
 using Cts.Domain.Identity;
 using Cts.EfRepository.Contexts;
 using GaEpd.AppLibrary.Domain.Repositories;
+using GaEpd.AppLibrary.ListItems;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -51,6 +52,10 @@ public sealed class StaffAppService : IStaffAppService
 
         return _mapper.Map<List<StaffViewDto>>(users);
     }
+
+    public async Task<IReadOnlyList<ListItem<string>>> GetActiveStaffMembersAsync(CancellationToken token = default) =>
+        await _context.Users.AsNoTracking().FilterByActiveStatus(StaffSearchDto.ActiveStatus.Active)
+            .Select(e => new ListItem<string>(e.Id, e.SelectableNameWithOffice)).ToListAsync(token);
 
     public async Task<IList<string>> GetRolesAsync(string id) =>
         await _userManager.GetRolesAsync(await _userManager.FindByIdAsync(id));

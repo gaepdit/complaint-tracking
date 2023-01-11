@@ -69,6 +69,22 @@ public class StaffFilters
     }
 
     [Test]
+    public void StandaloneActiveStatusFilter_ReturnsAllActive()
+    {
+        var expected = IdentityData.GetUsers.Where(e => e.Active);
+        var result = IdentityData.GetUsers.AsQueryable().FilterByActiveStatus(StaffSearchDto.ActiveStatus.Active);
+        result.Should().BeEquivalentTo(expected);
+    }
+
+    [Test]
+    public void StandaloneActiveStatusFilterForInactive_ReturnsAllActive()
+    {
+        var expected = IdentityData.GetUsers.Where(e => !e.Active);
+        var result = IdentityData.GetUsers.AsQueryable().FilterByActiveStatus(StaffSearchDto.ActiveStatus.Inactive);
+        result.Should().BeEquivalentTo(expected);
+    }
+
+    [Test]
     public void StatusAllFilter_ReturnsAll()
     {
         var filter = new StaffSearchDto { Status = StaffSearchDto.ActiveStatus.All };

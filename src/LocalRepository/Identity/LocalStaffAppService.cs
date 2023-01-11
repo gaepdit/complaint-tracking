@@ -5,6 +5,7 @@ using Cts.Domain.Identity;
 using Cts.Domain.Offices;
 using Cts.TestData.Identity;
 using GaEpd.AppLibrary.Domain.Repositories;
+using GaEpd.AppLibrary.ListItems;
 using Microsoft.AspNetCore.Identity;
 
 namespace Cts.LocalRepository.Identity;
@@ -50,6 +51,14 @@ public sealed class LocalStaffAppService : IStaffAppService
             : (await _userManager.GetUsersInRoleAsync(filter.Role)).AsQueryable().ApplyFilter(filter);
 
         return _mapper.Map<List<StaffViewDto>>(users);
+    }
+
+    public Task<IReadOnlyList<ListItem<string>>> GetActiveStaffMembersAsync(CancellationToken token = default)
+    {
+        var listItems = IdentityData.GetUsers.AsQueryable()
+            .FilterByActiveStatus(StaffSearchDto.ActiveStatus.Active)
+            .Select(e => new ListItem<string>(e.Id, e.SelectableNameWithOffice));
+        return Task.FromResult((IReadOnlyList<ListItem<string>>)listItems.ToList());
     }
 
     public async Task<IList<string>> GetRolesAsync(string id) =>
