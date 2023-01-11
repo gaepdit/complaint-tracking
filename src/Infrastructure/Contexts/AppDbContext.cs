@@ -37,4 +37,10 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
         complaintEntity.Navigation(e => e.SecondaryConcern).AutoInclude();
         complaintEntity.Navigation(e => e.CurrentOffice).AutoInclude();
     }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+        optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTrackingWithIdentityResolution);
+    }
 }
