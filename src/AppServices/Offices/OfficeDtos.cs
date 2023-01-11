@@ -33,6 +33,9 @@ public class OfficeUpdateDto
         ErrorMessage = "The Name must be at least {2} characters but no longer than {1}.")]
     public string Name { get; init; } = string.Empty;
 
-    public StaffViewDto? Assignor { get; init; }
+    [Required]
+    [Display(Name = "Assignor")]
+    public string? AssignorId { get; init; }
+
     public bool Active { get; init; }
 }

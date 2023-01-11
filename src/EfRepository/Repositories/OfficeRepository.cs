@@ -18,4 +18,14 @@ public sealed class OfficeRepository : BaseRepository<Office, Guid>, IOfficeRepo
         (await GetAsync(id, token)).StaffMembers
         .Where(e => e.Active)
         .OrderBy(e => e.LastName).ThenBy(e => e.FirstName).ToList();
+
+    // Hide some base repository methods in order to include Assignor data. 
+    public new Task<Office?> FindAsync(Guid id, CancellationToken token = default) =>
+        Context.Set<Office>().AsNoTracking()
+            .Include(e => e.Assignor)
+            .SingleOrDefaultAsync(e => e.Id.Equals(id), token);
+
+    public new async Task<IReadOnlyCollection<Office>> GetListAsync(CancellationToken token = default) =>
+        await Context.Set<Office>().AsNoTracking()
+            .Include(e => e.Assignor).ToListAsync(token);
 }

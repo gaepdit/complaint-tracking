@@ -64,8 +64,9 @@ public sealed class OfficeAppService : IOfficeAppService
         if (item.Name != resource.Name.Trim())
             await _manager.ChangeNameAsync(item, resource.Name, token);
         item.Active = resource.Active;
-        item.SetUpdater((await _userService.GetCurrentUserAsync())?.Id);
+        item.AssignorId = resource.AssignorId;
 
+        item.SetUpdater((await _userService.GetCurrentUserAsync())?.Id);
         await _repository.UpdateAsync(item, token: token);
     }
 
