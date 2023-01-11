@@ -32,6 +32,8 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
         base.OnModelCreating(builder);
 
         // See https://learn.microsoft.com/en-us/ef/core/querying/related-data/eager#model-configuration-for-auto-including-navigations
+        builder.Entity<ApplicationUser>().Navigation(e => e.Office).AutoInclude();
+        
         var complaintEntity = builder.Entity<Complaint>();
         complaintEntity.Navigation(e => e.PrimaryConcern).AutoInclude();
         complaintEntity.Navigation(e => e.SecondaryConcern).AutoInclude();
