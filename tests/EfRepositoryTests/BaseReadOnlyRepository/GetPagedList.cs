@@ -27,7 +27,7 @@ public class GetPagedList
     [Test]
     public async Task WhenItemsExist_ReturnsList()
     {
-        var itemsCount = OfficeData.GetOffices.Count();
+        var itemsCount = OfficeData.GetOffices.Count;
         var paging = new PaginatedRequest(1, itemsCount);
 
         var result = await _repository.GetPagedListAsync(paging);
@@ -53,7 +53,7 @@ public class GetPagedList
     [Test]
     public async Task WhenPagedBeyondExistingItems_ReturnsEmptyList()
     {
-        var itemsCount = OfficeData.GetOffices.Count();
+        var itemsCount = OfficeData.GetOffices.Count;
         var paging = new PaginatedRequest(2, itemsCount);
         var result = await _repository.GetPagedListAsync(paging);
         result.Should().BeEmpty();
@@ -62,7 +62,7 @@ public class GetPagedList
     [Test]
     public async Task GivenSorting_ReturnsSortedList()
     {
-        var itemsCount = OfficeData.GetOffices.Count();
+        var itemsCount = OfficeData.GetOffices.Count;
         var paging = new PaginatedRequest(1, itemsCount, "Name desc");
 
         var result = await _repository.GetPagedListAsync(paging);

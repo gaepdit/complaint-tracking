@@ -19,7 +19,7 @@ public class GetPagedListByPredicate
     [Test]
     public async Task WhenItemsExist_ReturnsList()
     {
-        var itemsCount = OfficeData.GetOffices.Count();
+        var itemsCount = OfficeData.GetOffices.Count;
         var paging = new PaginatedRequest(1, itemsCount);
 
         var result = await _repository.GetPagedListAsync(e => e.Name.Length > 0, paging);
@@ -34,7 +34,7 @@ public class GetPagedListByPredicate
     [Test]
     public async Task WhenOneItemMatches_ReturnsListOfOne()
     {
-        var itemsCount = OfficeData.GetOffices.Count();
+        var itemsCount = OfficeData.GetOffices.Count;
         var item = OfficeData.GetOffices.First();
         var paging = new PaginatedRequest(1, itemsCount);
 
@@ -50,7 +50,7 @@ public class GetPagedListByPredicate
     [Test]
     public async Task WhenDoesNotExist_ReturnsEmptyList()
     {
-        var itemsCount = OfficeData.GetOffices.Count();
+        var itemsCount = OfficeData.GetOffices.Count;
         var paging = new PaginatedRequest(1, itemsCount);
         var result = await _repository.GetPagedListAsync(e => e.Name == TestConstants.NonExistentName, paging);
         result.Should().BeEmpty();
@@ -59,7 +59,7 @@ public class GetPagedListByPredicate
     [Test]
     public async Task WhenPagedBeyondExistingItems_ReturnsEmptyList()
     {
-        var itemsCount = OfficeData.GetOffices.Count();
+        var itemsCount = OfficeData.GetOffices.Count;
         var paging = new PaginatedRequest(2, itemsCount);
         var result = await _repository.GetPagedListAsync(e => e.Name.Length > 0, paging);
         result.Should().BeEmpty();
@@ -68,7 +68,7 @@ public class GetPagedListByPredicate
     [Test]
     public async Task GivenSorting_ReturnsSortedList()
     {
-        var itemsCount = OfficeData.GetOffices.Count();
+        var itemsCount = OfficeData.GetOffices.Count;
         var paging = new PaginatedRequest(1, itemsCount, "Name desc");
 
         var result = await _repository.GetPagedListAsync(e => e.Name.Length > 0, paging);

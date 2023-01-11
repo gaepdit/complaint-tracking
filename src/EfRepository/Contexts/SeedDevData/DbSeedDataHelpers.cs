@@ -56,7 +56,7 @@ public static class DbSeedDataHelpers
     private static void SeedIdentityData(AppDbContext context)
     {
         var roles = IdentityData.GetRoles.ToList();
-        var users = IdentityData.GetUsers;
+        var users = IdentityData.GetUsers.ToList();
         var userRoles = roles
             .Select(role => new IdentityUserRole<string> { RoleId = role.Id, UserId = users.First().Id })
             .ToList();
@@ -64,6 +64,8 @@ public static class DbSeedDataHelpers
         if (!context.Roles.Any()) context.Roles.AddRange(roles);
         if (!context.Users.Any()) context.Users.AddRange(users);
         if (!context.UserRoles.Any()) context.UserRoles.AddRange(userRoles);
+
+        OfficeData.SeedOfficeAssignors(context.Offices.AsTracking().ToList(), users);
 
         context.SaveChanges();
     }

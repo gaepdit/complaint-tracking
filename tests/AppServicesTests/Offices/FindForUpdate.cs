@@ -32,8 +32,7 @@ public class FindForUpdate
 
         var result = await appService.FindForUpdateAsync(Guid.Empty);
 
-        result.Should().BeEquivalentTo(office, options => options
-            .Excluding(ctx => ctx.Path.EndsWith("Assignor.Id")));
+        result.Should().BeEquivalentTo(office);
     }
 
     [Test]

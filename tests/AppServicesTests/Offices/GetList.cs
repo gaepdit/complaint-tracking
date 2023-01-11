@@ -3,7 +3,6 @@ using Cts.AppServices.UserServices;
 using Cts.Domain.Identity;
 using Cts.Domain.Offices;
 using Cts.TestData.Constants;
-using FluentAssertions.Execution;
 
 namespace AppServicesTests.Offices;
 
@@ -33,12 +32,7 @@ public class GetList
 
         var result = await appService.GetListAsync();
 
-        using (new AssertionScope())
-        {
-            result.Should().BeEquivalentTo(itemList, options => options
-                .Excluding(ctx => ctx.Path.EndsWith("Assignor.Id")));
-            result[0].Assignor!.Id.Should().Be(office.Assignor.Id);
-        }
+        result.Should().BeEquivalentTo(itemList);
     }
 
     [Test]
