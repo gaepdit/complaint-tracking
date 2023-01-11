@@ -5,7 +5,7 @@ namespace Cts.TestData;
 
 internal static class ComplaintData
 {
-    private static readonly List<Complaint> ComplaintSeedItems = new()
+    private static List<Complaint> ComplaintSeedItems => new()
     {
         new Complaint(1)
         {
@@ -80,4 +80,6 @@ internal static class ComplaintData
             return _complaints;
         }
     }
+
+    public static void ClearData() => _complaints = null;
 }

@@ -18,6 +18,15 @@ public static class DbSeedDataHelpers
         SeedComplaintData(context);
     }
 
+    internal static void ClearAllStaticData()
+    {
+        ActionTypeData.ClearData();
+        OfficeData.ClearData();
+        ConcernData.ClearData();
+        IdentityData.ClearData();
+        ComplaintData.ClearData();
+    }
+
     public static void SeedActionTypeData(AppDbContext context)
     {
         if (context.ActionTypes.Any()) return;

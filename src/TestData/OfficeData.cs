@@ -1,10 +1,10 @@
-﻿using Cts.Domain.Offices;
+using Cts.Domain.Offices;
 
 namespace Cts.TestData;
 
 internal static class OfficeData
 {
-    private static readonly List<Office> OfficeSeedItems = new()
+    private static List<Office> OfficeSeedItems => new()
     {
         new Office(new Guid("00000000-0000-0000-0000-000000000004"), "Branch"),
         new Office(new Guid("00000000-0000-0000-0000-000000000005"), "District"),
@@ -23,4 +23,6 @@ internal static class OfficeData
             return _offices;
         }
     }
+
+    public static void ClearData() => _offices = null;
 }

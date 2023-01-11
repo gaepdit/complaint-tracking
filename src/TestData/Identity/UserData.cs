@@ -1,10 +1,10 @@
-﻿using Cts.Domain.Identity;
+using Cts.Domain.Identity;
 
 namespace Cts.TestData.Identity;
 
 internal static partial class IdentityData
 {
-    private static readonly List<ApplicationUser> UserSeedItems = new()
+    private static List<ApplicationUser> UserSeedItems => new()
     {
         new ApplicationUser
         {
@@ -41,16 +41,18 @@ internal static partial class IdentityData
         get
         {
             if (_users is not null) return _users;
+            _users = UserSeedItems;
 
-            UserSeedItems.ForEach(delegate(ApplicationUser user)
+            foreach (var user in _users)
             {
                 user.UserName = user.Email;
                 user.NormalizedEmail = user.Email.ToUpperInvariant();
                 user.NormalizedUserName = user.Email.ToUpperInvariant();
-            });
+            }
 
-            _users = UserSeedItems;
             return _users;
         }
     }
+
+    public static void ClearData() => _users = null;
 }

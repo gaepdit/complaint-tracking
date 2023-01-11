@@ -1,10 +1,10 @@
-﻿using Cts.Domain.Concerns;
+using Cts.Domain.Concerns;
 
 namespace Cts.TestData;
 
 internal static class ConcernData
 {
-    private static readonly List<Concern> ConcernSeedItems = new()
+    private static List<Concern> ConcernSeedItems => new()
     {
         new Concern(new Guid("00000000-0000-0000-0000-000000000030"), "Agricultural Ground Water Use"),
         new Concern(new Guid("00000000-0000-0000-0000-000000000031"), "Agricultural Surface Water Use"),
@@ -59,4 +59,6 @@ internal static class ConcernData
             return _concerns;
         }
     }
+
+    public static void ClearData() => _concerns = null;
 }

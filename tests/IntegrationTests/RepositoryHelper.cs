@@ -121,6 +121,7 @@ public sealed class RepositoryHelper : IDisposable
     /// <returns>An <see cref="ActionTypeRepository"/>.</returns>
     public IActionTypeRepository GetActionTypeRepository()
     {
+        DbSeedDataHelpers.ClearAllStaticData();
         DbSeedDataHelpers.SeedActionTypeData(_context);
         Context = new AppDbContext(_options);
         return new ActionTypeRepository(Context);
@@ -132,6 +133,7 @@ public sealed class RepositoryHelper : IDisposable
     /// <returns>An <see cref="ComplaintRepository"/>.</returns>
     public IComplaintRepository GetComplaintRepository()
     {
+        DbSeedDataHelpers.ClearAllStaticData();
         DbSeedDataHelpers.SeedAllData(_context);
         Context = new AppDbContext(_options);
         return new ComplaintRepository(Context);
@@ -143,6 +145,7 @@ public sealed class RepositoryHelper : IDisposable
     /// <returns>An <see cref="ActionTypeRepository"/>.</returns>
     public IConcernRepository GetConcernRepository()
     {
+        DbSeedDataHelpers.ClearAllStaticData();
         DbSeedDataHelpers.SeedConcernData(_context);
         Context = new AppDbContext(_options);
         return new ConcernRepository(Context);
@@ -154,6 +157,7 @@ public sealed class RepositoryHelper : IDisposable
     /// <returns>An <see cref="OfficeRepository"/>.</returns>
     public IOfficeRepository GetOfficeRepository()
     {
+        DbSeedDataHelpers.ClearAllStaticData();
         DbSeedDataHelpers.SeedOfficeData(_context);
         Context = new AppDbContext(_options);
         return new OfficeRepository(Context);

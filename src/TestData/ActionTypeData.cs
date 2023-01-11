@@ -1,10 +1,10 @@
-﻿using Cts.Domain.ActionTypes;
+using Cts.Domain.ActionTypes;
 
 namespace Cts.TestData;
 
 internal static class ActionTypeData
 {
-    private static readonly List<ActionType> ActionTypeSeedItems = new()
+    private static List<ActionType> ActionTypeSeedItems => new()
     {
         new ActionType(new Guid("00000000-0000-0000-0000-000000000020"), "Initial investigation"),
         new ActionType(new Guid("00000000-0000-0000-0000-000000000021"), "Follow-up investigation"),
@@ -28,4 +28,6 @@ internal static class ActionTypeData
             return _actionTypes;
         }
     }
+
+    public static void ClearData() => _actionTypes = null;
 }
