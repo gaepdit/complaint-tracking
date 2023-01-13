@@ -3,28 +3,23 @@ using Cts.TestData;
 
 namespace IntegrationTests.Complaints;
 
+[NonParallelizable]
 public class Exists
 {
-    private IComplaintRepository _repository = default!;
-
-    [SetUp]
-    public void SetUp() => _repository = RepositoryHelper.CreateRepositoryHelper().GetComplaintRepository();
-
-    [TearDown]
-    public void TearDown() => _repository.Dispose();
-
     [Test]
     public async Task WhenItemsExist_ReturnsTrue()
     {
+        using var repository = RepositoryHelper.CreateRepositoryHelper().GetComplaintRepository();
         var item = ComplaintData.GetComplaints.First();
-        var result = await _repository.ExistsAsync(e => e.Id == item.Id);
+        var result = await repository.ExistsAsync(e => e.Id == item.Id);
         result.Should().BeTrue();
     }
 
     [Test]
     public async Task WhenDoesNotExist_ReturnsEmptyList()
     {
-        var result = await _repository.ExistsAsync(e => e.Id == -1);
+        using var repository = RepositoryHelper.CreateRepositoryHelper().GetComplaintRepository();
+        var result = await repository.ExistsAsync(e => e.Id == -1);
         result.Should().BeFalse();
     }
 }
