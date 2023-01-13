@@ -7,61 +7,59 @@ namespace IntegrationTests.BaseRepository;
 
 public class Update
 {
+    private RepositoryHelper _repositoryHelper = default!;
+    private IOfficeRepository _repository = default!;
+
+    [SetUp]
+    public void SetUp()
+    {
+        _repositoryHelper = RepositoryHelper.CreateRepositoryHelper();
+        _repository = _repositoryHelper.GetOfficeRepository();
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        _repository.Dispose();
+        _repositoryHelper.Dispose();
+    }
+
     [Test]
     public async Task WhenItemIsValid_UpdatesItem()
     {
-        using var repositoryHelper = RepositoryHelper.CreateRepositoryHelper();
-        using var repository = repositoryHelper.GetOfficeRepository();
-        
         var item = OfficeData.GetOffices.First(e => e.Active);
-        var originalItem = new Office(item.Id, item.Name);
-        
         item.ChangeName(TestConstants.ValidName);
         item.Active = !item.Active;
 
-        await repository.UpdateAsync(item);
-        repositoryHelper.ClearChangeTracker();
+        await _repository.UpdateAsync(item);
+        _repositoryHelper.ClearChangeTracker();
 
-        var getResult = await repository.GetAsync(item.Id);
+        var getResult = await _repository.GetAsync(item.Id);
         getResult.Should().BeEquivalentTo(item);
-        
-        // revert the changes back
-        item.ChangeName(originalItem.Name);
-        item.Active = !item.Active;
     }
 
 
     [Test]
     public async Task WhenAutoSaveIsFalse_UpdateIsNotCommitted()
     {
-        using var repositoryHelper = RepositoryHelper.CreateRepositoryHelper();
-        using var repository = repositoryHelper.GetOfficeRepository();
-        
         var item = OfficeData.GetOffices.First(e => e.Active);
         var originalItem = new Office(item.Id, item.Name);
 
         item.ChangeName(TestConstants.ValidName);
         item.Active = !item.Active;
 
-        await repository.UpdateAsync(item, false);
-        repositoryHelper.ClearChangeTracker();
+        await _repository.UpdateAsync(item, false);
+        _repositoryHelper.ClearChangeTracker();
 
-        var getResult = await repository.GetAsync(item.Id);
+        var getResult = await _repository.GetAsync(item.Id);
         getResult.Should().BeEquivalentTo(originalItem);
-        
-        // revert the changes back
-        item.ChangeName(originalItem.Name);
-        item.Active = !item.Active;
     }
 
     [Test]
     public async Task WhenItemDoesNotExist_Throws()
     {
-        using var repositoryHelper = RepositoryHelper.CreateRepositoryHelper();
-        using var repository = repositoryHelper.GetOfficeRepository();
-        
         var item = new Office(Guid.Empty, TestConstants.ValidName);
-        var action = async () => await repository.UpdateAsync(item);
+        var action = async () => await _repository.UpdateAsync(item);
         (await action.Should().ThrowAsync<EntityNotFoundException>())
             .WithMessage($"Entity not found. Entity type: {typeof(Office).FullName}, id: {item.Id}");
     }

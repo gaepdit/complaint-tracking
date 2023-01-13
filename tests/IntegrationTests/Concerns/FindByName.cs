@@ -4,7 +4,6 @@ using Cts.TestData.Constants;
 
 namespace IntegrationTests.Concerns;
 
-[NonParallelizable]
 public class FindByName
 {
     private IConcernRepository _repository = default!;

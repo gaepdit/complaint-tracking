@@ -5,21 +5,35 @@ namespace IntegrationTests.BaseReadOnlyRepository;
 
 public class GetList
 {
+    private RepositoryHelper _helper = default!;
+    private IOfficeRepository _repository = default!;
+
+    [SetUp]
+    public void SetUp()
+    {
+        _helper = RepositoryHelper.CreateRepositoryHelper();
+        _repository = _helper.GetOfficeRepository();
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        _repository.Dispose();
+        _helper.Dispose();
+    }
+
     [Test]
     public async Task WhenItemsExist_ReturnsList()
     {
-        using var repository = RepositoryHelper.CreateRepositoryHelper().GetOfficeRepository();
-        var result = await repository.GetListAsync();
+        var result = await _repository.GetListAsync();
         result.Should().BeEquivalentTo(OfficeData.GetOffices);
     }
 
     [Test]
     public async Task WhenDoesNotExist_ReturnsEmptyList()
     {
-        using var helper = RepositoryHelper.CreateRepositoryHelper();
-        using var repository = helper.GetOfficeRepository();
-        await helper.ClearTableAsync<Office>();
-        var result = await repository.GetListAsync();
+        await _helper.ClearTableAsync<Office>();
+        var result = await _repository.GetListAsync();
         result.Should().BeEmpty();
     }
 }

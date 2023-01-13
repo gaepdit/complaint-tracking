@@ -6,20 +6,26 @@ namespace IntegrationTests.ActionTypes;
 
 public class FindByName
 {
+    private IActionTypeRepository _repository = default!;
+
+    [SetUp]
+    public void SetUp() => _repository = RepositoryHelper.CreateRepositoryHelper().GetActionTypeRepository();
+
+    [TearDown]
+    public void TearDown() => _repository.Dispose();
+
     [Test]
     public async Task WhenItemExists_ReturnsItem()
     {
-        using var repository = RepositoryHelper.CreateRepositoryHelper().GetActionTypeRepository();
         var item = ActionTypeData.GetActionTypes.First(e => e.Active);
-        var result = await repository.FindByNameAsync(item.Name);
+        var result = await _repository.FindByNameAsync(item.Name);
         result.Should().BeEquivalentTo(item);
     }
 
     [Test]
     public async Task WhenDoesNotExist_ReturnsNull()
     {
-        using var repository = RepositoryHelper.CreateRepositoryHelper().GetActionTypeRepository();
-        var result = await repository.FindByNameAsync(TestConstants.NonExistentName);
+        var result = await _repository.FindByNameAsync(TestConstants.NonExistentName);
         result.Should().BeNull();
     }
 }

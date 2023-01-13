@@ -7,14 +7,30 @@ namespace IntegrationTests.BaseReadOnlyRepository;
 
 public class GetPagedList
 {
+    private RepositoryHelper _helper = default!;
+    private IOfficeRepository _repository = default!;
+
+    [SetUp]
+    public void SetUp()
+    {
+        _helper = RepositoryHelper.CreateRepositoryHelper();
+        _repository = _helper.GetOfficeRepository();
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        _repository.Dispose();
+        _helper.Dispose();
+    }
+
     [Test]
     public async Task WhenItemsExist_ReturnsList()
     {
-        using var repository = RepositoryHelper.CreateRepositoryHelper().GetOfficeRepository();
         var itemsCount = OfficeData.GetOffices.Count();
         var paging = new PaginatedRequest(1, itemsCount);
 
-        var result = await repository.GetPagedListAsync(paging);
+        var result = await _repository.GetPagedListAsync(paging);
 
         using (new AssertionScope())
         {
@@ -26,12 +42,10 @@ public class GetPagedList
     [Test]
     public async Task WhenNoItemsExist_ReturnsEmptyList()
     {
-        using var helper = RepositoryHelper.CreateRepositoryHelper();
-        using var repository = helper.GetOfficeRepository();
-        await helper.ClearTableAsync<Office>();
+        await _helper.ClearTableAsync<Office>();
         var paging = new PaginatedRequest(1, 100);
 
-        var result = await repository.GetPagedListAsync(paging);
+        var result = await _repository.GetPagedListAsync(paging);
 
         result.Should().BeEmpty();
     }
@@ -39,27 +53,24 @@ public class GetPagedList
     [Test]
     public async Task WhenPagedBeyondExistingItems_ReturnsEmptyList()
     {
-        using var repository = RepositoryHelper.CreateRepositoryHelper().GetOfficeRepository();
         var itemsCount = OfficeData.GetOffices.Count();
         var paging = new PaginatedRequest(2, itemsCount);
-        var result = await repository.GetPagedListAsync(paging);
+        var result = await _repository.GetPagedListAsync(paging);
         result.Should().BeEmpty();
     }
 
     [Test]
     public async Task GivenSorting_ReturnsSortedList()
     {
-        using var repository = RepositoryHelper.CreateRepositoryHelper().GetOfficeRepository();
-        var itemsCount = OfficeData.GetOffices.Count(); 
+        var itemsCount = OfficeData.GetOffices.Count();
         var paging = new PaginatedRequest(1, itemsCount, "Name desc");
 
-        var result = await repository.GetPagedListAsync(paging);
+        var result = await _repository.GetPagedListAsync(paging);
 
         using (new AssertionScope())
         {
             result.Count.Should().Be(itemsCount);
-            result.Should().BeEquivalentTo(OfficeData.GetOffices, opts =>
-                opts.Excluding(e => e.StaffMembers));
+            result.Should().BeEquivalentTo(OfficeData.GetOffices);
             result.Should().BeInDescendingOrder(e => e.Name);
         }
     }

@@ -7,18 +7,24 @@ using GaEpd.AppLibrary.Pagination;
 
 namespace IntegrationTests.Complaints;
 
-[NonParallelizable]
 public class GetPagedListByPredicate
 {
+    private IComplaintRepository _repository = default!;
+
+    [SetUp]
+    public void SetUp() => _repository = RepositoryHelper.CreateRepositoryHelper().GetComplaintRepository();
+
+    [TearDown]
+    public void TearDown() => _repository.Dispose();
+
     [Test]
     public async Task GivenSorting_ReturnsSortedList()
     {
-        using var repository = RepositoryHelper.CreateRepositoryHelper().GetComplaintRepository();
         var itemsCount = ComplaintData.GetComplaints.Count();
         var sorting = SortBy.IdDesc.GetDescription();
         var paging = new PaginatedRequest(1, itemsCount, sorting);
 
-        var result = await repository.GetPagedListAsync(e => e.DateReceived >= DateTime.MinValue, paging);
+        var result = await _repository.GetPagedListAsync(e => e.DateReceived >= DateTime.MinValue, paging);
 
         using (new AssertionScope())
         {

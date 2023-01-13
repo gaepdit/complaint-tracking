@@ -24,7 +24,7 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     public ComplaintStatus Status { get; set; } = ComplaintStatus.New;
 
-    public DateTime DateEntered { get; init; } = DateTime.Now.Date;
+    public DateTime DateEntered { get; init; } = DateTime.Now;
 
     public ApplicationUser EnteredBy { get; init; } = null!;
 
