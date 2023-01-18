@@ -2,7 +2,6 @@
 using Cts.AppServices.Staff;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Identity;
-using Cts.Domain.Offices;
 using Cts.Infrastructure.Contexts;
 using GaEpd.AppLibrary.Domain.Repositories;
 using Microsoft.AspNetCore.Identity;
@@ -17,22 +16,19 @@ public sealed class StaffAppService : IStaffAppService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IMapper _mapper;
     private readonly IdentityErrorDescriber _errorDescriber;
-    private readonly IOfficeRepository _officeRepository;
 
     public StaffAppService(
         AppDbContext context,
         IUserService userService,
         UserManager<ApplicationUser> userManager,
         IMapper mapper,
-        IdentityErrorDescriber errorDescriber,
-        IOfficeRepository officeRepository)
+        IdentityErrorDescriber errorDescriber)
     {
         _context = context;
         _userService = userService;
         _userManager = userManager;
         _mapper = mapper;
         _errorDescriber = errorDescriber;
-        _officeRepository = officeRepository;
     }
 
     public async Task<StaffViewDto?> GetCurrentUserAsync()
@@ -93,7 +89,7 @@ public sealed class StaffAppService : IStaffAppService
         if (user is null) throw new EntityNotFoundException(typeof(ApplicationUser), resource.Id);
 
         user.Phone = resource.Phone;
-        user.Office = resource.OfficeId == null ? null : await _officeRepository.GetAsync(resource.OfficeId.Value);
+        user.Office = await _context.Offices.FindAsync(resource.OfficeId);
         user.Active = resource.Active;
 
         _context.Attach(user);
