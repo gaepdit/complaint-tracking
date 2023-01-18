@@ -5,6 +5,8 @@ using Cts.Domain.Offices;
 using Cts.Infrastructure.Contexts;
 using Cts.Infrastructure.Contexts.SeedDevData;
 using Cts.Infrastructure.Repositories;
+using Cts.TestData;
+using Cts.TestData.Identity;
 using GaEpd.AppLibrary.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.CompilerServices;
@@ -115,13 +117,22 @@ public sealed class RepositoryHelper : IDisposable
         ClearChangeTracker();
     }
 
+    private static void ClearAllStaticData()
+    {
+        ActionTypeData.ClearData();
+        OfficeData.ClearData();
+        ConcernData.ClearData();
+        IdentityData.ClearData();
+        ComplaintData.ClearData();
+    }
+
     /// <summary>
     /// Seeds data for the ActionType entity and returns an instance of ActionTypeRepository.
     /// </summary>
     /// <returns>An <see cref="ActionTypeRepository"/>.</returns>
     public IActionTypeRepository GetActionTypeRepository()
     {
-        DbSeedDataHelpers.ClearAllStaticData();
+        ClearAllStaticData();
         DbSeedDataHelpers.SeedActionTypeData(_context);
         Context = new AppDbContext(_options);
         return new ActionTypeRepository(Context);
@@ -133,7 +144,7 @@ public sealed class RepositoryHelper : IDisposable
     /// <returns>An <see cref="ComplaintRepository"/>.</returns>
     public IComplaintRepository GetComplaintRepository()
     {
-        DbSeedDataHelpers.ClearAllStaticData();
+        ClearAllStaticData();
         DbSeedDataHelpers.SeedAllData(_context);
         Context = new AppDbContext(_options);
         return new ComplaintRepository(Context);
@@ -145,7 +156,7 @@ public sealed class RepositoryHelper : IDisposable
     /// <returns>An <see cref="ActionTypeRepository"/>.</returns>
     public IConcernRepository GetConcernRepository()
     {
-        DbSeedDataHelpers.ClearAllStaticData();
+        ClearAllStaticData();
         DbSeedDataHelpers.SeedConcernData(_context);
         Context = new AppDbContext(_options);
         return new ConcernRepository(Context);
@@ -157,7 +168,7 @@ public sealed class RepositoryHelper : IDisposable
     /// <returns>An <see cref="OfficeRepository"/>.</returns>
     public IOfficeRepository GetOfficeRepository()
     {
-        DbSeedDataHelpers.ClearAllStaticData();
+        ClearAllStaticData();
         DbSeedDataHelpers.SeedOfficeData(_context);
         Context = new AppDbContext(_options);
         return new OfficeRepository(Context);
