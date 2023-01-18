@@ -1,5 +1,4 @@
 using Cts.LocalRepository.Repositories;
-using Cts.TestData.Constants;
 using FluentAssertions.Execution;
 
 namespace LocalRepositoryTests.BaseReadOnlyRepository;
