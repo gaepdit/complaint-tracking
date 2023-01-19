@@ -1,7 +1,7 @@
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("AppServicesTests")]
-[assembly: InternalsVisibleTo("Infrastructure")]
-[assembly: InternalsVisibleTo("IntegrationTests")]
+[assembly: InternalsVisibleTo("EfRepository")]
+[assembly: InternalsVisibleTo("EfRepositoryTests")]
 [assembly: InternalsVisibleTo("LocalRepository")]
 [assembly: InternalsVisibleTo("LocalRepositoryTests")]

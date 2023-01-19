@@ -1,8 +1,8 @@
 ﻿using Cts.AppServices.Staff;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Identity;
-using Cts.Infrastructure.Contexts;
-using Cts.Infrastructure.Identity;
+using Cts.EfRepository.Contexts;
+using Cts.EfRepository.Identity;
 using Cts.LocalRepository.ServiceCollectionExtensions;
 using Cts.WebApp.Platform.Settings;
 using Microsoft.AspNetCore.Identity;

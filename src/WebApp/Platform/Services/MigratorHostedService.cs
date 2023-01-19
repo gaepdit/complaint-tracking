@@ -1,6 +1,6 @@
 using Cts.Domain.Identity;
-using Cts.Infrastructure.Contexts;
-using Cts.Infrastructure.Contexts.SeedDevData;
+using Cts.EfRepository.Contexts;
+using Cts.EfRepository.Contexts.SeedDevData;
 using Cts.WebApp.Platform.Local;
 using Cts.WebApp.Platform.Settings;
 using Microsoft.AspNetCore.Identity;

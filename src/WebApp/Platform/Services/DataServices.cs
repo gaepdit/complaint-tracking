@@ -2,8 +2,8 @@
 using Cts.Domain.Complaints;
 using Cts.Domain.Concerns;
 using Cts.Domain.Offices;
-using Cts.Infrastructure.Contexts;
-using Cts.Infrastructure.Repositories;
+using Cts.EfRepository.Contexts;
+using Cts.EfRepository.Repositories;
 using Cts.LocalRepository.Repositories;
 using Cts.WebApp.Platform.Settings;
 using Microsoft.EntityFrameworkCore;
@@ -31,7 +31,7 @@ public static class DataServices
         {
             services.AddDbContext<AppDbContext>(opts =>
                 opts.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
-                    x => x.MigrationsAssembly("Infrastructure")));
+                    x => x.MigrationsAssembly("EfRepository")));
 
 
             services.AddScoped<IActionTypeRepository, ActionTypeRepository>();

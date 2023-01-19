@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestData", "src\TestData\Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalRepository", "src\LocalRepository\LocalRepository.csproj", "{4C665526-95FF-41F1-9288-306333AF551E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "src\Infrastructure\Infrastructure.csproj", "{869866E5-5475-437F-95FA-D5F790BBD8DC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EfRepository", "src\EfRepository\EfRepository.csproj", "{869866E5-5475-437F-95FA-D5F790BBD8DC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "src\WebApp\WebApp.csproj", "{27C45548-073A-4273-A4CE-96FB79804915}"
 EndProject
@@ -19,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{F13C14B3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalRepositoryTests", "tests\LocalRepositoryTests\LocalRepositoryTests.csproj", "{780EAE57-7318-407B-9CBC-1149AA797364}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "tests\IntegrationTests\IntegrationTests.csproj", "{19588BB6-CAAF-48BE-962E-7C9DE59C2AAC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EfRepositoryTests", "tests\EfRepositoryTests\EfRepositoryTests.csproj", "{19588BB6-CAAF-48BE-962E-7C9DE59C2AAC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAppTests", "tests\WebAppTests\WebAppTests.csproj", "{F0C5E7D5-43A6-4B5E-BF69-7F4BB3A47F58}"
 EndProject
