@@ -13,6 +13,8 @@ public class OfficeViewDto
     public bool Active { get; init; }
 
     public StaffViewDto? Assignor { get; init; }
+    public string? AssignorNameWithOffice => Assignor?.DisplayNameWithOffice;
+    
 }
 
 public class OfficeCreateDto
@@ -21,6 +23,7 @@ public class OfficeCreateDto
     [StringLength(Office.MaxNameLength, MinimumLength = Office.MinNameLength,
         ErrorMessage = "The Name must be at least {2} characters but no longer than {1}.")]
     public string Name { get; init; } = string.Empty;
+    
     public StaffViewDto? Assignor { get; init; }
 }
 

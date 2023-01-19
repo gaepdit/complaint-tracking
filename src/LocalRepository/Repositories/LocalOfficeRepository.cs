@@ -1,6 +1,7 @@
 ﻿using Cts.Domain.Identity;
 using Cts.Domain.Offices;
 using Cts.TestData;
+using Cts.TestData.Identity;
 
 namespace Cts.LocalRepository.Repositories;
 
@@ -16,4 +17,12 @@ public sealed class LocalOfficeRepository : BaseRepository<Office, Guid>, IOffic
         (await GetAsync(id, token)).StaffMembers
         .Where(e => e.Active)
         .OrderBy(e => e.LastName).ThenBy(e => e.FirstName).ToList();
+
+    public new async Task UpdateAsync(Office entity, bool autoSave = true, CancellationToken token = default)
+    {
+        var item = await GetAsync(entity.Id, token);
+        item.Assignor = IdentityData.GetUsers.SingleOrDefault(e => e.Id == entity.AssignorId);
+        Items.Remove(item);
+        Items.Add(entity);
+    }
 }

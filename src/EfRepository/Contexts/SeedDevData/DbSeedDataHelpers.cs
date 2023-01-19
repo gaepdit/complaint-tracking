@@ -53,7 +53,7 @@ public static class DbSeedDataHelpers
         context.SaveChanges();
     }
 
-    private static void SeedIdentityData(AppDbContext context)
+    public static void SeedIdentityData(AppDbContext context)
     {
         var roles = IdentityData.GetRoles.ToList();
         var users = IdentityData.GetUsers.ToList();

@@ -170,6 +170,7 @@ public sealed class RepositoryHelper : IDisposable
     {
         ClearAllStaticData();
         DbSeedDataHelpers.SeedOfficeData(_context);
+        DbSeedDataHelpers.SeedIdentityData(_context);
         Context = new AppDbContext(_options);
         return new OfficeRepository(Context);
     }

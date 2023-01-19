@@ -1,24 +1,32 @@
 ﻿using Cts.AppServices.Offices;
+using Cts.AppServices.Staff;
 using Cts.Domain.Identity;
 using Cts.WebApp.Platform.Models;
 using Cts.WebApp.Platform.PageDisplayHelpers;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using GaEpd.AppLibrary.ListItems;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Cts.WebApp.Pages.Admin.Maintenance.Offices;
 
 [Authorize(Roles = AppRole.SiteMaintenance)]
 public class EditModel : PageModel
 {
-    private readonly IOfficeAppService _service;
+    private readonly IOfficeAppService _officeService;
+    private readonly IStaffAppService _staffService;
     private readonly IValidator<OfficeUpdateDto> _validator;
 
-    public EditModel(IOfficeAppService service, IValidator<OfficeUpdateDto> validator)
+    public EditModel(
+        IOfficeAppService officeService,
+        IStaffAppService staffService,
+        IValidator<OfficeUpdateDto> validator)
     {
-        _service = service;
+        _officeService = officeService;
+        _staffService = staffService;
         _validator = validator;
     }
 
@@ -28,6 +36,8 @@ public class EditModel : PageModel
     [BindProperty]
     public string OriginalName { get; set; } = string.Empty;
 
+    public SelectList ActiveStaffMembers { get; private set; } = default!;
+
     [TempData]
     public Guid HighlightId { get; set; }
 
@@ -36,11 +46,13 @@ public class EditModel : PageModel
     public async Task<IActionResult> OnGetAsync(Guid? id)
     {
         if (id == null) return RedirectToPage("Index");
-        var item = await _service.FindForUpdateAsync(id.Value);
+        var item = await _officeService.FindForUpdateAsync(id.Value);
         if (item == null) return NotFound();
 
         Item = item;
         OriginalName = Item.Name;
+
+        await PopulateSelectListsAsync();
         return Page();
     }
 
@@ -48,12 +60,20 @@ public class EditModel : PageModel
     {
         var validationResult = await _validator.ValidateAsync(Item);
         if (!validationResult.IsValid) validationResult.AddToModelState(ModelState, nameof(Item));
-        if (!ModelState.IsValid) return Page();
 
-        await _service.UpdateAsync(Item);
+        if (!ModelState.IsValid)
+        {
+            await PopulateSelectListsAsync();
+            return Page();
+        }
+
+        await _officeService.UpdateAsync(Item);
 
         HighlightId = Item.Id;
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, $"\"{Item.Name}\" successfully updated.");
         return RedirectToPage("Index");
     }
+
+    private async Task PopulateSelectListsAsync() =>
+        ActiveStaffMembers = (await _staffService.GetActiveStaffMembersAsync()).ToSelectList();
 }
