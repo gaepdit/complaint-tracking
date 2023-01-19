@@ -33,7 +33,7 @@ The solution contains the following projects:
 * **Domain** — A class library containing the data models and business logic.
 * **AppServices** — A class library containing the services used by an application to interact with the domain.
 * **LocalRepository** — A class library implementing the repository and services without using a database (for local development).
-* **Infrastructure** — A class library implementing the repository and services using Entity Framework (for server deployment).
+* **EfRepository** — A class library implementing the repository and services using LocalDb and Entity Framework.
 * **WebApp** — The front end web application.
 
 There are also corresponding unit test projects for each, plus a **TestData** project containing test data for development and testing.

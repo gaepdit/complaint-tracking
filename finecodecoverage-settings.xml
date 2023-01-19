@@ -5,10 +5,10 @@
   <Exclude>
         [AppServicesTests]*
         [DomainTests]*
-        [IntegrationTests]*
+        [EfRepositoryTests]*
         [LocalRepositoryTests]*
         [WebAppTests]*
         [TestData]*
-        [Infrastructure]Cts.Infrastructure.Migrations.*
+        [EfRepository]Cts.EfRepository.Migrations.*
   </Exclude>
 </FineCodeCoverage>

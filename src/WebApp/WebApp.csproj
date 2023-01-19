@@ -24,7 +24,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\LocalRepository\LocalRepository.csproj" />
-        <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+        <ProjectReference Include="..\EfRepository\EfRepository.csproj" />
     </ItemGroup>
 
     <ItemGroup>
