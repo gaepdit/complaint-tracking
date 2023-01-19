@@ -2,9 +2,9 @@ name: CodeQL Scan
 
 on:
   push:
-    branches: ["main", "vNext"]
+    branches: ["main", "vNext/main"]
   pull_request:
-    branches: ["main", "vNext"]
+    branches: ["main", "vNext/main"]
   schedule:
     - cron: '26 6 * * 5'
 
