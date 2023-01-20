@@ -10,6 +10,10 @@ using Cts.WebApp.Platform.Settings;
 var builder = WebApplication.CreateBuilder(args);
 var isLocal = builder.Environment.IsLocalEnv();
 
+// Set default timeout for regular expressions.
+// https://learn.microsoft.com/en-us/dotnet/standard/base-types/best-practices#use-time-out-values
+AppDomain.CurrentDomain.SetData("REGEX_DEFAULT_MATCH_TIMEOUT", TimeSpan.FromMilliseconds(100));
+
 // Bind application settings.
 builder.Configuration.GetSection(nameof(ApplicationSettings.LocalDevSettings))
     .Bind(ApplicationSettings.LocalDevSettings);
