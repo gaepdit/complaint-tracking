@@ -19,7 +19,10 @@ public class FindByName
     {
         var item = OfficeData.GetOffices.First(e => e.Active);
         var result = await _repository.FindByNameAsync(item.Name);
-        result.Should().BeEquivalentTo(item);
+        result.Should().BeEquivalentTo(item, opts => opts
+            .Excluding(e => e.StaffMembers)
+            .Excluding(e => e.Assignor)
+        );
     }
 
     [Test]

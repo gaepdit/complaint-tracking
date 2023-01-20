@@ -48,9 +48,9 @@ internal static class ConcernData
         new Concern(new Guid("00000000-0000-0000-0000-000000000069"), "Water Quality Stormwater Urban"),
     };
 
-    private static IEnumerable<Concern>? _concerns;
+    private static ICollection<Concern>? _concerns;
 
-    public static IEnumerable<Concern> GetConcerns
+    public static ICollection<Concern> GetConcerns
     {
         get
         {
