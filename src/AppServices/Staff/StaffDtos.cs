@@ -1,6 +1,7 @@
 ﻿using Cts.AppServices.Offices;
 using Cts.Domain.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.Text;
 
 namespace Cts.AppServices.Staff;
 
@@ -43,6 +44,20 @@ public class StaffViewDto
 
     public string DisplayName =>
         string.Join(" ", new[] { FirstName, LastName }.Where(s => !string.IsNullOrEmpty(s)));
+
+    public string DisplayNameWithOffice
+    {
+        get
+        {
+            var sn = new StringBuilder();
+            sn.Append(DisplayName);
+
+            if (Office != null) sn.Append($" ({Office.Name})");
+            if (!Active) sn.Append(" [Inactive]");
+
+            return sn.ToString();
+        }
+    }
 
     public string SortableFullName =>
         string.Join(", ", new[] { LastName, FirstName }.Where(s => !string.IsNullOrEmpty(s)));

@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Cts.AppServices.Offices;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Identity;
@@ -20,7 +20,7 @@ public class FindForUpdate
             LastName = TestConstants.NewValidName,
             Email = TestConstants.ValidEmail,
         };
-        office.MasterUser = user;
+        office.Assignor = user;
 
         var repoMock = new Mock<IOfficeRepository>();
         repoMock.Setup(l => l.FindAsync(office.Id, It.IsAny<CancellationToken>()))
@@ -32,8 +32,7 @@ public class FindForUpdate
 
         var result = await appService.FindForUpdateAsync(Guid.Empty);
 
-        result.Should().BeEquivalentTo(office, options => options
-            .Excluding(ctx => ctx.Path.EndsWith("MasterUser.Id")));
+        result.Should().BeEquivalentTo(office);
     }
 
     [Test]

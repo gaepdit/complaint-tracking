@@ -1,4 +1,5 @@
 using Cts.Domain.Identity;
+using Cts.TestData;
 using Cts.TestData.Identity;
 using Microsoft.AspNetCore.Identity;
 
@@ -20,6 +21,8 @@ public sealed class LocalUserStore : IUserRoleStore<ApplicationUser> // inherits
         UserRoles = Roles
             .Select(role => new IdentityUserRole<string> { RoleId = role.Id, UserId = Users.First().Id })
             .ToList();
+
+        OfficeData.SeedOfficeAssignors(OfficeData.GetOffices, Users);
     }
 
     // IUserStore

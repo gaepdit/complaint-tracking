@@ -9,8 +9,8 @@ public class FindByPredicateSqlServer
     public async Task SqlServerDatabaseIsNotCaseSensitive()
     {
         using var repositoryHelper = RepositoryHelper.CreateSqlServerRepositoryHelper(this);
-        using var repository = repositoryHelper.GetOfficeRepository();
-        var item = OfficeData.GetOffices.First(e => e.Active);
+        using var repository = repositoryHelper.GetConcernRepository();
+        var item = ConcernData.GetConcerns.First(e => e.Active);
 
         // Test using a predicate that compares uppercase names.
         var resultSameCase = await repository.FindAsync(e =>

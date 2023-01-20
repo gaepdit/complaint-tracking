@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Cts.AppServices.Staff;
 using Cts.AppServices.UserServices;
-using Cts.Domain.Identity;
 using Cts.Domain.Offices;
 using GaEpd.AppLibrary.ListItems;
 
@@ -50,9 +49,9 @@ public sealed class OfficeAppService : IOfficeAppService
 
     public async Task<Guid> CreateAsync(OfficeCreateDto resource, CancellationToken token = default)
     {
-        var masterUser = _mapper.Map<ApplicationUser>(resource.MasterUser);
-        var item = await _manager.CreateAsync(resource.Name, masterUser, token);
+        var item = await _manager.CreateAsync(resource.Name, resource.AssignorId, token);
         item.SetCreator((await _userService.GetCurrentUserAsync())?.Id);
+
         await _repository.InsertAsync(item, token: token);
         return item.Id;
     }
@@ -64,8 +63,9 @@ public sealed class OfficeAppService : IOfficeAppService
         if (item.Name != resource.Name.Trim())
             await _manager.ChangeNameAsync(item, resource.Name, token);
         item.Active = resource.Active;
-        item.SetUpdater((await _userService.GetCurrentUserAsync())?.Id);
+        item.AssignorId = resource.AssignorId;
 
+        item.SetUpdater((await _userService.GetCurrentUserAsync())?.Id);
         await _repository.UpdateAsync(item, token: token);
     }
 

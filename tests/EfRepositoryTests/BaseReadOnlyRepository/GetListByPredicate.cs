@@ -1,4 +1,4 @@
-using Cts.Domain.Offices;
+using Cts.Domain.Concerns;
 using Cts.TestData;
 using Cts.TestData.Constants;
 using FluentAssertions.Execution;
@@ -7,10 +7,10 @@ namespace EfRepositoryTests.BaseReadOnlyRepository;
 
 public class GetListByPredicate
 {
-    private IOfficeRepository _repository = default!;
+    private IConcernRepository _repository = default!;
 
     [SetUp]
-    public void SetUp() => _repository = RepositoryHelper.CreateRepositoryHelper().GetOfficeRepository();
+    public void SetUp() => _repository = RepositoryHelper.CreateRepositoryHelper().GetConcernRepository();
 
     [TearDown]
     public void TearDown() => _repository.Dispose();
@@ -18,7 +18,7 @@ public class GetListByPredicate
     [Test]
     public async Task WhenItemsExist_ReturnsList()
     {
-        var item = OfficeData.GetOffices.First(e => e.Active);
+        var item = ConcernData.GetConcerns.First(e => e.Active);
         var result = await _repository.GetListAsync(e => e.Name == item.Name);
         using (new AssertionScope())
         {

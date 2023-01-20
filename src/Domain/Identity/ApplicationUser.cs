@@ -1,5 +1,6 @@
 using Cts.Domain.Offices;
 using Microsoft.AspNetCore.Identity;
+using System.Text;
 
 namespace Cts.Domain.Identity;
 
@@ -24,4 +25,22 @@ public class ApplicationUser : IdentityUser, IEntity<string>
     public Office? Office { get; set; }
 
     public bool Active { get; set; } = true;
+
+    // Get-only properties
+    private string SortableFullName =>
+        string.Join(", ", new[] { LastName, FirstName }.Where(s => !string.IsNullOrEmpty(s)));
+
+    public string SelectableNameWithOffice
+    {
+        get
+        {
+            var sn = new StringBuilder();
+            sn.Append(SortableFullName);
+
+            if (Office != null) sn.Append($" ({Office.Name})");
+            if (!Active) sn.Append(" [Inactive]");
+
+            return sn.ToString();
+        }
+    }
 }

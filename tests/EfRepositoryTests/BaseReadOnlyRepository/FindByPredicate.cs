@@ -1,4 +1,4 @@
-using Cts.Domain.Offices;
+using Cts.Domain.Concerns;
 using Cts.TestData;
 using Cts.TestData.Constants;
 using FluentAssertions.Execution;
@@ -7,10 +7,10 @@ namespace EfRepositoryTests.BaseReadOnlyRepository;
 
 public class FindByPredicate
 {
-    private IOfficeRepository _repository = default!;
+    private IConcernRepository _repository = default!;
 
     [SetUp]
-    public void SetUp() => _repository = RepositoryHelper.CreateRepositoryHelper().GetOfficeRepository();
+    public void SetUp() => _repository = RepositoryHelper.CreateRepositoryHelper().GetConcernRepository();
 
     [TearDown]
     public void TearDown() => _repository.Dispose();
@@ -18,7 +18,7 @@ public class FindByPredicate
     [Test]
     public async Task WhenItemExists_ReturnsItem()
     {
-        var item = OfficeData.GetOffices.First(e => e.Active);
+        var item = ConcernData.GetConcerns.First(e => e.Active);
         var result = await _repository.FindAsync(e => e.Name == item.Name);
         result.Should().BeEquivalentTo(item);
     }
@@ -33,7 +33,7 @@ public class FindByPredicate
     [Test]
     public async Task SqliteDatabaseIsCaseSensitive()
     {
-        var item = OfficeData.GetOffices.First(e => e.Active);
+        var item = ConcernData.GetConcerns.First(e => e.Active);
 
         // Test using a predicate that compares uppercase names.
         var resultSameCase = await _repository.FindAsync(e =>

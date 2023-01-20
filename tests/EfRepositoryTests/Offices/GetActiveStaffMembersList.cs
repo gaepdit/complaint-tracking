@@ -20,7 +20,9 @@ public class GetActiveStaffMembersList
         // First active office was seeded with active staff.
         var item = OfficeData.GetOffices.First(e => e.Active);
         var result = await _repository.GetActiveStaffMembersListAsync(item.Id);
-        result.Should().BeEquivalentTo(item.StaffMembers);
+        result.Should().BeEquivalentTo(item.StaffMembers, opts => opts
+            .Excluding(e => e.Office)
+        );
     }
 
     [Test]
