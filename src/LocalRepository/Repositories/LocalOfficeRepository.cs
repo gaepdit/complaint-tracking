@@ -18,6 +18,13 @@ public sealed class LocalOfficeRepository : BaseRepository<Office, Guid>, IOffic
         .Where(e => e.Active)
         .OrderBy(e => e.LastName).ThenBy(e => e.FirstName).ToList();
 
+    public new Task InsertAsync(Office entity, bool autoSave = true, CancellationToken token = default)
+    {
+        entity.Assignor = IdentityData.GetUsers.SingleOrDefault(e => e.Id == entity.AssignorId);
+        Items.Add(entity);
+        return Task.CompletedTask;
+    }
+
     public new async Task UpdateAsync(Office entity, bool autoSave = true, CancellationToken token = default)
     {
         var item = await GetAsync(entity.Id, token);

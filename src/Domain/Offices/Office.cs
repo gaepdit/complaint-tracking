@@ -15,12 +15,7 @@ public class Office : AuditableEntity
     [UsedImplicitly] // Used by ORM.
     private Office() { }
 
-    internal Office(Guid id, string name, ApplicationUser? assignor = null) : base(id)
-    {
-        SetName(name);
-        Assignor = assignor;
-        AssignorId = assignor?.Id;
-    }
+    internal Office(Guid id, string name) : base(id) => SetName(name);
 
     // Properties
 

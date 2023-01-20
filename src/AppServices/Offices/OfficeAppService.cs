@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Cts.AppServices.Staff;
 using Cts.AppServices.UserServices;
-using Cts.Domain.Identity;
 using Cts.Domain.Offices;
 using GaEpd.AppLibrary.ListItems;
 
@@ -50,9 +49,9 @@ public sealed class OfficeAppService : IOfficeAppService
 
     public async Task<Guid> CreateAsync(OfficeCreateDto resource, CancellationToken token = default)
     {
-        var assignor = _mapper.Map<ApplicationUser>(resource.Assignor);
-        var item = await _manager.CreateAsync(resource.Name, assignor, token);
+        var item = await _manager.CreateAsync(resource.Name, resource.AssignorId, token);
         item.SetCreator((await _userService.GetCurrentUserAsync())?.Id);
+
         await _repository.InsertAsync(item, token: token);
         return item.Id;
     }

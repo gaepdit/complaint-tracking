@@ -28,7 +28,7 @@ public class OfficeMapping
     public void OfficeUpdateMappingWorks()
     {
         var user = new ApplicationUser { Id = Guid.NewGuid().ToString() };
-        var item = new Office(Guid.NewGuid(), TestConstants.ValidName, user);
+        var item = new Office(Guid.NewGuid(), TestConstants.ValidName) { AssignorId = user.Id };
 
         var result = AppServicesTestsGlobal.Mapper!.Map<OfficeUpdateDto>(item);
 
