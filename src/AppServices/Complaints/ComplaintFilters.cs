@@ -30,17 +30,17 @@ internal static class ComplaintFilters
     public static Expression<Func<Complaint, bool>> IsPublic(this Expression<Func<Complaint, bool>> predicate) =>
         predicate.IsClosed().ExcludeDeleted();
 
-    // The inverted comparison returns true if the parameter is null.
-    // Since a null dateFrom value indicates no date filtering is desired, all entities pass this filter.
+    // The input from the search page is a DateTime object, but only the date part is entered. (After migrating
+    // to .NET 7, the input can be changed to a DateOnly type.)
     private static Expression<Func<Complaint, bool>> FromDate(this Expression<Func<Complaint, bool>> predicate,
         DateTime? input) =>
-        predicate.And(e => input == null || e.DateReceived >= input);
+        predicate.And(e => input == null || e.DateReceived.Date >= input);
 
-    // The inverted comparison returns true if the parameter is null.
-    // Since a null dateFrom value indicates no date filtering is desired, all entities pass this filter.
+    // The input from the search page is a DateTime object, but only the date part is entered. (After migrating
+    // to .NET 7, the input can be changed to a DateOnly type.)
     private static Expression<Func<Complaint, bool>> ToDate(this Expression<Func<Complaint, bool>> predicate,
         DateTime? input) =>
-        predicate.And(e => input == null || e.DateReceived <= input);
+        predicate.And(e => input == null || e.DateReceived.Date <= input);
 
     private static Expression<Func<Complaint, bool>> ContainsNature(this Expression<Func<Complaint, bool>> predicate,
         string? input) =>
