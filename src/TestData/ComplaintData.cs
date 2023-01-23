@@ -5,12 +5,12 @@ namespace Cts.TestData;
 
 internal static class ComplaintData
 {
-    private static List<Complaint> ComplaintSeedItems => new()
+    private static readonly List<Complaint> ComplaintSeedItems = new()
     {
         new Complaint(1)
         {
             Status = ComplaintStatus.Closed,
-            DateReceived = DateTime.Now.AddDays(-2),
+            DateReceived = DateTime.Now.Date.AddDays(-2),
             ComplaintNature = TextData.MultipleParagraphs,
             ComplaintLocation = TextData.ShortMultiline,
             ComplaintCity = TextData.Word,
@@ -25,12 +25,12 @@ internal static class ComplaintData
             CurrentOffice = OfficeData.GetOffices.ElementAt(0),
             ReviewComments = TextData.Phrase,
             ComplaintClosed = true,
-            DateComplaintClosed = DateTime.Now.AddDays(-1),
+            DateComplaintClosed = DateTime.Now.Date.AddDays(-1),
         },
         new Complaint(2)
         {
             Status = ComplaintStatus.New,
-            DateReceived = DateTime.Now.AddDays(-1),
+            DateReceived = DateTime.Now.Date.AddDays(-1),
             ComplaintNature = null,
             ComplaintLocation = null,
             ComplaintCity = null,
@@ -50,7 +50,7 @@ internal static class ComplaintData
         new Complaint(3)
         {
             Status = ComplaintStatus.Closed,
-            DateReceived = DateTime.Now.AddDays(-20),
+            DateReceived = DateTime.Now.Date.AddDays(-20),
             ComplaintNature = "PublicSearchSpec reference",
             ComplaintLocation = TextData.Word,
             ComplaintCity = TextData.Word,
@@ -65,7 +65,7 @@ internal static class ComplaintData
             CurrentOffice = OfficeData.GetOffices.ElementAt(1),
             ReviewComments = TextData.Word,
             ComplaintClosed = true,
-            DateComplaintClosed = DateTime.Now.AddDays(-10),
+            DateComplaintClosed = DateTime.Now.Date.AddDays(-10),
         },
     };
 
@@ -80,6 +80,6 @@ internal static class ComplaintData
             return _complaints;
         }
     }
-
+    
     public static void ClearData() => _complaints = null;
 }

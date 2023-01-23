@@ -23,7 +23,7 @@ public class ComplaintTransition : AuditableEntity
     public Office? TransferredToOffice { get; set; }
     public Guid? TransferredToOfficeId { get; set; } = null;
 
-    public DateTime DateTransferred { get; set; } = DateTime.Now;
+    public DateTime DateTransferred { get; set; } = DateTime.Now.Date;
 
     public DateTime? DateAccepted { get; set; } = null;
 
