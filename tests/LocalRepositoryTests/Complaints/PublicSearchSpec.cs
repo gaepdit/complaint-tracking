@@ -40,8 +40,8 @@ public class PublicSearchSpec
     {
         var spec = new ComplaintPublicSearchDto
         {
-            DateFrom = _referenceItem.DateReceived,
-            DateTo = _referenceItem.DateReceived,
+            DateFrom = _referenceItem.DateReceived.Date,
+            DateTo = _referenceItem.DateReceived.Date,
         };
         var predicate = ComplaintFilters.PublicSearchPredicate(spec);
 
