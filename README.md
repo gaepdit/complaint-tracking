@@ -15,7 +15,7 @@ Public complaints are time-critical and high-profile public information. The CTS
 
 * The application will allow EPD staff to enter new complaints, review and update existing complaints, and remove complaints erroneously entered.
 * The admin side of the application will be restricted to authenticated EPD employees.
-* A public web site will be available for reviewing or searching for complaints.
+* A public website will be available for reviewing or searching for complaints.
 
 ## Info for developers
 

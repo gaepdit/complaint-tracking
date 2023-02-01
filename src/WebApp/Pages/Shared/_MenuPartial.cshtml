@@ -1,10 +1,10 @@
-<nav id="main-nav" class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-brand border-bottom shadow-sm mb-3 d-print-none">
+<nav id="main-nav" class="navbar navbar-expand-sm navbar-dark bg-brand border-bottom shadow-sm mb-3 d-print-none">
     <div class="container">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav-content"
+                aria-controls="main-nav-content" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span> <span class="align-middle">Menu</span>
         </button>
-        <div class="navbar-collapse collapse d-sm-inline-flex">
+        <div class="navbar-collapse collapse d-sm-inline-flex" id="main-nav-content">
             <ul class="navbar-nav flex-grow-1 mr-auto">
                 <li class="nav-item">
                     <a class="nav-link text-white" asp-page="/Index">Home</a>
@@ -18,13 +18,19 @@
                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="View account menu">
                             Account
                         </a>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdownMenuLink">
-                            <a class="nav-link text-dark dropdown-item" asp-page="/Account/Index">Your profile</a>
-                            <hr class="dropdown-divider">
-                            <form class="form-inline py-0 px-2" asp-page="/Account/Logout" method="post">
-                                <button type="submit" class="btn btn-outline-danger d-block w-100 px-4 py-2">Sign out</button>
-                            </form>
-                        </div>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdownMenuLink">
+                            <li>
+                                <a class="dropdown-item text-dark" asp-page="/Account/Index">Your profile</a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <form class="form-inline py-0 px-2" asp-page="/Account/Logout" method="post">
+                                    <button type="submit" class="btn btn-outline-danger d-block w-100 px-4 py-2">Sign out</button>
+                                </form>
+                            </li>
+                        </ul>
                     </li>
                 }
                 else
