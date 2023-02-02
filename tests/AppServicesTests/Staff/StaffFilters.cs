@@ -47,7 +47,7 @@ public class StaffFilters
     [Test]
     public void OfficeFilter_ReturnsMatches()
     {
-        var office = IdentityData.GetUsers.First(e => e.Active && e.Office != null).Office;
+        var office = IdentityData.GetUsers.First(e => e is { Active: true, Office: { } }).Office;
         var filter = new StaffSearchDto { Office = office!.Id };
         var expected = IdentityData.GetUsers
             .Where(e => e.Active && e.Office == office);

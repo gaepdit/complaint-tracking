@@ -1,6 +1,7 @@
 using Cts.LocalRepository.Repositories;
 using FluentAssertions.Execution;
 using GaEpd.AppLibrary.Pagination;
+using System.Globalization;
 
 namespace LocalRepositoryTests.BaseReadOnlyRepository;
 
@@ -56,7 +57,8 @@ public class GetPagedList
         {
             result.Count.Should().Be(itemsCount);
             result.Should().BeEquivalentTo(repository.Items);
-            result.Should().BeInDescendingOrder(e => e.Name);
+            var comparer = CultureInfo.InvariantCulture.CompareInfo.GetStringComparer(CompareOptions.IgnoreCase);
+            result.Should().BeInDescendingOrder(e => e.Name, comparer);
         }
     }
 }
