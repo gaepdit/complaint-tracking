@@ -37,7 +37,7 @@ public class AddModel : PageModel
         var id = await service.CreateAsync(Item.Name);
 
         HighlightId = id;
-        TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, $"\"{Item.Name}\" successfully added.");
+        TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, $"“{Item.Name}” successfully added.");
         return RedirectToPage("Index");
     }
 }

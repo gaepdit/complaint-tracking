@@ -42,24 +42,24 @@ There are also corresponding unit test projects for each, plus a **TestData** pr
 
 There are two launch profiles:
 
-* **WebApp Local** — This profile uses data in the "TestData" project and does not connect to any external server. A local user account is used to simulate authentication.
+* **WebApp Local** — This profile uses data in the "TestData" project and either uses the data in-memory or builds and seeds a database. A local user account can be used to simulate authentication, or an Azure AD account can be configured.
 
-    You can modify some development settings by creating an "appsettings.Local.json" file in the "WebApp" folder to test various scenarios:
+    You can configure various development scenarios by creating an "appsettings.Local.json" file in the "WebApp" folder with the following settings:
 
-    - *AuthenticatedUser* — Simulates a successful login with a test account when `true`. Simulates a failed login when `false`.
-    - *AuthenticatedUserIsAdmin* — Applies all App Roles to the logged in account when `true` or no roles when `false`. (Only applies if *AuthenticatedUser* is `true`.)
-    - *BuildLocalDb* — Uses LocalDB when `true`. Uses in-memory data when `false`.
-    - *UseEfMigrations* - Uses Entity Framework migrations when `true`. Deletes and recreates database when `false`. (Only applies if *BuildLocalDb* is `true`.)
+    - *UseInMemoryData* — Uses in-memory data when `true`. Connects to a SQL Server database when `false`.
+    - *UseEfMigrations* - Uses Entity Framework migrations when `true`. When set to `false`, the database is deleted and recreated on each run. (Only applies if *UseInMemoryData* is `false`.)
+    - *UseAzureAd* — If `true`, the app must be registered in the Azure portal, and configuration settings added in the "AzureAd" settings section. If `false`, authentication is simulated using test user data.
+    - *LocalUserIsAuthenticated* — Simulates a successful login with a test account when `true`. Simulates a failed login when `false`. (Only applies if *UseAzureAd* is `false`.)
+    - *LocalUserIsAdmin* — Adds all App Roles to the logged in account when `true` or no roles when `false`. (Applies whether *UserAzureAd* is `true` or `false`.)
 
-* **WebApp Dev Server** — This profile connects to a remote database server for data and requires an SOG account to log in. *To use this profile, you must add the "appsettings.Development.json" file from the "app-config" repo.*
+* **WebApp Dev Server** — This profile connects to a remote database server for data. *To use this profile, you must add the "appsettings.Development.json" file from the "app-config" repo.*
 
     Most development should be done using the Local profile. The Dev Server profile is only needed when specifically troubleshooting issues with the database server or SOG account.
 
-Here's a visualization of how each launch profile (plus the `BuildLocalDb` setting) configures the application at runtime.
-
+Here's a visualization of how each launch profile (plus the `UseInMemoryData` setting) configures the data storage at runtime.
 ```mermaid
 flowchart LR
-    subgraph SPL["'Local' launch profile"]
+    subgraph SPL["'Local' launch profile & UseInMemoryData = true"]
         direction LR
         D[Domain]
         T["Test Data (in memory)"]
@@ -77,7 +77,7 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    subgraph SPB["'Local' launch profile + 'BuildLocalDb' setting"]
+    subgraph SPB["'Local' launch profile & UseInMemoryData = false"]
         direction LR
         D[Domain]
         T[Test Data]
@@ -97,19 +97,17 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    subgraph SPD["'Dev Server' launch profile (or Production)"]
+    subgraph SPD["'Dev Server' launch profile"]
         direction LR
         D[Domain]
         R[EfRepository]
         A[App Services]
         W([Web App])
         B[(DB Server)]
-        Z[[Azure AD]]
 
         W --> A
         A --> D
         A --> R
         R ==>|VPN| B -.-> D
-        W ==>|SOG| Z
     end
 ```

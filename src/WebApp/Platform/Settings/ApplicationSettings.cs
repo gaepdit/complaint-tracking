@@ -8,9 +8,10 @@ public static class ApplicationSettings
 
     public class LocalDev
     {
-        public bool AuthenticatedUser { get; [UsedImplicitly] init; }
-        public bool AuthenticatedUserIsAdmin { get; [UsedImplicitly] init; }
-        public bool BuildLocalDb { get; [UsedImplicitly] init; }
+        public bool UseAzureAd { get; [UsedImplicitly] init; }
+        public bool LocalUserIsAuthenticated { get; [UsedImplicitly] init; }
+        public bool LocalUserIsAdmin { get; [UsedImplicitly] init; }
+        public bool UseInMemoryData { get; [UsedImplicitly] init; } = true;
         public bool UseEfMigrations { get; [UsedImplicitly] init; }
     }
 

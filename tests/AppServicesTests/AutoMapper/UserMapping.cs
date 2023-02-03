@@ -12,8 +12,8 @@ public class UserMapping
     private readonly ApplicationUser _item = new()
     {
         Id = Guid.NewGuid().ToString(),
-        FirstName = TestConstants.ValidName,
-        LastName = TestConstants.ValidName,
+        GivenName = TestConstants.ValidName,
+        FamilyName = TestConstants.ValidName,
         Email = TestConstants.ValidEmail,
         Phone = "123-456-7890",
         Office = new Office(Guid.NewGuid(), TestConstants.ValidName),
@@ -27,8 +27,8 @@ public class UserMapping
         using (new AssertionScope())
         {
             result.Id.Should().Be(_item.Id);
-            result.FirstName.Should().Be(_item.FirstName);
-            result.LastName.Should().Be(_item.LastName);
+            result.GivenName.Should().Be(_item.GivenName);
+            result.FamilyName.Should().Be(_item.FamilyName);
             result.Email.Should().Be(_item.Email);
             result.Phone.Should().Be(_item.Phone);
             result.Office.Should().BeEquivalentTo(_item.Office);
@@ -42,8 +42,8 @@ public class UserMapping
         var item = new StaffViewDto
         {
             Id = Guid.NewGuid().ToString(),
-            FirstName = TestConstants.ValidName,
-            LastName = TestConstants.ValidName,
+            GivenName = TestConstants.ValidName,
+            FamilyName = TestConstants.ValidName,
             Email = TestConstants.ValidEmail,
             Phone = "123-456-7890",
             Office = new OfficeViewDto { Id = Guid.NewGuid(), Name = TestConstants.ValidName },
@@ -54,8 +54,8 @@ public class UserMapping
         using (new AssertionScope())
         {
             result.Id.Should().Be(item.Id);
-            result.FirstName.Should().Be(item.FirstName);
-            result.LastName.Should().Be(item.LastName);
+            result.GivenName.Should().Be(item.GivenName);
+            result.FamilyName.Should().Be(item.FamilyName);
             result.Email.Should().Be(item.Email);
             result.Phone.Should().Be(item.Phone);
             result.Office.Should().BeEquivalentTo(item.Office);

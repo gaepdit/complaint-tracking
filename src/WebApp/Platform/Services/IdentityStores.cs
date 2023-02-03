@@ -16,7 +16,7 @@ public static class IdentityStores
         var identityBuilder = services.AddIdentity<ApplicationUser, IdentityRole>();
 
         // When running locally, you have the option to use in-memory data or build the database using LocalDB.
-        if (isLocal && !ApplicationSettings.LocalDevSettings.BuildLocalDb)
+        if (isLocal && ApplicationSettings.LocalDevSettings.UseInMemoryData)
         {
             // Adds local UserStore, RoleSore, and StaffAppService
             services.AddLocalIdentity();

@@ -38,16 +38,16 @@ public sealed class LocalStaffAppService : IStaffAppService
         return _mapper.Map<StaffViewDto?>(user);
     }
 
-    public Task<StaffViewDto?> FindAsync(string id)
+    public async Task<StaffViewDto?> FindAsync(string id)
     {
-        var user = IdentityData.GetUsers.SingleOrDefault(e => e.Id == id);
-        return Task.FromResult(_mapper.Map<StaffViewDto?>(user));
+        var user = await _userManager.FindByIdAsync(id);
+        return _mapper.Map<StaffViewDto?>(user);
     }
 
     public async Task<List<StaffViewDto>> GetListAsync(StaffSearchDto filter)
     {
         var users = string.IsNullOrEmpty(filter.Role)
-            ? IdentityData.GetUsers.AsQueryable().ApplyFilter(filter)
+            ? _userManager.Users.ApplyFilter(filter)
             : (await _userManager.GetUsersInRoleAsync(filter.Role)).AsQueryable().ApplyFilter(filter);
 
         return _mapper.Map<List<StaffViewDto>>(users);

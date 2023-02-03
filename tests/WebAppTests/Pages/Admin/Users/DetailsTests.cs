@@ -17,8 +17,8 @@ public class DetailsTests
         {
             Id = Guid.Empty.ToString(),
             Email = TestConstants.ValidEmail,
-            FirstName = TestConstants.ValidName,
-            LastName = TestConstants.ValidName,
+            GivenName = TestConstants.ValidName,
+            FamilyName = TestConstants.ValidName,
         };
         var service = new Mock<IStaffAppService>();
         service.Setup(l => l.FindAsync(It.IsAny<string>()))

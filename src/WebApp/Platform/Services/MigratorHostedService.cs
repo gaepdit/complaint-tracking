@@ -31,7 +31,7 @@ public class MigratorHostedService : IHostedService
         }
 
         // If using in-memory data, no further action required.
-        if (!ApplicationSettings.LocalDevSettings.BuildLocalDb) return;
+        if (ApplicationSettings.LocalDevSettings.UseInMemoryData) return;
 
         if (ApplicationSettings.LocalDevSettings.UseEfMigrations)
         {

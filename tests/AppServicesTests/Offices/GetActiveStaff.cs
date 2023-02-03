@@ -13,8 +13,8 @@ public class GetActiveStaff
     {
         var user = new ApplicationUser
         {
-            FirstName = TestConstants.ValidName,
-            LastName = TestConstants.NewValidName,
+            GivenName = TestConstants.ValidName,
+            FamilyName = TestConstants.NewValidName,
             Email = TestConstants.ValidEmail,
         };
 
@@ -31,8 +31,8 @@ public class GetActiveStaff
         var result = await appService.GetActiveStaffAsync(Guid.Empty);
 
         result.Should().ContainSingle(e =>
-            string.Equals(e.FirstName, user.FirstName, StringComparison.Ordinal) &&
-            string.Equals(e.LastName, user.LastName, StringComparison.Ordinal) &&
+            string.Equals(e.GivenName, user.GivenName, StringComparison.Ordinal) &&
+            string.Equals(e.FamilyName, user.FamilyName, StringComparison.Ordinal) &&
             string.Equals(e.Email, user.Email, StringComparison.Ordinal));
     }
 }

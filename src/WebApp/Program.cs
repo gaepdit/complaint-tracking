@@ -24,9 +24,6 @@ var raygunApiKeySet = !string.IsNullOrEmpty(ApplicationSettings.RaygunSettings.A
 // Configure Identity.
 builder.Services.AddIdentityStores(isLocal);
 
-// Configure cookies (SameSiteMode.None is needed to get single sign-out to work).
-builder.Services.Configure<CookiePolicyOptions>(opts => opts.MinimumSameSitePolicy = SameSiteMode.None);
-
 // Configure Authentication.
 builder.Services.AddAuthenticationServices(builder.Configuration, isLocal);
 
@@ -116,7 +113,7 @@ app.UseSwaggerUI(c =>
 
 // Map endpoints.
 app.MapRazorPages();
-app.MapControllers(); // This is only needed if an API is implemented. Delete if unused.
+app.MapControllers();
 
 // Make it so.
 app.Run();

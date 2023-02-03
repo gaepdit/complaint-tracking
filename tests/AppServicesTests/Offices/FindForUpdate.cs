@@ -16,8 +16,8 @@ public class FindForUpdate
         var user = new ApplicationUser
         {
             Id = Guid.NewGuid().ToString(),
-            FirstName = TestConstants.ValidName,
-            LastName = TestConstants.NewValidName,
+            GivenName = TestConstants.ValidName,
+            FamilyName = TestConstants.NewValidName,
             Email = TestConstants.ValidEmail,
         };
         office.Assignor = user;

@@ -79,7 +79,7 @@ SELECT
     WHEN c.CurrentOwnerId IS NULL
         THEN NULL
     ELSE
-        concat(currentOwner.LastName, concat(', ', currentOwner.FirstName))
+        concat(currentOwner.FamilyName, concat(', ', currentOwner.GivenName))
     END                   AS CurrentOwner,
     DateComplaintClosed,
     DateCurrentOwnerAccepted,
@@ -95,7 +95,7 @@ SELECT
     WHEN c.EnteredById IS NULL
         THEN NULL
     ELSE
-        concat(enteredBy.LastName, concat(', ', enteredBy.FirstName))
+        concat(enteredBy.FamilyName, concat(', ', enteredBy.GivenName))
     END                   AS EnteredBy,
     -- PrimaryConcernId,
     primaryConcern.Name   AS PrimaryConcern,
@@ -104,14 +104,14 @@ SELECT
     WHEN c.ReceivedById IS NULL
         THEN NULL
     ELSE
-        concat(receivedBy.LastName, concat(', ', receivedBy.FirstName))
+        concat(receivedBy.FamilyName, concat(', ', receivedBy.GivenName))
     END                   AS ReceivedBy,
     -- ReviewById,
     CASE
     WHEN c.ReviewById IS NULL
         THEN NULL
     ELSE
-        concat(reviewBy.LastName, concat(', ', reviewBy.FirstName))
+        concat(reviewBy.FamilyName, concat(', ', reviewBy.GivenName))
     END                   AS ReviewBy,
     -- ReviewComments,
     dbo.RegexReplace(
@@ -191,7 +191,7 @@ SELECT
     WHEN ca.EnteredById IS NULL
         THEN NULL
     ELSE
-        concat(enteredBy.LastName, concat(', ', enteredBy.FirstName))
+        concat(enteredBy.FamilyName, concat(', ', enteredBy.GivenName))
     END             AS EnteredBy,
     Investigator
 FROM ComplaintActions ca
@@ -245,7 +245,7 @@ SELECT
     WHEN c.ReceivedById IS NULL
         THEN NULL
     ELSE
-        concat(receivedBy.LastName, concat(', ', receivedBy.FirstName))
+        concat(receivedBy.FamilyName, concat(', ', receivedBy.GivenName))
     END                   AS ReceivedBy,
     -- Status,
     CASE

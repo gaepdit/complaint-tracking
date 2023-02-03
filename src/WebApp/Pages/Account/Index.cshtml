@@ -8,7 +8,7 @@
 <hr />
 <partial name="_AlertPartial" for="Message" />
 
-<h2>@Model.DisplayStaff.DisplayName</h2>
+<h2>@Html.DisplayFor(m => m.DisplayStaff.DisplayName, "StringOrNone")</h2>
 
 <dl class="row">
     <dt class="col-sm-3">Email</dt>

@@ -20,8 +20,8 @@ public class EditRolesTests
     {
         Id = Guid.Empty.ToString(),
         Email = TestConstants.ValidEmail,
-        FirstName = TestConstants.ValidName,
-        LastName = TestConstants.ValidName,
+        GivenName = TestConstants.ValidName,
+        FamilyName = TestConstants.ValidName,
         Office = OfficeViewTest,
     };
 

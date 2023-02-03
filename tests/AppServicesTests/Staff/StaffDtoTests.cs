@@ -24,9 +24,9 @@ public class StaffDtoTests
     [TestCase("abc", "def", "abc def")]
     [TestCase("abc", "", "abc")]
     [TestCase("", "def", "def")]
-    public void DisplayName_ExpectedBehavior(string firstName, string lastName, string expected)
+    public void DisplayName_ExpectedBehavior(string givenName, string familyName, string expected)
     {
-        var staffViewDto = new StaffViewDto { FirstName = firstName, LastName = lastName };
+        var staffViewDto = new StaffViewDto { GivenName = givenName, FamilyName = familyName };
 
         staffViewDto.DisplayName.Should().Be(expected);
     }
@@ -34,12 +34,12 @@ public class StaffDtoTests
     [TestCase("abc", "def", "abc def")]
     [TestCase("abc", "", "abc")]
     [TestCase("", "def", "def")]
-    public void DisplayNameWithOffice_ExpectedBehavior(string firstName, string lastName, string expectedDisplayName)
+    public void DisplayNameWithOffice_ExpectedBehavior(string givenName, string familyName, string expectedDisplayName)
     {
         var staffViewDto = new StaffViewDto
         {
-            FirstName = firstName,
-            LastName = lastName,
+            GivenName = givenName,
+            FamilyName = familyName,
             Office = new OfficeViewDto { Id = Guid.Empty, Name = TextData.Phrase },
         };
 
@@ -50,11 +50,11 @@ public class StaffDtoTests
     [TestCase("abc", "", "abc")]
     [TestCase("", "def", "def")]
     public void DisplayNameWithOffice_NullOffice_ExpectedBehavior(
-        string firstName,
-        string lastName,
+        string givenName,
+        string familyName,
         string expectedDisplayName)
     {
-        var staffViewDto = new StaffViewDto { FirstName = firstName, LastName = lastName };
+        var staffViewDto = new StaffViewDto { GivenName = givenName, FamilyName = familyName };
         staffViewDto.DisplayNameWithOffice.Should().Be(expectedDisplayName);
     }
 
@@ -62,15 +62,15 @@ public class StaffDtoTests
     [TestCase("abc", "", "abc")]
     [TestCase("", "def", "def")]
     public void DisplayNameWithOffice_InactiveUser_ExpectedBehavior(
-        string firstName,
-        string lastName,
+        string givenName,
+        string familyName,
         string expectedDisplayName)
     {
         var staffViewDto = new StaffViewDto
         {
             Active = false,
-            FirstName = firstName,
-            LastName = lastName,
+            GivenName = givenName,
+            FamilyName = familyName,
             Office = new OfficeViewDto { Id = Guid.Empty, Name = TextData.Phrase },
         };
 
@@ -80,9 +80,9 @@ public class StaffDtoTests
     [TestCase("abc", "def", "def, abc")]
     [TestCase("abc", "", "abc")]
     [TestCase("", "def", "def")]
-    public void SortableFullName_ExpectedBehavior(string firstName, string lastName, string expected)
+    public void SortableFullName_ExpectedBehavior(string givenName, string familyName, string expected)
     {
-        var staffViewDto = new StaffViewDto { FirstName = firstName, LastName = lastName };
+        var staffViewDto = new StaffViewDto { GivenName = givenName, FamilyName = familyName };
         staffViewDto.SortableFullName.Should().Be(expected);
     }
 

@@ -32,7 +32,7 @@ public class AddTests
         var page = new AddModel(service.Object, staffService.Object, validator.Object)
             { Item = ItemTest, TempData = WebAppTestsGlobal.GetPageTempData() };
         var expectedMessage =
-            new DisplayMessage(DisplayMessage.AlertContext.Success, $"\"{ItemTest.Name}\" successfully added.");
+            new DisplayMessage(DisplayMessage.AlertContext.Success, $"“{ItemTest.Name}” successfully added.");
 
         var result = await page.OnPostAsync();
 

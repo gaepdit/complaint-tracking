@@ -10,15 +10,15 @@ public static class StaffFilters
             .FilterByEmail(filter.Email)
             .FilterByOffice(filter.Office)
             .FilterByActiveStatus(filter.Status)
-            .OrderBy(m => m.LastName)
-            .ThenBy(m => m.FirstName);
+            .OrderBy(m => m.FamilyName)
+            .ThenBy(m => m.GivenName);
 
     private static IQueryable<ApplicationUser> FilterByName(
         this IQueryable<ApplicationUser> query, string? name) =>
         string.IsNullOrWhiteSpace(name)
             ? query
-            : query.Where(m => m.FirstName.ToLower().Contains(name.ToLower())
-                || m.LastName.ToLower().Contains(name.ToLower()));
+            : query.Where(m => m.GivenName.ToLower().Contains(name.ToLower())
+                || m.FamilyName.ToLower().Contains(name.ToLower()));
 
     private static IQueryable<ApplicationUser> FilterByEmail(
         this IQueryable<ApplicationUser> query, string? email) =>

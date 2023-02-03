@@ -1,6 +1,8 @@
 ﻿using Cts.Domain.Identity;
 using Cts.WebApp.Platform.Local;
-using Microsoft.AspNetCore.Authentication.AzureAD.UI;
+using Cts.WebApp.Platform.Settings;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -26,15 +28,13 @@ public class LogoutModel : PageModel
 
     private async Task<IActionResult> LogOutAndRedirectToIndex()
     {
-        if (!_environment.IsLocalEnv())
-        {
-#pragma warning disable 618
-            return SignOut(IdentityConstants.ApplicationScheme, IdentityConstants.ExternalScheme,
-                AzureADDefaults.OpenIdScheme);
-#pragma warning restore 618
-        }
+        // If Azure AD is enabled, sign out all authentication schemes.
+        if (!_environment.IsLocalEnv() || ApplicationSettings.LocalDevSettings.UseAzureAd)
+            return SignOut(new AuthenticationProperties { RedirectUri = "/Index" },
+                IdentityConstants.ApplicationScheme,
+                OpenIdConnectDefaults.AuthenticationScheme);
 
-        // If "test" users is enabled, sign out locally and redirect to home page.
+        // If a local user is enabled instead, sign out locally and redirect to home page.
         await _signInManager.SignOutAsync();
         return RedirectToPage("/Index");
     }

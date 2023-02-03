@@ -53,7 +53,7 @@ public class EditModel : PageModel
         await _service.UpdateAsync(Item);
 
         HighlightId = Item.Id;
-        TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, $"\"{Item.Name}\" successfully updated.");
+        TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, $"“{Item.Name}” successfully updated.");
         return RedirectToPage("Index");
     }
 }

@@ -9,7 +9,7 @@ public class UserRoleStore
     public async Task AddToRole_AddsRole()
     {
         using var store = new LocalUserStore();
-        var user = store.Users.Last();
+        var user = store.UserStore.Last();
         var roleName = store.Roles.First().Name;
         var resultBefore = await store.IsInRoleAsync(user, roleName, CancellationToken.None);
 
@@ -27,7 +27,7 @@ public class UserRoleStore
     public async Task RemoveFromRole_RemovesRole()
     {
         using var store = new LocalUserStore();
-        var user = store.Users.First();
+        var user = store.UserStore.First();
         var roleName = store.Roles.First().Name;
         var resultBefore = await store.IsInRoleAsync(user, roleName, CancellationToken.None);
 
@@ -45,7 +45,7 @@ public class UserRoleStore
     public async Task GetRoles_ReturnsListOfRoles()
     {
         using var store = new LocalUserStore();
-        var user = store.Users.First();
+        var user = store.UserStore.First();
 
         var result = await store.GetRolesAsync(user, CancellationToken.None);
 
@@ -60,7 +60,7 @@ public class UserRoleStore
     public async Task GetRoles_IfNone_ReturnsEmptyList()
     {
         using var store = new LocalUserStore();
-        var user = store.Users.Last();
+        var user = store.UserStore.Last();
 
         var result = await store.GetRolesAsync(user, CancellationToken.None);
 
@@ -75,7 +75,7 @@ public class UserRoleStore
     public async Task IsInRole_IfSo_ReturnsTrue()
     {
         using var store = new LocalUserStore();
-        var user = store.Users.First();
+        var user = store.UserStore.First();
         var roleName = store.Roles.First().Name;
         var result = await store.IsInRoleAsync(user, roleName, CancellationToken.None);
         result.Should().BeTrue();
@@ -85,7 +85,7 @@ public class UserRoleStore
     public async Task IsInRole_IfNot_ReturnsFalse()
     {
         using var store = new LocalUserStore();
-        var user = store.Users.Last();
+        var user = store.UserStore.Last();
         var roleName = store.Roles.First().Name;
         var result = await store.IsInRoleAsync(user, roleName, CancellationToken.None);
         result.Should().BeFalse();
@@ -101,7 +101,7 @@ public class UserRoleStore
         using (new AssertionScope())
         {
             result.Should().HaveCount(1);
-            result[0].Should().Be(store.Users.First());
+            result[0].Should().Be(store.UserStore.First());
         }
     }
 

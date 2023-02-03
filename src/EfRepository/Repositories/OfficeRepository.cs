@@ -24,7 +24,7 @@ public sealed class OfficeRepository : BaseRepository<Office, Guid>, IOfficeRepo
         return item
             .StaffMembers
             .Where(e => e.Active)
-            .OrderBy(e => e.LastName).ThenBy(e => e.FirstName).ToList();
+            .OrderBy(e => e.FamilyName).ThenBy(e => e.GivenName).ToList();
     }
 
     // Hide some base repository methods in order to include Assignor data. 
