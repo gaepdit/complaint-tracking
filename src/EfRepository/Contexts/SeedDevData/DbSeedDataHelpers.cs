@@ -16,12 +16,20 @@ public static class DbSeedDataHelpers
         SeedOfficeData(context);
         SeedIdentityData(context);
         SeedComplaintData(context);
+        SeedAttachmentData(context);
     }
 
     public static void SeedActionTypeData(AppDbContext context)
     {
         if (context.ActionTypes.Any()) return;
         context.ActionTypes.AddRange(ActionTypeData.GetActionTypes);
+        context.SaveChanges();
+    }
+
+    private static void SeedAttachmentData(AppDbContext context)
+    {
+        if (context.Attachments.Any()) return;
+        context.Attachments.AddRange(AttachmentData.GetAttachments);
         context.SaveChanges();
     }
 

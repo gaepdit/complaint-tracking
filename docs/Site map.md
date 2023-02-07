@@ -4,8 +4,9 @@
 
 ## Public pages
 
-* `/Public` (search)
-* `/Public/Complaint/{id}` (detail view)
+* `/Public` (public search)
+* `/Public/Complaint/{id}` (public detail view)
+* `/Public/Complaint/Attachment/{attachmentId}/{fileName}` (public attachment download)
 
 ### Redirects
 
@@ -40,10 +41,14 @@
 | `/Complaints/Reports`   | `/Admin/Complaints/Reports` |
 | `/Complaints/Reports/*` | `/Admin/Complaints/Reports` |
 
-## Complaint details & user actions
+## Complaint details
+
+* `/Admin/Complaints/Details/{id}`
+* `/Admin/Complaints/Attachment/{attachmentId}/{fileName}`
+
+## Complaint user actions
 
 * `/Admin/Complaints/Add`
-* `/Admin/Complaints/Details/{id}`
 * `/Admin/Complaints/Details/Approve/{id}`
 * `/Admin/Complaints/Details/Assign/{id}`
 * `/Admin/Complaints/Details/Delete/{id}`

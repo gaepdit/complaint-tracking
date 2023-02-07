@@ -125,10 +125,38 @@ body {
     white-space: pre-line !important;
 }
 
-/* External links
+/* SVG icons
 -------------------------------------------------- */
-a[target]::after {
-    content: ' \1f5d7';
+
+svg:not(:root).svgicon {
+    overflow: visible;
+}
+
+svg:not(:root) {
+    overflow: hidden;
+}
+
+.svgicon {
+    display: inline-block;
+    font-size: inherit;
+    overflow: visible;
+    vertical-align: middle;
+    width: 1.5em;
+    height: 1.5em;
+}
+
+/* Image thumbnails
+-------------------------------------------------- */
+.img-thumbnail {
+    max-width: 90px;
+    max-height: 90px;
+}
+
+/* Hover style for links with underline removed
+-------------------------------------------------- */
+
+a.text-decoration-none:hover {
+    outline: 2px solid;
 }
 
 /* Banner for test site

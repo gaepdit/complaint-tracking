@@ -67,6 +67,26 @@ internal static class ComplaintData
             ComplaintClosed = true,
             DateComplaintClosed = DateTime.Now.AddDays(-10),
         },
+        new Complaint(4)
+        {
+            ComplaintNature = "Deleted Complaint",
+            Status = ComplaintStatus.Closed,
+            DateReceived = DateTime.Now.AddDays(-2),
+            ComplaintLocation = TextData.ShortMultiline,
+            ComplaintCity = TextData.Word,
+            ComplaintCounty = TextData.AnotherWord,
+            PrimaryConcern = ConcernData.GetConcerns.ElementAt(0),
+            SecondaryConcern = ConcernData.GetConcerns.ElementAt(1),
+            SourceFacilityId = TextData.ThirdWord,
+            SourceFacilityName = TextData.Phrase,
+            SourceContactName = TextData.Phrase,
+            SourceAddress = ValueObjectData.FullAddress,
+            SourcePhoneNumber = ValueObjectData.SampleNumber,
+            CurrentOffice = OfficeData.GetOffices.ElementAt(0),
+            ReviewComments = TextData.Phrase,
+            ComplaintClosed = true,
+            DateComplaintClosed = DateTime.Now.AddDays(-1),
+        },
     };
 
     private static IEnumerable<Complaint>? _complaints;
@@ -76,7 +96,9 @@ internal static class ComplaintData
         get
         {
             if (_complaints is not null) return _complaints;
+
             _complaints = ComplaintSeedItems;
+            _complaints.ElementAt(3).SetDeleted(null);
             return _complaints;
         }
     }

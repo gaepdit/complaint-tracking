@@ -1,30 +1,37 @@
-using Cts.Domain.Complaints;
 using Cts.Domain.Identity;
+using JetBrains.Annotations;
 
 namespace Cts.Domain.Attachments;
 
 public class Attachment : AuditableSoftDeleteEntity
 {
-    public virtual Complaint Complaint { get; set; } = null!;
-    public int ComplaintId { get; set; }
+    // Constants
+
+    public const string DefaultAttachmentsLocation = "attachments";
+    public const string DefaultThumbnailsLocation = "thumbnails";
+
+    // Constructors
+
+    [UsedImplicitly] // Used by ORM.
+    private Attachment() { }
+
+    internal Attachment(Guid id) : base(id) { }
+
+    // Properties
+
+    public int ComplaintId { get; init; }
 
     [StringLength(245)]
-    public string FileName { get; set; } = string.Empty;
+    public string FileName { get; init; } = string.Empty;
 
     [StringLength(10)]
-    public string FileExtension { get; set; } = string.Empty;
+    public string FileExtension { get; init; } = string.Empty;
 
-    public long Size { get; set; }
+    public long Size { get; init; }
 
-    public DateTime DateUploaded { get; set; }
+    public DateTimeOffset DateUploaded { get; init; }
 
-    public virtual ApplicationUser? UploadedBy { get; set; }
+    public ApplicationUser? UploadedBy { get; init; }
 
-    public bool IsImage { get; set; }
-
-#pragma warning disable S125
-    // public string FilePath => Path.Combine(FilePaths.AttachmentsFolder, Id + FileExtension);
-    //
-    // public string ThumbnailPath => IsImage ? Path.Combine(FilePaths.ThumbnailsFolder, Id + FileExtension) : null;
-#pragma warning restore S125
+    public bool IsImage { get; init; }
 }

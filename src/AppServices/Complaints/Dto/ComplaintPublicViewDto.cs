@@ -1,4 +1,5 @@
-﻿using Cts.AppServices.Offices;
+﻿using Cts.AppServices.Attachments;
+using Cts.AppServices.Offices;
 using Cts.Domain.Complaints;
 using Cts.Domain.Concerns;
 using Cts.Domain.DataProcessing;
@@ -96,7 +97,7 @@ public class ComplaintPublicViewDto
     }
 
     // Properties: Attachments
-    // TODO
-    // [Display(Name = "Attachments")]
-    // public List<AttachmentPublicViewDto> Attachments { get; set; } = new();
+
+    [Display(Name = "Attachments")]
+    public IReadOnlyList<AttachmentPublicViewDto>? Attachments { get; set; }
 }

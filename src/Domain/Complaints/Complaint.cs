@@ -132,7 +132,7 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     // Properties: Attachments
 
-    public List<Attachment> Attachments { get; set; } = new();
+    public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
 
     // Methods
 }

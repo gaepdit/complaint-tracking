@@ -51,6 +51,7 @@ There are two launch profiles:
     - *UseAzureAd* — If `true`, the app must be registered in the Azure portal, and configuration settings added in the "AzureAd" settings section. If `false`, authentication is simulated using test user data.
     - *LocalUserIsAuthenticated* — Simulates a successful login with a test account when `true`. Simulates a failed login when `false`. (Only applies if *UseAzureAd* is `false`.)
     - *LocalUserIsAdmin* — Adds all App Roles to the logged in account when `true` or no roles when `false`. (Applies whether *UserAzureAd* is `true` or `false`.)
+    - *UseInMemoryFiles* — If `true`, files are seeded from the TestData project and stored in memory. If `false`, attachment files are saved/loaded from the file system.
 
 * **WebApp Dev Server** — This profile connects to a remote database server for data. *To use this profile, you must add the "appsettings.Development.json" file from the "app-config" repo.*
 

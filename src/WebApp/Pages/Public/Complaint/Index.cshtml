@@ -77,10 +77,49 @@
 </p>
 
 <h2>Attachments</h2>
-@* TODO *@
-<p>
-    <em>None.</em>
-</p>
 <p>
     <em>(Attachments may not be available for complaints resolved before April 2018. Please note that not every complaint has attachments.)</em>
 </p>
+
+@if (Model.Item.Attachments is {Count: > 0 })
+{
+    <table class="table align-middle" aria-label="File attachments">
+        <thead>
+        <th scope="col">File</th>
+        <th scope="col">Size</th>
+        <th scope="col">Date Uploaded</th>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.Item.Attachments)
+        {
+            <tr>
+                <td>
+                    @if (item.IsImage)
+                    {
+                        <a asp-page="Attachment" asp-route-id="@item.Id" asp-route-fileName="@item.FileName" target="_blank"
+                           class="text-decoration-none rounded d-block" data-fancybox="attachment" data-caption="@item.FileName">
+                            <img src="Attachment/@item.Id/@item.FileName/?thumbnail=true" class="img-thumbnail rounded me-2" alt="" />
+                            @item.FileName
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-page="Attachment" asp-route-id="@item.Id" asp-route-fileName="@item.FileName" target="_blank"
+                           class="text-decoration-none rounded d-block p-2">
+                            @Html.DisplayFor(m => item.FileExtension, "FileTypeIcon") @item.FileName
+                        </a>
+                    }
+                </td>
+                <td>@Html.DisplayFor(m => item.Size, "FileSize")</td>
+                <td>@item.DateUploaded.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern)</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>
+        <em>None.</em>
+    </p>
+}

@@ -1,9 +1,11 @@
-﻿using Cts.Domain.ActionTypes;
+﻿using Cts.AppServices.Files;
+using Cts.Domain.ActionTypes;
 using Cts.Domain.Complaints;
 using Cts.Domain.Concerns;
 using Cts.Domain.Offices;
 using Cts.EfRepository.Contexts;
 using Cts.EfRepository.Repositories;
+using Cts.LocalRepository.Files;
 using Cts.LocalRepository.Repositories;
 using Cts.WebApp.Platform.Settings;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +40,17 @@ public static class DataServices
             services.AddScoped<IComplaintRepository, ComplaintRepository>();
             services.AddScoped<IConcernRepository, ConcernRepository>();
             services.AddScoped<IOfficeRepository, OfficeRepository>();
+        }
+
+        // When running locally, you have the option to access file in memory or use the local filesystem.
+        if (isLocal && ApplicationSettings.LocalDevSettings.UseInMemoryFiles)
+        {
+            services.AddTransient<IFileService, InMemoryFileService>();
+        }
+        else
+        {
+            services.AddTransient<IFileService,
+                FileSystemFileService>(_ => new FileSystemFileService(configuration["PersistedFilesBasePath"]));
         }
     }
 }
