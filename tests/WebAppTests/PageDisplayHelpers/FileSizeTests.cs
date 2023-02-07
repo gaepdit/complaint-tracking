@@ -3,7 +3,6 @@ using FluentAssertions.Execution;
 
 namespace WebAppTests.PageDisplayHelpers;
 
-[TestFixture]
 public class FileSizeTests
 {
     [Test]

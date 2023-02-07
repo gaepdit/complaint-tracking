@@ -18,9 +18,9 @@ public class EditTests
     [Test]
     public async Task OnGet_ReturnsWithItem()
     {
-        var service = new Mock<IActionTypeAppService>();
-        service.Setup(l => l.FindForUpdateAsync(ItemTest.Id, CancellationToken.None)).ReturnsAsync(ItemTest);
-        var page = new EditModel(service.Object, Mock.Of<IValidator<ActionTypeUpdateDto>>())
+        var serviceMock = new Mock<IActionTypeAppService>();
+        serviceMock.Setup(l => l.FindForUpdateAsync(ItemTest.Id, CancellationToken.None)).ReturnsAsync(ItemTest);
+        var page = new EditModel(serviceMock.Object, Mock.Of<IValidator<ActionTypeUpdateDto>>())
             { TempData = WebAppTestsGlobal.GetPageTempData() };
 
         await page.OnGetAsync(ItemTest.Id);
@@ -36,8 +36,8 @@ public class EditTests
     [Test]
     public async Task OnGet_GivenNullId_ReturnsNotFound()
     {
-        var service = new Mock<IActionTypeAppService>();
-        var page = new EditModel(service.Object, Mock.Of<IValidator<ActionTypeUpdateDto>>())
+        var serviceMock = new Mock<IActionTypeAppService>();
+        var page = new EditModel(serviceMock.Object, Mock.Of<IValidator<ActionTypeUpdateDto>>())
             { TempData = WebAppTestsGlobal.GetPageTempData() };
 
         var result = await page.OnGetAsync(null);
@@ -52,10 +52,10 @@ public class EditTests
     [Test]
     public async Task OnGet_GivenInvalidId_ReturnsNotFound()
     {
-        var service = new Mock<IActionTypeAppService>();
-        service.Setup(l => l.FindForUpdateAsync(It.IsAny<Guid>(), CancellationToken.None))
+        var serviceMock = new Mock<IActionTypeAppService>();
+        serviceMock.Setup(l => l.FindForUpdateAsync(It.IsAny<Guid>(), CancellationToken.None))
             .ReturnsAsync((ActionTypeUpdateDto?)null);
-        var page = new EditModel(service.Object, Mock.Of<IValidator<ActionTypeUpdateDto>>())
+        var page = new EditModel(serviceMock.Object, Mock.Of<IValidator<ActionTypeUpdateDto>>())
             { TempData = WebAppTestsGlobal.GetPageTempData() };
 
         var result = await page.OnGetAsync(Guid.Empty);
@@ -66,11 +66,11 @@ public class EditTests
     [Test]
     public async Task OnPost_GivenSuccess_ReturnsRedirectWithDisplayMessage()
     {
-        var service = new Mock<IActionTypeAppService>();
-        var validator = new Mock<IValidator<ActionTypeUpdateDto>>();
-        validator.Setup(l => l.ValidateAsync(It.IsAny<ActionTypeUpdateDto>(), CancellationToken.None))
+        var serviceMock = new Mock<IActionTypeAppService>();
+        var validatorMock = new Mock<IValidator<ActionTypeUpdateDto>>();
+        validatorMock.Setup(l => l.ValidateAsync(It.IsAny<ActionTypeUpdateDto>(), CancellationToken.None))
             .ReturnsAsync(new ValidationResult());
-        var page = new EditModel(service.Object, validator.Object)
+        var page = new EditModel(serviceMock.Object, validatorMock.Object)
             { Item = ItemTest, TempData = WebAppTestsGlobal.GetPageTempData() };
         var expectedMessage =
             new DisplayMessage(DisplayMessage.AlertContext.Success, $"“{ItemTest.Name}” successfully updated.");
@@ -89,12 +89,12 @@ public class EditTests
     [Test]
     public async Task OnPost_GivenInvalidItem_ReturnsPageWithModelErrors()
     {
-        var service = new Mock<IActionTypeAppService>();
-        var validator = new Mock<IValidator<ActionTypeUpdateDto>>();
+        var serviceMock = new Mock<IActionTypeAppService>();
+        var validatorMock = new Mock<IValidator<ActionTypeUpdateDto>>();
         var validationFailures = new List<ValidationFailure> { new("property", "message") };
-        validator.Setup(l => l.ValidateAsync(It.IsAny<ActionTypeUpdateDto>(), CancellationToken.None))
+        validatorMock.Setup(l => l.ValidateAsync(It.IsAny<ActionTypeUpdateDto>(), CancellationToken.None))
             .ReturnsAsync(new ValidationResult(validationFailures));
-        var page = new EditModel(service.Object, validator.Object)
+        var page = new EditModel(serviceMock.Object, validatorMock.Object)
             { Item = ItemTest, TempData = WebAppTestsGlobal.GetPageTempData() };
 
         var result = await page.OnPostAsync();

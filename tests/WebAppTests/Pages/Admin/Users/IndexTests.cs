@@ -12,13 +12,13 @@ public class IndexTests
     [Test]
     public async Task OnSearch_IfValidModel_ReturnsPage()
     {
-        var officeService = new Mock<IOfficeAppService>();
-        officeService.Setup(l => l.GetActiveListItemsAsync(CancellationToken.None))
+        var officeServiceMock = new Mock<IOfficeAppService>();
+        officeServiceMock.Setup(l => l.GetActiveListItemsAsync(CancellationToken.None))
             .ReturnsAsync(new List<ListItem>());
-        var staffService = new Mock<IStaffAppService>();
-        staffService.Setup(l => l.GetListAsync(It.IsAny<StaffSearchDto>()))
+        var staffServiceMock = new Mock<IStaffAppService>();
+        staffServiceMock.Setup(l => l.GetListAsync(It.IsAny<StaffSearchDto>()))
             .ReturnsAsync(new List<StaffViewDto>());
-        var page = new IndexModel(officeService.Object, staffService.Object)
+        var page = new IndexModel(officeServiceMock.Object, staffServiceMock.Object)
             { TempData = WebAppTestsGlobal.GetPageTempData() };
 
         var result = await page.OnGetSearchAsync(new StaffSearchDto());
@@ -36,11 +36,11 @@ public class IndexTests
     [Test]
     public async Task OnSearch_IfInvalidModel_ReturnPageWithInvalidModelState()
     {
-        var officeService = new Mock<IOfficeAppService>();
-        officeService.Setup(l => l.GetActiveListItemsAsync(CancellationToken.None))
+        var officeServiceMock = new Mock<IOfficeAppService>();
+        officeServiceMock.Setup(l => l.GetActiveListItemsAsync(CancellationToken.None))
             .ReturnsAsync(new List<ListItem>());
-        var staffService = new Mock<IStaffAppService>();
-        var page = new IndexModel(officeService.Object, staffService.Object)
+        var staffServiceMock = new Mock<IStaffAppService>();
+        var page = new IndexModel(officeServiceMock.Object, staffServiceMock.Object)
             { TempData = WebAppTestsGlobal.GetPageTempData() };
         page.ModelState.AddModelError("Error", "Sample error description");
 

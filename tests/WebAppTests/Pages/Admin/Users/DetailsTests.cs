@@ -20,14 +20,14 @@ public class DetailsTests
             GivenName = TestConstants.ValidName,
             FamilyName = TestConstants.ValidName,
         };
-        var service = new Mock<IStaffAppService>();
-        service.Setup(l => l.FindAsync(It.IsAny<string>()))
+        var serviceMock = new Mock<IStaffAppService>();
+        serviceMock.Setup(l => l.FindAsync(It.IsAny<string>()))
             .ReturnsAsync(staffView);
-        service.Setup(l => l.GetAppRolesAsync(It.IsAny<string>()))
+        serviceMock.Setup(l => l.GetAppRolesAsync(It.IsAny<string>()))
             .ReturnsAsync(new List<AppRole>());
         var pageModel = new DetailsModel { TempData = WebAppTestsGlobal.GetPageTempData() };
 
-        var result = await pageModel.OnGetAsync(service.Object, staffView.Id);
+        var result = await pageModel.OnGetAsync(serviceMock.Object, staffView.Id);
 
         using (new AssertionScope())
         {
@@ -41,10 +41,10 @@ public class DetailsTests
     [Test]
     public async Task OnGet_MissingIdReturnsNotFound()
     {
-        var service = new Mock<IStaffAppService>();
+        var serviceMock = new Mock<IStaffAppService>();
         var pageModel = new DetailsModel { TempData = WebAppTestsGlobal.GetPageTempData() };
 
-        var result = await pageModel.OnGetAsync(service.Object, null);
+        var result = await pageModel.OnGetAsync(serviceMock.Object, null);
 
         using (new AssertionScope())
         {
@@ -56,12 +56,12 @@ public class DetailsTests
     [Test]
     public async Task OnGet_NonexistentIdReturnsNotFound()
     {
-        var service = new Mock<IStaffAppService>();
-        service.Setup(l => l.FindAsync(It.IsAny<string>()))
+        var serviceMock = new Mock<IStaffAppService>();
+        serviceMock.Setup(l => l.FindAsync(It.IsAny<string>()))
             .ReturnsAsync((StaffViewDto?)null);
         var pageModel = new DetailsModel { TempData = WebAppTestsGlobal.GetPageTempData() };
 
-        var result = await pageModel.OnGetAsync(service.Object, Guid.Empty.ToString());
+        var result = await pageModel.OnGetAsync(serviceMock.Object, Guid.Empty.ToString());
 
         result.Should().BeOfType<NotFoundResult>();
     }

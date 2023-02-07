@@ -14,12 +14,12 @@ public class IndexTests
     {
         var item = Mock.Of<ComplaintPublicViewDto>();
 
-        var service = new Mock<IComplaintAppService>();
-        service.Setup(l => l.GetPublicViewAsync(It.IsAny<int>(), CancellationToken.None))
+        var serviceMock = new Mock<IComplaintAppService>();
+        serviceMock.Setup(l => l.GetPublicViewAsync(It.IsAny<int>(), CancellationToken.None))
             .ReturnsAsync(item);
         var pageModel = new IndexModel();
 
-        var result = await pageModel.OnGetAsync(service.Object, 1);
+        var result = await pageModel.OnGetAsync(serviceMock.Object, 1);
 
         using (new AssertionScope())
         {
@@ -31,10 +31,10 @@ public class IndexTests
     [Test]
     public async Task OnGet_MissingIdReturnsNotFound()
     {
-        var service = new Mock<IComplaintAppService>();
+        var serviceMock = new Mock<IComplaintAppService>();
         var pageModel = new IndexModel();
 
-        var result = await pageModel.OnGetAsync(service.Object, null);
+        var result = await pageModel.OnGetAsync(serviceMock.Object, null);
 
         using (new AssertionScope())
         {
@@ -46,12 +46,12 @@ public class IndexTests
     [Test]
     public async Task OnGet_NonexistentIdReturnsNotFound()
     {
-        var service = new Mock<IComplaintAppService>();
-        service.Setup(l => l.GetPublicViewAsync(It.IsAny<int>(), CancellationToken.None))
+        var serviceMock = new Mock<IComplaintAppService>();
+        serviceMock.Setup(l => l.GetPublicViewAsync(It.IsAny<int>(), CancellationToken.None))
             .ReturnsAsync((ComplaintPublicViewDto?)null);
         var pageModel = new IndexModel();
 
-        var result = await pageModel.OnGetAsync(service.Object, 0);
+        var result = await pageModel.OnGetAsync(serviceMock.Object, 0);
 
         result.Should().BeOfType<NotFoundResult>();
     }

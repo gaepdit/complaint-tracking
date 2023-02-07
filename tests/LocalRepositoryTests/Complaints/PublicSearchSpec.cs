@@ -5,7 +5,6 @@ using Cts.LocalRepository.Repositories;
 
 namespace LocalRepositoryTests.Complaints;
 
-[TestFixture]
 public class PublicSearchSpec
 {
     private LocalComplaintRepository _repository = default!;

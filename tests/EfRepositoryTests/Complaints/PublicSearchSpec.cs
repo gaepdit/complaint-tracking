@@ -5,7 +5,6 @@ using Cts.TestData;
 
 namespace EfRepositoryTests.Complaints;
 
-[TestFixture]
 public class PublicSearchSpec
 {
     private IComplaintRepository _repository = default!;

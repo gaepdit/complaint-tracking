@@ -15,11 +15,11 @@ public class IndexTests
     [Test]
     public async Task OnGet_ReturnsWithList()
     {
-        var service = new Mock<IOfficeAppService>();
-        service.Setup(l => l.GetListAsync(CancellationToken.None)).ReturnsAsync(ListTest);
+        var serviceMock = new Mock<IOfficeAppService>();
+        serviceMock.Setup(l => l.GetListAsync(CancellationToken.None)).ReturnsAsync(ListTest);
         var page = new IndexModel { TempData = WebAppTestsGlobal.GetPageTempData() };
 
-        await page.OnGetAsync(service.Object);
+        await page.OnGetAsync(serviceMock.Object);
 
         using (new AssertionScope())
         {
@@ -32,13 +32,13 @@ public class IndexTests
     [Test]
     public async Task SetDisplayMessage_ReturnsWithDisplayMessage()
     {
-        var service = new Mock<IOfficeAppService>();
-        service.Setup(l => l.GetListAsync(CancellationToken.None)).ReturnsAsync(ListTest);
+        var serviceMock = new Mock<IOfficeAppService>();
+        serviceMock.Setup(l => l.GetListAsync(CancellationToken.None)).ReturnsAsync(ListTest);
         var page = new IndexModel { TempData = WebAppTestsGlobal.GetPageTempData() };
         var expectedMessage = new DisplayMessage(DisplayMessage.AlertContext.Info, "Info message");
 
         page.TempData.SetDisplayMessage(expectedMessage.Context, expectedMessage.Message);
-        await page.OnGetAsync(service.Object);
+        await page.OnGetAsync(serviceMock.Object);
 
         page.Message.Should().BeEquivalentTo(expectedMessage);
     }
