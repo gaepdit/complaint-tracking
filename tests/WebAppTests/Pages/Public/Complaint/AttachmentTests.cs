@@ -16,7 +16,6 @@ public class AttachmentTests
         var item = new AttachmentPublicViewDto
         {
             FileName = TestConstants.ShortName,
-            ComplaintId = 1,
             FileExtension = ".pdf",
             Id = Guid.Empty,
             IsImage = false,
@@ -61,7 +60,6 @@ public class AttachmentTests
         var item = new AttachmentPublicViewDto
         {
             FileName = TestConstants.ValidName,
-            ComplaintId = 1,
             FileExtension = ".pdf",
             Id = Guid.Empty,
             IsImage = false,
@@ -89,7 +87,6 @@ public class AttachmentTests
         var item = new AttachmentPublicViewDto
         {
             FileName = TestConstants.ShortName,
-            ComplaintId = 1,
             FileExtension = ".pdf",
             Id = Guid.Empty,
             IsImage = false,
@@ -116,7 +113,6 @@ public class AttachmentTests
         var item = new AttachmentPublicViewDto
         {
             FileName = TestConstants.ShortName,
-            ComplaintId = 1,
             FileExtension = ".png",
             Id = Guid.Empty,
             IsImage = true,
