@@ -10,7 +10,7 @@ internal static class ComplaintData
         new Complaint(1)
         {
             Status = ComplaintStatus.Closed,
-            DateReceived = DateTime.Now.AddDays(-2),
+            DateReceived = DateTime.Now.AddDays(-4),
             ComplaintNature = TextData.MultipleParagraphs,
             ComplaintLocation = TextData.ShortMultiline,
             ComplaintCity = TextData.Word,
@@ -99,6 +99,13 @@ internal static class ComplaintData
 
             _complaints = ComplaintSeedItems;
             _complaints.ElementAt(3).SetDeleted(null);
+
+            foreach (var complaint in _complaints)
+            {
+                complaint.ComplaintActions = ComplaintActionData.GetComplaintActions
+                    .Where(e => e.ComplaintId == complaint.Id).ToList();
+            }
+
             return _complaints;
         }
     }

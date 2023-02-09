@@ -9,7 +9,7 @@ public static class TextData
 
     // Words and phrases
     public const string Word = "Croissant";
-    public const string AnotherWord = "Lillipop";
+    public const string AnotherWord = "Lollipop";
     public const string ThirdWord = "Pie";
 
     public const string Phrase = "Soufflé croissant caramels gummi bears marzipan.";
