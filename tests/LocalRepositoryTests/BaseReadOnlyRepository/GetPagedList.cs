@@ -8,7 +8,7 @@ namespace LocalRepositoryTests.BaseReadOnlyRepository;
 public class GetPagedList
 {
     [Test]
-    public async Task WhenItemsExist_ReturnsList()
+    public async Task WhenItemsExist_ReturnsPagedList()
     {
         using var repository = new LocalOfficeRepository();
         var itemsCount = repository.Items.Count;
@@ -24,7 +24,7 @@ public class GetPagedList
     }
 
     [Test]
-    public async Task WhenNoItemsExist_ReturnsEmptyList()
+    public async Task WhenDoesNotExist_ReturnsEmptyList()
     {
         using var repository = new LocalOfficeRepository();
         repository.Items.Clear();

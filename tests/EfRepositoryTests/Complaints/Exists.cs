@@ -22,7 +22,7 @@ public class Exists
     }
 
     [Test]
-    public async Task WhenDoesNotExist_ReturnsEmptyList()
+    public async Task WhenDoesNotExist_ReturnsFalse()
     {
         var result = await _repository.ExistsAsync(e => e.Id == -1);
         result.Should().BeFalse();

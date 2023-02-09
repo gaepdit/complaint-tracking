@@ -1,4 +1,4 @@
-using Cts.AppServices.Attachments;
+﻿using Cts.AppServices.Attachments;
 using Cts.LocalRepository.Repositories;
 
 namespace LocalRepositoryTests.Complaints;
@@ -14,7 +14,7 @@ public class GetAttachmentsList
     public void TearDown() => _repository.Dispose();
 
     [Test]
-    public async Task WhenItemsExist_ReturnsTrue()
+    public async Task WhenItemsExist_ReturnsList()
     {
         var complaint = _repository.Items.First();
         var items = _repository.AttachmentItems.Where(e => e.ComplaintId == complaint.Id && !e.IsDeleted);

@@ -26,7 +26,7 @@ public class GetPagedList
     }
 
     [Test]
-    public async Task WhenItemsExist_ReturnsList()
+    public async Task WhenItemsExist_ReturnsPagedList()
     {
         var itemsCount = ConcernData.GetConcerns.Count;
         var paging = new PaginatedRequest(1, itemsCount);
@@ -41,7 +41,7 @@ public class GetPagedList
     }
 
     [Test]
-    public async Task WhenNoItemsExist_ReturnsEmptyList()
+    public async Task WhenDoesNotExist_ReturnsEmptyList()
     {
         await _helper.ClearTableAsync<Concern>();
         var paging = new PaginatedRequest(1, 100);

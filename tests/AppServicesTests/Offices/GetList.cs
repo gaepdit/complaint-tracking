@@ -9,7 +9,7 @@ namespace AppServicesTests.Offices;
 public class GetList
 {
     [Test]
-    public async Task WhenItemsExist_ReturnsViewDtoList()
+    public async Task WhenItemsExist_ReturnsList()
     {
         var office = new Office(Guid.Empty, TestConstants.ValidName);
         var user = new ApplicationUser
@@ -36,7 +36,7 @@ public class GetList
     }
 
     [Test]
-    public async Task WhenNoItemsExist_ReturnsEmptyList()
+    public async Task WhenDoesNotExist_ReturnsEmptyList()
     {
         var repoMock = new Mock<IOfficeRepository>();
         repoMock.Setup(l => l.GetListAsync(It.IsAny<CancellationToken>()))
