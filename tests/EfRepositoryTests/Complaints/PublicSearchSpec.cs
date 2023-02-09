@@ -34,6 +34,7 @@ public class PublicSearchSpec
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Attachments)
+            .Excluding(e => e.ComplaintActions)
         );
     }
 
@@ -55,6 +56,7 @@ public class PublicSearchSpec
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
+            .Excluding(e => e.ComplaintActions)
         );
     }
 
@@ -72,6 +74,7 @@ public class PublicSearchSpec
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
+            .Excluding(e => e.ComplaintActions)
         );
     }
 
@@ -89,6 +92,7 @@ public class PublicSearchSpec
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
+            .Excluding(e => e.ComplaintActions)
         );
     }
 
@@ -106,6 +110,7 @@ public class PublicSearchSpec
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
+            .Excluding(e => e.ComplaintActions)
         );
     }
 
@@ -123,6 +128,7 @@ public class PublicSearchSpec
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
+            .Excluding(e => e.ComplaintActions)
         );
     }
 
@@ -141,6 +147,7 @@ public class PublicSearchSpec
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
+            .Excluding(e => e.ComplaintActions)
         );
     }
 
@@ -160,6 +167,7 @@ public class PublicSearchSpec
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
+            .Excluding(e => e.ComplaintActions)
         );
     }
 
@@ -178,6 +186,7 @@ public class PublicSearchSpec
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
+            .Excluding(e => e.ComplaintActions)
         );
     }
 
@@ -196,6 +205,7 @@ public class PublicSearchSpec
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
+            .Excluding(e => e.ComplaintActions)
         );
     }
 
@@ -214,6 +224,7 @@ public class PublicSearchSpec
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
+            .Excluding(e => e.ComplaintActions)
         );
     }
 }

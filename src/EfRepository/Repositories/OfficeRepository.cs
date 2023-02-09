@@ -27,7 +27,8 @@ public sealed class OfficeRepository : BaseRepository<Office, Guid>, IOfficeRepo
             .OrderBy(e => e.FamilyName).ThenBy(e => e.GivenName).ToList();
     }
 
-    // Hide some base repository methods in order to include Assignor data. 
+    // Hide some base repository methods in order to include additional data.
+
     public new Task<Office?> FindAsync(Guid id, CancellationToken token = default) =>
         Context.Set<Office>().AsNoTracking()
             .Include(e => e.Assignor)

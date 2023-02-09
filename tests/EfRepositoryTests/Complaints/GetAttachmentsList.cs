@@ -15,7 +15,7 @@ public class GetAttachmentsList
     public void TearDown() => _repository.Dispose();
 
     [Test]
-    public async Task WhenItemsExist_ReturnsTrue()
+    public async Task WhenItemsExist_ReturnsList()
     {
         var complaint = ComplaintData.GetComplaints.First();
         var items = AttachmentData.GetAttachments.Where(e => e.ComplaintId == complaint.Id && !e.IsDeleted);

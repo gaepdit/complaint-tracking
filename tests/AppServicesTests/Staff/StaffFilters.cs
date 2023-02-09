@@ -8,10 +8,11 @@ public class StaffFilters
     [Test]
     public void DefaultFilter_ReturnsAllActive()
     {
+        var users = IdentityData.GetUsers;
         var filter = new StaffSearchDto();
-        var expected = IdentityData.GetUsers.Where(e => e.Active);
+        var expected = users.Where(e => e.Active);
 
-        var result = IdentityData.GetUsers.AsQueryable().ApplyFilter(filter);
+        var result = users.AsQueryable().ApplyFilter(filter);
 
         result.Should().BeEquivalentTo(expected);
     }
@@ -19,14 +20,15 @@ public class StaffFilters
     [Test]
     public void NameFilter_ReturnsMatches()
     {
-        var name = IdentityData.GetUsers.First(e => e.Active).GivenName;
+        var users = IdentityData.GetUsers;
+        var name = users.First(e => e.Active).GivenName;
         var filter = new StaffSearchDto { Name = name };
-        var expected = IdentityData.GetUsers
+        var expected = users
             .Where(e => e.Active &&
                 (string.Equals(e.GivenName, name, StringComparison.CurrentCultureIgnoreCase) ||
                     string.Equals(e.FamilyName, name, StringComparison.CurrentCultureIgnoreCase)));
 
-        var result = IdentityData.GetUsers.AsQueryable().ApplyFilter(filter);
+        var result = users.AsQueryable().ApplyFilter(filter);
 
         result.Should().BeEquivalentTo(expected);
     }
@@ -34,12 +36,13 @@ public class StaffFilters
     [Test]
     public void EmailFilter_ReturnsMatches()
     {
-        var email = IdentityData.GetUsers.First(e => e.Active).Email;
+        var users = IdentityData.GetUsers;
+        var email = users.First(e => e.Active).Email;
         var filter = new StaffSearchDto { Email = email };
-        var expected = IdentityData.GetUsers
+        var expected = users
             .Where(e => e.Active && e.Email == email);
 
-        var result = IdentityData.GetUsers.AsQueryable().ApplyFilter(filter);
+        var result = users.AsQueryable().ApplyFilter(filter);
 
         result.Should().BeEquivalentTo(expected);
     }
@@ -47,12 +50,13 @@ public class StaffFilters
     [Test]
     public void OfficeFilter_ReturnsMatches()
     {
-        var office = IdentityData.GetUsers.First(e => e is { Active: true, Office: { } }).Office;
+        var users = IdentityData.GetUsers;
+        var office = users.First(e => e is { Active: true, Office: { } }).Office;
         var filter = new StaffSearchDto { Office = office!.Id };
-        var expected = IdentityData.GetUsers
+        var expected = users
             .Where(e => e.Active && e.Office == office);
 
-        var result = IdentityData.GetUsers.AsQueryable().ApplyFilter(filter);
+        var result = users.AsQueryable().ApplyFilter(filter);
 
         result.Should().BeEquivalentTo(expected);
     }
@@ -60,10 +64,11 @@ public class StaffFilters
     [Test]
     public void InactiveFilter_ReturnsAllInactive()
     {
+        var users = IdentityData.GetUsers;
         var filter = new StaffSearchDto { Status = StaffSearchDto.ActiveStatus.Inactive };
-        var expected = IdentityData.GetUsers.Where(e => !e.Active);
+        var expected = users.Where(e => !e.Active);
 
-        var result = IdentityData.GetUsers.AsQueryable().ApplyFilter(filter);
+        var result = users.AsQueryable().ApplyFilter(filter);
 
         result.Should().BeEquivalentTo(expected);
     }
@@ -71,24 +76,33 @@ public class StaffFilters
     [Test]
     public void StandaloneActiveStatusFilter_ReturnsAllActive()
     {
-        var expected = IdentityData.GetUsers.Where(e => e.Active);
-        var result = IdentityData.GetUsers.AsQueryable().FilterByActiveStatus(StaffSearchDto.ActiveStatus.Active);
+        var users = IdentityData.GetUsers;
+        var expected = users.Where(e => e.Active);
+        
+        var result = users.AsQueryable().FilterByActiveStatus(StaffSearchDto.ActiveStatus.Active);
+        
         result.Should().BeEquivalentTo(expected);
     }
 
     [Test]
     public void StandaloneActiveStatusFilterForInactive_ReturnsAllActive()
     {
-        var expected = IdentityData.GetUsers.Where(e => !e.Active);
-        var result = IdentityData.GetUsers.AsQueryable().FilterByActiveStatus(StaffSearchDto.ActiveStatus.Inactive);
+        var users = IdentityData.GetUsers;
+        var expected = users.Where(e => !e.Active);
+        
+        var result = users.AsQueryable().FilterByActiveStatus(StaffSearchDto.ActiveStatus.Inactive);
+        
         result.Should().BeEquivalentTo(expected);
     }
 
     [Test]
     public void StatusAllFilter_ReturnsAll()
     {
+        var  users = IdentityData.GetUsers;
         var filter = new StaffSearchDto { Status = StaffSearchDto.ActiveStatus.All };
-        var result = IdentityData.GetUsers.AsQueryable().ApplyFilter(filter);
-        result.Should().BeEquivalentTo(IdentityData.GetUsers);
+        
+        var result = users.AsQueryable().ApplyFilter(filter);
+        
+        result.Should().BeEquivalentTo(users);
     }
 }

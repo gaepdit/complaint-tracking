@@ -8,7 +8,7 @@ namespace AppServicesTests.ActionTypes;
 public class GetList
 {
     [Test]
-    public async Task WhenItemsExist_ReturnsViewDtoList()
+    public async Task WhenItemsExist_ReturnsList()
     {
         var itemList = new List<ActionType> { new(Guid.Empty, TestConstants.ValidName) };
         var repoMock = new Mock<IActionTypeRepository>();

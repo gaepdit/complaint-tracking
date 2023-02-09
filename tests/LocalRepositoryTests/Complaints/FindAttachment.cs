@@ -13,7 +13,7 @@ public class FindAttachment
     public void TearDown() => _repository.Dispose();
 
     [Test]
-    public async Task WhenItemsExist_ReturnsTrue()
+    public async Task WhenItemsExist_ReturnsItem()
     {
         var item = _repository.AttachmentItems.First();
         var result = await _repository.FindAttachmentAsync(item.Id);
@@ -21,7 +21,7 @@ public class FindAttachment
     }
 
     [Test]
-    public async Task WhenDoesNotExist_ReturnsEmptyList()
+    public async Task WhenDoesNotExist_ReturnsNull()
     {
         var result = await _repository.FindAttachmentAsync(Guid.Empty);
         result.Should().BeNull();

@@ -17,6 +17,7 @@ public static class DbSeedDataHelpers
         SeedIdentityData(context);
         SeedComplaintData(context);
         SeedAttachmentData(context);
+        SeedComplaintActionData(context);
     }
 
     public static void SeedActionTypeData(AppDbContext context)
@@ -30,6 +31,13 @@ public static class DbSeedDataHelpers
     {
         if (context.Attachments.Any()) return;
         context.Attachments.AddRange(AttachmentData.GetAttachments);
+        context.SaveChanges();
+    }
+
+    private static void SeedComplaintActionData(AppDbContext context)
+    {
+        if (context.ComplaintActions.Any()) return;
+        context.ComplaintActions.AddRange(ComplaintActionData.GetComplaintActions);
         context.SaveChanges();
     }
 

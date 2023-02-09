@@ -71,10 +71,24 @@
 </div>
 
 <h2>Actions</h2>
-@* TODO *@
-<p>
-    <em>None.</em>
-</p>
+
+@if (Model.Item.ComplaintActions is {Count: > 0 })
+{
+    @foreach (var item in Model.Item.ComplaintActions)
+    {
+        <h3 class="h4 pt-2">
+            @item.ActionDate.ToString(CultureInfo.CurrentCulture.DateTimeFormat.LongDatePattern) —
+            <em class="text-brand">@item.ActionType.Name</em>
+        </h3>
+        <p class="text-pre-line">@item.Comments</p>
+    }
+}
+else
+{
+    <p>
+        <em>None.</em>
+    </p>
+}
 
 <h2>Attachments</h2>
 <p>

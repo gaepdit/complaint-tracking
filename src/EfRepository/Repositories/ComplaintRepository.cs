@@ -1,4 +1,5 @@
-using Cts.Domain.Attachments;
+﻿using Cts.Domain.Attachments;
+using Cts.Domain.ComplaintActions;
 using Cts.Domain.Complaints;
 using Cts.EfRepository.Contexts;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,12 @@ public class ComplaintRepository : BaseRepository<Complaint, int>, IComplaintRep
 
     public Task<bool> ExistsAsync(Expression<Func<Complaint, bool>> predicate, CancellationToken token = default) =>
         Context.Set<Complaint>().AsNoTracking().AnyAsync(predicate, token);
+
+    public async Task<IReadOnlyCollection<ComplaintAction>> GetComplaintActionsListAsync(
+        Expression<Func<ComplaintAction, bool>> predicate, CancellationToken token = default) =>
+        await Context.Set<ComplaintAction>().AsNoTracking()
+            .Include(e => e.ActionType)
+            .Where(predicate).ToListAsync(token);
 
     public async Task<IReadOnlyCollection<Attachment>> GetAttachmentsListAsync(
         Expression<Func<Attachment, bool>> predicate, CancellationToken token = default) =>

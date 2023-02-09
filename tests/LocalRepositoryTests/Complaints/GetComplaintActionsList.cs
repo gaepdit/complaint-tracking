@@ -1,9 +1,9 @@
-﻿using Cts.AppServices.Attachments;
+﻿using Cts.AppServices.ComplaintActions;
 using Cts.LocalRepository.Repositories;
 
 namespace LocalRepositoryTests.Complaints;
 
-public class GetAttachmentsList
+public class GetComplaintActionsList
 {
     private LocalComplaintRepository _repository = default!;
 
@@ -17,9 +17,10 @@ public class GetAttachmentsList
     public async Task WhenItemsExist_ReturnsList()
     {
         var complaint = _repository.Items.First();
-        var items = _repository.AttachmentItems.Where(e => e.ComplaintId == complaint.Id && !e.IsDeleted);
+        var items = _repository.ComplaintActionItems.Where(e => e.ComplaintId == complaint.Id && !e.IsDeleted);
 
-        var result = await _repository.GetAttachmentsListAsync(AttachmentFilters.PublicIdPredicate(complaint.Id));
+        var result =
+            await _repository.GetComplaintActionsListAsync(ComplaintActionFilters.PublicIdPredicate(complaint.Id));
 
         result.Should().BeEquivalentTo(items);
     }
@@ -27,10 +28,10 @@ public class GetAttachmentsList
     [Test]
     public async Task WhenItemIsDeleted_ReturnsListWithoutItem()
     {
-        var item = _repository.AttachmentItems.First(e => e.IsDeleted);
+        var item = _repository.ComplaintActionItems.First(e => e.IsDeleted);
 
         var result =
-            await _repository.GetAttachmentsListAsync(AttachmentFilters.PublicIdPredicate(item.ComplaintId));
+            await _repository.GetComplaintActionsListAsync(ComplaintActionFilters.PublicIdPredicate(item.ComplaintId));
 
         result.Should().NotContain(item);
     }
@@ -38,7 +39,7 @@ public class GetAttachmentsList
     [Test]
     public async Task WhenDoesNotExist_ReturnsEmptyList()
     {
-        var result = await _repository.GetAttachmentsListAsync(e => e.Id == Guid.Empty);
+        var result = await _repository.GetComplaintActionsListAsync(e => e.Id == Guid.Empty);
         result.Should().BeEmpty();
     }
 }

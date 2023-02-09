@@ -1,5 +1,6 @@
 using AutoMapper;
 using Cts.AppServices.Attachments;
+using Cts.AppServices.ComplaintActions;
 using Cts.AppServices.Complaints.Dto;
 using Cts.Domain.Complaints;
 using GaEpd.AppLibrary.Pagination;
@@ -22,9 +23,16 @@ public sealed class ComplaintAppService : IComplaintAppService
     {
         var item = _mapper.Map<ComplaintPublicViewDto>(
             await _repository.FindAsync(ComplaintFilters.PublicIdPredicate(id), token));
+        if (item is not null) item.ComplaintActions = await GetPublicComplaintActionsAsync(id, token);
         if (item is not null) item.Attachments = await GetPublicAttachmentsAsync(id, token);
         return item;
     }
+
+    private async Task<IReadOnlyList<ComplaintActionPublicViewDto>> GetPublicComplaintActionsAsync(
+        int complaintId, CancellationToken token) =>
+        _mapper.Map<IReadOnlyList<ComplaintActionPublicViewDto>>(
+            await _repository.GetComplaintActionsListAsync(
+                ComplaintActionFilters.PublicIdPredicate(complaintId), token));
 
     private async Task<IReadOnlyList<AttachmentPublicViewDto>> GetPublicAttachmentsAsync(int complaintId,
         CancellationToken token = default) =>

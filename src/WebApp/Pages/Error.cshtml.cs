@@ -18,9 +18,9 @@ public class ErrorModel : PageModel
 
     public void OnGet(int? statusCode)
     {
-        _logger.LogError("Error page Get method accessed {StatusCode}", statusCode);
+        _logger.LogWarning("Error page Get method accessed {StatusCode}", statusCode);
         Status = statusCode;
     }
 
-    public void OnPost() => _logger.LogError("Error page Post method accessed");
+    public void OnPost() => _logger.LogWarning("Error page Post method accessed");
 }

@@ -12,7 +12,7 @@ namespace AppServicesTests.Complaints;
 public class PublicSearch
 {
     [Test]
-    public async Task WhenItemsExist_ReturnsPaginatedList()
+    public async Task WhenItemsExist_ReturnsPagedList()
     {
         var itemList = new ReadOnlyCollection<Complaint>(ComplaintData.GetComplaints.ToList());
         var count = ComplaintData.GetComplaints.Count();
@@ -37,7 +37,7 @@ public class PublicSearch
         }
     }
     [Test]
-    public async Task WhenNoItemsExist_ReturnsEmptyPaginatedList()
+    public async Task WhenDoesNotExist_ReturnsEmptyPagedList()
     {
         var itemList = new ReadOnlyCollection<Complaint>(new List<Complaint>());
         const int count = 0;

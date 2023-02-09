@@ -1,23 +1,30 @@
 ﻿using Cts.Domain.ActionTypes;
-using Cts.Domain.Complaints;
 using Cts.Domain.Identity;
+using JetBrains.Annotations;
 
 namespace Cts.Domain.ComplaintActions;
 
 public class ComplaintAction : AuditableSoftDeleteEntity
 {
-    public Complaint Complaint { get; set; } = null!;
-    public int ComplaintId { get; set; }
+    // Constructors
 
-    public DateTime ActionDate { get; set; }
+    [UsedImplicitly] // Used by ORM.
+    private ComplaintAction() { }
 
-    public ActionType ActionType { get; set; } = null!;
-    public Guid ActionTypeId { get; set; }
+    internal ComplaintAction(Guid id) : base(id) { }
+
+    // Properties
+
+    public int ComplaintId { get; init; }
+
+    public DateTime ActionDate { get; init; }
+
+    public ActionType ActionType { get; init; } = null!;
 
     [StringLength(100)]
-    public string? Investigator { get; set; }
+    public string? Investigator { get; init; }
 
-    public DateTime? DateEntered { get; set; }
+    public DateTimeOffset DateEntered { get; init; }
 
     public ApplicationUser EnteredBy { get; set; } = null!;
 

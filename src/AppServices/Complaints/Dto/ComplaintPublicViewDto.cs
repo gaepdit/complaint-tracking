@@ -1,4 +1,5 @@
 ﻿using Cts.AppServices.Attachments;
+using Cts.AppServices.ComplaintActions;
 using Cts.AppServices.Offices;
 using Cts.Domain.Complaints;
 using Cts.Domain.Concerns;
@@ -80,9 +81,9 @@ public class ComplaintPublicViewDto
     public string? CurrentOfficeName => CurrentOffice?.Name;
 
     // Properties: Actions
-    // TODO
-    // [Display(Name = "Actions")]
-    // public List<ComplaintActionPublicViewDto> ComplaintActions { get; set; } = new();
+
+    [Display(Name = "Actions")]
+    public IReadOnlyList<ComplaintActionPublicViewDto>? ComplaintActions { get; set; }
 
     // Properties: Review/Closure
 

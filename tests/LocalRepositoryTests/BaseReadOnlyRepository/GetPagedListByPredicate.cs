@@ -5,6 +5,7 @@ using System.Globalization;
 
 namespace LocalRepositoryTests.BaseReadOnlyRepository;
 
+[FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
 public class GetPagedListByPredicate
 {
     private LocalOfficeRepository _repository = default!;
@@ -16,7 +17,7 @@ public class GetPagedListByPredicate
     public void TearDown() => _repository.Dispose();
 
     [Test]
-    public async Task WhenItemsExist_ReturnsList()
+    public async Task WhenItemsExist_ReturnsPagedList()
     {
         var itemsCount = _repository.Items.Count;
         var paging = new PaginatedRequest(1, itemsCount);

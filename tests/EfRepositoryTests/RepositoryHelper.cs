@@ -124,6 +124,7 @@ public sealed class RepositoryHelper : IDisposable
         ConcernData.ClearData();
         IdentityData.ClearData();
         ComplaintData.ClearData();
+        ComplaintActionData.ClearData();
     }
 
     /// <summary>

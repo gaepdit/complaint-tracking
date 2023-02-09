@@ -18,7 +18,7 @@ public class GetPagedListByPredicate
     public void TearDown() => _repository.Dispose();
 
     [Test]
-    public async Task WhenItemsExist_ReturnsList()
+    public async Task WhenItemsExist_ReturnsPagedList()
     {
         var itemsCount = ConcernData.GetConcerns.Count;
         var paging = new PaginatedRequest(1, itemsCount);
