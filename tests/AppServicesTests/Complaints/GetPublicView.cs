@@ -1,5 +1,6 @@
 ﻿using Cts.AppServices.Complaints;
 using Cts.Domain.Attachments;
+using Cts.Domain.ComplaintActions;
 using Cts.Domain.Complaints;
 using Cts.TestData;
 using System.Linq.Expressions;
@@ -11,12 +12,19 @@ public class GetPublicView
     [Test]
     public async Task WhenItemExists_ReturnsViewDto()
     {
+        var complaintActionsList = new List<ComplaintAction>
+            { ComplaintActionData.GetComplaintActions.First(e => !e.IsDeleted) };
         var attachmentList = new List<Attachment> { AttachmentData.GetAttachments.First(e => !e.IsDeleted) };
         var item = ComplaintData.GetComplaints.First(e => e is { IsDeleted: false, ComplaintClosed: true });
+        item.ComplaintActions = complaintActionsList;
         item.Attachments = attachmentList;
         var repoMock = new Mock<IComplaintRepository>();
         repoMock.Setup(l => l.FindAsync(It.IsAny<Expression<Func<Complaint, bool>>>(), CancellationToken.None))
             .ReturnsAsync(item);
+        repoMock.Setup(l =>
+                l.GetComplaintActionsListAsync(
+                    It.IsAny<Expression<Func<ComplaintAction, bool>>>(), CancellationToken.None))
+            .ReturnsAsync(complaintActionsList);
         repoMock.Setup(l =>
                 l.GetAttachmentsListAsync(It.IsAny<Expression<Func<Attachment, bool>>>(), CancellationToken.None))
             .ReturnsAsync(attachmentList);
