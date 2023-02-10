@@ -1,3 +1,21 @@
+/* Branding
+-------------------------------------------------- */
+.bg-brand {
+    background-color: #105367;
+}
+
+.bg-brand a {
+    color: #c0f1ff;
+}
+
+.bg-brand a:hover, .bg-brand a:focus {
+    color: #ddecf0;
+}
+
+.text-brand {
+    color: #105367;
+}
+
 /* Adjust font sizing
 -------------------------------------------------- */
 html {
@@ -53,31 +71,12 @@ body {
     line-height: 60px; /* Vertically center the text there */
 }
 
-/* Branding
+/* Header and nav bar
 -------------------------------------------------- */
-.bg-brand {
-    background-color: #105367;
-}
-
-.bg-brand a {
-    color: #c0f1ff;
-}
-
-.bg-brand a:hover, .bg-brand a:focus {
-    color: #ddecf0;
-}
-
-.text-brand {
-    color: #105367;
-}
-
-/* Header logo */
 .img-logo {
     height: 60px;
 }
 
-/* Nav bar text
--------------------------------------------------- */
 .nav-link:hover {
     text-decoration: underline;
 }
@@ -212,4 +211,15 @@ a.text-decoration-none:hover {
 
 *:hover > .anchorjs-link, .anchorjs-link:focus-visible {
     margin-left: -1.375em !important;
+}
+
+
+/* Validation summary
+-------------------------------------------------- */
+.validation-summary-valid {
+    display: none;
+}
+
+.validation-summary-errors ul {
+    margin-bottom: 0;
 }

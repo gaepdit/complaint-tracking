@@ -8,13 +8,13 @@
 
 <div class="p-3 border rounded-3 bg-light">
     <form method="post">
-        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+        <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
         <div class="row">
             <div class="col-md-10 mb-3">
                 <div class="form-floating">
                     <input asp-for="Item.Name" class="form-control" />
                     <label asp-for="Item.Name" class="form-label"></label>
-                    <span asp-validation-for="Item.Name" class="text-danger"></span>
+                    <span asp-validation-for="Item.Name" class="invalid-feedback"></span>
                 </div>
             </div>
         </div>

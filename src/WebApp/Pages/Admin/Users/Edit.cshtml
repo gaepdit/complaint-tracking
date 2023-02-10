@@ -11,7 +11,7 @@
 
 <div class="p-3 border rounded-3 bg-light mb-3">
     <form method="post">
-        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert">
+        <div asp-validation-summary="All" class="alert alert-danger" role="alert">
             User update failed:
         </div>
         <div class="row">
@@ -25,14 +25,14 @@
                 <div class="form-floating">
                     <input asp-for="UpdateStaff.Phone" class="form-control" />
                     <label asp-for="UpdateStaff.Phone" class="form-label"></label>
-                    <span asp-validation-for="UpdateStaff.Phone" class="text-danger"></span>
+                    <span asp-validation-for="UpdateStaff.Phone" class="invalid-feedback"></span>
                 </div>
             </div>
             <div class="col-md mb-3">
                 <div class="form-floating">
                     <select asp-for="UpdateStaff.OfficeId" asp-items="Model.OfficeItems" class="form-select"></select>
                     <label asp-for="UpdateStaff.OfficeId" class="form-label"></label>
-                    <span asp-validation-for="UpdateStaff.OfficeId" class="text-danger"></span>
+                    <span asp-validation-for="UpdateStaff.OfficeId" class="invalid-feedback"></span>
                 </div>
             </div>
         </div>

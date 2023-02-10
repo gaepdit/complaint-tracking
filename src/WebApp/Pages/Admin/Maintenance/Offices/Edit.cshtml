@@ -18,7 +18,7 @@
                 <div class="form-floating">
                     <input asp-for="Item.Name" class="form-control" />
                     <label asp-for="Item.Name" class="form-label"></label>
-                    <span asp-validation-for="Item.Name" class="text-danger"></span>
+                    <span asp-validation-for="Item.Name" class="invalid-feedback"></span>
                 </div>
             </div>
             <div class="col-lg mb-3">
@@ -27,7 +27,7 @@
                         <option value="">(select assignor)</option>
                     </select>
                     <label asp-for="Item.AssignorId" class="form-label"></label>
-                    <span asp-validation-for="Item.AssignorId" class="text-danger"></span>
+                    <span asp-validation-for="Item.AssignorId" class="invalid-feedback"></span>
                 </div>
             </div>
         </div>
