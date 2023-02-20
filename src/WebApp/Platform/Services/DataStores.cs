@@ -12,18 +12,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cts.WebApp.Platform.Services;
 
-public static class DataServices
+public static class DataStores
 {
-    public static void AddDataServices(this IServiceCollection services,
+    public static void AddDataStores(this IServiceCollection services,
         ConfigurationManager configuration, bool isLocal)
     {
-        // When running locally, you have the option to use in-memory data or build the database using LocalDB.
+        // When running locally, you have the option to use in-memory data or a database.
         if (isLocal && ApplicationSettings.LocalDevSettings.UseInMemoryData)
         {
             services.AddDbContext<AppDbContext>(opts =>
                 opts.UseInMemoryDatabase("TEMP_DB"));
 
-            // Uses static data if no database is built.
+            // Uses local static data if no database is built.
             services.AddSingleton<IActionTypeRepository, LocalActionTypeRepository>();
             services.AddSingleton<IComplaintRepository, LocalComplaintRepository>();
             services.AddSingleton<IConcernRepository, LocalConcernRepository>();

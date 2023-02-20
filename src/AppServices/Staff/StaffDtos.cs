@@ -42,6 +42,7 @@ public class StaffViewDto
     [UIHint("BoolActive")]
     public bool Active { get; init; } = true;
 
+    // Read-only properties
     public string DisplayName =>
         string.Join(" ", new[] { GivenName, FamilyName }.Where(s => !string.IsNullOrEmpty(s)));
 
@@ -61,6 +62,20 @@ public class StaffViewDto
 
     public string SortableFullName =>
         string.Join(", ", new[] { FamilyName, GivenName }.Where(s => !string.IsNullOrEmpty(s)));
+
+    public string SelectableNameWithOffice
+    {
+        get
+        {
+            var sn = new StringBuilder();
+            sn.Append(SortableFullName);
+
+            if (Office != null) sn.Append($" ({Office.Name})");
+            if (!Active) sn.Append(" [Inactive]");
+
+            return sn.ToString();
+        }
+    }
 
     public StaffUpdateDto AsUpdateDto() =>
         new() { Id = Id, Phone = Phone, OfficeId = Office?.Id, Active = Active };

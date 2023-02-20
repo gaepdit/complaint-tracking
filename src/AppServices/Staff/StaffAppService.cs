@@ -1,35 +1,33 @@
 ﻿using AutoMapper;
-using Cts.AppServices.Staff;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Identity;
-using Cts.EfRepository.Contexts;
+using Cts.Domain.Offices;
 using GaEpd.AppLibrary.Domain.Repositories;
 using GaEpd.AppLibrary.ListItems;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
-namespace Cts.EfRepository.Identity;
+namespace Cts.AppServices.Staff;
 
 public sealed class StaffAppService : IStaffAppService
 {
-    private readonly AppDbContext _context;
     private readonly IUserService _userService;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IMapper _mapper;
     private readonly IdentityErrorDescriber _errorDescriber;
+    private readonly IOfficeRepository _officeRepository;
 
     public StaffAppService(
-        AppDbContext context,
         IUserService userService,
         UserManager<ApplicationUser> userManager,
         IMapper mapper,
-        IdentityErrorDescriber errorDescriber)
+        IdentityErrorDescriber errorDescriber,
+        IOfficeRepository officeRepository)
     {
-        _context = context;
         _userService = userService;
         _userManager = userManager;
         _mapper = mapper;
         _errorDescriber = errorDescriber;
+        _officeRepository = officeRepository;
     }
 
     public async Task<StaffViewDto?> GetCurrentUserAsync()
@@ -47,15 +45,15 @@ public sealed class StaffAppService : IStaffAppService
     public async Task<List<StaffViewDto>> GetListAsync(StaffSearchDto filter)
     {
         var users = string.IsNullOrEmpty(filter.Role)
-            ? _context.Users.AsNoTracking().ApplyFilter(filter)
+            ? _userManager.Users.ApplyFilter(filter)
             : (await _userManager.GetUsersInRoleAsync(filter.Role)).AsQueryable().ApplyFilter(filter);
 
         return _mapper.Map<List<StaffViewDto>>(users);
     }
 
     public async Task<IReadOnlyList<ListItem<string>>> GetActiveStaffMembersAsync(CancellationToken token = default) =>
-        await _context.Users.AsNoTracking().FilterByActiveStatus(StaffSearchDto.ActiveStatus.Active)
-            .Select(e => new ListItem<string>(e.Id, e.SelectableNameWithOffice)).ToListAsync(token);
+        (await GetListAsync(new StaffSearchDto { Status = StaffSearchDto.ActiveStatus.Active }))
+            .Select(e => new ListItem<string>(e.Id, e.SelectableNameWithOffice)).ToList();
 
     public async Task<IList<string>> GetRolesAsync(string id) =>
         await _userManager.GetRolesAsync(await _userManager.FindByIdAsync(id));
@@ -94,15 +92,11 @@ public sealed class StaffAppService : IStaffAppService
         if (user is null) throw new EntityNotFoundException(typeof(ApplicationUser), resource.Id);
 
         user.Phone = resource.Phone;
-        user.Office = await _context.Offices.FindAsync(resource.OfficeId);
+        user.Office = resource.OfficeId == null ? null : await _officeRepository.FindAsync(resource.OfficeId.Value);
         user.Active = resource.Active;
 
-        _context.Attach(user);
-        _context.Update(user);
-        await _context.SaveChangesAsync();
-
-        return IdentityResult.Success;
+        return await _userManager.UpdateAsync(user);
     }
 
-    public void Dispose() => _context.Dispose();
+    public void Dispose() => _officeRepository.Dispose();
 }

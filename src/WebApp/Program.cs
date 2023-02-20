@@ -49,9 +49,9 @@ if (raygunApiKeySet)
     builder.Services.AddHttpContextAccessor(); // needed by RaygunScriptPartial
 }
 
-// Add App and data services.
+// Add app services and data stores.
 builder.Services.AddAppServices();
-builder.Services.AddDataServices(builder.Configuration, isLocal);
+builder.Services.AddDataStores(builder.Configuration, isLocal);
 
 // Initialize database.
 builder.Services.AddHostedService<MigratorHostedService>();
