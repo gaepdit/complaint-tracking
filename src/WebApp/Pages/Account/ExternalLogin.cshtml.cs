@@ -1,6 +1,5 @@
 using Cts.AppServices.Staff;
 using Cts.Domain.Identity;
-using Cts.WebApp.Platform.Local;
 using Cts.WebApp.Platform.Models;
 using Cts.WebApp.Platform.PageDisplayHelpers;
 using Cts.WebApp.Platform.Settings;
@@ -24,7 +23,6 @@ public class ExternalLoginModel : PageModel
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IConfiguration _configuration;
-    private readonly IWebHostEnvironment _environment;
     private readonly IStaffAppService _staffService;
     private readonly ILogger<ExternalLoginModel> _logger;
 
@@ -32,14 +30,12 @@ public class ExternalLoginModel : PageModel
         SignInManager<ApplicationUser> signInManager,
         UserManager<ApplicationUser> userManager,
         IConfiguration configuration,
-        IWebHostEnvironment environment,
         IStaffAppService staffService,
         ILogger<ExternalLoginModel> logger)
     {
         _signInManager = signInManager;
         _userManager = userManager;
         _configuration = configuration;
-        _environment = environment;
         _staffService = staffService;
         _logger = logger;
     }
@@ -52,9 +48,8 @@ public class ExternalLoginModel : PageModel
     {
         ReturnUrl = returnUrl ?? "/";
 
-        // If a local user is enabled, create user information and sign in locally.
-        if (_environment.IsLocalEnv() && !ApplicationSettings.LocalDevSettings.UseAzureAd)
-            return await SignInAsLocalUser();
+        // Use AzureAD authentication if enabled; otherwise, sign in as local user.
+        if (!ApplicationSettings.DevSettings.UseAzureAd) return await SignInAsLocalUser();
 
         // Request a redirect to the external login provider.
         const string provider = OpenIdConnectDefaults.AuthenticationScheme;
@@ -67,11 +62,11 @@ public class ExternalLoginModel : PageModel
     {
         _logger.LogInformation(
             "Local user signin attempted with settings {LocalUserIsAuthenticated} and {LocalUserIsAdmin}",
-            ApplicationSettings.LocalDevSettings.LocalUserIsAuthenticated,
-            ApplicationSettings.LocalDevSettings.LocalUserIsAdmin);
-        if (!ApplicationSettings.LocalDevSettings.LocalUserIsAuthenticated) return Forbid();
+            ApplicationSettings.DevSettings.LocalUserIsAuthenticated,
+            ApplicationSettings.DevSettings.LocalUserIsAdmin);
+        if (!ApplicationSettings.DevSettings.LocalUserIsAuthenticated) return Forbid();
 
-        var staff = ApplicationSettings.LocalDevSettings.LocalUserIsAdmin
+        var staff = ApplicationSettings.DevSettings.LocalUserIsAdmin
             ? (await _staffService.GetListAsync(new StaffSearchDto { Name = "Admin" })).First()
             : (await _staffService.GetListAsync(new StaffSearchDto { Name = "General" })).First();
 
@@ -159,9 +154,9 @@ public class ExternalLoginModel : PageModel
 
         _logger.LogInformation("Created new user {UserName}", user.UserName);
 
-        // Add new user to application Roles if seeded in app settings (or running locally as local admin user).
+        // Add new user to application Roles if seeded in app settings or local admin user setting is enabled.
         var seedUsers = _configuration.GetSection("SeedAdminUsers").Get<string[]>();
-        if ((_environment.IsLocalEnv() && ApplicationSettings.LocalDevSettings.LocalUserIsAdmin) ||
+        if (ApplicationSettings.DevSettings.LocalUserIsAdmin ||
             (seedUsers != null && seedUsers.Contains(user.Email, StringComparer.InvariantCultureIgnoreCase)))
         {
             _logger.LogInformation("Seeding roles for new user {UserName}", user.UserName);

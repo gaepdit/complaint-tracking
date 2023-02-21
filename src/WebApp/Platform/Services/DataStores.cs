@@ -14,15 +14,11 @@ namespace Cts.WebApp.Platform.Services;
 
 public static class DataStores
 {
-    public static void AddDataStores(this IServiceCollection services,
-        ConfigurationManager configuration, bool isLocal)
+    public static void AddDataStores(this IServiceCollection services, ConfigurationManager configuration)
     {
-        // When running locally, you have the option to use in-memory data or a database.
-        if (isLocal && ApplicationSettings.LocalDevSettings.UseInMemoryData)
+        // When configured, use in-memory data; otherwise use a SQL Server database.
+        if (ApplicationSettings.DevSettings.UseInMemoryData)
         {
-            services.AddDbContext<AppDbContext>(opts =>
-                opts.UseInMemoryDatabase("TEMP_DB"));
-
             // Uses local static data if no database is built.
             services.AddSingleton<IActionTypeRepository, LocalActionTypeRepository>();
             services.AddSingleton<IComplaintRepository, LocalComplaintRepository>();
@@ -31,10 +27,17 @@ public static class DataStores
         }
         else
         {
-            services.AddDbContext<AppDbContext>(opts =>
-                opts.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
-                    x => x.MigrationsAssembly("EfRepository")));
+            string connectionString = configuration.GetConnectionString("DefaultConnection");
 
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                services.AddDbContext<AppDbContext>(opts => opts.UseInMemoryDatabase("TEMP_DB"));
+            }
+            else
+            {
+                services.AddDbContext<AppDbContext>(opts =>
+                    opts.UseSqlServer(connectionString, x => x.MigrationsAssembly("EfRepository")));
+            }
 
             services.AddScoped<IActionTypeRepository, ActionTypeRepository>();
             services.AddScoped<IComplaintRepository, ComplaintRepository>();
@@ -43,7 +46,7 @@ public static class DataStores
         }
 
         // When running locally, you have the option to access file in memory or use the local filesystem.
-        if (isLocal && ApplicationSettings.LocalDevSettings.UseInMemoryFiles)
+        if (ApplicationSettings.DevSettings.UseInMemoryFiles)
         {
             services.AddTransient<IFileService, InMemoryFileService>();
         }

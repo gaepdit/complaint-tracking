@@ -10,12 +10,12 @@ namespace Cts.WebApp.Platform.Services;
 
 public static class IdentityStores
 {
-    public static void AddIdentityStores(this IServiceCollection services, bool isLocal)
+    public static void AddIdentityStores(this IServiceCollection services)
     {
         var identityBuilder = services.AddIdentity<ApplicationUser, IdentityRole>();
 
         // When running locally, you have the option to use in-memory data or build the database using LocalDB.
-        if (isLocal && ApplicationSettings.LocalDevSettings.UseInMemoryData)
+        if (ApplicationSettings.DevSettings.UseInMemoryData)
         {
             // Add local UserStore and RoleStore.
             services.AddSingleton<IUserStore<ApplicationUser>, LocalUserStore>();

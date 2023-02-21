@@ -1,5 +1,4 @@
 ﻿using Cts.Domain.Identity;
-using Cts.WebApp.Platform.Local;
 using Cts.WebApp.Platform.Settings;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -14,13 +13,8 @@ namespace Cts.WebApp.Pages.Account;
 public class LogoutModel : PageModel
 {
     private readonly SignInManager<ApplicationUser> _signInManager;
-    private readonly IWebHostEnvironment _environment;
 
-    public LogoutModel(SignInManager<ApplicationUser> signInManager, IWebHostEnvironment environment)
-    {
-        _signInManager = signInManager;
-        _environment = environment;
-    }
+    public LogoutModel(SignInManager<ApplicationUser> signInManager) => _signInManager = signInManager;
 
     public Task<IActionResult> OnGetAsync() => LogOutAndRedirectToIndex();
 
@@ -29,7 +23,7 @@ public class LogoutModel : PageModel
     private async Task<IActionResult> LogOutAndRedirectToIndex()
     {
         // If Azure AD is enabled, sign out all authentication schemes.
-        if (!_environment.IsLocalEnv() || ApplicationSettings.LocalDevSettings.UseAzureAd)
+        if (ApplicationSettings.DevSettings.UseAzureAd)
             return SignOut(new AuthenticationProperties { RedirectUri = "/Index" },
                 IdentityConstants.ApplicationScheme,
                 OpenIdConnectDefaults.AuthenticationScheme);

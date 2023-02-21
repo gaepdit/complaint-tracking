@@ -19,7 +19,7 @@ Public complaints are time-critical and high-profile public information. The CTS
 
 ## Info for developers
 
-This is an ASP.NET 6 web application.
+This is an ASP.NET 6 web application. The CTS is currently being completely rebuilt in the `vNext` branch.
 
 ### Prerequisites for development
 
@@ -30,41 +30,47 @@ This is an ASP.NET 6 web application.
 
 The solution contains the following projects:
 
-* **Domain** — A class library containing the data models and business logic.
+* **Domain** — A class library containing the data models, business logic, and repository interfaces.
 * **AppServices** — A class library containing the services used by an application to interact with the domain.
-* **LocalRepository** — A class library implementing the repository and services without using a database (for local development).
-* **EfRepository** — A class library implementing the repository and services using LocalDb and Entity Framework.
+* **LocalRepository** — A class library implementing the repositories and data stores using static in-memory test data (for local development).
+* **EfRepository** — A class library implementing the repositories and data stores using Entity Framework and a database (as specified by the configured connection string).
 * **WebApp** — The front end web application.
 
 There are also corresponding unit test projects for each, plus a **TestData** project containing test data for development and testing.
 
-### Launch profiles
+### Development settings
 
-There are two launch profiles:
+The following development settings configure the data stores and authentication. To change these settings, add an "appsettings.Development.json" file in the root of the "WebApp" folder with a `DevSettings` section. (Optionally, the settings file can also include an `AzureAd` section or database connection string as needed.)
 
-* **WebApp Local** — This profile uses data in the "TestData" project and either uses the data in-memory or builds and seeds a database. A local user account can be used to simulate authentication, or an Azure AD account can be configured.
+- *UseInMemoryData* — 
+    - When `true`, the `LocalRepository` project is used for repositories and data stores. Data is initially populated from the `TestData` project. 
+    - When `false`, the `EfRepository` project is used, and a SQL Server database (as specified by the connection string) is seeded from the `TestData` project. <small>(If the connection string is missing, then a temporary EF Core in-memory database provider is used. This option is included for convenience and is not recommended.)</small>
+- *UseEfMigrations* — Uses Entity Framework migrations when `true`. When `false`, the database is deleted and recreated on each run. (Only applies if *UseInMemoryData* is `false`.)
+- *UseAzureAd* — If `true`, connects to Azure AD for user authentication. (The app must be registered in the Azure portal, and configuration added to the settings file.) If `false`, authentication is simulated using test user data.
+- *LocalUserIsAuthenticated* — Simulates a successful login with a test account when `true`. Simulates a failed login when `false`. (Only applies if *UseAzureAd* is `false`.)
+- *LocalUserIsAdmin* — Adds all App Roles to the logged in account when `true` or no roles when `false`. (Applies whether *UserAzureAd* is `true` or `false`.)
+- *UseInMemoryFiles* — If `true`, files are seeded from the TestData project and stored in memory. If `false`, attachment files are saved/loaded from the file system.
 
-    You can configure various development scenarios by creating an "appsettings.Local.json" file in the "WebApp" folder with the following settings:
+When running in the production environment, the settings are automatically set as follows:
 
-    - *UseInMemoryData* — Uses in-memory data when `true`. Connects to a SQL Server database when `false`.
-    - *UseEfMigrations* - Uses Entity Framework migrations when `true`. When set to `false`, the database is deleted and recreated on each run. (Only applies if *UseInMemoryData* is `false`.)
-    - *UseAzureAd* — If `true`, the app must be registered in the Azure portal, and configuration settings added in the "AzureAd" settings section. If `false`, authentication is simulated using test user data.
-    - *LocalUserIsAuthenticated* — Simulates a successful login with a test account when `true`. Simulates a failed login when `false`. (Only applies if *UseAzureAd* is `false`.)
-    - *LocalUserIsAdmin* — Adds all App Roles to the logged in account when `true` or no roles when `false`. (Applies whether *UserAzureAd* is `true` or `false`.)
-    - *UseInMemoryFiles* — If `true`, files are seeded from the TestData project and stored in memory. If `false`, attachment files are saved/loaded from the file system.
+```csharp
+UseInMemoryData = false,
+UseEfMigrations = true,
+UseAzureAd = true,
+LocalUserIsAuthenticated = false,
+LocalUserIsAdmin = false,
+UseInMemoryFiles = false,
+```
 
-* **WebApp Dev Server** — This profile connects to a remote database server for data. *To use this profile, you must add the "appsettings.Development.json" file from the "app-config" repo.*
+Here's a visualization of how the settings configure data storage at runtime.
 
-    Most development should be done using the Local profile. The Dev Server profile is only needed when specifically troubleshooting issues with the database server or SOG account.
-
-Here's a visualization of how each launch profile (plus the `UseInMemoryData` setting) configures the data storage at runtime.
 ```mermaid
 flowchart LR
-    subgraph SPL["'Local' launch profile & UseInMemoryData = true"]
+    subgraph SPL["'UseInMemoryData' = true"]
         direction LR
         D[Domain]
         T["Test Data (in memory)"]
-        R[Local Repository]
+        R[Local Repositories]
         A[App Services]
         W([Web App])
 
@@ -78,37 +84,38 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    subgraph SPB["'Local' launch profile & UseInMemoryData = false"]
+    subgraph SPB["'UseInMemoryData' = false"]
         direction LR
         D[Domain]
         T[Test Data]
-        R[EfRepository]
+        R[EF Repositories]
         A[App Services]
         W([Web App])
-        B[(LocalDB)]
+        B[(Database)]
 
         W --> A
         A --> D
         R --> B
         A --> R
         T -->|Seed| B
-        B -.-> D
+        B --> D
     end
 ```
 
 ```mermaid
 flowchart LR
-    subgraph SPD["'Dev Server' launch profile"]
+    subgraph SPD["Production or staging environment"]
         direction LR
         D[Domain]
-        R[EfRepository]
+        R[EF Repositories]
         A[App Services]
         W([Web App])
-        B[(DB Server)]
+        B[(Database)]
 
         W --> A
         A --> D
         A --> R
-        R ==>|VPN| B -.-> D
+        R --> B
+        B --> D
     end
 ```

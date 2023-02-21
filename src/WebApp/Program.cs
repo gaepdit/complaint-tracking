@@ -2,30 +2,24 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.OpenApi.Models;
 using Mindscape.Raygun4Net.AspNetCore;
 using Cts.AppServices.ServiceCollectionExtensions;
-using Cts.WebApp.Platform.Local;
 using Cts.WebApp.Platform.Raygun;
 using Cts.WebApp.Platform.Services;
 using Cts.WebApp.Platform.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
-var isLocal = builder.Environment.IsLocalEnv();
 
 // Set default timeout for regular expressions.
 // https://learn.microsoft.com/en-us/dotnet/standard/base-types/best-practices#use-time-out-values
 AppDomain.CurrentDomain.SetData("REGEX_DEFAULT_MATCH_TIMEOUT", TimeSpan.FromMilliseconds(100));
 
 // Bind application settings.
-builder.Configuration.GetSection(nameof(ApplicationSettings.LocalDevSettings))
-    .Bind(ApplicationSettings.LocalDevSettings);
-builder.Configuration.GetSection(nameof(ApplicationSettings.RaygunSettings))
-    .Bind(ApplicationSettings.RaygunSettings);
-var raygunApiKeySet = !string.IsNullOrEmpty(ApplicationSettings.RaygunSettings.ApiKey);
+AppConfiguration.BindSettings(builder);
 
 // Configure Identity.
-builder.Services.AddIdentityStores(isLocal);
+builder.Services.AddIdentityStores();
 
 // Configure Authentication.
-builder.Services.AddAuthenticationServices(builder.Configuration, isLocal);
+builder.Services.AddAuthenticationServices(builder.Configuration);
 
 // Persist data protection keys.
 var keysFolder = Path.Combine(builder.Configuration["PersistedFilesBasePath"], "DataProtectionKeys");
@@ -38,10 +32,11 @@ builder.Services.AddRazorPages();
 // Starting value for HSTS max age is five minutes to allow for debugging.
 // For more info on updating HSTS max age value for production, see:
 // https://gaepdit.github.io/web-apps/use-https.html#how-to-enable-hsts
-if (!isLocal) builder.Services.AddHsts(opts => opts.MaxAge = TimeSpan.FromMinutes(300));
+if (!builder.Environment.IsDevelopment()) 
+    builder.Services.AddHsts(opts => opts.MaxAge = TimeSpan.FromMinutes(300));
 
 // Configure application monitoring.
-if (raygunApiKeySet)
+if (!string.IsNullOrEmpty(ApplicationSettings.RaygunSettings.ApiKey))
 {
     builder.Services.AddTransient<IErrorLogger, ErrorLogger>();
     builder.Services.AddRaygun(builder.Configuration,
@@ -51,7 +46,7 @@ if (raygunApiKeySet)
 
 // Add app services and data stores.
 builder.Services.AddAppServices();
-builder.Services.AddDataStores(builder.Configuration, isLocal);
+builder.Services.AddDataStores(builder.Configuration);
 
 // Initialize database.
 builder.Services.AddHostedService<MigratorHostedService>();
@@ -77,20 +72,19 @@ builder.Services.AddWebOptimizer();
 
 // Build the application.
 var app = builder.Build();
-var env = app.Environment;
 
 // Configure the HTTP request pipeline.
-if (env.IsProduction() || env.IsStaging())
+if (app.Environment.IsDevelopment())
+{
+    // Development
+    app.UseDeveloperExceptionPage();
+}
+else
 {
     // Production or Staging
     app.UseExceptionHandler("/Error");
     app.UseHsts();
-    if (raygunApiKeySet) app.UseRaygun();
-}
-else
-{
-    // Development or Local
-    app.UseDeveloperExceptionPage();
+    if (!string.IsNullOrEmpty(ApplicationSettings.RaygunSettings.ApiKey)) app.UseRaygun();
 }
 
 // Configure the application pipeline.

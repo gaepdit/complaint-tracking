@@ -115,7 +115,7 @@ public sealed class LocalUserStore :
             .Select(e => e.RoleId);
         var rolesForUser = Roles
             .Where(r => roleIdsForUser.Contains(r.Id))
-            .Select(r => r.NormalizedName).ToList();
+            .Select(r => r.Name).ToList();
         return Task.FromResult<IList<string>>(rolesForUser);
     }
 
