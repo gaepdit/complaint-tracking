@@ -1,8 +1,6 @@
 ﻿using Cts.AppServices.Attachments;
 using Cts.AppServices.ComplaintActions;
-using Cts.AppServices.Offices;
 using Cts.Domain.Complaints;
-using Cts.Domain.Concerns;
 using Cts.Domain.DataProcessing;
 using Cts.Domain.ValueObjects;
 using System.ComponentModel.DataAnnotations;
@@ -22,10 +20,10 @@ public class ComplaintPublicViewDto
 
     // Properties: Status & meta-data
 
-    public ComplaintStatus Status { get; init; } = ComplaintStatus.New;
+    public ComplaintStatus Status { get; init; }
 
-    [Display(Name = "Date Received")]
-    public DateTime DateReceived { get; init; }
+    [Display(Name = "Complaint Received")]
+    public DateTimeOffset DateReceived { get; init; }
 
     // Properties: Complaint details
 
@@ -50,45 +48,34 @@ public class ComplaintPublicViewDto
     public string? ComplaintCounty { get; init; }
 
     [Display(Name = "Primary Concern")]
-    public Concern? PrimaryConcern { get; init; }
-
-    public string? PrimaryConcernName => PrimaryConcern?.Name;
+    public string? PrimaryConcernName { get; init; }
 
     [Display(Name = "Secondary Concern")]
-    public Concern? SecondaryConcern { get; init; }
-
-    public string? SecondaryConcernName => SecondaryConcern?.Name;
+    public string? SecondaryConcernName { get; init; }
 
     // Properties: Source
 
     [Display(Name = "Facility ID Number")]
-    public string? SourceFacilityId { get; set; }
+    public string? SourceFacilityId { get; init; }
 
     [Display(Name = "Source Name")]
-    public string? SourceFacilityName { get; set; }
+    public string? SourceFacilityName { get; init; }
 
     [Display(Name = "Source Contact")]
-    public string? SourceContactName { get; set; }
+    public string? SourceContactName { get; init; }
 
     [Display(Name = "Source Address")]
-    public Address? SourceAddress { get; set; }
+    public IncompleteAddress? SourceAddress { get; init; }
 
     // Properties: Assignment/History
 
     [Display(Name = "Assigned Office")]
-    public OfficeViewDto? CurrentOffice { get; init; }
-
-    public string? CurrentOfficeName => CurrentOffice?.Name;
-
-    // Properties: Actions
-
-    [Display(Name = "Actions")]
-    public IReadOnlyList<ComplaintActionPublicViewDto>? ComplaintActions { get; set; }
+    public string? CurrentOfficeName { get; init; }
 
     // Properties: Review/Closure
 
-    [Display(Name = "Date Complaint Closed")]
-    public DateTime? DateComplaintClosed { get; init; }
+    [Display(Name = "Complaint Closed")]
+    public DateTimeOffset? DateComplaintClosed { get; init; }
 
     [Display(Name = "Review Comments")]
     public string? ReviewComments
@@ -96,6 +83,13 @@ public class ComplaintPublicViewDto
         get => _reviewComments;
         init => _reviewComments = PersonalInformation.RedactPii(value);
     }
+
+    // === Lists ===
+
+    // Properties: Actions
+
+    [Display(Name = "Actions")]
+    public IReadOnlyList<ComplaintActionPublicViewDto>? ComplaintActions { get; set; }
 
     // Properties: Attachments
 

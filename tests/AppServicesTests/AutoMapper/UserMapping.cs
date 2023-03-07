@@ -46,7 +46,7 @@ public class UserMapping
             FamilyName = TestConstants.ValidName,
             Email = TestConstants.ValidEmail,
             Phone = "123-456-7890",
-            Office = new OfficeViewDto { Id = Guid.NewGuid(), Name = TestConstants.ValidName },
+            Office = new OfficeDisplayViewDto { Id = Guid.NewGuid(), Name = TestConstants.ValidName },
         };
 
         var result = AppServicesTestsGlobal.Mapper!.Map<ApplicationUser>(item);

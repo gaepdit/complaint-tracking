@@ -71,7 +71,7 @@ public class ExternalLoginModel : PageModel
             : (await _staffService.GetListAsync(new StaffSearchDto { Name = "General" })).First();
 
         var user = await _userManager.FindByIdAsync(staff.Id);
-        _logger.LogInformation("Local user {StaffName} with ID {StaffId} signed in", staff.DisplayName, staff.Id);
+        _logger.LogInformation("Local user {StaffName} with ID {StaffId} signed in", staff.Name, staff.Id);
 
         await _signInManager.SignInAsync(user, false);
         return LocalRedirect(ReturnUrl);

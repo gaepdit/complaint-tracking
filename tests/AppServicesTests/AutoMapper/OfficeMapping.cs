@@ -13,7 +13,7 @@ public class OfficeMapping
     {
         var item = new Office(Guid.NewGuid(), TestConstants.ValidName);
 
-        var result = AppServicesTestsGlobal.Mapper!.Map<OfficeViewDto>(item);
+        var result = AppServicesTestsGlobal.Mapper!.Map<OfficeAdminViewDto>(item);
 
         using (new AssertionScope())
         {

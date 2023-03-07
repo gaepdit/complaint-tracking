@@ -1,4 +1,5 @@
 ﻿using Cts.AppServices.Complaints;
+using Cts.AppServices.UserServices;
 using Cts.Domain.Attachments;
 using Cts.Domain.Complaints;
 using Cts.TestData;
@@ -11,14 +12,13 @@ public class GetPublicAttachment
     [Test]
     public async Task WhenItemsExists_ReturnsViewDtoList()
     {
-        var item = AttachmentData.GetAttachments.First(e => !e.IsDeleted);
-        var complaint = ComplaintData.GetComplaints.First(e => e is { IsDeleted: false, ComplaintClosed: true });
+        var item = AttachmentData.GetAttachments.First(e =>
+            !e.IsDeleted && !e.Complaint.IsDeleted && e.Complaint.ComplaintClosed);
         var repoMock = new Mock<IComplaintRepository>();
-        repoMock.Setup(l => l.FindAttachmentAsync(item.Id, CancellationToken.None))
+        repoMock.Setup(l => l.FindAttachmentAsync(It.IsAny<Guid>(), CancellationToken.None))
             .ReturnsAsync(item);
-        repoMock.Setup(l => l.FindAsync(It.IsAny<Expression<Func<Complaint, bool>>>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(complaint);
-        var appService = new ComplaintAppService(repoMock.Object, AppServicesTestsGlobal.Mapper!);
+        var appService = new ComplaintAppService(repoMock.Object, Mock.Of<IComplaintManager>(),
+            AppServicesTestsGlobal.Mapper!, Mock.Of<IUserService>());
 
         var result = await appService.GetPublicAttachmentAsync(item.Id);
 
@@ -31,7 +31,8 @@ public class GetPublicAttachment
         var repoMock = new Mock<IComplaintRepository>();
         repoMock.Setup(l => l.FindAttachmentAsync(It.IsAny<Guid>(), CancellationToken.None))
             .ReturnsAsync((Attachment?)null);
-        var appService = new ComplaintAppService(repoMock.Object, AppServicesTestsGlobal.Mapper!);
+        var appService = new ComplaintAppService(repoMock.Object, Mock.Of<IComplaintManager>(),
+            AppServicesTestsGlobal.Mapper!, Mock.Of<IUserService>());
 
         var result = await appService.GetPublicAttachmentAsync(Guid.Empty);
 
@@ -45,7 +46,8 @@ public class GetPublicAttachment
         var repoMock = new Mock<IComplaintRepository>();
         repoMock.Setup(l => l.FindAttachmentAsync(It.IsAny<Guid>(), CancellationToken.None))
             .ReturnsAsync(item);
-        var appService = new ComplaintAppService(repoMock.Object, AppServicesTestsGlobal.Mapper!);
+        var appService = new ComplaintAppService(repoMock.Object, Mock.Of<IComplaintManager>(),
+            AppServicesTestsGlobal.Mapper!, Mock.Of<IUserService>());
 
         var result = await appService.GetPublicAttachmentAsync(item.Id);
 
@@ -53,15 +55,15 @@ public class GetPublicAttachment
     }
 
     [Test]
-    public async Task WhenNoCorrespondingComplaintExists_ReturnsNull()
+    public async Task WhenCorrespondingComplaintIsNotPublic_ReturnsNull()
     {
-        var item = AttachmentData.GetAttachments.First(e => !e.IsDeleted);
+        var item = AttachmentData.GetAttachments.First(e => !e.IsDeleted && e.Complaint.IsDeleted);
+
         var repoMock = new Mock<IComplaintRepository>();
-        repoMock.Setup(l => l.FindAttachmentAsync(item.Id, CancellationToken.None))
+        repoMock.Setup(l => l.FindAttachmentAsync(It.IsAny<Guid>(), CancellationToken.None))
             .ReturnsAsync(item);
-        repoMock.Setup(l => l.FindAsync(It.IsAny<int>(), CancellationToken.None))
-            .ReturnsAsync((Complaint?)null);
-        var appService = new ComplaintAppService(repoMock.Object, AppServicesTestsGlobal.Mapper!);
+        var appService = new ComplaintAppService(repoMock.Object,Mock.Of<IComplaintManager>(),
+            AppServicesTestsGlobal.Mapper!, Mock.Of<IUserService>());
 
         var result = await appService.GetPublicAttachmentAsync(item.Id);
 

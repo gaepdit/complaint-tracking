@@ -1,6 +1,6 @@
 using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.Dto;
-using Cts.WebApp.Pages.Public.Complaint;
+using Cts.WebApp.Pages.Public.Complaints;
 using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -15,7 +15,7 @@ public class IndexTests
         var item = Mock.Of<ComplaintPublicViewDto>();
 
         var serviceMock = new Mock<IComplaintAppService>();
-        serviceMock.Setup(l => l.GetPublicViewAsync(It.IsAny<int>(), CancellationToken.None))
+        serviceMock.Setup(l => l.GetPublicAsync(It.IsAny<int>(), CancellationToken.None))
             .ReturnsAsync(item);
         var pageModel = new IndexModel();
 
@@ -47,7 +47,7 @@ public class IndexTests
     public async Task OnGet_NonexistentIdReturnsNotFound()
     {
         var serviceMock = new Mock<IComplaintAppService>();
-        serviceMock.Setup(l => l.GetPublicViewAsync(It.IsAny<int>(), CancellationToken.None))
+        serviceMock.Setup(l => l.GetPublicAsync(It.IsAny<int>(), CancellationToken.None))
             .ReturnsAsync((ComplaintPublicViewDto?)null);
         var pageModel = new IndexModel();
 

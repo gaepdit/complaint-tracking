@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Cts.AppServices.Complaints.Dto;
 
@@ -7,27 +6,27 @@ public class ComplaintPublicSearchDto
 {
     // Sorting
 
-    public SortBy Sort { get; set; } = SortBy.Id;
-    public string SortByName => Sort.ToString();
+    public SortBy Sort { get; init; } = SortBy.IdAsc;
+    public string SortByName() => Sort.ToString();
 
     // Dates
 
     [Display(Name = "From")]
     [DataType(DataType.Date)]
-    public DateTime? DateFrom { get; set; }
+    public DateTime? DateFrom { get; init; }
 
     [Display(Name = "Through")]
     [DataType(DataType.Date)]
-    public DateTime? DateTo { get; set; }
+    public DateTime? DateTo { get; init; }
 
     // Complaint
 
     [Display(Name = "Description of Complaint")]
     [StringLength(100)]
-    public string? Nature { get; set; }
+    public string? Description { get; set; }
 
     [Display(Name = "Type of Complaint")]
-    public Guid? Type { get; set; }
+    public Guid? Concern { get; init; }
 
     // Source
 
@@ -48,45 +47,35 @@ public class ComplaintPublicSearchDto
     public string? City { get; set; }
 
     [Display(Name = "State")]
-    public string? State { get; set; }
+    public string? State { get; init; }
 
     [Display(Name = "Postal Code")]
     [StringLength(10)]
     public string? PostalCode { get; set; }
 
     // UI Routing
-    public IDictionary<string, string?> AsRouteValues =>
-        new Dictionary<string, string?>
-        {
-            { nameof(Sort), Sort.ToString() },
-            { nameof(DateFrom), DateFrom?.ToString("d") },
-            { nameof(DateTo), DateTo?.ToString("d") },
-            { nameof(Nature), Nature },
-            { nameof(Type), Type?.ToString() },
-            { nameof(SourceName), SourceName },
-            { nameof(County), County },
-            { nameof(Street), Street },
-            { nameof(City), City },
-            { nameof(State), State },
-            { nameof(PostalCode), PostalCode },
-        };
+    public IDictionary<string, string?> AsRouteValues() => new Dictionary<string, string?>
+    {
+        { nameof(Sort), Sort.ToString() },
+        { nameof(DateFrom), DateFrom?.ToString("d") },
+        { nameof(DateTo), DateTo?.ToString("d") },
+        { nameof(Description), Description },
+        { nameof(Concern), Concern?.ToString() },
+        { nameof(SourceName), SourceName },
+        { nameof(County), County },
+        { nameof(Street), Street },
+        { nameof(City), City },
+        { nameof(State), State },
+        { nameof(PostalCode), PostalCode },
+    };
 
     public void TrimAll()
     {
-        Nature = Nature?.Trim();
+        Description = Description?.Trim();
         SourceName = SourceName?.Trim();
         County = County?.Trim();
         Street = Street?.Trim();
         City = City?.Trim();
-        State = State?.Trim();
         PostalCode = PostalCode?.Trim();
     }
-}
-
-public enum SortBy
-{
-    [Description("Id")] Id,
-    [Description("Id desc")] IdDesc,
-    [Description("DateReceived, Id")] ReceivedDate,
-    [Description("DateReceived desc, Id")] ReceivedDateDesc,
 }

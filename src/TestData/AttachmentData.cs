@@ -1,4 +1,5 @@
 using Cts.Domain.Attachments;
+using Cts.TestData.Identity;
 
 namespace Cts.TestData;
 
@@ -8,54 +9,60 @@ internal static class AttachmentData
     {
         new Attachment(new Guid("00000000-0000-0000-0000-000000000101"))
         {
-            ComplaintId = 1,
+            Complaint = ComplaintData.GetComplaints.ElementAt(0),
             FileName = "FileOne.png",
             FileExtension = ".png",
             Size = 1,
-            DateUploaded = DateTime.Today.AddDays(-2),
+            DateUploaded = DateTimeOffset.Now.AddDays(-2),
+            UploadedBy = UserData.GetUsers.ElementAt(1),
             IsImage = true,
         },
         new Attachment(new Guid("00000000-0000-0000-0000-000000000102"))
         {
-            ComplaintId = 1,
+            Complaint = ComplaintData.GetComplaints.ElementAt(0),
             FileName = "File Two.svg",
             FileExtension = ".svg",
             Size = 10,
-            DateUploaded = DateTime.Today.AddDays(-1),
+            DateUploaded = DateTimeOffset.Now.AddDays(-1),
+            UploadedBy = UserData.GetUsers.ElementAt(1),
             IsImage = true,
         },
         new Attachment(new Guid("00000000-0000-0000-0000-000000000103"))
         {
-            ComplaintId = 1,
+            Complaint = ComplaintData.GetComplaints.ElementAt(0),
             FileName = "File-Three-💻.pdf",
             FileExtension = ".pdf",
             Size = 100000,
-            DateUploaded = DateTime.Today.AddDays(-1),
+            UploadedBy = UserData.GetUsers.ElementAt(2),
+            DateUploaded = DateTimeOffset.Now.AddDays(-1),
         },
         new Attachment(new Guid("00000000-0000-0000-0000-000000000104"))
         {
-            ComplaintId = 1,
+            Complaint = ComplaintData.GetComplaints.ElementAt(0),
             FileName = "File-Four-Empty-File.png",
             FileExtension = ".png",
             Size = 1000,
-            DateUploaded = DateTime.Today.AddDays(-3),
+            DateUploaded = DateTimeOffset.Now.AddDays(-3),
+            UploadedBy = UserData.GetUsers.ElementAt(0),
             IsImage = true,
         },
         new Attachment(new Guid("00000000-0000-0000-0000-000000000105"))
         {
-            ComplaintId = 1,
+            Complaint = ComplaintData.GetComplaints.ElementAt(0),
             FileName = "File-Five-Attachment-Deleted.pdf",
             FileExtension = ".pdf",
             Size = 1000,
-            DateUploaded = DateTime.Today.AddDays(-3),
+            DateUploaded = DateTimeOffset.Now.AddDays(-3),
+            UploadedBy = UserData.GetUsers.ElementAt(0),
         },
         new Attachment(new Guid("00000000-0000-0000-0000-000000000106"))
         {
-            ComplaintId = 4,
+            Complaint = ComplaintData.GetComplaints.ElementAt(3),
             FileName = "File-Six-Complaint-Deleted.pdf",
             FileExtension = ".pdf",
             Size = 1000,
-            DateUploaded = DateTime.Today.AddDays(-3),
+            DateUploaded = DateTimeOffset.Now.AddDays(-3),
+            UploadedBy = UserData.GetUsers.ElementAt(0),
         },
     };
 
@@ -68,10 +75,12 @@ internal static class AttachmentData
             if (_attachments is not null) return _attachments;
 
             _attachments = AttachmentSeedItems;
-            _attachments.ElementAt(4).SetDeleted(null);
+            _attachments.ElementAt(4).SetDeleted("00000000-0000-0000-0000-000000000002");
             return _attachments;
         }
     }
+
+    public static void ClearData() => _attachments = null;
 
     private static List<AttachmentFile> AttachmentFilesSeedItems => new()
     {

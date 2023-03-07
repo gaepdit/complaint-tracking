@@ -1,4 +1,5 @@
 ﻿using Cts.Domain.ActionTypes;
+using Cts.Domain.Complaints;
 using Cts.Domain.Identity;
 using JetBrains.Annotations;
 
@@ -15,18 +16,18 @@ public class ComplaintAction : AuditableSoftDeleteEntity
 
     // Properties
 
-    public int ComplaintId { get; init; }
+    public Complaint Complaint { get; init; } = default!;
 
-    public DateTime ActionDate { get; init; }
+    public DateTimeOffset ActionDate { get; init; }
 
-    public ActionType ActionType { get; init; } = null!;
+    public ActionType ActionType { get; init; } = default!;
 
     [StringLength(100)]
     public string? Investigator { get; init; }
 
     public DateTimeOffset DateEntered { get; init; }
 
-    public ApplicationUser EnteredBy { get; set; } = null!;
+    public ApplicationUser EnteredBy { get; init; } = default!;
 
-    public string? Comments { get; set; }
+    public string? Comments { get; init; }
 }

@@ -1,4 +1,5 @@
 ﻿@page "{id:Guid?}"
+@using Cts.WebApp.Pages.Shared.DisplayTemplates;
 @model EditRolesModel
 @{
     ViewData["Title"] = "Edit User Roles";
@@ -7,17 +8,17 @@
 <h1>@ViewData["Title"]</h1>
 <hr />
 
-<h2>@Model.DisplayStaff.DisplayName</h2>
+<h2>@Model.DisplayStaff.Name</h2>
 
 <dl class="row">
     <dt class="col-sm-3">Email</dt>
     <dd class="col-sm-9">@Model.DisplayStaff.Email</dd>
 
     <dt class="col-sm-3">Phone</dt>
-    <dd class="col-sm-9">@Html.DisplayFor(m => m.DisplayStaff.Phone, "StringOrNone")</dd>
+    <dd class="col-sm-9">@Html.DisplayFor(m => m.DisplayStaff.Phone, TemplateNames.StringOrNone)</dd>
 
     <dt class="col-sm-3">Office</dt>
-    <dd class="col-sm-9">@Html.DisplayFor(m => m.OfficeName, "StringOrNone")</dd>
+    <dd class="col-sm-9">@Html.DisplayFor(m => m.OfficeName, TemplateNames.StringOrNone)</dd>
 </dl>
 
 <div class="p-3 border rounded-3 bg-light mb-3">

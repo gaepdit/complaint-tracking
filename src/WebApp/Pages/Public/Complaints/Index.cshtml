@@ -1,0 +1,141 @@
+﻿@page "{id:int?}"
+@using Cts.WebApp.Pages.Shared.DisplayTemplates;
+@using GaEpd.AppLibrary.Enums
+@using System.Globalization
+@model IndexModel
+@{
+    ViewData["Title"] = $"Complaint ID {Model.Item.Id}";
+}
+
+<h1>
+    @ViewData["Title"] <em class="text-brand">— Public Copy</em>
+</h1>
+
+<p>
+    <small class="text-muted">Report generated @DateTime.Now.ToString(Cts.WebApp.Platform.Constants.DateTimeFormatConstants.LongDateTimeFormat).</small>
+</p>
+
+<div class="container">
+    <dl class="row">
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.DateReceived)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.DateReceived, TemplateNames.LongDateTime)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CurrentOfficeName)</dt>
+        <dd class="col-sm-8 col-lg-9">@Model.Item.CurrentOfficeName</dd>
+    </dl>
+</div>
+
+<h2>Status: <em class="text-brand">@Model.Item.Status.GetDisplayName()</em></h2>
+
+<div class="container">
+    <dl class="row">
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.DateComplaintClosed)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.DateComplaintClosed, TemplateNames.LongDateTimeOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ReviewComments)</dt>
+        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(m => Model.Item.ReviewComments, TemplateNames.StringOrNotEntered)</dd>
+    </dl>
+</div>
+
+<h2>@Html.DisplayNameFor(m => m.Item.ComplaintNature)</h2>
+
+<p class="container text-break text-pre-line">@Html.DisplayFor(m => Model.Item.ComplaintNature, TemplateNames.StringOrNotEntered)</p>
+
+<h2>Complaint Details</h2>
+
+<div class="container">
+    <dl class="row">
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.PrimaryConcernName)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.PrimaryConcernName, TemplateNames.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SecondaryConcernName)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.SecondaryConcernName, TemplateNames.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ComplaintLocation)</dt>
+        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(m => Model.Item.ComplaintLocation, TemplateNames.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ComplaintCity)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.ComplaintCity, TemplateNames.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ComplaintCounty)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.ComplaintCounty, TemplateNames.County)</dd>
+    </dl>
+</div>
+
+<h2>Source</h2>
+
+<div class="container">
+    <dl class="row">
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceFacilityId)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.SourceFacilityId, TemplateNames.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceFacilityName)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.SourceFacilityName, TemplateNames.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceContactName)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.SourceContactName, TemplateNames.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceAddress)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.SourceAddress)</dd>
+    </dl>
+</div>
+
+<h2>Actions</h2>
+
+<div class="container">
+    @if (Model.Item.ComplaintActions is { Count: > 0 })
+    {
+        @foreach (var item in Model.Item.ComplaintActions)
+        {
+            <h3 class="h4 pt-2">
+                @Html.DisplayFor(m => item.ActionDate, TemplateNames.LongDate) —
+                <em class="text-brand">@item.ActionTypeName</em>
+            </h3>
+            <p class="text-break text-pre-line">@item.Comments</p>
+        }
+    }
+    else
+    {
+        <p><em>None.</em></p>
+    }
+</div>
+
+<h2>Attachments</h2>
+
+<p class="container">
+    <em>(Attachments may not be available for complaints resolved before April 2018. Please note that not every complaint has attachments.)</em>
+</p>
+
+@if (Model.Item.Attachments is { Count: > 0 })
+{
+    <table class="table align-middle" aria-label="File attachments">
+        <thead>
+            <tr>
+                <th scope="col">File</th>
+                <th scope="col">Size</th>
+                <th scope="col">Date Uploaded</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Item.Attachments)
+            {
+                <tr>
+                    <td>
+                        @if (item.IsImage)
+                        {
+                            <a asp-page="Attachment" asp-route-id="@item.Id" asp-route-fileName="@item.FileName" target="_blank"
+                               class="text-decoration-none rounded d-block no-external-link" data-fancybox="attachment" data-caption="@item.FileName">
+                                <img src="Attachment/@item.Id/@item.FileName/?thumbnail=true" class="img-thumbnail rounded me-2" alt="" />
+                                @item.FileName
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-page="Attachment" asp-route-id="@item.Id" asp-route-fileName="@item.FileName" target="_blank"
+                               class="text-decoration-none rounded d-block p-2 no-external-link">
+                                @Html.DisplayFor(m => item.FileExtension, TemplateNames.FileTypeIcon) @item.FileName
+                            </a>
+                        }
+                    </td>
+                    <td>@Html.DisplayFor(m => item.Size, TemplateNames.FileSize)</td>
+                    <td>@Html.DisplayFor(m => item.DateUploaded, TemplateNames.ShortDate)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p class="container"><em>None.</em></p>
+}

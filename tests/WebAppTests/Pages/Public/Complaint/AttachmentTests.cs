@@ -2,7 +2,7 @@ using Cts.AppServices.Attachments;
 using Cts.AppServices.Complaints;
 using Cts.AppServices.Files;
 using Cts.TestData.Constants;
-using Cts.WebApp.Pages.Public.Complaint;
+using Cts.WebApp.Pages.Public.Complaints;
 using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Mvc;
 

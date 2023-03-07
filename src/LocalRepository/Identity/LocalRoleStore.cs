@@ -12,7 +12,7 @@ public sealed class LocalRoleStore : IRoleStore<IdentityRole>
 
     public LocalRoleStore()
     {
-        Roles = IdentityData.GetRoles;
+        Roles = UserData.GetRoles;
     }
 
     public Task<IdentityResult> CreateAsync(IdentityRole role, CancellationToken cancellationToken) =>

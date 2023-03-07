@@ -6,6 +6,9 @@ namespace Cts.AppServices.ComplaintActions;
 
 internal static class ComplaintActionFilters
 {
+    public static Expression<Func<ComplaintAction, bool>> IdPredicate(int id) =>
+        PredicateBuilder.True<ComplaintAction>().ForComplaint(id);
+
     public static Expression<Func<ComplaintAction, bool>> PublicIdPredicate(int id) =>
         PredicateBuilder.True<ComplaintAction>().ForComplaint(id).IsPublic();
 
@@ -15,5 +18,5 @@ internal static class ComplaintActionFilters
 
     private static Expression<Func<ComplaintAction, bool>> ForComplaint(
         this Expression<Func<ComplaintAction, bool>> predicate, int complaintId) =>
-        predicate.And(e => e.ComplaintId == complaintId);
+        predicate.And(e => e.Complaint.Id == complaintId);
 }

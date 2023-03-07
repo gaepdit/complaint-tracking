@@ -10,7 +10,7 @@ namespace Cts.WebApp.Pages.Admin.Maintenance.Offices;
 [Authorize]
 public class IndexModel : PageModel
 {
-    public IReadOnlyList<OfficeViewDto> Items { get; private set; } = default!;
+    public IReadOnlyList<OfficeAdminViewDto> Items { get; private set; } = default!;
     public static MaintenanceOption ThisOption => MaintenanceOption.Office;
     public DisplayMessage? Message { get; private set; }
 

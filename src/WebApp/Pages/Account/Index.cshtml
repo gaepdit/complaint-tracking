@@ -1,4 +1,5 @@
 ﻿@page
+@using Cts.WebApp.Pages.Shared.DisplayTemplates;
 @model IndexModel
 @{
     ViewData["Title"] = "Account Profile";
@@ -8,22 +9,22 @@
 <hr />
 <partial name="_AlertPartial" for="Message" />
 
-<h2>@Html.DisplayFor(m => m.DisplayStaff.DisplayName, "StringOrNone")</h2>
+<h2>@Html.DisplayFor(m => m.DisplayStaff.Name, TemplateNames.StringOrNone)</h2>
 
 <dl class="row">
     <dt class="col-sm-3">Email</dt>
     <dd class="col-sm-9">@Model.DisplayStaff.Email</dd>
 
     <dt class="col-sm-3">Phone</dt>
-    <dd class="col-sm-9">@Html.DisplayFor(m => m.DisplayStaff.Phone, "StringOrNone")</dd>
+    <dd class="col-sm-9">@Html.DisplayFor(m => m.DisplayStaff.Phone, TemplateNames.StringOrNone)</dd>
 
     <dt class="col-sm-3">Office</dt>
-    <dd class="col-sm-9">@Html.DisplayFor(m => m.OfficeName, "StringOrNone")</dd>
+    <dd class="col-sm-9">@Html.DisplayFor(m => m.OfficeName, TemplateNames.StringOrNone)</dd>
 </dl>
 
 <div class="mb-3">
-    <a asp-page="./Edit" class="btn btn-outline-primary me-2">Edit Profile</a>
-    <form class="form-inline d-inline-block" asp-page="./Logout" method="post">
+    <a asp-page="Edit" class="btn btn-outline-primary me-2">Edit Profile</a>
+    <form class="form-inline d-inline-block" asp-page="Logout" method="post">
         <button type="submit" class="btn btn-danger">Sign out</button>
     </form>
 </div>

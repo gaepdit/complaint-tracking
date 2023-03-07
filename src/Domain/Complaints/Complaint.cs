@@ -4,6 +4,7 @@ using Cts.Domain.ComplaintTransitions;
 using Cts.Domain.Concerns;
 using Cts.Domain.Identity;
 using Cts.Domain.Offices;
+using System.Text.Json.Serialization;
 
 namespace Cts.Domain.Complaints;
 
@@ -18,25 +19,29 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     internal Complaint(int id) : base(id) { }
 
+    // Methods
+
+    public void SetId(int id) => Id = id;
+
     // Properties
 
     // Properties: Status & meta-data
 
     public ComplaintStatus Status { get; set; } = ComplaintStatus.New;
 
-    public DateTime DateEntered { get; init; } = DateTime.Now;
+    public DateTimeOffset DateEntered { get; init; } = DateTimeOffset.Now;
 
-    public ApplicationUser EnteredBy { get; init; } = null!;
+    public ApplicationUser EnteredBy { get; init; } = default!;
 
-    public DateTime DateReceived { get; set; }
+    public DateTimeOffset DateReceived { get; set; }
 
-    public ApplicationUser ReceivedBy { get; set; } = null!;
+    public ApplicationUser ReceivedBy { get; set; } = default!;
 
     // Properties: Caller
 
     public string? CallerName { get; set; }
     public string? CallerRepresents { get; set; }
-    public Address? CallerAddress { get; set; }
+    public IncompleteAddress? CallerAddress { get; set; }
 
     public PhoneNumber? CallerPhoneNumber { get; set; }
     public PhoneNumber? CallerSecondaryPhoneNumber { get; set; }
@@ -49,15 +54,10 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     // Properties: Complaint details
 
-    [DataType(DataType.MultilineText)]
     public string? ComplaintNature { get; set; }
 
-    [DataType(DataType.MultilineText)]
-    [StringLength(4000)]
     public string? ComplaintLocation { get; set; }
 
-    [DataType(DataType.MultilineText)]
-    [StringLength(4000)]
     public string? ComplaintDirections { get; set; }
 
     [StringLength(50)]
@@ -81,7 +81,7 @@ public class Complaint : AuditableSoftDeleteEntity<int>
     [StringLength(100)]
     public string? SourceContactName { get; set; }
 
-    public Address? SourceAddress { get; set; }
+    public IncompleteAddress? SourceAddress { get; set; }
 
     public PhoneNumber? SourcePhoneNumber { get; set; }
     public PhoneNumber? SourceSecondaryPhoneNumber { get; set; }
@@ -94,7 +94,7 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     // Properties: Assignment/History
 
-    public Office CurrentOffice { get; set; } = null!;
+    public Office CurrentOffice { get; set; } = default!;
 
     [StringLength(50)]
     [Obsolete("Holdover from old application")]
@@ -102,11 +102,11 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     public ApplicationUser? CurrentOwner { get; set; }
 
-    public DateTime? DateCurrentOwnerAssigned { get; set; }
+    public DateTimeOffset? DateCurrentOwnerAssigned { get; set; }
 
     public Guid? CurrentAssignmentTransitionId { get; set; }
 
-    public DateTime? DateCurrentOwnerAccepted { get; set; }
+    public DateTimeOffset? DateCurrentOwnerAccepted { get; set; }
 
     public List<ComplaintTransition> ComplaintTransitions { get; set; } = new();
 
@@ -116,29 +116,29 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     // Properties: Review/Closure
 
-    public ApplicationUser? ReviewBy { get; set; }
+    public ApplicationUser? ReviewedBy { get; set; }
 
-    [StringLength(4000)]
     public string? ReviewComments { get; set; }
 
     public bool ComplaintClosed { get; set; }
 
-    public DateTime? DateComplaintClosed { get; set; }
+    public DateTimeOffset? DateComplaintClosed { get; set; }
 
     // Properties: Deletion
 
-    [StringLength(4000)]
+    public ApplicationUser? DeletedBy { get; set; }
     public string? DeleteComments { get; set; }
 
     // Properties: Attachments
 
-    public ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
+    public List<Attachment> Attachments { get; set; } = new();
 
     // Methods
 }
 
 // Enums
 
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum ComplaintStatus
 {
     /// <summary>

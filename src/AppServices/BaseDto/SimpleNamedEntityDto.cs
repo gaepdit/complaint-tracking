@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Cts.AppServices.BaseDto;
 
-public class SimpleNamedEntityViewDto
+public abstract class SimpleNamedEntityViewDto : IDtoHasNameProperty
 {
     public Guid Id { get; init; }
     public string Name { get; init; } = string.Empty;
@@ -12,14 +12,14 @@ public class SimpleNamedEntityViewDto
     public bool Active { get; init; }
 }
 
-public class SimpleNamedEntityCreateDto
+public abstract class SimpleNamedEntityCreateDto
 {
     [Required(AllowEmptyStrings = false)]
     [StringLength(SimpleNamedEntity.MaxNameLength, MinimumLength = SimpleNamedEntity.MinNameLength)]
     public string Name { get; init; } = string.Empty;
 }
 
-public class SimpleNamedEntityUpdateDto
+public abstract class SimpleNamedEntityUpdateDto
 {
     public Guid Id { get; init; }
 

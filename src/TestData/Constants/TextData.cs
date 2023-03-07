@@ -8,10 +8,12 @@ public static class TextData
     public const string Empty = "";
 
     // Words and phrases
+    public const string EmailAddress = "sample@example.com";
     public const string Word = "Croissant";
     public const string AnotherWord = "Lollipop";
     public const string ThirdWord = "Pie";
 
+    public const string ShortPhrase = "Gummies Macaroon";
     public const string Phrase = "Soufflé croissant caramels gummi bears marzipan.";
 
     public static readonly string ShortMultiline = "Soufflé jelly gummies shortbread." +

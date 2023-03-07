@@ -8,7 +8,7 @@ public class StaffFilters
     [Test]
     public void DefaultFilter_ReturnsAllActive()
     {
-        var users = IdentityData.GetUsers;
+        var users = UserData.GetUsers;
         var filter = new StaffSearchDto();
         var expected = users.Where(e => e.Active);
 
@@ -20,7 +20,7 @@ public class StaffFilters
     [Test]
     public void NameFilter_ReturnsMatches()
     {
-        var users = IdentityData.GetUsers;
+        var users = UserData.GetUsers;
         var name = users.First(e => e.Active).GivenName;
         var filter = new StaffSearchDto { Name = name };
         var expected = users
@@ -36,7 +36,7 @@ public class StaffFilters
     [Test]
     public void EmailFilter_ReturnsMatches()
     {
-        var users = IdentityData.GetUsers;
+        var users = UserData.GetUsers;
         var email = users.First(e => e.Active).Email;
         var filter = new StaffSearchDto { Email = email };
         var expected = users
@@ -50,7 +50,7 @@ public class StaffFilters
     [Test]
     public void OfficeFilter_ReturnsMatches()
     {
-        var users = IdentityData.GetUsers;
+        var users = UserData.GetUsers;
         var office = users.First(e => e is { Active: true, Office: { } }).Office;
         var filter = new StaffSearchDto { Office = office!.Id };
         var expected = users
@@ -64,7 +64,7 @@ public class StaffFilters
     [Test]
     public void InactiveFilter_ReturnsAllInactive()
     {
-        var users = IdentityData.GetUsers;
+        var users = UserData.GetUsers;
         var filter = new StaffSearchDto { Status = StaffSearchDto.ActiveStatus.Inactive };
         var expected = users.Where(e => !e.Active);
 
@@ -76,7 +76,7 @@ public class StaffFilters
     [Test]
     public void StandaloneActiveStatusFilter_ReturnsAllActive()
     {
-        var users = IdentityData.GetUsers;
+        var users = UserData.GetUsers;
         var expected = users.Where(e => e.Active);
         
         var result = users.AsQueryable().FilterByActiveStatus(StaffSearchDto.ActiveStatus.Active);
@@ -87,7 +87,7 @@ public class StaffFilters
     [Test]
     public void StandaloneActiveStatusFilterForInactive_ReturnsAllActive()
     {
-        var users = IdentityData.GetUsers;
+        var users = UserData.GetUsers;
         var expected = users.Where(e => !e.Active);
         
         var result = users.AsQueryable().FilterByActiveStatus(StaffSearchDto.ActiveStatus.Inactive);
@@ -98,7 +98,7 @@ public class StaffFilters
     [Test]
     public void StatusAllFilter_ReturnsAll()
     {
-        var  users = IdentityData.GetUsers;
+        var  users = UserData.GetUsers;
         var filter = new StaffSearchDto { Status = StaffSearchDto.ActiveStatus.All };
         
         var result = users.AsQueryable().ApplyFilter(filter);

@@ -5,14 +5,14 @@
 ## Public pages
 
 * `/Public` (public search)
-* `/Public/Complaint/{id}` (public detail view)
-* `/Public/Complaint/Attachment/{attachmentId}/{fileName}` (public attachment download)
+* `/Public/Complaints/{id}` (public detail view)
+* `/Public/Complaints/Attachment/{attachmentId}/{fileName}` (public attachment download)
 
 ### Redirects
 
 | Redirect                        | To                       |
 |---------------------------------|--------------------------|
-| `/Public/ComplaintDetails/{id}` | `/Public/Complaint/{id}` |
+| `/Public/ComplaintDetails/{id}` | `/Public/Complaints/{id}` |
 
 ## Account & login pages
 

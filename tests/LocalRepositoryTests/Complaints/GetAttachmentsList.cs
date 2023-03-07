@@ -17,7 +17,7 @@ public class GetAttachmentsList
     public async Task WhenItemsExist_ReturnsList()
     {
         var complaint = _repository.Items.First();
-        var items = _repository.AttachmentItems.Where(e => e.ComplaintId == complaint.Id && !e.IsDeleted);
+        var items = _repository.AttachmentItems.Where(e => e.Complaint.Id == complaint.Id && !e.IsDeleted);
 
         var result = await _repository.GetAttachmentsListAsync(AttachmentFilters.PublicIdPredicate(complaint.Id));
 
@@ -29,8 +29,8 @@ public class GetAttachmentsList
     {
         var item = _repository.AttachmentItems.First(e => e.IsDeleted);
 
-        var result =
-            await _repository.GetAttachmentsListAsync(AttachmentFilters.PublicIdPredicate(item.ComplaintId));
+        var result = await _repository
+            .GetAttachmentsListAsync(AttachmentFilters.PublicIdPredicate(item.Complaint.Id));
 
         result.Should().NotContain(item);
     }

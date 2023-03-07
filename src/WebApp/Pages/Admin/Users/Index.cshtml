@@ -1,5 +1,7 @@
 ﻿@page
 @using Cts.AppServices.Staff
+@using Cts.WebApp.Pages.Shared.DisplayTemplates;
+@using Cts.WebApp.Platform.Constants
 @model IndexModel
 @{
     ViewData["Title"] = "User Search";
@@ -32,7 +34,7 @@
             <div class="col-md mb-3">
                 <div class="form-floating">
                     <select asp-for="Filter.Office" asp-items="Model.OfficeItems" name="@nameof(Model.Filter.Office)" class="form-select">
-                        <option value="">(any)</option>
+                        <option value="">@TextConstants.SelectTextAny</option>
                     </select>
                     <label asp-for="Filter.Office" class="form-label"></label>
                 </div>
@@ -40,7 +42,7 @@
             <div class="col-md mb-3">
                 <div class="form-floating">
                     <select asp-for="Filter.Role" asp-items="Model.RoleItems" name="@nameof(Model.Filter.Role)" class="form-select">
-                        <option value="">(any)</option>
+                        <option value="">@TextConstants.SelectTextAny</option>
                     </select>
                     <label asp-for="Filter.Role" class="form-label"></label>
                 </div>
@@ -55,7 +57,7 @@
         <div class="mt-3 mb-1">
             <input type="hidden" name="handler" value="search" />
             <button id="SearchButton" type="submit" class="btn btn-primary col-sm-3 me-2">Search</button>
-            <a asp-page="./Index" class="btn btn-outline-secondary col-sm-3 col-md-2">Clear Form</a>
+            <a asp-page="Index" class="btn btn-outline-secondary col-sm-3 col-md-2">Clear Form</a>
         </div>
     </form>
 </div>
@@ -83,14 +85,14 @@
                             {
                                 <span class="badge bg-secondary">YOU</span>
                             }
-                            <a asp-page="./Details" asp-route-id="@item.Id">@item.DisplayName</a>
+                            <a asp-page="Details" asp-route-id="@item.Id">@item.Name</a>
                         </td>
                         <td>@item.Email</td>
                         <td>
                             @{
                                 var name = item.Office?.Name;
                             }
-                            @Html.DisplayFor(m => name, "StringOrNone")
+                                @Html.DisplayFor(m => name, TemplateNames.StringOrNone)
                         </td>
                         <td>@Html.DisplayFor(m => item.Active)</td>
                     </tr>

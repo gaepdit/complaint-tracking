@@ -8,7 +8,7 @@ public sealed class ConcernRepository : BaseRepository<Concern, Guid>, IConcernR
 {
     public ConcernRepository(AppDbContext dbContext) : base(dbContext) { }
 
-    public Task<Concern?> FindByNameAsync(string name, CancellationToken token = default) =>
-        Context.Concerns.AsNoTracking()
+    public async Task<Concern?> FindByNameAsync(string name, CancellationToken token = default) =>
+        await Context.Concerns.AsNoTracking()
             .SingleOrDefaultAsync(e => string.Equals(e.Name.ToUpper(), name.ToUpper()), token);
 }

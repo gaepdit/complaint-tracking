@@ -13,8 +13,8 @@ public class PublicSearchSpec
     [SetUp]
     public void SetUp()
     {
-        _repository = RepositoryHelper.CreateRepositoryHelper().GetComplaintRepository();
-        _referenceItem = ComplaintData.GetComplaints.Single(e => e.ComplaintNature == "PublicSearchSpec reference");
+        _repository = RepositoryHelper.CreateSqlServerRepositoryHelper(this).GetComplaintRepository();
+        _referenceItem = ComplaintData.GetComplaints.Single(e => e.ComplaintNature == "PublicSearchSpec complaint nature reference");
     }
 
     [TearDown]
@@ -26,7 +26,8 @@ public class PublicSearchSpec
         var spec = new ComplaintPublicSearchDto();
         var predicate = ComplaintFilters.PublicSearchPredicate(spec);
 
-        var results = await _repository.GetListAsync(predicate);
+        using var repository = RepositoryHelper.CreateSqlServerRepositoryHelper(this).GetComplaintRepository();
+        var results = await repository.GetListAsync(predicate);
 
         var expected = ComplaintData.GetComplaints
             .Where(e => e is { IsDeleted: false, ComplaintClosed: true });
@@ -35,6 +36,11 @@ public class PublicSearchSpec
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Attachments)
             .Excluding(e => e.ComplaintActions)
+            .Excluding(e => e.ComplaintTransitions)
+            .Excluding(e => e.EnteredBy.Office)
+            .Excluding(e => e.ReceivedBy.Office)
+            .Excluding(e => e.CurrentOwner!.Office)
+            .Excluding(e => e.ReviewedBy!.Office)
         );
     }
 
@@ -57,13 +63,17 @@ public class PublicSearchSpec
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.ComplaintActions)
+            .Excluding(e => e.ComplaintTransitions)
+            .Excluding(e => e.EnteredBy.Office)
+            .Excluding(e => e.ReceivedBy.Office)
+            .Excluding(e => e.CurrentOwner!.Office)
         );
     }
 
     [Test]
     public async Task NatureSpec_ReturnsFilteredList()
     {
-        var spec = new ComplaintPublicSearchDto { Nature = _referenceItem.ComplaintNature };
+        var spec = new ComplaintPublicSearchDto { Description = _referenceItem.ComplaintNature };
         var predicate = ComplaintFilters.PublicSearchPredicate(spec);
 
         var results = await _repository.GetListAsync(predicate);
@@ -75,13 +85,17 @@ public class PublicSearchSpec
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.ComplaintActions)
+            .Excluding(e => e.ComplaintTransitions)
+            .Excluding(e => e.EnteredBy.Office)
+            .Excluding(e => e.ReceivedBy.Office)
+            .Excluding(e => e.CurrentOwner!.Office)
         );
     }
 
     [Test]
     public async Task ConcernSpec_ReturnsFilteredList()
     {
-        var spec = new ComplaintPublicSearchDto { Type = _referenceItem.PrimaryConcern.Id };
+        var spec = new ComplaintPublicSearchDto { Concern = _referenceItem.PrimaryConcern.Id };
         var predicate = ComplaintFilters.PublicSearchPredicate(spec);
 
         var results = await _repository.GetListAsync(predicate);
@@ -93,6 +107,10 @@ public class PublicSearchSpec
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.ComplaintActions)
+            .Excluding(e => e.ComplaintTransitions)
+            .Excluding(e => e.EnteredBy.Office)
+            .Excluding(e => e.ReceivedBy.Office)
+            .Excluding(e => e.CurrentOwner!.Office)
         );
     }
 
@@ -111,6 +129,10 @@ public class PublicSearchSpec
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.ComplaintActions)
+            .Excluding(e => e.ComplaintTransitions)
+            .Excluding(e => e.EnteredBy.Office)
+            .Excluding(e => e.ReceivedBy.Office)
+            .Excluding(e => e.CurrentOwner!.Office)
         );
     }
 
@@ -129,6 +151,10 @@ public class PublicSearchSpec
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.ComplaintActions)
+            .Excluding(e => e.ComplaintTransitions)
+            .Excluding(e => e.EnteredBy.Office)
+            .Excluding(e => e.ReceivedBy.Office)
+            .Excluding(e => e.CurrentOwner!.Office)
         );
     }
 
@@ -148,6 +174,10 @@ public class PublicSearchSpec
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.ComplaintActions)
+            .Excluding(e => e.ComplaintTransitions)
+            .Excluding(e => e.EnteredBy.Office)
+            .Excluding(e => e.ReceivedBy.Office)
+            .Excluding(e => e.CurrentOwner!.Office)
         );
     }
 
@@ -168,6 +198,10 @@ public class PublicSearchSpec
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.ComplaintActions)
+            .Excluding(e => e.ComplaintTransitions)
+            .Excluding(e => e.EnteredBy.Office)
+            .Excluding(e => e.ReceivedBy.Office)
+            .Excluding(e => e.CurrentOwner!.Office)
         );
     }
 
@@ -187,6 +221,10 @@ public class PublicSearchSpec
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.ComplaintActions)
+            .Excluding(e => e.ComplaintTransitions)
+            .Excluding(e => e.EnteredBy.Office)
+            .Excluding(e => e.ReceivedBy.Office)
+            .Excluding(e => e.CurrentOwner!.Office)
         );
     }
 
@@ -206,6 +244,10 @@ public class PublicSearchSpec
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.ComplaintActions)
+            .Excluding(e => e.ComplaintTransitions)
+            .Excluding(e => e.EnteredBy.Office)
+            .Excluding(e => e.ReceivedBy.Office)
+            .Excluding(e => e.CurrentOwner!.Office)
         );
     }
 
@@ -215,7 +257,8 @@ public class PublicSearchSpec
         var spec = new ComplaintPublicSearchDto { PostalCode = _referenceItem.SourceAddress!.PostalCode };
         var predicate = ComplaintFilters.PublicSearchPredicate(spec);
 
-        var results = await _repository.GetListAsync(predicate);
+        using var repository = RepositoryHelper.CreateRepositoryHelper().GetComplaintRepository();
+        var results = await repository.GetListAsync(predicate);
 
         var expected = ComplaintData.GetComplaints
             .Where(e => e.SourceAddress != null
@@ -225,6 +268,10 @@ public class PublicSearchSpec
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.ComplaintActions)
+            .Excluding(e => e.ComplaintTransitions)
+            .Excluding(e => e.EnteredBy.Office)
+            .Excluding(e => e.ReceivedBy.Office)
+            .Excluding(e => e.CurrentOwner!.Office)
         );
     }
 }

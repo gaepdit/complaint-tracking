@@ -1,0 +1,339 @@
+@page "{id:int?}"
+@using Cts.WebApp.Pages.Shared.DisplayTemplates;
+@using GaEpd.AppLibrary.Enums
+@using System.Globalization
+@model DetailsModel
+@{
+    ViewData["Title"] = $"Complaint ID {Model.Item.Id}";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (Model.UserIsOwner)
+{
+    <p>This Complaint was assigned to you on @Html.DisplayFor(m => m.Item.DateCurrentOwnerAssigned, TemplateNames.LongDateTimeOrNotEntered).</p>
+}
+
+@if (Model.Item.IsDeleted)
+{
+    <h2 class="text-danger">Complaint Has Been Deleted</h2>
+
+    @if (Model.CanDelete)
+    {
+        <div class="d-print-none">
+            <a asp-page="Restore" asp-route-id="@Model.Item.Id" class="btn btn-outline-danger">Restore deleted complaint</a>
+        </div>
+    }
+
+    <div class="container">
+        <dl class="row">
+            <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.DeletedBy)</dt>
+            <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.DeletedBy, TemplateNames.NameOrNotEntered) on @Html.DisplayFor(m => m.Item.DeletedAt, TemplateNames.LongDateTimeOrNotEntered)</dd>
+            <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.DeleteComments)</dt>
+            <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Model.Item.DeleteComments</dd>
+        </dl>
+    </div>
+}
+else
+{
+    <div class="d-print-none mb-3">
+        @if (Model.CanAccept)
+        {
+            <form asp-action="Accept">
+                <button type="submit">Accept</button>
+                @Html.HiddenFor(m => m.Item.Id)
+            </form>
+        }
+        else
+        {
+
+            @if (Model.CanEditDetails)
+            {
+                <a asp-page="Edit" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary">Edit details</a>
+            }
+            @if (Model.CanEditAll)
+            {
+                <a asp-page="Actions" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary">Add/edit actions</a>
+            }
+        }
+        @if (Model.CanDelete)
+        {
+            <a asp-page="Delete" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary">Delete</a>
+        }
+        @if (Model.Item.IsPublic)
+        {
+            <a asp-page="/Public/Complaints/Index" asp-route-id="@Model.Item.Id">View public copy</a>
+        }
+    </div>
+}
+
+<h2 id="status">Status: <em class="text-brand">@Model.Item.Status.GetDisplayName()</em></h2>
+
+<div class="gaepd-noprint">
+    @if (Model.CanReview)
+    {
+        <a asp-action="Approve" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary">Close Complaint (approved)</a>
+        <a asp-action="Return" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary">Return to staff (not approved)</a>
+    }
+    @if (Model.CanAssign)
+    {
+        <a asp-action="Assign" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary">Assign</a>
+    }
+    @if (Model.CanRequestReview)
+    {
+        <a asp-action="RequestReview" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary">Submit for review</a>
+    }
+    @if (Model.CanReassign)
+    {
+        <a asp-action="Assign" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary">Transfer/reassign</a>
+    }
+    @if (Model.CanReopen)
+    {
+        <a asp-action="Reopen" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary">Reopen</a>
+    }
+</div>
+
+<div class="container">
+    <dl class="row">
+        @if (Model.Item.ComplaintClosed)
+        {
+            <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ReviewedBy)</dt>
+            <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.ReviewedBy, TemplateNames.NameOrNotEntered) on @Html.DisplayFor(m => m.Item.DateComplaintClosed, TemplateNames.LongDateTimeOrNotEntered)</dd>
+            <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ReviewComments)</dt>
+            <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Model.Item.ReviewComments</dd>
+        }
+
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CurrentOfficeName)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.CurrentOfficeName)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CurrentOwner)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.CurrentOwner, TemplateNames.NameOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.DateReceived)</dt>
+        <dd class="col-sm-8 col-lg-9">
+            @Html.DisplayFor(m => m.Item.DateReceived, TemplateNames.LongDateTime)
+        </dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.DateCurrentOwnerAssigned)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.DateCurrentOwnerAssigned, TemplateNames.LongDateTimeOrNotEntered)</dd>
+    </dl>
+</div>
+
+<h2>Caller</h2>
+
+<div class="container">
+    <dl class="row">
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CallerName)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.CallerName, TemplateNames.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CallerRepresents)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.CallerRepresents, TemplateNames.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CallerAddress)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.CallerAddress)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CallerPhoneNumber)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.CallerPhoneNumber)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CallerSecondaryPhoneNumber)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.CallerSecondaryPhoneNumber)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CallerTertiaryPhoneNumber)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.CallerTertiaryPhoneNumber)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CallerEmail)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.CallerEmail, TemplateNames.StringOrNotEntered)</dd>
+    </dl>
+</div>
+
+<h2>@Html.DisplayNameFor(m => m.Item.ComplaintNature)</h2>
+
+<p class="container text-break text-pre-line">@Html.DisplayFor(m => Model.Item.ComplaintNature, TemplateNames.StringOrNotEntered)</p>
+
+<h2>Complaint Details</h2>
+
+<div class="container">
+    <dl class="row">
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.PrimaryConcernName)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.PrimaryConcernName, TemplateNames.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SecondaryConcernName)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.SecondaryConcernName, TemplateNames.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ComplaintLocation)</dt>
+        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(m => m.Item.ComplaintLocation, TemplateNames.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ComplaintCity)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.ComplaintCity, TemplateNames.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ComplaintCounty)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.ComplaintCounty, TemplateNames.County)</dd>
+    </dl>
+</div>
+
+<h2>Source</h2>
+
+<div class="container">
+    <dl class="row">
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceFacilityId)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.SourceFacilityId, TemplateNames.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceFacilityName)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.SourceFacilityName, TemplateNames.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceContactName)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.SourceContactName, TemplateNames.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceAddress)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.SourceAddress)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourcePhoneNumber)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.SourcePhoneNumber)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceSecondaryPhoneNumber)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.SourceSecondaryPhoneNumber)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceTertiaryPhoneNumber)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.SourceTertiaryPhoneNumber)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceEmail)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.SourceEmail, TemplateNames.StringOrNotEntered)</dd>
+    </dl>
+</div>
+
+<h2>Actions</h2>
+
+@if (Model.CanEditAll)
+{
+    <a asp-page="Actions" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary">Add/edit actions</a>
+}
+
+<div class="container">
+    @if (Model.Item.ComplaintActions is { Count: > 0 })
+    {
+        @foreach (var item in Model.Item.ComplaintActions)
+        {
+            <h3 class="h4 pt-2">
+                @Html.DisplayFor(m => item.ActionDate, TemplateNames.LongDate) —
+                <em class="text-brand">@item.ActionTypeName</em>
+            </h3>
+            <dl class="row">
+                <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => item.Investigator)</dt>
+                <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => item.Investigator, TemplateNames.StringOrNotEntered)</dd>
+                <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => item.EnteredBy)</dt>
+                <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => item.EnteredBy, TemplateNames.NameOrNotEntered) on @Html.DisplayFor(m => item.DateEntered, TemplateNames.LongDateTime)</dd>
+                <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => item.Comments)</dt>
+                <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(m => item.Comments, TemplateNames.StringOrNotEntered)</dd>
+            </dl>
+        }
+    }
+    else
+    {
+        <p><em>None.</em></p>
+    }
+</div>
+
+<h2>Attachments</h2>
+
+@if (Model.Item.Attachments is { Count: > 0 })
+{
+    <table class="table align-middle" aria-label="File attachments">
+        <thead>
+            <tr>
+                <th scope="col">File</th>
+                <th scope="col">Size</th>
+                <th scope="col">Uploaded By</th>
+                @if (Model.CanEditAttachments)
+                {
+                    <th scope="col">Actions</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Item.Attachments)
+            {
+                <tr>
+                    <td>
+                        @if (item.IsImage)
+                        {
+                            <a asp-page="Attachment" asp-route-id="@item.Id" asp-route-fileName="@item.FileName" target="_blank"
+                               class="text-decoration-none rounded d-block no-external-link" data-fancybox="attachment" data-caption="@item.FileName">
+                                <img src="../Attachment/@item.Id/@item.FileName/?thumbnail=true" class="img-thumbnail rounded me-2" alt="" />
+                                @item.FileName
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-page="Attachment" asp-route-id="@item.Id" asp-route-fileName="@item.FileName" target="_blank"
+                               class="text-decoration-none rounded d-block p-2 no-external-link">
+                                @Html.DisplayFor(m => item.FileExtension, TemplateNames.FileTypeIcon) @item.FileName
+                            </a>
+                        }
+                    </td>
+                    <td>@Html.DisplayFor(m => item.Size, TemplateNames.FileSize)</td>
+                    <td>
+                        @Html.DisplayFor(m => item.UploadedBy, TemplateNames.NameOrNotEntered) <br />
+                        on @Html.DisplayFor(m => item.DateUploaded, TemplateNames.ShortDateTime)
+                    </td>
+                    @if (Model.CanEditAttachments)
+                    {
+                        <td>
+                            <a class="btn btn-outline-primary btn-sm" asp-action="DeleteAttachment" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p class="container"><em>None.</em></p>
+}
+
+@if (Model.CanEditAttachments)
+{
+    <div class="container">
+        @if (Model.Item.ComplaintClosed)
+        {
+            <p><strong>Be careful! This complaint has already been approved/closed.</strong></p>
+        }
+
+        @* TODO *@
+        <p>
+            <em>
+                Supported file types are images, documents, and spreadsheets.<br />
+                All files must comply with <a href="#" target="_blank">EPD’s complaint attachments policy (<abbr>PDF</abbr>)</a>.
+            </em>
+        </p>
+    </div>
+}
+
+
+<h2>Audit History</h2>
+
+<div class="container">
+    <dl class="row">
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ReceivedBy)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.ReceivedBy, TemplateNames.NameOrNotEntered) on @Html.DisplayFor(m => m.Item.DateReceived, TemplateNames.LongDateTime)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.EnteredBy)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.EnteredBy, TemplateNames.NameOrNotEntered) on @Html.DisplayFor(m => m.Item.DateEntered, TemplateNames.LongDateTime)</dd>
+    </dl>
+</div>
+
+@if (Model.Item.ComplaintTransitions is { Count: > 0 })
+{
+    <table class="table table-small align-top" aria-label="Audit history">
+        <thead>
+            <tr>
+                <th scope="col">Action Date</th>
+                <th scope="col">Action</th>
+                <th scope="col">From</th>
+                <th scope="col">To</th>
+                <th scope="col">Date Accepted</th>
+                <th scope="col">Transferred By</th>
+                <th scope="col">Comment</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Item.ComplaintTransitions)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(m => item.DateTransferred, TemplateNames.ShortDateTime)</td>
+                    <td>@item.TransitionType.GetDisplayName()</td>
+                    <td>
+                        @Html.DisplayFor(m => item.TransferredFromUser, TemplateNames.NameOrBlank)
+                        @Html.DisplayFor(m => item.TransferredFromOffice, TemplateNames.NameOrBlank)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(m => item.TransferredToUser, TemplateNames.NameOrBlank)
+                        @Html.DisplayFor(m => item.TransferredToOffice, TemplateNames.NameOrBlank)
+                    </td>
+                    <td>@Html.DisplayFor(m => item.DateAccepted, TemplateNames.ShortDateTimeOrBlank)</td>
+                    <td>@Html.DisplayFor(m => item.TransferredByUser, TemplateNames.NameOrNotEntered)</td>
+                    <td class="text-break text-pre-line">@Html.DisplayFor(m => item.Comment)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

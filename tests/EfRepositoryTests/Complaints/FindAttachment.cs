@@ -18,7 +18,9 @@ public class FindAttachment
     {
         var item = AttachmentData.GetAttachments.First();
         var result = await _repository.FindAttachmentAsync(item.Id);
-        result.Should().BeEquivalentTo(item);
+        result.Should().BeEquivalentTo(item, opts => opts
+            .Excluding(e => e.UploadedBy!.Office)
+            .Excluding(e => e.Complaint));
     }
 
     [Test]

@@ -18,17 +18,18 @@ namespace Cts.WebApp.Pages.Public;
 public class IndexModel : PageModel
 {
     // Properties
-    public ComplaintPublicSearchDto Spec { get; set; } = null!;
-    public bool ShowResults { get; private set; }
-    public IPaginatedResult<ComplaintPublicViewDto> Results { get; private set; } = null!;
-
     [BindProperty]
     [Required(ErrorMessage = "Please enter a complaint ID.")]
     [Display(Name = "Complaint ID")]
     public string? FindId { get; set; }
 
+    public ComplaintPublicSearchDto Spec { get; set; } = default!;
+    public bool ShowResults { get; private set; }
+    public IPaginatedResult<ComplaintSearchResultDto> Results { get; private set; } = default!;
+    public string SortByName => Spec.Sort.ToString();
+
     // Select Lists
-    public SelectList ConcernsSelectList { get; private set; } = null!;
+    public SelectList ConcernsSelectList { get; private set; } = default!;
     public SelectList CountiesSelectList => new(Data.Counties);
     public SelectList StatesSelectList => new(Data.States);
 
@@ -56,7 +57,7 @@ public class IndexModel : PageModel
         {
             ModelState.AddModelError(nameof(FindId), "Complaint ID must be a number.");
         }
-        else if (!await _complaints.PublicComplaintExistsAsync(idInt))
+        else if (!await _complaints.PublicExistsAsync(idInt))
         {
             ModelState.AddModelError(nameof(FindId),
                 "The Complaint ID entered does not exist or is not publicly available. " +
@@ -64,7 +65,7 @@ public class IndexModel : PageModel
         }
 
         if (!ModelState.IsValid) return Page();
-        return RedirectToPage("Complaint/Index", new { id = FindId });
+        return RedirectToPage("Complaints/Index", new { id = FindId });
     }
 
     public async Task<IActionResult> OnGetSearchAsync(ComplaintPublicSearchDto spec, [FromQuery] int p = 1)

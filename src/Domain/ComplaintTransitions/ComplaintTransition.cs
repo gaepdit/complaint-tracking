@@ -1,41 +1,51 @@
 ﻿using Cts.Domain.Complaints;
 using Cts.Domain.Identity;
 using Cts.Domain.Offices;
+using JetBrains.Annotations;
+using System.Text.Json.Serialization;
 
 namespace Cts.Domain.ComplaintTransitions;
 
 public class ComplaintTransition : AuditableEntity
 {
-    [Required]
-    public Complaint Complaint { get; set; } = null!;
+    // Constructors
 
-    public int ComplaintId { get; set; }
+    [UsedImplicitly] // Used by ORM.
+    private ComplaintTransition() { }
 
-    public ApplicationUser? TransferredByUser { get; set; }
+    internal ComplaintTransition(Guid id) : base(id) { }
 
-    public ApplicationUser? TransferredFromUser { get; set; }
+    // Properties
 
-    public Office? TransferredFromOffice { get; set; }
-    public Guid? TransferredFromOfficeId { get; set; }
+    public Complaint Complaint { get; init; } = default!;
 
-    public ApplicationUser? TransferredToUser { get; set; }
+    public TransitionType TransitionType { get; init; } = TransitionType.New;
 
-    public Office? TransferredToOffice { get; set; }
-    public Guid? TransferredToOfficeId { get; set; } = null;
+    public DateTimeOffset DateTransferred { get; init; } = DateTimeOffset.Now;
 
-    public DateTime DateTransferred { get; set; } = DateTime.Now;
+    public ApplicationUser? TransferredByUser { get; init; }
 
-    public DateTime? DateAccepted { get; set; } = null;
+    public ApplicationUser? TransferredFromUser { get; init; }
 
-    public TransitionType TransitionType { get; set; } = TransitionType.New;
+    public Office? TransferredFromOffice { get; init; }
+
+    public ApplicationUser? TransferredToUser { get; init; }
+
+    public Office? TransferredToOffice { get; init; }
+
+    public DateTimeOffset? DateAccepted { get; init; }
 
     [StringLength(4000)]
-    public string? Comment { get; set; }
+    public string? Comment { get; init; }
 }
 
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum TransitionType
 {
+    [Display(Name = "New")]
     New = 0,
+
+    [Display(Name = "Assigned")]
     Assigned = 1,
 
     [Display(Name = "Submitted For Review")]
@@ -44,8 +54,15 @@ public enum TransitionType
     [Display(Name = "Returned By Reviewer")]
     ReturnedByReviewer = 3,
 
+    [Display(Name = "Closed")]
     Closed = 4,
+
+    [Display(Name = "Reopened")]
     Reopened = 5,
+
+    [Display(Name = "Deleted")]
     Deleted = 6,
+
+    [Display(Name = "Restored")]
     Restored = 7,
 }

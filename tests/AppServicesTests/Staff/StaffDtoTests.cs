@@ -28,7 +28,7 @@ public class StaffDtoTests
     {
         var staffViewDto = new StaffViewDto { GivenName = givenName, FamilyName = familyName };
 
-        staffViewDto.DisplayName.Should().Be(expected);
+        staffViewDto.Name.Should().Be(expected);
     }
 
     [TestCase("abc", "def", "abc def")]
@@ -40,7 +40,7 @@ public class StaffDtoTests
         {
             GivenName = givenName,
             FamilyName = familyName,
-            Office = new OfficeViewDto { Id = Guid.Empty, Name = TextData.Phrase },
+            Office = new OfficeDisplayViewDto { Id = Guid.Empty, Name = TextData.Phrase },
         };
 
         staffViewDto.DisplayNameWithOffice.Should().Be($"{expectedDisplayName} ({TextData.Phrase})");
@@ -71,7 +71,7 @@ public class StaffDtoTests
             Active = false,
             GivenName = givenName,
             FamilyName = familyName,
-            Office = new OfficeViewDto { Id = Guid.Empty, Name = TextData.Phrase },
+            Office = new OfficeDisplayViewDto { Id = Guid.Empty, Name = TextData.Phrase },
         };
 
         staffViewDto.DisplayNameWithOffice.Should().Be($"{expectedDisplayName} ({TextData.Phrase}) [Inactive]");
@@ -92,7 +92,7 @@ public class StaffDtoTests
         var staffViewDto = new StaffViewDto
         {
             Phone = TestConstants.ValidPhoneNumber,
-            Office = new OfficeViewDto { Id = Guid.NewGuid() },
+            Office = new OfficeDisplayViewDto { Id = Guid.NewGuid() },
         };
 
         var result = staffViewDto.AsUpdateDto();

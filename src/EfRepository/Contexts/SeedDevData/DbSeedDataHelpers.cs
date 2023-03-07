@@ -16,28 +16,12 @@ public static class DbSeedDataHelpers
         SeedOfficeData(context);
         SeedIdentityData(context);
         SeedComplaintData(context);
-        SeedAttachmentData(context);
-        SeedComplaintActionData(context);
     }
 
     public static void SeedActionTypeData(AppDbContext context)
     {
         if (context.ActionTypes.Any()) return;
         context.ActionTypes.AddRange(ActionTypeData.GetActionTypes);
-        context.SaveChanges();
-    }
-
-    private static void SeedAttachmentData(AppDbContext context)
-    {
-        if (context.Attachments.Any()) return;
-        context.Attachments.AddRange(AttachmentData.GetAttachments);
-        context.SaveChanges();
-    }
-
-    private static void SeedComplaintActionData(AppDbContext context)
-    {
-        if (context.ComplaintActions.Any()) return;
-        context.ComplaintActions.AddRange(ComplaintActionData.GetComplaintActions);
         context.SaveChanges();
     }
 
@@ -48,11 +32,22 @@ public static class DbSeedDataHelpers
         context.Database.BeginTransaction();
         if (context.Database.ProviderName == SqlServerProvider)
             context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Complaints ON");
+
         context.Complaints.AddRange(ComplaintData.GetComplaints);
         context.SaveChanges();
+
         if (context.Database.ProviderName == SqlServerProvider)
             context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Complaints OFF");
         context.Database.CommitTransaction();
+
+        if (!context.Attachments.Any())
+            context.Attachments.AddRange(AttachmentData.GetAttachments);
+        if (!context.ComplaintActions.Any())
+            context.ComplaintActions.AddRange(ComplaintActionData.GetComplaintActions);
+        if (!context.ComplaintTransitions.Any())
+            context.ComplaintTransitions.AddRange(ComplaintTransitionData.GetComplaintTransitions);
+
+        context.SaveChanges();
     }
 
     public static void SeedConcernData(AppDbContext context)
@@ -71,8 +66,8 @@ public static class DbSeedDataHelpers
 
     public static void SeedIdentityData(AppDbContext context)
     {
-        var roles = IdentityData.GetRoles.ToList();
-        var users = IdentityData.GetUsers.ToList();
+        var roles = UserData.GetRoles.ToList();
+        var users = UserData.GetUsers.ToList();
         var userRoles = roles
             .Select(role => new IdentityUserRole<string> { RoleId = role.Id, UserId = users.First().Id })
             .ToList();

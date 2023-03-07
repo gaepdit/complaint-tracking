@@ -1,0 +1,9 @@
+﻿@model DateTimeOffset?
+@if (Model is null)
+{
+    <span class="text-muted">[Not entered]</span>
+}
+else
+{
+    @Model.Value.ToString(Cts.WebApp.Platform.Constants.DateTimeFormatConstants.LongDateTimeFormat)
+}

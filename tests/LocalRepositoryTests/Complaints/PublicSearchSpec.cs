@@ -14,7 +14,7 @@ public class PublicSearchSpec
     public void SetUp()
     {
         _repository = new LocalComplaintRepository();
-        _referenceItem = _repository.Items.Single(e => e.ComplaintNature == "PublicSearchSpec reference");
+        _referenceItem = _repository.Items.Single(e => e.ComplaintNature == "PublicSearchSpec complaint nature reference");
     }
 
     [TearDown]
@@ -52,9 +52,9 @@ public class PublicSearchSpec
     }
 
     [Test]
-    public async Task NatureSpec_ReturnsFilteredList()
+    public async Task DescriptionSpec_ReturnsFilteredList()
     {
-        var spec = new ComplaintPublicSearchDto { Nature = _referenceItem.ComplaintNature };
+        var spec = new ComplaintPublicSearchDto { Description = _referenceItem.ComplaintNature };
         var predicate = ComplaintFilters.PublicSearchPredicate(spec);
 
         var results = await _repository.GetListAsync(predicate);
@@ -68,7 +68,7 @@ public class PublicSearchSpec
     [Test]
     public async Task ConcernSpec_ReturnsFilteredList()
     {
-        var spec = new ComplaintPublicSearchDto { Type = _referenceItem.PrimaryConcern.Id };
+        var spec = new ComplaintPublicSearchDto { Concern = _referenceItem.PrimaryConcern.Id };
         var predicate = ComplaintFilters.PublicSearchPredicate(spec);
 
         var results = await _repository.GetListAsync(predicate);

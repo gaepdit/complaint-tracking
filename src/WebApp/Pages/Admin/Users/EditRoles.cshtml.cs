@@ -73,9 +73,9 @@ public class EditRolesModel : PageModel
 
     public class RoleSetting
     {
-        public string Name { get; init; } = null!;
-        public string DisplayName { get; init; } = null!;
-        public string Description { get; init; } = null!;
+        public string Name { get; init; } = default!;
+        public string DisplayName { get; init; } = default!;
+        public string Description { get; init; } = default!;
         public bool IsSelected { get; init; }
     }
 }

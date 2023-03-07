@@ -4,28 +4,28 @@ namespace Cts.TestData.Constants;
 
 public static class ValueObjectData
 {
-    public static readonly PhoneNumber SampleNumber = new()
+    public static PhoneNumber SamplePhoneNumber() => new()
     {
         Number = TestConstants.ValidPhoneNumber,
         Type = PhoneType.Office,
     };
 
-    public static readonly PhoneNumber AlternateNumber = new()
+    public static PhoneNumber AlternatePhoneNumber() => new()
     {
         Number = TestConstants.AlternatePhoneNumber,
         Type = PhoneType.Cell,
     };
 
-    public static readonly Address FullAddress = new()
+    public static IncompleteAddress FullCompleteAddress() => new()
     {
         Street = "123 Main St.",
         Street2 = "Box 456",
         City = "Town-ville",
-        PostalCode = "98765-0000",
+        PostalCode = "98765-1234",
         State = "Georgia",
     };
 
-    public static readonly Address LessAddress = new()
+    public static IncompleteAddress LessCompleteAddress() => new()
     {
         Street = "456 Second St.",
         Street2 = null,
@@ -34,21 +34,21 @@ public static class ValueObjectData
         State = "GA",
     };
 
-    public static readonly Address IncompleteAddress = new()
+    public static IncompleteAddress IncompleteAddress() => new()
     {
         Street = "789 Third St.",
         Street2 = null,
-        City = "",
-        PostalCode = "",
+        City = null,
+        PostalCode = null,
         State = "GA",
     };
 
-    public static readonly Address AlternateFullAddress = new()
+    public static IncompleteAddress AlternateFullCompleteAddress() => new()
     {
         Street = "2000 Alternate St.",
         Street2 = "Box 2000",
         City = "Alt-ville",
-        PostalCode = "98765-2000",
+        PostalCode = "98765-2222",
         State = "Florida",
     };
 }

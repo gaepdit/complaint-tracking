@@ -1,9 +1,10 @@
 ﻿@page "{id:Guid?}"
 @using Cts.Domain.Identity
+@using Cts.WebApp.Pages.Shared.DisplayTemplates;
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model DetailsModel
 @{
-    ViewData["Title"] = "User Profile: " + Model.DisplayStaff.DisplayName;
+    ViewData["Title"] = "User Profile: " + Model.DisplayStaff.Name;
 }
 
 <h1>User Profile</h1>
@@ -15,13 +16,13 @@
     {
         <em class="text-warning">Inactive:</em>
     }
-    @Model.DisplayStaff.DisplayName
+    @Model.DisplayStaff.Name
 </h2>
 
 @if (User.IsInRole(AppRole.UserAdmin))
 {
     <p>
-        <a asp-page="./Edit" asp-route-id="@Model.DisplayStaff.Id" class="btn btn-outline-primary btn-sm">Edit Profile</a>
+        <a asp-page="Edit" asp-route-id="@Model.DisplayStaff.Id" class="btn btn-outline-primary btn-sm">Edit Profile</a>
     </p>
 }
 
@@ -30,10 +31,10 @@
     <dd class="col-sm-9">@Model.DisplayStaff.Email</dd>
 
     <dt class="col-sm-3">Phone</dt>
-    <dd class="col-sm-9">@Html.DisplayFor(m => m.DisplayStaff.Phone, "StringOrNone")</dd>
+    <dd class="col-sm-9">@Html.DisplayFor(m => m.DisplayStaff.Phone, TemplateNames.StringOrNone)</dd>
 
     <dt class="col-sm-3">Office</dt>
-    <dd class="col-sm-9">@Html.DisplayFor(m => m.OfficeName, "StringOrNone")</dd>
+    <dd class="col-sm-9">@Html.DisplayFor(m => m.OfficeName, TemplateNames.StringOrNone)</dd>
 </dl>
 <hr />
 
@@ -42,7 +43,7 @@
 @if (User.IsInRole(AppRole.UserAdmin))
 {
     <p>
-        <a asp-page="./EditRoles" asp-route-id="@Model.DisplayStaff.Id" class="btn btn-outline-primary btn-sm">Edit User Roles</a>
+        <a asp-page="EditRoles" asp-route-id="@Model.DisplayStaff.Id" class="btn btn-outline-primary btn-sm">Edit User Roles</a>
     </p>
 }
 

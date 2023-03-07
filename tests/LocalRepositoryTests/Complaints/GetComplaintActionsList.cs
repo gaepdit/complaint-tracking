@@ -17,7 +17,7 @@ public class GetComplaintActionsList
     public async Task WhenItemsExist_ReturnsList()
     {
         var complaint = _repository.Items.First();
-        var items = _repository.ComplaintActionItems.Where(e => e.ComplaintId == complaint.Id && !e.IsDeleted);
+        var items = _repository.ComplaintActionItems.Where(e => e.Complaint.Id == complaint.Id && !e.IsDeleted);
 
         var result =
             await _repository.GetComplaintActionsListAsync(ComplaintActionFilters.PublicIdPredicate(complaint.Id));
@@ -31,7 +31,7 @@ public class GetComplaintActionsList
         var item = _repository.ComplaintActionItems.First(e => e.IsDeleted);
 
         var result =
-            await _repository.GetComplaintActionsListAsync(ComplaintActionFilters.PublicIdPredicate(item.ComplaintId));
+            await _repository.GetComplaintActionsListAsync(ComplaintActionFilters.PublicIdPredicate(item.Complaint.Id));
 
         result.Should().NotContain(item);
     }

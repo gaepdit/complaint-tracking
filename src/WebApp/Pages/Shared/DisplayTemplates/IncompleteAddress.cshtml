@@ -1,0 +1,42 @@
+﻿@model Cts.Domain.ValueObjects.IncompleteAddress?
+@if (Model is null)
+{
+    <span class="text-muted">[Not entered]</span>
+}
+else
+{
+    @if (!string.IsNullOrWhiteSpace(Model.Street))
+    {
+        @Model.Street<br />
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.Street2))
+    {
+        @Model.Street2<br />
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.City))
+    {
+        @if (string.IsNullOrWhiteSpace(Model.State))
+        {
+            @Model.City
+        }
+        else
+        {
+            @Model.City@:,
+        }
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.State))
+    {
+        @if (string.IsNullOrEmpty(Model.PostalCode))
+        {
+            @Model.State
+        }
+        else
+        {
+            @Model.State@:&nbsp;
+        }
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.PostalCode))
+    {
+        @Model.PostalCode
+    }
+}

@@ -1,3 +1,4 @@
+using Cts.Domain.Complaints;
 using Cts.Domain.Identity;
 using JetBrains.Annotations;
 
@@ -19,7 +20,7 @@ public class Attachment : AuditableSoftDeleteEntity
 
     // Properties
 
-    public int ComplaintId { get; init; }
+    public Complaint Complaint { get; init; } = default!;
 
     [StringLength(245)]
     public string FileName { get; init; } = string.Empty;

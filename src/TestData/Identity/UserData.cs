@@ -2,7 +2,7 @@ using Cts.Domain.Identity;
 
 namespace Cts.TestData.Identity;
 
-internal static partial class IdentityData
+internal static partial class UserData
 {
     private static List<ApplicationUser> UserSeedItems => new()
     {

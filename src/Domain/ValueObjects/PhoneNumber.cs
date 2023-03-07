@@ -1,6 +1,7 @@
 ﻿using GaEpd.AppLibrary.Domain.ValueObjects;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 namespace Cts.Domain.ValueObjects;
 
@@ -9,17 +10,20 @@ public record PhoneNumber : ValueObject
 {
     [StringLength(25)]
     [DataType(DataType.PhoneNumber)]
-    public string Number { get; [UsedImplicitly] init; } = string.Empty;
+    [Display(Name = "Phone number")]
+    public string? Number { get; [UsedImplicitly] init; } = string.Empty;
 
-    public PhoneType Type { get; [UsedImplicitly] init; } = PhoneType.Unknown;
+    [Display(Name = "Phone type")]
+    public PhoneType? Type { get; [UsedImplicitly] init; } = PhoneType.Unknown;
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
-        yield return Number;
-        yield return Type;
+        yield return Number ?? string.Empty;
+        yield return Type ?? PhoneType.Unknown;
     }
 }
 
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum PhoneType
 {
     Cell = 0,

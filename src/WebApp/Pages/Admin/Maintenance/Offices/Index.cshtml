@@ -1,5 +1,6 @@
 ﻿@page
 @using Cts.Domain.Identity
+@using Cts.WebApp.Pages.Shared.DisplayTemplates;
 @model IndexModel
 @{
     ViewData["Title"] = $"Site Maintenance: {IndexModel.ThisOption.PluralName}";
@@ -29,7 +30,7 @@
     The &ldquo;@AppRole.SiteMaintenanceRole.DisplayName&rdquo; role is needed to add or edit @IndexModel.ThisOption.PluralName.
     @if (User.IsInRole(AppRole.SiteMaintenance))
     {
-        @:Select an item to edit it. Setting an item as &ldquo;inactive&rdquo; makes it unavailable for future use but does not 
+        @:Select an item to edit it. Setting an item as &ldquo;inactive&rdquo; makes it unavailable for future use but does not
         @:affect any existing use.
     }
 </p>
@@ -42,36 +43,36 @@ else
 {
     <table class="table" aria-describedby="table-description">
         <thead>
-        <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Assignor</th>
-            <th scope="col">Active</th>
-        </tr>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Assignor</th>
+                <th scope="col">Active</th>
+            </tr>
         </thead>
         <tbody>
-        @foreach (var item in Model.Items)
-        {
-            <tr class="@(item.Id == Model.HighlightId ? "list-group-item-warning" : !item.Active ? "bg-secondary bg-opacity-25" : "")">
-                <td>
-                    @if (User.IsInRole(AppRole.SiteMaintenance))
-                    {
-                        <a asp-page="Edit" asp-route-id="@item.Id">
-                            @Html.DisplayFor(m => item.Name, "StringOrNone")
-                        </a>
-                    }
-                    else
-                    {
-                        @Html.DisplayFor(m => item.Name, "StringOrNone")
-                    }
-                </td>
-                <td>
-                    @Html.DisplayFor(m => item.AssignorNameWithOffice, "StringOrNone")
-                </td>
-                <td>
-                    @Html.DisplayFor(m => item.Active)
-                </td>
-            </tr>
-        }
+            @foreach (var item in Model.Items)
+            {
+                <tr class="@(item.Id == Model.HighlightId ? "list-group-item-warning" : !item.Active ? "bg-secondary bg-opacity-25" : "")">
+                    <td>
+                        @if (User.IsInRole(AppRole.SiteMaintenance))
+                        {
+                            <a asp-page="Edit" asp-route-id="@item.Id">
+                                @Html.DisplayFor(m => item.Name, TemplateNames.StringOrNone)
+                            </a>
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(m => item.Name, TemplateNames.StringOrNone)
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(m => item.AssignorNameWithOffice, TemplateNames.StringOrNone)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(m => item.Active)
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 }

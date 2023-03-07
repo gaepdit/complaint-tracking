@@ -14,7 +14,7 @@ namespace WebAppTests.Pages.Admin.Users;
 
 public class EditRolesTests
 {
-    private static readonly OfficeViewDto OfficeViewTest = new() { Id = Guid.Empty, Name = TestConstants.ValidName };
+    private static readonly OfficeDisplayViewDto OfficeViewTest = new() { Id = Guid.Empty, Name = TestConstants.ValidName };
 
     private static readonly StaffViewDto StaffViewTest = new()
     {

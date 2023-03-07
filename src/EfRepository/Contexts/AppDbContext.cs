@@ -33,11 +33,28 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
 
         // See https://learn.microsoft.com/en-us/ef/core/querying/related-data/eager#model-configuration-for-auto-including-navigations
         builder.Entity<ApplicationUser>().Navigation(e => e.Office).AutoInclude();
+        builder.Entity<Attachment>().Navigation(e => e.UploadedBy).AutoInclude();
         
-        var complaintEntity = builder.Entity<Complaint>();
-        complaintEntity.Navigation(e => e.PrimaryConcern).AutoInclude();
-        complaintEntity.Navigation(e => e.SecondaryConcern).AutoInclude();
-        complaintEntity.Navigation(e => e.CurrentOffice).AutoInclude();
+        var complaint = builder.Entity<Complaint>();
+        complaint.Navigation(e => e.PrimaryConcern).AutoInclude();
+        complaint.Navigation(e => e.SecondaryConcern).AutoInclude();
+        complaint.Navigation(e => e.CurrentOffice).AutoInclude();
+        complaint.Navigation(e => e.EnteredBy).AutoInclude();
+        complaint.Navigation(e => e.ReceivedBy).AutoInclude();
+        complaint.Navigation(e => e.CurrentOwner).AutoInclude();
+        complaint.Navigation(e => e.ReviewedBy).AutoInclude();
+        complaint.Navigation(e => e.DeletedBy).AutoInclude();
+
+        var action = builder.Entity<ComplaintAction>();
+        action.Navigation(e => e.ActionType).AutoInclude();
+        action.Navigation(e => e.EnteredBy).AutoInclude();
+
+        var transition = builder.Entity<ComplaintTransition>();
+        transition.Navigation(e => e.TransferredByUser).AutoInclude();
+        transition.Navigation(e => e.TransferredFromOffice).AutoInclude();
+        transition.Navigation(e => e.TransferredFromUser).AutoInclude();
+        transition.Navigation(e => e.TransferredToOffice).AutoInclude();
+        transition.Navigation(e => e.TransferredToUser).AutoInclude();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

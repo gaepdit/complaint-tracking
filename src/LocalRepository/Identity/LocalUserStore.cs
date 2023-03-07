@@ -19,8 +19,8 @@ public sealed class LocalUserStore :
 
     public LocalUserStore()
     {
-        UserStore = IdentityData.GetUsers.ToList();
-        Roles = IdentityData.GetRoles.ToList();
+        UserStore = UserData.GetUsers.ToList();
+        Roles = UserData.GetRoles.ToList();
         UserRoles = Roles
             .Select(role => new IdentityUserRole<string> { RoleId = role.Id, UserId = UserStore.First().Id })
             .ToList();

@@ -1,7 +1,9 @@
-﻿using Cts.AppServices.Offices;
+﻿using Cts.AppServices.BaseDto;
+using Cts.AppServices.Offices;
 using Cts.Domain.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Cts.AppServices.Staff;
 
@@ -30,28 +32,30 @@ public record StaffSearchDto
     }
 }
 
-public class StaffViewDto
+public class StaffViewDto : IDtoHasNameProperty
 {
     public string Id { get; init; } = string.Empty;
     public string GivenName { get; init; } = string.Empty;
     public string FamilyName { get; init; } = string.Empty;
     public string Email { get; init; } = string.Empty;
     public string? Phone { get; init; }
-    public OfficeViewDto? Office { get; init; }
+    public OfficeDisplayViewDto? Office { get; init; }
 
     [UIHint("BoolActive")]
     public bool Active { get; init; } = true;
 
     // Read-only properties
-    public string DisplayName =>
+    [JsonIgnore]
+    public string Name =>
         string.Join(" ", new[] { GivenName, FamilyName }.Where(s => !string.IsNullOrEmpty(s)));
 
+    [JsonIgnore]
     public string DisplayNameWithOffice
     {
         get
         {
             var sn = new StringBuilder();
-            sn.Append(DisplayName);
+            sn.Append(Name);
 
             if (Office != null) sn.Append($" ({Office.Name})");
             if (!Active) sn.Append(" [Inactive]");
@@ -60,9 +64,11 @@ public class StaffViewDto
         }
     }
 
+    [JsonIgnore]
     public string SortableFullName =>
         string.Join(", ", new[] { FamilyName, GivenName }.Where(s => !string.IsNullOrEmpty(s)));
 
+    [JsonIgnore]
     public string SelectableNameWithOffice
     {
         get

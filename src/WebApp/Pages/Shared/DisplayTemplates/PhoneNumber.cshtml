@@ -1,0 +1,13 @@
+﻿@model Cts.Domain.ValueObjects.PhoneNumber?
+@if (Model is null || string.IsNullOrWhiteSpace(Model.Number))
+{
+    <span class="text-muted">[Not entered]</span>
+}
+else
+{
+    @Model.Number
+    @if (Model.Type is not null && Model.Type != Domain.ValueObjects.PhoneType.Unknown)
+    {
+        <em>(@Model.Type.ToString())</em>
+    }
+}

@@ -51,8 +51,12 @@ public sealed class StaffAppService : IStaffAppService
         return _mapper.Map<List<StaffViewDto>>(users);
     }
 
-    public async Task<IReadOnlyList<ListItem<string>>> GetActiveStaffMembersAsync(CancellationToken token = default) =>
+    public async Task<IReadOnlyList<ListItem<string>>> GetActiveStaffMembersAsync() =>
         (await GetListAsync(new StaffSearchDto { Status = StaffSearchDto.ActiveStatus.Active }))
+            .Select(e => new ListItem<string>(e.Id, e.SelectableNameWithOffice)).ToList();
+
+    public async Task<IReadOnlyList<ListItem<string>>> GetAllStaffMembersAsync() =>
+        (await GetListAsync(new StaffSearchDto { Status = StaffSearchDto.ActiveStatus.All }))
             .Select(e => new ListItem<string>(e.Id, e.SelectableNameWithOffice)).ToList();
 
     public async Task<IList<string>> GetRolesAsync(string id) =>
@@ -88,8 +92,8 @@ public sealed class StaffAppService : IStaffAppService
 
     public async Task<IdentityResult> UpdateAsync(StaffUpdateDto resource)
     {
-        var user = await _userManager.FindByIdAsync(resource.Id);
-        if (user is null) throw new EntityNotFoundException(typeof(ApplicationUser), resource.Id);
+        var user = await _userManager.FindByIdAsync(resource.Id)
+            ?? throw new EntityNotFoundException(typeof(ApplicationUser), resource.Id);
 
         user.Phone = resource.Phone;
         user.Office = resource.OfficeId == null ? null : await _officeRepository.FindAsync(resource.OfficeId.Value);

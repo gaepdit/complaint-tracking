@@ -1,0 +1,259 @@
+@page
+@using Cts.AppServices.Complaints.Dto
+@using Cts.WebApp.Pages.Shared.DisplayTemplates;
+@using Cts.WebApp.Platform.Constants
+@using GaEpd.AppLibrary.Pagination
+@using System.Globalization
+@model IndexModel
+@{
+    ViewData["Title"] = "Complaint Search";
+}
+
+@section Scripts {
+    <script src="~/js/formSearch.js"></script>
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="p-3 rounded-3 bg-light border">
+    <div class="text-muted">
+        <em>All fields are optional.</em>
+    </div>
+    <form method="get" asp-fragment="SearchResults">
+        <h2 class="h4">Status</h2>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="Spec.Status" class="form-label"></label>
+                <select asp-for="Spec.Status" asp-items="Html.GetEnumSelectList<SearchComplaintStatus>()" class="form-select">
+                    <option value="">@TextConstants.SelectTextAny</option>
+                </select>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label asp-for="Spec.DeletedStatus" class="form-label"></label>
+                <select asp-for="Spec.DeletedStatus" asp-items="Html.GetEnumSelectList<SearchDeleteStatus>()" class="form-select">
+                    <option value="">Not Deleted</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="Spec.ReceivedFrom" class="form-label">Date Complaint Received</label>
+                <div class="input-group">
+                    <div class="form-floating">
+                        <input asp-for="Spec.ReceivedFrom" name="@nameof(Model.Spec.ReceivedFrom)" class="form-control" />
+                        <label asp-for="Spec.ReceivedFrom" class="form-label"></label>
+                    </div>
+                    <div class="form-floating">
+                        <input asp-for="Spec.ReceivedTo" name="@nameof(Model.Spec.ReceivedTo)" class="form-control" />
+                        <label asp-for="Spec.ReceivedTo" class="form-label"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label asp-for="Spec.ClosedFrom" class="form-label">Date Complaint Closed</label>
+                <div class="input-group">
+                    <div class="form-floating">
+                        <input asp-for="Spec.ClosedFrom" name="@nameof(Model.Spec.ClosedFrom)" class="form-control" />
+                        <label asp-for="Spec.ClosedFrom" class="form-label"></label>
+                    </div>
+                    <div class="form-floating">
+                        <input asp-for="Spec.ClosedTo" name="@nameof(Model.Spec.ClosedTo)" class="form-control" />
+                        <label asp-for="Spec.ClosedTo" class="form-label"></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="Spec.ReceivedBy" class="form-label"></label>
+                <select asp-for="Spec.ReceivedBy" asp-items="Model.StaffMembersSelectList" class="form-select">
+                    <option value="">@TextConstants.SelectTextAny</option>
+                </select>
+            </div>
+        </div>
+
+        <h2 class="h4">Caller</h2>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="Spec.CallerName" class="form-label"></label>
+                <input asp-for="Spec.CallerName" name="@nameof(Model.Spec.CallerName)" class="form-control" />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label asp-for="Spec.Represents" class="form-label"></label>
+                <input asp-for="Spec.Represents" name="@nameof(Model.Spec.Represents)" class="form-control" />
+            </div>
+        </div>
+
+        <h2 class="h4">Complaint Details</h2>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="Spec.Description" class="form-label"></label>
+                <input asp-for="Spec.Description" name="@nameof(Model.Spec.Description)" class="form-control" aria-describedby="DescriptionHelpBlock" />
+                <small id="DescriptionHelpBlock" class="form-text text-muted d-block mb-3">(A word or phrase to search for; searches nature, location, and description fields.)</small>
+                <label asp-for="Spec.ComplaintCity" class="form-label"></label>
+                <input asp-for="Spec.ComplaintCity" name="@nameof(Model.Spec.ComplaintCity)" class="form-control" />
+            </div>
+            <div class="col-md-6 mb-3">
+                <label asp-for="Spec.County" class="form-label"></label>
+                <select asp-for="Spec.County" asp-items="Model.CountiesSelectList" class="form-select mb-3">
+                    <option value="">@TextConstants.SelectTextAny</option>
+                </select>
+                <label asp-for="Spec.Concern" class="form-label"></label>
+                <select asp-for="Spec.Concern" asp-items="Model.ConcernsSelectList" class="form-select">
+                    <option value="">@TextConstants.SelectTextAny</option>
+                </select>
+            </div>
+        </div>
+
+        <h2 class="h4">Source</h2>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="Spec.Source" class="form-label"></label>
+                <input asp-for="Spec.Source" name="@nameof(Model.Spec.Source)" class="form-control mb-3" />
+                <label asp-for="Spec.FacilityId" class="form-label"></label>
+                <input asp-for="Spec.FacilityId" name="@nameof(Model.Spec.FacilityId)" class="form-control mb-3" />
+                <label asp-for="Spec.Contact" class="form-label"></label>
+                <input asp-for="Spec.Contact" name="@nameof(Model.Spec.Contact)" class="form-control" />
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label asp-for="Spec.Street" class="form-label"></label>
+                        <input asp-for="Spec.Street" name="@nameof(Model.Spec.Street)" class="form-control" />
+                    </div>
+                    <div class="col-sm-8 mb-3">
+                        <label asp-for="Spec.State" class="form-label"></label>
+                        <select asp-for="Spec.State" asp-items="Model.StatesSelectList" class="form-select">
+                            <option value="">@TextConstants.SelectTextAny</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4 mb-3">
+                        <label asp-for="Spec.PostalCode" class="form-label"></label>
+                        <input asp-for="Spec.PostalCode" name="@nameof(Model.Spec.PostalCode)" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="mt-3 mb-1">
+            <input type="hidden" name="handler" value="search" />
+            <button id="SearchButton" type="submit" class="btn btn-primary col-sm-3 me-2">Search</button>
+            <a asp-page="Index" class="btn btn-outline-secondary col-sm-3 col-md-2">Clear Form</a>
+        </div>
+    </form>
+</div>
+
+@if (Model.ShowResults)
+{
+    <div id="SearchResults" class="mt-4">
+        <h3>Search Results</h3>
+
+        @if (Model.Results.TotalCount == 0)
+        {
+            <div class="container pt-3">
+                <p class="lead text-info">No matching results found.</p>
+            </div>
+        }
+        else
+        {
+            <table class="table" aria-label="Facility search results">
+                <caption class="caption-top container">
+                    <div class="d-md-flex align-items-center justify-content-between">
+                        <div class="small">
+                            <partial name="_PaginatedResultsCount" model="Model.Results" />
+                        </div>
+                        <div class="mt-3 mt-md-0">
+                            <partial name="_PaginationNav" model="((IPaginatedResult)Model.Results, Model.Spec.AsRouteValues())" />
+                        </div>
+                    </div>
+                </caption>
+
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col" class="text-nowrap">
+                            <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
+                       asp-route-Sort="@(Model.Spec.Sort == SortBy.IdAsc ? SortBy.IdDesc : SortBy.IdAsc)">
+                                ID
+                                @Html.DisplayFor(m => m.SortByName, TemplateNames.SortArrow, new { up = SortBy.IdAsc.ToString(), down = SortBy.IdDesc.ToString() })
+                            </a>
+                        </th>
+                        <th scope="col" class="text-nowrap">
+                            <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
+                       asp-route-Sort="@(Model.Spec.Sort == SortBy.ReceivedDateAsc ? SortBy.ReceivedDateDesc : SortBy.ReceivedDateAsc)">
+                                Received
+                                @Html.DisplayFor(m => m.SortByName, TemplateNames.SortArrow, new { up = SortBy.ReceivedDateAsc.ToString(), down = SortBy.ReceivedDateDesc.ToString() })
+                            </a>
+                        </th>
+                        <th scope="col" class="text-nowrap">
+                            <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
+                       asp-route-Sort="@(Model.Spec.Sort == SortBy.StatusAsc ? SortBy.StatusDesc : SortBy.StatusAsc)">
+                                Status
+                                @Html.DisplayFor(m => m.SortByName, TemplateNames.SortArrow, new { up = SortBy.StatusAsc.ToString(), down = SortBy.StatusDesc.ToString() })
+                            </a>
+                        </th>
+                        <th scope="col">Source/Location</th>
+                        <th scope="col">Current Assignment</th>
+                        <th scope="col">Areas of Concern</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model.Results.Items)
+                    {
+                        <tr class="@(item.IsDeleted ? "table-danger" : "")">
+                            <th scope="row">
+                                <a asp-page="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">@item.Id</a>
+                            </th>
+                            <td class="text-nowrap">@Html.DisplayFor(m => item.DateReceived, TemplateNames.ShortDate)</td>
+                            <td>
+                                @if (item.IsDeleted)
+                                {
+                                    <strong>DELETED</strong>
+                                    <br />
+                                }
+                                @Html.DisplayFor(m => item.Status)
+                                @if (item.ComplaintClosed && item.DateComplaintClosed is not null)
+                                {
+                                    <br />
+                                    @:on @Html.DisplayFor(m => item.DateComplaintClosed, TemplateNames.ShortDate)
+                                }
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>@Html.DisplayFor(m => item.SourceFacilityName, TemplateNames.StringOrNotEntered)</li>
+                                    @if (item.SourceFacilityId != null)
+                                    {
+                                        <li>ID: @item.SourceFacilityId</li>
+                                    }
+                                    @if (item.ComplaintCounty != null)
+                                    {
+                                        <li>@Html.DisplayFor(m => item.ComplaintCounty, TemplateNames.County)</li>
+                                    }
+                                </ul>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(m => item.AssignedOwnerName, TemplateNames.StringOrNotEntered)
+                                <br />
+                                @Html.DisplayFor(m => item.CurrentOfficeName, TemplateNames.StringOrNotEntered)
+                            </td>
+                            <td>
+                                <ol type="I">
+                                    <li>@Html.DisplayFor(m => item.PrimaryConcernName, TemplateNames.StringOrNotEntered)</li>
+                                    @if (item.SecondaryConcernName is not null)
+                                    {
+                                        <li>@Html.DisplayFor(m => item.SecondaryConcernName, TemplateNames.StringOrNotEntered)</li>
+                                    }
+                                </ol>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="d-md-flex align-items-center justify-content-end">
+                <partial name="_PaginationNav" model="((IPaginatedResult)Model.Results, Model.Spec.AsRouteValues())" />
+            </div>
+        }
+    </div>
+}

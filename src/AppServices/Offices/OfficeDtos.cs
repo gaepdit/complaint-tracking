@@ -1,10 +1,21 @@
-﻿using Cts.AppServices.Staff;
+﻿using Cts.AppServices.BaseDto;
+using Cts.AppServices.Staff;
 using Cts.Domain.Offices;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Cts.AppServices.Offices;
 
-public class OfficeViewDto
+public class OfficeDisplayViewDto : IDtoHasNameProperty
+{
+    public Guid Id { get; init; }
+    public string Name { get; init; } = string.Empty;
+
+    [UIHint("BoolActive")]
+    public bool Active { get; init; }
+}
+
+public class OfficeAdminViewDto : IDtoHasNameProperty
 {
     public Guid Id { get; init; }
     public string Name { get; init; } = string.Empty;
@@ -13,6 +24,8 @@ public class OfficeViewDto
     public bool Active { get; init; }
 
     public StaffViewDto? Assignor { get; init; }
+
+    [JsonIgnore]
     public string? AssignorNameWithOffice => Assignor?.DisplayNameWithOffice;
 }
 
