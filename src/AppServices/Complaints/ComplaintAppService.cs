@@ -5,6 +5,8 @@ using Cts.AppServices.Complaints.Dto;
 using Cts.AppServices.ComplaintTransitions;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Complaints;
+using Cts.Domain.Concerns;
+using Cts.Domain.Offices;
 using GaEpd.AppLibrary.Pagination;
 using Microsoft.AspNetCore.Http;
 
@@ -13,17 +15,23 @@ namespace Cts.AppServices.Complaints;
 public sealed class ComplaintAppService : IComplaintAppService
 {
     private readonly IComplaintRepository _repository;
+    private readonly IConcernRepository _concernRepository;
+    private readonly IOfficeRepository _officeRepository;
     private readonly IComplaintManager _manager;
     private readonly IMapper _mapper;
     private readonly IUserService _userService;
 
     public ComplaintAppService(
         IComplaintRepository repository,
+        IConcernRepository concernRepository,
+        IOfficeRepository officeRepository,
         IComplaintManager manager,
         IMapper mapper,
         IUserService userService)
     {
         _repository = repository;
+        _concernRepository = concernRepository;
+        _officeRepository = officeRepository;
         _manager = manager;
         _mapper = mapper;
         _userService = userService;
@@ -73,7 +81,7 @@ public sealed class ComplaintAppService : IComplaintAppService
     public async Task<AttachmentPublicViewDto?> GetPublicAttachmentAsync(Guid id, CancellationToken token = default)
     {
         var attachment = await _repository.FindAttachmentAsync(id, token);
-        if (attachment is null || attachment.IsDeleted || attachment.Complaint is null) return null;
+        if (attachment is null || attachment.IsDeleted) return null;
         var complaint = new List<Complaint> { attachment.Complaint }
             .SingleOrDefault(ComplaintFilters.IsPublicPredicate().Compile());
         return complaint is null ? null : _mapper.Map<AttachmentPublicViewDto>(attachment);
@@ -127,16 +135,33 @@ public sealed class ComplaintAppService : IComplaintAppService
     public async Task<AttachmentViewDto?> GetAttachmentAsync(Guid id, CancellationToken token = default)
     {
         var attachment = await _repository.FindAttachmentAsync(id, token);
-        return attachment is null || attachment.Complaint is null
-            ? null
-            : _mapper.Map<AttachmentViewDto>(attachment);
+        return _mapper.Map<AttachmentViewDto>(attachment);
     }
 
     public async Task<int> CreateAsync(ComplaintCreateDto resource, CancellationToken token = default)
     {
-        var item = _manager.Create();
-        item.SetCreator((await _userService.GetCurrentUserAsync())?.Id);
-        await _repository.InsertAsync(item, token: token);
+        var currentUser = await _userService.GetCurrentUserAsync();
+        DateTime.SpecifyKind(resource.DateReceived, DateTimeKind.Local);
+
+        var item = _mapper.Map<Complaint>(resource);
+
+        if (currentUser is not null) item.EnteredBy = currentUser;
+        item.ReceivedBy = await _userService.GetUserAsync(resource.ReceivedById!);
+        item.PrimaryConcern = await _concernRepository.GetAsync(resource.PrimaryConcernId, token);
+        item.SecondaryConcern = resource.SecondaryConcernId is null
+            ? null
+            : await _concernRepository.FindAsync(resource.SecondaryConcernId.Value, token);
+        item.CurrentOffice = await _officeRepository.GetAsync(resource.CurrentOfficeId, token);
+        if (resource.CurrentOwnerId != null)
+        {
+            item.CurrentOwner = await _userService.FindUserAsync(resource.CurrentOwnerId);
+            item.DateCurrentOwnerAssigned = DateTimeOffset.Now;
+            item.DateCurrentOwnerAccepted = resource.CurrentOwnerId.Equals(currentUser?.Id) ? DateTimeOffset.Now : null;
+        }
+
+        item.SetCreator(currentUser?.Id);
+
+        await _repository.InsertAsync(item, autoSave: true, token: token);
         return item.Id;
     }
 

@@ -3,8 +3,5 @@
 /// <inheritdoc />
 public class ComplaintManager : IComplaintManager
 {
-    public Complaint Create()
-    {
-        return new Complaint();
-    }
+    public Complaint Create() => new();
 }

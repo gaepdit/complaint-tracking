@@ -31,7 +31,7 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     public DateTimeOffset DateEntered { get; init; } = DateTimeOffset.Now;
 
-    public ApplicationUser EnteredBy { get; init; } = default!;
+    public ApplicationUser EnteredBy { get; set; } = default!;
 
     public DateTimeOffset DateReceived { get; set; }
 

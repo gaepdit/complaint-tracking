@@ -36,6 +36,13 @@ public sealed class StaffAppService : IStaffAppService
         return _mapper.Map<StaffViewDto?>(user);
     }
 
+    public async Task<StaffViewDto> GetAsync(string id)
+    {
+        var user = await _userManager.FindByIdAsync(id)
+            ?? throw new EntityNotFoundException(typeof(ApplicationUser), id);
+        return _mapper.Map<StaffViewDto>(user);
+    }
+
     public async Task<StaffViewDto?> FindAsync(string id)
     {
         var user = await _userManager.FindByIdAsync(id);

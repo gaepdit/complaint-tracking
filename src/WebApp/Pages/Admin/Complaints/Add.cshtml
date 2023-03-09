@@ -73,7 +73,7 @@
                     </div>
                     <div class="form-floating">
                         <select asp-for="Item.CallerPhoneNumber!.Type" asp-items="PhoneTypesSelectList" class="form-select">
-                            <option value="">@TextConstants.SelectTextRequired</option>
+                            <option value="">@TextConstants.SelectTextEmpty</option>
                         </select>
                         <label asp-for="Item.CallerPhoneNumber!.Type" class="form-label"></label>
                         <span asp-validation-for="Item.CallerPhoneNumber!.Type" class="invalid-feedback"></span>
@@ -87,7 +87,7 @@
                     </div>
                     <div class="form-floating">
                         <select asp-for="Item.CallerSecondaryPhoneNumber!.Type" asp-items="PhoneTypesSelectList" class="form-select">
-                            <option value="">@TextConstants.SelectTextRequired</option>
+                            <option value="">@TextConstants.SelectTextEmpty</option>
                         </select>
                         <label asp-for="Item.CallerSecondaryPhoneNumber!.Type" class="form-label"></label>
                         <span asp-validation-for="Item.CallerSecondaryPhoneNumber!.Type" class="invalid-feedback"></span>
@@ -101,7 +101,7 @@
                     </div>
                     <div class="form-floating">
                         <select asp-for="Item.CallerTertiaryPhoneNumber!.Type" asp-items="PhoneTypesSelectList" class="form-select">
-                            <option value="">@TextConstants.SelectTextRequired</option>
+                            <option value="">@TextConstants.SelectTextEmpty</option>
                         </select>
                         <label asp-for="Item.CallerTertiaryPhoneNumber!.Type" class="form-label"></label>
                         <span asp-validation-for="Item.CallerTertiaryPhoneNumber!.Type" class="invalid-feedback"></span>
@@ -173,7 +173,7 @@
                 </div>
                 <div class="form-floating mb-3">
                     <select asp-for="Item.ComplaintCounty" asp-items="Model.CountiesSelectList" class="form-select">
-                        <option value="">@TextConstants.SelectTextRequired</option>
+                        <option value="">@TextConstants.SelectTextEmpty</option>
                     </select>
                     <label asp-for="Item.ComplaintCounty" class="form-label"></label>
                     <span asp-validation-for="Item.ComplaintCounty" class="invalid-feedback"></span>
@@ -189,7 +189,7 @@
                 </div>
                 <div class="form-floating mb-3">
                     <select asp-for="Item.SecondaryConcernId" asp-items="Model.ConcernsSelectList" class="form-select">
-                        <option value="">@TextConstants.SelectTextRequired</option>
+                        <option value="">@TextConstants.SelectTextEmpty</option>
                     </select>
                     <label asp-for="Item.SecondaryConcernId" class="form-label"></label>
                     <span asp-validation-for="Item.SecondaryConcernId" class="invalid-feedback"></span>
@@ -241,7 +241,7 @@
                     </div>
                     <div class="form-floating">
                         <select asp-for="Item.SourcePhoneNumber!.Type" asp-items="PhoneTypesSelectList" class="form-select">
-                            <option value="">@TextConstants.SelectTextRequired</option>
+                            <option value="">@TextConstants.SelectTextEmpty</option>
                         </select>
                         <label asp-for="Item.SourcePhoneNumber!.Type" class="form-label"></label>
                         <span asp-validation-for="Item.SourcePhoneNumber!.Type" class="invalid-feedback"></span>
@@ -255,7 +255,7 @@
                     </div>
                     <div class="form-floating">
                         <select asp-for="Item.SourceSecondaryPhoneNumber!.Type" asp-items="PhoneTypesSelectList" class="form-select">
-                            <option value="">@TextConstants.SelectTextRequired</option>
+                            <option value="">@TextConstants.SelectTextEmpty</option>
                         </select>
                         <label asp-for="Item.SourceSecondaryPhoneNumber!.Type" class="form-label"></label>
                         <span asp-validation-for="Item.SourceSecondaryPhoneNumber!.Type" class="invalid-feedback"></span>
@@ -269,7 +269,7 @@
                     </div>
                     <div class="form-floating">
                         <select asp-for="Item.SourceTertiaryPhoneNumber!.Type" asp-items="PhoneTypesSelectList" class="form-select">
-                            <option value="">@TextConstants.SelectTextRequired</option>
+                            <option value="">@TextConstants.SelectTextEmpty</option>
                         </select>
                         <label asp-for="Item.SourceTertiaryPhoneNumber!.Type" class="form-label"></label>
                         <span asp-validation-for="Item.SourceTertiaryPhoneNumber!.Type" class="invalid-feedback"></span>
@@ -337,7 +337,7 @@
             <div class="col-md mb-3">
                 <div class="form-floating">
                     <select asp-for="Item.CurrentOwnerId" asp-items="Model.ActiveStaffMembers" class="form-select">
-                        <option value="">[Assignor]</option>
+                        <option value="">Default Assignor</option>
                     </select>
                     <label asp-for="Item.CurrentOwnerId" class="form-label"></label>
                     <span asp-validation-for="Item.CurrentOwnerId" class="invalid-feedback"></span>
@@ -372,7 +372,7 @@
                     $("#Item_SourceAddress_Street").val($("#Item_CallerAddress_Street").val());
                     $("#Item_SourceAddress_Street2").val($("#Item_CallerAddress_Street2").val());
                     $("#Item_SourceAddress_City").val($("#Item_CallerAddress_City").val());
-                    $("#Item_SourceAddress_StateId").val($("#Item_CallerAddress_StateId").val());
+                    $("#Item_SourceAddress_State").val($("#Item_CallerAddress_State").val());
                     $("#Item_SourceAddress_PostalCode").val($("#Item_CallerAddress_PostalCode").val());
                 }
                 );

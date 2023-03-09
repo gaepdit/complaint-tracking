@@ -1,5 +1,4 @@
-﻿using Cts.AppServices.Utilities;
-using Cts.Domain.Concerns;
+using Cts.AppServices.Utilities;
 using Cts.Domain.ValueObjects;
 using JetBrains.Annotations;
 using System.ComponentModel.DataAnnotations;
@@ -13,11 +12,9 @@ public class ComplaintCreateDto
     [UsedImplicitly]
     public ComplaintCreateDto() { }
 
-    public ComplaintCreateDto(string defaultState, string? receivedById)
+    public ComplaintCreateDto(string? receivedById)
     {
         ReceivedById = receivedById;
-        CallerAddress.State = defaultState;
-        SourceAddress.State = defaultState;
     }
 
     // Meta-data

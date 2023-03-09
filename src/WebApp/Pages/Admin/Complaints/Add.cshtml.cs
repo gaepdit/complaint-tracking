@@ -1,12 +1,13 @@
-﻿using Cts.AppServices.Complaints;
+using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.Dto;
 using Cts.AppServices.Concerns;
 using Cts.AppServices.Offices;
 using Cts.AppServices.Staff;
 using Cts.Domain.Data;
-using Cts.Domain.ValueObjects;
 using Cts.WebApp.Platform.Models;
 using Cts.WebApp.Platform.PageDisplayHelpers;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using GaEpd.AppLibrary.ListItems;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -34,28 +35,33 @@ public class AddModel : PageModel
     private readonly IStaffAppService _staff;
     private readonly IConcernAppService _concernService;
     private readonly IOfficeAppService _offices;
+    private readonly IValidator<ComplaintCreateDto> _validator;
 
     public AddModel(
         IComplaintAppService service,
         IStaffAppService staff,
         IConcernAppService concerns,
-        IOfficeAppService offices)
+        IOfficeAppService offices,
+        IValidator<ComplaintCreateDto> validator)
     {
         _complaints = service;
         _staff = staff;
         _concernService = concerns;
         _offices = offices;
+        _validator = validator;
     }
 
     public async Task OnGetAsync()
     {
         await PopulateSelectListsAsync();
         var user = await _staff.GetCurrentUserAsync();
-        Item = new ComplaintCreateDto("Georgia", user?.Id);
+        Item = new ComplaintCreateDto(user?.Id);
     }
 
     public async Task<IActionResult> OnPostAsync()
     {
+        var validationResult = await _validator.ValidateAsync(Item);
+        if (!validationResult.IsValid) validationResult.AddToModelState(ModelState, nameof(Item));
         if (!ModelState.IsValid)
         {
             await PopulateSelectListsAsync();
@@ -64,12 +70,11 @@ public class AddModel : PageModel
 
         var id = await _complaints.CreateAsync(Item);
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "Complaint successfully created.");
-        return RedirectToPage("./Details", new { id });
+        return RedirectToPage("Details", new { id });
     }
 
     private async Task PopulateSelectListsAsync()
     {
-
         ActiveStaffMembers = (await _staff.GetActiveStaffMembersAsync()).ToSelectList();
         ConcernsSelectList = (await _concernService.GetActiveListItemsAsync()).ToSelectList();
         OfficesSelectList = (await _offices.GetActiveListItemsAsync()).ToSelectList();
