@@ -141,7 +141,7 @@ public sealed class ComplaintAppService : IComplaintAppService
     public async Task<int> CreateAsync(ComplaintCreateDto resource, CancellationToken token = default)
     {
         var currentUser = await _userService.GetCurrentUserAsync();
-        DateTime.SpecifyKind(resource.DateReceived, DateTimeKind.Local);
+        resource.DateReceived = DateTime.SpecifyKind(resource.DateReceived, DateTimeKind.Local);
 
         var item = _mapper.Map<Complaint>(resource);
         await _manager.SetIdAsync(item);
