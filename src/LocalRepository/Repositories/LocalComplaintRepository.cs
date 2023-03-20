@@ -37,12 +37,6 @@ public sealed class LocalComplaintRepository : BaseRepository<Complaint, int>, I
     public Task<Attachment?> FindAttachmentAsync(Guid id, CancellationToken token = default) =>
         Task.FromResult(AttachmentItems.SingleOrDefault(e => e.Id == id));
 
-    // Hide the base repository method in order to set the ID.
-
-    public new Task InsertAsync(Complaint entity, bool autoSave = true, CancellationToken token = default)
-    {
-        entity.SetId(Items.Select(e => e.Id).Max() + 1);
-        Items.Add(entity);
-        return Task.CompletedTask;
-    }
+    public Task<int> GetNextIdAsync(CancellationToken token = default) =>
+        Task.FromResult(Items.Select(e => e.Id).Max() + 1);
 }

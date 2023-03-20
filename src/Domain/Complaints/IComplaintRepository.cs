@@ -17,4 +17,6 @@ public interface IComplaintRepository : IRepository<Complaint, int>
         int complaintId, CancellationToken token = default);
 
     public Task<Attachment?> FindAttachmentAsync(Guid id, CancellationToken token = default);
+
+    public Task<int> GetNextIdAsync(CancellationToken token = default);
 }

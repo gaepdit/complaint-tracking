@@ -21,7 +21,7 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     // Methods
 
-    public void SetId(int id) => Id = id;
+    internal void SetId(int id) => Id = id;
 
     // Properties
 

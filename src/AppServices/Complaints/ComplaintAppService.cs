@@ -144,6 +144,7 @@ public sealed class ComplaintAppService : IComplaintAppService
         DateTime.SpecifyKind(resource.DateReceived, DateTimeKind.Local);
 
         var item = _mapper.Map<Complaint>(resource);
+        await _manager.SetIdAsync(item);
 
         if (currentUser is not null) item.EnteredBy = currentUser;
         item.ReceivedBy = await _userService.GetUserAsync(resource.ReceivedById!);
