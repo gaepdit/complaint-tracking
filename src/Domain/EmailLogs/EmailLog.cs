@@ -2,7 +2,7 @@ namespace Cts.Domain.EmailLogs;
 
 public class EmailLog : Entity<Guid>
 {
-    public DateTimeOffset DateSent { get; set; }
+    public DateTimeOffset SentDate { get; set; }
     public string? To { get; set; }
     public string? From { get; set; }
     public string? Subject { get; set; }

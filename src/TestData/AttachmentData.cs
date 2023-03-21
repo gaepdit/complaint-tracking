@@ -13,7 +13,7 @@ internal static class AttachmentData
             FileName = "FileOne.png",
             FileExtension = ".png",
             Size = 1,
-            DateUploaded = DateTimeOffset.Now.AddDays(-2),
+            UploadedDate = DateTimeOffset.Now.AddDays(-2),
             UploadedBy = UserData.GetUsers.ElementAt(1),
             IsImage = true,
         },
@@ -23,7 +23,7 @@ internal static class AttachmentData
             FileName = "File Two.svg",
             FileExtension = ".svg",
             Size = 10,
-            DateUploaded = DateTimeOffset.Now.AddDays(-1),
+            UploadedDate = DateTimeOffset.Now.AddDays(-1),
             UploadedBy = UserData.GetUsers.ElementAt(1),
             IsImage = true,
         },
@@ -34,7 +34,7 @@ internal static class AttachmentData
             FileExtension = ".pdf",
             Size = 100000,
             UploadedBy = UserData.GetUsers.ElementAt(2),
-            DateUploaded = DateTimeOffset.Now.AddDays(-1),
+            UploadedDate = DateTimeOffset.Now.AddDays(-1),
         },
         new Attachment(new Guid("00000000-0000-0000-0000-000000000104"))
         {
@@ -42,7 +42,7 @@ internal static class AttachmentData
             FileName = "File-Four-Empty-File.png",
             FileExtension = ".png",
             Size = 1000,
-            DateUploaded = DateTimeOffset.Now.AddDays(-3),
+            UploadedDate = DateTimeOffset.Now.AddDays(-3),
             UploadedBy = UserData.GetUsers.ElementAt(0),
             IsImage = true,
         },
@@ -52,7 +52,7 @@ internal static class AttachmentData
             FileName = "File-Five-Attachment-Deleted.pdf",
             FileExtension = ".pdf",
             Size = 1000,
-            DateUploaded = DateTimeOffset.Now.AddDays(-3),
+            UploadedDate = DateTimeOffset.Now.AddDays(-3),
             UploadedBy = UserData.GetUsers.ElementAt(0),
         },
         new Attachment(new Guid("00000000-0000-0000-0000-000000000106"))
@@ -61,7 +61,7 @@ internal static class AttachmentData
             FileName = "File-Six-Complaint-Deleted.pdf",
             FileExtension = ".pdf",
             Size = 1000,
-            DateUploaded = DateTimeOffset.Now.AddDays(-3),
+            UploadedDate = DateTimeOffset.Now.AddDays(-3),
             UploadedBy = UserData.GetUsers.ElementAt(0),
         },
     };

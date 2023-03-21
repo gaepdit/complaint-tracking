@@ -38,15 +38,15 @@ public class PublicSearchSpec
     {
         var spec = new ComplaintPublicSearchDto
         {
-            DateFrom = _referenceItem.DateReceived.Date,
-            DateTo = _referenceItem.DateReceived.Date,
+            DateFrom = _referenceItem.ReceivedDate.Date,
+            DateTo = _referenceItem.ReceivedDate.Date,
         };
         var predicate = ComplaintFilters.PublicSearchPredicate(spec);
 
         var results = await _repository.GetListAsync(predicate);
 
         var expected = _repository.Items
-            .Where(e => e.DateReceived == _referenceItem.DateReceived
+            .Where(e => e.ReceivedDate == _referenceItem.ReceivedDate
                 && e is { IsDeleted: false, ComplaintClosed: true });
         results.Should().BeEquivalentTo(expected);
     }

@@ -18,9 +18,9 @@
         <div class="row mb-3">
             <div class="col-md input-group mb-3">
                 <div class="form-floating">
-                    <input asp-for="Item.DateReceived" class="form-control" />
-                    <label asp-for="Item.DateReceived" class="form-label"></label>
-                    <span asp-validation-for="Item.DateReceived" class="invalid-feedback"></span>
+                    <input asp-for="Item.ReceivedDate" class="form-control" />
+                    <label asp-for="Item.ReceivedDate" class="form-label"></label>
+                    <span asp-validation-for="Item.ReceivedDate" class="invalid-feedback"></span>
                 </div>
                 <div class="form-floating">
                     <input asp-for="Item.TimeReceived" asp-format="{0:HH:mm}" class="form-control" />
@@ -209,9 +209,9 @@
                 </div>
                 <div class="col-md-6 mb-3">
                     <div class="form-floating">
-                        <input asp-for="Item.SourceFacilityId" class="form-control" />
-                        <label asp-for="Item.SourceFacilityId" class="form-label"></label>
-                        <span asp-validation-for="Item.SourceFacilityId" class="invalid-feedback"></span>
+                        <input asp-for="Item.SourceFacilityIdNumber" class="form-control" />
+                        <label asp-for="Item.SourceFacilityIdNumber" class="form-label"></label>
+                        <span asp-validation-for="Item.SourceFacilityIdNumber" class="invalid-feedback"></span>
                     </div>
                 </div>
             </div>

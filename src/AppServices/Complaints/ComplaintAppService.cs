@@ -141,7 +141,7 @@ public sealed class ComplaintAppService : IComplaintAppService
     public async Task<int> CreateAsync(ComplaintCreateDto resource, CancellationToken token = default)
     {
         var currentUser = await _userService.GetCurrentUserAsync();
-        resource.DateReceived = DateTime.SpecifyKind(resource.DateReceived, DateTimeKind.Local);
+        resource.ReceivedDate = DateTime.SpecifyKind(resource.ReceivedDate, DateTimeKind.Local);
 
         var item = _mapper.Map<Complaint>(resource);
         await _manager.SetIdAsync(item);
@@ -156,8 +156,8 @@ public sealed class ComplaintAppService : IComplaintAppService
         if (resource.CurrentOwnerId != null)
         {
             item.CurrentOwner = await _userService.FindUserAsync(resource.CurrentOwnerId);
-            item.DateCurrentOwnerAssigned = DateTimeOffset.Now;
-            item.DateCurrentOwnerAccepted = resource.CurrentOwnerId.Equals(currentUser?.Id) ? DateTimeOffset.Now : null;
+            item.CurrentOwnerAssignedDate = DateTimeOffset.Now;
+            item.CurrentOwnerAcceptedDate = resource.CurrentOwnerId.Equals(currentUser?.Id) ? DateTimeOffset.Now : null;
         }
 
         item.SetCreator(currentUser?.Id);

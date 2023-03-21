@@ -17,8 +17,8 @@
 
 <div class="container">
     <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.DateReceived)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.DateReceived, TemplateNames.LongDateTime)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ReceivedDate)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.ReceivedDate, TemplateNames.LongDateTime)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CurrentOfficeName)</dt>
         <dd class="col-sm-8 col-lg-9">@Model.Item.CurrentOfficeName</dd>
     </dl>
@@ -28,8 +28,8 @@
 
 <div class="container">
     <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.DateComplaintClosed)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.DateComplaintClosed, TemplateNames.LongDateTimeOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ComplaintClosedDate)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.ComplaintClosedDate, TemplateNames.LongDateTimeOrNotEntered)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ReviewComments)</dt>
         <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(m => Model.Item.ReviewComments, TemplateNames.StringOrNotEntered)</dd>
     </dl>
@@ -60,8 +60,8 @@
 
 <div class="container">
     <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceFacilityId)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.SourceFacilityId, TemplateNames.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceFacilityIdNumber)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.SourceFacilityIdNumber, TemplateNames.StringOrNotEntered)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceFacilityName)</dt>
         <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.SourceFacilityName, TemplateNames.StringOrNotEntered)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceContactName)</dt>
@@ -129,7 +129,7 @@
                         }
                     </td>
                     <td>@Html.DisplayFor(m => item.Size, TemplateNames.FileSize)</td>
-                    <td>@Html.DisplayFor(m => item.DateUploaded, TemplateNames.ShortDate)</td>
+                    <td>@Html.DisplayFor(m => item.UploadedDate, TemplateNames.ShortDate)</td>
                 </tr>
             }
         </tbody>

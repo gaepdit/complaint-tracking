@@ -22,7 +22,7 @@ public class ComplaintCreateDto
     [Required]
     [DataType(DataType.Date)]
     [Display(Name = "Date received")]
-    public DateTime DateReceived { get; set; } = DateTime.Today;
+    public DateTime ReceivedDate { get; set; } = DateTime.Today;
 
     [Required]
     [DataType(DataType.Time)]
@@ -96,8 +96,8 @@ public class ComplaintCreateDto
     public string? SourceFacilityName { get; set; }
 
     [StringLength(50)]
-    [Display(Name = "Facility ID")]
-    public string? SourceFacilityId { get; set; }
+    [Display(Name = "Facility ID Number")]
+    public string? SourceFacilityIdNumber { get; set; }
 
     [StringLength(100)]
     [Display(Name = "Name")]

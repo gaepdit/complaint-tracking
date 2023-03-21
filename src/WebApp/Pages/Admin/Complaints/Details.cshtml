@@ -11,7 +11,7 @@
 
 @if (Model.UserIsOwner)
 {
-    <p>This Complaint was assigned to you on @Html.DisplayFor(m => m.Item.DateCurrentOwnerAssigned, TemplateNames.LongDateTimeOrNotEntered).</p>
+    <p>This Complaint was assigned to you on @Html.DisplayFor(m => m.Item.CurrentOwnerAssignedDate, TemplateNames.LongDateTimeOrNotEntered).</p>
 }
 
 @if (Model.Item.IsDeleted)
@@ -98,7 +98,7 @@ else
         @if (Model.Item.ComplaintClosed)
         {
             <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ReviewedBy)</dt>
-            <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.ReviewedBy, TemplateNames.NameOrNotEntered) on @Html.DisplayFor(m => m.Item.DateComplaintClosed, TemplateNames.LongDateTimeOrNotEntered)</dd>
+            <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.ReviewedBy, TemplateNames.NameOrNotEntered) on @Html.DisplayFor(m => m.Item.ComplaintClosedDate, TemplateNames.LongDateTimeOrNotEntered)</dd>
             <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ReviewComments)</dt>
             <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Model.Item.ReviewComments</dd>
         }
@@ -107,12 +107,12 @@ else
         <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.CurrentOfficeName, TemplateNames.StringOrNotEntered)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CurrentOwner)</dt>
         <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.CurrentOwner, TemplateNames.NameOrNotEntered)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.DateReceived)</dt>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ReceivedDate)</dt>
         <dd class="col-sm-8 col-lg-9">
-            @Html.DisplayFor(m => m.Item.DateReceived, TemplateNames.LongDateTime)
+            @Html.DisplayFor(m => m.Item.ReceivedDate, TemplateNames.LongDateTime)
         </dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.DateCurrentOwnerAssigned)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.DateCurrentOwnerAssigned, TemplateNames.LongDateTimeOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CurrentOwnerAssignedDate)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.CurrentOwnerAssignedDate, TemplateNames.LongDateTimeOrNotEntered)</dd>
     </dl>
 </div>
 
@@ -162,8 +162,8 @@ else
 
 <div class="container">
     <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceFacilityId)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.SourceFacilityId, TemplateNames.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceFacilityIdNumber)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.SourceFacilityIdNumber, TemplateNames.StringOrNotEntered)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceFacilityName)</dt>
         <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.SourceFacilityName, TemplateNames.StringOrNotEntered)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceContactName)</dt>
@@ -201,7 +201,7 @@ else
                 <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => item.Investigator)</dt>
                 <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => item.Investigator, TemplateNames.StringOrNotEntered)</dd>
                 <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => item.EnteredBy)</dt>
-                <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => item.EnteredBy, TemplateNames.NameOrNotEntered) on @Html.DisplayFor(m => item.DateEntered, TemplateNames.LongDateTime)</dd>
+                <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => item.EnteredBy, TemplateNames.NameOrNotEntered) on @Html.DisplayFor(m => item.EnteredDate, TemplateNames.LongDateTime)</dd>
                 <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => item.Comments)</dt>
                 <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(m => item.Comments, TemplateNames.StringOrNotEntered)</dd>
             </dl>
@@ -253,7 +253,7 @@ else
                     <td>@Html.DisplayFor(m => item.Size, TemplateNames.FileSize)</td>
                     <td>
                         @Html.DisplayFor(m => item.UploadedBy, TemplateNames.NameOrNotEntered) <br />
-                        on @Html.DisplayFor(m => item.DateUploaded, TemplateNames.ShortDateTime)
+                        on @Html.DisplayFor(m => item.UploadedDate, TemplateNames.ShortDateTime)
                     </td>
                     @if (Model.CanEditAttachments)
                     {
@@ -295,9 +295,9 @@ else
 <div class="container">
     <dl class="row">
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ReceivedBy)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.ReceivedBy, TemplateNames.NameOrNotEntered) on @Html.DisplayFor(m => m.Item.DateReceived, TemplateNames.LongDateTime)</dd>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.ReceivedBy, TemplateNames.NameOrNotEntered) on @Html.DisplayFor(m => m.Item.ReceivedDate, TemplateNames.LongDateTime)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.EnteredBy)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.EnteredBy, TemplateNames.NameOrNotEntered) on @Html.DisplayFor(m => m.Item.DateEntered, TemplateNames.LongDateTime)</dd>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.EnteredBy, TemplateNames.NameOrNotEntered) on @Html.DisplayFor(m => m.Item.EnteredDate, TemplateNames.LongDateTime)</dd>
     </dl>
 </div>
 
@@ -319,7 +319,7 @@ else
             @foreach (var item in Model.Item.ComplaintTransitions)
             {
                 <tr>
-                    <td>@Html.DisplayFor(m => item.DateTransferred, TemplateNames.ShortDateTime)</td>
+                    <td>@Html.DisplayFor(m => item.TransferredDate, TemplateNames.ShortDateTime)</td>
                     <td>@item.TransitionType.GetDisplayName()</td>
                     <td>
                         @Html.DisplayFor(m => item.TransferredFromUser, TemplateNames.NameOrBlank)
@@ -329,7 +329,7 @@ else
                         @Html.DisplayFor(m => item.TransferredToUser, TemplateNames.NameOrBlank)
                         @Html.DisplayFor(m => item.TransferredToOffice, TemplateNames.NameOrBlank)
                     </td>
-                    <td>@Html.DisplayFor(m => item.DateAccepted, TemplateNames.ShortDateTimeOrBlank)</td>
+                    <td>@Html.DisplayFor(m => item.AcceptedDate, TemplateNames.ShortDateTimeOrBlank)</td>
                     <td>@Html.DisplayFor(m => item.TransferredByUser, TemplateNames.NameOrNotEntered)</td>
                     <td class="text-break text-pre-line">@Html.DisplayFor(m => item.Comment)</td>
                 </tr>

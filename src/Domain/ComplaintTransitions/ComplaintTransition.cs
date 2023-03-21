@@ -21,7 +21,7 @@ public class ComplaintTransition : AuditableEntity
 
     public TransitionType TransitionType { get; init; } = TransitionType.New;
 
-    public DateTimeOffset DateTransferred { get; init; } = DateTimeOffset.Now;
+    public DateTimeOffset TransferredDate { get; init; } = DateTimeOffset.Now;
 
     public ApplicationUser? TransferredByUser { get; init; }
 
@@ -33,7 +33,7 @@ public class ComplaintTransition : AuditableEntity
 
     public Office? TransferredToOffice { get; init; }
 
-    public DateTimeOffset? DateAccepted { get; init; }
+    public DateTimeOffset? AcceptedDate { get; init; }
 
     [StringLength(4000)]
     public string? Comment { get; init; }

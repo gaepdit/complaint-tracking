@@ -21,7 +21,7 @@ public class AttachmentViewDto
     [Display(Name = "Deleted By")]
     public StaffViewDto? UploadedBy { get; init; }
 
-    public DateTimeOffset DateUploaded { get; init; }
+    public DateTimeOffset UploadedDate { get; init; }
     public bool IsImage { get; init; }
 
     [JsonIgnore]

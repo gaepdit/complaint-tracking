@@ -10,15 +10,15 @@ public class ComplaintMapping
     {
         var item = new ComplaintCreateDto()
         {
-            DateReceived = new DateTime(2000, 1, 1),
+            ReceivedDate = new DateTime(2000, 1, 1),
             TimeReceived = new DateTime(2020, 2, 2, 1, 15, 0),
         };
-        item.DateReceived = DateTime.SpecifyKind(item.DateReceived, DateTimeKind.Local);
+        item.ReceivedDate = DateTime.SpecifyKind(item.ReceivedDate, DateTimeKind.Local);
 
         var result = AppServicesTestsGlobal.Mapper!.Map<Complaint>(item);
 
         var correct = new DateTime(2000, 1, 1, 1, 15, 0);
         var expected = DateTime.SpecifyKind(correct, DateTimeKind.Local);
-        result.DateReceived.Should().Be(expected);
+        result.ReceivedDate.Should().Be(expected);
     }
 }

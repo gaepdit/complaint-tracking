@@ -29,11 +29,11 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     public ComplaintStatus Status { get; set; } = ComplaintStatus.New;
 
-    public DateTimeOffset DateEntered { get; init; } = DateTimeOffset.Now;
+    public DateTimeOffset EnteredDate { get; init; } = DateTimeOffset.Now;
 
     public ApplicationUser EnteredBy { get; set; } = default!;
 
-    public DateTimeOffset DateReceived { get; set; }
+    public DateTimeOffset ReceivedDate { get; set; }
 
     public ApplicationUser ReceivedBy { get; set; } = default!;
 
@@ -73,7 +73,7 @@ public class Complaint : AuditableSoftDeleteEntity<int>
     // Properties: Source
 
     [StringLength(50)]
-    public string? SourceFacilityId { get; set; }
+    public string? SourceFacilityIdNumber { get; set; }
 
     [StringLength(100)]
     public string? SourceFacilityName { get; set; }
@@ -102,11 +102,11 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     public ApplicationUser? CurrentOwner { get; set; }
 
-    public DateTimeOffset? DateCurrentOwnerAssigned { get; set; }
+    public DateTimeOffset? CurrentOwnerAssignedDate { get; set; }
 
     public Guid? CurrentAssignmentTransitionId { get; set; }
 
-    public DateTimeOffset? DateCurrentOwnerAccepted { get; set; }
+    public DateTimeOffset? CurrentOwnerAcceptedDate { get; set; }
 
     public List<ComplaintTransition> ComplaintTransitions { get; set; } = new();
 
@@ -122,7 +122,7 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     public bool ComplaintClosed { get; set; }
 
-    public DateTimeOffset? DateComplaintClosed { get; set; }
+    public DateTimeOffset? ComplaintClosedDate { get; set; }
 
     // Properties: Deletion
 

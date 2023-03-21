@@ -188,7 +188,7 @@
                             <th scope="row">
                                 <a asp-page="./Complaints/Index" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">@item.Id</a>
                             </th>
-                            <td class="text-nowrap">@Html.DisplayFor(m => item.DateReceived, TemplateNames.ShortDate)</td>
+                            <td class="text-nowrap">@Html.DisplayFor(m => item.ReceivedDate, TemplateNames.ShortDate)</td>
                             <td>
                                 <ul>
                                     <li>@Html.DisplayFor(m => item.SourceFacilityName, TemplateNames.StringOrNotEntered)</li>

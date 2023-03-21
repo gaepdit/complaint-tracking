@@ -30,7 +30,7 @@ public class Attachment : AuditableSoftDeleteEntity
 
     public long Size { get; init; }
 
-    public DateTimeOffset DateUploaded { get; init; }
+    public DateTimeOffset UploadedDate { get; init; }
 
     public ApplicationUser? UploadedBy { get; init; }
 

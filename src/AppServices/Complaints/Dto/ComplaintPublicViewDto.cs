@@ -23,7 +23,7 @@ public class ComplaintPublicViewDto
     public ComplaintStatus Status { get; init; }
 
     [Display(Name = "Complaint Received")]
-    public DateTimeOffset DateReceived { get; init; }
+    public DateTimeOffset ReceivedDate { get; init; }
 
     // Properties: Complaint details
 
@@ -56,7 +56,7 @@ public class ComplaintPublicViewDto
     // Properties: Source
 
     [Display(Name = "Facility ID Number")]
-    public string? SourceFacilityId { get; init; }
+    public string? SourceFacilityIdNumber { get; init; }
 
     [Display(Name = "Source Name")]
     public string? SourceFacilityName { get; init; }
@@ -75,7 +75,7 @@ public class ComplaintPublicViewDto
     // Properties: Review/Closure
 
     [Display(Name = "Complaint Closed")]
-    public DateTimeOffset? DateComplaintClosed { get; init; }
+    public DateTimeOffset? ComplaintClosedDate { get; init; }
 
     [Display(Name = "Review Comments")]
     public string? ReviewComments

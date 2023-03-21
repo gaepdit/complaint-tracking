@@ -11,8 +11,8 @@ public class ComplaintTransitionViewDto
     public OfficeDisplayViewDto? TransferredFromOffice { get; set; }
     public StaffViewDto? TransferredToUser { get; set; }
     public OfficeDisplayViewDto? TransferredToOffice { get; set; }
-    public DateTimeOffset DateTransferred { get; set; }
-    public DateTimeOffset? DateAccepted { get; set; }
+    public DateTimeOffset TransferredDate { get; set; }
+    public DateTimeOffset? AcceptedDate { get; set; }
     public TransitionType TransitionType { get; set; }
     public string? Comment { get; set; }
 }

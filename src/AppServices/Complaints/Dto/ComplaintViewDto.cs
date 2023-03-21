@@ -19,7 +19,7 @@ public class ComplaintViewDto
     public ComplaintStatus Status { get; init; }
 
     [Display(Name = "Date Received")]
-    public DateTimeOffset DateReceived { get; init; }
+    public DateTimeOffset ReceivedDate { get; init; }
 
     [Display(Name = "Received By")]
     public StaffViewDto? ReceivedBy { get; init; }
@@ -28,7 +28,7 @@ public class ComplaintViewDto
     public StaffViewDto? EnteredBy { get; init; }
 
     [Display(Name = "Date Entered")]
-    public DateTimeOffset DateEntered { get; init; }
+    public DateTimeOffset EnteredDate { get; init; }
 
     // Properties: Complaint details
 
@@ -53,7 +53,7 @@ public class ComplaintViewDto
     // Properties: Source
 
     [Display(Name = "Facility ID Number")]
-    public string? SourceFacilityId { get; init; }
+    public string? SourceFacilityIdNumber { get; init; }
 
     [Display(Name = "Source Name")]
     public string? SourceFacilityName { get; init; }
@@ -85,7 +85,7 @@ public class ComplaintViewDto
     public StaffViewDto? CurrentOwner { get; init; }
 
     [Display(Name = "Date Assigned")]
-    public DateTimeOffset? DateCurrentOwnerAssigned { get; init; }
+    public DateTimeOffset? CurrentOwnerAssignedDate { get; init; }
 
     // Properties: Caller
 
@@ -116,7 +116,7 @@ public class ComplaintViewDto
     public bool ComplaintClosed { get; init; }
 
     [Display(Name = "Date Closed")]
-    public DateTimeOffset? DateComplaintClosed { get; init; }
+    public DateTimeOffset? ComplaintClosedDate { get; init; }
 
     [Display(Name = "Reviewed By")]
     public StaffViewDto? ReviewedBy { get; init; }

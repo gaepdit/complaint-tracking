@@ -7,10 +7,10 @@ public enum SortBy
 {
     [Description("Id")] IdAsc,
     [Description("Id desc")] IdDesc,
-    [Description("DateReceived, Id")] ReceivedDateAsc,
-    [Description("DateReceived desc, Id")] ReceivedDateDesc,
-    [Description("Status, DateComplaintClosed, Id")] StatusAsc,
-    [Description("Status desc, DateComplaintClosed desc, Id")] StatusDesc,
+    [Description("ReceivedDate, Id")] ReceivedDateAsc,
+    [Description("ReceivedDate desc, Id")] ReceivedDateDesc,
+    [Description("Status, ComplaintClosedDate, Id")] StatusAsc,
+    [Description("Status desc, ComplaintClosedDate desc, Id")] StatusDesc,
 }
 
 // The order of the values in this enum is intentional:

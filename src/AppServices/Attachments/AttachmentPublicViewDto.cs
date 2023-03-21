@@ -17,7 +17,7 @@ public class AttachmentPublicViewDto
 
     public string SizeDescription => FileSize.ToFileSizeString(Size);
 
-    public DateTimeOffset DateUploaded { get; init; }
+    public DateTimeOffset UploadedDate { get; init; }
     public bool IsImage { get; init; }
 
     [JsonIgnore]

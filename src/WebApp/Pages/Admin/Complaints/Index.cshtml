@@ -138,8 +138,8 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-floating">
-                        <input asp-for="Spec.FacilityId" name="@nameof(Model.Spec.FacilityId)" class="form-control mb-3" />
-                        <label asp-for="Spec.FacilityId" class="form-label"></label>
+                        <input asp-for="Spec.FacilityIdNumber" name="@nameof(Model.Spec.FacilityIdNumber)" class="form-control mb-3" />
+                        <label asp-for="Spec.FacilityIdNumber" class="form-label"></label>
                     </div>
                 </div>
                 <div class="col-md-6 mb-3">
@@ -254,7 +254,7 @@
                             <th scope="row">
                                 <a asp-page="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">@item.Id</a>
                             </th>
-                            <td class="text-nowrap">@Html.DisplayFor(m => item.DateReceived, TemplateNames.ShortDate)</td>
+                            <td class="text-nowrap">@Html.DisplayFor(m => item.ReceivedDate, TemplateNames.ShortDate)</td>
                             <td>
                                 @if (item.IsDeleted)
                                 {
@@ -262,18 +262,18 @@
                                     <br />
                                 }
                                 @Html.DisplayFor(m => item.Status)
-                                @if (item.ComplaintClosed && item.DateComplaintClosed is not null)
+                                @if (item.ComplaintClosed && item.ComplaintClosedDate is not null)
                                 {
                                     <br />
-                                    @:on @Html.DisplayFor(m => item.DateComplaintClosed, TemplateNames.ShortDate)
+                                    @:on @Html.DisplayFor(m => item.ComplaintClosedDate, TemplateNames.ShortDate)
                                 }
                             </td>
                             <td>
                                 <ul>
                                     <li>@Html.DisplayFor(m => item.SourceFacilityName, TemplateNames.StringOrNotEntered)</li>
-                                    @if (item.SourceFacilityId != null)
+                                    @if (item.SourceFacilityIdNumber != null)
                                     {
-                                        <li>ID: @item.SourceFacilityId</li>
+                                        <li>ID: @item.SourceFacilityIdNumber</li>
                                     }
                                     @if (item.ComplaintCounty != null)
                                     {

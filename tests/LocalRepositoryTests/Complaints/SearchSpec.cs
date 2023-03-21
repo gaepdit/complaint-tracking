@@ -69,8 +69,8 @@ public class SearchSpec
 
         var spec = new ComplaintSearchDto
         {
-            ClosedFrom = referenceItem.DateComplaintClosed!.Value.Date,
-            ClosedTo = referenceItem.DateComplaintClosed!.Value.Date,
+            ClosedFrom = referenceItem.ComplaintClosedDate!.Value.Date,
+            ClosedTo = referenceItem.ComplaintClosedDate!.Value.Date,
         };
 
         var predicate = ComplaintFilters.SearchPredicate(spec);
@@ -79,7 +79,7 @@ public class SearchSpec
 
         var expected = _repository.Items
             .Where(e => e is { IsDeleted: false, ComplaintClosed: true }
-                && e.DateComplaintClosed == referenceItem.DateComplaintClosed);
+                && e.ComplaintClosedDate == referenceItem.ComplaintClosedDate);
         results.Should().BeEquivalentTo(expected);
     }
 
@@ -90,8 +90,8 @@ public class SearchSpec
 
         var spec = new ComplaintSearchDto
         {
-            ReceivedFrom = referenceItem.DateReceived.Date,
-            ReceivedTo = referenceItem.DateReceived.Date,
+            ReceivedFrom = referenceItem.ReceivedDate.Date,
+            ReceivedTo = referenceItem.ReceivedDate.Date,
         };
 
         var predicate = ComplaintFilters.SearchPredicate(spec);
@@ -99,7 +99,7 @@ public class SearchSpec
         var results = await _repository.GetListAsync(predicate);
 
         var expected = _repository.Items.Where(e => e is { IsDeleted: false }
-            && e.DateReceived == referenceItem.DateReceived);
+            && e.ReceivedDate == referenceItem.ReceivedDate);
         results.Should().BeEquivalentTo(expected);
     }
 

@@ -64,8 +64,8 @@ public class ComplaintSearchDto
     [Display(Name = "Source/facility name")]
     public string? Source { get; set; }
 
-    [Display(Name = "Facility ID")]
-    public string? FacilityId { get; set; }
+    [Display(Name = "Facility ID Number")]
+    public string? FacilityIdNumber { get; set; }
 
     [Display(Name = "Source Contact")]
     public string? Contact { get; set; }
@@ -105,7 +105,7 @@ public class ComplaintSearchDto
         { nameof(County), County },
         { nameof(Concern), Concern?.ToString() },
         { nameof(Source), Source },
-        { nameof(FacilityId), FacilityId },
+        { nameof(FacilityIdNumber), FacilityIdNumber },
         { nameof(Contact), Contact },
         { nameof(Street), Street },
         { nameof(City), City },
@@ -122,7 +122,7 @@ public class ComplaintSearchDto
         Description = Description?.Trim();
         ComplaintCity = ComplaintCity?.Trim();
         Source = Source?.Trim();
-        FacilityId = FacilityId?.Trim();
+        FacilityIdNumber = FacilityIdNumber?.Trim();
         Street = Street?.Trim();
         City = City?.Trim();
         PostalCode = PostalCode?.Trim();

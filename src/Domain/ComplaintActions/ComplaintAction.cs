@@ -25,7 +25,7 @@ public class ComplaintAction : AuditableSoftDeleteEntity
     [StringLength(100)]
     public string? Investigator { get; init; }
 
-    public DateTimeOffset DateEntered { get; init; }
+    public DateTimeOffset EnteredDate { get; init; }
 
     public ApplicationUser EnteredBy { get; init; } = default!;
 
