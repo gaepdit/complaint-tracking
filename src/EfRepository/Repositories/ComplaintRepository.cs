@@ -12,30 +12,25 @@ public class ComplaintRepository : BaseRepository<Complaint, int>, IComplaintRep
 {
     public ComplaintRepository(AppDbContext context) : base(context) { }
 
-    public async Task<bool> ExistsAsync(int id, CancellationToken token = default) =>
-        await Context.Set<Complaint>().AsNoTracking()
-            .AnyAsync(e => e.Id.Equals(id), token);
-
-    public async Task<bool> ExistsAsync(Expression<Func<Complaint, bool>> predicate, CancellationToken token = default) =>
-        await Context.Set<Complaint>().AsNoTracking()
-            .AnyAsync(predicate, token);
-
     public async Task<IReadOnlyCollection<ComplaintAction>> GetComplaintActionsListAsync(
         Expression<Func<ComplaintAction, bool>> predicate, CancellationToken token = default) =>
-        await Context.Set<ComplaintAction>().AsNoTracking()
+        await Context.ComplaintActions.AsNoTracking()
             .Where(predicate).ToListAsync(token);
 
     public async Task<IReadOnlyCollection<Attachment>> GetAttachmentsListAsync(
         Expression<Func<Attachment, bool>> predicate, CancellationToken token = default) =>
-        await Context.Set<Attachment>().AsNoTracking()
+        await Context.Attachments.AsNoTracking()
             .Where(predicate).ToListAsync(token);
 
     public async Task<IReadOnlyCollection<ComplaintTransition>> GetComplaintTransitionsListAsync(
         int complaintId, CancellationToken token = default) =>
-        await Context.Set<ComplaintTransition>().AsNoTracking()
+        await Context.ComplaintTransitions.AsNoTracking()
             .Where(e => e.Complaint.Id == complaintId).ToListAsync(token);
 
     public async Task<Attachment?> FindAttachmentAsync(Guid id, CancellationToken token = default) =>
-    await Context.Set<Attachment>().AsNoTracking()
+        await Context.Attachments.AsNoTracking()
             .SingleOrDefaultAsync(e => e.Id == id, token);
+
+    public async Task<int> GetNextIdAsync(CancellationToken token = default) =>
+        await Context.Complaints.AsNoTracking().MaxAsync(e => e.Id, token) + 1;
 }

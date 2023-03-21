@@ -1,6 +1,6 @@
 using Cts.LocalRepository.Repositories;
 
-namespace LocalRepositoryTests.BaseReadRepository;
+namespace LocalRepositoryTests.Complaints;
 
 public class FindAttachment
 {

@@ -2,6 +2,8 @@
 using Cts.AppServices.Complaints.Dto;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Complaints;
+using Cts.Domain.Concerns;
+using Cts.Domain.Offices;
 using Cts.TestData;
 using FluentAssertions.Execution;
 using GaEpd.AppLibrary.Pagination;
@@ -24,8 +26,13 @@ public class Search
             .ReturnsAsync(itemList);
         repoMock.Setup(l => l.CountAsync(It.IsAny<Expression<Func<Complaint, bool>>>(), CancellationToken.None))
             .ReturnsAsync(count);
-        var appService = new ComplaintAppService(repoMock.Object, Mock.Of<IComplaintManager>(),
-            AppServicesTestsGlobal.Mapper!, Mock.Of<IUserService>());
+        var appService = new ComplaintAppService(
+            repoMock.Object,
+            Mock.Of<IConcernRepository>(),
+            Mock.Of<IOfficeRepository>(),
+            Mock.Of<IComplaintManager>(),
+            AppServicesTestsGlobal.Mapper!,
+            Mock.Of<IUserService>());
 
         var result = await appService.SearchAsync(Mock.Of<ComplaintSearchDto>(),
             paging, CancellationToken.None);
@@ -50,8 +57,13 @@ public class Search
         repoMock.Setup(l => l.CountAsync(
                 It.IsAny<Expression<Func<Complaint, bool>>>(), CancellationToken.None))
             .ReturnsAsync(count);
-        var appService = new ComplaintAppService(repoMock.Object, Mock.Of<IComplaintManager>(),
-            AppServicesTestsGlobal.Mapper!, Mock.Of<IUserService>());
+        var appService = new ComplaintAppService(
+            repoMock.Object,
+            Mock.Of<IConcernRepository>(),
+            Mock.Of<IOfficeRepository>(),
+            Mock.Of<IComplaintManager>(),
+            AppServicesTestsGlobal.Mapper!,
+            Mock.Of<IUserService>());
 
         var result = await appService.SearchAsync(Mock.Of<ComplaintSearchDto>(),
             paging, CancellationToken.None);

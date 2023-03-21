@@ -35,6 +35,17 @@ public class AutoMapperProfile : Profile
         CreateMap<Complaint, ComplaintViewDto>();
         CreateMap<Complaint, ComplaintSearchResultDto>();
 
+        CreateMap<ComplaintCreateDto, Complaint>(MemberList.Source)
+            .ForMember(d => d.DateReceived,
+                o => o.MapFrom(s => s.DateReceived.Add(s.TimeReceived.TimeOfDay)))
+            .ForSourceMember(s => s.DateReceived, o => o.DoNotValidate())
+            .ForSourceMember(s => s.TimeReceived, o => o.DoNotValidate())
+            .ForSourceMember(s => s.ReceivedById, o => o.DoNotValidate())
+            .ForSourceMember(s => s.PrimaryConcernId, o => o.DoNotValidate())
+            .ForSourceMember(s => s.SecondaryConcernId, o => o.DoNotValidate())
+            .ForSourceMember(s => s.CurrentOfficeId, o => o.DoNotValidate())
+            .ForSourceMember(s => s.CurrentOwnerId, o => o.DoNotValidate());
+
         CreateMap<ComplaintAction, ComplaintActionPublicViewDto>();
         CreateMap<ComplaintAction, ComplaintActionViewDto>();
 
