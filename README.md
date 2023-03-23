@@ -19,12 +19,12 @@ Public complaints are time-critical and high-profile public information. The CTS
 
 ## Info for developers
 
-This is an ASP.NET 6 web application. The CTS is currently being completely rebuilt in the `vNext` branch.
+This is an ASP.NET web application. The CTS is currently being completely rebuilt in the `vNext` branch.
 
 ### Prerequisites for development
 
 + [Visual Studio](https://www.visualstudio.com/vs/) or similar
-+ [.NET 6.0 SDK](https://dotnet.microsoft.com/download)
++ [.NET SDK](https://dotnet.microsoft.com/download)
 
 ### Project organization
 

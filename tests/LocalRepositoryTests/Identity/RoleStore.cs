@@ -48,6 +48,7 @@ public class RoleStore
     public async Task FindByName_ReturnsRole()
     {
         var role = _store.Roles.First();
+        Assert.That(role.NormalizedName, Is.Not.Null);
         var result = await _store.FindByNameAsync(role.NormalizedName, CancellationToken.None);
         result.Should().BeEquivalentTo(role);
     }
