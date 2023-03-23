@@ -54,6 +54,7 @@ public class EditModel : PageModel
     {
         var validationResult = await _validator.ValidateAsync(UpdateStaff);
         if (!validationResult.IsValid) validationResult.AddToModelState(ModelState, nameof(UpdateStaff));
+
         if (!ModelState.IsValid)
         {
             var staff = await _staffService.FindAsync(UpdateStaff.Id);
@@ -65,7 +66,8 @@ public class EditModel : PageModel
             return Page();
         }
 
-        await _staffService.UpdateAsync(UpdateStaff);
+        var result = await _staffService.UpdateAsync(UpdateStaff);
+        if (!result.Succeeded) return BadRequest();
 
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "Successfully updated.");
         return RedirectToPage("Details", new { id = UpdateStaff.Id });

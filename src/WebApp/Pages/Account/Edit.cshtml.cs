@@ -51,8 +51,9 @@ public class EditModel : PageModel
     public async Task<IActionResult> OnPostAsync()
     {
         var staff = await _staffService.GetCurrentUserAsync();
-        if (staff is not { Active: true }) return Forbid();
-        if (staff.Id != UpdateStaff.Id || !UpdateStaff.Active) return BadRequest();
+        if (staff is null || staff.Id != UpdateStaff.Id || !UpdateStaff.Active)
+            return BadRequest();
+        if (!staff.Active) return Forbid();
 
         var validationResult = await _validator.ValidateAsync(UpdateStaff);
         if (!validationResult.IsValid) validationResult.AddToModelState(ModelState, nameof(UpdateStaff));
@@ -64,7 +65,8 @@ public class EditModel : PageModel
             return Page();
         }
 
-        await _staffService.UpdateAsync(UpdateStaff);
+        var result = await _staffService.UpdateAsync(UpdateStaff);
+        if (!result.Succeeded) return BadRequest();
 
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "Successfully updated profile.");
         return RedirectToPage("Index");
