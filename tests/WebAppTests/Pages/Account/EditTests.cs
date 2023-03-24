@@ -3,7 +3,7 @@ using Cts.AppServices.Staff;
 using Cts.TestData.Constants;
 using Cts.WebApp.Pages.Account;
 using Cts.WebApp.Platform.Models;
-using Cts.WebApp.Platform.PageDisplayHelpers;
+using Cts.WebApp.Platform.PageModelHelpers;
 using FluentAssertions.Execution;
 using FluentValidation;
 using FluentValidation.Results;
@@ -126,23 +126,5 @@ public class EditTests
             page.DisplayStaff.Should().Be(StaffViewTest);
             page.UpdateStaff.Should().Be(StaffUpdateTest);
         }
-    }
-
-    [Test]
-    public async Task OnPost_GivenMissingUser_ReturnsBadRequest()
-    {
-        var staffService = new Mock<IStaffAppService>();
-        staffService.Setup(l => l.GetCurrentUserAsync())
-            .ReturnsAsync((StaffViewDto?)null);
-        var validator = new Mock<IValidator<StaffUpdateDto>>();
-        var validationFailures = new List<ValidationFailure> { new("property", "message") };
-        validator.Setup(l => l.ValidateAsync(It.IsAny<StaffUpdateDto>(), CancellationToken.None))
-            .ReturnsAsync(new ValidationResult(validationFailures));
-        var page = new EditModel(staffService.Object, Mock.Of<IOfficeAppService>(), validator.Object)
-        { UpdateStaff = StaffUpdateTest, TempData = WebAppTestsGlobal.GetPageTempData() };
-
-        var result = await page.OnPostAsync();
-
-        result.Should().BeOfType<BadRequestResult>();
     }
 }

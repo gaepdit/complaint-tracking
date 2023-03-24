@@ -4,6 +4,7 @@ using Cts.AppServices.UserServices;
 using Cts.Domain.Complaints;
 using Cts.Domain.Concerns;
 using Cts.Domain.Offices;
+using Cts.TestData.Constants;
 
 namespace AppServicesTests.Complaints;
 
@@ -12,12 +13,16 @@ public class Create
     [Test]
     public async Task OnSuccessfulInsert_ReturnsId()
     {
-        var item = new ComplaintCreateDto();
+        var repoMock = new Mock<IOfficeRepository>();
+        var office = new Office(Guid.NewGuid(), TestConstants.ValidName);
+        repoMock.Setup(l => l.GetAsync(It.IsAny<Guid>(), CancellationToken.None))
+            .ReturnsAsync(office);
+        var item = new ComplaintCreateDto() { CurrentOfficeId = Guid.Empty};
 
         var appService = new ComplaintAppService(
             Mock.Of<IComplaintRepository>(),
             Mock.Of<IConcernRepository>(),
-            Mock.Of<IOfficeRepository>(),
+            repoMock.Object,
             Mock.Of<IComplaintManager>(),
             AppServicesTestsGlobal.Mapper!,
             Mock.Of<IUserService>());

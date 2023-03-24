@@ -152,7 +152,7 @@ public sealed class ComplaintAppService : IComplaintAppService
         item.SecondaryConcern = resource.SecondaryConcernId is null
             ? null
             : await _concernRepository.FindAsync(resource.SecondaryConcernId.Value, token);
-        item.CurrentOffice = await _officeRepository.GetAsync(resource.CurrentOfficeId, token);
+        item.CurrentOffice = await _officeRepository.GetAsync(resource.CurrentOfficeId!.Value, token);
         if (resource.CurrentOwnerId != null)
         {
             item.CurrentOwner = await _userService.FindUserAsync(resource.CurrentOwnerId);
@@ -162,6 +162,7 @@ public sealed class ComplaintAppService : IComplaintAppService
 
         item.SetCreator(currentUser?.Id);
 
+        // TODO: Save transitions.
         await _repository.InsertAsync(item, autoSave: true, token: token);
         return item.Id;
     }

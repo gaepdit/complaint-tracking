@@ -12,9 +12,10 @@ public class ComplaintCreateDto
     [UsedImplicitly]
     public ComplaintCreateDto() { }
 
-    public ComplaintCreateDto(string? receivedById)
+    public ComplaintCreateDto(string? receivedById, Guid? currentOfficeId)
     {
         ReceivedById = receivedById;
+        CurrentOfficeId = currentOfficeId;
     }
 
     // Meta-data
@@ -125,7 +126,7 @@ public class ComplaintCreateDto
 
     [Required]
     [Display(Name = "Assigned office")]
-    public Guid CurrentOfficeId { get; set; }
+    public Guid? CurrentOfficeId { get; set; }
 
     [Display(Name = "Assigned associate")]
     public string? CurrentOwnerId { get; set; }

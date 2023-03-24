@@ -50,7 +50,7 @@ public class EditModel : PageModel
     public async Task<IActionResult> OnPostAsync()
     {
         var staff = await _staffService.GetCurrentUserAsync();
-        if (staff is null || staff.Id != UpdateStaff.Id || !UpdateStaff.Active)
+        if (staff.Id != UpdateStaff.Id || !UpdateStaff.Active)
             return BadRequest();
         if (!staff.Active) return Forbid();
 

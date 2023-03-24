@@ -6,7 +6,7 @@ namespace Cts.AppServices.Staff;
 
 public interface IStaffAppService : IDisposable
 {
-    Task<StaffViewDto?> GetCurrentUserAsync();
+    Task<StaffViewDto> GetCurrentUserAsync();
     Task<StaffViewDto> GetAsync(string id);
     Task<StaffViewDto?> FindAsync(string id);
     public Task<List<StaffViewDto>> GetListAsync(StaffSearchDto filter);

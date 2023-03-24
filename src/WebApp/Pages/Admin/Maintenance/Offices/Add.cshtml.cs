@@ -39,7 +39,7 @@ public class AddModel : PageModel
 
     public static MaintenanceOption ThisOption => MaintenanceOption.Office;
 
-    public async Task<IActionResult> OnGetAsync(Guid? id)
+    public async Task<IActionResult> OnGetAsync()
     {
         await PopulateSelectListsAsync();
         return Page();

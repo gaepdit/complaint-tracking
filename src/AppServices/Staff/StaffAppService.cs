@@ -27,10 +27,11 @@ public sealed class StaffAppService : IStaffAppService
         _officeRepository = officeRepository;
     }
 
-    public async Task<StaffViewDto?> GetCurrentUserAsync()
+    public async Task<StaffViewDto> GetCurrentUserAsync()
     {
-        var user = await _userService.GetCurrentUserAsync();
-        return _mapper.Map<StaffViewDto?>(user);
+        var user = await _userService.GetCurrentUserAsync()
+            ?? throw new CurrentUserNotFoundException();
+        return _mapper.Map<StaffViewDto>(user);
     }
 
     public async Task<StaffViewDto> GetAsync(string id)

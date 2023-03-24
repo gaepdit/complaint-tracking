@@ -54,7 +54,7 @@ public class AddModel : PageModel
     {
         await PopulateSelectListsAsync();
         var user = await _staff.GetCurrentUserAsync();
-        Item = new ComplaintCreateDto(user?.Id);
+        Item = new ComplaintCreateDto(user.Id, user.Office?.Id);
     }
 
     public async Task<IActionResult> OnPostAsync()
