@@ -21,7 +21,7 @@ public class AttachmentModel : PageModel
         if (id is null) return NotFound();
 
         var item = await complaintService.GetAttachmentAsync(id.Value);
-        if (item == null || string.IsNullOrWhiteSpace(item.FileName))
+        if (item is null || string.IsNullOrWhiteSpace(item.FileName))
             return NotFound($"Attachment ID not found: {id.Value}");
 
         if (fileName != item.FileName)

@@ -25,9 +25,9 @@ public class EditRolesModel : PageModel
 
     public async Task<IActionResult> OnGetAsync(string? id)
     {
-        if (id == null) return RedirectToPage("Index");
+        if (id is null) return RedirectToPage("Index");
         var staff = await _staffService.FindAsync(id);
-        if (staff == null) return NotFound();
+        if (staff is null) return NotFound();
 
         DisplayStaff = staff;
         UserId = id;
@@ -51,7 +51,7 @@ public class EditRolesModel : PageModel
             ModelState.AddModelError(string.Empty, string.Concat(err.Code, ": ", err.Description));
 
         var staff = await _staffService.FindAsync(UserId);
-        if (staff == null) return BadRequest();
+        if (staff is null) return BadRequest();
 
         DisplayStaff = staff;
 

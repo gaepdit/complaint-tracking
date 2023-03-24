@@ -22,7 +22,7 @@ builder.Services.AddIdentityStores();
 builder.Services.AddAuthenticationServices(builder.Configuration);
 
 // Persist data protection keys.
-var keysFolder = Path.Combine(builder.Configuration["PersistedFilesBasePath"], "DataProtectionKeys");
+var keysFolder = Path.Combine(builder.Configuration["PersistedFilesBasePath"] ?? "", "DataProtectionKeys");
 builder.Services.AddDataProtection().PersistKeysToFileSystem(Directory.CreateDirectory(keysFolder));
 builder.Services.AddAuthorization();
 

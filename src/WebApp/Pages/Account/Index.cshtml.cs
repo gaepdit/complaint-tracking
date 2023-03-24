@@ -19,7 +19,7 @@ public class IndexModel : PageModel
     public async Task<IActionResult> OnGetAsync([FromServices] IStaffAppService staffService)
     {
         var staff = await staffService.GetCurrentUserAsync();
-        if (staff == null) return Forbid();
+        if (staff is null) return Forbid();
 
         DisplayStaff = staff;
         Roles = await staffService.GetAppRolesAsync(DisplayStaff.Id);

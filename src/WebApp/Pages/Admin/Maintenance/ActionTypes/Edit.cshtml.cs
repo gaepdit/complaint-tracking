@@ -35,9 +35,9 @@ public class EditModel : PageModel
 
     public async Task<IActionResult> OnGetAsync(Guid? id)
     {
-        if (id == null) return RedirectToPage("Index");
+        if (id is null) return RedirectToPage("Index");
         var item = await _service.FindForUpdateAsync(id.Value);
-        if (item == null) return NotFound();
+        if (item is null) return NotFound();
 
         Item = item;
         OriginalName = Item.Name;

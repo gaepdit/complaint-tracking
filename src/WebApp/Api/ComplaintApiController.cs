@@ -22,6 +22,6 @@ public class ComplaintApiController : Controller
     public async Task<ActionResult<ComplaintPublicViewDto>> GetComplaintAsync([FromRoute] int id)
     {
         var item = await _service.GetPublicAsync(id);
-        return item != null ? Ok(item) : Problem("ID not found.", statusCode: 404);
+        return item is null ? Problem("ID not found.", statusCode: 404) : Ok(item);
     }
 }

@@ -19,6 +19,6 @@ public class OfficeApiController : Controller
     public async Task<ActionResult<OfficeAdminViewDto>> GetOfficeAsync([FromRoute] Guid id)
     {
         var item = await _officeAppService.FindAsync(id);
-        return item != null ? Ok(item) : Problem("ID not found.", statusCode: 404);
+        return item is null ? Problem("ID not found.", statusCode: 404) : Ok(item);
     }
 }

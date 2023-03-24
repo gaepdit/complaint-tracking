@@ -13,9 +13,9 @@ public class IndexModel : PageModel
 
     public async Task<IActionResult> OnGetAsync([FromServices] IComplaintAppService service, int? id)
     {
-        if (id == null) return RedirectToPage("../Index");
+        if (id is null) return RedirectToPage("../Index");
         var item = await service.GetPublicAsync(id.Value);
-        if (item == null) return NotFound();
+        if (item is null) return NotFound();
 
         Item = item;
         return Page();

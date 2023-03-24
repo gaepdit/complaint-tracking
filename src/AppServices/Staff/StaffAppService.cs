@@ -13,20 +13,17 @@ public sealed class StaffAppService : IStaffAppService
     private readonly IUserService _userService;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IMapper _mapper;
-    private readonly IdentityErrorDescriber _errorDescriber;
     private readonly IOfficeRepository _officeRepository;
 
     public StaffAppService(
         IUserService userService,
         UserManager<ApplicationUser> userManager,
         IMapper mapper,
-        IdentityErrorDescriber errorDescriber,
         IOfficeRepository officeRepository)
     {
         _userService = userService;
         _userManager = userManager;
         _mapper = mapper;
-        _errorDescriber = errorDescriber;
         _officeRepository = officeRepository;
     }
 
@@ -66,15 +63,19 @@ public sealed class StaffAppService : IStaffAppService
         (await GetListAsync(new StaffSearchDto { Status = StaffSearchDto.ActiveStatus.All }))
             .Select(e => new ListItem<string>(e.Id, e.SelectableNameWithOffice)).ToList();
 
-    public async Task<IList<string>> GetRolesAsync(string id) =>
-        await _userManager.GetRolesAsync(await _userManager.FindByIdAsync(id));
+    public async Task<IList<string>> GetRolesAsync(string id)
+    {
+        ApplicationUser? user = await _userManager.FindByIdAsync(id);
+        if (user is null) return new List<string>();
+        return await _userManager.GetRolesAsync(user);
+    }
 
     public async Task<IList<AppRole>> GetAppRolesAsync(string id) => AppRole.RolesAsAppRoles(await GetRolesAsync(id));
 
     public async Task<IdentityResult> UpdateRolesAsync(string id, Dictionary<string, bool> roles)
     {
-        var user = await _userManager.FindByIdAsync(id);
-        if (user == null) return IdentityResult.Failed(_errorDescriber.DefaultError());
+        var user = await _userManager.FindByIdAsync(id)
+            ?? throw new EntityNotFoundException(typeof(ApplicationUser), id);
 
         foreach (var (role, value) in roles)
         {
@@ -103,7 +104,7 @@ public sealed class StaffAppService : IStaffAppService
             ?? throw new EntityNotFoundException(typeof(ApplicationUser), resource.Id);
 
         user.Phone = resource.Phone;
-        user.Office = resource.OfficeId == null ? null : await _officeRepository.FindAsync(resource.OfficeId.Value);
+        user.Office = resource.OfficeId is null ? null : await _officeRepository.FindAsync(resource.OfficeId.Value);
         user.Active = resource.Active;
 
         return await _userManager.UpdateAsync(user);

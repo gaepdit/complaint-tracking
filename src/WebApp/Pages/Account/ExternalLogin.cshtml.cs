@@ -73,7 +73,7 @@ public class ExternalLoginModel : PageModel
         var user = await _userManager.FindByIdAsync(staff.Id);
         _logger.LogInformation("Local user {StaffName} with ID {StaffId} signed in", staff.Name, staff.Id);
 
-        await _signInManager.SignInAsync(user, false);
+        await _signInManager.SignInAsync(user!, false);
         return LocalRedirect(ReturnUrl);
     }
 
@@ -139,8 +139,8 @@ public class ExternalLoginModel : PageModel
         {
             UserName = info.Principal.FindFirstValue(ClaimConstants.PreferredUserName),
             Email = info.Principal.FindFirstValue(ClaimTypes.Email),
-            GivenName = info.Principal.FindFirstValue(ClaimTypes.GivenName),
-            FamilyName = info.Principal.FindFirstValue(ClaimTypes.Surname),
+            GivenName = info.Principal.FindFirstValue(ClaimTypes.GivenName) ?? "",
+            FamilyName = info.Principal.FindFirstValue(ClaimTypes.Surname) ?? "",
             AzureAdObjectId = info.Principal.FindFirstValue(ClaimConstants.ObjectId),
         };
 
@@ -176,8 +176,8 @@ public class ExternalLoginModel : PageModel
         _logger.LogInformation("Existing user {UserName} logged in with {LoginProvider} provider",
             user.UserName, info.LoginProvider);
         user.Email = info.Principal.FindFirstValue(ClaimTypes.Email);
-        user.GivenName = info.Principal.FindFirstValue(ClaimTypes.GivenName);
-        user.FamilyName = info.Principal.FindFirstValue(ClaimTypes.Surname);
+        user.GivenName = info.Principal.FindFirstValue(ClaimTypes.GivenName) ?? "";
+        user.FamilyName = info.Principal.FindFirstValue(ClaimTypes.Surname) ?? "";
         await _userManager.UpdateAsync(user);
         await _signInManager.RefreshSignInAsync(user);
         return LocalRedirect(ReturnUrl);
@@ -200,7 +200,7 @@ public class ExternalLoginModel : PageModel
 
         // Include the access token in the properties.
         var props = new AuthenticationProperties();
-        props.StoreTokens(info.AuthenticationTokens);
+        if (info.AuthenticationTokens is not null) props.StoreTokens(info.AuthenticationTokens);
         props.IsPersistent = true;
 
         await _signInManager.SignInAsync(user, props, info.LoginProvider);

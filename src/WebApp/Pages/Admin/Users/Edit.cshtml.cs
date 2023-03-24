@@ -39,9 +39,9 @@ public class EditModel : PageModel
 
     public async Task<IActionResult> OnGetAsync(string? id)
     {
-        if (id == null) return RedirectToPage("Index");
+        if (id is null) return RedirectToPage("Index");
         var staff = await _staffService.FindAsync(id);
-        if (staff == null) return NotFound();
+        if (staff is null) return NotFound();
 
         DisplayStaff = staff;
         UpdateStaff = DisplayStaff.AsUpdateDto();
@@ -57,7 +57,7 @@ public class EditModel : PageModel
         if (!ModelState.IsValid)
         {
             var staff = await _staffService.FindAsync(UpdateStaff.Id);
-            if (staff == null) return BadRequest();
+            if (staff is null) return BadRequest();
 
             DisplayStaff = staff;
 

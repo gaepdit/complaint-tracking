@@ -45,9 +45,9 @@ internal static partial class UserData
 
             foreach (var user in _users)
             {
-                user.UserName = user.Email.ToLowerInvariant();
-                user.NormalizedEmail = user.Email.ToUpperInvariant();
-                user.NormalizedUserName = user.Email.ToUpperInvariant();
+                user.UserName = user.Email?.ToLowerInvariant();
+                user.NormalizedEmail = user.Email?.ToUpperInvariant();
+                user.NormalizedUserName = user.Email?.ToUpperInvariant();
             }
 
             return _users;

@@ -1,6 +1,7 @@
 using Cts.Domain.Identity;
 using Cts.TestData;
 using Cts.TestData.Identity;
+using GaEpd.AppLibrary.Domain.Repositories;
 using Microsoft.AspNetCore.Identity;
 
 namespace Cts.LocalRepository.Identity;
@@ -33,19 +34,19 @@ public sealed class LocalUserStore :
     public Task<string> GetUserIdAsync(ApplicationUser user, CancellationToken cancellationToken) =>
         Task.FromResult(user.Id);
 
-    public Task<string> GetUserNameAsync(ApplicationUser user, CancellationToken cancellationToken) =>
+    public Task<string?> GetUserNameAsync(ApplicationUser user, CancellationToken cancellationToken) =>
         Task.FromResult(user.UserName);
 
-    public Task SetUserNameAsync(ApplicationUser user, string userName, CancellationToken cancellationToken)
+    public Task SetUserNameAsync(ApplicationUser user, string? userName, CancellationToken cancellationToken)
     {
         user.UserName = userName;
         return Task.CompletedTask;
     }
 
-    public Task<string> GetNormalizedUserNameAsync(ApplicationUser user, CancellationToken cancellationToken) =>
+    public Task<string?> GetNormalizedUserNameAsync(ApplicationUser user, CancellationToken cancellationToken) =>
         Task.FromResult(user.NormalizedUserName);
 
-    public Task SetNormalizedUserNameAsync(ApplicationUser user, string normalizedName,
+    public Task SetNormalizedUserNameAsync(ApplicationUser user, string? normalizedName,
         CancellationToken cancellationToken)
     {
         user.NormalizedUserName = normalizedName;
@@ -60,7 +61,8 @@ public sealed class LocalUserStore :
 
     public async Task<IdentityResult> UpdateAsync(ApplicationUser user, CancellationToken cancellationToken)
     {
-        var existingUser = await FindByIdAsync(user.Id, cancellationToken);
+        var existingUser = await FindByIdAsync(user.Id, cancellationToken)
+            ?? throw new EntityNotFoundException(typeof(ApplicationUser), user.Id);
         UserStore.Remove(existingUser);
         UserStore.Add(user);
         return IdentityResult.Success;
@@ -69,19 +71,16 @@ public sealed class LocalUserStore :
     public async Task<IdentityResult> DeleteAsync(ApplicationUser user, CancellationToken cancellationToken)
     {
         var existingUser = await FindByIdAsync(user.Id, cancellationToken);
-        UserStore.Remove(existingUser);
+        if (existingUser is not null) UserStore.Remove(existingUser);
         return IdentityResult.Success;
     }
 
-    public Task<ApplicationUser> FindByIdAsync(string userId, CancellationToken cancellationToken) =>
-        Task.FromResult(UserStore.Single(u => u.Id == userId));
+    public Task<ApplicationUser?> FindByIdAsync(string userId, CancellationToken cancellationToken) =>
+        Task.FromResult(UserStore.SingleOrDefault(u => u.Id == userId));
 
-#nullable disable // Reevaluate this after updating to .NET 7.
-    public Task<ApplicationUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken) =>
-        // Nullability warning is incorrect because IUserStore.FindByNameAsync can return null.
+    public Task<ApplicationUser?> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken) =>
         Task.FromResult(UserStore.SingleOrDefault(u =>
             string.Equals(u.NormalizedUserName, normalizedUserName, StringComparison.InvariantCultureIgnoreCase)));
-#nullable restore
 
     // IUserRoleStore
     public Task AddToRoleAsync(ApplicationUser user, string roleName, CancellationToken cancellationToken)
@@ -115,7 +114,7 @@ public sealed class LocalUserStore :
             .Select(e => e.RoleId);
         var rolesForUser = Roles
             .Where(r => roleIdsForUser.Contains(r.Id))
-            .Select(r => r.Name).ToList();
+            .Select(r => r.Name ?? "").ToList();
         return Task.FromResult<IList<string>>(rolesForUser);
     }
 
@@ -143,7 +142,6 @@ public sealed class LocalUserStore :
         // Method intentionally left empty.
     }
 
-#nullable disable // Reevaluate this after updating to .NET 7.
     public Task AddLoginAsync(ApplicationUser user, UserLoginInfo login, CancellationToken cancellationToken)
     {
         UserLogins.Add(new UserLogin
@@ -171,7 +169,7 @@ public sealed class LocalUserStore :
                 .Select(ul => new UserLoginInfo(ul.LoginProvider, ul.ProviderKey, ul.ProviderDisplayName))
                 .ToList());
 
-    public Task<ApplicationUser> FindByLoginAsync(string loginProvider, string providerKey,
+    public Task<ApplicationUser?> FindByLoginAsync(string loginProvider, string providerKey,
         CancellationToken cancellationToken)
     {
         var userId = UserLogins
@@ -181,10 +179,9 @@ public sealed class LocalUserStore :
 
     private sealed class UserLogin
     {
-        public string LoginProvider { get; init; }
-        public string ProviderKey { get; init; }
-        public string ProviderDisplayName { get; init; }
-        public string UserId { get; init; }
+        public string LoginProvider { get; init; } = string.Empty;
+        public string ProviderKey { get; init; } = string.Empty;
+        public string? ProviderDisplayName { get; init; }
+        public string UserId { get; init; } = string.Empty;
     }
-#nullable restore
 }

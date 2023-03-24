@@ -14,7 +14,7 @@ public static class TempDataExtensions
     private static T? Get<T>(this ITempDataDictionary tempData, string key) where T : class
     {
         tempData.TryGetValue(key, out var o);
-        return o == null ? null : JsonSerializer.Deserialize<T>((string)o);
+        return o is null ? null : JsonSerializer.Deserialize<T>((string)o);
     }
 
     public static void SetDisplayMessage(this ITempDataDictionary tempData, DisplayMessage.AlertContext context,

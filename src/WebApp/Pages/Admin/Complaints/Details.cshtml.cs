@@ -41,9 +41,9 @@ public class DetailsModel : PageModel
         var staff = await _staff.GetCurrentUserAsync();
         if (staff is not { Active: true }) return Forbid();
 
-        if (id == null) return RedirectToPage("../Index");
+        if (id is null) return RedirectToPage("../Index");
         var item = await _complaints.GetAsync(id.Value);
-        if (item == null) return NotFound();
+        if (item is null) return NotFound();
 
         Item = item;
 

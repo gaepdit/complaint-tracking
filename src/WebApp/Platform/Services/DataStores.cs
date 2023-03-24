@@ -27,7 +27,7 @@ public static class DataStores
         }
         else
         {
-            string connectionString = configuration.GetConnectionString("DefaultConnection");
+            string? connectionString = configuration.GetConnectionString("DefaultConnection");
 
             if (string.IsNullOrEmpty(connectionString))
             {
@@ -53,7 +53,7 @@ public static class DataStores
         else
         {
             services.AddTransient<IFileService,
-                FileSystemFileService>(_ => new FileSystemFileService(configuration["PersistedFilesBasePath"]));
+                FileSystemFileService>(_ => new FileSystemFileService(configuration["PersistedFilesBasePath"] ?? ""));
         }
     }
 }
