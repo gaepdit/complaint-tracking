@@ -2,7 +2,7 @@ using Cts.WebApp.Platform.Models;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System.Text.Json;
 
-namespace Cts.WebApp.Platform.PageDisplayHelpers;
+namespace Cts.WebApp.Platform.PageModelHelpers;
 
 public static class TempDataExtensions
 {

@@ -1,10 +1,9 @@
-﻿using Cts.AppServices.Offices;
+using Cts.AppServices.Offices;
 using Cts.AppServices.Staff;
 using Cts.Domain.Identity;
 using Cts.WebApp.Platform.Models;
-using Cts.WebApp.Platform.PageDisplayHelpers;
+using Cts.WebApp.Platform.PageModelHelpers;
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using GaEpd.AppLibrary.ListItems;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -52,8 +51,7 @@ public class EditModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        var validationResult = await _validator.ValidateAsync(UpdateStaff);
-        if (!validationResult.IsValid) validationResult.AddToModelState(ModelState, nameof(UpdateStaff));
+        await _validator.ApplyValidationAsync(UpdateStaff, ModelState);
 
         if (!ModelState.IsValid)
         {

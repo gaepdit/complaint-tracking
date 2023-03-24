@@ -2,7 +2,7 @@
 using Cts.TestData.Constants;
 using Cts.WebApp.Pages.Admin.Maintenance.Offices;
 using Cts.WebApp.Platform.Models;
-using Cts.WebApp.Platform.PageDisplayHelpers;
+using Cts.WebApp.Platform.PageModelHelpers;
 using FluentAssertions.Execution;
 
 namespace WebAppTests.Pages.Admin.Maintenance.Offices;

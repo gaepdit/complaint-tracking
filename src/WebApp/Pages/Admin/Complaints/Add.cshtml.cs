@@ -5,9 +5,8 @@ using Cts.AppServices.Offices;
 using Cts.AppServices.Staff;
 using Cts.Domain.Data;
 using Cts.WebApp.Platform.Models;
-using Cts.WebApp.Platform.PageDisplayHelpers;
+using Cts.WebApp.Platform.PageModelHelpers;
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using GaEpd.AppLibrary.ListItems;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -60,8 +59,8 @@ public class AddModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        var validationResult = await _validator.ValidateAsync(Item);
-        if (!validationResult.IsValid) validationResult.AddToModelState(ModelState, nameof(Item));
+        await _validator.ApplyValidationAsync(Item, ModelState);
+
         if (!ModelState.IsValid)
         {
             await PopulateSelectListsAsync();

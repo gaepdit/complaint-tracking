@@ -4,7 +4,7 @@ using Cts.Domain.Identity;
 using Cts.TestData.Constants;
 using Cts.WebApp.Pages.Admin.Users;
 using Cts.WebApp.Platform.Models;
-using Cts.WebApp.Platform.PageDisplayHelpers;
+using Cts.WebApp.Platform.PageModelHelpers;
 using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

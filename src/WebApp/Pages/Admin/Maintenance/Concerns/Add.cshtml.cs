@@ -1,9 +1,8 @@
 ﻿using Cts.AppServices.Concerns;
 using Cts.Domain.Identity;
 using Cts.WebApp.Platform.Models;
-using Cts.WebApp.Platform.PageDisplayHelpers;
+using Cts.WebApp.Platform.PageModelHelpers;
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -30,8 +29,7 @@ public class AddModel : PageModel
         [FromServices] IConcernAppService service,
         [FromServices] IValidator<ConcernCreateDto> validator)
     {
-        var validationResult = await validator.ValidateAsync(Item);
-        if (!validationResult.IsValid) validationResult.AddToModelState(ModelState, nameof(Item));
+        await validator.ApplyValidationAsync(Item, ModelState);
         if (!ModelState.IsValid) return Page();
 
         var id = await service.CreateAsync(Item.Name);
