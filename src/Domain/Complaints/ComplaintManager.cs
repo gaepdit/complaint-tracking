@@ -3,7 +3,7 @@
 /// <inheritdoc />
 public class ComplaintManager : IComplaintManager
 {
-    private IComplaintRepository _repository;
+    private readonly IComplaintRepository _repository;
 
     public ComplaintManager(IComplaintRepository repository) => _repository = repository;
 

@@ -1,5 +1,6 @@
 using Cts.LocalRepository.Identity;
 using FluentAssertions.Execution;
+using System.Diagnostics;
 
 namespace LocalRepositoryTests.Identity;
 
@@ -11,7 +12,7 @@ public class UserRoleStore
         using var store = new LocalUserStore();
         var user = store.UserStore.Last();
         var roleName = store.Roles.First().Name;
-        Assert.That(roleName, Is.Not.Null);
+        Debug.Assert(roleName != null, nameof(roleName) + " != null");
         var resultBefore = await store.IsInRoleAsync(user, roleName, CancellationToken.None);
 
         await store.AddToRoleAsync(user, roleName, CancellationToken.None);
@@ -30,7 +31,7 @@ public class UserRoleStore
         using var store = new LocalUserStore();
         var user = store.UserStore.First();
         var roleName = store.Roles.First().Name;
-        Assert.That(roleName, Is.Not.Null);
+        Debug.Assert(roleName != null, nameof(roleName) + " != null");
         var resultBefore = await store.IsInRoleAsync(user, roleName, CancellationToken.None);
 
         await store.RemoveFromRoleAsync(user, roleName, CancellationToken.None);
@@ -79,7 +80,7 @@ public class UserRoleStore
         using var store = new LocalUserStore();
         var user = store.UserStore.First();
         var roleName = store.Roles.First().Name;
-        Assert.That(roleName, Is.Not.Null);
+        Debug.Assert(roleName != null, nameof(roleName) + " != null");
         var result = await store.IsInRoleAsync(user, roleName, CancellationToken.None);
         result.Should().BeTrue();
     }
@@ -90,7 +91,7 @@ public class UserRoleStore
         using var store = new LocalUserStore();
         var user = store.UserStore.Last();
         var roleName = store.Roles.First().Name;
-        Assert.That(roleName, Is.Not.Null);
+        Debug.Assert(roleName != null, nameof(roleName) + " != null");
         var result = await store.IsInRoleAsync(user, roleName, CancellationToken.None);
         result.Should().BeFalse();
     }
@@ -100,7 +101,7 @@ public class UserRoleStore
     {
         using var store = new LocalUserStore();
         var roleName = store.Roles.First().Name;
-        Assert.That(roleName, Is.Not.Null);
+        Debug.Assert(roleName != null, nameof(roleName) + " != null");
         var result = await store.GetUsersInRoleAsync(roleName, CancellationToken.None);
 
         using (new AssertionScope())

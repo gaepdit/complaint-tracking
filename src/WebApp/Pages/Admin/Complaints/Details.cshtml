@@ -6,6 +6,9 @@
     ViewData["Title"] = $"Complaint ID {Model.Item.Id}";
 }
 
+@* Remove when complaint actions have all been implemented: *@
+@* ReSharper disable Mvc.ActionNotResolved *@
+
 <h1>@ViewData["Title"]</h1>
 
 @if (Model.UserIsOwner)
@@ -68,7 +71,7 @@ else
 
 <h2 id="status">Status: <em class="text-brand">@Model.Item.Status.GetDisplayName()</em></h2>
 
-<div class="gaepd-noprint">
+<div class="d-print-none">
     @if (Model.CanReview)
     {
         <a asp-action="Approve" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary">Close Complaint (approved)</a>

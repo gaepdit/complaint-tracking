@@ -22,7 +22,7 @@ public class DetailsModel : PageModel
     public bool CanReview { get; set; }
     public bool CanAssign { get; set; }
     public bool CanRequestReview { get; set; }
-    public bool CanReassign{ get; set; }
+    public bool CanReassign { get; set; }
     public bool CanReopen { get; set; }
     public bool CanEditAttachments { get; set; }
 

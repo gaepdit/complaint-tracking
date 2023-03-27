@@ -18,7 +18,7 @@ public class RaygunClientProvider : DefaultRaygunAspNetCoreClientProvider
             args.Message.Details.Tags.Add(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
         };
 
-        var identity = context?.User.Identity as ClaimsIdentity;
+        var identity = context.User.Identity as ClaimsIdentity;
         if (identity?.IsAuthenticated == true)
         {
             client.UserInfo = new RaygunIdentifierMessage(identity.Name) { IsAnonymous = false };

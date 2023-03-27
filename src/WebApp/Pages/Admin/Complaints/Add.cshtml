@@ -5,7 +5,7 @@
 @model AddModel
 @{
     ViewData["Title"] = $"Add A New Complaint";
-    var PhoneTypesSelectList = Html.GetEnumSelectList<PhoneType>();
+    var phoneTypesSelectList = Html.GetEnumSelectList<PhoneType>().ToArray();
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -72,7 +72,7 @@
                         <span asp-validation-for="Item.CallerPhoneNumber" class="invalid-feedback"></span>
                     </div>
                     <div class="form-floating">
-                        <select asp-for="Item.CallerPhoneNumber!.Type" asp-items="PhoneTypesSelectList" class="form-select">
+                        <select asp-for="Item.CallerPhoneNumber!.Type" asp-items="phoneTypesSelectList" class="form-select">
                             <option value="">@TextConstants.SelectTextEmpty</option>
                         </select>
                         <label asp-for="Item.CallerPhoneNumber!.Type" class="form-label"></label>
@@ -86,7 +86,7 @@
                         <span asp-validation-for="Item.CallerSecondaryPhoneNumber" class="invalid-feedback"></span>
                     </div>
                     <div class="form-floating">
-                        <select asp-for="Item.CallerSecondaryPhoneNumber!.Type" asp-items="PhoneTypesSelectList" class="form-select">
+                        <select asp-for="Item.CallerSecondaryPhoneNumber!.Type" asp-items="phoneTypesSelectList" class="form-select">
                             <option value="">@TextConstants.SelectTextEmpty</option>
                         </select>
                         <label asp-for="Item.CallerSecondaryPhoneNumber!.Type" class="form-label"></label>
@@ -100,7 +100,7 @@
                         <span asp-validation-for="Item.CallerTertiaryPhoneNumber" class="invalid-feedback"></span>
                     </div>
                     <div class="form-floating">
-                        <select asp-for="Item.CallerTertiaryPhoneNumber!.Type" asp-items="PhoneTypesSelectList" class="form-select">
+                        <select asp-for="Item.CallerTertiaryPhoneNumber!.Type" asp-items="phoneTypesSelectList" class="form-select">
                             <option value="">@TextConstants.SelectTextEmpty</option>
                         </select>
                         <label asp-for="Item.CallerTertiaryPhoneNumber!.Type" class="form-label"></label>
@@ -240,7 +240,7 @@
                         <span asp-validation-for="Item.SourcePhoneNumber" class="invalid-feedback"></span>
                     </div>
                     <div class="form-floating">
-                        <select asp-for="Item.SourcePhoneNumber!.Type" asp-items="PhoneTypesSelectList" class="form-select">
+                        <select asp-for="Item.SourcePhoneNumber!.Type" asp-items="phoneTypesSelectList" class="form-select">
                             <option value="">@TextConstants.SelectTextEmpty</option>
                         </select>
                         <label asp-for="Item.SourcePhoneNumber!.Type" class="form-label"></label>
@@ -254,7 +254,7 @@
                         <span asp-validation-for="Item.SourceSecondaryPhoneNumber" class="invalid-feedback"></span>
                     </div>
                     <div class="form-floating">
-                        <select asp-for="Item.SourceSecondaryPhoneNumber!.Type" asp-items="PhoneTypesSelectList" class="form-select">
+                        <select asp-for="Item.SourceSecondaryPhoneNumber!.Type" asp-items="phoneTypesSelectList" class="form-select">
                             <option value="">@TextConstants.SelectTextEmpty</option>
                         </select>
                         <label asp-for="Item.SourceSecondaryPhoneNumber!.Type" class="form-label"></label>
@@ -268,7 +268,7 @@
                         <span asp-validation-for="Item.SourceTertiaryPhoneNumber" class="invalid-feedback"></span>
                     </div>
                     <div class="form-floating">
-                        <select asp-for="Item.SourceTertiaryPhoneNumber!.Type" asp-items="PhoneTypesSelectList" class="form-select">
+                        <select asp-for="Item.SourceTertiaryPhoneNumber!.Type" asp-items="phoneTypesSelectList" class="form-select">
                             <option value="">@TextConstants.SelectTextEmpty</option>
                         </select>
                         <label asp-for="Item.SourceTertiaryPhoneNumber!.Type" class="form-label"></label>

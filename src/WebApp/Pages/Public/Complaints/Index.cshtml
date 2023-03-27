@@ -1,7 +1,6 @@
 ﻿@page "{id:int?}"
 @using Cts.WebApp.Pages.Shared.DisplayTemplates;
 @using GaEpd.AppLibrary.Enums
-@using System.Globalization
 @model IndexModel
 @{
     ViewData["Title"] = $"Complaint ID {Model.Item.Id}";
@@ -12,7 +11,7 @@
 </h1>
 
 <p>
-    <small class="text-muted">Report generated @DateTime.Now.ToString(Cts.WebApp.Platform.Constants.DateTimeFormatConstants.LongDateTimeFormat).</small>
+    <small class="text-muted">Report generated @(DateTime.Now.ToString(Platform.Constants.DateTimeFormatConstants.LongDateTimeFormat)).</small>
 </p>
 
 <div class="container">
