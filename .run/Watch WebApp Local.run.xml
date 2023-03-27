@@ -1,0 +1,11 @@
+﻿<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Watch WebApp Local" type="RunDotNetWatch" factoryName="RunDotNetWatch">
+    <option name="exePath" value="$PROJECT_DIR$/.artifacts/WebApp/bin/Debug/net7.0/WebApp.exe" />
+    <option name="programParameters" value="" />
+    <option name="projectFilePath" value="$PROJECT_DIR$/src/WebApp/WebApp.csproj" />
+    <option name="projectTfm" value="net7.0" />
+    <option name="restartOnRudeEditEditor" value="true" />
+    <option name="workingDirectory" value="$PROJECT_DIR$/src/WebApp" />
+    <method v="2" />
+  </configuration>
+</component>
