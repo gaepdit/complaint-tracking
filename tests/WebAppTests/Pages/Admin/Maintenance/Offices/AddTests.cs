@@ -30,7 +30,7 @@ public class AddTests
         validator.Setup(l => l.ValidateAsync(It.IsAny<OfficeCreateDto>(), CancellationToken.None))
             .ReturnsAsync(new ValidationResult());
         var page = new AddModel(serviceMock.Object, staffService.Object, validator.Object)
-            { Item = ItemTest, TempData = WebAppTestsGlobal.GetPageTempData() };
+            { Item = ItemTest, TempData = WebAppTestsGlobal.PageTempData() };
         var expectedMessage =
             new DisplayMessage(DisplayMessage.AlertContext.Success, $"“{ItemTest.Name}” successfully added.");
 
@@ -57,7 +57,7 @@ public class AddTests
         validator.Setup(l => l.ValidateAsync(It.IsAny<OfficeCreateDto>(), CancellationToken.None))
             .ReturnsAsync(new ValidationResult(validationFailures));
         var page = new AddModel(serviceMock.Object, staffServiceMock.Object, validator.Object)
-            { Item = ItemTest, TempData = WebAppTestsGlobal.GetPageTempData() };
+            { Item = ItemTest, TempData = WebAppTestsGlobal.PageTempData() };
 
         var result = await page.OnPostAsync();
 

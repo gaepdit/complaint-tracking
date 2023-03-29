@@ -2,6 +2,7 @@
 using Cts.AppServices.UserServices;
 using Cts.Domain.Identity;
 using Cts.Domain.Offices;
+using Cts.Domain.Security;
 using GaEpd.AppLibrary.Domain.Repositories;
 using GaEpd.AppLibrary.ListItems;
 using Microsoft.AspNetCore.Identity;

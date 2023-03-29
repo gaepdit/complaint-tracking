@@ -1,6 +1,6 @@
 ﻿@page
-@using Cts.Domain.Identity
-@using Cts.WebApp.Pages.Shared.DisplayTemplates;
+@using Cts.Domain.Security
+@using Cts.WebApp.Pages.Shared.DisplayTemplates
 @model IndexModel
 @{
     ViewData["Title"] = $"Site Maintenance: {IndexModel.ThisOption.PluralName}";
@@ -19,7 +19,7 @@
     @IndexModel.ThisOption.SingularName dropdown lists.
 </p>
 
-@if (User.IsInRole(AppRole.SiteMaintenance))
+@if (Model.IsSiteMaintainer)
 {
     <p>
         <a asp-page="Add" class="btn btn-outline-primary btn-sm">Add New</a>
@@ -28,7 +28,7 @@
 
 <p id="table-description">
     The &ldquo;@AppRole.SiteMaintenanceRole.DisplayName&rdquo; role is needed to add or edit @IndexModel.ThisOption.PluralName.
-    @if (User.IsInRole(AppRole.SiteMaintenance))
+    @if (Model.IsSiteMaintainer)
     {
         @:Select an item to edit it. Setting an item as &ldquo;inactive&rdquo; makes it unavailable for future use but does not
         @:affect any existing use.
@@ -53,7 +53,7 @@ else
             {
                 <tr class="@(item.Id == Model.HighlightId ? "list-group-item-warning" : !item.Active ? "bg-secondary bg-opacity-25" : "")">
                     <td>
-                        @if (User.IsInRole(AppRole.SiteMaintenance))
+                        @if (Model.IsSiteMaintainer)
                         {
                             <a asp-page="Edit" asp-route-id="@item.Id">
                                 @Html.DisplayFor(m => item.Name, TemplateNames.StringOrNone)

@@ -1,4 +1,4 @@
-﻿using Cts.Domain.Identity;
+﻿using Cts.Domain.Security;
 using GaEpd.AppLibrary.ListItems;
 using Microsoft.AspNetCore.Identity;
 

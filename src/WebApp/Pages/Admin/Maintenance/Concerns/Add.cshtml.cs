@@ -1,5 +1,5 @@
 ﻿using Cts.AppServices.Concerns;
-using Cts.Domain.Identity;
+using Cts.Domain.Security.Policies;
 using Cts.WebApp.Platform.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using FluentValidation;
@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Cts.WebApp.Pages.Admin.Maintenance.Concerns;
 
-[Authorize(Roles = AppRole.SiteMaintenance)]
+[Authorize(Policy = PolicyName.SiteMaintainer)]
 public class AddModel : PageModel
 {
     [BindProperty]
