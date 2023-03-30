@@ -1,4 +1,3 @@
-using Cts.AppServices.Security;
 using Cts.Domain.Identity;
 using Cts.TestData;
 using Cts.TestData.Identity;

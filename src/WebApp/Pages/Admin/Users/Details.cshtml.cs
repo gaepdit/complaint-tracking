@@ -1,4 +1,4 @@
-﻿using Cts.AppServices.Security;
+﻿using Cts.AppServices.Permissions;
 using Cts.AppServices.Staff;
 using Cts.Domain.Identity;
 using Cts.WebApp.Platform.Models;

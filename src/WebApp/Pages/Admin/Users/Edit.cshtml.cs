@@ -1,5 +1,5 @@
 using Cts.AppServices.Offices;
-using Cts.AppServices.Security;
+using Cts.AppServices.Permissions;
 using Cts.AppServices.Staff;
 using Cts.WebApp.Platform.Models;
 using Cts.WebApp.Platform.PageModelHelpers;

@@ -6,9 +6,8 @@ using System.Security.Principal;
 
 namespace Cts.AppServices.Complaints.Permissions;
 
-internal class ComplaintViewAuthorizationHandler :
-    AuthorizationHandler<ComplaintOperation, ComplaintViewDto>,
-    IAuthorizationRequirement
+internal class ComplaintViewPermissionsHandler :
+    AuthorizationHandler<ComplaintOperation, ComplaintViewDto>
 {
     private static bool IsOpen(ComplaintViewDto resource) =>
         resource is { ComplaintClosed: false, IsDeleted: false };
@@ -68,10 +67,7 @@ internal class ComplaintViewAuthorizationHandler :
         ComplaintViewDto resource)
     {
         if (!(context.User.Identity?.IsAuthenticated ?? false))
-        {
-            context.Fail();
             return Task.FromResult(0);
-        }
 
         var success = requirement.Name switch
         {

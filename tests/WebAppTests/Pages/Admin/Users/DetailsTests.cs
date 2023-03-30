@@ -1,4 +1,3 @@
-using Cts.AppServices.Security;
 using Cts.AppServices.Staff;
 using Cts.Domain.Identity;
 using Cts.TestData.Constants;

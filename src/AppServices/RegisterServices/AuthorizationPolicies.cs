@@ -1,5 +1,5 @@
 ﻿using Cts.AppServices.Complaints.Permissions;
-using Cts.AppServices.Security;
+using Cts.AppServices.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,6 +16,6 @@ public static class AuthorizationPolicies
             opts.AddPolicy(PolicyName.DivisionManager, Policies.DivisionManagerPolicy());
         });
 
-        services.AddSingleton<IAuthorizationHandler>(_ => new ComplaintViewAuthorizationHandler());
+        services.AddSingleton<IAuthorizationHandler>(_ => new ComplaintViewPermissionsHandler());
     }
 }

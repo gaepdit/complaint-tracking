@@ -1,5 +1,5 @@
 ﻿using Cts.AppServices.Concerns;
-using Cts.AppServices.Security;
+using Cts.AppServices.Permissions;
 using Cts.WebApp.Platform.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using Microsoft.AspNetCore.Authorization;
