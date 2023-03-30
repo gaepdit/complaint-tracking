@@ -55,6 +55,7 @@ Users in the Division Manager role have all the capabilities of a Manager, plus 
 * Delete and restore Complaints.
 * View deleted Complaints.
 * View reports for all Users.
+* Edit attachments for all Complaints, including closed Complaints.
 
 ### User Account Admin
 
@@ -72,7 +73,7 @@ Users in the Data Export role can:
 
 Users in the Attachments Editor role can:
 
-* Edit attachments for all complaints, including closed complaints. (Normally, attachments can only be edited for open complaints the user is already able to edit.)
+* Edit attachments for all Complaints, including closed Complaints. (Normally, attachments can only be edited for open complaints the user is already able to edit.)
 
 ### Site Maintenance
 

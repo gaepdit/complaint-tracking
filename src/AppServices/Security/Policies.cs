@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Cts.AppServices.Security.Requirements;
+using Microsoft.AspNetCore.Authorization;
 
-namespace Cts.Domain.Security.Policies;
+namespace Cts.AppServices.Security;
 
 public static class PolicyName
 {

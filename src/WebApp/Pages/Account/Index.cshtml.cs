@@ -1,5 +1,6 @@
+using Cts.AppServices.Security;
 using Cts.AppServices.Staff;
-using Cts.Domain.Security;
+using Cts.Domain.Identity;
 using Cts.WebApp.Platform.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using Microsoft.AspNetCore.Authorization;

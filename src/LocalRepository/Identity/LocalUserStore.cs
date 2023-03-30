@@ -1,5 +1,5 @@
+using Cts.AppServices.Security;
 using Cts.Domain.Identity;
-using Cts.Domain.Security;
 using Cts.TestData;
 using Cts.TestData.Identity;
 using GaEpd.AppLibrary.Domain.Repositories;
@@ -29,7 +29,7 @@ public sealed class LocalUserStore :
 
         UserRoles.Add(new IdentityUserRole<string>
         {
-            RoleId = Roles.Single(e => e.Name == RoleName.DivisionManager).Id,
+            RoleId = Roles.Single(e => e.Name == RoleName.SiteMaintenance).Id,
             UserId = UserStore.Single(e => e.GivenName == "General").Id,
         });
 

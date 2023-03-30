@@ -1,6 +1,7 @@
 using Cts.AppServices.Offices;
+using Cts.AppServices.Security;
 using Cts.AppServices.Staff;
-using Cts.Domain.Security;
+using Cts.Domain.Identity;
 using Cts.TestData.Constants;
 using Cts.WebApp.Pages.Admin.Users;
 using Cts.WebApp.Platform.Models;

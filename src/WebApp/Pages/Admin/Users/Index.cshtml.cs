@@ -1,6 +1,7 @@
 ﻿using Cts.AppServices.Offices;
+using Cts.AppServices.Security;
 using Cts.AppServices.Staff;
-using Cts.Domain.Security;
+using Cts.Domain.Identity;
 using GaEpd.AppLibrary.ListItems;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

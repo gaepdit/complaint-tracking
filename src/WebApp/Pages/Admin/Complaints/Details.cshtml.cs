@@ -1,5 +1,6 @@
 ﻿using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.Dto;
+using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Staff;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,28 +13,21 @@ public class DetailsModel : PageModel
 {
     // Properties
     public ComplaintViewDto Item { get; private set; } = default!;
-
-    // Control properties
-    public bool UserIsOwner { get; set; }
-    public bool CanDelete { get; set; }
-    public bool CanAccept { get; set; }
-    public bool CanEditDetails { get; set; }
-    public bool CanEditAll { get; set; }
-    public bool CanReview { get; set; }
-    public bool CanAssign { get; set; }
-    public bool CanRequestReview { get; set; }
-    public bool CanReassign { get; set; }
-    public bool CanReopen { get; set; }
-    public bool CanEditAttachments { get; set; }
+    public Dictionary<IAuthorizationRequirement, bool> UserCan { get; set; } = new();
 
     // Services
     private readonly IComplaintAppService _complaints;
     private readonly IStaffAppService _staff;
+    private readonly IAuthorizationService _authorization;
 
-    public DetailsModel(IComplaintAppService complaints, IStaffAppService staff)
+    public DetailsModel(
+        IComplaintAppService complaints,
+        IStaffAppService staff,
+        IAuthorizationService authorization)
     {
         _complaints = complaints;
         _staff = staff;
+        _authorization = authorization;
     }
 
     public async Task<IActionResult> OnGetAsync(int? id)
@@ -45,10 +39,17 @@ public class DetailsModel : PageModel
         var item = await _complaints.GetAsync(id.Value);
         if (item is null) return NotFound();
 
+        item.CurrentUserId = staff.Id;
+        item.CurrentUserOfficeId = staff.Office?.Id ?? Guid.Empty;
         Item = item;
 
-        // TODO: Set control properties
+        foreach (var operation in ComplaintOperation.AllOperations)
+            await SetPermissionAsync(operation);
 
+        if (item.IsDeleted && !UserCan[ComplaintOperation.ManageDeletions]) return Forbid();
         return Page();
     }
+
+    private async Task SetPermissionAsync(IAuthorizationRequirement operation) =>
+        UserCan[operation] = (await _authorization.AuthorizeAsync(User, Item, operation)).Succeeded;
 }

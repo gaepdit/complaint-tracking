@@ -1,6 +1,7 @@
 ﻿using Cts.AppServices.Attachments;
 using Cts.AppServices.ComplaintActions;
 using Cts.AppServices.ComplaintTransitions;
+using Cts.AppServices.Offices;
 using Cts.AppServices.Staff;
 using Cts.Domain.Complaints;
 using Cts.Domain.ValueObjects;
@@ -10,6 +11,10 @@ namespace Cts.AppServices.Complaints.Dto;
 
 public class ComplaintViewDto
 {
+    // Control assist
+    public string CurrentUserId { get; set; } = string.Empty;
+    public Guid CurrentUserOfficeId { get; set; }
+
     // Properties
 
     public int Id { get; init; }
@@ -79,6 +84,9 @@ public class ComplaintViewDto
     // Properties: Assignment
 
     [Display(Name = "Current Assigned Office")]
+    public OfficeAdminViewDto? CurrentOffice { get; init; }
+
+    public string? CurrentOfficeAssignorId { get; init; }
     public string? CurrentOfficeName { get; init; }
 
     [Display(Name = "Current Assigned Staff")]
@@ -86,6 +94,9 @@ public class ComplaintViewDto
 
     [Display(Name = "Date Assigned")]
     public DateTimeOffset? CurrentOwnerAssignedDate { get; init; }
+
+    [Display(Name = "Date Accepted")]
+    public DateTimeOffset? CurrentOwnerAcceptedDate { get; init; }
 
     // Properties: Caller
 

@@ -1,4 +1,4 @@
-﻿using Cts.Domain.Security;
+﻿using Cts.Domain.Identity;
 using Microsoft.AspNetCore.Identity;
 
 namespace Cts.TestData.Identity;

@@ -1,6 +1,6 @@
+using Cts.AppServices.Security;
 using Cts.AppServices.Staff;
 using Cts.Domain.Identity;
-using Cts.Domain.Security;
 using Cts.WebApp.Platform.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using Cts.WebApp.Platform.Settings;

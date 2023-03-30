@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Cts.Domain.Identity;
+using Microsoft.AspNetCore.Authorization;
 
-namespace Cts.Domain.Security.Policies;
+namespace Cts.AppServices.Security.Requirements;
 
-internal class DivisionManagerRequirement : AuthorizationHandler<DivisionManagerRequirement>, IAuthorizationRequirement
+internal class DivisionManagerRequirement :
+    AuthorizationHandler<DivisionManagerRequirement>, IAuthorizationRequirement
 {
     protected override Task HandleRequirementAsync(
         AuthorizationHandlerContext context,

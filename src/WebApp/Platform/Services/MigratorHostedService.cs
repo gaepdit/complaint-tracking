@@ -1,4 +1,5 @@
-using Cts.Domain.Security;
+using Cts.AppServices.Security;
+using Cts.Domain.Identity;
 using Cts.EfRepository.Contexts;
 using Cts.EfRepository.Contexts.SeedDevData;
 using Cts.WebApp.Platform.Settings;

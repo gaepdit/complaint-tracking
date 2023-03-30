@@ -32,7 +32,9 @@ public class AutoMapperProfile : Profile
         CreateMap<Attachment, AttachmentViewDto>();
 
         CreateMap<Complaint, ComplaintPublicViewDto>();
-        CreateMap<Complaint, ComplaintViewDto>();
+        CreateMap<Complaint, ComplaintViewDto>()
+            .ForMember(d => d.CurrentUserId, o => o.Ignore())
+            .ForMember(d => d.CurrentUserOfficeId, o => o.Ignore());
         CreateMap<Complaint, ComplaintSearchResultDto>();
 
         CreateMap<ComplaintCreateDto, Complaint>(MemberList.Source)

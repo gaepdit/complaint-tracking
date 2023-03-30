@@ -1,4 +1,4 @@
-﻿namespace Cts.Domain.Security;
+﻿namespace Cts.Domain.Identity;
 
 /// <summary>
 /// User Roles available to the application for authorization.

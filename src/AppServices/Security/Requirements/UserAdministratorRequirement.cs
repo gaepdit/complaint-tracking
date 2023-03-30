@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Cts.Domain.Identity;
+using Microsoft.AspNetCore.Authorization;
 
-namespace Cts.Domain.Security.Policies;
+namespace Cts.AppServices.Security.Requirements;
 
 internal class UserAdministratorRequirement : AuthorizationHandler<UserAdministratorRequirement>, IAuthorizationRequirement
 {
