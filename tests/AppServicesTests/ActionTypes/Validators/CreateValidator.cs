@@ -1,21 +1,22 @@
-﻿using Cts.AppServices.Concerns;
-using Cts.Domain.Concerns;
+﻿using Cts.AppServices.ActionTypes;
+using Cts.AppServices.ActionTypes.Validators;
+using Cts.Domain.ActionTypes;
 using Cts.TestData.Constants;
 using FluentValidation.TestHelper;
 
-namespace AppServicesTests.Concerns;
+namespace AppServicesTests.ActionTypes;
 
 public class CreateValidator
 {
     [Test]
     public async Task ValidDto_ReturnsAsValid()
     {
-        var repoMock = new Mock<IConcernRepository>();
+        var repoMock = new Mock<IActionTypeRepository>();
         repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((Concern?)null);
-        var model = new ConcernCreateDto { Name = TestConstants.ValidName };
+            .ReturnsAsync((ActionType?)null);
+        var model = new ActionTypeCreateDto { Name = TestConstants.ValidName };
 
-        var validator = new ConcernCreateValidator(repoMock.Object);
+        var validator = new ActionTypeCreateValidator(repoMock.Object);
         var result = await validator.TestValidateAsync(model);
 
         result.ShouldNotHaveValidationErrorFor(e => e.Name);
@@ -24,12 +25,12 @@ public class CreateValidator
     [Test]
     public async Task DuplicateName_ReturnsAsInvalid()
     {
-        var repoMock = new Mock<IConcernRepository>();
+        var repoMock = new Mock<IActionTypeRepository>();
         repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new Concern(Guid.Empty, TestConstants.ValidName));
-        var model = new ConcernCreateDto { Name = TestConstants.ValidName };
+            .ReturnsAsync(new ActionType(Guid.Empty, TestConstants.ValidName));
+        var model = new ActionTypeCreateDto { Name = TestConstants.ValidName };
 
-        var validator = new ConcernCreateValidator(repoMock.Object);
+        var validator = new ActionTypeCreateValidator(repoMock.Object);
         var result = await validator.TestValidateAsync(model);
 
         result.ShouldHaveValidationErrorFor(e => e.Name)
@@ -39,12 +40,12 @@ public class CreateValidator
     [Test]
     public async Task NameTooShort_ReturnsAsInvalid()
     {
-        var repoMock = new Mock<IConcernRepository>();
+        var repoMock = new Mock<IActionTypeRepository>();
         repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((Concern?)null);
-        var model = new ConcernCreateDto { Name = TestConstants.ShortName };
+            .ReturnsAsync((ActionType?)null);
+        var model = new ActionTypeCreateDto { Name = TestConstants.ShortName };
 
-        var validator = new ConcernCreateValidator(repoMock.Object);
+        var validator = new ActionTypeCreateValidator(repoMock.Object);
         var result = await validator.TestValidateAsync(model);
 
         result.ShouldHaveValidationErrorFor(e => e.Name);

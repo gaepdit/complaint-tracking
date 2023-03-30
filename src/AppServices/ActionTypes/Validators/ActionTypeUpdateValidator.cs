@@ -2,7 +2,7 @@
 using Cts.Domain.BaseEntities;
 using FluentValidation;
 
-namespace Cts.AppServices.ActionTypes;
+namespace Cts.AppServices.ActionTypes.Validators;
 
 public class ActionTypeUpdateValidator : AbstractValidator<ActionTypeUpdateDto>
 {
