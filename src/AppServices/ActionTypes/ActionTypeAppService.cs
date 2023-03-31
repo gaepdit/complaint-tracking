@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Cts.AppServices.UserServices;
-using Cts.Domain.ActionTypes;
+using Cts.Domain.Entities.ActionTypes;
 using GaEpd.AppLibrary.ListItems;
 
 namespace Cts.AppServices.ActionTypes;

@@ -1,6 +1,6 @@
 ﻿using Cts.AppServices.Concerns;
 using Cts.AppServices.UserServices;
-using Cts.Domain.Concerns;
+using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Identity;
 using Cts.TestData.Constants;
 

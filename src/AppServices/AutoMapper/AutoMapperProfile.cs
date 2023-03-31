@@ -7,14 +7,14 @@ using Cts.AppServices.ComplaintTransitions;
 using Cts.AppServices.Concerns;
 using Cts.AppServices.Offices;
 using Cts.AppServices.Staff;
-using Cts.Domain.ActionTypes;
-using Cts.Domain.Attachments;
-using Cts.Domain.ComplaintActions;
-using Cts.Domain.Complaints;
-using Cts.Domain.ComplaintTransitions;
-using Cts.Domain.Concerns;
+using Cts.Domain.Entities.ActionTypes;
+using Cts.Domain.Entities.Attachments;
+using Cts.Domain.Entities.ComplaintActions;
+using Cts.Domain.Entities.Complaints;
+using Cts.Domain.Entities.ComplaintTransitions;
+using Cts.Domain.Entities.Concerns;
+using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
-using Cts.Domain.Offices;
 
 namespace Cts.AppServices.AutoMapper;
 

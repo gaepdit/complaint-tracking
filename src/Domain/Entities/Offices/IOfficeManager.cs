@@ -1,6 +1,6 @@
 using Cts.Domain.Exceptions;
 
-namespace Cts.Domain.Offices;
+namespace Cts.Domain.Entities.Offices;
 
 /// <summary>
 /// A manager for managing Offices.

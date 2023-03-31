@@ -1,8 +1,8 @@
 ﻿using Cts.AppServices.Complaints;
 using Cts.AppServices.UserServices;
-using Cts.Domain.Complaints;
-using Cts.Domain.Concerns;
-using Cts.Domain.Offices;
+using Cts.Domain.Entities.Complaints;
+using Cts.Domain.Entities.Concerns;
+using Cts.Domain.Entities.Offices;
 
 namespace AppServicesTests.Complaints;
 

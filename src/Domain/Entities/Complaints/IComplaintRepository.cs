@@ -1,9 +1,9 @@
-﻿using Cts.Domain.Attachments;
-using Cts.Domain.ComplaintActions;
-using Cts.Domain.ComplaintTransitions;
+﻿using Cts.Domain.Entities.Attachments;
+using Cts.Domain.Entities.ComplaintActions;
+using Cts.Domain.Entities.ComplaintTransitions;
 using System.Linq.Expressions;
 
-namespace Cts.Domain.Complaints;
+namespace Cts.Domain.Entities.Complaints;
 
 public interface IComplaintRepository : IRepository<Complaint, int>
 {

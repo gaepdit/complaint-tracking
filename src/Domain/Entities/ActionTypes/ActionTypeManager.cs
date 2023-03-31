@@ -1,6 +1,6 @@
 using Cts.Domain.Exceptions;
 
-namespace Cts.Domain.ActionTypes;
+namespace Cts.Domain.Entities.ActionTypes;
 
 /// <inheritdoc />
 public class ActionTypeManager : IActionTypeManager

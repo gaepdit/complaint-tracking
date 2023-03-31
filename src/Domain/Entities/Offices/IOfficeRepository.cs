@@ -1,6 +1,6 @@
 ﻿using Cts.Domain.Identity;
 
-namespace Cts.Domain.Offices;
+namespace Cts.Domain.Entities.Offices;
 
 public interface IOfficeRepository : IRepository<Office, Guid>
 {

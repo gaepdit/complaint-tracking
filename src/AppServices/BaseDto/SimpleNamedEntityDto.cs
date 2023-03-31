@@ -1,4 +1,4 @@
-﻿using Cts.Domain.BaseEntities;
+﻿using Cts.Domain.Entities.BaseEntities;
 using System.ComponentModel.DataAnnotations;
 
 namespace Cts.AppServices.BaseDto;

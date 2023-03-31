@@ -1,6 +1,6 @@
 using Cts.Domain.Exceptions;
 
-namespace Cts.Domain.Concerns;
+namespace Cts.Domain.Entities.Concerns;
 
 /// <inheritdoc />
 public class ConcernManager : IConcernManager

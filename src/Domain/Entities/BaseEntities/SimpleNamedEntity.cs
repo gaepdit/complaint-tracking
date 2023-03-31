@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 
-namespace Cts.Domain.BaseEntities;
+namespace Cts.Domain.Entities.BaseEntities;
 
 public abstract class SimpleNamedEntity : AuditableEntity
 {

@@ -1,5 +1,5 @@
-﻿using Cts.Domain.ActionTypes;
-using Cts.Domain.BaseEntities;
+﻿using Cts.Domain.Entities.ActionTypes;
+using Cts.Domain.Entities.BaseEntities;
 using FluentValidation;
 
 namespace Cts.AppServices.ActionTypes.Validators;

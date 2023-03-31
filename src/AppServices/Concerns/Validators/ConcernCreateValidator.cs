@@ -1,5 +1,5 @@
-﻿using Cts.Domain.BaseEntities;
-using Cts.Domain.Concerns;
+﻿using Cts.Domain.Entities.BaseEntities;
+using Cts.Domain.Entities.Concerns;
 using FluentValidation;
 
 namespace Cts.AppServices.Concerns.Validators;

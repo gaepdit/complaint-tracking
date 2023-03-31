@@ -1,4 +1,4 @@
-namespace Cts.Domain.EmailLogs;
+namespace Cts.Domain.Entities.EmailLogs;
 
 public class EmailLog : Entity<Guid>
 {

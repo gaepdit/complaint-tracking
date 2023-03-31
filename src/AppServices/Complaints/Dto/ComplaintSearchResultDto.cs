@@ -1,5 +1,5 @@
 ﻿using Cts.AppServices.Staff;
-using Cts.Domain.Complaints;
+using Cts.Domain.Entities.Complaints;
 
 namespace Cts.AppServices.Complaints.Dto;
 

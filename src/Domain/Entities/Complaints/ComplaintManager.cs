@@ -1,4 +1,4 @@
-﻿namespace Cts.Domain.Complaints;
+﻿namespace Cts.Domain.Entities.Complaints;
 
 /// <inheritdoc />
 public class ComplaintManager : IComplaintManager

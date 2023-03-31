@@ -1,6 +1,6 @@
 using AutoMapper;
 using Cts.AppServices.UserServices;
-using Cts.Domain.Concerns;
+using Cts.Domain.Entities.Concerns;
 using GaEpd.AppLibrary.ListItems;
 
 namespace Cts.AppServices.Concerns;

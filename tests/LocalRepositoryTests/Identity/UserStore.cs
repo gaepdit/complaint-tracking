@@ -1,5 +1,5 @@
+using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
-using Cts.Domain.Offices;
 using Cts.LocalRepository.Identity;
 using Cts.TestData.Identity;
 using FluentAssertions.Execution;

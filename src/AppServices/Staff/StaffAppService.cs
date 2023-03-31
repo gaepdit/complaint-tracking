@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Cts.AppServices.UserServices;
+using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
-using Cts.Domain.Offices;
 using GaEpd.AppLibrary.Domain.Repositories;
 using GaEpd.AppLibrary.ListItems;
 using Microsoft.AspNetCore.Identity;

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Cts.AppServices.ActionTypes;
 using Cts.AppServices.UserServices;
-using Cts.Domain.ActionTypes;
+using Cts.Domain.Entities.ActionTypes;
 using Cts.TestData.Constants;
 
 namespace AppServicesTests.ActionTypes;

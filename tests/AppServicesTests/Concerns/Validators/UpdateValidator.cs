@@ -1,6 +1,6 @@
 ﻿using Cts.AppServices.Concerns;
 using Cts.AppServices.Concerns.Validators;
-using Cts.Domain.Concerns;
+using Cts.Domain.Entities.Concerns;
 using Cts.TestData.Constants;
 using FluentValidation.TestHelper;
 

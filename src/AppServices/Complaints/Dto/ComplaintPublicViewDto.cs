@@ -1,7 +1,7 @@
 ﻿using Cts.AppServices.Attachments;
 using Cts.AppServices.ComplaintActions;
-using Cts.Domain.Complaints;
 using Cts.Domain.DataProcessing;
+using Cts.Domain.Entities.Complaints;
 using Cts.Domain.ValueObjects;
 using System.ComponentModel.DataAnnotations;
 

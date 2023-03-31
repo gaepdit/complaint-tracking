@@ -1,6 +1,6 @@
 ﻿using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.Dto;
-using Cts.Domain.Complaints;
+using Cts.Domain.Entities.Complaints;
 using Cts.TestData;
 
 namespace EfRepositoryTests.Complaints;

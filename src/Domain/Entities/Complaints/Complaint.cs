@@ -1,12 +1,12 @@
-using Cts.Domain.Attachments;
-using Cts.Domain.ComplaintActions;
-using Cts.Domain.ComplaintTransitions;
-using Cts.Domain.Concerns;
+using Cts.Domain.Entities.Attachments;
+using Cts.Domain.Entities.ComplaintActions;
+using Cts.Domain.Entities.ComplaintTransitions;
+using Cts.Domain.Entities.Concerns;
+using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
-using Cts.Domain.Offices;
 using System.Text.Json.Serialization;
 
-namespace Cts.Domain.Complaints;
+namespace Cts.Domain.Entities.Complaints;
 
 public class Complaint : AuditableSoftDeleteEntity<int>
 {

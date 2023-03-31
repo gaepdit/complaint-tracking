@@ -1,7 +1,7 @@
-﻿using Cts.Domain.Attachments;
-using Cts.Domain.ComplaintActions;
-using Cts.Domain.Complaints;
-using Cts.Domain.ComplaintTransitions;
+﻿using Cts.Domain.Entities.Attachments;
+using Cts.Domain.Entities.ComplaintActions;
+using Cts.Domain.Entities.Complaints;
+using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.EfRepository.Contexts;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;

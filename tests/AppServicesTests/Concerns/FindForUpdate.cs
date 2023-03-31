@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Cts.AppServices.Concerns;
 using Cts.AppServices.UserServices;
-using Cts.Domain.Concerns;
+using Cts.Domain.Entities.Concerns;
 using Cts.TestData.Constants;
 
 namespace AppServicesTests.Concerns;

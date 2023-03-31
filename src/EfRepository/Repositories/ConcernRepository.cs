@@ -1,4 +1,4 @@
-﻿using Cts.Domain.Concerns;
+﻿using Cts.Domain.Entities.Concerns;
 using Cts.EfRepository.Contexts;
 using Microsoft.EntityFrameworkCore;
 

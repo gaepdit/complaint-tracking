@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Cts.AppServices.Staff;
 using Cts.AppServices.UserServices;
-using Cts.Domain.Offices;
+using Cts.Domain.Entities.Offices;
 using GaEpd.AppLibrary.ListItems;
 
 namespace Cts.AppServices.Offices;

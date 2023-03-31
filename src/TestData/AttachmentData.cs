@@ -1,4 +1,4 @@
-using Cts.Domain.Attachments;
+using Cts.Domain.Entities.Attachments;
 using Cts.TestData.Identity;
 
 namespace Cts.TestData;

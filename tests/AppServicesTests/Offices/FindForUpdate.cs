@@ -1,8 +1,8 @@
 using AutoMapper;
 using Cts.AppServices.Offices;
 using Cts.AppServices.UserServices;
+using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
-using Cts.Domain.Offices;
 using Cts.TestData.Constants;
 
 namespace AppServicesTests.Offices;

@@ -2,10 +2,10 @@ using Cts.AppServices.ActionTypes;
 using Cts.AppServices.Complaints;
 using Cts.AppServices.Concerns;
 using Cts.AppServices.Offices;
-using Cts.Domain.ActionTypes;
-using Cts.Domain.Complaints;
-using Cts.Domain.Concerns;
-using Cts.Domain.Offices;
+using Cts.Domain.Entities.ActionTypes;
+using Cts.Domain.Entities.Complaints;
+using Cts.Domain.Entities.Concerns;
+using Cts.Domain.Entities.Offices;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Cts.AppServices.RegisterServices;

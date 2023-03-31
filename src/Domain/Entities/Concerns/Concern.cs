@@ -1,6 +1,6 @@
-﻿using Cts.Domain.BaseEntities;
+﻿using Cts.Domain.Entities.BaseEntities;
 
-namespace Cts.Domain.Concerns;
+namespace Cts.Domain.Entities.Concerns;
 
 public class Concern : SimpleNamedEntity
 {

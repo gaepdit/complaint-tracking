@@ -1,9 +1,9 @@
-﻿using Cts.Domain.ActionTypes;
-using Cts.Domain.Complaints;
+﻿using Cts.Domain.Entities.ActionTypes;
+using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Identity;
 using JetBrains.Annotations;
 
-namespace Cts.Domain.ComplaintActions;
+namespace Cts.Domain.Entities.ComplaintActions;
 
 public class ComplaintAction : AuditableSoftDeleteEntity
 {

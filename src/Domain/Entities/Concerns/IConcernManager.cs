@@ -1,6 +1,6 @@
 using Cts.Domain.Exceptions;
 
-namespace Cts.Domain.Concerns;
+namespace Cts.Domain.Entities.Concerns;
 
 /// <summary>
 /// A manager for managing Concerns.

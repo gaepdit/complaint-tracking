@@ -1,4 +1,4 @@
-﻿using Cts.Domain.Attachments;
+﻿using Cts.Domain.Entities.Attachments;
 using GaEpd.AppLibrary.Domain.Predicates;
 using System.Linq.Expressions;
 

@@ -1,8 +1,8 @@
-using Cts.Domain.Complaints;
+using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Identity;
 using JetBrains.Annotations;
 
-namespace Cts.Domain.Attachments;
+namespace Cts.Domain.Entities.Attachments;
 
 public class Attachment : AuditableSoftDeleteEntity
 {

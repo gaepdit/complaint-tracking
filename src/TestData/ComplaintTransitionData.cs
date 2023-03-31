@@ -1,4 +1,4 @@
-using Cts.Domain.ComplaintTransitions;
+using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.TestData.Constants;
 using Cts.TestData.Identity;
 

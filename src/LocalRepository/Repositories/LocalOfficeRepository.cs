@@ -1,5 +1,5 @@
-﻿using Cts.Domain.Identity;
-using Cts.Domain.Offices;
+﻿using Cts.Domain.Entities.Offices;
+using Cts.Domain.Identity;
 using Cts.TestData;
 using Cts.TestData.Identity;
 

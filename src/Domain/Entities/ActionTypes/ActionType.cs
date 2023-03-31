@@ -1,6 +1,6 @@
-﻿using Cts.Domain.BaseEntities;
+﻿using Cts.Domain.Entities.BaseEntities;
 
-namespace Cts.Domain.ActionTypes;
+namespace Cts.Domain.Entities.ActionTypes;
 
 public class ActionType : SimpleNamedEntity
 {

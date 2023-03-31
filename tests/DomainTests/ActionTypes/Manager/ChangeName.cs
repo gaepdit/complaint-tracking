@@ -1,5 +1,5 @@
-using Cts.Domain.ActionTypes;
-using Cts.Domain.BaseEntities;
+using Cts.Domain.Entities.ActionTypes;
+using Cts.Domain.Entities.BaseEntities;
 using Cts.Domain.Exceptions;
 using Cts.TestData.Constants;
 

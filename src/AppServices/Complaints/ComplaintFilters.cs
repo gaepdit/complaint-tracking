@@ -1,5 +1,5 @@
 ﻿using Cts.AppServices.Complaints.Dto;
-using Cts.Domain.Complaints;
+using Cts.Domain.Entities.Complaints;
 using GaEpd.AppLibrary.Domain.Predicates;
 using System.Linq.Expressions;
 

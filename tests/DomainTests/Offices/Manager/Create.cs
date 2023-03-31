@@ -1,5 +1,5 @@
+using Cts.Domain.Entities.Offices;
 using Cts.Domain.Exceptions;
-using Cts.Domain.Offices;
 using Cts.TestData.Constants;
 
 namespace DomainTests.Offices.Manager;

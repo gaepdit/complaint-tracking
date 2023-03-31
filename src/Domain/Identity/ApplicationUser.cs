@@ -1,4 +1,4 @@
-using Cts.Domain.Offices;
+using Cts.Domain.Entities.Offices;
 using Microsoft.AspNetCore.Identity;
 
 namespace Cts.Domain.Identity;

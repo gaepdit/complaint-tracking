@@ -1,4 +1,4 @@
-﻿using Cts.Domain.Complaints;
+﻿using Cts.Domain.Entities.Complaints;
 using Cts.TestData;
 using EfRepositoryTests;
 

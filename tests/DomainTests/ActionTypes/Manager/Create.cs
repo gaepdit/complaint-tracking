@@ -1,4 +1,4 @@
-using Cts.Domain.ActionTypes;
+using Cts.Domain.Entities.ActionTypes;
 using Cts.Domain.Exceptions;
 using Cts.TestData.Constants;
 

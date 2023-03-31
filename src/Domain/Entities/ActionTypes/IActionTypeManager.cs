@@ -1,6 +1,6 @@
 using Cts.Domain.Exceptions;
 
-namespace Cts.Domain.ActionTypes;
+namespace Cts.Domain.Entities.ActionTypes;
 
 /// <summary>
 /// A manager for managing Action Types.

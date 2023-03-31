@@ -1,5 +1,5 @@
 ﻿using Cts.AppServices.Complaints.Dto;
-using Cts.Domain.Complaints;
+using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Principal;
