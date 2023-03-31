@@ -218,84 +218,84 @@
                 </caption>
 
                 <thead class="table-light">
-                    <tr>
-                        <th scope="col" class="text-nowrap">
-                            <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                       asp-route-Sort="@(Model.Spec.Sort == SortBy.IdAsc ? SortBy.IdDesc : SortBy.IdAsc)">
-                                ID
-                                @Html.DisplayFor(m => m.SortByName, TemplateNames.SortArrow, new { up = SortBy.IdAsc.ToString(), down = SortBy.IdDesc.ToString() })
-                            </a>
-                        </th>
-                        <th scope="col" class="text-nowrap">
-                            <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                       asp-route-Sort="@(Model.Spec.Sort == SortBy.ReceivedDateAsc ? SortBy.ReceivedDateDesc : SortBy.ReceivedDateAsc)">
-                                Received
-                                @Html.DisplayFor(m => m.SortByName, TemplateNames.SortArrow, new { up = SortBy.ReceivedDateAsc.ToString(), down = SortBy.ReceivedDateDesc.ToString() })
-                            </a>
-                        </th>
-                        <th scope="col" class="text-nowrap">
-                            <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                       asp-route-Sort="@(Model.Spec.Sort == SortBy.StatusAsc ? SortBy.StatusDesc : SortBy.StatusAsc)">
-                                Status
-                                @Html.DisplayFor(m => m.SortByName, TemplateNames.SortArrow, new { up = SortBy.StatusAsc.ToString(), down = SortBy.StatusDesc.ToString() })
-                            </a>
-                        </th>
-                        <th scope="col">Source/Location</th>
-                        <th scope="col">Current Assignment</th>
-                        <th scope="col">Areas of Concern</th>
-                    </tr>
+                <tr>
+                    <th scope="col" class="text-nowrap">
+                        <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
+                           asp-route-Sort="@(Model.Spec.Sort == SortBy.IdAsc ? SortBy.IdDesc : SortBy.IdAsc)">
+                            ID
+                            @Html.DisplayFor(m => m.SortByName, TemplateNames.SortArrow, new { up = SortBy.IdAsc.ToString(), down = SortBy.IdDesc.ToString() })
+                        </a>
+                    </th>
+                    <th scope="col" class="text-nowrap">
+                        <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
+                           asp-route-Sort="@(Model.Spec.Sort == SortBy.ReceivedDateAsc ? SortBy.ReceivedDateDesc : SortBy.ReceivedDateAsc)">
+                            Received
+                            @Html.DisplayFor(m => m.SortByName, TemplateNames.SortArrow, new { up = SortBy.ReceivedDateAsc.ToString(), down = SortBy.ReceivedDateDesc.ToString() })
+                        </a>
+                    </th>
+                    <th scope="col" class="text-nowrap">
+                        <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
+                           asp-route-Sort="@(Model.Spec.Sort == SortBy.StatusAsc ? SortBy.StatusDesc : SortBy.StatusAsc)">
+                            Status
+                            @Html.DisplayFor(m => m.SortByName, TemplateNames.SortArrow, new { up = SortBy.StatusAsc.ToString(), down = SortBy.StatusDesc.ToString() })
+                        </a>
+                    </th>
+                    <th scope="col">Source/Location</th>
+                    <th scope="col">Current Assignment</th>
+                    <th scope="col">Areas of Concern</th>
+                </tr>
                 </thead>
 
                 <tbody>
-                    @foreach (var item in Model.Results.Items)
-                    {
-                        <tr class="@(item.IsDeleted ? "table-danger" : "")">
-                            <th scope="row">
-                                <a asp-page="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">@item.Id</a>
-                            </th>
-                            <td class="text-nowrap">@Html.DisplayFor(m => item.ReceivedDate, TemplateNames.ShortDate)</td>
-                            <td>
-                                @if (item.IsDeleted)
-                                {
-                                    <strong>DELETED</strong>
-                                    <br />
-                                }
-                                @Html.DisplayFor(m => item.Status)
-                                @if (item.ComplaintClosed && item.ComplaintClosedDate is not null)
-                                {
-                                    <br />
-                                    @:on @Html.DisplayFor(m => item.ComplaintClosedDate, TemplateNames.ShortDate)
-                                }
-                            </td>
-                            <td>
-                                <ul>
-                                    <li>@Html.DisplayFor(m => item.SourceFacilityName, TemplateNames.StringOrNotEntered)</li>
-                                    @if (item.SourceFacilityIdNumber != null)
-                                    {
-                                        <li>ID: @item.SourceFacilityIdNumber</li>
-                                    }
-                                    @if (item.ComplaintCounty != null)
-                                    {
-                                        <li>@Html.DisplayFor(m => item.ComplaintCounty, TemplateNames.County)</li>
-                                    }
-                                </ul>
-                            </td>
-                            <td>
-                                @Html.DisplayFor(m => item.AssignedOwnerName, TemplateNames.StringOrNotEntered)
+                @foreach (var item in Model.Results.Items)
+                {
+                    <tr class="@(item.IsDeleted ? "table-danger" : "")">
+                        <th scope="row">
+                            <a asp-page="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">@item.Id</a>
+                        </th>
+                        <td class="text-nowrap">@Html.DisplayFor(m => item.ReceivedDate, TemplateNames.ShortDate)</td>
+                        <td>
+                            @if (item.IsDeleted)
+                            {
+                                <strong>DELETED</strong>
                                 <br />
-                                @Html.DisplayFor(m => item.CurrentOfficeName, TemplateNames.StringOrNotEntered)
-                            </td>
-                            <td>
-                                <ol type="I">
-                                    <li>@Html.DisplayFor(m => item.PrimaryConcernName, TemplateNames.StringOrNotEntered)</li>
-                                    @if (item.SecondaryConcernName is not null)
-                                    {
-                                        <li>@Html.DisplayFor(m => item.SecondaryConcernName, TemplateNames.StringOrNotEntered)</li>
-                                    }
-                                </ol>
-                            </td>
-                        </tr>
-                    }
+                            }
+                            @Html.DisplayFor(m => item.Status)
+                            @if (item.ComplaintClosed && item.ComplaintClosedDate is not null)
+                            {
+                                <br />
+                                @:on @Html.DisplayFor(m => item.ComplaintClosedDate, TemplateNames.ShortDate)
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.SourceFacilityName, TemplateNames.StringOrNotEntered)
+                            <ul>
+                                @if (item.SourceFacilityIdNumber != null)
+                                {
+                                    <li>ID: @item.SourceFacilityIdNumber</li>
+                                }
+                                @if (item.ComplaintCounty != null)
+                                {
+                                    <li>@Html.DisplayFor(m => item.ComplaintCounty, TemplateNames.County)</li>
+                                }
+                            </ul>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(m => item.AssignedOwnerName, TemplateNames.StringOrNotEntered)
+                            <br />
+                            @Html.DisplayFor(m => item.CurrentOfficeName, TemplateNames.StringOrNotEntered)
+                        </td>
+                        <td>
+                            <ol type="I">
+                                <li>@Html.DisplayFor(m => item.PrimaryConcernName, TemplateNames.StringOrNotEntered)</li>
+                                @if (item.SecondaryConcernName is not null)
+                                {
+                                    <li>@Html.DisplayFor(m => item.SecondaryConcernName, TemplateNames.StringOrNotEntered)</li>
+                                }
+                            </ol>
+                        </td>
+                    </tr>
+                }
                 </tbody>
             </table>
 

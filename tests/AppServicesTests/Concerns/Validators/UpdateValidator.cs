@@ -1,9 +1,10 @@
 ﻿using Cts.AppServices.Concerns;
+using Cts.AppServices.Concerns.Validators;
 using Cts.Domain.Concerns;
 using Cts.TestData.Constants;
 using FluentValidation.TestHelper;
 
-namespace AppServicesTests.Concerns;
+namespace AppServicesTests.Concerns.Validators;
 
 public class UpdateValidator
 {

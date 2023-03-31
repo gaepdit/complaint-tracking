@@ -24,7 +24,7 @@ public class AddTests
         var validatorMock = new Mock<IValidator<ActionTypeCreateDto>>();
         validatorMock.Setup(l => l.ValidateAsync(It.IsAny<ActionTypeCreateDto>(), CancellationToken.None))
             .ReturnsAsync(new ValidationResult());
-        var page = new AddModel { Item = ItemTest, TempData = WebAppTestsGlobal.GetPageTempData() };
+        var page = new AddModel { Item = ItemTest, TempData = WebAppTestsGlobal.PageTempData() };
         var expectedMessage =
             new DisplayMessage(DisplayMessage.AlertContext.Success, $"“{ItemTest.Name}” successfully added.");
 
@@ -47,7 +47,7 @@ public class AddTests
         var validationFailures = new List<ValidationFailure> { new("property", "message") };
         validatorMock.Setup(l => l.ValidateAsync(It.IsAny<ActionTypeCreateDto>(), CancellationToken.None))
             .ReturnsAsync(new ValidationResult(validationFailures));
-        var page = new AddModel { Item = ItemTest, TempData = WebAppTestsGlobal.GetPageTempData() };
+        var page = new AddModel { Item = ItemTest, TempData = WebAppTestsGlobal.PageTempData() };
 
         var result = await page.OnPostAsync(serviceMock.Object, validatorMock.Object);
 

@@ -1,14 +1,14 @@
-﻿using Cts.Domain.BaseEntities;
-using Cts.Domain.Concerns;
+﻿using Cts.Domain.ActionTypes;
+using Cts.Domain.BaseEntities;
 using FluentValidation;
 
-namespace Cts.AppServices.Concerns;
+namespace Cts.AppServices.ActionTypes.Validators;
 
-public class ConcernCreateValidator : AbstractValidator<ConcernCreateDto>
+public class ActionTypeCreateValidator : AbstractValidator<ActionTypeCreateDto>
 {
-    private readonly IConcernRepository _repository;
+    private readonly IActionTypeRepository _repository;
 
-    public ConcernCreateValidator(IConcernRepository repository)
+    public ActionTypeCreateValidator(IActionTypeRepository repository)
     {
         _repository = repository;
 

@@ -1,6 +1,5 @@
 ﻿@page "{id:Guid?}"
-@using Cts.Domain.Identity
-@using Cts.WebApp.Pages.Shared.DisplayTemplates;
+@using Cts.WebApp.Pages.Shared.DisplayTemplates
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model DetailsModel
 @{
@@ -19,7 +18,7 @@
     @Model.DisplayStaff.Name
 </h2>
 
-@if (User.IsInRole(AppRole.UserAdmin))
+@if (Model.IsUserAdministrator)
 {
     <p>
         <a asp-page="Edit" asp-route-id="@Model.DisplayStaff.Id" class="btn btn-outline-primary btn-sm">Edit Profile</a>
@@ -40,7 +39,7 @@
 
 <h3>Roles</h3>
 
-@if (User.IsInRole(AppRole.UserAdmin))
+@if (Model.IsUserAdministrator)
 {
     <p>
         <a asp-page="EditRoles" asp-route-id="@Model.DisplayStaff.Id" class="btn btn-outline-primary btn-sm">Edit User Roles</a>

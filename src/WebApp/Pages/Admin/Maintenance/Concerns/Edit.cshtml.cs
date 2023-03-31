@@ -1,5 +1,5 @@
 ﻿using Cts.AppServices.Concerns;
-using Cts.Domain.Identity;
+using Cts.AppServices.Permissions;
 using Cts.WebApp.Platform.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using FluentValidation;
@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Cts.WebApp.Pages.Admin.Maintenance.Concerns;
 
-[Authorize(Roles = AppRole.SiteMaintenance)]
+[Authorize(Policy = PolicyName.SiteMaintainer)]
 public class EditModel : PageModel
 {
     private readonly IConcernAppService _service;

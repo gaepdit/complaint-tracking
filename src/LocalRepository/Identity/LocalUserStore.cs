@@ -25,6 +25,13 @@ public sealed class LocalUserStore :
         UserRoles = Roles
             .Select(role => new IdentityUserRole<string> { RoleId = role.Id, UserId = UserStore.First().Id })
             .ToList();
+
+        UserRoles.Add(new IdentityUserRole<string>
+        {
+            RoleId = Roles.Single(e => e.Name == RoleName.SiteMaintenance).Id,
+            UserId = UserStore.Single(e => e.GivenName == "General").Id,
+        });
+
         UserLogins = new List<UserLogin>();
 
         OfficeData.SeedOfficeAssignors(OfficeData.GetOffices, UserStore);

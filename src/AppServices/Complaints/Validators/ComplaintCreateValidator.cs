@@ -1,7 +1,7 @@
 ﻿using Cts.AppServices.Complaints.Dto;
 using FluentValidation;
 
-namespace Cts.AppServices.Concerns;
+namespace Cts.AppServices.Complaints.Validators;
 
 public class ComplaintCreateValidator : AbstractValidator<ComplaintCreateDto>
 {

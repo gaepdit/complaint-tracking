@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Cts.AppServices.Complaints.Dto;
@@ -18,13 +18,13 @@ public enum SortBy
 // and the corresponding integer values ensure that previous bookmarks don't break.
 public enum SearchComplaintStatus
 {
-    [Display(Name = "All Open")] AllOpen,
-    [Display(Name = "All Closed")] AllClosed,
-    [Display(Name = "New")] New,
-    [Display(Name = "Under Investigation")] UnderInvestigation,
-    [Display(Name = "Review Pending")] ReviewPending,
-    [Display(Name = "Approved/Closed")] Closed,
-    [Display(Name = "Administratively Closed")] AdministrativelyClosed,
+    [Display(Name = "All Open")] AllOpen = 0,
+    [Display(Name = "All Closed")] AllClosed = 1,
+    [Display(Name = "New")] New = 2,
+    [Display(Name = "Under Investigation")] UnderInvestigation = 3,
+    [Display(Name = "Review Pending")] ReviewPending = 4,
+    [Display(Name = "Approved/Closed")] Closed = 5,
+    [Display(Name = "Administratively Closed")] AdministrativelyClosed = 6,
 }
 
 // "Not Deleted" is included as an additional Delete Status option in the UI representing the null default state.
@@ -33,6 +33,6 @@ public enum SearchComplaintStatus
 // "Not Deleted" (null) = only non-deleted complaints
 public enum SearchDeleteStatus
 {
-    Deleted,
-    All,
+    Deleted = 0,
+    All = 1,
 }

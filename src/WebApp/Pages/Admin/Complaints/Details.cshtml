@@ -1,4 +1,5 @@
 @page "{id:int?}"
+@using Cts.AppServices.Complaints.Permissions
 @using Cts.WebApp.Pages.Shared.DisplayTemplates;
 @using GaEpd.AppLibrary.Enums
 @model DetailsModel
@@ -11,21 +12,25 @@
 
 <h1>@ViewData["Title"]</h1>
 
-@if (Model.UserIsOwner)
+@if (Model.UserCan[ComplaintOperation.ViewAsOwner])
 {
-    <p>This Complaint was assigned to you on @Html.DisplayFor(m => m.Item.CurrentOwnerAssignedDate, TemplateNames.LongDateTimeOrNotEntered).</p>
+    <p>
+        This Complaint was assigned to you on @Html.DisplayFor(m => m.Item.CurrentOwnerAssignedDate, TemplateNames.LongDateTimeOrNotEntered).
+        @if (Model.Item.CurrentOwnerAcceptedDate != null)
+        {
+            <br />
+            @:You accepted it on @Html.DisplayFor(m => m.Item.CurrentOwnerAcceptedDate, TemplateNames.LongDateTimeOrNotEntered).
+        }
+    </p>
 }
 
-@if (Model.Item.IsDeleted)
+@if (Model.Item.IsDeleted) // implies `ComplaintOperation.ManageDeletions`
 {
     <h2 class="text-danger">Complaint Has Been Deleted</h2>
 
-    @if (Model.CanDelete)
-    {
-        <div class="d-print-none">
-            <a asp-page="Restore" asp-route-id="@Model.Item.Id" class="btn btn-outline-danger">Restore deleted complaint</a>
-        </div>
-    }
+    <div class="d-print-none mb-2">
+        <a asp-page="Restore" asp-route-id="@Model.Item.Id" class="btn btn-outline-danger">Restore deleted complaint</a>
+    </div>
 
     <div class="container">
         <dl class="row">
@@ -39,28 +44,27 @@
 else
 {
     <div class="d-print-none mb-3">
-        @if (Model.CanAccept)
+        @if (Model.UserCan[ComplaintOperation.Accept])
         {
             <form asp-action="Accept">
-                <button type="submit">Accept</button>
+                <button id="AcceptSubmitButton" type="submit" class="btn btn-primary me-2">Accept</button>
                 @Html.HiddenFor(m => m.Item.Id)
             </form>
         }
         else
         {
-
-            @if (Model.CanEditDetails)
+            @if (Model.UserCan[ComplaintOperation.Edit] || Model.UserCan[ComplaintOperation.EditAsRecentReporter])
             {
-                <a asp-page="Edit" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary">Edit details</a>
+                <a asp-page="Edit" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary me-2">Edit details</a>
             }
-            @if (Model.CanEditAll)
+            @if (Model.UserCan[ComplaintOperation.Edit])
             {
-                <a asp-page="Actions" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary">Add/edit actions</a>
+                <a asp-page="Actions" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary me-2">Add/edit actions</a>
             }
         }
-        @if (Model.CanDelete)
+        @if (Model.UserCan[ComplaintOperation.ManageDeletions])
         {
-            <a asp-page="Delete" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary">Delete</a>
+            <a asp-page="Delete" asp-route-id="@Model.Item.Id" class="btn btn-outline-danger me-2">Delete</a>
         }
         @if (Model.Item.IsPublic)
         {
@@ -71,27 +75,27 @@ else
 
 <h2 id="status">Status: <em class="text-brand">@Model.Item.Status.GetDisplayName()</em></h2>
 
-<div class="d-print-none">
-    @if (Model.CanReview)
+<div class="d-print-none mb-2">
+    @if (Model.UserCan[ComplaintOperation.Review])
     {
-        <a asp-action="Approve" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary">Close Complaint (approved)</a>
-        <a asp-action="Return" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary">Return to staff (not approved)</a>
+        <a asp-action="Approve" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary me-2">Close Complaint (approved)</a>
+        <a asp-action="Return" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary me-2">Return to staff (not approved)</a>
     }
-    @if (Model.CanAssign)
+    @if (Model.UserCan[ComplaintOperation.Assign])
     {
-        <a asp-action="Assign" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary">Assign</a>
+        <a asp-action="Assign" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary me-2">Assign</a>
     }
-    @if (Model.CanRequestReview)
+    @if (Model.UserCan[ComplaintOperation.RequestReview])
     {
-        <a asp-action="RequestReview" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary">Submit for review</a>
+        <a asp-action="RequestReview" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary me-2">Submit for review</a>
     }
-    @if (Model.CanReassign)
+    @if (Model.UserCan[ComplaintOperation.Reassign])
     {
-        <a asp-action="Assign" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary">Transfer/reassign</a>
+        <a asp-action="Assign" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary me-2">Transfer/reassign</a>
     }
-    @if (Model.CanReopen)
+    @if (Model.UserCan[ComplaintOperation.Reopen])
     {
-        <a asp-action="Reopen" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary">Reopen</a>
+        <a asp-action="Reopen" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary me-2">Reopen</a>
     }
 </div>
 
@@ -105,7 +109,7 @@ else
             <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Model.Item.ReviewComments</dd>
         }
 
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CurrentOfficeName)</dt>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CurrentOffice)</dt>
         <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.CurrentOfficeName, TemplateNames.StringOrNotEntered)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CurrentOwner)</dt>
         <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.CurrentOwner, TemplateNames.NameOrNotEntered)</dd>
@@ -185,9 +189,9 @@ else
 
 <h2>Actions</h2>
 
-@if (Model.CanEditAll)
+@if (Model.UserCan[ComplaintOperation.Edit])
 {
-    <a asp-page="Actions" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary">Add/edit actions</a>
+    <a asp-page="Actions" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary mb-2">Add/edit actions</a>
 }
 
 <div class="container">
@@ -211,7 +215,9 @@ else
     }
     else
     {
-        <p><em>None.</em></p>
+        <p>
+            <em>None.</em>
+        </p>
     }
 </div>
 
@@ -221,64 +227,68 @@ else
 {
     <table class="table align-middle" aria-label="File attachments">
         <thead>
-            <tr>
-                <th scope="col">File</th>
-                <th scope="col">Size</th>
-                <th scope="col">Uploaded By</th>
-                @if (Model.CanEditAttachments)
-                {
-                    <th scope="col">Actions</th>
-                }
-            </tr>
+        <tr>
+            <th scope="col">File</th>
+            <th scope="col">Size</th>
+            <th scope="col">Uploaded By</th>
+            @if (Model.UserCan[ComplaintOperation.EditAttachments])
+            {
+                <th scope="col">Actions</th>
+            }
+        </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.Item.Attachments)
-            {
-                <tr>
-                    <td>
-                        @if (item.IsImage)
-                        {
-                            <a asp-page="Attachment" asp-route-id="@item.Id" asp-route-fileName="@item.FileName" target="_blank"
-                               class="text-decoration-none rounded d-block no-external-link" data-fancybox="attachment" data-caption="@item.FileName">
-                                <img src="../Attachment/@item.Id/@item.FileName/?thumbnail=true" class="img-thumbnail rounded me-2" alt="" />
-                                @item.FileName
-                            </a>
-                        }
-                        else
-                        {
-                            <a asp-page="Attachment" asp-route-id="@item.Id" asp-route-fileName="@item.FileName" target="_blank"
-                               class="text-decoration-none rounded d-block p-2 no-external-link">
-                                @Html.DisplayFor(m => item.FileExtension, TemplateNames.FileTypeIcon) @item.FileName
-                            </a>
-                        }
-                    </td>
-                    <td>@Html.DisplayFor(m => item.Size, TemplateNames.FileSize)</td>
-                    <td>
-                        @Html.DisplayFor(m => item.UploadedBy, TemplateNames.NameOrNotEntered) <br />
-                        on @Html.DisplayFor(m => item.UploadedDate, TemplateNames.ShortDateTime)
-                    </td>
-                    @if (Model.CanEditAttachments)
+        @foreach (var item in Model.Item.Attachments)
+        {
+            <tr>
+                <td>
+                    @if (item.IsImage)
                     {
-                        <td>
-                            <a class="btn btn-outline-primary btn-sm" asp-action="DeleteAttachment" asp-route-id="@item.Id">Delete</a>
-                        </td>
+                        <a asp-page="Attachment" asp-route-id="@item.Id" asp-route-fileName="@item.FileName" target="_blank"
+                           class="text-decoration-none rounded d-block no-external-link" data-fancybox="attachment" data-caption="@item.FileName">
+                            <img src="../Attachment/@item.Id/@item.FileName/?thumbnail=true" class="img-thumbnail rounded me-2" alt="" />
+                            @item.FileName
+                        </a>
                     }
-                </tr>
-            }
+                    else
+                    {
+                        <a asp-page="Attachment" asp-route-id="@item.Id" asp-route-fileName="@item.FileName" target="_blank"
+                           class="text-decoration-none rounded d-block p-2 no-external-link">
+                            @Html.DisplayFor(m => item.FileExtension, TemplateNames.FileTypeIcon) @item.FileName
+                        </a>
+                    }
+                </td>
+                <td>@Html.DisplayFor(m => item.Size, TemplateNames.FileSize)</td>
+                <td>
+                    @Html.DisplayFor(m => item.UploadedBy, TemplateNames.NameOrNotEntered) <br />
+                    on @Html.DisplayFor(m => item.UploadedDate, TemplateNames.ShortDateTime)
+                </td>
+                @if (Model.UserCan[ComplaintOperation.EditAttachments])
+                {
+                    <td>
+                        <a class="btn btn-outline-danger btn-sm" asp-action="DeleteAttachment" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                }
+            </tr>
+        }
         </tbody>
     </table>
 }
 else
 {
-    <p class="container"><em>None.</em></p>
+    <p class="container">
+        <em>None.</em>
+    </p>
 }
 
-@if (Model.CanEditAttachments)
+@if (Model.UserCan[ComplaintOperation.EditAttachments])
 {
     <div class="container">
         @if (Model.Item.ComplaintClosed)
         {
-            <p><strong>Be careful! This complaint has already been approved/closed.</strong></p>
+            <p>
+                <strong>Be careful! This complaint has already been approved/closed.</strong>
+            </p>
         }
 
         @* TODO *@
@@ -307,35 +317,35 @@ else
 {
     <table class="table table-small align-top" aria-label="Audit history">
         <thead>
-            <tr>
-                <th scope="col">Action Date</th>
-                <th scope="col">Action</th>
-                <th scope="col">From</th>
-                <th scope="col">To</th>
-                <th scope="col">Date Accepted</th>
-                <th scope="col">Transferred By</th>
-                <th scope="col">Comment</th>
-            </tr>
+        <tr>
+            <th scope="col">Action Date</th>
+            <th scope="col">Action</th>
+            <th scope="col">From</th>
+            <th scope="col">To</th>
+            <th scope="col">Date Accepted</th>
+            <th scope="col">Transferred By</th>
+            <th scope="col">Comment</th>
+        </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.Item.ComplaintTransitions)
-            {
-                <tr>
-                    <td>@Html.DisplayFor(m => item.TransferredDate, TemplateNames.ShortDateTime)</td>
-                    <td>@item.TransitionType.GetDisplayName()</td>
-                    <td>
-                        @Html.DisplayFor(m => item.TransferredFromUser, TemplateNames.NameOrBlank)
-                        @Html.DisplayFor(m => item.TransferredFromOffice, TemplateNames.NameOrBlank)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(m => item.TransferredToUser, TemplateNames.NameOrBlank)
-                        @Html.DisplayFor(m => item.TransferredToOffice, TemplateNames.NameOrBlank)
-                    </td>
-                    <td>@Html.DisplayFor(m => item.AcceptedDate, TemplateNames.ShortDateTimeOrBlank)</td>
-                    <td>@Html.DisplayFor(m => item.TransferredByUser, TemplateNames.NameOrNotEntered)</td>
-                    <td class="text-break text-pre-line">@Html.DisplayFor(m => item.Comment)</td>
-                </tr>
-            }
+        @foreach (var item in Model.Item.ComplaintTransitions)
+        {
+            <tr>
+                <td>@Html.DisplayFor(m => item.TransferredDate, TemplateNames.ShortDateTime)</td>
+                <td>@item.TransitionType.GetDisplayName()</td>
+                <td>
+                    @Html.DisplayFor(m => item.TransferredFromUser, TemplateNames.NameOrBlank)
+                    @Html.DisplayFor(m => item.TransferredFromOffice, TemplateNames.NameOrBlank)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => item.TransferredToUser, TemplateNames.NameOrBlank)
+                    @Html.DisplayFor(m => item.TransferredToOffice, TemplateNames.NameOrBlank)
+                </td>
+                <td>@Html.DisplayFor(m => item.AcceptedDate, TemplateNames.ShortDateTimeOrBlank)</td>
+                <td>@Html.DisplayFor(m => item.TransferredByUser, TemplateNames.NameOrNotEntered)</td>
+                <td class="text-break text-pre-line">@Html.DisplayFor(m => item.Comment)</td>
+            </tr>
+        }
         </tbody>
     </table>
 }

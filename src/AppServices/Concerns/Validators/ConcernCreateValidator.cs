@@ -1,19 +1,19 @@
-﻿using Cts.Domain.Offices;
+﻿using Cts.Domain.BaseEntities;
+using Cts.Domain.Concerns;
 using FluentValidation;
 
-namespace Cts.AppServices.Offices;
+namespace Cts.AppServices.Concerns.Validators;
 
-public class OfficeCreateValidator : AbstractValidator<OfficeCreateDto>
+public class ConcernCreateValidator : AbstractValidator<ConcernCreateDto>
 {
-    private readonly IOfficeRepository _repository;
+    private readonly IConcernRepository _repository;
 
-    public OfficeCreateValidator(IOfficeRepository repository)
+    public ConcernCreateValidator(IConcernRepository repository)
     {
         _repository = repository;
 
         RuleFor(e => e.Name)
-            .Cascade(CascadeMode.Stop)
-            .Length(Office.MinNameLength, Office.MaxNameLength)
+            .Length(SimpleNamedEntity.MinNameLength, SimpleNamedEntity.MaxNameLength)
             .MustAsync(async (_, name, token) => await NotDuplicateName(name, token))
             .WithMessage("The name entered already exists.");
     }

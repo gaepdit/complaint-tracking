@@ -1,9 +1,10 @@
 ﻿using Cts.AppServices.ActionTypes;
+using Cts.AppServices.ActionTypes.Validators;
 using Cts.Domain.ActionTypes;
 using Cts.TestData.Constants;
 using FluentValidation.TestHelper;
 
-namespace AppServicesTests.ActionTypes;
+namespace AppServicesTests.ActionTypes.Validators;
 
 public class CreateValidator
 {

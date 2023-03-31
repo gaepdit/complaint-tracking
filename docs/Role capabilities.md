@@ -9,7 +9,7 @@ Visitors to this site who are not logged in can only do the following:
 
 ## Staff
 
-All Users with CTS accounts who are logged into the application can:
+All Users with accounts who are logged into the application can:
 
 * Create new Complaints and either assign them to Users within the same Office or to the Assignor of another Office.
 * Edit Complaints assigned to them.
@@ -45,7 +45,7 @@ Users in the Manager role can:
 
 ### Division Manager
 
-Users in the Division Manager role have all of the capabilities of a Manager, plus they can:
+Users in the Division Manager role have all the capabilities of a Manager, plus they can:
 
 * Create and manage CTS User accounts and assign roles, including the Division Manager role.
 * Edit EPD Offices and designate the Assignor for each Office.
@@ -55,6 +55,7 @@ Users in the Division Manager role have all of the capabilities of a Manager, pl
 * Delete and restore Complaints.
 * View deleted Complaints.
 * View reports for all Users.
+* Edit attachments for all Complaints, including closed Complaints.
 
 ### User Account Admin
 
@@ -72,4 +73,11 @@ Users in the Data Export role can:
 
 Users in the Attachments Editor role can:
 
-* Edit attachments for all complaints, including closed complaints. (Normally, attachments can only be edited for open complaints the user is already able to edit.)
+* Edit attachments for all Complaints, including closed Complaints. (Normally, attachments can only be edited for open complaints the user is already able to edit.)
+
+### Site Maintenance
+
+Users in the Site Maintenance role can:
+
+* Edit EPD Offices and designate the Assignor for each Office.
+* Edit the lookup tables for Complaint Action Types and Areas of Concern.

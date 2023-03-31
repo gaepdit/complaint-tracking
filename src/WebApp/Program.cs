@@ -1,10 +1,10 @@
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.OpenApi.Models;
-using Mindscape.Raygun4Net.AspNetCore;
-using Cts.AppServices.ServiceCollectionExtensions;
+using Cts.AppServices.RegisterServices;
 using Cts.WebApp.Platform.Raygun;
 using Cts.WebApp.Platform.Services;
 using Cts.WebApp.Platform.Settings;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.OpenApi.Models;
+using Mindscape.Raygun4Net.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +24,9 @@ builder.Services.AddAuthenticationServices(builder.Configuration);
 // Persist data protection keys.
 var keysFolder = Path.Combine(builder.Configuration["PersistedFilesBasePath"] ?? "", "DataProtectionKeys");
 builder.Services.AddDataProtection().PersistKeysToFileSystem(Directory.CreateDirectory(keysFolder));
-builder.Services.AddAuthorization();
+
+// Configure authorization policies.
+builder.Services.AddAuthorizationPolicies();
 
 // Configure UI services.
 builder.Services.AddRazorPages();
@@ -32,7 +34,7 @@ builder.Services.AddRazorPages();
 // Starting value for HSTS max age is five minutes to allow for debugging.
 // For more info on updating HSTS max age value for production, see:
 // https://gaepdit.github.io/web-apps/use-https.html#how-to-enable-hsts
-if (!builder.Environment.IsDevelopment()) 
+if (!builder.Environment.IsDevelopment())
     builder.Services.AddHsts(opts => opts.MaxAge = TimeSpan.FromMinutes(300));
 
 // Configure application monitoring.
@@ -44,8 +46,12 @@ if (!string.IsNullOrEmpty(ApplicationSettings.RaygunSettings.ApiKey))
     builder.Services.AddHttpContextAccessor(); // needed by RaygunScriptPartial
 }
 
-// Add app services and data stores.
+// Add app services.
+builder.Services.AddAutoMapperProfiles();
 builder.Services.AddAppServices();
+builder.Services.AddValidators();
+
+// Add data stores.
 builder.Services.AddDataStores(builder.Configuration);
 
 // Initialize database.

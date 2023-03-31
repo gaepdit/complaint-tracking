@@ -3,8 +3,10 @@ using Cts.Domain.Identity;
 using Cts.TestData.Constants;
 using Cts.WebApp.Pages.Admin.Users;
 using FluentAssertions.Execution;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Security.Claims;
 
 namespace WebAppTests.Pages.Admin.Users;
 
@@ -25,9 +27,12 @@ public class DetailsTests
             .ReturnsAsync(staffView);
         serviceMock.Setup(l => l.GetAppRolesAsync(It.IsAny<string>()))
             .ReturnsAsync(new List<AppRole>());
-        var pageModel = new DetailsModel { TempData = WebAppTestsGlobal.GetPageTempData() };
+        var authorizationMock = new Mock<IAuthorizationService>();
+        authorizationMock.Setup(l => l.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), null, It.IsAny<string>()))
+            .ReturnsAsync(AuthorizationResult.Success);
+        var pageModel = new DetailsModel { TempData = WebAppTestsGlobal.PageTempData() };
 
-        var result = await pageModel.OnGetAsync(serviceMock.Object, staffView.Id);
+        var result = await pageModel.OnGetAsync(serviceMock.Object, authorizationMock.Object, staffView.Id);
 
         using (new AssertionScope())
         {
@@ -42,9 +47,9 @@ public class DetailsTests
     public async Task OnGet_MissingIdReturnsNotFound()
     {
         var serviceMock = new Mock<IStaffAppService>();
-        var pageModel = new DetailsModel { TempData = WebAppTestsGlobal.GetPageTempData() };
+        var pageModel = new DetailsModel { TempData = WebAppTestsGlobal.PageTempData() };
 
-        var result = await pageModel.OnGetAsync(serviceMock.Object, null);
+        var result = await pageModel.OnGetAsync(serviceMock.Object, Mock.Of<IAuthorizationService>(), null);
 
         using (new AssertionScope())
         {
@@ -59,9 +64,10 @@ public class DetailsTests
         var serviceMock = new Mock<IStaffAppService>();
         serviceMock.Setup(l => l.FindAsync(It.IsAny<string>()))
             .ReturnsAsync((StaffViewDto?)null);
-        var pageModel = new DetailsModel { TempData = WebAppTestsGlobal.GetPageTempData() };
+        var pageModel = new DetailsModel { TempData = WebAppTestsGlobal.PageTempData() };
 
-        var result = await pageModel.OnGetAsync(serviceMock.Object, Guid.Empty.ToString());
+        var result = await pageModel
+            .OnGetAsync(serviceMock.Object, Mock.Of<IAuthorizationService>(), Guid.Empty.ToString());
 
         result.Should().BeOfType<NotFoundResult>();
     }

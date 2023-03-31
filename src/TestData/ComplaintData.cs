@@ -14,14 +14,14 @@ internal static class ComplaintData
             EnteredBy = UserData.GetUsers.ElementAt(0),
             ReceivedDate = DateTimeOffset.Now.AddDays(-4),
             ReceivedBy = UserData.GetUsers.ElementAt(0),
-            ComplaintNature = TextData.MultipleParagraphs,
+            ComplaintNature = "Closed complaint",
             ComplaintLocation = TextData.ShortMultiline,
             ComplaintCity = TextData.Word,
             ComplaintCounty = TextData.AnotherWord,
             PrimaryConcern = ConcernData.GetConcerns.ElementAt(0),
             SecondaryConcern = ConcernData.GetConcerns.ElementAt(1),
             SourceFacilityIdNumber = Guid.NewGuid().ToString().Substring(9, 9).ToUpperInvariant(),
-            SourceFacilityName = TextData.Phrase,
+            SourceFacilityName = "Closed Complaint",
             SourceContactName = TextData.Phrase,
             SourceAddress = ValueObjectData.FullCompleteAddress(),
             SourcePhoneNumber = ValueObjectData.SamplePhoneNumber(),
@@ -51,6 +51,7 @@ internal static class ComplaintData
             ReceivedBy = UserData.GetUsers.ElementAt(1),
             PrimaryConcern = ConcernData.GetConcerns.ElementAt(2),
             CurrentOffice = OfficeData.GetOffices.ElementAt(1),
+            SourceFacilityName = "New complaint with minimal data.",
         },
         new Complaint(3)
         {
@@ -78,7 +79,7 @@ internal static class ComplaintData
         },
         new Complaint(5)
         {
-            ComplaintNature = "Deleted Complaint",
+            ComplaintNature = "Deleted complaint",
             Status = ComplaintStatus.Closed,
             EnteredBy = UserData.GetUsers.ElementAt(0),
             ReceivedDate = DateTimeOffset.Now.AddDays(-2),
@@ -89,7 +90,7 @@ internal static class ComplaintData
             PrimaryConcern = ConcernData.GetConcerns.ElementAt(0),
             SecondaryConcern = ConcernData.GetConcerns.ElementAt(1),
             SourceFacilityIdNumber = Guid.NewGuid().ToString().Substring(9, 9).ToUpperInvariant(),
-            SourceFacilityName = TextData.Phrase,
+            SourceFacilityName = "Deleted Complaint",
             SourceContactName = TextData.Phrase,
             SourceAddress = ValueObjectData.FullCompleteAddress(),
             SourcePhoneNumber = ValueObjectData.SamplePhoneNumber(),
@@ -97,6 +98,42 @@ internal static class ComplaintData
             ReviewComments = TextData.Phrase,
             ComplaintClosed = true,
             ComplaintClosedDate = DateTimeOffset.Now.AddDays(-1),
+        },
+        new Complaint(6)
+        {
+            Status = ComplaintStatus.New,
+            EnteredBy = UserData.GetUsers.ElementAt(1),
+            ReceivedDate = DateTimeOffset.Now.AddDays(-1),
+            ReceivedBy = UserData.GetUsers.ElementAt(1),
+            PrimaryConcern = ConcernData.GetConcerns.ElementAt(2),
+            CurrentOffice = OfficeData.GetOffices.ElementAt(0),
+            CurrentOwner = UserData.GetUsers.ElementAt(1),
+            CurrentOwnerAssignedDate = DateTimeOffset.Now.AddDays(-4),
+            SourceFacilityName = "Open complaint assigned to user.",
+        },
+        new Complaint(7)
+        {
+            Status = ComplaintStatus.UnderInvestigation,
+            EnteredBy = UserData.GetUsers.ElementAt(1),
+            ReceivedDate = DateTimeOffset.Now.AddDays(-1),
+            ReceivedBy = UserData.GetUsers.ElementAt(1),
+            PrimaryConcern = ConcernData.GetConcerns.ElementAt(2),
+            CurrentOffice = OfficeData.GetOffices.ElementAt(0),
+            CurrentOwner = UserData.GetUsers.ElementAt(1),
+            CurrentOwnerAssignedDate = DateTimeOffset.Now.AddDays(-4),
+            CurrentOwnerAcceptedDate = DateTimeOffset.Now.AddDays(-3),
+            SourceFacilityName = "Complaint accepted by user and under investigation.",
+        },
+        new Complaint(8)
+        {
+            Status = ComplaintStatus.New,
+            EnteredBy = UserData.GetUsers.ElementAt(1),
+            EnteredDate = DateTimeOffset.Now.AddHours(-2),
+            ReceivedDate = DateTimeOffset.Now.AddDays(-1),
+            ReceivedBy = UserData.GetUsers.ElementAt(1),
+            PrimaryConcern = ConcernData.GetConcerns.ElementAt(2),
+            CurrentOffice = OfficeData.GetOffices.ElementAt(1),
+            SourceFacilityName = "New complaint entered more than an hour ago.",
         },
     };
 

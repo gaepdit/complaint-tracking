@@ -1,4 +1,5 @@
 ﻿@page "{id:Guid?}"
+@using Cts.Domain.Identity
 @using Cts.WebApp.Pages.Shared.DisplayTemplates;
 @model EditRolesModel
 @{
@@ -31,10 +32,11 @@
             @for (var i = 0; i < Model.RoleSettings.Count; i++)
             {
                 var index = i;
+                var disableInput = Model.RoleSettings[index].Name == RoleName.DivisionManager && !Model.CanEditDivisionManager;
                 <div class="col">
                     <div class="card h-100">
                         <label class="form-check-label p-1 h-100" asp-for="@Model.RoleSettings[index].IsSelected">
-                            <input class="form-check-input m-2" type="checkbox" asp-for="@Model.RoleSettings[index].IsSelected" aria-describedby="role-help-block-@index" />
+                            <input disabled="@disableInput" class="form-check-input m-2" type="checkbox" asp-for="@Model.RoleSettings[index].IsSelected" aria-describedby="role-help-block-@index" />
                             <p class="d-inline-block w-75">
                                 @Model.RoleSettings[index].DisplayName<br />
                                 <small id="role-help-block-@index" class="card-text">@Model.RoleSettings[index].Description</small>

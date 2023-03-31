@@ -1,4 +1,5 @@
-﻿using Cts.AppServices.Staff;
+﻿using Cts.AppServices.Permissions;
+using Cts.AppServices.Staff;
 using Cts.Domain.Identity;
 using Cts.WebApp.Platform.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
@@ -8,20 +9,27 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Cts.WebApp.Pages.Admin.Users;
 
-[Authorize(Roles = AppRole.UserAdmin)]
+[Authorize(Policy = PolicyName.UserAdministrator)]
 public class EditRolesModel : PageModel
 {
     private readonly IStaffAppService _staffService;
-    public EditRolesModel(IStaffAppService staffService) => _staffService = staffService;
+    private readonly IAuthorizationService _authorization;
 
-    public StaffViewDto DisplayStaff { get; private set; } = default!;
-    public string? OfficeName => DisplayStaff.Office?.Name;
+    public EditRolesModel(IStaffAppService staffService, IAuthorizationService authorization)
+    {
+        _staffService = staffService;
+        _authorization = authorization;
+    }
 
     [BindProperty]
     public string UserId { get; set; } = string.Empty;
 
     [BindProperty]
     public List<RoleSetting> RoleSettings { get; set; } = new();
+
+    public StaffViewDto DisplayStaff { get; private set; } = default!;
+    public string? OfficeName => DisplayStaff.Office?.Name;
+    public bool CanEditDivisionManager { get; private set; }
 
     public async Task<IActionResult> OnGetAsync(string? id)
     {
@@ -31,6 +39,7 @@ public class EditRolesModel : PageModel
 
         DisplayStaff = staff;
         UserId = id;
+        CanEditDivisionManager = (await _authorization.AuthorizeAsync(User, PolicyName.DivisionManager)).Succeeded;
 
         await PopulateRoleSettingsAsync();
         return Page();
@@ -38,8 +47,14 @@ public class EditRolesModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        var result = await _staffService.UpdateRolesAsync(UserId,
-            RoleSettings.ToDictionary(r => r.Name, r => r.IsSelected));
+        CanEditDivisionManager = (await _authorization.AuthorizeAsync(User, PolicyName.DivisionManager)).Succeeded;
+
+        var roleDictionary = CanEditDivisionManager
+            ? RoleSettings.ToDictionary(r => r.Name, r => r.IsSelected)
+            : RoleSettings.Where(e => e.Name != RoleName.DivisionManager)
+                .ToDictionary(r => r.Name, r => r.IsSelected);
+
+        var result = await _staffService.UpdateRolesAsync(UserId, roleDictionary);
 
         if (result.Succeeded)
         {

@@ -2,7 +2,7 @@
 using Cts.Domain.Concerns;
 using FluentValidation;
 
-namespace Cts.AppServices.Concerns;
+namespace Cts.AppServices.Concerns.Validators;
 
 public class ConcernUpdateValidator : AbstractValidator<ConcernUpdateDto>
 {

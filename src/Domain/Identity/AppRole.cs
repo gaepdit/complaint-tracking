@@ -1,7 +1,22 @@
 ﻿namespace Cts.Domain.Identity;
 
 /// <summary>
-/// Authorization Roles for the application.
+/// User Roles available to the application for authorization.
+/// </summary>
+public static class RoleName
+{
+    // These are the strings that are stored in the database. Avoid modifying these once set!
+
+    public const string AttachmentsEditor = nameof(AttachmentsEditor);
+    public const string DataExport = nameof(DataExport);
+    public const string DivisionManager = nameof(DivisionManager);
+    public const string Manager = nameof(Manager);
+    public const string SiteMaintenance = nameof(SiteMaintenance);
+    public const string UserAdmin = nameof(UserAdmin);
+}
+
+/// <summary>
+/// Class for listing and describing the application roles for use in the UI, etc.
 /// </summary>
 public class AppRole
 {
@@ -40,47 +55,37 @@ public class AppRole
         return appRoles;
     }
 
-    // Roles
-    // These are the strings that are stored in the database. Avoid modifying these once set!
-
-    public const string AttachmentsEditor = nameof(AttachmentsEditor);
-    public const string DataExport = nameof(DataExport);
-    public const string DivisionManager = nameof(DivisionManager);
-    public const string Manager = nameof(Manager);
-    public const string SiteMaintenance = nameof(SiteMaintenance);
-    public const string UserAdmin = nameof(UserAdmin);
-
     // These static Role objects are used for displaying role information in the UI.
 
     public static AppRole AttachmentsEditorRole { get; } = new(
-        AttachmentsEditor, "Attachments Editor",
+        RoleName.AttachmentsEditor, "Attachments Editor",
         "Can edit attachments for all complaints, including closed complaints."
     );
 
     public static AppRole DataExportRole { get; } = new(
-        DataExport, "Data Export",
+        RoleName.DataExport, "Data Export",
         "Can generate a ZIP archive of complaints."
     );
 
     public static AppRole DivisionManagerRole { get; } = new(
-        DivisionManager, "Division Manager",
+        RoleName.DivisionManager, "Division Manager",
         "Can register and edit all users and roles. Can manage all complaints. Can delete and restore " +
         "complaints and complaint actions. Can edit offices, assignors, and lookup tables."
     );
 
     public static AppRole ManagerRole { get; } = new(
-        Manager, "Manager",
+        RoleName.Manager, "Manager",
         "Can manage complaints for all users assigned to the same office. Can delete and restore " +
         "complaint actions."
     );
 
     public static AppRole SiteMaintenanceRole { get; } = new(
-        SiteMaintenance, "Site Maintenance",
+        RoleName.SiteMaintenance, "Site Maintenance",
         "Can update values in lookup tables (drop-down lists)."
     );
 
     public static AppRole UserAdminRole { get; } = new(
-        UserAdmin, "User Account Admin",
+        RoleName.UserAdmin, "User Account Admin",
         "Can register and edit all users and roles, excluding the Division Manager role."
     );
 }
