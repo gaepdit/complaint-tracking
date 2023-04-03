@@ -39,7 +39,6 @@ public class DetailsModel : PageModel
         var item = await _complaints.GetAsync(id.Value);
         if (item is null) return NotFound();
 
-        item.CurrentUserId = staff.Id;
         item.CurrentUserOfficeId = staff.Office?.Id ?? Guid.Empty;
         Item = item;
 

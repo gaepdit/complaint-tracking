@@ -38,6 +38,7 @@ public class StaffDtoTests
     {
         var staffViewDto = new StaffViewDto
         {
+            Active = true,
             GivenName = givenName,
             FamilyName = familyName,
             Office = new OfficeDisplayViewDto { Id = Guid.Empty, Name = TextData.Phrase },
@@ -54,7 +55,13 @@ public class StaffDtoTests
         string familyName,
         string expectedDisplayName)
     {
-        var staffViewDto = new StaffViewDto { GivenName = givenName, FamilyName = familyName };
+        var staffViewDto = new StaffViewDto
+        {
+            Active = true,
+            GivenName = givenName,
+            FamilyName = familyName,
+        };
+
         staffViewDto.DisplayNameWithOffice.Should().Be(expectedDisplayName);
     }
 
@@ -91,6 +98,7 @@ public class StaffDtoTests
     {
         var staffViewDto = new StaffViewDto
         {
+            Active = true,
             Phone = TestConstants.ValidPhoneNumber,
             Office = new OfficeDisplayViewDto { Id = Guid.NewGuid() },
         };

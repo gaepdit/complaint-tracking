@@ -11,8 +11,7 @@ namespace Cts.AppServices.Complaints.Dto;
 
 public class ComplaintViewDto
 {
-    // Control assist
-    public string CurrentUserId { get; set; } = string.Empty;
+    // Authorization handler assist properties
     public Guid CurrentUserOfficeId { get; set; }
 
     // Properties

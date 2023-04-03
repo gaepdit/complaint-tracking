@@ -42,7 +42,7 @@ public class StaffViewDto : IDtoHasNameProperty
     public OfficeDisplayViewDto? Office { get; init; }
 
     [UIHint("BoolActive")]
-    public bool Active { get; init; } = true;
+    public bool Active { get; init; }
 
     // Read-only properties
     [JsonIgnore]

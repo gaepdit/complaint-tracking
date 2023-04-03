@@ -42,6 +42,7 @@ public class UserMapping
         var item = new StaffViewDto
         {
             Id = Guid.NewGuid().ToString(),
+            Active = true,
             GivenName = TestConstants.ValidName,
             FamilyName = TestConstants.ValidName,
             Email = TestConstants.ValidEmail,

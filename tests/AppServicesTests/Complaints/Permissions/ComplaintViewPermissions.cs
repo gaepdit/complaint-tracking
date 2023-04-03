@@ -62,12 +62,13 @@ public class ComplaintViewPermissions
     public async Task RecentReporter_IfEnteredWithinPastHour_Succeeds()
     {
         var requirements = new[] { ComplaintOperation.EditAsRecentReporter };
-        var user = new ClaimsPrincipal(new ClaimsIdentity("Basic"));
+        var user = new ClaimsPrincipal(new ClaimsIdentity(
+            new Claim[] { new(ClaimTypes.NameIdentifier, Guid.Empty.ToString()) },
+            "Basic"));
         var resource = new ComplaintViewDto
         {
             EnteredDate = DateTimeOffset.Now.AddMinutes(-30),
             EnteredBy = new StaffViewDto { Id = Guid.Empty.ToString() },
-            CurrentUserId = Guid.Empty.ToString(),
         };
         var context = new AuthorizationHandlerContext(requirements, user, resource);
         var handler = new ComplaintViewPermissionsHandler();
@@ -81,12 +82,13 @@ public class ComplaintViewPermissions
     public async Task RecentReporter_IfEnteredBeforePastHour_DoesNotSucceed()
     {
         var requirements = new[] { ComplaintOperation.EditAsRecentReporter };
-        var user = new ClaimsPrincipal(new ClaimsIdentity("Basic"));
+        var user = new ClaimsPrincipal(new ClaimsIdentity(
+            new Claim[] { new(ClaimTypes.NameIdentifier, Guid.Empty.ToString()) },
+            "Basic"));
         var resource = new ComplaintViewDto
         {
             EnteredDate = DateTimeOffset.Now.AddMinutes(-90),
             EnteredBy = new StaffViewDto { Id = Guid.Empty.ToString() },
-            CurrentUserId = Guid.Empty.ToString(),
         };
         var context = new AuthorizationHandlerContext(requirements, user, resource);
         var handler = new ComplaintViewPermissionsHandler();
