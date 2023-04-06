@@ -1,6 +1,6 @@
-﻿@page
+﻿@page "{handler?}"
 @using Cts.AppServices.Complaints.Dto
-@using Cts.WebApp.Pages.Shared.DisplayTemplates;
+@using Cts.WebApp.Pages.Shared.DisplayTemplates
 @using Cts.WebApp.Platform.Constants
 @using GaEpd.AppLibrary.Pagination
 @model IndexModel
@@ -43,7 +43,7 @@
 </div>
 <div class="row">
     <div class="p-3 rounded-3 bg-light border col-lg-9">
-        <form method="get" asp-fragment="SearchResults">
+        <form method="get" asp-page-handler="Search" asp-fragment="SearchResults">
             <h3 class="h4">Complaint Details</h3>
             <div class="row">
                 <div class="col-md-6 mb-3">
@@ -71,7 +71,7 @@
                 </div>
                 <div class="col-md-6 mb-3">
                     <div class="form-floating">
-                        <select asp-for="Spec.Concern" asp-items="Model.ConcernsSelectList" class="form-select">
+                        <select asp-for="Spec.Concern" name="@nameof(Model.Spec.Concern)" asp-items="Model.ConcernsSelectList" class="form-select">
                             <option value="">@TextConstants.SelectTextAny</option>
                         </select>
                         <label asp-for="Spec.Concern" class="form-label"></label>
@@ -90,7 +90,7 @@
             <div class="row">
                 <div class="mb-3">
                     <div class="form-floating">
-                        <select asp-for="Spec.County" asp-items="Model.CountiesSelectList" class="form-select">
+                        <select asp-for="Spec.County" name="@nameof(Model.Spec.County)" asp-items="Model.CountiesSelectList" class="form-select">
                             <option value="">@TextConstants.SelectTextAny</option>
                         </select>
                         <label asp-for="Spec.County" class="form-label"></label>
@@ -108,7 +108,7 @@
                         </div>
                         <div class="col-sm-8 mb-3">
                             <div class="form-floating">
-                                <select asp-for="Spec.State" asp-items="Model.StatesSelectList" class="form-select">
+                                <select asp-for="Spec.State" name="@nameof(Model.Spec.State)" asp-items="Model.StatesSelectList" class="form-select">
                                     <option value="">@TextConstants.SelectTextAny</option>
                                 </select>
                                 <label asp-for="Spec.State" class="form-label"></label>
@@ -125,7 +125,6 @@
             </div>
 
             <div class="mt-3 mb-1">
-                <input type="hidden" name="handler" value="search" />
                 <button id="SearchButton" type="submit" class="btn btn-primary px-5 me-2">Search</button>
                 <a asp-page="Index" class="btn btn-outline-secondary">Clear Form</a>
             </div>
@@ -159,56 +158,56 @@
                 </caption>
 
                 <thead class="table-light">
-                    <tr>
-                        <th scope="col" class="text-nowrap">
-                            <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                       asp-route-Sort="@(Model.Spec.Sort == SortBy.IdAsc ? SortBy.IdDesc : SortBy.IdAsc)">
-                                ID @Html.DisplayFor(m => m.SortByName, TemplateNames.SortArrow,
-                        new { up = SortBy.IdAsc.ToString(), down = SortBy.IdDesc.ToString() })
-                            </a>
-                        </th>
-                        <th scope="col" class="text-nowrap">
-                            <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                       asp-route-Sort="@(Model.Spec.Sort == SortBy.ReceivedDateAsc ? SortBy.ReceivedDateDesc : SortBy.ReceivedDateAsc)">
-                                Date Received @Html.DisplayFor(m => m.SortByName, TemplateNames.SortArrow,
-                        new { up = SortBy.ReceivedDateAsc.ToString(), down = SortBy.ReceivedDateDesc.ToString() })
-                            </a>
-                        </th>
-                        <th scope="col">Source/Location</th>
-                        <th scope="col">EPD Office Assigned</th>
-                        <th scope="col">Areas of Concern</th>
-                    </tr>
+                <tr>
+                    <th scope="col" class="text-nowrap">
+                        <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
+                           asp-route-Sort="@(Model.Spec.Sort == SortBy.IdAsc ? SortBy.IdDesc : SortBy.IdAsc)">
+                            ID @Html.DisplayFor(m => m.SortByName, TemplateNames.SortArrow,
+                                   new { up = SortBy.IdAsc.ToString(), down = SortBy.IdDesc.ToString() })
+                        </a>
+                    </th>
+                    <th scope="col" class="text-nowrap">
+                        <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
+                           asp-route-Sort="@(Model.Spec.Sort == SortBy.ReceivedDateAsc ? SortBy.ReceivedDateDesc : SortBy.ReceivedDateAsc)">
+                            Date Received @Html.DisplayFor(m => m.SortByName, TemplateNames.SortArrow,
+                                              new { up = SortBy.ReceivedDateAsc.ToString(), down = SortBy.ReceivedDateDesc.ToString() })
+                        </a>
+                    </th>
+                    <th scope="col">Source/Location</th>
+                    <th scope="col">EPD Office Assigned</th>
+                    <th scope="col">Areas of Concern</th>
+                </tr>
                 </thead>
 
                 <tbody>
-                    @foreach (var item in Model.Results.Items)
-                    {
-                        <tr>
-                            <th scope="row">
-                                <a asp-page="./Complaints/Index" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">@item.Id</a>
-                            </th>
-                            <td class="text-nowrap">@Html.DisplayFor(m => item.ReceivedDate, TemplateNames.ShortDate)</td>
-                            <td>
-                                <ul>
-                                    <li>@Html.DisplayFor(m => item.SourceFacilityName, TemplateNames.StringOrNotEntered)</li>
-                                    @if (item.ComplaintCounty != null)
-                                    {
-                                        <li>@item.ComplaintCounty County</li>
-                                    }
-                                </ul>
-                            </td>
-                            <td>@Html.DisplayFor(m => item.CurrentOfficeName, TemplateNames.StringOrNotEntered)</td>
-                            <td>
-                                <ol type="I">
-                                    <li>@Html.DisplayFor(m => item.PrimaryConcernName, TemplateNames.StringOrNotEntered)</li>
-                                    @if (item.SecondaryConcernName is not null)
-                                    {
-                                        <li>@Html.DisplayFor(m => item.SecondaryConcernName, TemplateNames.StringOrNotEntered)</li>
-                                    }
-                                </ol>
-                            </td>
-                        </tr>
-                    }
+                @foreach (var item in Model.Results.Items)
+                {
+                    <tr>
+                        <th scope="row">
+                            <a asp-page="./Complaints/Index" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">@item.Id</a>
+                        </th>
+                        <td class="text-nowrap">@Html.DisplayFor(m => item.ReceivedDate, TemplateNames.ShortDate)</td>
+                        <td>
+                            <ul>
+                                <li>@Html.DisplayFor(m => item.SourceFacilityName, TemplateNames.StringOrNotEntered)</li>
+                                @if (item.ComplaintCounty != null)
+                                {
+                                    <li>@item.ComplaintCounty County</li>
+                                }
+                            </ul>
+                        </td>
+                        <td>@Html.DisplayFor(m => item.CurrentOfficeName, TemplateNames.StringOrNotEntered)</td>
+                        <td>
+                            <ol type="I">
+                                <li>@Html.DisplayFor(m => item.PrimaryConcernName, TemplateNames.StringOrNotEntered)</li>
+                                @if (item.SecondaryConcernName is not null)
+                                {
+                                    <li>@Html.DisplayFor(m => item.SecondaryConcernName, TemplateNames.StringOrNotEntered)</li>
+                                }
+                            </ol>
+                        </td>
+                    </tr>
+                }
                 </tbody>
             </table>
 

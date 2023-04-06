@@ -10,7 +10,7 @@ public static class TextData
     // Words and phrases
     public const string EmailAddress = "sample@example.com";
     public const string Word = "Croissant";
-    public const string AnotherWord = "Lollipop";
+    public const string AnotherWord = "Bacon";
     public const string ThirdWord = "Pie";
 
     public const string ShortPhrase = "Gummies Macaroon";
