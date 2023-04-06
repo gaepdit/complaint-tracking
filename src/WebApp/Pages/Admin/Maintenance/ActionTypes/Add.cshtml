@@ -2,6 +2,7 @@
 @model AddModel
 @{
     ViewData["Title"] = $"Add a new {AddModel.ThisOption.SingularName}";
+    ViewData["NoAnchors"] = true;
 }
 
 <h1>@ViewData["Title"]</h1>

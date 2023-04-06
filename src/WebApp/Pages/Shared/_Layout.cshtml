@@ -52,7 +52,10 @@
 
 <script src="~/lib/jquery/jquery.min.js"></script>
 <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="~/lib/anchor-js/anchor.min.js"></script>
+@if (!ViewData.ContainsKey("NoAnchors") || (bool)(ViewData["NoAnchors"] ?? false) != true)
+{
+    <script src="~/lib/anchor-js/anchor.min.js"></script>
+}
 <script src="~/js/site.js"></script>
 @await RenderSectionAsync("Scripts", false)
 </body>

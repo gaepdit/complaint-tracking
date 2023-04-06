@@ -181,20 +181,6 @@ a.text-decoration-none:hover {
     }
 }
 
-/* Anchor-JS
--------------------------------------------------- */
-.anchorjs-link {
-    transition: all .25s linear;
-    /* See https://github.com/bryanbraun/anchorjs/pull/192 */
-    margin-left: -1.25em !important;
-    padding-left: .25em;
-    padding-right: .25em !important;
-}
-
-*:hover > .anchorjs-link, .anchorjs-link:focus-visible {
-    margin-left: -1.375em !important;
-}
-
 /* Fix for Bootstrap textarea with "floating" label
 -------------------------------------------------- */
 .form-floating > textarea.form-control {

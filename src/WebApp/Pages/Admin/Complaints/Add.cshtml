@@ -5,6 +5,7 @@
 @model AddModel
 @{
     ViewData["Title"] = $"Add A New Complaint";
+    ViewData["NoAnchors"] = true;
     var phoneTypesSelectList = Html.GetEnumSelectList<PhoneType>().ToArray();
 }
 

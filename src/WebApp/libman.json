@@ -13,7 +13,6 @@
       ]
     },
     {
-      "provider": "cdnjs",
       "library": "bootstrap@5.2.2",
       "destination": "wwwroot/lib/bootstrap/",
       "files": [
@@ -26,7 +25,6 @@
       ]
     },
     {
-      "provider": "cdnjs",
       "library": "jquery-validate@1.19.5",
       "destination": "wwwroot/lib/jquery-validate/",
       "files": [
@@ -35,7 +33,6 @@
       ]
     },
     {
-      "provider": "cdnjs",
       "library": "jquery-validation-unobtrusive@4.0.0",
       "destination": "wwwroot/lib/jquery-validation-unobtrusive/",
       "files": [
@@ -44,8 +41,7 @@
       ]
     },
     {
-      "provider": "cdnjs",
-      "library": "anchor-js@4.3.1",
+      "library": "anchor-js@5.0.0",
       "destination": "wwwroot/lib/anchor-js/"
     }
   ]

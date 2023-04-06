@@ -1,8 +1,8 @@
 ﻿@page "{id:Guid?}"
 @model EditModel
-
 @{
     ViewData["Title"] = $"Edit {EditModel.ThisOption.SingularName}";
+    ViewData["NoAnchors"] = true;
 }
 
 <h1>Edit @EditModel.ThisOption.SingularName</h1>
