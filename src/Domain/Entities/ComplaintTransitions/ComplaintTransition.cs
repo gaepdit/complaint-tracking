@@ -33,8 +33,6 @@ public class ComplaintTransition : AuditableEntity
 
     public Office? TransferredToOffice { get; init; }
 
-    public DateTimeOffset? AcceptedDate { get; init; }
-
     [StringLength(4000)]
     public string? Comment { get; init; }
 }
@@ -42,7 +40,7 @@ public class ComplaintTransition : AuditableEntity
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum TransitionType
 {
-    [Display(Name = "New")]
+    [Display(Name = "New")] 
     New = 0,
 
     [Display(Name = "Assigned")]
@@ -53,16 +51,19 @@ public enum TransitionType
 
     [Display(Name = "Returned By Reviewer")]
     ReturnedByReviewer = 3,
-
-    [Display(Name = "Closed")]
+    
+    [Display(Name = "Closed")] 
     Closed = 4,
 
-    [Display(Name = "Reopened")]
+    [Display(Name = "Reopened")] 
     Reopened = 5,
-
-    [Display(Name = "Deleted")]
+    
+    [Display(Name = "Deleted")] 
     Deleted = 6,
-
-    [Display(Name = "Restored")]
+    
+    [Display(Name = "Restored")] 
     Restored = 7,
+
+    [Display(Name = "Accepted")] 
+    Accepted = 8,
 }
