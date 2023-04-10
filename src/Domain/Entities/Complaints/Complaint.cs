@@ -96,10 +96,6 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     public Office CurrentOffice { get; set; } = default!;
 
-    [StringLength(50)]
-    [Obsolete("Holdover from old application")]
-    public string? CurrentProgram { get; set; }
-
     public ApplicationUser? CurrentOwner { get; set; }
 
     public DateTimeOffset? CurrentOwnerAssignedDate { get; set; }
