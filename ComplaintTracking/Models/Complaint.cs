@@ -1,4 +1,4 @@
-using ComplaintTracking.Data;
+﻿using ComplaintTracking.Data;
 using ComplaintTracking.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -254,11 +254,6 @@ namespace ComplaintTracking.Models
         [Display(Name = "Current Assigned Office")]
         public virtual Office CurrentOffice { get; set; }
         public Guid CurrentOfficeId { get; set; }
-
-        [Display(Name = "Current Assigned Program")]
-        [StringLength(50)]
-        [Obsolete("Holdover from old application")]
-        public string CurrentProgram { get; set; }
 
         [Display(Name = "Current Assigned Associate")]
         public virtual ApplicationUser CurrentOwner { get; set; }
