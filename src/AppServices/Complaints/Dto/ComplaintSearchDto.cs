@@ -18,21 +18,25 @@ public class ComplaintSearchDto
 
     [Display(Name = "From")]
     [DataType(DataType.Date)]
-    public DateTime? ClosedFrom { get; init; }
+    [DisplayFormat(DataFormatString = "{0:O}", ApplyFormatInEditMode = true)]
+    public DateOnly? ClosedFrom { get; init; }
 
     [Display(Name = "Through")]
     [DataType(DataType.Date)]
-    public DateTime? ClosedTo { get; init; }
+    [DisplayFormat(DataFormatString = "{0:O}", ApplyFormatInEditMode = true)]
+    public DateOnly? ClosedTo { get; init; }
 
     // Received
 
     [Display(Name = "From")]
     [DataType(DataType.Date)]
-    public DateTime? ReceivedFrom { get; init; }
+    [DisplayFormat(DataFormatString = "{0:O}", ApplyFormatInEditMode = true)]
+    public DateOnly? ReceivedFrom { get; init; }
 
     [Display(Name = "Through")]
     [DataType(DataType.Date)]
-    public DateTime? ReceivedTo { get; init; }
+    [DisplayFormat(DataFormatString = "{0:O}", ApplyFormatInEditMode = true)]
+    public DateOnly? ReceivedTo { get; init; }
 
     [Display(Name = "Received By")]
     public string? ReceivedBy { get; init; }

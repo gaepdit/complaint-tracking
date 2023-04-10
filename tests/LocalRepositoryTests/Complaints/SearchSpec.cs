@@ -69,8 +69,8 @@ public class SearchSpec
 
         var spec = new ComplaintSearchDto
         {
-            ClosedFrom = referenceItem.ComplaintClosedDate!.Value.Date,
-            ClosedTo = referenceItem.ComplaintClosedDate!.Value.Date,
+            ClosedFrom = DateOnly.FromDateTime(referenceItem.ComplaintClosedDate!.Value.Date),
+            ClosedTo = DateOnly.FromDateTime(referenceItem.ComplaintClosedDate!.Value.Date),
         };
 
         var predicate = ComplaintFilters.SearchPredicate(spec);
@@ -90,8 +90,8 @@ public class SearchSpec
 
         var spec = new ComplaintSearchDto
         {
-            ReceivedFrom = referenceItem.ReceivedDate.Date,
-            ReceivedTo = referenceItem.ReceivedDate.Date,
+            ReceivedFrom = DateOnly.FromDateTime(referenceItem.ReceivedDate.Date),
+            ReceivedTo = DateOnly.FromDateTime(referenceItem.ReceivedDate.Date),
         };
 
         var predicate = ComplaintFilters.SearchPredicate(spec);

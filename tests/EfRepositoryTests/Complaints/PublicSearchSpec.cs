@@ -1,4 +1,4 @@
-﻿using Cts.AppServices.Complaints;
+using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.Dto;
 using Cts.Domain.Entities.Complaints;
 using Cts.TestData;
@@ -49,8 +49,8 @@ public class PublicSearchSpec
     {
         var spec = new ComplaintPublicSearchDto
         {
-            DateFrom = _referenceItem.ReceivedDate.Date,
-            DateTo = _referenceItem.ReceivedDate.Date,
+            DateFrom = DateOnly.FromDateTime(_referenceItem.ReceivedDate.Date),
+            DateTo = DateOnly.FromDateTime(_referenceItem.ReceivedDate.Date),
         };
         var predicate = ComplaintFilters.PublicSearchPredicate(spec);
 

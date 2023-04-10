@@ -13,11 +13,13 @@ public class ComplaintPublicSearchDto
 
     [Display(Name = "From")]
     [DataType(DataType.Date)]
-    public DateTime? DateFrom { get; init; }
+    [DisplayFormat(DataFormatString = "{0:O}", ApplyFormatInEditMode = true)]
+    public DateOnly? DateFrom { get; init; }
 
     [Display(Name = "Through")]
     [DataType(DataType.Date)]
-    public DateTime? DateTo { get; init; }
+    [DisplayFormat(DataFormatString = "{0:O}", ApplyFormatInEditMode = true)]
+    public DateOnly? DateTo { get; init; }
 
     // Complaint
 

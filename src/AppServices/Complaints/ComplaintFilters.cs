@@ -1,4 +1,4 @@
-﻿using Cts.AppServices.Complaints.Dto;
+using Cts.AppServices.Complaints.Dto;
 using Cts.Domain.Entities.Complaints;
 using GaEpd.AppLibrary.Domain.Predicates;
 using System.Linq.Expressions;
@@ -58,58 +58,62 @@ internal static class ComplaintFilters
 
     private static Expression<Func<Complaint, bool>> ByStatus(this Expression<Func<Complaint, bool>> predicate,
         SearchComplaintStatus? input) => input switch
-        {
-            SearchComplaintStatus.Closed =>
-                predicate.And(e => e.Status == ComplaintStatus.Closed),
-            SearchComplaintStatus.AdministrativelyClosed =>
-                predicate.And(e => e.Status == ComplaintStatus.AdministrativelyClosed),
-            SearchComplaintStatus.AllClosed =>
-                predicate.And(e => e.ComplaintClosed),
-            SearchComplaintStatus.New =>
-                predicate.And(e => e.Status == ComplaintStatus.New),
-            SearchComplaintStatus.ReviewPending =>
-                predicate.And(e => e.Status == ComplaintStatus.ReviewPending),
-            SearchComplaintStatus.UnderInvestigation =>
-                predicate.And(e => e.Status == ComplaintStatus.UnderInvestigation),
-            SearchComplaintStatus.AllOpen =>
-                predicate.And(e => !e.ComplaintClosed),
-            _ => predicate,
-        };
+    {
+        SearchComplaintStatus.Closed =>
+            predicate.And(e => e.Status == ComplaintStatus.Closed),
+        SearchComplaintStatus.AdministrativelyClosed =>
+            predicate.And(e => e.Status == ComplaintStatus.AdministrativelyClosed),
+        SearchComplaintStatus.AllClosed =>
+            predicate.And(e => e.ComplaintClosed),
+        SearchComplaintStatus.New =>
+            predicate.And(e => e.Status == ComplaintStatus.New),
+        SearchComplaintStatus.ReviewPending =>
+            predicate.And(e => e.Status == ComplaintStatus.ReviewPending),
+        SearchComplaintStatus.UnderInvestigation =>
+            predicate.And(e => e.Status == ComplaintStatus.UnderInvestigation),
+        SearchComplaintStatus.AllOpen =>
+            predicate.And(e => !e.ComplaintClosed),
+        _ => predicate,
+    };
 
     private static Expression<Func<Complaint, bool>> ByDeletedStatus(this Expression<Func<Complaint, bool>> predicate,
         SearchDeleteStatus? input) => input switch
-        {
-            SearchDeleteStatus.All => predicate,
-            SearchDeleteStatus.Deleted => predicate.And(e => e.IsDeleted),
-            _ => predicate.And(e => !e.IsDeleted),
-        };
+    {
+        SearchDeleteStatus.All => predicate,
+        SearchDeleteStatus.Deleted => predicate.And(e => e.IsDeleted),
+        _ => predicate.And(e => !e.IsDeleted),
+    };
 
-    // The input from the search page is a DateTime object, but only the date part is entered. (After migrating
-    // to .NET 7, the input can be changed to a DateOnly type.)
-    private static Expression<Func<Complaint, bool>> FromDate(this Expression<Func<Complaint, bool>> predicate,
-        DateTime? input) => input is null ? predicate : predicate.And(e => e.ReceivedDate.Date >= input);
+    private static Expression<Func<Complaint, bool>> FromDate(
+        this Expression<Func<Complaint, bool>> predicate, DateOnly? input) =>
+        input is null
+            ? predicate
+            : predicate.And(e => e.ReceivedDate.Date >= input.Value.ToDateTime(TimeOnly.MinValue));
 
-    // The input from the search page is a DateTime object, but only the date part is entered. (After migrating
-    // to .NET 7, the input can be changed to a DateOnly type.)
-    private static Expression<Func<Complaint, bool>> ToDate(this Expression<Func<Complaint, bool>> predicate,
-        DateTime? input) => input is null ? predicate : predicate.And(e => e.ReceivedDate.Date <= input);
+    private static Expression<Func<Complaint, bool>> ToDate(
+        this Expression<Func<Complaint, bool>> predicate, DateOnly? input) =>
+        input is null
+            ? predicate
+            : predicate.And(e => e.ReceivedDate.Date <= input.Value.ToDateTime(TimeOnly.MinValue));
 
-    // The input from the search page is a DateTime object, but only the date part is entered. (After migrating
-    // to .NET 7, the input can be changed to a DateOnly type.)
-    private static Expression<Func<Complaint, bool>> FromClosedDate(this Expression<Func<Complaint, bool>> predicate,
-        DateTime? input) => input is null
-        ? predicate
-        : predicate.And(e => e.ComplaintClosed && e.ComplaintClosedDate != null && e.ComplaintClosedDate.Value.Date >= input);
+    private static Expression<Func<Complaint, bool>> FromClosedDate(
+        this Expression<Func<Complaint, bool>> predicate, DateOnly? input) =>
+        input is null
+            ? predicate
+            : predicate.And(e =>
+                e.ComplaintClosed && e.ComplaintClosedDate != null &&
+                e.ComplaintClosedDate.Value.Date >= input.Value.ToDateTime(TimeOnly.MinValue));
 
-    // The input from the search page is a DateTime object, but only the date part is entered. (After migrating
-    // to .NET 7, the input can be changed to a DateOnly type.)
-    private static Expression<Func<Complaint, bool>> ToClosedDate(this Expression<Func<Complaint, bool>> predicate,
-        DateTime? input) => input is null
-        ? predicate
-        : predicate.And(e => e.ComplaintClosed && e.ComplaintClosedDate != null && e.ComplaintClosedDate.Value.Date <= input);
+    private static Expression<Func<Complaint, bool>> ToClosedDate(
+        this Expression<Func<Complaint, bool>> predicate, DateOnly? input) =>
+        input is null
+            ? predicate
+            : predicate.And(e =>
+                e.ComplaintClosed && e.ComplaintClosedDate != null &&
+                e.ComplaintClosedDate.Value.Date <= input.Value.ToDateTime(TimeOnly.MinValue));
 
     private static Expression<Func<Complaint, bool>> ReceivedBy(this Expression<Func<Complaint, bool>> predicate,
-    string? input) => string.IsNullOrWhiteSpace(input) ? predicate : predicate.And(e => e.ReceivedBy.Id == input);
+        string? input) => string.IsNullOrWhiteSpace(input) ? predicate : predicate.And(e => e.ReceivedBy.Id == input);
 
     private static Expression<Func<Complaint, bool>> ContainsCaller(this Expression<Func<Complaint, bool>> predicate,
         string? input) => string.IsNullOrWhiteSpace(input)
@@ -132,6 +136,7 @@ internal static class ComplaintFilters
         : predicate.And(e => (e.ComplaintNature != null && e.ComplaintNature.Contains(input))
             || (e.ComplaintLocation != null && e.ComplaintLocation.Contains(input))
             || (e.ComplaintDirections != null && e.ComplaintDirections.Contains(input)));
+    
     private static Expression<Func<Complaint, bool>> ContainsComplaintCity(this Expression<Func<Complaint, bool>> predicate,
     string? input) => string.IsNullOrWhiteSpace(input)
         ? predicate
