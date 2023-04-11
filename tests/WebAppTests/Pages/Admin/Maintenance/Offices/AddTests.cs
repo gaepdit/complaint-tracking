@@ -24,7 +24,7 @@ public class AddTests
         serviceMock.Setup(l => l.CreateAsync(It.IsAny<OfficeCreateDto>(), CancellationToken.None))
             .ReturnsAsync(Guid.Empty);
         var staffService = new Mock<IStaffAppService>();
-        staffService.Setup(l => l.GetActiveStaffMembersAsync())
+        staffService.Setup(l => l.GetStaffListItemsAsync(It.IsAny<bool>()))
             .ReturnsAsync(new List<ListItem<string>>());
         var validator = new Mock<IValidator<OfficeCreateDto>>();
         validator.Setup(l => l.ValidateAsync(It.IsAny<OfficeCreateDto>(), CancellationToken.None))
@@ -50,7 +50,7 @@ public class AddTests
     {
         var serviceMock = new Mock<IOfficeAppService>();
         var staffServiceMock = new Mock<IStaffAppService>();
-        staffServiceMock.Setup(l => l.GetActiveStaffMembersAsync())
+        staffServiceMock.Setup(l => l.GetStaffListItemsAsync(It.IsAny<bool>()))
             .ReturnsAsync(new List<ListItem<string>>());
         var validator = new Mock<IValidator<OfficeCreateDto>>();
         var validationFailures = new List<ValidationFailure> { new("property", "message") };

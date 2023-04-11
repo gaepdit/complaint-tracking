@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Cts.AppServices.Staff;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Offices;
 using GaEpd.AppLibrary.ListItems;
@@ -69,11 +68,13 @@ public sealed class OfficeAppService : IOfficeAppService
         await _repository.UpdateAsync(item, token: token);
     }
 
-    public async Task<IReadOnlyList<StaffViewDto>> GetActiveStaffAsync(Guid id, CancellationToken token = default)
-    {
-        var users = await _repository.GetActiveStaffMembersListAsync(id, token);
-        return _mapper.Map<IReadOnlyList<StaffViewDto>>(users);
-    }
+    public async Task<IReadOnlyList<ListItem<string>>> GetStaffListItemsAsync(
+        Guid? id, bool activeOnly, CancellationToken token = default) =>
+        id is null
+            ? Array.Empty<ListItem<string>>()
+            : (await _repository.GetStaffMembersListAsync(id.Value, activeOnly, token))
+            .Select(e => new ListItem<string>(e.Id, e.SortableNameWithInactive))
+            .ToList();
 
     public void Dispose() => _repository.Dispose();
 }

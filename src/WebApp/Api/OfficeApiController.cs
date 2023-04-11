@@ -1,4 +1,4 @@
-﻿using Cts.AppServices.Offices;
+using Cts.AppServices.Offices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cts.WebApp.Api;
@@ -21,4 +21,8 @@ public class OfficeApiController : Controller
         var item = await _officeAppService.FindAsync(id);
         return item is null ? Problem("ID not found.", statusCode: 404) : Ok(item);
     }
+
+    [HttpGet("{id:guid}/staff")]
+    public async Task<JsonResult> GetStaffAsync([FromRoute] Guid id) =>
+        Json(await _officeAppService.GetStaffListItemsAsync(id, false));
 }

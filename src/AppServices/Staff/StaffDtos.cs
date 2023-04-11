@@ -69,7 +69,7 @@ public class StaffViewDto : IDtoHasNameProperty
         string.Join(", ", new[] { FamilyName, GivenName }.Where(s => !string.IsNullOrEmpty(s)));
 
     [JsonIgnore]
-    public string SelectableNameWithOffice
+    public string SortableNameWithOffice
     {
         get
         {

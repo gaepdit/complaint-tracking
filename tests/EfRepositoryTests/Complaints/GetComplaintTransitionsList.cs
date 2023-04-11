@@ -23,7 +23,7 @@ public class GetComplaintTransitionsList
         var result = await _repository.GetComplaintTransitionsListAsync(complaint.Id);
 
         result.Should().BeEquivalentTo(items, opts => opts
-            .Excluding(e => e.TransferredByUser!.Office)
+            .Excluding(e => e.CommittedByUser!.Office)
             .Excluding(e => e.TransferredFromUser!.Office)
             .Excluding(e => e.TransferredToUser!.Office)
             .Excluding(e => e.TransferredToOffice!.Assignor)

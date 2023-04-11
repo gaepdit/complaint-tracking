@@ -319,7 +319,7 @@ else
         <thead>
         <tr>
             <th scope="col">Action&nbsp;Date</th>
-            <th scope="col">By</th>
+            <th scope="col">Committed&nbsp;By</th>
             <th scope="col">Action</th>
             <th scope="col">From</th>
             <th scope="col">To</th>
@@ -331,7 +331,7 @@ else
         {
             <tr>
                 <td>@Html.DisplayFor(m => item.TransferredDate, TemplateNames.ShortDateTime)</td>
-                <td>@Html.DisplayFor(m => item.TransferredByUser, TemplateNames.NameOrNotEntered)</td>
+                <td>@Html.DisplayFor(m => item.CommittedByUser, TemplateNames.NameOrNotEntered)</td>
                 <td>@item.TransitionType.GetDisplayName()</td>
                 <td>
                     @Html.DisplayFor(m => item.TransferredFromUser, TemplateNames.NameOrBlank)

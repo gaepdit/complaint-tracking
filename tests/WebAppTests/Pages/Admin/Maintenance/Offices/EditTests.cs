@@ -23,7 +23,7 @@ public class EditTests
         var serviceMock = new Mock<IOfficeAppService>();
         serviceMock.Setup(l => l.FindForUpdateAsync(ItemTest.Id, CancellationToken.None)).ReturnsAsync(ItemTest);
         var staffServiceMock = new Mock<IStaffAppService>();
-        staffServiceMock.Setup(l => l.GetActiveStaffMembersAsync())
+        staffServiceMock.Setup(l => l.GetStaffListItemsAsync(It.IsAny<bool>()))
             .ReturnsAsync(new List<ListItem<string>>());
         var page = new EditModel(serviceMock.Object, staffServiceMock.Object, Mock.Of<IValidator<OfficeUpdateDto>>())
             { TempData = WebAppTestsGlobal.PageTempData() };
@@ -43,7 +43,7 @@ public class EditTests
     {
         var serviceMock = new Mock<IOfficeAppService>();
         var staffServiceMock = new Mock<IStaffAppService>();
-        staffServiceMock.Setup(l => l.GetActiveStaffMembersAsync())
+        staffServiceMock.Setup(l => l.GetStaffListItemsAsync(It.IsAny<bool>()))
             .ReturnsAsync(new List<ListItem<string>>());
         var page = new EditModel(serviceMock.Object, staffServiceMock.Object, Mock.Of<IValidator<OfficeUpdateDto>>())
             { TempData = WebAppTestsGlobal.PageTempData() };
@@ -64,7 +64,7 @@ public class EditTests
         serviceMock.Setup(l => l.FindForUpdateAsync(It.IsAny<Guid>(), CancellationToken.None))
             .ReturnsAsync((OfficeUpdateDto?)null);
         var staffService = new Mock<IStaffAppService>();
-        staffService.Setup(l => l.GetActiveStaffMembersAsync())
+        staffService.Setup(l => l.GetStaffListItemsAsync(It.IsAny<bool>()))
             .ReturnsAsync(new List<ListItem<string>>());
         var page = new EditModel(serviceMock.Object, staffService.Object, Mock.Of<IValidator<OfficeUpdateDto>>())
             { TempData = WebAppTestsGlobal.PageTempData() };
@@ -103,7 +103,7 @@ public class EditTests
     {
         var serviceMock = new Mock<IOfficeAppService>();
         var staffServiceMock = new Mock<IStaffAppService>();
-        staffServiceMock.Setup(l => l.GetActiveStaffMembersAsync())
+        staffServiceMock.Setup(l => l.GetStaffListItemsAsync(It.IsAny<bool>()))
             .ReturnsAsync(new List<ListItem<string>>());
         var validatorMock = new Mock<IValidator<OfficeUpdateDto>>();
         var validationFailures = new List<ValidationFailure> { new("property", "message") };

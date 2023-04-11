@@ -23,7 +23,7 @@ public class ComplaintTransition : AuditableEntity
 
     public DateTimeOffset TransferredDate { get; init; } = DateTimeOffset.Now;
 
-    public ApplicationUser? TransferredByUser { get; init; }
+    public ApplicationUser? CommittedByUser { get; init; }
 
     public ApplicationUser? TransferredFromUser { get; init; }
 

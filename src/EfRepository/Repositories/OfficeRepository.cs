@@ -1,7 +1,6 @@
 using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
 using Cts.EfRepository.Contexts;
-using GaEpd.AppLibrary.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cts.EfRepository.Repositories;
@@ -14,17 +13,13 @@ public sealed class OfficeRepository : BaseRepository<Office, Guid>, IOfficeRepo
         await Context.Offices.AsNoTracking()
             .SingleOrDefaultAsync(e => string.Equals(e.Name.ToUpper(), name.ToUpper()), token);
 
-    public async Task<List<ApplicationUser>> GetActiveStaffMembersListAsync(
-        Guid id, CancellationToken token = default)
-    {
-        var item = await Context.Offices.AsTracking()
-            .Include(e => e.StaffMembers)
-            .SingleOrDefaultAsync(e => e.Id.Equals(id), token);
-        return item is null
-            ? throw new EntityNotFoundException(typeof(Office), id)
-            : item.StaffMembers.Where(e => e.Active)
-                .OrderBy(e => e.FamilyName).ThenBy(e => e.GivenName).ToList();
-    }
+    public async Task<List<ApplicationUser>> GetStaffMembersListAsync(
+        Guid id, bool activeOnly, CancellationToken token = default) =>
+        await Context.Users.AsNoTracking()
+            .Where(e => e.Office != null && e.Office.Id == id)
+            .Where(e => !activeOnly || e.Active)
+            .OrderBy(e => e.FamilyName).ThenBy(e => e.GivenName)
+            .ToListAsync(token);
 
     // Hide some base repository methods in order to include additional data.
 

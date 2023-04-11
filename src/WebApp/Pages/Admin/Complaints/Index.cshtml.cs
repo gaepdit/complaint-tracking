@@ -1,6 +1,7 @@
 ﻿using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.Dto;
 using Cts.AppServices.Concerns;
+using Cts.AppServices.Offices;
 using Cts.AppServices.Staff;
 using Cts.Domain.Data;
 using Cts.WebApp.Platform.Constants;
@@ -24,8 +25,11 @@ public class IndexModel : PageModel
     public string SortByName => Spec.Sort.ToString();
 
     // Select Lists
-    public SelectList StaffMembersSelectList { get; private set; } = default!;
-    public SelectList ConcernsSelectList { get; private set; } = default!;    
+    public SelectList ReceivedBySelectList { get; private set; } = default!;
+    public SelectList ConcernsSelectList { get; private set; } = default!;
+    public SelectList OfficesSelectList { get; set; } = default!;
+    public SelectList AssignedToSelectList { get; set; } = default!;
+
     public SelectList CountiesSelectList => new(Data.Counties);
     public SelectList StatesSelectList => new(Data.States);
 
@@ -33,12 +37,18 @@ public class IndexModel : PageModel
     private readonly IComplaintAppService _complaints;
     private readonly IStaffAppService _staff;
     private readonly IConcernAppService _concerns;
+    private readonly IOfficeAppService _offices;
 
-    public IndexModel(IComplaintAppService complaints, IStaffAppService staff, IConcernAppService concerns)
+    public IndexModel(
+        IComplaintAppService complaints,
+        IStaffAppService staff,
+        IConcernAppService concerns,
+        IOfficeAppService offices)
     {
         _complaints = complaints;
         _staff = staff;
         _concerns = concerns;
+        _offices = offices;
     }
 
     public Task OnGetAsync()
@@ -62,10 +72,14 @@ public class IndexModel : PageModel
 
     private async Task PopulateSelectListsAsync()
     {
-        var staffTask = _staff.GetAllStaffMembersAsync();
+        var receivedByTask = _staff.GetStaffListItemsAsync(false);
         var concernsTask = _concerns.GetActiveListItemsAsync();
+        var officesTask = _offices.GetActiveListItemsAsync();
+        var assignedToTask = _offices.GetStaffListItemsAsync(Spec.Office, false);
 
-        StaffMembersSelectList = (await staffTask).ToSelectList();
+        ReceivedBySelectList = (await receivedByTask).ToSelectList();
         ConcernsSelectList = (await concernsTask).ToSelectList();
+        OfficesSelectList = (await officesTask).ToSelectList();
+        AssignedToSelectList = (await assignedToTask).ToSelectList();
     }
 }

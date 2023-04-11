@@ -56,17 +56,18 @@ public sealed class StaffAppService : IStaffAppService
         return _mapper.Map<List<StaffViewDto>>(users);
     }
 
-    public async Task<IReadOnlyList<ListItem<string>>> GetActiveStaffMembersAsync() =>
-        (await GetListAsync(new StaffSearchDto { Status = StaffSearchDto.ActiveStatus.Active }))
-            .Select(e => new ListItem<string>(e.Id, e.SelectableNameWithOffice)).ToList();
-
-    public async Task<IReadOnlyList<ListItem<string>>> GetAllStaffMembersAsync() =>
-        (await GetListAsync(new StaffSearchDto { Status = StaffSearchDto.ActiveStatus.All }))
-            .Select(e => new ListItem<string>(e.Id, e.SelectableNameWithOffice)).ToList();
+    public async Task<IReadOnlyList<ListItem<string>>> GetStaffListItemsAsync(bool activeOnly = true)
+    {
+        var search = activeOnly
+            ? new StaffSearchDto { Status = StaffSearchDto.ActiveStatus.Active }
+            : new StaffSearchDto { Status = StaffSearchDto.ActiveStatus.All };
+        return (await GetListAsync(search))
+            .Select(e => new ListItem<string>(e.Id, e.SortableNameWithOffice)).ToList();
+    }
 
     public async Task<IList<string>> GetRolesAsync(string id)
     {
-        ApplicationUser? user = await _userManager.FindByIdAsync(id);
+        var user = await _userManager.FindByIdAsync(id);
         if (user is null) return new List<string>();
         return await _userManager.GetRolesAsync(user);
     }
