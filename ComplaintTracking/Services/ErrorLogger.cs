@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Connections;
@@ -29,8 +29,6 @@ namespace ComplaintTracking.Services
             string context = "",
             Dictionary<string, object> customData = null)
         {
-            if (ExceptionCanBeIgnored(exception)) return string.Empty;
-
             var shortId = ShortID.GetShortID();
 
             // Custom data
@@ -47,10 +45,6 @@ namespace ComplaintTracking.Services
 
             return shortId;
         }
-
-        private static bool ExceptionCanBeIgnored(Exception ex) =>
-            // ConnectionResetException is irrelevant; should be fixed in .NET 6.0
-            ex is ConnectionResetException && ex.Message.Contains("The client has disconnected");
     }
 
     public interface IErrorLogger
