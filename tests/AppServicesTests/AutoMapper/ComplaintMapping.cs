@@ -11,7 +11,7 @@ public class ComplaintMapping
         var item = new ComplaintCreateDto()
         {
             ReceivedDate = new DateTime(2000, 1, 1),
-            TimeReceived = new DateTime(2020, 2, 2, 1, 15, 0),
+            ReceivedTime = new DateTime(2020, 2, 2, 1, 15, 0),
         };
         item.ReceivedDate = DateTime.SpecifyKind(item.ReceivedDate, DateTimeKind.Local);
 

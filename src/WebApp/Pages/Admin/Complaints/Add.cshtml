@@ -24,14 +24,14 @@
                     <span asp-validation-for="Item.ReceivedDate" class="invalid-feedback"></span>
                 </div>
                 <div class="form-floating">
-                    <input asp-for="Item.TimeReceived" asp-format="{0:HH:mm}" class="form-control" />
-                    <label asp-for="Item.TimeReceived" class="form-label"></label>
-                    <span asp-validation-for="Item.TimeReceived" class="invalid-feedback"></span>
+                    <input asp-for="Item.ReceivedTime" asp-format="{0:HH:mm}" class="form-control" />
+                    <label asp-for="Item.ReceivedTime" class="form-label"></label>
+                    <span asp-validation-for="Item.ReceivedTime" class="invalid-feedback"></span>
                 </div>
             </div>
             <div class="col-md mb-3">
                 <div class="form-floating">
-                    <select asp-for="Item.ReceivedById" asp-items="Model.ActiveStaffMembers" class="form-select">
+                    <select asp-for="Item.ReceivedById" asp-items="Model.AllStaffSelectList" class="form-select">
                         <option value="">@TextConstants.SelectTextRequired</option>
                     </select>
                     <label asp-for="Item.ReceivedById" class="form-label"></label>
@@ -337,8 +337,8 @@
             </div>
             <div class="col-md mb-3">
                 <div class="form-floating">
-                    <select asp-for="Item.CurrentOwnerId" asp-items="Model.ActiveStaffMembers" class="form-select">
-                        <option value="">Default Assignor</option>
+                    <select asp-for="Item.CurrentOwnerId" asp-items="Model.StaffInOfficeSelectList" class="form-select">
+                        <option value="">[Default Assignor]</option>
                     </select>
                     <label asp-for="Item.CurrentOwnerId" class="form-label"></label>
                     <span asp-validation-for="Item.CurrentOwnerId" class="invalid-feedback"></span>

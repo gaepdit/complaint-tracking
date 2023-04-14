@@ -63,5 +63,5 @@ public class AddModel : PageModel
     }
 
     private async Task PopulateSelectListsAsync() =>
-        ActiveStaffMembers = (await _staffService.GetStaffListItemsAsync()).ToSelectList();
+        ActiveStaffMembers = (await _staffService.GetStaffListItemsAsync(true)).ToSelectList();
 }

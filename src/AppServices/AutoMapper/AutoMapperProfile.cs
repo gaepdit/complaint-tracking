@@ -25,7 +25,7 @@ public class AutoMapperProfile : Profile
         CreateMap<ActionType, ActionTypeViewDto>();
         CreateMap<ActionType, ActionTypeUpdateDto>();
 
-        CreateMap<ApplicationUser, StaffViewDto>().ReverseMap();
+        CreateMap<ApplicationUser, StaffViewDto>();
         CreateMap<ApplicationUser, StaffUpdateDto>();
 
         CreateMap<Attachment, AttachmentPublicViewDto>();
@@ -36,17 +36,6 @@ public class AutoMapperProfile : Profile
             .ForMember(d => d.CurrentUserOfficeId, o => o.Ignore());
         CreateMap<Complaint, ComplaintSearchResultDto>();
 
-        CreateMap<ComplaintCreateDto, Complaint>(MemberList.Source)
-            .ForMember(d => d.ReceivedDate,
-                o => o.MapFrom(s => s.ReceivedDate.Add(s.TimeReceived.TimeOfDay)))
-            .ForSourceMember(s => s.ReceivedDate, o => o.DoNotValidate())
-            .ForSourceMember(s => s.TimeReceived, o => o.DoNotValidate())
-            .ForSourceMember(s => s.ReceivedById, o => o.DoNotValidate())
-            .ForSourceMember(s => s.PrimaryConcernId, o => o.DoNotValidate())
-            .ForSourceMember(s => s.SecondaryConcernId, o => o.DoNotValidate())
-            .ForSourceMember(s => s.CurrentOfficeId, o => o.DoNotValidate())
-            .ForSourceMember(s => s.CurrentOwnerId, o => o.DoNotValidate());
-
         CreateMap<ComplaintAction, ComplaintActionPublicViewDto>();
         CreateMap<ComplaintAction, ComplaintActionViewDto>();
 
@@ -55,7 +44,7 @@ public class AutoMapperProfile : Profile
         CreateMap<Concern, ConcernViewDto>();
         CreateMap<Concern, ConcernUpdateDto>();
 
-        CreateMap<Office, OfficeDisplayViewDto>().ReverseMap();
+        CreateMap<Office, OfficeDisplayViewDto>();
         CreateMap<Office, OfficeAdminViewDto>();
         CreateMap<Office, OfficeUpdateDto>();
     }

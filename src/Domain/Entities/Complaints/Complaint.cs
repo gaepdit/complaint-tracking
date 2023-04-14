@@ -4,6 +4,7 @@ using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
+using JetBrains.Annotations;
 using System.Text.Json.Serialization;
 
 namespace Cts.Domain.Entities.Complaints;
@@ -15,13 +16,13 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     // Constructors
 
-    internal Complaint() { }
+    [UsedImplicitly] // Used by ORM.
+    private Complaint() { }
 
-    internal Complaint(int id) : base(id) { }
-
-    // Methods
-
-    internal void SetId(int id) => Id = id;
+    internal Complaint(int? id)
+    {
+        if (id is not null) Id = id.Value;
+    }
 
     // Properties
 
@@ -100,10 +101,12 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     public DateTimeOffset? CurrentOwnerAssignedDate { get; set; }
 
-    public Guid? CurrentAssignmentTransitionId { get; set; }
 
     public DateTimeOffset? CurrentOwnerAcceptedDate { get; set; }
 
+    // Properties: Transitions
+    
+    public Guid? CurrentAssignmentTransitionId { get; set; }
     public List<ComplaintTransition> ComplaintTransitions { get; set; } = new();
 
     // Properties: Actions

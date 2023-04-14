@@ -56,7 +56,7 @@ public sealed class StaffAppService : IStaffAppService
         return _mapper.Map<List<StaffViewDto>>(users);
     }
 
-    public async Task<IReadOnlyList<ListItem<string>>> GetStaffListItemsAsync(bool activeOnly = true)
+    public async Task<IReadOnlyList<ListItem<string>>> GetStaffListItemsAsync(bool activeOnly)
     {
         var search = activeOnly
             ? new StaffSearchDto { Status = StaffSearchDto.ActiveStatus.Active }

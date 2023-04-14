@@ -1,4 +1,4 @@
-using Cts.AppServices.Offices;
+﻿using Cts.AppServices.Offices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cts.WebApp.Api;
@@ -25,4 +25,10 @@ public class OfficeApiController : Controller
     [HttpGet("{id:guid}/staff")]
     public async Task<JsonResult> GetStaffAsync([FromRoute] Guid id) =>
         Json(await _officeAppService.GetStaffListItemsAsync(id, false));
+
+    [HttpGet("{id:guid}/staff-for-assignment")]
+    public async Task<JsonResult> GetStaffForAssignmentAsync([FromRoute] Guid id)
+    {
+        throw new NotImplementedException();
+    }
 }

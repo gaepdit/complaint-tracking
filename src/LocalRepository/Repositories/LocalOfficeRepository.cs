@@ -20,6 +20,12 @@ public sealed class LocalOfficeRepository : BaseRepository<Office, Guid>, IOffic
             .OrderBy(e => e.FamilyName).ThenBy(e => e.GivenName)
             .ToList());
 
+    public Task<Office?> FindIncludeAssignorAsync(Guid id, CancellationToken token = default) =>
+        FindAsync(id, token);
+
+    public Task<IReadOnlyCollection<Office>> GetListIncludeAssignorAsync(CancellationToken token = default) =>
+        GetListAsync(token);
+
     // Hide some base repository methods in order to set additional data.
 
     public new Task InsertAsync(Office entity, bool autoSave = true, CancellationToken token = default)

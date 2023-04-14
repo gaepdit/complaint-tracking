@@ -2,5 +2,5 @@
 
 public interface IComplaintManager
 {
-    public Task SetIdAsync(Complaint complaint);
+    public Task<Complaint> CreateNewComplaintAsync();
 }
