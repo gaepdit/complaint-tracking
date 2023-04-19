@@ -4,7 +4,7 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model AddModel
 @{
-    ViewData["Title"] = $"Add A New Complaint";
+    ViewData["Title"] = "Add A New Complaint";
     ViewData["NoAnchors"] = true;
     var phoneTypesSelectList = Html.GetEnumSelectList<PhoneType>().ToArray();
 }
@@ -354,29 +354,7 @@
     </form>
 </div>
 
-@section Scripts
-    {
+@section Scripts {
+    <script src="~/js/copyContactInfo.js"></script>
     <partial name="_ValidationScriptsPartial" />
-    <script>
-        $(document).ready(function () {
-            // Copy Caller info to Source info
-            $('#copy-caller-info')
-                .click(function copyCallerInfoToSource() {
-                    $("#Item_SourceContactName").val($("#Item_CallerName").val());
-                    $("#Item_SourceEmail").val($("#Item_CallerEmail").val());
-                    $("#Item_SourcePhoneNumber_Number").val($("#Item_CallerPhoneNumber_Number").val());
-                    $("#Item_SourcePhoneNumber_Type").val($("#Item_CallerPhoneNumber_Type").val());
-                    $("#Item_SourceSecondaryPhoneNumber_Number").val($("#Item_CallerSecondaryPhoneNumber_Number").val());
-                    $("#Item_SourceSecondaryPhoneNumber_Type").val($("#Item_CallerSecondaryPhoneNumber_Type").val());
-                    $("#Item_SourceTertiaryPhoneNumber_Number").val($("#Item_CallerTertiaryPhoneNumber_Number").val());
-                    $("#Item_SourceTertiaryPhoneNumber_Type").val($("#Item_CallerTertiaryPhoneNumber_Type").val());
-                    $("#Item_SourceAddress_Street").val($("#Item_CallerAddress_Street").val());
-                    $("#Item_SourceAddress_Street2").val($("#Item_CallerAddress_Street2").val());
-                    $("#Item_SourceAddress_City").val($("#Item_CallerAddress_City").val());
-                    $("#Item_SourceAddress_State").val($("#Item_CallerAddress_State").val());
-                    $("#Item_SourceAddress_PostalCode").val($("#Item_CallerAddress_PostalCode").val());
-                }
-                );
-        });
-    </script>
 }

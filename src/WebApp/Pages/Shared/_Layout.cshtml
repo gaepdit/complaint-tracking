@@ -55,8 +55,8 @@
 @if (!ViewData.ContainsKey("NoAnchors") || (bool)(ViewData["NoAnchors"] ?? false) != true)
 {
     <script src="~/lib/anchor-js/anchor.min.js"></script>
+    <script src="~/js/configureAnchor.js"></script>
 }
-<script src="~/js/site.js"></script>
 @await RenderSectionAsync("Scripts", false)
 </body>
 </html>

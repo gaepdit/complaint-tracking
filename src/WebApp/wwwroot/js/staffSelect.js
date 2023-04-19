@@ -1,8 +1,8 @@
 ﻿// Populated the assigned associate dropdown when an assigned office selection is made.
-const officeSelect = document.querySelector("#Spec_Office");
+const officeSelect = document.getElementById("Spec_Office");
 
 officeSelect.addEventListener("change", () => {
-    const staffSelect = document.querySelector("#Spec_Assigned");
+    const staffSelect = document.getElementById("Spec_Assigned");
     staffSelect.innerHTML = '<option value="">(any)</option>';
     staffSelect.disabled = true;
     if (officeSelect.value === '') return;
