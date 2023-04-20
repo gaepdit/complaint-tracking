@@ -9,352 +9,355 @@
     var phoneTypesSelectList = Html.GetEnumSelectList<PhoneType>().ToArray();
 }
 
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/copyContactInfo.js"></script>
+    <script src="~/lib/axios/axios.min.js"></script>
+    <script src="~/js/staffSelect.js"></script>
+    <script>setUpStaffDropdown("Item_CurrentOfficeId","Item_CurrentOwnerId",true);</script>
+}
+
 <h1>@ViewData["Title"]</h1>
 
 <div class="p-3 border rounded-3 bg-light">
-    <form method="post">
-        <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
+<form method="post">
+<div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
 
-        <h2>Received</h2>
-        <div class="row mb-3">
-            <div class="col-md input-group mb-3">
-                <div class="form-floating">
-                    <input asp-for="Item.ReceivedDate" class="form-control" />
-                    <label asp-for="Item.ReceivedDate" class="form-label"></label>
-                    <span asp-validation-for="Item.ReceivedDate" class="invalid-feedback"></span>
-                </div>
-                <div class="form-floating">
-                    <input asp-for="Item.ReceivedTime" asp-format="{0:HH:mm}" class="form-control" />
-                    <label asp-for="Item.ReceivedTime" class="form-label"></label>
-                    <span asp-validation-for="Item.ReceivedTime" class="invalid-feedback"></span>
-                </div>
-            </div>
-            <div class="col-md mb-3">
-                <div class="form-floating">
-                    <select asp-for="Item.ReceivedById" asp-items="Model.AllStaffSelectList" class="form-select">
-                        <option value="">@TextConstants.SelectTextRequired</option>
-                    </select>
-                    <label asp-for="Item.ReceivedById" class="form-label"></label>
-                    <span asp-validation-for="Item.ReceivedById" class="invalid-feedback"></span>
-                </div>
-            </div>
+<h2>Received</h2>
+<div class="row mb-3">
+    <div class="col-md input-group mb-3">
+        <div class="form-floating">
+            <input asp-for="Item.ReceivedDate" class="form-control" />
+            <label asp-for="Item.ReceivedDate" class="form-label"></label>
+            <span asp-validation-for="Item.ReceivedDate" class="invalid-feedback"></span>
         </div>
-
-        <h2>Caller</h2>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <div class="form-floating">
-                    <input asp-for="Item.CallerName" class="form-control" />
-                    <label asp-for="Item.CallerName" class="form-label"></label>
-                    <span asp-validation-for="Item.CallerName" class="invalid-feedback"></span>
-                </div>
-            </div>
-            <div class="col-md-6 mb-3">
-                <div class="form-floating">
-                    <input asp-for="Item.CallerRepresents" class="form-control" />
-                    <label asp-for="Item.CallerRepresents" class="form-label"></label>
-                    <span asp-validation-for="Item.CallerRepresents" class="invalid-feedback"></span>
-                </div>
-            </div>
+        <div class="form-floating">
+            <input asp-for="Item.ReceivedTime" asp-format="{0:HH:mm}" class="form-control" />
+            <label asp-for="Item.ReceivedTime" class="form-label"></label>
+            <span asp-validation-for="Item.ReceivedTime" class="invalid-feedback"></span>
         </div>
-
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <h3 class="h5">Contact info</h3>
-                <div class="form-floating mb-3">
-                    <input asp-for="Item.CallerEmail" class="form-control" />
-                    <label asp-for="Item.CallerEmail" class="form-label"></label>
-                    <span asp-validation-for="Item.CallerEmail" class="invalid-feedback"></span>
-                </div>
-                <div class="input-group mb-3">
-                    <div class="form-floating">
-                        <input asp-for="Item.CallerPhoneNumber!.Number" class="form-control" />
-                        <label asp-for="Item.CallerPhoneNumber" class="form-label"></label>
-                        <span asp-validation-for="Item.CallerPhoneNumber" class="invalid-feedback"></span>
-                    </div>
-                    <div class="form-floating">
-                        <select asp-for="Item.CallerPhoneNumber!.Type" asp-items="phoneTypesSelectList" class="form-select">
-                            <option value="">@TextConstants.SelectTextEmpty</option>
-                        </select>
-                        <label asp-for="Item.CallerPhoneNumber!.Type" class="form-label"></label>
-                        <span asp-validation-for="Item.CallerPhoneNumber!.Type" class="invalid-feedback"></span>
-                    </div>
-                </div>
-                <div class="input-group mb-3">
-                    <div class="form-floating">
-                        <input asp-for="Item.CallerSecondaryPhoneNumber!.Number" class="form-control" />
-                        <label asp-for="Item.CallerSecondaryPhoneNumber" class="form-label"></label>
-                        <span asp-validation-for="Item.CallerSecondaryPhoneNumber" class="invalid-feedback"></span>
-                    </div>
-                    <div class="form-floating">
-                        <select asp-for="Item.CallerSecondaryPhoneNumber!.Type" asp-items="phoneTypesSelectList" class="form-select">
-                            <option value="">@TextConstants.SelectTextEmpty</option>
-                        </select>
-                        <label asp-for="Item.CallerSecondaryPhoneNumber!.Type" class="form-label"></label>
-                        <span asp-validation-for="Item.CallerSecondaryPhoneNumber!.Type" class="invalid-feedback"></span>
-                    </div>
-                </div>
-                <div class="input-group mb-3">
-                    <div class="form-floating">
-                        <input asp-for="Item.CallerTertiaryPhoneNumber!.Number" class="form-control" />
-                        <label asp-for="Item.CallerTertiaryPhoneNumber" class="form-label"></label>
-                        <span asp-validation-for="Item.CallerTertiaryPhoneNumber" class="invalid-feedback"></span>
-                    </div>
-                    <div class="form-floating">
-                        <select asp-for="Item.CallerTertiaryPhoneNumber!.Type" asp-items="phoneTypesSelectList" class="form-select">
-                            <option value="">@TextConstants.SelectTextEmpty</option>
-                        </select>
-                        <label asp-for="Item.CallerTertiaryPhoneNumber!.Type" class="form-label"></label>
-                        <span asp-validation-for="Item.CallerTertiaryPhoneNumber!.Type" class="invalid-feedback"></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <h3 class="h5">Address</h3>
-                <div class="form-floating mb-3">
-                    <input asp-for="Item.CallerAddress.Street" class="form-control" />
-                    <label asp-for="Item.CallerAddress.Street" class="form-label"></label>
-                    <span asp-validation-for="Item.CallerAddress.Street" class="invalid-feedback"></span>
-                </div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Item.CallerAddress.Street2" class="form-control" />
-                    <label asp-for="Item.CallerAddress.Street2" class="form-label"></label>
-                    <span asp-validation-for="Item.CallerAddress.Street2" class="invalid-feedback"></span>
-                </div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Item.CallerAddress.City" class="form-control" />
-                    <label asp-for="Item.CallerAddress.City" class="form-label"></label>
-                    <span asp-validation-for="Item.CallerAddress.City" class="invalid-feedback"></span>
-                </div>
-                <div class="input-group mb-3">
-                    <div class="form-floating">
-                        <select asp-for="Item.CallerAddress.State" asp-items="Model.StatesSelectList" class="form-select">
-                            <option value="">@TextConstants.SelectTextEmpty</option>
-                        </select>
-                        <label asp-for="Item.CallerAddress.State" class="form-label"></label>
-                        <span asp-validation-for="Item.CallerAddress.State" class="invalid-feedback"></span>
-                    </div>
-                    <div class="form-floating">
-                        <input asp-for="Item.CallerAddress.PostalCode" class="form-control" />
-                        <label asp-for="Item.CallerAddress.PostalCode" class="form-label"></label>
-                        <span asp-validation-for="Item.CallerAddress.PostalCode" class="invalid-feedback"></span>
-                    </div>
-                </div>
-            </div>
+    </div>
+    <div class="col-md mb-3">
+        <div class="form-floating">
+            <select asp-for="Item.ReceivedById" asp-items="Model.AllStaffSelectList" class="form-select">
+                <option value="">@TextConstants.SelectTextRequired</option>
+            </select>
+            <label asp-for="Item.ReceivedById" class="form-label"></label>
+            <span asp-validation-for="Item.ReceivedById" class="invalid-feedback"></span>
         </div>
-
-        <h2>Complaint</h2>
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <h3 class="h5">Details</h3>
-                <div class="form-floating mb-3">
-                    <textarea asp-for="Item.ComplaintNature" rows="5" class="form-control"></textarea>
-                    <label asp-for="Item.ComplaintNature" class="form-label"></label>
-                    <span asp-validation-for="Item.ComplaintNature" class="invalid-feedback"></span>
-                </div>
-                <div class="form-floating mb-3">
-                    <textarea asp-for="Item.ComplaintLocation" rows="5" class="form-control"></textarea>
-                    <label asp-for="Item.ComplaintLocation" class="form-label"></label>
-                    <span asp-validation-for="Item.ComplaintLocation" class="invalid-feedback"></span>
-                </div>
-                <div class="form-floating mb-3">
-                    <textarea asp-for="Item.ComplaintDirections" rows="5" class="form-control"></textarea>
-                    <label asp-for="Item.ComplaintDirections" class="form-label"></label>
-                    <span asp-validation-for="Item.ComplaintDirections" class="invalid-feedback"></span>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <h3 class="h5">Location</h3>
-                <div class="form-floating mb-3">
-                    <input asp-for="Item.ComplaintCity" class="form-control" />
-                    <label asp-for="Item.ComplaintCity" class="form-label"></label>
-                    <span asp-validation-for="Item.ComplaintCity" class="invalid-feedback"></span>
-                </div>
-                <div class="form-floating mb-3">
-                    <select asp-for="Item.ComplaintCounty" asp-items="Model.CountiesSelectList" class="form-select">
-                        <option value="">@TextConstants.SelectTextEmpty</option>
-                    </select>
-                    <label asp-for="Item.ComplaintCounty" class="form-label"></label>
-                    <span asp-validation-for="Item.ComplaintCounty" class="invalid-feedback"></span>
-                </div>
-
-                <h3 class="h5">Environmental areas of concern</h3>
-                <div class="form-floating mb-3">
-                    <select asp-for="Item.PrimaryConcernId" asp-items="Model.ConcernsSelectList" class="form-select">
-                        <option value="">@TextConstants.SelectTextRequired</option>
-                    </select>
-                    <label asp-for="Item.PrimaryConcernId" class="form-label"></label>
-                    <span asp-validation-for="Item.PrimaryConcernId" class="invalid-feedback"></span>
-                </div>
-                <div class="form-floating mb-3">
-                    <select asp-for="Item.SecondaryConcernId" asp-items="Model.ConcernsSelectList" class="form-select">
-                        <option value="">@TextConstants.SelectTextEmpty</option>
-                    </select>
-                    <label asp-for="Item.SecondaryConcernId" class="form-label"></label>
-                    <span asp-validation-for="Item.SecondaryConcernId" class="invalid-feedback"></span>
-                </div>
-            </div>
-        </div>
-
-        <h2>Source</h2>
-        <div class="row">
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <div class="form-floating">
-                        <input asp-for="Item.SourceFacilityName" class="form-control" />
-                        <label asp-for="Item.SourceFacilityName" class="form-label"></label>
-                        <span asp-validation-for="Item.SourceFacilityName" class="invalid-feedback"></span>
-                    </div>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <div class="form-floating">
-                        <input asp-for="Item.SourceFacilityIdNumber" class="form-control" />
-                        <label asp-for="Item.SourceFacilityIdNumber" class="form-label"></label>
-                        <span asp-validation-for="Item.SourceFacilityIdNumber" class="invalid-feedback"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="mb-3">
-            <button id="copy-caller-info" type="button" class="btn btn-outline-info">Copy contact/address from Caller</button>
-        </div>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <h3 class="h5">Contact info</h3>
-                <div class="form-floating mb-3">
-                    <input asp-for="Item.SourceContactName" class="form-control" />
-                    <label asp-for="Item.SourceContactName" class="form-label"></label>
-                    <span asp-validation-for="Item.SourceContactName" class="invalid-feedback"></span>
-                </div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Item.SourceEmail" class="form-control" />
-                    <label asp-for="Item.SourceEmail" class="form-label"></label>
-                    <span asp-validation-for="Item.SourceEmail" class="invalid-feedback"></span>
-                </div>
-                <div class="input-group mb-3">
-                    <div class="form-floating">
-                        <input asp-for="Item.SourcePhoneNumber!.Number" class="form-control" />
-                        <label asp-for="Item.SourcePhoneNumber" class="form-label"></label>
-                        <span asp-validation-for="Item.SourcePhoneNumber" class="invalid-feedback"></span>
-                    </div>
-                    <div class="form-floating">
-                        <select asp-for="Item.SourcePhoneNumber!.Type" asp-items="phoneTypesSelectList" class="form-select">
-                            <option value="">@TextConstants.SelectTextEmpty</option>
-                        </select>
-                        <label asp-for="Item.SourcePhoneNumber!.Type" class="form-label"></label>
-                        <span asp-validation-for="Item.SourcePhoneNumber!.Type" class="invalid-feedback"></span>
-                    </div>
-                </div>
-                <div class="input-group mb-3">
-                    <div class="form-floating">
-                        <input asp-for="Item.SourceSecondaryPhoneNumber!.Number" class="form-control" />
-                        <label asp-for="Item.SourceSecondaryPhoneNumber" class="form-label"></label>
-                        <span asp-validation-for="Item.SourceSecondaryPhoneNumber" class="invalid-feedback"></span>
-                    </div>
-                    <div class="form-floating">
-                        <select asp-for="Item.SourceSecondaryPhoneNumber!.Type" asp-items="phoneTypesSelectList" class="form-select">
-                            <option value="">@TextConstants.SelectTextEmpty</option>
-                        </select>
-                        <label asp-for="Item.SourceSecondaryPhoneNumber!.Type" class="form-label"></label>
-                        <span asp-validation-for="Item.SourceSecondaryPhoneNumber!.Type" class="invalid-feedback"></span>
-                    </div>
-                </div>
-                <div class="input-group mb-3">
-                    <div class="form-floating">
-                        <input asp-for="Item.SourceTertiaryPhoneNumber!.Number" class="form-control" />
-                        <label asp-for="Item.SourceTertiaryPhoneNumber" class="form-label"></label>
-                        <span asp-validation-for="Item.SourceTertiaryPhoneNumber" class="invalid-feedback"></span>
-                    </div>
-                    <div class="form-floating">
-                        <select asp-for="Item.SourceTertiaryPhoneNumber!.Type" asp-items="phoneTypesSelectList" class="form-select">
-                            <option value="">@TextConstants.SelectTextEmpty</option>
-                        </select>
-                        <label asp-for="Item.SourceTertiaryPhoneNumber!.Type" class="form-label"></label>
-                        <span asp-validation-for="Item.SourceTertiaryPhoneNumber!.Type" class="invalid-feedback"></span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <h3 class="h5">Address</h3>
-                <div class="form-floating mb-3">
-                    <input asp-for="Item.SourceAddress.Street" class="form-control" />
-                    <label asp-for="Item.SourceAddress.Street" class="form-label"></label>
-                    <span asp-validation-for="Item.SourceAddress.Street" class="invalid-feedback"></span>
-                </div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Item.SourceAddress.Street2" class="form-control" />
-                    <label asp-for="Item.SourceAddress.Street2" class="form-label"></label>
-                    <span asp-validation-for="Item.SourceAddress.Street2" class="invalid-feedback"></span>
-                </div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Item.SourceAddress.City" class="form-control" />
-                    <label asp-for="Item.SourceAddress.City" class="form-label"></label>
-                    <span asp-validation-for="Item.SourceAddress.City" class="invalid-feedback"></span>
-                </div>
-                <div class="input-group mb-3">
-                    <div class="form-floating">
-                        <select asp-for="Item.SourceAddress.State" asp-items="Model.StatesSelectList" class="form-select">
-                            <option value="">@TextConstants.SelectTextEmpty</option>
-                        </select>
-                        <label asp-for="Item.SourceAddress.State" class="form-label"></label>
-                        <span asp-validation-for="Item.SourceAddress.State" class="invalid-feedback"></span>
-                    </div>
-                    <div class="form-floating">
-                        <input asp-for="Item.SourceAddress.PostalCode" class="form-control" />
-                        <label asp-for="Item.SourceAddress.PostalCode" class="form-label"></label>
-                        <span asp-validation-for="Item.SourceAddress.PostalCode" class="invalid-feedback"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <h2>Attachments</h2>
-        <div class="mb-3">
-            <p>Selected files will be uploaded when Complaint is saved.</p>
-            @* TODO *@
-            <p>
-                <em>
-                    Supported file types are images, documents, and spreadsheets.<br />
-                    All files must comply with <a href="#" target="_blank">EPD’s complaint attachments policy (<abbr>PDF</abbr>)</a>.
-                </em>
-            </p>
-        </div>
-
-        <h2>Assignment</h2>
-        <div class="row mb-3">
-            <div class="col-md mb-3">
-                <div class="form-floating">
-                    <select asp-for="Item.CurrentOfficeId" asp-items="Model.OfficesSelectList" class="form-select">
-                        <option value="">@TextConstants.SelectTextRequired</option>
-                    </select>
-                    <label asp-for="Item.CurrentOfficeId" class="form-label"></label>
-                    <span asp-validation-for="Item.CurrentOfficeId" class="invalid-feedback"></span>
-                </div>
-            </div>
-            <div class="col-md mb-3">
-                <div class="form-floating">
-                    <select asp-for="Item.CurrentOwnerId" asp-items="Model.StaffInOfficeSelectList" class="form-select">
-                        <option value="">[Default Assignor]</option>
-                    </select>
-                    <label asp-for="Item.CurrentOwnerId" class="form-label"></label>
-                    <span asp-validation-for="Item.CurrentOwnerId" class="invalid-feedback"></span>
-                </div>
-            </div>
-        </div>
-
-        <div class="mt-3 mb-1">
-            <button id="SubmitButton" type="submit" class="btn btn-primary col-md-4 me-2">Add New Complaint</button>
-            <a asp-page="Index" class="btn btn-outline-secondary col-md-2">Cancel</a>
-        </div>
-        <div class="text-danger mt-3">* denotes a required field</div>
-    </form>
+    </div>
 </div>
 
-@section Scripts {
-    <script src="~/js/copyContactInfo.js"></script>
-    <partial name="_ValidationScriptsPartial" />
-}
+<h2>Caller</h2>
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <div class="form-floating">
+            <input asp-for="Item.CallerName" class="form-control" />
+            <label asp-for="Item.CallerName" class="form-label"></label>
+            <span asp-validation-for="Item.CallerName" class="invalid-feedback"></span>
+        </div>
+    </div>
+    <div class="col-md-6 mb-3">
+        <div class="form-floating">
+            <input asp-for="Item.CallerRepresents" class="form-control" />
+            <label asp-for="Item.CallerRepresents" class="form-label"></label>
+            <span asp-validation-for="Item.CallerRepresents" class="invalid-feedback"></span>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-md-6">
+        <h3 class="h5">Contact info</h3>
+        <div class="form-floating mb-3">
+            <input asp-for="Item.CallerEmail" class="form-control" />
+            <label asp-for="Item.CallerEmail" class="form-label"></label>
+            <span asp-validation-for="Item.CallerEmail" class="invalid-feedback"></span>
+        </div>
+        <div class="input-group mb-3">
+            <div class="form-floating">
+                <input asp-for="Item.CallerPhoneNumber!.Number" class="form-control" />
+                <label asp-for="Item.CallerPhoneNumber" class="form-label"></label>
+                <span asp-validation-for="Item.CallerPhoneNumber" class="invalid-feedback"></span>
+            </div>
+            <div class="form-floating">
+                <select asp-for="Item.CallerPhoneNumber!.Type" asp-items="phoneTypesSelectList" class="form-select">
+                    <option value="">@TextConstants.SelectTextEmpty</option>
+                </select>
+                <label asp-for="Item.CallerPhoneNumber!.Type" class="form-label"></label>
+                <span asp-validation-for="Item.CallerPhoneNumber!.Type" class="invalid-feedback"></span>
+            </div>
+        </div>
+        <div class="input-group mb-3">
+            <div class="form-floating">
+                <input asp-for="Item.CallerSecondaryPhoneNumber!.Number" class="form-control" />
+                <label asp-for="Item.CallerSecondaryPhoneNumber" class="form-label"></label>
+                <span asp-validation-for="Item.CallerSecondaryPhoneNumber" class="invalid-feedback"></span>
+            </div>
+            <div class="form-floating">
+                <select asp-for="Item.CallerSecondaryPhoneNumber!.Type" asp-items="phoneTypesSelectList" class="form-select">
+                    <option value="">@TextConstants.SelectTextEmpty</option>
+                </select>
+                <label asp-for="Item.CallerSecondaryPhoneNumber!.Type" class="form-label"></label>
+                <span asp-validation-for="Item.CallerSecondaryPhoneNumber!.Type" class="invalid-feedback"></span>
+            </div>
+        </div>
+        <div class="input-group mb-3">
+            <div class="form-floating">
+                <input asp-for="Item.CallerTertiaryPhoneNumber!.Number" class="form-control" />
+                <label asp-for="Item.CallerTertiaryPhoneNumber" class="form-label"></label>
+                <span asp-validation-for="Item.CallerTertiaryPhoneNumber" class="invalid-feedback"></span>
+            </div>
+            <div class="form-floating">
+                <select asp-for="Item.CallerTertiaryPhoneNumber!.Type" asp-items="phoneTypesSelectList" class="form-select">
+                    <option value="">@TextConstants.SelectTextEmpty</option>
+                </select>
+                <label asp-for="Item.CallerTertiaryPhoneNumber!.Type" class="form-label"></label>
+                <span asp-validation-for="Item.CallerTertiaryPhoneNumber!.Type" class="invalid-feedback"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <h3 class="h5">Address</h3>
+        <div class="form-floating mb-3">
+            <input asp-for="Item.CallerAddress.Street" class="form-control" />
+            <label asp-for="Item.CallerAddress.Street" class="form-label"></label>
+            <span asp-validation-for="Item.CallerAddress.Street" class="invalid-feedback"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="Item.CallerAddress.Street2" class="form-control" />
+            <label asp-for="Item.CallerAddress.Street2" class="form-label"></label>
+            <span asp-validation-for="Item.CallerAddress.Street2" class="invalid-feedback"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="Item.CallerAddress.City" class="form-control" />
+            <label asp-for="Item.CallerAddress.City" class="form-label"></label>
+            <span asp-validation-for="Item.CallerAddress.City" class="invalid-feedback"></span>
+        </div>
+        <div class="input-group mb-3">
+            <div class="form-floating">
+                <select asp-for="Item.CallerAddress.State" asp-items="Model.StatesSelectList" class="form-select">
+                    <option value="">@TextConstants.SelectTextEmpty</option>
+                </select>
+                <label asp-for="Item.CallerAddress.State" class="form-label"></label>
+                <span asp-validation-for="Item.CallerAddress.State" class="invalid-feedback"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Item.CallerAddress.PostalCode" class="form-control" />
+                <label asp-for="Item.CallerAddress.PostalCode" class="form-label"></label>
+                <span asp-validation-for="Item.CallerAddress.PostalCode" class="invalid-feedback"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2>Complaint</h2>
+<div class="row mb-3">
+    <div class="col-md-6">
+        <h3 class="h5">Details</h3>
+        <div class="form-floating mb-3">
+            <textarea asp-for="Item.ComplaintNature" rows="5" class="form-control"></textarea>
+            <label asp-for="Item.ComplaintNature" class="form-label"></label>
+            <span asp-validation-for="Item.ComplaintNature" class="invalid-feedback"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <textarea asp-for="Item.ComplaintLocation" rows="5" class="form-control"></textarea>
+            <label asp-for="Item.ComplaintLocation" class="form-label"></label>
+            <span asp-validation-for="Item.ComplaintLocation" class="invalid-feedback"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <textarea asp-for="Item.ComplaintDirections" rows="5" class="form-control"></textarea>
+            <label asp-for="Item.ComplaintDirections" class="form-label"></label>
+            <span asp-validation-for="Item.ComplaintDirections" class="invalid-feedback"></span>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <h3 class="h5">Location</h3>
+        <div class="form-floating mb-3">
+            <input asp-for="Item.ComplaintCity" class="form-control" />
+            <label asp-for="Item.ComplaintCity" class="form-label"></label>
+            <span asp-validation-for="Item.ComplaintCity" class="invalid-feedback"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <select asp-for="Item.ComplaintCounty" asp-items="Model.CountiesSelectList" class="form-select">
+                <option value="">@TextConstants.SelectTextEmpty</option>
+            </select>
+            <label asp-for="Item.ComplaintCounty" class="form-label"></label>
+            <span asp-validation-for="Item.ComplaintCounty" class="invalid-feedback"></span>
+        </div>
+
+        <h3 class="h5">Environmental areas of concern</h3>
+        <div class="form-floating mb-3">
+            <select asp-for="Item.PrimaryConcernId" asp-items="Model.ConcernsSelectList" class="form-select">
+                <option value="">@TextConstants.SelectTextRequired</option>
+            </select>
+            <label asp-for="Item.PrimaryConcernId" class="form-label"></label>
+            <span asp-validation-for="Item.PrimaryConcernId" class="invalid-feedback"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <select asp-for="Item.SecondaryConcernId" asp-items="Model.ConcernsSelectList" class="form-select">
+                <option value="">@TextConstants.SelectTextEmpty</option>
+            </select>
+            <label asp-for="Item.SecondaryConcernId" class="form-label"></label>
+            <span asp-validation-for="Item.SecondaryConcernId" class="invalid-feedback"></span>
+        </div>
+    </div>
+</div>
+
+<h2>Source</h2>
+<div class="row">
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <div class="form-floating">
+                <input asp-for="Item.SourceFacilityName" class="form-control" />
+                <label asp-for="Item.SourceFacilityName" class="form-label"></label>
+                <span asp-validation-for="Item.SourceFacilityName" class="invalid-feedback"></span>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="form-floating">
+                <input asp-for="Item.SourceFacilityIdNumber" class="form-control" />
+                <label asp-for="Item.SourceFacilityIdNumber" class="form-label"></label>
+                <span asp-validation-for="Item.SourceFacilityIdNumber" class="invalid-feedback"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mb-3">
+    <button id="copy-caller-info" type="button" class="btn btn-outline-info">Copy contact/address from Caller</button>
+</div>
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <h3 class="h5">Contact info</h3>
+        <div class="form-floating mb-3">
+            <input asp-for="Item.SourceContactName" class="form-control" />
+            <label asp-for="Item.SourceContactName" class="form-label"></label>
+            <span asp-validation-for="Item.SourceContactName" class="invalid-feedback"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="Item.SourceEmail" class="form-control" />
+            <label asp-for="Item.SourceEmail" class="form-label"></label>
+            <span asp-validation-for="Item.SourceEmail" class="invalid-feedback"></span>
+        </div>
+        <div class="input-group mb-3">
+            <div class="form-floating">
+                <input asp-for="Item.SourcePhoneNumber!.Number" class="form-control" />
+                <label asp-for="Item.SourcePhoneNumber" class="form-label"></label>
+                <span asp-validation-for="Item.SourcePhoneNumber" class="invalid-feedback"></span>
+            </div>
+            <div class="form-floating">
+                <select asp-for="Item.SourcePhoneNumber!.Type" asp-items="phoneTypesSelectList" class="form-select">
+                    <option value="">@TextConstants.SelectTextEmpty</option>
+                </select>
+                <label asp-for="Item.SourcePhoneNumber!.Type" class="form-label"></label>
+                <span asp-validation-for="Item.SourcePhoneNumber!.Type" class="invalid-feedback"></span>
+            </div>
+        </div>
+        <div class="input-group mb-3">
+            <div class="form-floating">
+                <input asp-for="Item.SourceSecondaryPhoneNumber!.Number" class="form-control" />
+                <label asp-for="Item.SourceSecondaryPhoneNumber" class="form-label"></label>
+                <span asp-validation-for="Item.SourceSecondaryPhoneNumber" class="invalid-feedback"></span>
+            </div>
+            <div class="form-floating">
+                <select asp-for="Item.SourceSecondaryPhoneNumber!.Type" asp-items="phoneTypesSelectList" class="form-select">
+                    <option value="">@TextConstants.SelectTextEmpty</option>
+                </select>
+                <label asp-for="Item.SourceSecondaryPhoneNumber!.Type" class="form-label"></label>
+                <span asp-validation-for="Item.SourceSecondaryPhoneNumber!.Type" class="invalid-feedback"></span>
+            </div>
+        </div>
+        <div class="input-group mb-3">
+            <div class="form-floating">
+                <input asp-for="Item.SourceTertiaryPhoneNumber!.Number" class="form-control" />
+                <label asp-for="Item.SourceTertiaryPhoneNumber" class="form-label"></label>
+                <span asp-validation-for="Item.SourceTertiaryPhoneNumber" class="invalid-feedback"></span>
+            </div>
+            <div class="form-floating">
+                <select asp-for="Item.SourceTertiaryPhoneNumber!.Type" asp-items="phoneTypesSelectList" class="form-select">
+                    <option value="">@TextConstants.SelectTextEmpty</option>
+                </select>
+                <label asp-for="Item.SourceTertiaryPhoneNumber!.Type" class="form-label"></label>
+                <span asp-validation-for="Item.SourceTertiaryPhoneNumber!.Type" class="invalid-feedback"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <h3 class="h5">Address</h3>
+        <div class="form-floating mb-3">
+            <input asp-for="Item.SourceAddress.Street" class="form-control" />
+            <label asp-for="Item.SourceAddress.Street" class="form-label"></label>
+            <span asp-validation-for="Item.SourceAddress.Street" class="invalid-feedback"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="Item.SourceAddress.Street2" class="form-control" />
+            <label asp-for="Item.SourceAddress.Street2" class="form-label"></label>
+            <span asp-validation-for="Item.SourceAddress.Street2" class="invalid-feedback"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="Item.SourceAddress.City" class="form-control" />
+            <label asp-for="Item.SourceAddress.City" class="form-label"></label>
+            <span asp-validation-for="Item.SourceAddress.City" class="invalid-feedback"></span>
+        </div>
+        <div class="input-group mb-3">
+            <div class="form-floating">
+                <select asp-for="Item.SourceAddress.State" asp-items="Model.StatesSelectList" class="form-select">
+                    <option value="">@TextConstants.SelectTextEmpty</option>
+                </select>
+                <label asp-for="Item.SourceAddress.State" class="form-label"></label>
+                <span asp-validation-for="Item.SourceAddress.State" class="invalid-feedback"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Item.SourceAddress.PostalCode" class="form-control" />
+                <label asp-for="Item.SourceAddress.PostalCode" class="form-label"></label>
+                <span asp-validation-for="Item.SourceAddress.PostalCode" class="invalid-feedback"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2>Attachments</h2>
+<div class="mb-3">
+    <p>Selected files will be uploaded when Complaint is saved.</p>
+    @* TODO *@
+    <p>
+        <em>
+            Supported file types are images, documents, and spreadsheets.<br />
+            All files must comply with <a href="#" target="_blank">EPD’s complaint attachments policy (<abbr>PDF</abbr>)</a>.
+        </em>
+    </p>
+</div>
+
+<h2>Assignment</h2>
+<div class="row mb-3">
+    <div class="col-md mb-3">
+        <div class="form-floating">
+            <select asp-for="Item.CurrentOfficeId" asp-items="Model.OfficesSelectList" class="form-select">
+                <option value="">@TextConstants.SelectTextRequired</option>
+            </select>
+            <label asp-for="Item.CurrentOfficeId" class="form-label"></label>
+            <span asp-validation-for="Item.CurrentOfficeId" class="invalid-feedback"></span>
+        </div>
+    </div>
+    <div class="col-md mb-3">
+        <div class="form-floating">
+            <select asp-for="Item.CurrentOwnerId" asp-items="Model.StaffInOfficeSelectList" class="form-select">
+                <option value="">[Default Assignor]</option>
+            </select>
+            <label asp-for="Item.CurrentOwnerId" class="form-label"></label>
+            <span asp-validation-for="Item.CurrentOwnerId" class="invalid-feedback"></span>
+        </div>
+    </div>
+</div>
+
+<div class="mt-3 mb-1">
+    <button id="SubmitButton" type="submit" class="btn btn-primary col-md-4 me-2">Add New Complaint</button>
+    <a asp-page="Index" class="btn btn-outline-secondary col-md-2">Cancel</a>
+</div>
+<div class="text-danger mt-3">* denotes a required field</div>
+</form>
+</div>

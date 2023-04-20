@@ -26,19 +26,19 @@ public sealed class OfficeAppService : IOfficeAppService
 
     public async Task<OfficeAdminViewDto?> FindAsync(Guid id, CancellationToken token = default)
     {
-        var item = await _repository.FindAsync(id, token);
+        var item = await _repository.FindIncludeAssignorAsync(id, token);
         return _mapper.Map<OfficeAdminViewDto>(item);
     }
 
     public async Task<OfficeUpdateDto?> FindForUpdateAsync(Guid id, CancellationToken token = default)
     {
-        var item = await _repository.FindAsync(id, token);
+        var item = await _repository.FindIncludeAssignorAsync(id, token);
         return _mapper.Map<OfficeUpdateDto>(item);
     }
 
     public async Task<IReadOnlyList<OfficeAdminViewDto>> GetListAsync(CancellationToken token = default)
     {
-        var list = (await _repository.GetListAsync(token)).OrderBy(e => e.Name).ToList();
+        var list = (await _repository.GetListIncludeAssignorAsync(token)).OrderBy(e => e.Name).ToList();
         return _mapper.Map<IReadOnlyList<OfficeAdminViewDto>>(list);
     }
 
@@ -75,6 +75,9 @@ public sealed class OfficeAppService : IOfficeAppService
             : (await _repository.GetStaffMembersListAsync(id.Value, activeOnly, token))
             .Select(e => new ListItem<string>(e.Id, e.SortableNameWithInactive))
             .ToList();
+
+    public async Task<bool> UserIsAssignorAsync(Guid id, string userId, CancellationToken token = default) =>
+        (await _repository.FindAsync(e => e.Id == id && e.Active, token))?.AssignorId == userId;
 
     public void Dispose() => _repository.Dispose();
 }

@@ -7,12 +7,14 @@ namespace Cts.AppServices.Staff;
 public interface IStaffAppService : IDisposable
 {
     Task<StaffViewDto> GetCurrentUserAsync();
+    Task<StaffViewDto?> FindCurrentUserAsync();
     Task<StaffViewDto> GetAsync(string id);
     Task<StaffViewDto?> FindAsync(string id);
-    public Task<List<StaffViewDto>> GetListAsync(StaffSearchDto filter);
+    Task<List<StaffViewDto>> GetListAsync(StaffSearchDto filter);
     Task<IReadOnlyList<ListItem<string>>> GetStaffListItemsAsync(bool activeOnly);
-    public Task<IList<string>> GetRolesAsync(string id);
-    public Task<IList<AppRole>> GetAppRolesAsync(string id);
-    public Task<IdentityResult> UpdateRolesAsync(string id, Dictionary<string, bool> roles);
+    Task<IList<string>> GetRolesAsync(string id);
+    Task<IList<AppRole>> GetAppRolesAsync(string id);
+    Task<bool> HasAppRoleAsync(string id, AppRole role);
+    Task<IdentityResult> UpdateRolesAsync(string id, Dictionary<string, bool> roles);
     Task<IdentityResult> UpdateAsync(StaffUpdateDto resource);
 }

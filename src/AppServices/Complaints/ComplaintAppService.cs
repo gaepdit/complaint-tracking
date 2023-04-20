@@ -7,7 +7,6 @@ using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
-using Cts.Domain.Identity;
 using GaEpd.AppLibrary.Pagination;
 using Microsoft.AspNetCore.Http;
 
@@ -157,7 +156,8 @@ public sealed class ComplaintAppService : IComplaintAppService
         // Properties: Meta-data
         if (!string.IsNullOrEmpty(currentUserId))
             item.EnteredBy = await _users.GetUserAsync(currentUserId);
-        item.ReceivedDate = DateTime.SpecifyKind(resource.ReceivedDate, DateTimeKind.Local).Add(resource.ReceivedTime.TimeOfDay);
+        item.ReceivedDate = DateTime.SpecifyKind(resource.ReceivedDate, DateTimeKind.Local)
+            .Add(resource.ReceivedTime.TimeOfDay);
         item.ReceivedBy = await _users.GetUserAsync(resource.ReceivedById!);
 
         // Properties: Caller
@@ -189,7 +189,7 @@ public sealed class ComplaintAppService : IComplaintAppService
         item.SourceSecondaryPhoneNumber = resource.SourceSecondaryPhoneNumber;
         item.SourceTertiaryPhoneNumber = resource.SourceTertiaryPhoneNumber;
         item.SourceEmail = resource.SourceEmail;
-        
+
         // Properties: Assignment/History
         item.CurrentOffice = await _offices.GetAsync(resource.CurrentOfficeId!.Value, token);
         if (resource.CurrentOwnerId != null)

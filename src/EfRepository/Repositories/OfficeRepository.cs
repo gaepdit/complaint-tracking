@@ -22,12 +22,12 @@ public sealed class OfficeRepository : BaseRepository<Office, Guid>, IOfficeRepo
             .OrderBy(e => e.FamilyName).ThenBy(e => e.GivenName)
             .ToListAsync(token);
 
-    public new async Task<Office?> FindIncludeAssignorAsync(Guid id, CancellationToken token = default) =>
+    public async Task<Office?> FindIncludeAssignorAsync(Guid id, CancellationToken token = default) =>
         await Context.Set<Office>().AsNoTracking()
             .Include(e => e.Assignor)
             .SingleOrDefaultAsync(e => e.Id.Equals(id), token);
 
-    public new async Task<IReadOnlyCollection<Office>> GetListIncludeAssignorAsync(CancellationToken token = default) =>
+    public async Task<IReadOnlyCollection<Office>> GetListIncludeAssignorAsync(CancellationToken token = default) =>
         await Context.Set<Office>().AsNoTracking()
             .Include(e => e.Assignor).ToListAsync(token);
 }
