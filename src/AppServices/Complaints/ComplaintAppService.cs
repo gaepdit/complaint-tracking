@@ -147,7 +147,7 @@ public sealed class ComplaintAppService : IComplaintAppService
         return item.Id;
     }
 
-    private async Task<Complaint> CreateComplaintFromDtoAsync(ComplaintCreateDto resource, CancellationToken token)
+    internal async Task<Complaint> CreateComplaintFromDtoAsync(ComplaintCreateDto resource, CancellationToken token)
     {
         var item = await _complaintManager.CreateNewComplaintAsync();
         var currentUserId = (await _users.GetCurrentUserAsync())?.Id;

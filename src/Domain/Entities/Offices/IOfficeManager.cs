@@ -11,11 +11,10 @@ public interface IOfficeManager
     /// Creates a new <see cref="Office"/>.
     /// </summary>
     /// <param name="name">The name of the Office to create.</param>
-    /// <param name="assignorId">The ID of the application user to set as the assignor for the Office.</param>
     /// <param name="token"><see cref="T:System.Threading.CancellationToken"/></param>
     /// <exception cref="NameAlreadyExistsException">Thrown if an Office already exists with the given name.</exception>
     /// <returns>The Office that was created.</returns>
-    Task<Office> CreateAsync(string name, string? assignorId, CancellationToken token = default);
+    Task<Office> CreateAsync(string name, CancellationToken token = default);
 
     /// <summary>
     /// Changes the name of an <see cref="Office"/>.

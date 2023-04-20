@@ -23,7 +23,7 @@ public class GetList
         var itemList = new List<Office> { office };
 
         var repoMock = new Mock<IOfficeRepository>();
-        repoMock.Setup(l => l.GetListAsync(It.IsAny<CancellationToken>()))
+        repoMock.Setup(l => l.GetListIncludeAssignorAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(itemList);
         var managerMock = new Mock<IOfficeManager>();
         var userServiceMock = new Mock<IUserService>();
@@ -39,7 +39,7 @@ public class GetList
     public async Task WhenDoesNotExist_ReturnsEmptyList()
     {
         var repoMock = new Mock<IOfficeRepository>();
-        repoMock.Setup(l => l.GetListAsync(It.IsAny<CancellationToken>()))
+        repoMock.Setup(l => l.GetListIncludeAssignorAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<Office>());
         var managerMock = new Mock<IOfficeManager>();
         var userServiceMock = new Mock<IUserService>();

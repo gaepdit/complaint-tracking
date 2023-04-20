@@ -25,21 +25,4 @@ public sealed class LocalOfficeRepository : BaseRepository<Office, Guid>, IOffic
 
     public Task<IReadOnlyCollection<Office>> GetListIncludeAssignorAsync(CancellationToken token = default) =>
         GetListAsync(token);
-
-    // Hide some base repository methods in order to set additional data.
-
-    public new Task InsertAsync(Office entity, bool autoSave = true, CancellationToken token = default)
-    {
-        entity.Assignor = UserData.GetUsers.SingleOrDefault(e => e.Id == entity.AssignorId);
-        Items.Add(entity);
-        return Task.CompletedTask;
-    }
-
-    public new async Task UpdateAsync(Office entity, bool autoSave = true, CancellationToken token = default)
-    {
-        var item = await GetAsync(entity.Id, token);
-        item.Assignor = UserData.GetUsers.SingleOrDefault(e => e.Id == entity.AssignorId);
-        Items.Remove(item);
-        Items.Add(entity);
-    }
 }

@@ -24,7 +24,6 @@ public class Office : AuditableEntity
 
     public bool Active { get; set; } = true;
 
-    public string? AssignorId { get; set; }
     public ApplicationUser? Assignor { get; set; }
 
     public List<ApplicationUser> StaffMembers { get; set; } = new();
