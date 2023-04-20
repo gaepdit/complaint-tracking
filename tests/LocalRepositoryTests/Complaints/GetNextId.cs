@@ -13,7 +13,7 @@ public class GetNextId
     public void TearDown() => _repository.Dispose();
 
     [Test]
-    public async Task OnSuccessfulInsert_ReturnsNextIdNumber()
+    public async Task GivenLocalRepository_ReturnsNextIdNumber()
     {
         var maxId = _repository.Items.Max(e => e.Id);
         var result = await _repository.GetNextIdAsync();

@@ -15,7 +15,7 @@ public class Create
         var repoMock = new Mock<IOfficeRepository>();
         var managerMock = new Mock<IOfficeManager>();
         managerMock.Setup(l =>
-                l.CreateAsync(It.IsAny<string>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()))
+                l.CreateAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(item);
         var userServiceMock = new Mock<IUserService>();
         userServiceMock.Setup(l => l.GetCurrentUserAsync())

@@ -1,4 +1,3 @@
-using Cts.LocalRepository.Identity;
 using Cts.LocalRepository.Repositories;
 using Cts.TestData.Identity;
 

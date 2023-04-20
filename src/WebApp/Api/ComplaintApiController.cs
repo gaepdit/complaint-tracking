@@ -15,7 +15,9 @@ public class ComplaintApiController : Controller
 
     [HttpGet]
     public async Task<IPaginatedResult<ComplaintSearchResultDto>> ListComplaintsAsync(
-        [FromQuery] ComplaintPublicSearchDto spec, [FromQuery] ushort page = 1, [FromQuery] ushort pageSize = 25) =>
+        [FromQuery] ComplaintPublicSearchDto spec,
+        [FromQuery] ushort page = 1,
+        [FromQuery] ushort pageSize = 25) =>
         await _service.PublicSearchAsync(spec, new PaginatedRequest(page, pageSize));
 
     [HttpGet("{id:int}")]

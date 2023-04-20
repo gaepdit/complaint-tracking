@@ -23,16 +23,18 @@ public class AddModel : PageModel
     public ComplaintCreateDto Item { get; set; } = default!;
 
     // Select lists
-    public SelectList ActiveStaffMembers { get; private set; } = default!;
     public SelectList ConcernsSelectList { get; private set; } = default!;
     public SelectList OfficesSelectList { get; private set; } = default!;
+    public SelectList AllStaffSelectList { get; private set; } = default!;
+    public SelectList StaffInOfficeSelectList { get; private set; } = default!;
+
     public SelectList StatesSelectList => new(Data.States);
     public SelectList CountiesSelectList => new(Data.Counties);
 
     // Services
     private readonly IComplaintAppService _complaints;
     private readonly IStaffAppService _staff;
-    private readonly IConcernAppService _concernService;
+    private readonly IConcernAppService _concerns;
     private readonly IOfficeAppService _offices;
     private readonly IValidator<ComplaintCreateDto> _validator;
 
@@ -45,16 +47,16 @@ public class AddModel : PageModel
     {
         _complaints = service;
         _staff = staff;
-        _concernService = concerns;
+        _concerns = concerns;
         _offices = offices;
         _validator = validator;
     }
 
     public async Task OnGetAsync()
     {
-        await PopulateSelectListsAsync();
         var user = await _staff.GetCurrentUserAsync();
         Item = new ComplaintCreateDto(user.Id, user.Office?.Id);
+        await PopulateSelectListsAsync(user.Office?.Id);
     }
 
     public async Task<IActionResult> OnPostAsync()
@@ -63,7 +65,7 @@ public class AddModel : PageModel
 
         if (!ModelState.IsValid)
         {
-            await PopulateSelectListsAsync();
+            await PopulateSelectListsAsync(Item.CurrentOfficeId);
             return Page();
         }
 
@@ -72,10 +74,11 @@ public class AddModel : PageModel
         return RedirectToPage("Details", new { id });
     }
 
-    private async Task PopulateSelectListsAsync()
+    private async Task PopulateSelectListsAsync(Guid? currentOfficeId)
     {
-        ActiveStaffMembers = (await _staff.GetStaffListItemsAsync()).ToSelectList();
-        ConcernsSelectList = (await _concernService.GetActiveListItemsAsync()).ToSelectList();
+        ConcernsSelectList = (await _concerns.GetActiveListItemsAsync()).ToSelectList();
         OfficesSelectList = (await _offices.GetActiveListItemsAsync()).ToSelectList();
+        AllStaffSelectList = (await _staff.GetStaffListItemsAsync(true)).ToSelectList();
+        StaffInOfficeSelectList = (await _offices.GetStaffListItemsAsync(currentOfficeId, true)).ToSelectList();
     }
 }

@@ -72,14 +72,9 @@ public class IndexModel : PageModel
 
     private async Task PopulateSelectListsAsync()
     {
-        var receivedByTask = _staff.GetStaffListItemsAsync(false);
-        var concernsTask = _concerns.GetActiveListItemsAsync();
-        var officesTask = _offices.GetActiveListItemsAsync();
-        var assignedToTask = _offices.GetStaffListItemsAsync(Spec.Office, false);
-
-        ReceivedBySelectList = (await receivedByTask).ToSelectList();
-        ConcernsSelectList = (await concernsTask).ToSelectList();
-        OfficesSelectList = (await officesTask).ToSelectList();
-        AssignedToSelectList = (await assignedToTask).ToSelectList();
+        ReceivedBySelectList = (await _staff.GetStaffListItemsAsync(false)).ToSelectList();
+        ConcernsSelectList = (await _concerns.GetActiveListItemsAsync()).ToSelectList();
+        OfficesSelectList = (await _offices.GetActiveListItemsAsync()).ToSelectList();
+        AssignedToSelectList = (await _offices.GetStaffListItemsAsync(Spec.Office, false)).ToSelectList();
     }
 }

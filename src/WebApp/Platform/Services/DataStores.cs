@@ -1,4 +1,4 @@
-﻿using Cts.AppServices.Files;
+using Cts.AppServices.Files;
 using Cts.Domain.Entities.ActionTypes;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.Concerns;
@@ -6,6 +6,7 @@ using Cts.Domain.Entities.Offices;
 using Cts.EfRepository.Contexts;
 using Cts.EfRepository.Repositories;
 using Cts.LocalRepository.Files;
+using Cts.LocalRepository.Identity;
 using Cts.LocalRepository.Repositories;
 using Cts.WebApp.Platform.Settings;
 using Microsoft.EntityFrameworkCore;
@@ -24,10 +25,11 @@ public static class DataStores
             services.AddSingleton<IComplaintRepository, LocalComplaintRepository>();
             services.AddSingleton<IConcernRepository, LocalConcernRepository>();
             services.AddSingleton<IOfficeRepository, LocalOfficeRepository>();
+            services.AddSingleton<IUserRepository, LocalUserRepository>();
         }
         else
         {
-            string? connectionString = configuration.GetConnectionString("DefaultConnection");
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
 
             if (string.IsNullOrEmpty(connectionString))
             {
@@ -43,6 +45,7 @@ public static class DataStores
             services.AddScoped<IComplaintRepository, ComplaintRepository>();
             services.AddScoped<IConcernRepository, ConcernRepository>();
             services.AddScoped<IOfficeRepository, OfficeRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
         }
 
         // When running locally, you have the option to access file in memory or use the local filesystem.

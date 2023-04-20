@@ -8,10 +8,10 @@ public class OfficeManager : IOfficeManager
     private readonly IOfficeRepository _repository;
     public OfficeManager(IOfficeRepository repository) => _repository = repository;
 
-    public async Task<Office> CreateAsync(string name, string? assignorId, CancellationToken token = default)
+    public async Task<Office> CreateAsync(string name, CancellationToken token = default)
     {
         await ThrowIfDuplicateName(name, ignoreId: null, token: token);
-        return new Office(Guid.NewGuid(), name) { AssignorId = assignorId };
+        return new Office(Guid.NewGuid(), name);
     }
 
     public async Task ChangeNameAsync(Office office, string name, CancellationToken token = default)

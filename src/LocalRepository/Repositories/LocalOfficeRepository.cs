@@ -20,20 +20,9 @@ public sealed class LocalOfficeRepository : BaseRepository<Office, Guid>, IOffic
             .OrderBy(e => e.FamilyName).ThenBy(e => e.GivenName)
             .ToList());
 
-    // Hide some base repository methods in order to set additional data.
+    public Task<Office?> FindIncludeAssignorAsync(Guid id, CancellationToken token = default) =>
+        FindAsync(id, token);
 
-    public new Task InsertAsync(Office entity, bool autoSave = true, CancellationToken token = default)
-    {
-        entity.Assignor = UserData.GetUsers.SingleOrDefault(e => e.Id == entity.AssignorId);
-        Items.Add(entity);
-        return Task.CompletedTask;
-    }
-
-    public new async Task UpdateAsync(Office entity, bool autoSave = true, CancellationToken token = default)
-    {
-        var item = await GetAsync(entity.Id, token);
-        item.Assignor = UserData.GetUsers.SingleOrDefault(e => e.Id == entity.AssignorId);
-        Items.Remove(item);
-        Items.Add(entity);
-    }
+    public Task<IReadOnlyCollection<Office>> GetListIncludeAssignorAsync(CancellationToken token = default) =>
+        GetListAsync(token);
 }

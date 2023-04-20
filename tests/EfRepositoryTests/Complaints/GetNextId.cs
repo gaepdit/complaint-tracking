@@ -1,5 +1,4 @@
 using Cts.Domain.Entities.Complaints;
-using Cts.TestData;
 
 namespace EfRepositoryTests.Complaints;
 
@@ -14,10 +13,8 @@ public class GetNextId
     public void TearDown() => _repository.Dispose();
 
     [Test]
-    public async Task OnSuccessfulInsert_ReturnsNextIdNumber()
+    public async Task GivenEF_ReturnsNull()
     {
-        var maxId = ComplaintData.GetComplaints.Max(e => e.Id);
-        var result = await _repository.GetNextIdAsync();
-        result.Should().Be(maxId + 1);
+        (await _repository.GetNextIdAsync()).Should().BeNull();
     }
 }

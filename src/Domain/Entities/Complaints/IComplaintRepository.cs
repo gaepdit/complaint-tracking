@@ -18,5 +18,7 @@ public interface IComplaintRepository : IRepository<Complaint, int>
 
     public Task<Attachment?> FindAttachmentAsync(Guid id, CancellationToken token = default);
 
-    public Task<int> GetNextIdAsync(CancellationToken token = default);
+    // Will return the next available ID if the repository requires it for adding new entities (local repository).
+    // Will return null if the repository creates a new ID on insert (Entity Framework).
+    public Task<int?> GetNextIdAsync();
 }

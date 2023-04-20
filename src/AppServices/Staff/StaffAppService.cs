@@ -34,6 +34,9 @@ public sealed class StaffAppService : IStaffAppService
         return _mapper.Map<StaffViewDto>(user);
     }
 
+    public async Task<StaffViewDto?> FindCurrentUserAsync() =>
+        _mapper.Map<StaffViewDto?>(await _userService.GetCurrentUserAsync());
+
     public async Task<StaffViewDto> GetAsync(string id)
     {
         var user = await _userManager.FindByIdAsync(id)
@@ -41,11 +44,8 @@ public sealed class StaffAppService : IStaffAppService
         return _mapper.Map<StaffViewDto>(user);
     }
 
-    public async Task<StaffViewDto?> FindAsync(string id)
-    {
-        var user = await _userManager.FindByIdAsync(id);
-        return _mapper.Map<StaffViewDto?>(user);
-    }
+    public async Task<StaffViewDto?> FindAsync(string id) =>
+        _mapper.Map<StaffViewDto?>(await _userManager.FindByIdAsync(id));
 
     public async Task<List<StaffViewDto>> GetListAsync(StaffSearchDto filter)
     {
@@ -56,7 +56,7 @@ public sealed class StaffAppService : IStaffAppService
         return _mapper.Map<List<StaffViewDto>>(users);
     }
 
-    public async Task<IReadOnlyList<ListItem<string>>> GetStaffListItemsAsync(bool activeOnly = true)
+    public async Task<IReadOnlyList<ListItem<string>>> GetStaffListItemsAsync(bool activeOnly)
     {
         var search = activeOnly
             ? new StaffSearchDto { Status = StaffSearchDto.ActiveStatus.Active }
@@ -73,6 +73,13 @@ public sealed class StaffAppService : IStaffAppService
     }
 
     public async Task<IList<AppRole>> GetAppRolesAsync(string id) => AppRole.RolesAsAppRoles(await GetRolesAsync(id));
+
+    public async Task<bool> HasAppRoleAsync(string id, AppRole role)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user is null) return false;
+        return await _userManager.IsInRoleAsync(user, role.Name);
+    }
 
     public async Task<IdentityResult> UpdateRolesAsync(string id, Dictionary<string, bool> roles)
     {

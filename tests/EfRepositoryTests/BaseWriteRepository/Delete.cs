@@ -34,6 +34,7 @@ public class Delete
         // (Still part of arrange...)
         var getResult = await _repository.GetAsync(item.Id);
         getResult.Should().BeEquivalentTo(item);
+        _repositoryHelper.ClearChangeTracker();
 
         // Act
         await _repository.DeleteAsync(item);

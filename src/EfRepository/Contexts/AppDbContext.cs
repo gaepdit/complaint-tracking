@@ -60,6 +60,6 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
-        optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTrackingWithIdentityResolution);
+        optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.TrackAll);
     }
 }

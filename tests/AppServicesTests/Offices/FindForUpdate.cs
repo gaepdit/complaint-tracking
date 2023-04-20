@@ -12,7 +12,6 @@ public class FindForUpdate
     [Test]
     public async Task WhenItemExists_ReturnsViewDto()
     {
-        var office = new Office(Guid.Empty, TestConstants.ValidName);
         var user = new ApplicationUser
         {
             Id = Guid.NewGuid().ToString(),
@@ -20,10 +19,10 @@ public class FindForUpdate
             FamilyName = TestConstants.NewValidName,
             Email = TestConstants.ValidEmail,
         };
-        office.Assignor = user;
+        var office = new Office(Guid.Empty, TestConstants.ValidName) { Assignor = user };
 
         var repoMock = new Mock<IOfficeRepository>();
-        repoMock.Setup(l => l.FindAsync(office.Id, It.IsAny<CancellationToken>()))
+        repoMock.Setup(l => l.FindIncludeAssignorAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(office);
         var managerMock = new Mock<IOfficeManager>();
         var userServiceMock = new Mock<IUserService>();

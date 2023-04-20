@@ -1,4 +1,4 @@
-﻿using Cts.Domain.Entities.Attachments;
+using Cts.Domain.Entities.Attachments;
 using Cts.Domain.Entities.ComplaintActions;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.ComplaintTransitions;
@@ -28,9 +28,9 @@ public class ComplaintRepository : BaseRepository<Complaint, int>, IComplaintRep
             .Where(e => e.Complaint.Id == complaintId).ToListAsync(token);
 
     public async Task<Attachment?> FindAttachmentAsync(Guid id, CancellationToken token = default) =>
-        await Context.Attachments.AsNoTracking()
+        await Context.Attachments
             .SingleOrDefaultAsync(e => e.Id == id, token);
 
-    public async Task<int> GetNextIdAsync(CancellationToken token = default) =>
-        await Context.Complaints.AsNoTracking().MaxAsync(e => e.Id, token) + 1;
+    // EF will set the ID automatically.
+    public Task<int?> GetNextIdAsync() => Task.FromResult(null as int?);
 }
