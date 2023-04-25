@@ -29,8 +29,8 @@ public class Create
             .ReturnsAsync(new Office(Guid.NewGuid(), TestConstants.ValidName));
 
         var appService = new ComplaintAppService(Mock.Of<IComplaintRepository>(), complaintManagerMock.Object,
-            Mock.Of<IConcernRepository>(), officeRepoMock.Object, Mock.Of<IComplaintTransitionRepository>(),
-            Mock.Of<IComplaintTransitionManager>(), AppServicesTestsGlobal.Mapper!, userServiceMock.Object);
+            Mock.Of<IConcernRepository>(), officeRepoMock.Object, Mock.Of<IComplaintTransitionManager>(),
+            AppServicesTestsGlobal.Mapper!, userServiceMock.Object);
 
         var item = new ComplaintCreateDto { CurrentOfficeId = Guid.Empty };
 
@@ -59,8 +59,8 @@ public class Create
             .ReturnsAsync(office);
 
         var appService = new ComplaintAppService(Mock.Of<IComplaintRepository>(), complaintManagerMock.Object,
-            Mock.Of<IConcernRepository>(), officeRepoMock.Object, Mock.Of<IComplaintTransitionRepository>(),
-            Mock.Of<IComplaintTransitionManager>(), AppServicesTestsGlobal.Mapper!, userServiceMock.Object);
+            Mock.Of<IConcernRepository>(), officeRepoMock.Object, Mock.Of<IComplaintTransitionManager>(),
+            AppServicesTestsGlobal.Mapper!, userServiceMock.Object);
 
         var item = new ComplaintCreateDto
         {

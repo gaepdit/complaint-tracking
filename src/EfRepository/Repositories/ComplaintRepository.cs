@@ -34,6 +34,13 @@ public class ComplaintRepository : BaseRepository<Complaint, int>, IComplaintRep
             .OrderBy(e => e.CommittedDate)
             .ToListAsync(token);
 
+    public async Task InsertTransitionAsync(
+        ComplaintTransition transition, bool autoSave = true, CancellationToken token = default)
+    {
+        await Context.Set<ComplaintTransition>().AddAsync(transition, token);
+        if (autoSave) await Context.SaveChangesAsync(token);
+    }
+
     public async Task<Attachment?> FindAttachmentAsync(Guid id, CancellationToken token = default) =>
         await Context.Attachments
             .SingleOrDefaultAsync(e => e.Id == id, token);

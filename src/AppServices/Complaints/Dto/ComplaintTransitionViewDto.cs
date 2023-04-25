@@ -2,7 +2,7 @@
 using Cts.AppServices.Staff;
 using Cts.Domain.Entities.ComplaintTransitions;
 
-namespace Cts.AppServices.ComplaintTransitions;
+namespace Cts.AppServices.Complaints.Dto;
 
 public class ComplaintTransitionViewDto
 {

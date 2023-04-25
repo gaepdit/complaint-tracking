@@ -42,6 +42,13 @@ public sealed class LocalComplaintRepository : BaseRepository<Complaint, int>, I
             .OrderBy(e => e.CommittedDate)
             .ToList() as IReadOnlyCollection<ComplaintTransition>);
 
+    public Task InsertTransitionAsync(
+        ComplaintTransition transition, bool autoSave = true, CancellationToken token = default)
+    {
+        ComplaintTransitionItems.Add(transition);
+        return Task.CompletedTask;
+    }
+
     public Task<Attachment?> FindAttachmentAsync(Guid id, CancellationToken token = default) =>
         Task.FromResult(AttachmentItems.SingleOrDefault(e => e.Id == id));
 

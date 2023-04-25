@@ -28,8 +28,8 @@ public class Search
         repoMock.Setup(l => l.CountAsync(It.IsAny<Expression<Func<Complaint, bool>>>(), CancellationToken.None))
             .ReturnsAsync(count);
         var appService = new ComplaintAppService(repoMock.Object, Mock.Of<IComplaintManager>(),
-            Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionRepository>(),
-            Mock.Of<IComplaintTransitionManager>(), AppServicesTestsGlobal.Mapper!, Mock.Of<IUserService>());
+            Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
+            AppServicesTestsGlobal.Mapper!, Mock.Of<IUserService>());
 
         var result = await appService.SearchAsync(Mock.Of<ComplaintSearchDto>(),
             paging, CancellationToken.None);
@@ -55,8 +55,8 @@ public class Search
                 It.IsAny<Expression<Func<Complaint, bool>>>(), CancellationToken.None))
             .ReturnsAsync(count);
         var appService = new ComplaintAppService(repoMock.Object, Mock.Of<IComplaintManager>(),
-            Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionRepository>(),
-            Mock.Of<IComplaintTransitionManager>(), AppServicesTestsGlobal.Mapper!, Mock.Of<IUserService>());
+            Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
+            AppServicesTestsGlobal.Mapper!, Mock.Of<IUserService>());
 
         var result = await appService.SearchAsync(Mock.Of<ComplaintSearchDto>(),
             paging, CancellationToken.None);

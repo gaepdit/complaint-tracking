@@ -2,7 +2,6 @@ using AutoMapper;
 using Cts.AppServices.Attachments;
 using Cts.AppServices.ComplaintActions;
 using Cts.AppServices.Complaints.Dto;
-using Cts.AppServices.ComplaintTransitions;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.ComplaintTransitions;
@@ -17,29 +16,21 @@ namespace Cts.AppServices.Complaints;
 public sealed class ComplaintAppService : IComplaintAppService
 {
     private readonly IComplaintRepository _complaints;
-    private readonly IComplaintManager _complaintManager;
+    private readonly IComplaintManager _manager;
     private readonly IConcernRepository _concerns;
     private readonly IOfficeRepository _offices;
-    private readonly IComplaintTransitionRepository _transitions;
-    private readonly IComplaintTransitionManager _transitionManager;
+    private readonly IComplaintTransitionManager _transitions;
     private readonly IMapper _mapper;
     private readonly IUserService _users;
 
-    public ComplaintAppService(IComplaintRepository complaints,
-        IComplaintManager complaintManager,
-        IConcernRepository concerns,
-        IOfficeRepository offices,
-        IComplaintTransitionRepository transitions,
-        IComplaintTransitionManager transitionManager,
-        IMapper mapper,
-        IUserService users)
+    public ComplaintAppService(IComplaintRepository complaints, IComplaintManager manager, IConcernRepository concerns,
+        IOfficeRepository offices, IComplaintTransitionManager transitions, IMapper mapper, IUserService users)
     {
         _complaints = complaints;
         _concerns = concerns;
         _offices = offices;
-        _complaintManager = complaintManager;
+        _manager = manager;
         _transitions = transitions;
-        _transitionManager = transitionManager;
         _mapper = mapper;
         _users = users;
     }
@@ -161,12 +152,12 @@ public sealed class ComplaintAppService : IComplaintAppService
 
     private async Task AddTransitionAsync(
         Complaint complaint, TransitionType type, ApplicationUser? user, CancellationToken token) =>
-        await _transitions.InsertAsync(_transitionManager.Create(complaint, type, user), autoSave: false, token);
+        await _complaints.InsertTransitionAsync(_transitions.Create(complaint, type, user), autoSave: false, token);
 
     internal async Task<Complaint> CreateComplaintFromDtoAsync(
         ComplaintCreateDto resource, string? currentUserId, CancellationToken token)
     {
-        var complaint = await _complaintManager.CreateNewComplaintAsync();
+        var complaint = await _manager.CreateNewComplaintAsync();
         complaint.SetCreator(currentUserId);
 
         // Properties: Meta-data
