@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 
 namespace Cts.LocalRepository.Repositories;
 
+/// <inheritdoc cref="IComplaintRepository" />
 public sealed class LocalComplaintRepository : BaseRepository<Complaint, int>, IComplaintRepository
 {
     internal ICollection<ComplaintAction> ComplaintActionItems { get; }
@@ -21,17 +22,24 @@ public sealed class LocalComplaintRepository : BaseRepository<Complaint, int>, I
     }
 
     public Task<IReadOnlyCollection<ComplaintAction>> GetComplaintActionsListAsync(
-        Expression<Func<ComplaintAction, bool>> predicate, CancellationToken token = default) =>
-        Task.FromResult(ComplaintActionItems.Where(predicate.Compile()).ToList()
-            as IReadOnlyCollection<ComplaintAction>);
+        Expression<Func<ComplaintAction, bool>> predicate, CancellationToken token = default) => Task.FromResult(
+        ComplaintActionItems
+            .Where(predicate.Compile())
+            .OrderBy(e => e.ActionDate)
+            .ToList() as IReadOnlyCollection<ComplaintAction>);
 
     public Task<IReadOnlyCollection<Attachment>> GetAttachmentsListAsync(
-        Expression<Func<Attachment, bool>> predicate, CancellationToken token = default) =>
-        Task.FromResult(AttachmentItems.Where(predicate.Compile()).ToList() as IReadOnlyCollection<Attachment>);
+        Expression<Func<Attachment, bool>> predicate, CancellationToken token = default) => Task.FromResult(
+        AttachmentItems
+            .Where(predicate.Compile())
+            .OrderBy(e => e.UploadedDate)
+            .ToList() as IReadOnlyCollection<Attachment>);
 
     public Task<IReadOnlyCollection<ComplaintTransition>> GetComplaintTransitionsListAsync(
-        int complaintId, CancellationToken token = default) =>
-        Task.FromResult(ComplaintTransitionItems.Where(e => e.Complaint.Id == complaintId)
+        int complaintId, CancellationToken token = default) => Task.FromResult(
+        ComplaintTransitionItems
+            .Where(e => e.Complaint.Id == complaintId)
+            .OrderBy(e => e.CommittedDate)
             .ToList() as IReadOnlyCollection<ComplaintTransition>);
 
     public Task<Attachment?> FindAttachmentAsync(Guid id, CancellationToken token = default) =>
@@ -39,4 +47,7 @@ public sealed class LocalComplaintRepository : BaseRepository<Complaint, int>, I
 
     // Local repository requires ID to be manually set.
     public Task<int?> GetNextIdAsync() => Task.FromResult(Items.Select(e => e.Id).Max() + 1 as int?);
+
+    // Local repository does not require changes to be explicitly saved.
+    public Task SaveChangesAsync(CancellationToken token = default) => Task.CompletedTask;
 }

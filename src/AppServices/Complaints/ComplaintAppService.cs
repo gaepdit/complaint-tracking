@@ -5,8 +5,10 @@ using Cts.AppServices.Complaints.Dto;
 using Cts.AppServices.ComplaintTransitions;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Complaints;
+using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
+using Cts.Domain.Identity;
 using GaEpd.AppLibrary.Pagination;
 using Microsoft.AspNetCore.Http;
 
@@ -15,17 +17,20 @@ namespace Cts.AppServices.Complaints;
 public sealed class ComplaintAppService : IComplaintAppService
 {
     private readonly IComplaintRepository _complaints;
+    private readonly IComplaintManager _complaintManager;
     private readonly IConcernRepository _concerns;
     private readonly IOfficeRepository _offices;
-    private readonly IComplaintManager _complaintManager;
+    private readonly IComplaintTransitionRepository _transitions;
+    private readonly IComplaintTransitionManager _transitionManager;
     private readonly IMapper _mapper;
     private readonly IUserService _users;
 
-    public ComplaintAppService(
-        IComplaintRepository complaints,
+    public ComplaintAppService(IComplaintRepository complaints,
+        IComplaintManager complaintManager,
         IConcernRepository concerns,
         IOfficeRepository offices,
-        IComplaintManager complaintManager,
+        IComplaintTransitionRepository transitions,
+        IComplaintTransitionManager transitionManager,
         IMapper mapper,
         IUserService users)
     {
@@ -33,6 +38,8 @@ public sealed class ComplaintAppService : IComplaintAppService
         _concerns = concerns;
         _offices = offices;
         _complaintManager = complaintManager;
+        _transitions = transitions;
+        _transitionManager = transitionManager;
         _mapper = mapper;
         _users = users;
     }
@@ -54,8 +61,8 @@ public sealed class ComplaintAppService : IComplaintAppService
             await _complaints.GetComplaintActionsListAsync(
                 ComplaintActionFilters.PublicIdPredicate(complaintId), token));
 
-    private async Task<IReadOnlyList<AttachmentPublicViewDto>> GetPublicAttachmentsAsync(int complaintId,
-        CancellationToken token = default) =>
+    private async Task<IReadOnlyList<AttachmentPublicViewDto>> GetPublicAttachmentsAsync(
+        int complaintId, CancellationToken token = default) =>
         _mapper.Map<IReadOnlyList<AttachmentPublicViewDto>>(
             await _complaints.GetAttachmentsListAsync(AttachmentFilters.PublicIdPredicate(complaintId), token));
 
@@ -63,9 +70,7 @@ public sealed class ComplaintAppService : IComplaintAppService
         await _complaints.ExistsAsync(ComplaintFilters.PublicIdPredicate(id), token);
 
     public async Task<IPaginatedResult<ComplaintSearchResultDto>> PublicSearchAsync(
-        ComplaintPublicSearchDto spec,
-        PaginatedRequest paging,
-        CancellationToken token = default)
+        ComplaintPublicSearchDto spec, PaginatedRequest paging, CancellationToken token = default)
     {
         var predicate = ComplaintFilters.PublicSearchPredicate(spec);
 
@@ -117,9 +122,7 @@ public sealed class ComplaintAppService : IComplaintAppService
         await _complaints.ExistsAsync(id, token);
 
     public async Task<IPaginatedResult<ComplaintSearchResultDto>> SearchAsync(
-        ComplaintSearchDto spec,
-        PaginatedRequest paging,
-        CancellationToken token = default)
+        ComplaintSearchDto spec, PaginatedRequest paging, CancellationToken token = default)
     {
         var predicate = ComplaintFilters.SearchPredicate(spec);
 
@@ -140,66 +143,82 @@ public sealed class ComplaintAppService : IComplaintAppService
 
     public async Task<int> CreateAsync(ComplaintCreateDto resource, CancellationToken token = default)
     {
-        var item = await CreateComplaintFromDtoAsync(resource, token);
+        var user = await _users.GetCurrentUserAsync();
+        var complaint = await CreateComplaintFromDtoAsync(resource, user?.Id, token);
+        await _complaints.InsertAsync(complaint, autoSave: false, token: token);
 
-        // TODO: Save transitions.
-        await _complaints.InsertAsync(item, autoSave: true, token: token);
-        return item.Id;
+        await AddTransitionAsync(complaint, TransitionType.New, user, token);
+
+        if (resource.CurrentOwnerId is not null)
+            await AddTransitionAsync(complaint, TransitionType.Assigned, user, token);
+
+        if (resource.CurrentOwnerId is not null && complaint.CurrentOwner == user)
+            await AddTransitionAsync(complaint, TransitionType.Accepted, user, token);
+
+        await _complaints.SaveChangesAsync(token);
+        return complaint.Id;
     }
 
-    internal async Task<Complaint> CreateComplaintFromDtoAsync(ComplaintCreateDto resource, CancellationToken token)
+    private async Task AddTransitionAsync(
+        Complaint complaint, TransitionType type, ApplicationUser? user, CancellationToken token) =>
+        await _transitions.InsertAsync(_transitionManager.Create(complaint, type, user), autoSave: false, token);
+
+    internal async Task<Complaint> CreateComplaintFromDtoAsync(
+        ComplaintCreateDto resource, string? currentUserId, CancellationToken token)
     {
-        var item = await _complaintManager.CreateNewComplaintAsync();
-        var currentUserId = (await _users.GetCurrentUserAsync())?.Id;
-        item.SetCreator(currentUserId);
+        var complaint = await _complaintManager.CreateNewComplaintAsync();
+        complaint.SetCreator(currentUserId);
 
         // Properties: Meta-data
         if (!string.IsNullOrEmpty(currentUserId))
-            item.EnteredBy = await _users.GetUserAsync(currentUserId);
-        item.ReceivedDate = DateTime.SpecifyKind(resource.ReceivedDate, DateTimeKind.Local)
+            complaint.EnteredBy = await _users.GetUserAsync(currentUserId);
+        complaint.ReceivedDate = DateTime.SpecifyKind(resource.ReceivedDate, DateTimeKind.Local)
             .Add(resource.ReceivedTime.TimeOfDay);
-        item.ReceivedBy = await _users.GetUserAsync(resource.ReceivedById!);
+        complaint.ReceivedBy = await _users.GetUserAsync(resource.ReceivedById!);
 
         // Properties: Caller
-        item.CallerName = resource.CallerName;
-        item.CallerRepresents = resource.CallerRepresents;
-        item.CallerAddress = resource.CallerAddress;
-        item.CallerPhoneNumber = resource.CallerPhoneNumber;
-        item.CallerSecondaryPhoneNumber = resource.CallerSecondaryPhoneNumber;
-        item.CallerTertiaryPhoneNumber = resource.CallerTertiaryPhoneNumber;
-        item.CallerEmail = resource.CallerEmail;
+        complaint.CallerName = resource.CallerName;
+        complaint.CallerRepresents = resource.CallerRepresents;
+        complaint.CallerAddress = resource.CallerAddress;
+        complaint.CallerPhoneNumber = resource.CallerPhoneNumber;
+        complaint.CallerSecondaryPhoneNumber = resource.CallerSecondaryPhoneNumber;
+        complaint.CallerTertiaryPhoneNumber = resource.CallerTertiaryPhoneNumber;
+        complaint.CallerEmail = resource.CallerEmail;
 
         // Properties: Complaint details
-        item.ComplaintNature = resource.ComplaintNature;
-        item.ComplaintLocation = resource.ComplaintLocation;
-        item.ComplaintDirections = resource.ComplaintDirections;
-        item.ComplaintCity = resource.ComplaintCity;
-        item.ComplaintCounty = resource.ComplaintCounty;
-        item.PrimaryConcern = await _concerns.GetAsync(resource.PrimaryConcernId, token);
-        item.SecondaryConcern = resource.SecondaryConcernId is null
-            ? null
-            : await _concerns.FindAsync(resource.SecondaryConcernId.Value, token);
+        complaint.ComplaintNature = resource.ComplaintNature;
+        complaint.ComplaintLocation = resource.ComplaintLocation;
+        complaint.ComplaintDirections = resource.ComplaintDirections;
+        complaint.ComplaintCity = resource.ComplaintCity;
+        complaint.ComplaintCounty = resource.ComplaintCounty;
+        complaint.PrimaryConcern = await _concerns.GetAsync(resource.PrimaryConcernId, token);
+        if (resource.SecondaryConcernId is not null)
+            complaint.SecondaryConcern = await _concerns.FindAsync(resource.SecondaryConcernId.Value, token);
 
         // Properties: Source
-        item.SourceFacilityIdNumber = resource.SourceFacilityIdNumber;
-        item.SourceFacilityName = resource.SourceFacilityName;
-        item.SourceContactName = resource.SourceContactName;
-        item.SourceAddress = resource.SourceAddress;
-        item.SourcePhoneNumber = resource.SourcePhoneNumber;
-        item.SourceSecondaryPhoneNumber = resource.SourceSecondaryPhoneNumber;
-        item.SourceTertiaryPhoneNumber = resource.SourceTertiaryPhoneNumber;
-        item.SourceEmail = resource.SourceEmail;
+        complaint.SourceFacilityIdNumber = resource.SourceFacilityIdNumber;
+        complaint.SourceFacilityName = resource.SourceFacilityName;
+        complaint.SourceContactName = resource.SourceContactName;
+        complaint.SourceAddress = resource.SourceAddress;
+        complaint.SourcePhoneNumber = resource.SourcePhoneNumber;
+        complaint.SourceSecondaryPhoneNumber = resource.SourceSecondaryPhoneNumber;
+        complaint.SourceTertiaryPhoneNumber = resource.SourceTertiaryPhoneNumber;
+        complaint.SourceEmail = resource.SourceEmail;
 
         // Properties: Assignment/History
-        item.CurrentOffice = await _offices.GetAsync(resource.CurrentOfficeId!.Value, token);
-        if (resource.CurrentOwnerId != null)
-        {
-            item.CurrentOwner = await _users.FindUserAsync(resource.CurrentOwnerId);
-            item.CurrentOwnerAssignedDate = DateTimeOffset.Now;
-            item.CurrentOwnerAcceptedDate = resource.CurrentOwnerId.Equals(currentUserId) ? DateTimeOffset.Now : null;
-        }
+        complaint.CurrentOffice = await _offices.GetAsync(resource.CurrentOfficeId!.Value, token);
 
-        return item;
+        if (resource.CurrentOwnerId == null) return complaint;
+
+        complaint.CurrentOwner = await _users.FindUserAsync(resource.CurrentOwnerId);
+        complaint.CurrentOwnerAssignedDate = DateTimeOffset.Now;
+
+        if (!resource.CurrentOwnerId.Equals(currentUserId)) return complaint;
+
+        complaint.CurrentOwnerAcceptedDate = DateTimeOffset.Now;
+        complaint.Status = ComplaintStatus.UnderInvestigation;
+
+        return complaint;
     }
 
     public Task SaveAttachmentAsync(IFormFile file, CancellationToken token = default)

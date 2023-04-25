@@ -3,6 +3,7 @@ using Cts.TestData;
 
 namespace Cts.LocalRepository.Repositories;
 
+/// <inheritdoc cref="IConcernRepository" />
 public sealed class LocalConcernRepository : BaseRepository<Concern, Guid>, IConcernRepository
 {
     public LocalConcernRepository() : base(ConcernData.GetConcerns) { }

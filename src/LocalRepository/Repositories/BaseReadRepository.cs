@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 
 namespace Cts.LocalRepository.Repositories;
 
+/// <inheritdoc />
 public abstract class BaseReadRepository<TEntity, TKey> : IReadRepository<TEntity, TKey>
     where TEntity : IEntity<TKey>
     where TKey : IEquatable<TKey>

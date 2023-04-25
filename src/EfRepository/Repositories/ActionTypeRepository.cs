@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cts.EfRepository.Repositories;
 
+/// <inheritdoc cref="IActionTypeRepository" />
 public sealed class ActionTypeRepository : BaseRepository<ActionType, Guid>, IActionTypeRepository
 {
     public ActionTypeRepository(AppDbContext dbContext) : base(dbContext) { }

@@ -6,12 +6,12 @@ namespace Cts.AppServices.ComplaintTransitions;
 
 public class ComplaintTransitionViewDto
 {
-    public TransitionType TransitionType { get; set; }
-    public DateTimeOffset TransferredDate { get; set; }
-    public StaffViewDto? CommittedByUser { get; set; }
-    public StaffViewDto? TransferredFromUser { get; set; }
-    public OfficeDisplayViewDto? TransferredFromOffice { get; set; }
-    public StaffViewDto? TransferredToUser { get; set; }
-    public OfficeDisplayViewDto? TransferredToOffice { get; set; }
-    public string? Comment { get; set; }
+    public TransitionType TransitionType { get; init; }
+    public DateTimeOffset CommittedDate { get; init; }
+    public StaffViewDto? CommittedByUser { get; init; }
+    public StaffViewDto? TransferredFromUser { get; init; }
+    public OfficeDisplayViewDto? TransferredFromOffice { get; init; }
+    public StaffViewDto? TransferredToUser { get; init; }
+    public OfficeDisplayViewDto? TransferredToOffice { get; init; }
+    public string? Comment { get; init; }
 }

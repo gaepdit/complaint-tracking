@@ -4,6 +4,7 @@ using Cts.AppServices.Concerns;
 using Cts.AppServices.Offices;
 using Cts.Domain.Entities.ActionTypes;
 using Cts.Domain.Entities.Complaints;
+using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +23,9 @@ public static class AppServices
         services.AddScoped<IComplaintManager, ComplaintManager>();
         services.AddScoped<IComplaintAppService, ComplaintAppService>();
 
+        // Complaint Transitions
+        services.AddScoped<IComplaintTransitionManager, ComplaintTransitionManager>();
+        
         // Concerns
         services.AddScoped<IConcernManager, ConcernManager>();
         services.AddScoped<IConcernAppService, ConcernAppService>();

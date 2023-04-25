@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cts.EfRepository.Repositories;
 
+/// <inheritdoc cref="IRepository{TEntity,TKey}"/> />
 public abstract class BaseRepository<TEntity, TKey> : 
     BaseReadRepository<TEntity, TKey>, IRepository<TEntity, TKey>
     where TEntity : class, IEntity<TKey>

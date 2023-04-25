@@ -14,7 +14,7 @@ public class ComplaintActionViewDto
     public DateTimeOffset EnteredDate { get; init; }
 
     [Display(Name = "Entered By")]
-    public StaffViewDto EnteredBy { get; set; } = default!;
+    public StaffViewDto EnteredBy { get; init; } = default!;
 
     public string? Comments { get; init; }
 }

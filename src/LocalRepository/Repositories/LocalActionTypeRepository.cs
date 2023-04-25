@@ -3,6 +3,7 @@ using Cts.TestData;
 
 namespace Cts.LocalRepository.Repositories;
 
+/// <inheritdoc cref="IActionTypeRepository" />
 public sealed class LocalActionTypeRepository : BaseRepository<ActionType, Guid>, IActionTypeRepository
 {
     public LocalActionTypeRepository() : base(ActionTypeData.GetActionTypes) { }

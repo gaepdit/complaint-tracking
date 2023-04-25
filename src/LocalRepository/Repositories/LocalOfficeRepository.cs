@@ -5,6 +5,7 @@ using Cts.TestData.Identity;
 
 namespace Cts.LocalRepository.Repositories;
 
+/// <inheritdoc cref="IOfficeRepository" />
 public sealed class LocalOfficeRepository : BaseRepository<Office, Guid>, IOfficeRepository
 {
     public LocalOfficeRepository() : base(OfficeData.GetOffices) { }

@@ -330,7 +330,7 @@ else
         @foreach (var item in Model.Item.ComplaintTransitions)
         {
             <tr>
-                <td>@Html.DisplayFor(m => item.TransferredDate, TemplateNames.ShortDateTime)</td>
+                <td>@Html.DisplayFor(m => item.CommittedDate, TemplateNames.ShortDateTime)</td>
                 <td>@Html.DisplayFor(m => item.CommittedByUser, TemplateNames.NameOrNotEntered)</td>
                 <td>@item.TransitionType.GetDisplayName()</td>
                 <td>
