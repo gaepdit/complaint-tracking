@@ -54,7 +54,4 @@ public sealed class LocalComplaintRepository : BaseRepository<Complaint, int>, I
 
     // Local repository requires ID to be manually set.
     public Task<int?> GetNextIdAsync() => Task.FromResult(Items.Select(e => e.Id).Max() + 1 as int?);
-
-    // Local repository does not require changes to be explicitly saved.
-    public Task SaveChangesAsync(CancellationToken token = default) => Task.CompletedTask;
 }

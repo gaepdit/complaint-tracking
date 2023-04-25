@@ -47,6 +47,4 @@ public class ComplaintRepository : BaseRepository<Complaint, int>, IComplaintRep
 
     // EF will set the ID automatically.
     public Task<int?> GetNextIdAsync() => Task.FromResult(null as int?);
-
-    public async Task SaveChangesAsync(CancellationToken token = default) => await Context.SaveChangesAsync(token);
 }
