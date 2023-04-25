@@ -3,6 +3,7 @@ using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Attachments;
 using Cts.Domain.Entities.ComplaintActions;
 using Cts.Domain.Entities.Complaints;
+using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
 using Cts.TestData;
@@ -31,13 +32,9 @@ public class Get
         repoMock.Setup(l =>
                 l.GetAttachmentsListAsync(It.IsAny<Expression<Func<Attachment, bool>>>(), CancellationToken.None))
             .ReturnsAsync(attachmentList);
-        var appService = new ComplaintAppService(
-            repoMock.Object,
-            Mock.Of<IConcernRepository>(),
-            Mock.Of<IOfficeRepository>(),
-            Mock.Of<IComplaintManager>(),
-            AppServicesTestsGlobal.Mapper!,
-            Mock.Of<IUserService>());
+        var appService = new ComplaintAppService(repoMock.Object, Mock.Of<IComplaintManager>(),
+            Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
+            AppServicesTestsGlobal.Mapper!, Mock.Of<IUserService>());
 
         var result = await appService.GetAsync(item.Id);
 
@@ -62,13 +59,9 @@ public class Get
         repoMock.Setup(l => l.GetAttachmentsListAsync(
                 It.IsAny<Expression<Func<Attachment, bool>>>(), CancellationToken.None))
             .ReturnsAsync(attachmentList);
-        var appService = new ComplaintAppService(
-            repoMock.Object,
-            Mock.Of<IConcernRepository>(),
-            Mock.Of<IOfficeRepository>(),
-            Mock.Of<IComplaintManager>(),
-            AppServicesTestsGlobal.Mapper!,
-            Mock.Of<IUserService>());
+        var appService = new ComplaintAppService(repoMock.Object, Mock.Of<IComplaintManager>(),
+            Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
+            AppServicesTestsGlobal.Mapper!, Mock.Of<IUserService>());
 
         var result = await appService.GetAsync(item.Id);
 
@@ -81,13 +74,9 @@ public class Get
         var repoMock = new Mock<IComplaintRepository>();
         repoMock.Setup(l => l.FindAsync(It.IsAny<int>(), CancellationToken.None))
             .ReturnsAsync((Complaint?)null);
-        var appService = new ComplaintAppService(
-            repoMock.Object,
-            Mock.Of<IConcernRepository>(),
-            Mock.Of<IOfficeRepository>(),
-            Mock.Of<IComplaintManager>(),
-            AppServicesTestsGlobal.Mapper!,
-            Mock.Of<IUserService>());
+        var appService = new ComplaintAppService(repoMock.Object, Mock.Of<IComplaintManager>(),
+            Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
+            AppServicesTestsGlobal.Mapper!, Mock.Of<IUserService>());
 
         var result = await appService.GetAsync(0);
 

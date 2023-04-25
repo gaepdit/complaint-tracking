@@ -1,6 +1,7 @@
 ﻿using Cts.AppServices.Complaints;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Complaints;
+using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
 
@@ -14,13 +15,9 @@ public class Exists
         var repoMock = new Mock<IComplaintRepository>();
         repoMock.Setup(l => l.ExistsAsync(It.IsAny<int>(), CancellationToken.None))
             .ReturnsAsync(true);
-        var appService = new ComplaintAppService(
-            repoMock.Object,
-            Mock.Of<IConcernRepository>(),
-            Mock.Of<IOfficeRepository>(),
-            Mock.Of<IComplaintManager>(),
-            AppServicesTestsGlobal.Mapper!,
-            Mock.Of<IUserService>());
+        var appService = new ComplaintAppService(repoMock.Object, Mock.Of<IComplaintManager>(),
+            Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
+            AppServicesTestsGlobal.Mapper!, Mock.Of<IUserService>());
 
         var result = await appService.ExistsAsync(0);
 
@@ -33,13 +30,9 @@ public class Exists
         var repoMock = new Mock<IComplaintRepository>();
         repoMock.Setup(l => l.ExistsAsync(It.IsAny<int>(), CancellationToken.None))
             .ReturnsAsync(false);
-        var appService = new ComplaintAppService(
-            repoMock.Object,
-            Mock.Of<IConcernRepository>(),
-            Mock.Of<IOfficeRepository>(),
-            Mock.Of<IComplaintManager>(),
-            AppServicesTestsGlobal.Mapper!,
-            Mock.Of<IUserService>());
+        var appService = new ComplaintAppService(repoMock.Object, Mock.Of<IComplaintManager>(),
+            Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
+            AppServicesTestsGlobal.Mapper!, Mock.Of<IUserService>());
 
         var result = await appService.ExistsAsync(0);
 

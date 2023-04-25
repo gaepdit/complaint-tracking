@@ -3,7 +3,8 @@ using GaEpd.AppLibrary.Domain.Repositories;
 
 namespace Cts.LocalRepository.Repositories;
 
-public abstract class BaseRepository<TEntity, TKey> : 
+/// <inheritdoc cref="IRepository{TEntity,TKey}"/>
+public abstract class BaseRepository<TEntity, TKey> :
     BaseReadRepository<TEntity, TKey>, IRepository<TEntity, TKey>
     where TEntity : IEntity<TKey>
     where TKey : IEquatable<TKey>
@@ -25,4 +26,7 @@ public abstract class BaseRepository<TEntity, TKey> :
 
     public async Task DeleteAsync(TEntity entity, bool autoSave = true, CancellationToken token = default) =>
         Items.Remove(await GetAsync(entity.Id, token));
+
+    // Local repository does not require changes to be explicitly saved.
+    public Task SaveChangesAsync(CancellationToken token = default) => Task.CompletedTask;
 }

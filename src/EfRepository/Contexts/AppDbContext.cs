@@ -9,6 +9,7 @@ using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Cts.EfRepository.Contexts;
 
@@ -31,10 +32,11 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         base.OnModelCreating(builder);
 
+        // Auto-includes
         // See https://learn.microsoft.com/en-us/ef/core/querying/related-data/eager#model-configuration-for-auto-including-navigations
         builder.Entity<ApplicationUser>().Navigation(e => e.Office).AutoInclude();
         builder.Entity<Attachment>().Navigation(e => e.UploadedBy).AutoInclude();
-        
+
         var complaint = builder.Entity<Complaint>();
         complaint.Navigation(e => e.PrimaryConcern).AutoInclude();
         complaint.Navigation(e => e.SecondaryConcern).AutoInclude();
@@ -55,6 +57,18 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
         transition.Navigation(e => e.TransferredFromUser).AutoInclude();
         transition.Navigation(e => e.TransferredToOffice).AutoInclude();
         transition.Navigation(e => e.TransferredToUser).AutoInclude();
+
+        // Handling DateTimeOffset in SQLite with Entity Framework Core
+        // https://blog.dangl.me/archive/handling-datetimeoffset-in-sqlite-with-entity-framework-core/
+        if (Database.ProviderName != "Microsoft.EntityFrameworkCore.Sqlite") return;
+        foreach (var entityType in builder.Model.GetEntityTypes())
+        {
+            var dateTimeOffsetProperties = entityType.ClrType.GetProperties()
+                .Where(p => p.PropertyType == typeof(DateTimeOffset) || p.PropertyType == typeof(DateTimeOffset?));
+            foreach (var property in dateTimeOffsetProperties)
+                builder.Entity(entityType.Name).Property(property.Name)
+                    .HasConversion(new DateTimeOffsetToBinaryConverter());
+        }
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

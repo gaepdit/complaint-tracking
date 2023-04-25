@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 
 namespace Cts.EfRepository.Repositories;
 
+/// <inheritdoc />
 public abstract class BaseReadRepository<TEntity, TKey> : IReadRepository<TEntity, TKey>
     where TEntity : class, IEntity<TKey>
     where TKey : IEquatable<TKey>

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cts.EfRepository.Repositories;
 
+/// <inheritdoc cref="IUserRepository" />
 public sealed class UserRepository : BaseReadRepository<ApplicationUser, string>, IUserRepository
 {
     public UserRepository(AppDbContext dbContext) : base(dbContext) { }

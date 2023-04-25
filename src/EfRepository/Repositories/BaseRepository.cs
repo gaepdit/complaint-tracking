@@ -5,7 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cts.EfRepository.Repositories;
 
-public abstract class BaseRepository<TEntity, TKey> : 
+/// <inheritdoc cref="IRepository{TEntity,TKey}"/> />
+public abstract class BaseRepository<TEntity, TKey> :
     BaseReadRepository<TEntity, TKey>, IRepository<TEntity, TKey>
     where TEntity : class, IEntity<TKey>
     where TKey : IEquatable<TKey>
@@ -52,4 +53,6 @@ public abstract class BaseRepository<TEntity, TKey> :
             throw;
         }
     }
+
+    public async Task SaveChangesAsync(CancellationToken token = default) => await Context.SaveChangesAsync(token);
 }

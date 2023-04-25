@@ -105,12 +105,9 @@ public class Complaint : AuditableSoftDeleteEntity<int>
     public DateTimeOffset? CurrentOwnerAcceptedDate { get; set; }
 
     // Properties: Transitions
-    
-    public Guid? CurrentAssignmentTransitionId { get; set; }
     public List<ComplaintTransition> ComplaintTransitions { get; set; } = new();
 
     // Properties: Actions
-
     public List<ComplaintAction> ComplaintActions { get; set; } = new();
 
     // Properties: Review/Closure
@@ -129,7 +126,6 @@ public class Complaint : AuditableSoftDeleteEntity<int>
     public string? DeleteComments { get; set; }
 
     // Properties: Attachments
-
     public List<Attachment> Attachments { get; set; } = new();
 
     // Methods

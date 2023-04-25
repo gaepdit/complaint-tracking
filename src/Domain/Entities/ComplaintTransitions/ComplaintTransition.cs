@@ -15,55 +15,55 @@ public class ComplaintTransition : AuditableEntity
 
     internal ComplaintTransition(Guid id) : base(id) { }
 
+    internal ComplaintTransition(Guid id, Complaint complaint, TransitionType type, ApplicationUser? user) : base(id)
+    {
+        Complaint = complaint;
+        TransitionType = type;
+        CommittedByUser = user;
+    }
+
     // Properties
 
     public Complaint Complaint { get; init; } = default!;
 
-    public TransitionType TransitionType { get; init; } = TransitionType.New;
+    public TransitionType TransitionType { get; init; }
 
-    public DateTimeOffset TransferredDate { get; init; } = DateTimeOffset.Now;
+    public DateTimeOffset CommittedDate { get; init; } = DateTimeOffset.Now;
 
     public ApplicationUser? CommittedByUser { get; init; }
 
-    public ApplicationUser? TransferredFromUser { get; init; }
+    public ApplicationUser? TransferredFromUser { get; set; }
 
-    public Office? TransferredFromOffice { get; init; }
+    public Office? TransferredFromOffice { get; set; }
 
-    public ApplicationUser? TransferredToUser { get; init; }
+    public ApplicationUser? TransferredToUser { get; set; }
 
-    public Office? TransferredToOffice { get; init; }
+    public Office? TransferredToOffice { get; set; }
 
     [StringLength(4000)]
-    public string? Comment { get; init; }
+    public string? Comment { get; set; }
 }
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum TransitionType
 {
-    [Display(Name = "New")] 
-    New = 0,
+    [Display(Name = "New")] New = 0,
 
-    [Display(Name = "Assigned")]
-    Assigned = 1,
+    [Display(Name = "Assigned")] Assigned = 1,
 
     [Display(Name = "Submitted For Review")]
     SubmittedForReview = 2,
 
     [Display(Name = "Returned By Reviewer")]
     ReturnedByReviewer = 3,
-    
-    [Display(Name = "Closed")] 
-    Closed = 4,
 
-    [Display(Name = "Reopened")] 
-    Reopened = 5,
-    
-    [Display(Name = "Deleted")] 
-    Deleted = 6,
-    
-    [Display(Name = "Restored")] 
-    Restored = 7,
+    [Display(Name = "Closed")] Closed = 4,
 
-    [Display(Name = "Accepted")] 
-    Accepted = 8,
+    [Display(Name = "Reopened")] Reopened = 5,
+
+    [Display(Name = "Deleted")] Deleted = 6,
+
+    [Display(Name = "Restored")] Restored = 7,
+
+    [Display(Name = "Accepted")] Accepted = 8,
 }

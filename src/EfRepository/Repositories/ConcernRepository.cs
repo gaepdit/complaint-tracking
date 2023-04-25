@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cts.EfRepository.Repositories;
 
+/// <inheritdoc cref="IConcernRepository" />
 public sealed class ConcernRepository : BaseRepository<Concern, Guid>, IConcernRepository
 {
     public ConcernRepository(AppDbContext dbContext) : base(dbContext) { }

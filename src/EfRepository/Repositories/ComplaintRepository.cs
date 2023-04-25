@@ -8,6 +8,7 @@ using System.Linq.Expressions;
 
 namespace Cts.EfRepository.Repositories;
 
+/// <inheritdoc cref="IComplaintRepository" />
 public class ComplaintRepository : BaseRepository<Complaint, int>, IComplaintRepository
 {
     public ComplaintRepository(AppDbContext context) : base(context) { }
@@ -15,17 +16,30 @@ public class ComplaintRepository : BaseRepository<Complaint, int>, IComplaintRep
     public async Task<IReadOnlyCollection<ComplaintAction>> GetComplaintActionsListAsync(
         Expression<Func<ComplaintAction, bool>> predicate, CancellationToken token = default) =>
         await Context.ComplaintActions.AsNoTracking()
-            .Where(predicate).ToListAsync(token);
+            .Where(predicate)
+            .OrderBy(e => e.ActionDate)
+            .ToListAsync(token);
 
     public async Task<IReadOnlyCollection<Attachment>> GetAttachmentsListAsync(
         Expression<Func<Attachment, bool>> predicate, CancellationToken token = default) =>
         await Context.Attachments.AsNoTracking()
-            .Where(predicate).ToListAsync(token);
+            .Where(predicate)
+            .OrderBy(e => e.UploadedDate)
+            .ToListAsync(token);
 
     public async Task<IReadOnlyCollection<ComplaintTransition>> GetComplaintTransitionsListAsync(
         int complaintId, CancellationToken token = default) =>
         await Context.ComplaintTransitions.AsNoTracking()
-            .Where(e => e.Complaint.Id == complaintId).ToListAsync(token);
+            .Where(e => e.Complaint.Id == complaintId)
+            .OrderBy(e => e.CommittedDate)
+            .ToListAsync(token);
+
+    public async Task InsertTransitionAsync(
+        ComplaintTransition transition, bool autoSave = true, CancellationToken token = default)
+    {
+        await Context.Set<ComplaintTransition>().AddAsync(transition, token);
+        if (autoSave) await Context.SaveChangesAsync(token);
+    }
 
     public async Task<Attachment?> FindAttachmentAsync(Guid id, CancellationToken token = default) =>
         await Context.Attachments
