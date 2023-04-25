@@ -1,10 +1,20 @@
-﻿using System.Diagnostics;
+﻿using FluentAssertions.Extensions;
+using System.Diagnostics;
 
 namespace EfRepositoryTests;
 
 [SetUpFixture]
 public class EfRepositoryTestsSetup
 {
+    [OneTimeSetUp]
+    public void RunBeforeAllTests()
+    {
+        AssertionOptions.AssertEquivalencyUsing(options => options
+            .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, 1.Milliseconds()))
+            .WhenTypeIs<DateTimeOffset>()
+        );
+    }
+
     [OneTimeTearDown]
     public void RunAfterAllTests()
     {
