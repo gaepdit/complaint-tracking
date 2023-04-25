@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "{handler?}"
 @using Cts.AppServices.Staff
 @using Cts.WebApp.Pages.Shared.DisplayTemplates;
 @using Cts.WebApp.Platform.Constants
@@ -14,7 +14,7 @@
 <h1>@ViewData["Title"]</h1>
 
 <div class="p-3 rounded-3 bg-light">
-    <form method="get" asp-fragment="SearchResults">
+    <form method="get" asp-page-handler="Search" asp-fragment="SearchResults">
         <div class="row">
             <div class="col-md mb-3">
                 <div class="form-floating">
@@ -55,7 +55,6 @@
             </div>
         </div>
         <div class="mt-3 mb-1">
-            <input type="hidden" name="handler" value="search" />
             <button id="SearchButton" type="submit" class="btn btn-primary col-sm-3 me-2">Search</button>
             <a asp-page="Index" class="btn btn-outline-secondary col-sm-3 col-md-2">Clear Form</a>
         </div>
