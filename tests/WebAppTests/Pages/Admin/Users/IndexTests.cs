@@ -1,8 +1,10 @@
 using Cts.AppServices.Offices;
 using Cts.AppServices.Staff;
+using Cts.AppServices.Staff.Dto;
 using Cts.WebApp.Pages.Admin.Users;
 using FluentAssertions.Execution;
 using GaEpd.AppLibrary.ListItems;
+using GaEpd.AppLibrary.Pagination;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace WebAppTests.Pages.Admin.Users;
@@ -12,22 +14,31 @@ public class IndexTests
     [Test]
     public async Task OnSearch_IfValidModel_ReturnsPage()
     {
+        // Arrange
         var officeServiceMock = new Mock<IOfficeAppService>();
         officeServiceMock.Setup(l => l.GetActiveListItemsAsync(CancellationToken.None))
             .ReturnsAsync(new List<ListItem>());
+
+        var paging = new PaginatedRequest(1, 1);
+        var output = new PaginatedResult<StaffSearchResultDto>(new List<StaffSearchResultDto>(), 1, paging);
         var staffServiceMock = new Mock<IStaffAppService>();
-        staffServiceMock.Setup(l => l.GetListAsync(It.IsAny<StaffSearchDto>()))
-            .ReturnsAsync(new List<StaffViewDto>());
+        staffServiceMock.Setup(l =>
+                l.SearchAsync(It.IsAny<StaffSearchDto>(), It.IsAny<PaginatedRequest>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(output);
+
         var page = new IndexModel(officeServiceMock.Object, staffServiceMock.Object)
             { TempData = WebAppTestsSetup.PageTempData() };
 
+        // Act
         var result = await page.OnGetSearchAsync(new StaffSearchDto());
 
+        // Assert
         using (new AssertionScope())
         {
             result.Should().BeOfType<PageResult>();
             page.ModelState.IsValid.Should().BeTrue();
-            page.SearchResults.Should().BeEmpty();
+            page.SearchResults.Should().Be(output);
+            page.SearchResults.Items.Should().BeEmpty();
             page.ShowResults.Should().BeTrue();
             page.HighlightId.Should().BeNull();
         }

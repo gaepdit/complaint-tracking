@@ -1,4 +1,5 @@
 using Cts.AppServices.Staff;
+using Cts.AppServices.Staff.Dto;
 using System.ComponentModel.DataAnnotations;
 
 namespace Cts.AppServices.ComplaintActions;

@@ -1,4 +1,4 @@
-﻿using FluentAssertions.Extensions;
+using FluentAssertions.Extensions;
 using System.Diagnostics;
 
 namespace EfRepositoryTests;
@@ -10,6 +10,7 @@ public class EfRepositoryTestsSetup
     public void RunBeforeAllTests()
     {
         AssertionOptions.AssertEquivalencyUsing(opts => opts
+            // DateTimeOffset comparison is often off by a few microseconds.
             .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, 1.Milliseconds()))
             .WhenTypeIs<DateTimeOffset>()
         );

@@ -37,7 +37,7 @@ public class IndexModel : PageModel
 
     public ComplaintPublicSearchDto Spec { get; set; } = default!;
     public bool ShowResults { get; private set; }
-    public IPaginatedResult<ComplaintSearchResultDto> Results { get; private set; } = default!;
+    public IPaginatedResult<ComplaintSearchResultDto> SearchResults { get; private set; } = default!;
     public string SortByName => Spec.Sort.ToString();
 
     // Select lists
@@ -80,7 +80,7 @@ public class IndexModel : PageModel
         ShowResults = true;
 
         await PopulateSelectListsAsync();
-        Results = await _complaints.PublicSearchAsync(spec, paging);
+        SearchResults = await _complaints.PublicSearchAsync(spec, paging);
         return Page();
     }
 

@@ -15,6 +15,10 @@
         <em class="text-warning">Inactive:</em>
     }
     @Model.DisplayStaff.Name
+    @if (Model.DisplayStaff.Email.Equals(User.Identity?.Name))
+    {
+        <a asp-page="/Account/Index"><span class="badge text-bg-info">YOU</span></a>
+    }
 </h2>
 
 @if (Model.IsUserAdministrator)

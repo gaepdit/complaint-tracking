@@ -7,7 +7,6 @@ public class ComplaintPublicSearchDto
     // Sorting
 
     public SortBy Sort { get; init; } = SortBy.IdAsc;
-    public string SortByName() => Sort.ToString();
 
     // Dates
 

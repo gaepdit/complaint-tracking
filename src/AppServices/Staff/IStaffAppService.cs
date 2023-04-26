@@ -1,5 +1,7 @@
-﻿using Cts.Domain.Identity;
+﻿using Cts.AppServices.Staff.Dto;
+using Cts.Domain.Identity;
 using GaEpd.AppLibrary.ListItems;
+using GaEpd.AppLibrary.Pagination;
 using Microsoft.AspNetCore.Identity;
 
 namespace Cts.AppServices.Staff;
@@ -8,9 +10,12 @@ public interface IStaffAppService : IDisposable
 {
     Task<StaffViewDto> GetCurrentUserAsync();
     Task<StaffViewDto?> FindCurrentUserAsync();
-    Task<StaffViewDto> GetAsync(string id);
     Task<StaffViewDto?> FindAsync(string id);
-    Task<List<StaffViewDto>> GetListAsync(StaffSearchDto filter);
+    Task<List<StaffViewDto>> GetListAsync(StaffSearchDto spec);
+
+    Task<IPaginatedResult<StaffSearchResultDto>> SearchAsync(
+        StaffSearchDto spec, PaginatedRequest paging, CancellationToken token = default);
+
     Task<IReadOnlyList<ListItem<string>>> GetStaffListItemsAsync(bool activeOnly);
     Task<IList<string>> GetRolesAsync(string id);
     Task<IList<AppRole>> GetAppRolesAsync(string id);

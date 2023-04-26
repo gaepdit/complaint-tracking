@@ -1,4 +1,5 @@
-﻿using Cts.Domain.Identity;
+﻿using Cts.AppServices.Staff.Dto;
+using Cts.Domain.Identity;
 using FluentValidation;
 
 namespace Cts.AppServices.Staff.Validators;

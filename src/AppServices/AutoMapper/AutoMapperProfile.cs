@@ -6,6 +6,7 @@ using Cts.AppServices.Complaints.Dto;
 using Cts.AppServices.Concerns;
 using Cts.AppServices.Offices;
 using Cts.AppServices.Staff;
+using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Entities.ActionTypes;
 using Cts.Domain.Entities.Attachments;
 using Cts.Domain.Entities.ComplaintActions;
@@ -26,6 +27,7 @@ public class AutoMapperProfile : Profile
 
         CreateMap<ApplicationUser, StaffViewDto>();
         CreateMap<ApplicationUser, StaffUpdateDto>();
+        CreateMap<ApplicationUser, StaffSearchResultDto>();
 
         CreateMap<Attachment, AttachmentPublicViewDto>();
         CreateMap<Attachment, AttachmentViewDto>();

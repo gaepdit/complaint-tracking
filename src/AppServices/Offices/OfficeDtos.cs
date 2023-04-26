@@ -1,5 +1,6 @@
 ﻿using Cts.AppServices.BaseDto;
 using Cts.AppServices.Staff;
+using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Entities.Offices;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;

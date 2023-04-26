@@ -2,6 +2,7 @@
 using Cts.AppServices.ComplaintActions;
 using Cts.AppServices.Offices;
 using Cts.AppServices.Staff;
+using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.ValueObjects;
 using System.ComponentModel.DataAnnotations;

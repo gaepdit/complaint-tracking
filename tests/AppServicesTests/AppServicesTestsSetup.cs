@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Cts.AppServices.AutoMapper;
 using FluentAssertions.Extensions;
 
@@ -17,11 +17,11 @@ public class AppServicesTestsSetup
         MapperConfig = new MapperConfiguration(c => c.AddProfile(new AutoMapperProfile()));
         Mapper = MapperConfig.CreateMapper();
 
-        // Setting this option globally since our DTOs generally exclude properties, e.g., audit properties.
-        // See https://fluentassertions.com/objectgraphs/#global-configuration
-        // and https://fluentassertions.com/objectgraphs/#matching-members
         AssertionOptions.AssertEquivalencyUsing(opts =>
+            // Setting this option globally since our DTOs generally exclude properties, e.g., audit properties.
+            // and https://fluentassertions.com/objectgraphs/#matching-members
             opts.ExcludingMissingMembers()
+                // DateTimeOffset comparison is often off by a few microseconds.
                 .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, 1.Milliseconds()))
                 .WhenTypeIs<DateTimeOffset>()
         );

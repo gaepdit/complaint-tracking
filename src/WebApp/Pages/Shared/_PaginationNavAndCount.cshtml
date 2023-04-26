@@ -1,0 +1,14 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model (GaEpd.AppLibrary.Pagination.IPaginatedResult Paging, IDictionary<string, string> RouteValues)
+
+<div class="container px-0">
+    <div class="row">
+        <div class="small col-md">
+            <partial name="_PaginationCount" model="Model.Paging" />
+        </div>
+        <div class="col-md mt-3 mt-md-0">
+            <partial name="_PaginationNav" model="(Model.Paging, Model.RouteValues)" />
+        </div>
+        <div class="col-md"></div>
+    </div>
+</div>

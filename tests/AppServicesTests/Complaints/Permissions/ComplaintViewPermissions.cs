@@ -1,6 +1,7 @@
 ﻿using Cts.AppServices.Complaints.Dto;
 using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Staff;
+using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
