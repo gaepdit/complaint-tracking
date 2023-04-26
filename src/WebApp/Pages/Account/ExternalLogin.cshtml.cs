@@ -17,9 +17,7 @@ namespace Cts.WebApp.Pages.Account;
 [AllowAnonymous]
 public class ExternalLoginModel : PageModel
 {
-    public ApplicationUser? DisplayFailedUser { get; private set; }
-    public string ReturnUrl { get; private set; } = "/";
-
+    // Constructor
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IConfiguration _configuration;
@@ -40,10 +38,16 @@ public class ExternalLoginModel : PageModel
         _logger = logger;
     }
 
+    // Properties
+    public ApplicationUser? DisplayFailedUser { get; private set; }
+    public string ReturnUrl { get; private set; } = "/";
+
+    // Methods
+
     // Don't call the page directly
     public IActionResult OnGet() => RedirectToPage("./Login");
 
-    // This Post method is called by the Login page
+    // This Post method is called from the Login page
     public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
     {
         ReturnUrl = returnUrl ?? "/";

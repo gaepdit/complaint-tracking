@@ -12,15 +12,19 @@ namespace Cts.WebApp.Pages.Admin.Users;
 [Authorize(Policy = PolicyName.UserAdministrator)]
 public class EditRolesModel : PageModel
 {
+    // Constructor
     private readonly IStaffAppService _staffService;
     private readonly IAuthorizationService _authorization;
 
-    public EditRolesModel(IStaffAppService staffService, IAuthorizationService authorization)
+    public EditRolesModel(
+        IStaffAppService staffService,
+        IAuthorizationService authorization)
     {
         _staffService = staffService;
         _authorization = authorization;
     }
 
+    // Properties
     [BindProperty]
     public string UserId { get; set; } = string.Empty;
 
@@ -31,6 +35,7 @@ public class EditRolesModel : PageModel
     public string? OfficeName => DisplayStaff.Office?.Name;
     public bool CanEditDivisionManager { get; private set; }
 
+    // Methods
     public async Task<IActionResult> OnGetAsync(string? id)
     {
         if (id is null) return RedirectToPage("Index");

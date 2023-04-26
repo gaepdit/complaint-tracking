@@ -18,20 +18,7 @@ namespace Cts.WebApp.Pages.Admin.Complaints;
 [Authorize]
 public class AddModel : PageModel
 {
-    // Properties
-    [BindProperty]
-    public ComplaintCreateDto Item { get; set; } = default!;
-
-    // Select lists
-    public SelectList ConcernsSelectList { get; private set; } = default!;
-    public SelectList OfficesSelectList { get; private set; } = default!;
-    public SelectList AllStaffSelectList { get; private set; } = default!;
-    public SelectList StaffInOfficeSelectList { get; private set; } = default!;
-
-    public SelectList StatesSelectList => new(Data.States);
-    public SelectList CountiesSelectList => new(Data.Counties);
-
-    // Services
+    // Constructor
     private readonly IComplaintAppService _complaints;
     private readonly IStaffAppService _staff;
     private readonly IConcernAppService _concerns;
@@ -52,6 +39,20 @@ public class AddModel : PageModel
         _validator = validator;
     }
 
+    // Properties
+    [BindProperty]
+    public ComplaintCreateDto Item { get; set; } = default!;
+
+    // Select lists
+    public SelectList ConcernsSelectList { get; private set; } = default!;
+    public SelectList OfficesSelectList { get; private set; } = default!;
+    public SelectList AllStaffSelectList { get; private set; } = default!;
+    public SelectList StaffInOfficeSelectList { get; private set; } = default!;
+
+    public SelectList StatesSelectList => new(Data.States);
+    public SelectList CountiesSelectList => new(Data.Counties);
+
+    // Methods
     public async Task OnGetAsync()
     {
         var user = await _staff.GetCurrentUserAsync();

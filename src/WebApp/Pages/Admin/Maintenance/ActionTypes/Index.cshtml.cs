@@ -16,7 +16,8 @@ public class IndexModel : PageModel
     [TempData]
     public Guid? HighlightId { get; set; }
 
-    public async Task OnGetAsync([FromServices] IActionTypeAppService service,
+    public async Task OnGetAsync(
+        [FromServices] IActionTypeAppService service,
         [FromServices] IAuthorizationService authorization)
     {
         Items = await service.GetListAsync();

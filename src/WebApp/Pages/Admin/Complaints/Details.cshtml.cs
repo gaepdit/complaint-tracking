@@ -11,11 +11,7 @@ namespace Cts.WebApp.Pages.Admin.Complaints;
 [Authorize]
 public class DetailsModel : PageModel
 {
-    // Properties
-    public ComplaintViewDto Item { get; private set; } = default!;
-    public Dictionary<IAuthorizationRequirement, bool> UserCan { get; set; } = new();
-
-    // Services
+    // Constructor
     private readonly IComplaintAppService _complaints;
     private readonly IStaffAppService _staff;
     private readonly IAuthorizationService _authorization;
@@ -30,6 +26,11 @@ public class DetailsModel : PageModel
         _authorization = authorization;
     }
 
+    // Properties
+    public ComplaintViewDto Item { get; private set; } = default!;
+    public Dictionary<IAuthorizationRequirement, bool> UserCan { get; set; } = new();
+
+    // Methods
     public async Task<IActionResult> OnGetAsync(int? id)
     {
         var staff = await _staff.GetCurrentUserAsync();

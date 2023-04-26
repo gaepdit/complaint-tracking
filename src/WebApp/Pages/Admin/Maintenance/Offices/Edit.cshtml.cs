@@ -15,6 +15,7 @@ namespace Cts.WebApp.Pages.Admin.Maintenance.Offices;
 [Authorize(Policy = PolicyName.SiteMaintainer)]
 public class EditModel : PageModel
 {
+    // Constructor
     private readonly IOfficeAppService _officeService;
     private readonly IStaffAppService _staffService;
     private readonly IValidator<OfficeUpdateDto> _validator;
@@ -29,19 +30,22 @@ public class EditModel : PageModel
         _validator = validator;
     }
 
+    // Properties
     [BindProperty]
     public OfficeUpdateDto Item { get; set; } = default!;
 
     [BindProperty]
     public string OriginalName { get; set; } = string.Empty;
 
-    public SelectList ActiveStaffMembers { get; private set; } = default!;
-
     [TempData]
     public Guid HighlightId { get; set; }
 
     public static MaintenanceOption ThisOption => MaintenanceOption.Office;
+    
+    // Select lists
+    public SelectList ActiveStaffMembers { get; private set; } = default!;
 
+    // Methods
     public async Task<IActionResult> OnGetAsync(Guid? id)
     {
         if (id is null) return RedirectToPage("Index");

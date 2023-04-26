@@ -11,14 +11,22 @@ namespace Cts.WebApp.Pages;
 [AllowAnonymous]
 public class ErrorModel : PageModel
 {
-    public int? Status { get; private set; }
-
     private readonly ILogger<ErrorModel> _logger;
     public ErrorModel(ILogger<ErrorModel> logger) => _logger = logger;
 
+    public int? Status { get; private set; }
+
     public void OnGet(int? statusCode)
     {
-        _logger.LogWarning("Error page Get method accessed {StatusCode}", statusCode);
+        if (statusCode is null)
+        {
+            _logger.LogError("Error page shown from Get method");
+        }
+        else
+        {
+            _logger.LogError("Error page shown from Get method with status code {StatusCode}", statusCode);
+        }
+
         Status = statusCode;
     }
 

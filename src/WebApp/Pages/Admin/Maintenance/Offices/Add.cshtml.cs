@@ -15,6 +15,7 @@ namespace Cts.WebApp.Pages.Admin.Maintenance.Offices;
 [Authorize(Policy = PolicyName.SiteMaintainer)]
 public class AddModel : PageModel
 {
+    // Constructor
     private readonly IOfficeAppService _officeService;
     private readonly IStaffAppService _staffService;
     private readonly IValidator<OfficeCreateDto> _validator;
@@ -29,16 +30,19 @@ public class AddModel : PageModel
         _validator = validator;
     }
 
+    // Properties
     [BindProperty]
     public OfficeCreateDto Item { get; set; } = default!;
-
-    public SelectList ActiveStaffMembers { get; private set; } = default!;
 
     [TempData]
     public Guid HighlightId { get; set; }
 
     public static MaintenanceOption ThisOption => MaintenanceOption.Office;
 
+    // Select lists
+    public SelectList ActiveStaffMembers { get; private set; } = default!;
+
+    // Methods
     public async Task<IActionResult> OnGetAsync()
     {
         await PopulateSelectListsAsync();

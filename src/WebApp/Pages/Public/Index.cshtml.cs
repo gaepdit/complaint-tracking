@@ -17,6 +17,18 @@ namespace Cts.WebApp.Pages.Public;
 [AllowAnonymous]
 public class IndexModel : PageModel
 {
+    // Constructor
+    private readonly IComplaintAppService _complaints;
+    private readonly IConcernAppService _concerns;
+
+    public IndexModel(
+        IComplaintAppService complaints,
+        IConcernAppService concerns)
+    {
+        _complaints = complaints;
+        _concerns = concerns;
+    }
+
     // Properties
     [BindProperty]
     [Required(ErrorMessage = "Please enter a complaint ID.")]
@@ -28,21 +40,12 @@ public class IndexModel : PageModel
     public IPaginatedResult<ComplaintSearchResultDto> Results { get; private set; } = default!;
     public string SortByName => Spec.Sort.ToString();
 
-    // Select Lists
+    // Select lists
     public SelectList ConcernsSelectList { get; private set; } = default!;
     public SelectList CountiesSelectList => new(Data.Counties);
     public SelectList StatesSelectList => new(Data.States);
 
-    // Services
-    private readonly IComplaintAppService _complaints;
-    private readonly IConcernAppService _concerns;
-
-    public IndexModel(IComplaintAppService complaints, IConcernAppService concerns)
-    {
-        _complaints = complaints;
-        _concerns = concerns;
-    }
-
+    // Methods
     public Task OnGetAsync()
     {
         Spec = new ComplaintPublicSearchDto();

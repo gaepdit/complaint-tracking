@@ -18,22 +18,7 @@ namespace Cts.WebApp.Pages.Admin.Complaints;
 [Authorize]
 public class IndexModel : PageModel
 {
-    // Properties
-    public ComplaintSearchDto Spec { get; set; } = default!;
-    public bool ShowResults { get; private set; }
-    public IPaginatedResult<ComplaintSearchResultDto> Results { get; private set; } = default!;
-    public string SortByName => Spec.Sort.ToString();
-
-    // Select Lists
-    public SelectList ReceivedBySelectList { get; private set; } = default!;
-    public SelectList ConcernsSelectList { get; private set; } = default!;
-    public SelectList OfficesSelectList { get; set; } = default!;
-    public SelectList AssignedToSelectList { get; set; } = default!;
-
-    public SelectList CountiesSelectList => new(Data.Counties);
-    public SelectList StatesSelectList => new(Data.States);
-
-    // Services
+    // Constructor
     private readonly IComplaintAppService _complaints;
     private readonly IStaffAppService _staff;
     private readonly IConcernAppService _concerns;
@@ -51,6 +36,22 @@ public class IndexModel : PageModel
         _offices = offices;
     }
 
+    // Properties
+    public ComplaintSearchDto Spec { get; set; } = default!;
+    public bool ShowResults { get; private set; }
+    public IPaginatedResult<ComplaintSearchResultDto> Results { get; private set; } = default!;
+    public string SortByName => Spec.Sort.ToString();
+
+    // Select lists
+    public SelectList ReceivedBySelectList { get; private set; } = default!;
+    public SelectList ConcernsSelectList { get; private set; } = default!;
+    public SelectList OfficesSelectList { get; set; } = default!;
+    public SelectList AssignedToSelectList { get; set; } = default!;
+
+    public SelectList CountiesSelectList => new(Data.Counties);
+    public SelectList StatesSelectList => new(Data.States);
+
+    // Methods
     public Task OnGetAsync()
     {
         Spec = new ComplaintSearchDto();

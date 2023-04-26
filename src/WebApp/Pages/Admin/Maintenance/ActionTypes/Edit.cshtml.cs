@@ -15,7 +15,9 @@ public class EditModel : PageModel
     private readonly IActionTypeAppService _service;
     private readonly IValidator<ActionTypeUpdateDto> _validator;
 
-    public EditModel(IActionTypeAppService service, IValidator<ActionTypeUpdateDto> validator)
+    public EditModel(
+        IActionTypeAppService service,
+        IValidator<ActionTypeUpdateDto> validator)
     {
         _service = service;
         _validator = validator;

@@ -11,7 +11,9 @@ public class IndexModel : PageModel
 {
     public ComplaintPublicViewDto Item { get; private set; } = default!;
 
-    public async Task<IActionResult> OnGetAsync([FromServices] IComplaintAppService service, int? id)
+    public async Task<IActionResult> OnGetAsync(
+        [FromServices] IComplaintAppService service, 
+        int? id)
     {
         if (id is null) return RedirectToPage("../Index");
         var item = await service.GetPublicAsync(id.Value);
