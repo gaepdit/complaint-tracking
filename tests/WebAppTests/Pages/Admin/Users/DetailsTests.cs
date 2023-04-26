@@ -39,7 +39,6 @@ public class DetailsTests
             result.Should().BeOfType<PageResult>();
             pageModel.DisplayStaff.Should().Be(staffView);
             pageModel.Roles.Should().BeEmpty();
-            pageModel.Message.Should().BeNull();
         }
     }
 

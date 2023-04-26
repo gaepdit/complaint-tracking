@@ -5,6 +5,7 @@
 @model DetailsModel
 @{
     ViewData["Title"] = $"Complaint ID {Model.Item.Id}";
+    var alertClass = Model.Item.ComplaintClosed ? "alert-secondary" : "alert-info";
 }
 
 @* Remove when complaint actions have all been implemented: *@
@@ -14,14 +15,14 @@
 
 @if (Model.UserCan[ComplaintOperation.ViewAsOwner])
 {
-    <p>
+    <div class="alert @alertClass" role="alert">
         This Complaint was assigned to you on @Html.DisplayFor(m => m.Item.CurrentOwnerAssignedDate, TemplateNames.LongDateTimeOrNotEntered).
         @if (Model.Item.CurrentOwnerAcceptedDate != null)
         {
             <br />
             @:You accepted it on @Html.DisplayFor(m => m.Item.CurrentOwnerAcceptedDate, TemplateNames.LongDateTimeOrNotEntered).
         }
-    </p>
+    </div>
 }
 
 @if (Model.Item.IsDeleted) // implies `ComplaintOperation.ManageDeletions`
