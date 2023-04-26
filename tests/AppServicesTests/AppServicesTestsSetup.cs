@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using Cts.AppServices.AutoMapper;
+using FluentAssertions.Extensions;
 
 namespace AppServicesTests;
 
 [SetUpFixture]
-public class AppServicesTestsGlobal
+public class AppServicesTestsSetup
 {
     internal static IMapper? Mapper;
     internal static MapperConfiguration? MapperConfig;
@@ -20,6 +21,9 @@ public class AppServicesTestsGlobal
         // See https://fluentassertions.com/objectgraphs/#global-configuration
         // and https://fluentassertions.com/objectgraphs/#matching-members
         AssertionOptions.AssertEquivalencyUsing(opts =>
-            opts.ExcludingMissingMembers());
+            opts.ExcludingMissingMembers()
+                .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, 1.Milliseconds()))
+                .WhenTypeIs<DateTimeOffset>()
+        );
     }
 }

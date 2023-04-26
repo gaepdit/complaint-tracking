@@ -21,7 +21,7 @@ public class GetAttachment
             .ReturnsAsync(item);
         var appService = new ComplaintAppService(repoMock.Object, Mock.Of<IComplaintManager>(),
             Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
-            AppServicesTestsGlobal.Mapper!, Mock.Of<IUserService>());
+            AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
 
         var result = await appService.GetAttachmentAsync(item.Id);
 
@@ -36,7 +36,7 @@ public class GetAttachment
             .ReturnsAsync((Attachment?)null);
         var appService = new ComplaintAppService(repoMock.Object, Mock.Of<IComplaintManager>(),
             Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
-            AppServicesTestsGlobal.Mapper!, Mock.Of<IUserService>());
+            AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
 
         var result = await appService.GetAttachmentAsync(Guid.Empty);
 
@@ -52,7 +52,7 @@ public class GetAttachment
             .ReturnsAsync(item);
         var appService = new ComplaintAppService(repoMock.Object, Mock.Of<IComplaintManager>(),
             Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
-            AppServicesTestsGlobal.Mapper!, Mock.Of<IUserService>());
+            AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
 
         var result = await appService.GetAttachmentAsync(item.Id);
 
@@ -69,7 +69,7 @@ public class GetAttachment
             .ReturnsAsync(item);
         var appService = new ComplaintAppService(repoMock.Object, Mock.Of<IComplaintManager>(),
             Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
-            AppServicesTestsGlobal.Mapper!, Mock.Of<IUserService>());
+            AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
 
         var result = await appService.GetAttachmentAsync(item.Id);
 

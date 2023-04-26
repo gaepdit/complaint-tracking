@@ -17,7 +17,7 @@ public class Exists
             .ReturnsAsync(true);
         var appService = new ComplaintAppService(repoMock.Object, Mock.Of<IComplaintManager>(),
             Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
-            AppServicesTestsGlobal.Mapper!, Mock.Of<IUserService>());
+            AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
 
         var result = await appService.ExistsAsync(0);
 
@@ -32,7 +32,7 @@ public class Exists
             .ReturnsAsync(false);
         var appService = new ComplaintAppService(repoMock.Object, Mock.Of<IComplaintManager>(),
             Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
-            AppServicesTestsGlobal.Mapper!, Mock.Of<IUserService>());
+            AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
 
         var result = await appService.ExistsAsync(0);
 

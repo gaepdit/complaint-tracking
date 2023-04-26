@@ -12,7 +12,7 @@ public class ActionTypeMapping
     {
         var item = new ActionType(Guid.NewGuid(), "Name");
 
-        var result = AppServicesTestsGlobal.Mapper!.Map<ActionTypeViewDto>(item);
+        var result = AppServicesTestsSetup.Mapper!.Map<ActionTypeViewDto>(item);
 
         using (new AssertionScope())
         {
@@ -27,7 +27,7 @@ public class ActionTypeMapping
     {
         var item = new ActionType(Guid.NewGuid(), "Name");
 
-        var result = AppServicesTestsGlobal.Mapper!.Map<ActionTypeUpdateDto>(item);
+        var result = AppServicesTestsSetup.Mapper!.Map<ActionTypeUpdateDto>(item);
 
         using (new AssertionScope())
         {

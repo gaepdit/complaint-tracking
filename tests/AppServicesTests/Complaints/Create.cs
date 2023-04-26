@@ -30,7 +30,7 @@ public class Create
 
         var appService = new ComplaintAppService(Mock.Of<IComplaintRepository>(), complaintManagerMock.Object,
             Mock.Of<IConcernRepository>(), officeRepoMock.Object, Mock.Of<IComplaintTransitionManager>(),
-            AppServicesTestsGlobal.Mapper!, userServiceMock.Object);
+            AppServicesTestsSetup.Mapper!, userServiceMock.Object);
 
         var item = new ComplaintCreateDto { CurrentOfficeId = Guid.Empty };
 
@@ -60,7 +60,7 @@ public class Create
 
         var appService = new ComplaintAppService(Mock.Of<IComplaintRepository>(), complaintManagerMock.Object,
             Mock.Of<IConcernRepository>(), officeRepoMock.Object, Mock.Of<IComplaintTransitionManager>(),
-            AppServicesTestsGlobal.Mapper!, userServiceMock.Object);
+            AppServicesTestsSetup.Mapper!, userServiceMock.Object);
 
         var item = new ComplaintCreateDto
         {

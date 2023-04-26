@@ -29,7 +29,7 @@ public class Search
             .ReturnsAsync(count);
         var appService = new ComplaintAppService(repoMock.Object, Mock.Of<IComplaintManager>(),
             Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
-            AppServicesTestsGlobal.Mapper!, Mock.Of<IUserService>());
+            AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
 
         var result = await appService.SearchAsync(Mock.Of<ComplaintSearchDto>(),
             paging, CancellationToken.None);
@@ -56,7 +56,7 @@ public class Search
             .ReturnsAsync(count);
         var appService = new ComplaintAppService(repoMock.Object, Mock.Of<IComplaintManager>(),
             Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
-            AppServicesTestsGlobal.Mapper!, Mock.Of<IUserService>());
+            AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
 
         var result = await appService.SearchAsync(Mock.Of<ComplaintSearchDto>(),
             paging, CancellationToken.None);

@@ -24,8 +24,8 @@ public class IndexTests
             .ReturnsAsync(AuthorizationResult.Success);
         var page = new IndexModel
         {
-            TempData = WebAppTestsGlobal.PageTempData(),
-            PageContext = WebAppTestsGlobal.PageContextWithUser(),
+            TempData = WebAppTestsSetup.PageTempData(),
+            PageContext = WebAppTestsSetup.PageContextWithUser(),
         };
 
         await page.OnGetAsync(serviceMock.Object, authorizationMock.Object);

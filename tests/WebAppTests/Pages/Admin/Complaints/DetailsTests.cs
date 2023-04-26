@@ -35,7 +35,7 @@ public class DetailsTests
                     new[] { ComplaintOperation.ManageDeletions }))
             .ReturnsAsync(AuthorizationResult.Success);
         var page = new DetailsModel(serviceMock.Object, staffServiceMock.Object, authorizationMock.Object)
-            { TempData = WebAppTestsGlobal.PageTempData(), PageContext = WebAppTestsGlobal.PageContextWithUser() };
+            { TempData = WebAppTestsSetup.PageTempData(), PageContext = WebAppTestsSetup.PageContextWithUser() };
 
         await page.OnGetAsync(ItemTest.Id);
 

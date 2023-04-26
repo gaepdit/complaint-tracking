@@ -23,7 +23,7 @@ public class IndexTests
         var authorizationMock = new Mock<IAuthorizationService>();
         authorizationMock.Setup(l => l.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), null, It.IsAny<string>()))
             .ReturnsAsync(AuthorizationResult.Success);
-        var page = new IndexModel { TempData = WebAppTestsGlobal.PageTempData() };
+        var page = new IndexModel { TempData = WebAppTestsSetup.PageTempData() };
 
         await page.OnGetAsync(serviceMock.Object, authorizationMock.Object);
 

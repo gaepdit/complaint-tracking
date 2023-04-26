@@ -6,7 +6,7 @@ using System.Security.Claims;
 namespace WebAppTests;
 
 [SetUpFixture]
-public static class WebAppTestsGlobal
+public static class WebAppTestsSetup
 {
     internal static TempDataDictionary PageTempData() =>
         new(new DefaultHttpContext(), Mock.Of<ITempDataProvider>());

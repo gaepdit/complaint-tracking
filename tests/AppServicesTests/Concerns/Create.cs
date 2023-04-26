@@ -20,7 +20,7 @@ public class Create
         userServiceMock.Setup(l => l.GetCurrentUserAsync())
             .ReturnsAsync((ApplicationUser?)null);
         var appService = new ConcernAppService(repoMock.Object, managerMock.Object,
-            AppServicesTestsGlobal.Mapper!, userServiceMock.Object);
+            AppServicesTestsSetup.Mapper!, userServiceMock.Object);
 
         var result = await appService.CreateAsync(item.Name);
 

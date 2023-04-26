@@ -5,6 +5,6 @@ public class AutoMapperConfiguration
     [Test]
     public void MappingConfigurationsAreValid()
     {
-        AppServicesTestsGlobal.MapperConfig!.AssertConfigurationIsValid();
+        AppServicesTestsSetup.MapperConfig!.AssertConfigurationIsValid();
     }
 }

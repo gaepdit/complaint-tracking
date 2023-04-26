@@ -30,7 +30,7 @@ public class DetailsTests
         var authorizationMock = new Mock<IAuthorizationService>();
         authorizationMock.Setup(l => l.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), null, It.IsAny<string>()))
             .ReturnsAsync(AuthorizationResult.Success);
-        var pageModel = new DetailsModel { TempData = WebAppTestsGlobal.PageTempData() };
+        var pageModel = new DetailsModel { TempData = WebAppTestsSetup.PageTempData() };
 
         var result = await pageModel.OnGetAsync(serviceMock.Object, authorizationMock.Object, staffView.Id);
 
@@ -46,7 +46,7 @@ public class DetailsTests
     public async Task OnGet_MissingIdReturnsNotFound()
     {
         var serviceMock = new Mock<IStaffAppService>();
-        var pageModel = new DetailsModel { TempData = WebAppTestsGlobal.PageTempData() };
+        var pageModel = new DetailsModel { TempData = WebAppTestsSetup.PageTempData() };
 
         var result = await pageModel.OnGetAsync(serviceMock.Object, Mock.Of<IAuthorizationService>(), null);
 
@@ -63,7 +63,7 @@ public class DetailsTests
         var serviceMock = new Mock<IStaffAppService>();
         serviceMock.Setup(l => l.FindAsync(It.IsAny<string>()))
             .ReturnsAsync((StaffViewDto?)null);
-        var pageModel = new DetailsModel { TempData = WebAppTestsGlobal.PageTempData() };
+        var pageModel = new DetailsModel { TempData = WebAppTestsSetup.PageTempData() };
 
         var result = await pageModel
             .OnGetAsync(serviceMock.Object, Mock.Of<IAuthorizationService>(), Guid.Empty.ToString());

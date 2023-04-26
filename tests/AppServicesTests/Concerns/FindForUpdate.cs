@@ -18,7 +18,7 @@ public class FindForUpdate
         var managerMock = new Mock<IConcernManager>();
         var userServiceMock = new Mock<IUserService>();
         var appService = new ConcernAppService(repoMock.Object, managerMock.Object,
-            AppServicesTestsGlobal.Mapper!, userServiceMock.Object);
+            AppServicesTestsSetup.Mapper!, userServiceMock.Object);
 
         var result = await appService.FindForUpdateAsync(Guid.Empty);
 

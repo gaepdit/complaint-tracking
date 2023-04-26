@@ -19,7 +19,7 @@ public class IndexTests
         staffServiceMock.Setup(l => l.GetListAsync(It.IsAny<StaffSearchDto>()))
             .ReturnsAsync(new List<StaffViewDto>());
         var page = new IndexModel(officeServiceMock.Object, staffServiceMock.Object)
-            { TempData = WebAppTestsGlobal.PageTempData() };
+            { TempData = WebAppTestsSetup.PageTempData() };
 
         var result = await page.OnGetSearchAsync(new StaffSearchDto());
 
@@ -41,7 +41,7 @@ public class IndexTests
             .ReturnsAsync(new List<ListItem>());
         var staffServiceMock = new Mock<IStaffAppService>();
         var page = new IndexModel(officeServiceMock.Object, staffServiceMock.Object)
-            { TempData = WebAppTestsGlobal.PageTempData() };
+            { TempData = WebAppTestsSetup.PageTempData() };
         page.ModelState.AddModelError("Error", "Sample error description");
 
         var result = await page.OnGetSearchAsync(new StaffSearchDto());

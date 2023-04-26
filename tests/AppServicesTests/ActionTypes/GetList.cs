@@ -17,7 +17,7 @@ public class GetList
         var managerMock = new Mock<IActionTypeManager>();
         var userServiceMock = new Mock<IUserService>();
         var appService = new ActionTypeAppService(repoMock.Object, managerMock.Object,
-            AppServicesTestsGlobal.Mapper!, userServiceMock.Object);
+            AppServicesTestsSetup.Mapper!, userServiceMock.Object);
 
         var result = await appService.GetListAsync();
 

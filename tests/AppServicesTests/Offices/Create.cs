@@ -21,7 +21,7 @@ public class Create
         userServiceMock.Setup(l => l.GetCurrentUserAsync())
             .ReturnsAsync((ApplicationUser?)null);
         var appService = new OfficeAppService(repoMock.Object, managerMock.Object,
-            AppServicesTestsGlobal.Mapper!, userServiceMock.Object);
+            AppServicesTestsSetup.Mapper!, userServiceMock.Object);
         var resource = new OfficeCreateDto { Name = TestConstants.ValidName };
 
         var result = await appService.CreateAsync(resource);

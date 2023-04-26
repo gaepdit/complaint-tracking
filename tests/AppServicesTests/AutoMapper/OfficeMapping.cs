@@ -13,7 +13,7 @@ public class OfficeMapping
     {
         var item = new Office(Guid.NewGuid(), TestConstants.ValidName);
 
-        var result = AppServicesTestsGlobal.Mapper!.Map<OfficeAdminViewDto>(item);
+        var result = AppServicesTestsSetup.Mapper!.Map<OfficeAdminViewDto>(item);
 
         using (new AssertionScope())
         {
@@ -30,7 +30,7 @@ public class OfficeMapping
         var user = new ApplicationUser { Id = Guid.NewGuid().ToString() };
         var item = new Office(Guid.NewGuid(), TestConstants.ValidName) { Assignor = user };
 
-        var result = AppServicesTestsGlobal.Mapper!.Map<OfficeUpdateDto>(item);
+        var result = AppServicesTestsSetup.Mapper!.Map<OfficeUpdateDto>(item);
 
         using (new AssertionScope())
         {

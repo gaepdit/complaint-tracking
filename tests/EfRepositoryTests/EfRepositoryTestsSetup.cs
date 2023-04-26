@@ -9,7 +9,7 @@ public class EfRepositoryTestsSetup
     [OneTimeSetUp]
     public void RunBeforeAllTests()
     {
-        AssertionOptions.AssertEquivalencyUsing(options => options
+        AssertionOptions.AssertEquivalencyUsing(opts => opts
             .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, 1.Milliseconds()))
             .WhenTypeIs<DateTimeOffset>()
         );
@@ -18,7 +18,7 @@ public class EfRepositoryTestsSetup
     [OneTimeTearDown]
     public void RunAfterAllTests()
     {
-        // Don't leave LocalDB process running (fix test runner warning)
+        // Don't leave LocalDB process running (fixes test runner warning)
         // See https://resharper-support.jetbrains.com/hc/en-us/community/posts/360006736719/comments/360002383960
         using var process = Process.Start("sqllocaldb", "stop MSSQLLocalDB");
         process.WaitForExit();
