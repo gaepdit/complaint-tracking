@@ -24,13 +24,13 @@ public class ComplaintTransition : AuditableEntity
 
     // Properties
 
-    public Complaint Complaint { get; init; } = default!;
+    public Complaint Complaint { get; private init; } = default!;
 
-    public TransitionType TransitionType { get; init; }
+    public TransitionType TransitionType { get; private init; }
 
     public DateTimeOffset CommittedDate { get; init; } = DateTimeOffset.Now;
 
-    public ApplicationUser? CommittedByUser { get; init; }
+    public ApplicationUser? CommittedByUser { get; private init; }
 
     public ApplicationUser? TransferredFromUser { get; set; }
 

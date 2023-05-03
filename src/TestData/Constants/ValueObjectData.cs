@@ -4,19 +4,19 @@ namespace Cts.TestData.Constants;
 
 public static class ValueObjectData
 {
-    public static PhoneNumber SamplePhoneNumber() => new()
+    public static PhoneNumber SamplePhoneNumber => new()
     {
         Number = TestConstants.ValidPhoneNumber,
         Type = PhoneType.Office,
     };
 
-    public static PhoneNumber AlternatePhoneNumber() => new()
+    public static PhoneNumber AlternatePhoneNumber => new()
     {
         Number = TestConstants.AlternatePhoneNumber,
         Type = PhoneType.Cell,
     };
 
-    public static IncompleteAddress FullCompleteAddress() => new()
+    public static IncompleteAddress FullCompleteAddress => new()
     {
         Street = "123 Main St.",
         Street2 = "Box 456",
@@ -25,7 +25,7 @@ public static class ValueObjectData
         State = "Georgia",
     };
 
-    public static IncompleteAddress LessCompleteAddress() => new()
+    public static IncompleteAddress LessCompleteAddress => new()
     {
         Street = "456 Second St.",
         Street2 = null,
@@ -34,7 +34,7 @@ public static class ValueObjectData
         State = "GA",
     };
 
-    public static IncompleteAddress IncompleteAddress() => new()
+    public static IncompleteAddress IncompleteAddress => new()
     {
         Street = "789 Third St.",
         Street2 = null,
@@ -43,7 +43,7 @@ public static class ValueObjectData
         State = "GA",
     };
 
-    public static IncompleteAddress AlternateFullCompleteAddress() => new()
+    public static IncompleteAddress AlternateFullCompleteAddress => new()
     {
         Street = "2000 Alternate St.",
         Street2 = "Box 2000",

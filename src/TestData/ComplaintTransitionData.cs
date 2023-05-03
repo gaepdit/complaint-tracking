@@ -6,92 +6,92 @@ namespace Cts.TestData;
 
 internal static class ComplaintTransitionData
 {
-    private static List<ComplaintTransition> ComplaintTransitionSeedItems => new()
+    private static IEnumerable<ComplaintTransition> ComplaintTransitionSeedItems => new List<ComplaintTransition>()
     {
-        new ComplaintTransition(new Guid("00000000-0000-0000-0000-000000000301"))
+        new(new Guid("00000000-0000-0000-0000-000000000301"),
+            ComplaintData.GetComplaints.ElementAt(0),
+            TransitionType.New,
+            UserData.GetUsers.ElementAt(2))
         {
-            Complaint = ComplaintData.GetComplaints.ElementAt(0),
-            TransitionType = TransitionType.New,
             CommittedDate = DateTimeOffset.Now.AddDays(-10),
-            CommittedByUser = UserData.GetUsers.ElementAt(2),
             TransferredToOffice = OfficeData.GetOffices.ElementAt(0),
             Comment = TextData.Phrase,
         },
-        new ComplaintTransition(new Guid("00000000-0000-0000-0000-000000000302"))
+        new(new Guid("00000000-0000-0000-0000-000000000302"),
+            ComplaintData.GetComplaints.ElementAt(0),
+            TransitionType.Assigned,
+            UserData.GetUsers.ElementAt(1))
         {
-            Complaint = ComplaintData.GetComplaints.ElementAt(0),
-            TransitionType = TransitionType.Assigned,
             CommittedDate = DateTimeOffset.Now.AddDays(-10),
-            CommittedByUser = UserData.GetUsers.ElementAt(1),
             TransferredFromOffice = OfficeData.GetOffices.ElementAt(0),
             TransferredToOffice = OfficeData.GetOffices.ElementAt(0),
             TransferredToUser = UserData.GetUsers.ElementAt(2),
         },
 
-        new ComplaintTransition(new Guid("00000000-0000-0000-0000-000000000303"))
+        new(new Guid("00000000-0000-0000-0000-000000000303"),
+            ComplaintData.GetComplaints.ElementAt(0),
+            TransitionType.Assigned,
+            UserData.GetUsers.ElementAt(2))
         {
-            Complaint = ComplaintData.GetComplaints.ElementAt(0),
-            TransitionType = TransitionType.Assigned,
             CommittedDate = DateTimeOffset.Now.AddDays(-9),
-            CommittedByUser = UserData.GetUsers.ElementAt(2),
             TransferredFromOffice = OfficeData.GetOffices.ElementAt(0),
             TransferredFromUser = UserData.GetUsers.ElementAt(2),
             TransferredToOffice = OfficeData.GetOffices.ElementAt(0),
             TransferredToUser = UserData.GetUsers.ElementAt(1),
         },
-        new ComplaintTransition(new Guid("00000000-0000-0000-0000-000000000304"))
+        new(new Guid("00000000-0000-0000-0000-000000000304"),
+            ComplaintData.GetComplaints.ElementAt(0),
+            TransitionType.Accepted,
+            UserData.GetUsers.ElementAt(1))
         {
-            Complaint = ComplaintData.GetComplaints.ElementAt(0),
-            TransitionType = TransitionType.Accepted,
             CommittedDate = DateTimeOffset.Now.AddDays(-9),
-            CommittedByUser = UserData.GetUsers.ElementAt(1),
         },
-        new ComplaintTransition(new Guid("00000000-0000-0000-0000-000000000305"))
+        new(new Guid("00000000-0000-0000-0000-000000000305"),
+            ComplaintData.GetComplaints.ElementAt(0),
+            TransitionType.SubmittedForReview,
+            UserData.GetUsers.ElementAt(1))
         {
-            Complaint = ComplaintData.GetComplaints.ElementAt(0),
-            TransitionType = TransitionType.SubmittedForReview,
             CommittedDate = DateTimeOffset.Now.AddDays(-7),
-            CommittedByUser = UserData.GetUsers.ElementAt(1),
             TransferredFromOffice = OfficeData.GetOffices.ElementAt(0),
             TransferredFromUser = UserData.GetUsers.ElementAt(1),
             TransferredToOffice = OfficeData.GetOffices.ElementAt(0),
             TransferredToUser = UserData.GetUsers.ElementAt(2),
         },
-        new ComplaintTransition(new Guid("00000000-0000-0000-0000-000000000306"))
+        new(new Guid("00000000-0000-0000-0000-000000000306"),
+            ComplaintData.GetComplaints.ElementAt(0),
+            TransitionType.ReturnedByReviewer,
+            UserData.GetUsers.ElementAt(2))
         {
-            Complaint = ComplaintData.GetComplaints.ElementAt(0),
-            TransitionType = TransitionType.ReturnedByReviewer,
             CommittedDate = DateTimeOffset.Now.AddDays(-6),
-            CommittedByUser = UserData.GetUsers.ElementAt(2),
             TransferredFromOffice = OfficeData.GetOffices.ElementAt(0),
             TransferredFromUser = UserData.GetUsers.ElementAt(2),
             TransferredToOffice = OfficeData.GetOffices.ElementAt(0),
             TransferredToUser = UserData.GetUsers.ElementAt(1),
         },
-        new ComplaintTransition(new Guid("00000000-0000-0000-0000-000000000307"))
+        new(new Guid("00000000-0000-0000-0000-000000000307"),
+            ComplaintData.GetComplaints.ElementAt(0),
+            TransitionType.Accepted,
+            UserData.GetUsers.ElementAt(1))
         {
-            Complaint = ComplaintData.GetComplaints.ElementAt(0),
-            TransitionType = TransitionType.Accepted,
             CommittedDate = DateTimeOffset.Now.AddDays(-5),
-            CommittedByUser = UserData.GetUsers.ElementAt(1),
         },
-        new ComplaintTransition(new Guid("00000000-0000-0000-0000-000000000308"))
+        new(new Guid("00000000-0000-0000-0000-000000000308"),
+            ComplaintData.GetComplaints.ElementAt(0),
+            TransitionType.SubmittedForReview,
+            UserData.GetUsers.ElementAt(1))
         {
-            Complaint = ComplaintData.GetComplaints.ElementAt(0),
-            TransitionType = TransitionType.SubmittedForReview,
             CommittedDate = DateTimeOffset.Now.AddDays(-4),
-            CommittedByUser = UserData.GetUsers.ElementAt(1),
             TransferredFromOffice = OfficeData.GetOffices.ElementAt(0),
             TransferredFromUser = UserData.GetUsers.ElementAt(1),
             TransferredToOffice = OfficeData.GetOffices.ElementAt(0),
             TransferredToUser = UserData.GetUsers.ElementAt(2),
         },
-        new ComplaintTransition(new Guid("00000000-0000-0000-0000-000000000309"))
+        new(new Guid("00000000-0000-0000-0000-000000000309"),
+            ComplaintData.GetComplaints.ElementAt(0),
+            TransitionType.Closed,
+            UserData.GetUsers.ElementAt(2))
         {
-            Complaint = ComplaintData.GetComplaints.ElementAt(0),
-            TransitionType = TransitionType.Closed,
             CommittedDate = DateTimeOffset.Now.AddDays(-3),
-            CommittedByUser = UserData.GetUsers.ElementAt(2),
             Comment = TextData.Paragraph,
         },
     };

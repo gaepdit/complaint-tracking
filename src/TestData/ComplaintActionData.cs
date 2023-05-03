@@ -8,9 +8,9 @@ internal static class ComplaintActionData
 {
     private static List<ComplaintAction> ComplaintActionSeedItems => new()
     {
-        new ComplaintAction(new Guid("00000000-0000-0000-0000-000000000201"))
+        new ComplaintAction(new Guid("00000000-0000-0000-0000-000000000201"),
+            ComplaintData.GetComplaints.ElementAt(0))
         {
-            Complaint = ComplaintData.GetComplaints.ElementAt(0),
             ActionDate = DateTimeOffset.Now.AddDays(-3).Date,
             ActionType = ActionTypeData.GetActionTypes.ElementAt(0),
             Investigator = TextData.Word,
@@ -18,9 +18,9 @@ internal static class ComplaintActionData
             EnteredBy = UserData.GetUsers.ElementAt(1),
             Comments = TextData.Paragraph,
         },
-        new ComplaintAction(new Guid("00000000-0000-0000-0000-000000000202"))
+        new ComplaintAction(new Guid("00000000-0000-0000-0000-000000000202"),
+            ComplaintData.GetComplaints.ElementAt(0))
         {
-            Complaint = ComplaintData.GetComplaints.ElementAt(0),
             ActionDate = DateTimeOffset.Now.AddDays(-2).Date,
             ActionType = ActionTypeData.GetActionTypes.ElementAt(1),
             Investigator = null,
@@ -28,9 +28,9 @@ internal static class ComplaintActionData
             EnteredBy = UserData.GetUsers.ElementAt(0),
             Comments = null,
         },
-        new ComplaintAction(new Guid("00000000-0000-0000-0000-000000000203"))
+        new ComplaintAction(new Guid("00000000-0000-0000-0000-000000000203"),
+            ComplaintData.GetComplaints.ElementAt(0))
         {
-            Complaint = ComplaintData.GetComplaints.ElementAt(0),
             ActionDate = DateTimeOffset.Now.AddDays(-1).Date,
             ActionType = ActionTypeData.GetActionTypes.ElementAt(5),
             Investigator = TextData.AnotherWord,
@@ -38,9 +38,9 @@ internal static class ComplaintActionData
             EnteredBy = UserData.GetUsers.ElementAt(1),
             Comments = TextData.MultipleParagraphs,
         },
-        new ComplaintAction(new Guid("00000000-0000-0000-0000-000000000204"))
+        new ComplaintAction(new Guid("00000000-0000-0000-0000-000000000204"),
+            ComplaintData.GetComplaints.ElementAt(2))
         {
-            Complaint = ComplaintData.GetComplaints.ElementAt(2),
             ActionDate = DateTimeOffset.Now.AddDays(-10).Date,
             ActionType = ActionTypeData.GetActionTypes.ElementAt(7),
             Investigator = "Deleted complaint action",
@@ -48,9 +48,9 @@ internal static class ComplaintActionData
             EnteredBy = UserData.GetUsers.ElementAt(0),
             Comments = TextData.Phrase,
         },
-        new ComplaintAction(new Guid("00000000-0000-0000-0000-000000000205"))
+        new ComplaintAction(new Guid("00000000-0000-0000-0000-000000000205"),
+            ComplaintData.GetComplaints.ElementAt(3))
         {
-            Complaint = ComplaintData.GetComplaints.ElementAt(3),
             ActionDate = DateTimeOffset.Now.AddDays(-1).Date,
             ActionType = ActionTypeData.GetActionTypes.ElementAt(0),
             Investigator = "Complaint action on a deleted complaint",
