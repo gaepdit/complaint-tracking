@@ -64,7 +64,11 @@ public class ComplaintViewPermissions
     {
         var requirements = new[] { ComplaintOperation.EditAsRecentReporter };
         var user = new ClaimsPrincipal(new ClaimsIdentity(
-            new Claim[] { new(ClaimTypes.NameIdentifier, Guid.Empty.ToString()) },
+            new Claim[]
+            {
+                new(ClaimTypes.NameIdentifier, Guid.Empty.ToString()),
+                new(ClaimTypes.Role, RoleName.Staff),
+            },
             "Basic"));
         var resource = new ComplaintViewDto
         {
@@ -84,7 +88,11 @@ public class ComplaintViewPermissions
     {
         var requirements = new[] { ComplaintOperation.EditAsRecentReporter };
         var user = new ClaimsPrincipal(new ClaimsIdentity(
-            new Claim[] { new(ClaimTypes.NameIdentifier, Guid.Empty.ToString()) },
+            new Claim[]
+            {
+                new(ClaimTypes.NameIdentifier, Guid.Empty.ToString()),
+                new(ClaimTypes.Role, RoleName.Staff),
+            },
             "Basic"));
         var resource = new ComplaintViewDto
         {

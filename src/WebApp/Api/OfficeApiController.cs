@@ -39,7 +39,6 @@ public class OfficeApiController : Controller
     {
         var user = await _staff.FindCurrentUserAsync();
         if (user is null) return Unauthorized();
-        if (!user.Active) return Problem("Forbidden", statusCode: StatusCodes.Status403Forbidden);
 
         if (user.Office?.Id == id // user is in this office
             || await _office.UserIsAssignorAsync(id, user.Id) // user is assignor for this office

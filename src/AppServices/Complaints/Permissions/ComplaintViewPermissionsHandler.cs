@@ -39,7 +39,7 @@ internal class ComplaintViewPermissionsHandler :
 
     // Users can edit their own.
     private static bool IsCurrentOwner(ClaimsPrincipal user, ComplaintViewDto resource) =>
-        resource.CurrentOwner?.Id == user.GetUserIdValue();
+        user.IsInRole(RoleName.Staff) && resource.CurrentOwner?.Id == user.GetUserIdValue();
 
     private static bool IsCurrentOwnerOrManager(ClaimsPrincipal user, ComplaintViewDto resource) =>
         IsCurrentOwner(user, resource) || IsCurrentManager(user, resource);
@@ -54,6 +54,7 @@ internal class ComplaintViewPermissionsHandler :
 
     // Original reporter can edit for 1 hour.
     private static bool IsRecentReporter(ClaimsPrincipal user, ComplaintViewDto resource) =>
+        (user.IsInRole(RoleName.Staff) || IsCurrentManager(user, resource)) &&
         resource.EnteredBy?.Id == user.GetUserIdValue() &&
         resource.EnteredDate.AddHours(1) > DateTimeOffset.Now;
 

@@ -5,13 +5,20 @@ namespace Cts.AppServices.Permissions;
 
 public static class PolicyName
 {
-    public const string UserAdministrator = nameof(UserAdministrator);
+    public const string StaffUser = nameof(StaffUser);
     public const string SiteMaintainer = nameof(SiteMaintainer);
+    public const string UserAdministrator = nameof(UserAdministrator);
     public const string DivisionManager = nameof(DivisionManager);
 }
 
 public static class Policies
 {
+    public static AuthorizationPolicy StaffUserPolicy() =>
+        new AuthorizationPolicyBuilder()
+            .RequireAuthenticatedUser()
+            .AddRequirements(new StaffUserRequirement())
+            .Build();
+
     public static AuthorizationPolicy SiteMaintainerPolicy() =>
         new AuthorizationPolicyBuilder()
             .RequireAuthenticatedUser()

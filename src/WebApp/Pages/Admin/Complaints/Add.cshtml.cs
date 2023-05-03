@@ -2,6 +2,7 @@ using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.Dto;
 using Cts.AppServices.Concerns;
 using Cts.AppServices.Offices;
+using Cts.AppServices.Permissions;
 using Cts.AppServices.Staff;
 using Cts.Domain.Data;
 using Cts.WebApp.Platform.Models;
@@ -15,7 +16,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Cts.WebApp.Pages.Admin.Complaints;
 
-[Authorize]
+[Authorize(Policy = PolicyName.StaffUser)]
 public class AddModel : PageModel
 {
     // Constructor
