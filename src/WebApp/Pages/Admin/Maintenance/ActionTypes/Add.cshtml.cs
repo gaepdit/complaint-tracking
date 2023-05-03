@@ -26,7 +26,7 @@ public class AddModel : PageModel
     }
 
     public async Task<IActionResult> OnPostAsync(
-        [FromServices] IActionTypeAppService service,
+        [FromServices] IActionTypeService service,
         [FromServices] IValidator<ActionTypeCreateDto> validator)
     {
         await validator.ApplyValidationAsync(Item, ModelState);

@@ -12,7 +12,7 @@ public class IndexModel : PageModel
     public ComplaintPublicViewDto Item { get; private set; } = default!;
 
     public async Task<IActionResult> OnGetAsync(
-        [FromServices] IComplaintAppService service, 
+        [FromServices] IComplaintService service, 
         int? id)
     {
         if (id is null) return RedirectToPage("../Index");

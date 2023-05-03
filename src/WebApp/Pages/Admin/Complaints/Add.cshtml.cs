@@ -20,17 +20,17 @@ namespace Cts.WebApp.Pages.Admin.Complaints;
 public class AddModel : PageModel
 {
     // Constructor
-    private readonly IComplaintAppService _complaints;
-    private readonly IStaffAppService _staff;
-    private readonly IConcernAppService _concerns;
-    private readonly IOfficeAppService _offices;
+    private readonly IComplaintService _complaints;
+    private readonly IStaffService _staff;
+    private readonly IConcernService _concerns;
+    private readonly IOfficeService _offices;
     private readonly IValidator<ComplaintCreateDto> _validator;
 
     public AddModel(
-        IComplaintAppService service,
-        IStaffAppService staff,
-        IConcernAppService concerns,
-        IOfficeAppService offices,
+        IComplaintService service,
+        IStaffService staff,
+        IConcernService concerns,
+        IOfficeService offices,
         IValidator<ComplaintCreateDto> validator)
     {
         _complaints = service;

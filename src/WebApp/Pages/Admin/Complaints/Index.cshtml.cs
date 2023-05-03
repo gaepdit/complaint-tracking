@@ -19,16 +19,16 @@ namespace Cts.WebApp.Pages.Admin.Complaints;
 public class IndexModel : PageModel
 {
     // Constructor
-    private readonly IComplaintAppService _complaints;
-    private readonly IStaffAppService _staff;
-    private readonly IConcernAppService _concerns;
-    private readonly IOfficeAppService _offices;
+    private readonly IComplaintService _complaints;
+    private readonly IStaffService _staff;
+    private readonly IConcernService _concerns;
+    private readonly IOfficeService _offices;
 
     public IndexModel(
-        IComplaintAppService complaints,
-        IStaffAppService staff,
-        IConcernAppService concerns,
-        IOfficeAppService offices)
+        IComplaintService complaints,
+        IStaffService staff,
+        IConcernService concerns,
+        IOfficeService offices)
     {
         _complaints = complaints;
         _staff = staff;

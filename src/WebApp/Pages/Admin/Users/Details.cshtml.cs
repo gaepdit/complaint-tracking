@@ -17,7 +17,7 @@ public class DetailsModel : PageModel
     public bool IsUserAdministrator { get; private set; }
 
     public async Task<IActionResult> OnGetAsync(
-        [FromServices] IStaffAppService staffService,
+        [FromServices] IStaffService staffService,
         [FromServices] IAuthorizationService authorization,
         string? id)
     {

@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Cts.AppServices.Complaints;
 
-public sealed class ComplaintAppService : IComplaintAppService
+public sealed class ComplaintService : IComplaintService
 {
     private readonly IComplaintRepository _complaints;
     private readonly IComplaintManager _manager;
@@ -23,7 +23,7 @@ public sealed class ComplaintAppService : IComplaintAppService
     private readonly IMapper _mapper;
     private readonly IUserService _users;
 
-    public ComplaintAppService(IComplaintRepository complaints, IComplaintManager manager, IConcernRepository concerns,
+    public ComplaintService(IComplaintRepository complaints, IComplaintManager manager, IConcernRepository concerns,
         IOfficeRepository offices, IComplaintTransitionManager transitions, IMapper mapper, IUserService users)
     {
         _complaints = complaints;

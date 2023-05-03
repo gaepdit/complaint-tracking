@@ -27,7 +27,7 @@ public class Search
             .ReturnsAsync(itemList);
         repoMock.Setup(l => l.CountAsync(It.IsAny<Expression<Func<Complaint, bool>>>(), CancellationToken.None))
             .ReturnsAsync(count);
-        var appService = new ComplaintAppService(repoMock.Object, Mock.Of<IComplaintManager>(),
+        var appService = new ComplaintService(repoMock.Object, Mock.Of<IComplaintManager>(),
             Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
             AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
 
@@ -54,7 +54,7 @@ public class Search
         repoMock.Setup(l => l.CountAsync(
                 It.IsAny<Expression<Func<Complaint, bool>>>(), CancellationToken.None))
             .ReturnsAsync(count);
-        var appService = new ComplaintAppService(repoMock.Object, Mock.Of<IComplaintManager>(),
+        var appService = new ComplaintService(repoMock.Object, Mock.Of<IComplaintManager>(),
             Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
             AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
 

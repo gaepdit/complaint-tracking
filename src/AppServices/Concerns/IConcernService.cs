@@ -2,7 +2,7 @@
 
 namespace Cts.AppServices.Concerns;
 
-public interface IConcernAppService : IDisposable
+public interface IConcernService : IDisposable
 {
     Task<ConcernUpdateDto?> FindForUpdateAsync(Guid id, CancellationToken token = default);
     Task<IReadOnlyList<ConcernViewDto>> GetListAsync(CancellationToken token = default);

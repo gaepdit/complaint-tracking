@@ -5,14 +5,14 @@ using GaEpd.AppLibrary.ListItems;
 
 namespace Cts.AppServices.Concerns;
 
-public sealed class ConcernAppService : IConcernAppService
+public sealed class ConcernService : IConcernService
 {
     private readonly IConcernRepository _repository;
     private readonly IConcernManager _manager;
     private readonly IMapper _mapper;
     private readonly IUserService _userService;
 
-    public ConcernAppService(
+    public ConcernService(
         IConcernRepository repository,
         IConcernManager manager,
         IMapper mapper,

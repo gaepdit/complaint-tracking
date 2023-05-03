@@ -2,7 +2,7 @@
 
 namespace Cts.AppServices.Offices;
 
-public interface IOfficeAppService : IDisposable
+public interface IOfficeService : IDisposable
 {
     Task<OfficeAdminViewDto?> FindAsync(Guid id, CancellationToken token = default);
     Task<OfficeUpdateDto?> FindForUpdateAsync(Guid id, CancellationToken token = default);

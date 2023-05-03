@@ -28,7 +28,7 @@ public class Create
         officeRepoMock.Setup(l => l.GetAsync(It.IsAny<Guid>(), CancellationToken.None))
             .ReturnsAsync(new Office(Guid.NewGuid(), TestConstants.ValidName));
 
-        var appService = new ComplaintAppService(Mock.Of<IComplaintRepository>(), complaintManagerMock.Object,
+        var appService = new ComplaintService(Mock.Of<IComplaintRepository>(), complaintManagerMock.Object,
             Mock.Of<IConcernRepository>(), officeRepoMock.Object, Mock.Of<IComplaintTransitionManager>(),
             AppServicesTestsSetup.Mapper!, userServiceMock.Object);
 
@@ -58,7 +58,7 @@ public class Create
         officeRepoMock.Setup(l => l.GetAsync(It.IsAny<Guid>(), CancellationToken.None))
             .ReturnsAsync(office);
 
-        var appService = new ComplaintAppService(Mock.Of<IComplaintRepository>(), complaintManagerMock.Object,
+        var appService = new ComplaintService(Mock.Of<IComplaintRepository>(), complaintManagerMock.Object,
             Mock.Of<IConcernRepository>(), officeRepoMock.Object, Mock.Of<IComplaintTransitionManager>(),
             AppServicesTestsSetup.Mapper!, userServiceMock.Object);
 

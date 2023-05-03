@@ -12,7 +12,7 @@ namespace Cts.WebApp.Pages.Admin.Complaints;
 public class AttachmentModel : PageModel
 {
     public async Task<IActionResult> OnGetAsync(
-        [FromServices] IComplaintAppService complaintService,
+        [FromServices] IComplaintService complaintService,
         [FromServices] IFileService fileService,
         [FromRoute] Guid? id,
         [FromRoute] string? fileName,

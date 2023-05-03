@@ -22,7 +22,7 @@ public class AttachmentTests
             Size = 1,
         };
 
-        var complaintServiceMock = new Mock<IComplaintAppService>();
+        var complaintServiceMock = new Mock<IComplaintService>();
         complaintServiceMock.Setup(l => l.GetPublicAttachmentAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(item);
         var fileServiceMock = new Mock<IFileService>();
@@ -43,7 +43,7 @@ public class AttachmentTests
     [Test]
     public async Task NonexistentItem_ReturnsNotFound()
     {
-        var complaintServiceMock = new Mock<IComplaintAppService>();
+        var complaintServiceMock = new Mock<IComplaintService>();
         complaintServiceMock.Setup(l => l.GetPublicAttachmentAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((AttachmentPublicViewDto?)null);
         var pageModel = new AttachmentModel();
@@ -66,7 +66,7 @@ public class AttachmentTests
             Size = 0,
         };
 
-        var complaintServiceMock = new Mock<IComplaintAppService>();
+        var complaintServiceMock = new Mock<IComplaintService>();
         complaintServiceMock.Setup(l => l.GetPublicAttachmentAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(item);
         var pageModel = new AttachmentModel();
@@ -93,7 +93,7 @@ public class AttachmentTests
             Size = 0,
         };
 
-        var complaintServiceMock = new Mock<IComplaintAppService>();
+        var complaintServiceMock = new Mock<IComplaintService>();
         complaintServiceMock.Setup(l => l.GetPublicAttachmentAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(item);
         var fileServiceMock = new Mock<IFileService>();
@@ -119,7 +119,7 @@ public class AttachmentTests
             Size = 0,
         };
 
-        var complaintServiceMock = new Mock<IComplaintAppService>();
+        var complaintServiceMock = new Mock<IComplaintService>();
         complaintServiceMock.Setup(l => l.GetPublicAttachmentAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(item);
         var fileServiceMock = new Mock<IFileService>();

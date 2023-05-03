@@ -10,8 +10,8 @@ namespace Cts.WebApp.Api;
 [Produces("application/json")]
 public class ComplaintApiController : Controller
 {
-    private readonly IComplaintAppService _service;
-    public ComplaintApiController(IComplaintAppService service) => _service = service;
+    private readonly IComplaintService _service;
+    public ComplaintApiController(IComplaintService service) => _service = service;
 
     [HttpGet]
     public async Task<IPaginatedResult<ComplaintSearchResultDto>> ListComplaintsAsync(

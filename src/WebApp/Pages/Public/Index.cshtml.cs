@@ -18,12 +18,12 @@ namespace Cts.WebApp.Pages.Public;
 public class IndexModel : PageModel
 {
     // Constructor
-    private readonly IComplaintAppService _complaints;
-    private readonly IConcernAppService _concerns;
+    private readonly IComplaintService _complaints;
+    private readonly IConcernService _concerns;
 
     public IndexModel(
-        IComplaintAppService complaints,
-        IConcernAppService concerns)
+        IComplaintService complaints,
+        IConcernService concerns)
     {
         _complaints = complaints;
         _concerns = concerns;

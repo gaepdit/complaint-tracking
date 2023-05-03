@@ -12,11 +12,11 @@ namespace Cts.WebApp.Pages.Admin.Maintenance.ActionTypes;
 [Authorize(Policy = PolicyName.SiteMaintainer)]
 public class EditModel : PageModel
 {
-    private readonly IActionTypeAppService _service;
+    private readonly IActionTypeService _service;
     private readonly IValidator<ActionTypeUpdateDto> _validator;
 
     public EditModel(
-        IActionTypeAppService service,
+        IActionTypeService service,
         IValidator<ActionTypeUpdateDto> validator)
     {
         _service = service;

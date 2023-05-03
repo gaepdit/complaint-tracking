@@ -17,21 +17,21 @@ public static class AppServices
     {
         // Action Types
         services.AddScoped<IActionTypeManager, ActionTypeManager>();
-        services.AddScoped<IActionTypeAppService, ActionTypeAppService>();
+        services.AddScoped<IActionTypeService, ActionTypeService>();
 
         // Complaints
         services.AddScoped<IComplaintManager, ComplaintManager>();
-        services.AddScoped<IComplaintAppService, ComplaintAppService>();
+        services.AddScoped<IComplaintService, ComplaintService>();
 
         // Complaint Transitions
         services.AddScoped<IComplaintTransitionManager, ComplaintTransitionManager>();
         
         // Concerns
         services.AddScoped<IConcernManager, ConcernManager>();
-        services.AddScoped<IConcernAppService, ConcernAppService>();
+        services.AddScoped<IConcernService, ConcernService>();
 
         // Offices
         services.AddScoped<IOfficeManager, OfficeManager>();
-        services.AddScoped<IOfficeAppService, OfficeAppService>();
+        services.AddScoped<IOfficeService, OfficeService>();
     }
 }

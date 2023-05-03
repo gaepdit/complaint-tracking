@@ -20,10 +20,10 @@ public class DetailsTests
     [Test]
     public async Task OnGet_GivenManageDeletions_ReturnsWithItemAndPermissions()
     {
-        var serviceMock = new Mock<IComplaintAppService>();
+        var serviceMock = new Mock<IComplaintService>();
         serviceMock.Setup(l => l.GetAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(ItemTest);
-        var staffServiceMock = new Mock<IStaffAppService>();
+        var staffServiceMock = new Mock<IStaffService>();
         staffServiceMock.Setup(l => l.GetCurrentUserAsync())
             .ReturnsAsync(StaffViewTest);
         var authorizationMock = new Mock<IAuthorizationService>();

@@ -18,7 +18,7 @@ public class GetActiveListItems
             .ReturnsAsync(itemList);
         var managerMock = new Mock<IConcernManager>();
         var userServiceMock = new Mock<IUserService>();
-        var appService = new ConcernAppService(repoMock.Object, managerMock.Object,
+        var appService = new ConcernService(repoMock.Object, managerMock.Object,
             AppServicesTestsSetup.Mapper!, userServiceMock.Object);
 
         var result = await appService.GetActiveListItemsAsync();

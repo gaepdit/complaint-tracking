@@ -5,14 +5,14 @@ using GaEpd.AppLibrary.ListItems;
 
 namespace Cts.AppServices.Offices;
 
-public sealed class OfficeAppService : IOfficeAppService
+public sealed class OfficeService : IOfficeService
 {
     private readonly IOfficeRepository _offices;
     private readonly IOfficeManager _officeManager;
     private readonly IMapper _mapper;
     private readonly IUserService _users;
 
-    public OfficeAppService(
+    public OfficeService(
         IOfficeRepository offices,
         IOfficeManager officeManager,
         IMapper mapper,

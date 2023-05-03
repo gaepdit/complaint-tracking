@@ -14,7 +14,7 @@ public class IndexModel : PageModel
     public string? OfficeName => DisplayStaff.Office?.Name;
     public IList<AppRole> Roles { get; private set; } = default!;
 
-    public async Task<IActionResult> OnGetAsync([FromServices] IStaffAppService staffService)
+    public async Task<IActionResult> OnGetAsync([FromServices] IStaffService staffService)
     {
         var staff = await staffService.GetCurrentUserAsync();
         if (staff is not { Active: true }) return Forbid();

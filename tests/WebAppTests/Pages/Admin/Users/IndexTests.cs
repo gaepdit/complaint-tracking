@@ -15,13 +15,13 @@ public class IndexTests
     public async Task OnSearch_IfValidModel_ReturnsPage()
     {
         // Arrange
-        var officeServiceMock = new Mock<IOfficeAppService>();
+        var officeServiceMock = new Mock<IOfficeService>();
         officeServiceMock.Setup(l => l.GetActiveListItemsAsync(CancellationToken.None))
             .ReturnsAsync(new List<ListItem>());
 
         var paging = new PaginatedRequest(1, 1);
         var output = new PaginatedResult<StaffSearchResultDto>(new List<StaffSearchResultDto>(), 1, paging);
-        var staffServiceMock = new Mock<IStaffAppService>();
+        var staffServiceMock = new Mock<IStaffService>();
         staffServiceMock.Setup(l =>
                 l.SearchAsync(It.IsAny<StaffSearchDto>(), It.IsAny<PaginatedRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(output);
@@ -47,10 +47,10 @@ public class IndexTests
     [Test]
     public async Task OnSearch_IfInvalidModel_ReturnPageWithInvalidModelState()
     {
-        var officeServiceMock = new Mock<IOfficeAppService>();
+        var officeServiceMock = new Mock<IOfficeService>();
         officeServiceMock.Setup(l => l.GetActiveListItemsAsync(CancellationToken.None))
             .ReturnsAsync(new List<ListItem>());
-        var staffServiceMock = new Mock<IStaffAppService>();
+        var staffServiceMock = new Mock<IStaffService>();
         var page = new IndexModel(officeServiceMock.Object, staffServiceMock.Object)
             { TempData = WebAppTestsSetup.PageTempData() };
         page.ModelState.AddModelError("Error", "Sample error description");

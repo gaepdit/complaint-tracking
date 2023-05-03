@@ -10,10 +10,10 @@ namespace Cts.WebApp.Api;
 [Produces("application/json")]
 public class OfficeApiController : Controller
 {
-    private readonly IOfficeAppService _office;
-    private readonly IStaffAppService _staff;
+    private readonly IOfficeService _office;
+    private readonly IStaffService _staff;
 
-    public OfficeApiController(IOfficeAppService office, IStaffAppService staff)
+    public OfficeApiController(IOfficeService office, IStaffService staff)
     {
         _office = office;
         _staff = staff;

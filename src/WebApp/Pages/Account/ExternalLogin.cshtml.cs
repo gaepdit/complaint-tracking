@@ -22,14 +22,14 @@ public class ExternalLoginModel : PageModel
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IConfiguration _configuration;
-    private readonly IStaffAppService _staffService;
+    private readonly IStaffService _staffService;
     private readonly ILogger<ExternalLoginModel> _logger;
 
     public ExternalLoginModel(
         SignInManager<ApplicationUser> signInManager,
         UserManager<ApplicationUser> userManager,
         IConfiguration configuration,
-        IStaffAppService staffService,
+        IStaffService staffService,
         ILogger<ExternalLoginModel> logger)
     {
         _signInManager = signInManager;

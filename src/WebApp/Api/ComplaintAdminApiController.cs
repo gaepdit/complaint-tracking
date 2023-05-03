@@ -12,8 +12,8 @@ namespace Cts.WebApp.Api;
 [Produces("application/json")]
 public class ComplaintAdminApiController : Controller
 {
-    private readonly IComplaintAppService _service;
-    public ComplaintAdminApiController(IComplaintAppService service) => _service = service;
+    private readonly IComplaintService _service;
+    public ComplaintAdminApiController(IComplaintService service) => _service = service;
 
     [HttpGet]
     public async Task<IPaginatedResult<ComplaintSearchResultDto>> ListComplaintsAsync(

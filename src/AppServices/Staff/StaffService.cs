@@ -10,14 +10,14 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Cts.AppServices.Staff;
 
-public sealed class StaffAppService : IStaffAppService
+public sealed class StaffService : IStaffService
 {
     private readonly IUserService _userService;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IMapper _mapper;
     private readonly IOfficeRepository _officeRepository;
 
-    public StaffAppService(
+    public StaffService(
         IUserService userService,
         UserManager<ApplicationUser> userManager,
         IMapper mapper,

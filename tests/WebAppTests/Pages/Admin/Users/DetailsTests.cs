@@ -23,7 +23,7 @@ public class DetailsTests
             GivenName = TestConstants.ValidName,
             FamilyName = TestConstants.ValidName,
         };
-        var serviceMock = new Mock<IStaffAppService>();
+        var serviceMock = new Mock<IStaffService>();
         serviceMock.Setup(l => l.FindAsync(It.IsAny<string>()))
             .ReturnsAsync(staffView);
         serviceMock.Setup(l => l.GetAppRolesAsync(It.IsAny<string>()))
@@ -46,7 +46,7 @@ public class DetailsTests
     [Test]
     public async Task OnGet_MissingIdReturnsNotFound()
     {
-        var serviceMock = new Mock<IStaffAppService>();
+        var serviceMock = new Mock<IStaffService>();
         var pageModel = new DetailsModel { TempData = WebAppTestsSetup.PageTempData() };
 
         var result = await pageModel.OnGetAsync(serviceMock.Object, Mock.Of<IAuthorizationService>(), null);
@@ -61,7 +61,7 @@ public class DetailsTests
     [Test]
     public async Task OnGet_NonexistentIdReturnsNotFound()
     {
-        var serviceMock = new Mock<IStaffAppService>();
+        var serviceMock = new Mock<IStaffService>();
         serviceMock.Setup(l => l.FindAsync(It.IsAny<string>()))
             .ReturnsAsync((StaffViewDto?)null);
         var pageModel = new DetailsModel { TempData = WebAppTestsSetup.PageTempData() };

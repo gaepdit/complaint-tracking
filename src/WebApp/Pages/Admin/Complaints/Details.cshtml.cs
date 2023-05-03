@@ -12,13 +12,13 @@ namespace Cts.WebApp.Pages.Admin.Complaints;
 public class DetailsModel : PageModel
 {
     // Constructor
-    private readonly IComplaintAppService _complaints;
-    private readonly IStaffAppService _staff;
+    private readonly IComplaintService _complaints;
+    private readonly IStaffService _staff;
     private readonly IAuthorizationService _authorization;
 
     public DetailsModel(
-        IComplaintAppService complaints,
-        IStaffAppService staff,
+        IComplaintService complaints,
+        IStaffService staff,
         IAuthorizationService authorization)
     {
         _complaints = complaints;

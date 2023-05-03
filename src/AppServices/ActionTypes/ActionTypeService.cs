@@ -5,14 +5,14 @@ using GaEpd.AppLibrary.ListItems;
 
 namespace Cts.AppServices.ActionTypes;
 
-public sealed class ActionTypeAppService : IActionTypeAppService
+public sealed class ActionTypeService : IActionTypeService
 {
     private readonly IActionTypeRepository _repository;
     private readonly IActionTypeManager _manager;
     private readonly IMapper _mapper;
     private readonly IUserService _userService;
 
-    public ActionTypeAppService(
+    public ActionTypeService(
         IActionTypeRepository repository,
         IActionTypeManager manager,
         IMapper mapper,

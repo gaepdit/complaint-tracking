@@ -18,7 +18,7 @@ public class AddTests
     [Test]
     public async Task OnPost_GivenSuccess_ReturnsRedirectWithDisplayMessage()
     {
-        var serviceMock = new Mock<IActionTypeAppService>();
+        var serviceMock = new Mock<IActionTypeService>();
         serviceMock.Setup(l => l.CreateAsync(It.IsAny<string>(), CancellationToken.None))
             .ReturnsAsync(Guid.Empty);
         var validatorMock = new Mock<IValidator<ActionTypeCreateDto>>();
@@ -42,7 +42,7 @@ public class AddTests
     [Test]
     public async Task OnPost_GivenInvalidItem_ReturnsPageWithModelErrors()
     {
-        var serviceMock = new Mock<IActionTypeAppService>();
+        var serviceMock = new Mock<IActionTypeService>();
         var validatorMock = new Mock<IValidator<ActionTypeCreateDto>>();
         var validationFailures = new List<ValidationFailure> { new("property", "message") };
         validatorMock.Setup(l => l.ValidateAsync(It.IsAny<ActionTypeCreateDto>(), CancellationToken.None))

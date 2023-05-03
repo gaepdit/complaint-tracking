@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Cts.AppServices.Complaints;
 
-public interface IComplaintAppService : IDisposable
+public interface IComplaintService : IDisposable
 {
     // Public methods
 

@@ -14,11 +14,11 @@ namespace Cts.WebApp.Pages.Admin.Users;
 public class EditRolesModel : PageModel
 {
     // Constructor
-    private readonly IStaffAppService _staffService;
+    private readonly IStaffService _staffService;
     private readonly IAuthorizationService _authorization;
 
     public EditRolesModel(
-        IStaffAppService staffService,
+        IStaffService staffService,
         IAuthorizationService authorization)
     {
         _staffService = staffService;

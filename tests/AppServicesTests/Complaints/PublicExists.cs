@@ -17,7 +17,7 @@ public class PublicExists
         repoMock.Setup(l =>
                 l.ExistsAsync(It.IsAny<Expression<Func<Complaint, bool>>>(), CancellationToken.None))
             .ReturnsAsync(true);
-        var appService = new ComplaintAppService(repoMock.Object, Mock.Of<IComplaintManager>(),
+        var appService = new ComplaintService(repoMock.Object, Mock.Of<IComplaintManager>(),
             Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
             AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
 
@@ -33,7 +33,7 @@ public class PublicExists
         repoMock.Setup(l =>
                 l.ExistsAsync(It.IsAny<Expression<Func<Complaint, bool>>>(), CancellationToken.None))
             .ReturnsAsync(false);
-        var appService = new ComplaintAppService(repoMock.Object, Mock.Of<IComplaintManager>(),
+        var appService = new ComplaintService(repoMock.Object, Mock.Of<IComplaintManager>(),
             Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
             AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
 

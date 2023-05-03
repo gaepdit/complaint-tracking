@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Cts.AppServices.Staff;
 
-public interface IStaffAppService : IDisposable
+public interface IStaffService : IDisposable
 {
     Task<StaffViewDto> GetCurrentUserAsync();
     Task<StaffViewDto?> FindCurrentUserAsync();

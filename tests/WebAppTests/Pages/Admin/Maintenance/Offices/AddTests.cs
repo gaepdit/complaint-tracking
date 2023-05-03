@@ -20,10 +20,10 @@ public class AddTests
     [Test]
     public async Task OnPost_GivenSuccess_ReturnsRedirectWithDisplayMessage()
     {
-        var serviceMock = new Mock<IOfficeAppService>();
+        var serviceMock = new Mock<IOfficeService>();
         serviceMock.Setup(l => l.CreateAsync(It.IsAny<OfficeCreateDto>(), CancellationToken.None))
             .ReturnsAsync(Guid.Empty);
-        var staffService = new Mock<IStaffAppService>();
+        var staffService = new Mock<IStaffService>();
         staffService.Setup(l => l.GetStaffListItemsAsync(It.IsAny<bool>()))
             .ReturnsAsync(new List<ListItem<string>>());
         var validator = new Mock<IValidator<OfficeCreateDto>>();
@@ -48,8 +48,8 @@ public class AddTests
     [Test]
     public async Task OnPost_GivenInvalidItem_ReturnsPageWithModelErrors()
     {
-        var serviceMock = new Mock<IOfficeAppService>();
-        var staffServiceMock = new Mock<IStaffAppService>();
+        var serviceMock = new Mock<IOfficeService>();
+        var staffServiceMock = new Mock<IStaffService>();
         staffServiceMock.Setup(l => l.GetStaffListItemsAsync(It.IsAny<bool>()))
             .ReturnsAsync(new List<ListItem<string>>());
         var validator = new Mock<IValidator<OfficeCreateDto>>();

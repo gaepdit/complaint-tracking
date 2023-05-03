@@ -16,13 +16,13 @@ namespace Cts.WebApp.Pages.Account;
 public class EditModel : PageModel
 {
     // Constructor
-    private readonly IStaffAppService _staffService;
-    private readonly IOfficeAppService _officeService;
+    private readonly IStaffService _staffService;
+    private readonly IOfficeService _officeService;
     private readonly IValidator<StaffUpdateDto> _validator;
 
     public EditModel(
-        IStaffAppService staffService,
-        IOfficeAppService officeService,
+        IStaffService staffService,
+        IOfficeService officeService,
         IValidator<StaffUpdateDto> validator)
     {
         _staffService = staffService;

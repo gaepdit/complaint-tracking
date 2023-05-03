@@ -28,7 +28,7 @@ public static class IdentityStores
         }
 
         // Add staff and user services.
-        services.AddTransient<IStaffAppService, StaffAppService>();
+        services.AddTransient<IStaffService, StaffService>();
         services.AddScoped<IUserService, UserService>();
     }
 }

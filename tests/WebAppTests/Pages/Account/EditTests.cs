@@ -35,10 +35,10 @@ public class EditTests
     [Test]
     public async Task OnGet_PopulatesThePageModel()
     {
-        var staffService = new Mock<IStaffAppService>();
+        var staffService = new Mock<IStaffService>();
         staffService.Setup(l => l.GetCurrentUserAsync())
             .ReturnsAsync(StaffViewTest);
-        var officeService = new Mock<IOfficeAppService>();
+        var officeService = new Mock<IOfficeService>();
         officeService.Setup(l => l.GetActiveListItemsAsync(CancellationToken.None))
             .ReturnsAsync(new List<ListItem>());
         var pageModel = new EditModel(staffService.Object, officeService.Object, Mock.Of<IValidator<StaffUpdateDto>>())
@@ -61,7 +61,7 @@ public class EditTests
         var expectedMessage =
             new DisplayMessage(DisplayMessage.AlertContext.Success, "Successfully updated profile.");
 
-        var staffService = new Mock<IStaffAppService>();
+        var staffService = new Mock<IStaffService>();
         staffService.Setup(l => l.GetCurrentUserAsync())
             .ReturnsAsync(StaffViewTest);
         staffService.Setup(l => l.UpdateAsync(It.IsAny<StaffUpdateDto>()))
@@ -69,7 +69,7 @@ public class EditTests
         var validator = new Mock<IValidator<StaffUpdateDto>>();
         validator.Setup(l => l.ValidateAsync(It.IsAny<StaffUpdateDto>(), CancellationToken.None))
             .ReturnsAsync(new ValidationResult());
-        var page = new EditModel(staffService.Object, Mock.Of<IOfficeAppService>(), validator.Object)
+        var page = new EditModel(staffService.Object, Mock.Of<IOfficeService>(), validator.Object)
         { UpdateStaff = StaffUpdateTest, TempData = WebAppTestsSetup.PageTempData() };
 
         var result = await page.OnPostAsync();
@@ -86,7 +86,7 @@ public class EditTests
     [Test]
     public async Task OnPost_GivenUpdateFailure_ReturnsBadRequest()
     {
-        var staffService = new Mock<IStaffAppService>();
+        var staffService = new Mock<IStaffService>();
         staffService.Setup(l => l.GetCurrentUserAsync())
             .ReturnsAsync(StaffViewTest);
         staffService.Setup(l => l.UpdateAsync(It.IsAny<StaffUpdateDto>()))
@@ -94,7 +94,7 @@ public class EditTests
         var validator = new Mock<IValidator<StaffUpdateDto>>();
         validator.Setup(l => l.ValidateAsync(It.IsAny<StaffUpdateDto>(), CancellationToken.None))
             .ReturnsAsync(new ValidationResult());
-        var page = new EditModel(staffService.Object, Mock.Of<IOfficeAppService>(), validator.Object)
+        var page = new EditModel(staffService.Object, Mock.Of<IOfficeService>(), validator.Object)
         { UpdateStaff = StaffUpdateTest, TempData = WebAppTestsSetup.PageTempData() };
 
         var result = await page.OnPostAsync();
@@ -105,10 +105,10 @@ public class EditTests
     [Test]
     public async Task OnPost_GivenInvalidModel_ReturnsPageWithInvalidModelState()
     {
-        var staffService = new Mock<IStaffAppService>();
+        var staffService = new Mock<IStaffService>();
         staffService.Setup(l => l.GetCurrentUserAsync())
             .ReturnsAsync(StaffViewTest);
-        var officeService = new Mock<IOfficeAppService>();
+        var officeService = new Mock<IOfficeService>();
         officeService.Setup(l => l.GetActiveListItemsAsync(CancellationToken.None))
             .ReturnsAsync(new List<ListItem>());
         var validator = new Mock<IValidator<StaffUpdateDto>>();

@@ -17,7 +17,7 @@ public class FindForUpdate
             .ReturnsAsync(item);
         var managerMock = new Mock<IConcernManager>();
         var userServiceMock = new Mock<IUserService>();
-        var appService = new ConcernAppService(repoMock.Object, managerMock.Object,
+        var appService = new ConcernService(repoMock.Object, managerMock.Object,
             AppServicesTestsSetup.Mapper!, userServiceMock.Object);
 
         var result = await appService.FindForUpdateAsync(Guid.Empty);
@@ -35,7 +35,7 @@ public class FindForUpdate
         var managerMock = new Mock<IConcernManager>();
         var mapperMock = new Mock<IMapper>();
         var userServiceMock = new Mock<IUserService>();
-        var appService = new ConcernAppService(repoMock.Object, managerMock.Object,
+        var appService = new ConcernService(repoMock.Object, managerMock.Object,
             mapperMock.Object, userServiceMock.Object);
 
         var result = await appService.FindForUpdateAsync(Guid.Empty);

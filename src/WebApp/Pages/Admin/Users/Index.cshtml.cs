@@ -17,12 +17,12 @@ namespace Cts.WebApp.Pages.Admin.Users;
 public class IndexModel : PageModel
 {
     // Constructor
-    private readonly IOfficeAppService _officeService;
-    private readonly IStaffAppService _staffService;
+    private readonly IOfficeService _officeService;
+    private readonly IStaffService _staffService;
 
     public IndexModel(
-        IOfficeAppService officeService,
-        IStaffAppService staffService)
+        IOfficeService officeService,
+        IStaffService staffService)
     {
         _officeService = officeService;
         _staffService = staffService;
