@@ -35,10 +35,11 @@ public class OfficeApiController : Controller
         Json(await _office.GetStaffListItemsAsync(id, false));
 
     [HttpGet("{id:guid}/staff-for-assignment")]
-    public async Task<JsonResult> GetStaffForAssignmentAsync([FromRoute] Guid id)
+    public async Task<IActionResult> GetStaffForAssignmentAsync([FromRoute] Guid id)
     {
         var user = await _staff.FindCurrentUserAsync();
-        if (user is null || !user.Active) return Json(null);
+        if (user is null) return Unauthorized();
+        if (!user.Active) return Problem("Forbidden", statusCode: StatusCodes.Status403Forbidden);
 
         if (user.Office?.Id == id // user is in this office
             || await _office.UserIsAssignorAsync(id, user.Id) // user is assignor for this office
@@ -47,6 +48,6 @@ public class OfficeApiController : Controller
             return Json(await _office.GetStaffListItemsAsync(id, true));
         }
 
-        return Json(null);
+        return Problem("Forbidden", statusCode: StatusCodes.Status403Forbidden);
     }
 }
