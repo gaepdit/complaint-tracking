@@ -43,6 +43,7 @@ public class ComplaintRepository : BaseRepository<Complaint, int>, IComplaintRep
 
     public async Task<Attachment?> FindAttachmentAsync(Guid id, CancellationToken token = default) =>
         await Context.Attachments
+            .Include(e => e.Complaint)
             .SingleOrDefaultAsync(e => e.Id == id, token);
 
     // EF will set the ID automatically.
