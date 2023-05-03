@@ -6,9 +6,9 @@ namespace Cts.TestData;
 
 internal static class ComplaintTransitionData
 {
-    private static IEnumerable<ComplaintTransition> ComplaintTransitionSeedItems => new List<ComplaintTransition>()
+    private static IEnumerable<ComplaintTransition> ComplaintTransitionSeedItems => new List<ComplaintTransition>
     {
-        new(new Guid("00000000-0000-0000-0000-000000000301"),
+        new(new Guid("40000000-0000-0000-0000-000000000001"),
             ComplaintData.GetComplaints.ElementAt(0),
             TransitionType.New,
             UserData.GetUsers.ElementAt(2))
@@ -17,7 +17,7 @@ internal static class ComplaintTransitionData
             TransferredToOffice = OfficeData.GetOffices.ElementAt(0),
             Comment = TextData.Phrase,
         },
-        new(new Guid("00000000-0000-0000-0000-000000000302"),
+        new(new Guid("40000000-0000-0000-0000-000000000002"),
             ComplaintData.GetComplaints.ElementAt(0),
             TransitionType.Assigned,
             UserData.GetUsers.ElementAt(1))
@@ -28,7 +28,7 @@ internal static class ComplaintTransitionData
             TransferredToUser = UserData.GetUsers.ElementAt(2),
         },
 
-        new(new Guid("00000000-0000-0000-0000-000000000303"),
+        new(new Guid("40000000-0000-0000-0000-000000000003"),
             ComplaintData.GetComplaints.ElementAt(0),
             TransitionType.Assigned,
             UserData.GetUsers.ElementAt(2))
@@ -39,14 +39,14 @@ internal static class ComplaintTransitionData
             TransferredToOffice = OfficeData.GetOffices.ElementAt(0),
             TransferredToUser = UserData.GetUsers.ElementAt(1),
         },
-        new(new Guid("00000000-0000-0000-0000-000000000304"),
+        new(new Guid("40000000-0000-0000-0000-000000000004"),
             ComplaintData.GetComplaints.ElementAt(0),
             TransitionType.Accepted,
             UserData.GetUsers.ElementAt(1))
         {
             CommittedDate = DateTimeOffset.Now.AddDays(-9),
         },
-        new(new Guid("00000000-0000-0000-0000-000000000305"),
+        new(new Guid("40000000-0000-0000-0000-000000000005"),
             ComplaintData.GetComplaints.ElementAt(0),
             TransitionType.SubmittedForReview,
             UserData.GetUsers.ElementAt(1))
@@ -57,7 +57,7 @@ internal static class ComplaintTransitionData
             TransferredToOffice = OfficeData.GetOffices.ElementAt(0),
             TransferredToUser = UserData.GetUsers.ElementAt(2),
         },
-        new(new Guid("00000000-0000-0000-0000-000000000306"),
+        new(new Guid("40000000-0000-0000-0000-000000000006"),
             ComplaintData.GetComplaints.ElementAt(0),
             TransitionType.ReturnedByReviewer,
             UserData.GetUsers.ElementAt(2))
@@ -68,14 +68,14 @@ internal static class ComplaintTransitionData
             TransferredToOffice = OfficeData.GetOffices.ElementAt(0),
             TransferredToUser = UserData.GetUsers.ElementAt(1),
         },
-        new(new Guid("00000000-0000-0000-0000-000000000307"),
+        new(new Guid("40000000-0000-0000-0000-000000000007"),
             ComplaintData.GetComplaints.ElementAt(0),
             TransitionType.Accepted,
             UserData.GetUsers.ElementAt(1))
         {
             CommittedDate = DateTimeOffset.Now.AddDays(-5),
         },
-        new(new Guid("00000000-0000-0000-0000-000000000308"),
+        new(new Guid("40000000-0000-0000-0000-000000000008"),
             ComplaintData.GetComplaints.ElementAt(0),
             TransitionType.SubmittedForReview,
             UserData.GetUsers.ElementAt(1))
@@ -86,7 +86,7 @@ internal static class ComplaintTransitionData
             TransferredToOffice = OfficeData.GetOffices.ElementAt(0),
             TransferredToUser = UserData.GetUsers.ElementAt(2),
         },
-        new(new Guid("00000000-0000-0000-0000-000000000309"),
+        new(new Guid("40000000-0000-0000-0000-000000000009"),
             ComplaintData.GetComplaints.ElementAt(0),
             TransitionType.Closed,
             UserData.GetUsers.ElementAt(2))

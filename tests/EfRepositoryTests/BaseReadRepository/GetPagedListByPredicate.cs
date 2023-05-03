@@ -20,7 +20,7 @@ public class GetPagedListByPredicate
     [Test]
     public async Task WhenItemsExist_ReturnsPagedList()
     {
-        var itemsCount = ConcernData.GetConcerns.Count;
+        var itemsCount = ConcernData.GetConcerns.Count();
         var paging = new PaginatedRequest(1, itemsCount);
 
         var result = await _repository.GetPagedListAsync(e => e.Name.Length > 0, paging);
@@ -35,7 +35,7 @@ public class GetPagedListByPredicate
     [Test]
     public async Task WhenOneItemMatches_ReturnsListOfOne()
     {
-        var itemsCount = ConcernData.GetConcerns.Count;
+        var itemsCount = ConcernData.GetConcerns.Count();
         var item = ConcernData.GetConcerns.First();
         var paging = new PaginatedRequest(1, itemsCount);
 
@@ -51,7 +51,7 @@ public class GetPagedListByPredicate
     [Test]
     public async Task WhenDoesNotExist_ReturnsEmptyList()
     {
-        var itemsCount = ConcernData.GetConcerns.Count;
+        var itemsCount = ConcernData.GetConcerns.Count();
         var paging = new PaginatedRequest(1, itemsCount);
         var result = await _repository.GetPagedListAsync(e => e.Name == TestConstants.NonExistentName, paging);
         result.Should().BeEmpty();
@@ -60,7 +60,7 @@ public class GetPagedListByPredicate
     [Test]
     public async Task WhenPagedBeyondExistingItems_ReturnsEmptyList()
     {
-        var itemsCount = ConcernData.GetConcerns.Count;
+        var itemsCount = ConcernData.GetConcerns.Count();
         var paging = new PaginatedRequest(2, itemsCount);
         var result = await _repository.GetPagedListAsync(e => e.Name.Length > 0, paging);
         result.Should().BeEmpty();
@@ -69,7 +69,7 @@ public class GetPagedListByPredicate
     [Test]
     public async Task GivenSorting_SqliteDatabaseIsCaseSensitive_ReturnsSortedList()
     {
-        var itemsCount = ConcernData.GetConcerns.Count;
+        var itemsCount = ConcernData.GetConcerns.Count();
         var paging = new PaginatedRequest(1, itemsCount, "Name desc");
 
         var result = await _repository.GetPagedListAsync(e => e.Name.Length > 0, paging);
@@ -89,7 +89,7 @@ public class GetPagedListByPredicate
         using var repositoryHelper = RepositoryHelper.CreateSqlServerRepositoryHelper(this);
         using var repository = repositoryHelper.GetConcernRepository();
 
-        var itemsCount = ConcernData.GetConcerns.Count;
+        var itemsCount = ConcernData.GetConcerns.Count();
         var paging = new PaginatedRequest(1, itemsCount, "Name desc");
 
         var result = await repository.GetPagedListAsync(e => e.Name.Length > 0, paging);

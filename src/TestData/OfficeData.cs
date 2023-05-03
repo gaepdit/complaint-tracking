@@ -7,10 +7,10 @@ internal static class OfficeData
 {
     private static List<Office> OfficeSeedItems => new()
     {
-        new Office(new Guid("00000000-0000-0000-0000-000000000004"), "Branch"),
-        new Office(new Guid("00000000-0000-0000-0000-000000000005"), "District"),
-        new Office(new Guid("00000000-0000-0000-0000-000000000006"), "Region"),
-        new Office(new Guid("00000000-0000-0000-0000-000000000007"), "Closed Office") { Active = false },
+        new Office(new Guid("60000000-0000-0000-0000-000000000001"), "Branch"),
+        new Office(new Guid("60000000-0000-0000-0000-000000000002"), "District"),
+        new Office(new Guid("60000000-0000-0000-0000-000000000003"), "Region"),
+        new Office(new Guid("60000000-0000-0000-0000-000000000004"), "Closed Office") { Active = false },
     };
 
     private static ICollection<Office>? _offices;

@@ -6,9 +6,9 @@ namespace Cts.TestData;
 
 internal static class ComplaintActionData
 {
-    private static List<ComplaintAction> ComplaintActionSeedItems => new()
+    private static IEnumerable<ComplaintAction> ComplaintActionSeedItems => new List<ComplaintAction>
     {
-        new ComplaintAction(new Guid("00000000-0000-0000-0000-000000000201"),
+        new(new Guid("30000000-0000-0000-0000-000000000001"),
             ComplaintData.GetComplaints.ElementAt(0))
         {
             ActionDate = DateTimeOffset.Now.AddDays(-3).Date,
@@ -18,7 +18,7 @@ internal static class ComplaintActionData
             EnteredBy = UserData.GetUsers.ElementAt(1),
             Comments = TextData.Paragraph,
         },
-        new ComplaintAction(new Guid("00000000-0000-0000-0000-000000000202"),
+        new(new Guid("30000000-0000-0000-0000-000000000002"),
             ComplaintData.GetComplaints.ElementAt(0))
         {
             ActionDate = DateTimeOffset.Now.AddDays(-2).Date,
@@ -28,7 +28,7 @@ internal static class ComplaintActionData
             EnteredBy = UserData.GetUsers.ElementAt(0),
             Comments = null,
         },
-        new ComplaintAction(new Guid("00000000-0000-0000-0000-000000000203"),
+        new(new Guid("30000000-0000-0000-0000-000000000003"),
             ComplaintData.GetComplaints.ElementAt(0))
         {
             ActionDate = DateTimeOffset.Now.AddDays(-1).Date,
@@ -38,7 +38,7 @@ internal static class ComplaintActionData
             EnteredBy = UserData.GetUsers.ElementAt(1),
             Comments = TextData.MultipleParagraphs,
         },
-        new ComplaintAction(new Guid("00000000-0000-0000-0000-000000000204"),
+        new(new Guid("30000000-0000-0000-0000-000000000004"),
             ComplaintData.GetComplaints.ElementAt(2))
         {
             ActionDate = DateTimeOffset.Now.AddDays(-10).Date,
@@ -48,7 +48,7 @@ internal static class ComplaintActionData
             EnteredBy = UserData.GetUsers.ElementAt(0),
             Comments = TextData.Phrase,
         },
-        new ComplaintAction(new Guid("00000000-0000-0000-0000-000000000205"),
+        new(new Guid("30000000-0000-0000-0000-000000000005"),
             ComplaintData.GetComplaints.ElementAt(3))
         {
             ActionDate = DateTimeOffset.Now.AddDays(-1).Date,
@@ -60,7 +60,7 @@ internal static class ComplaintActionData
         },
     };
 
-    private static IEnumerable<ComplaintAction>? _complaintActions;
+    private static List<ComplaintAction>? _complaintActions;
 
     public static IEnumerable<ComplaintAction> GetComplaintActions
     {
@@ -68,7 +68,7 @@ internal static class ComplaintActionData
         {
             if (_complaintActions is not null) return _complaintActions;
 
-            _complaintActions = ComplaintActionSeedItems;
+            _complaintActions = ComplaintActionSeedItems.ToList();
             _complaintActions.ElementAt(3).SetDeleted("00000000-0000-0000-0000-000000000001");
             return _complaintActions;
         }

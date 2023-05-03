@@ -4,17 +4,17 @@ namespace Cts.TestData;
 
 internal static class ActionTypeData
 {
-    private static List<ActionType> ActionTypeSeedItems => new()
+    private static IEnumerable<ActionType> ActionTypeSeedItems => new List<ActionType>
     {
-        new ActionType(new Guid("00000000-0000-0000-0000-000000000020"), "Initial investigation"),
-        new ActionType(new Guid("00000000-0000-0000-0000-000000000021"), "Follow-up investigation"),
-        new ActionType(new Guid("00000000-0000-0000-0000-000000000022"), "Referred to"),
-        new ActionType(new Guid("00000000-0000-0000-0000-000000000023"), "Notice of violation"),
-        new ActionType(new Guid("00000000-0000-0000-0000-000000000024"), "Initial investigation report"),
-        new ActionType(new Guid("00000000-0000-0000-0000-000000000025"), "Follow-up investigation report"),
-        new ActionType(new Guid("00000000-0000-0000-0000-000000000026"), "Status letter"),
-        new ActionType(new Guid("00000000-0000-0000-0000-000000000027"), "Other"),
-        new ActionType(new Guid("00000000-0000-0000-0000-000000000028"), "Consent/administrative order"),
+        new(new Guid("10000000-0000-0000-0000-000000000001"), "Initial investigation"),
+        new(new Guid("10000000-0000-0000-0000-000000000002"), "Follow-up investigation"),
+        new(new Guid("10000000-0000-0000-0000-000000000003"), "Referred to"),
+        new(new Guid("10000000-0000-0000-0000-000000000004"), "Notice of violation"),
+        new(new Guid("10000000-0000-0000-0000-000000000005"), "Initial investigation report"),
+        new(new Guid("10000000-0000-0000-0000-000000000006"), "Follow-up investigation report"),
+        new(new Guid("10000000-0000-0000-0000-000000000007"), "Status letter"),
+        new(new Guid("10000000-0000-0000-0000-000000000008"), "Other"),
+        new(new Guid("10000000-0000-0000-0000-000000000009"), "Consent/administrative order"),
     };
 
     private static IEnumerable<ActionType>? _actionTypes;

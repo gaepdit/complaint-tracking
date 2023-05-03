@@ -5,9 +5,9 @@ namespace Cts.TestData;
 
 internal static class AttachmentData
 {
-    private static List<Attachment> AttachmentSeedItems => new()
+    private static IEnumerable<Attachment> AttachmentSeedItems => new List<Attachment>
     {
-        new Attachment(new Guid("00000000-0000-0000-0000-000000000101"))
+        new(new Guid("20000000-0000-0000-0000-000000000001"))
         {
             Complaint = ComplaintData.GetComplaints.ElementAt(0),
             FileName = "FileOne.png",
@@ -17,7 +17,7 @@ internal static class AttachmentData
             UploadedBy = UserData.GetUsers.ElementAt(1),
             IsImage = true,
         },
-        new Attachment(new Guid("00000000-0000-0000-0000-000000000102"))
+        new(new Guid("20000000-0000-0000-0000-000000000002"))
         {
             Complaint = ComplaintData.GetComplaints.ElementAt(0),
             FileName = "File Two.svg",
@@ -27,7 +27,7 @@ internal static class AttachmentData
             UploadedBy = UserData.GetUsers.ElementAt(1),
             IsImage = true,
         },
-        new Attachment(new Guid("00000000-0000-0000-0000-000000000103"))
+        new(new Guid("20000000-0000-0000-0000-000000000003"))
         {
             Complaint = ComplaintData.GetComplaints.ElementAt(0),
             FileName = "File-Three-💻.pdf",
@@ -36,7 +36,7 @@ internal static class AttachmentData
             UploadedBy = UserData.GetUsers.ElementAt(2),
             UploadedDate = DateTimeOffset.Now.AddDays(-1),
         },
-        new Attachment(new Guid("00000000-0000-0000-0000-000000000104"))
+        new(new Guid("20000000-0000-0000-0000-000000000004"))
         {
             Complaint = ComplaintData.GetComplaints.ElementAt(0),
             FileName = "File-Four-Empty-File.png",
@@ -46,7 +46,7 @@ internal static class AttachmentData
             UploadedBy = UserData.GetUsers.ElementAt(0),
             IsImage = true,
         },
-        new Attachment(new Guid("00000000-0000-0000-0000-000000000105"))
+        new(new Guid("20000000-0000-0000-0000-000000000005"))
         {
             Complaint = ComplaintData.GetComplaints.ElementAt(0),
             FileName = "File-Five-Attachment-Deleted.pdf",
@@ -55,7 +55,7 @@ internal static class AttachmentData
             UploadedDate = DateTimeOffset.Now.AddDays(-3),
             UploadedBy = UserData.GetUsers.ElementAt(0),
         },
-        new Attachment(new Guid("00000000-0000-0000-0000-000000000106"))
+        new(new Guid("20000000-0000-0000-0000-000000000006"))
         {
             Complaint = ComplaintData.GetComplaints.ElementAt(3),
             FileName = "File-Six-Complaint-Deleted.pdf",
@@ -74,33 +74,33 @@ internal static class AttachmentData
         {
             if (_attachments is not null) return _attachments;
 
-            _attachments = AttachmentSeedItems;
-            _attachments.ElementAt(4).SetDeleted("00000000-0000-0000-0000-000000000002");
+            _attachments = AttachmentSeedItems.ToList();
+            _attachments.ElementAt(4).SetDeleted("20000000-0000-0000-0000-000000000002");
             return _attachments;
         }
     }
 
     public static void ClearData() => _attachments = null;
 
-    private static List<AttachmentFile> AttachmentFilesSeedItems => new()
+    private static ICollection<AttachmentFile> AttachmentFilesSeedItems => new List<AttachmentFile>
     {
-        new AttachmentFile("00000000-0000-0000-0000-000000000101.png",
+        new("20000000-0000-0000-0000-000000000001.png",
             Attachment.DefaultAttachmentsLocation, EncodedPngFile),
-        new AttachmentFile("00000000-0000-0000-0000-000000000101.png",
+        new("20000000-0000-0000-0000-000000000001.png",
             Attachment.DefaultThumbnailsLocation, EncodedPngFile),
-        new AttachmentFile("00000000-0000-0000-0000-000000000102.svg",
+        new("20000000-0000-0000-0000-000000000002.svg",
             Attachment.DefaultAttachmentsLocation, EncodedSvgFile),
-        new AttachmentFile("00000000-0000-0000-0000-000000000102.svg",
+        new("20000000-0000-0000-0000-000000000002.svg",
             Attachment.DefaultThumbnailsLocation, EncodedSvgFile),
-        new AttachmentFile("00000000-0000-0000-0000-000000000103.pdf",
+        new("20000000-0000-0000-0000-000000000003.pdf",
             Attachment.DefaultAttachmentsLocation, EncodedPdfFile),
-        new AttachmentFile("00000000-0000-0000-0000-000000000104.png",
+        new("20000000-0000-0000-0000-000000000004.png",
             Attachment.DefaultAttachmentsLocation, null),
-        new AttachmentFile("00000000-0000-0000-0000-000000000104.png",
+        new("20000000-0000-0000-0000-000000000004.png",
             Attachment.DefaultThumbnailsLocation, null),
-        new AttachmentFile("00000000-0000-0000-0000-000000000105.pdf",
+        new("20000000-0000-0000-0000-000000000005.pdf",
             Attachment.DefaultAttachmentsLocation, null),
-        new AttachmentFile("00000000-0000-0000-0000-000000000106.pdf",
+        new("20000000-0000-0000-0000-000000000006.pdf",
             Attachment.DefaultAttachmentsLocation, EncodedPdfFile),
     };
 

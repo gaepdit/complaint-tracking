@@ -28,7 +28,7 @@ public class GetPagedList
     [Test]
     public async Task WhenItemsExist_ReturnsPagedList()
     {
-        var itemsCount = ConcernData.GetConcerns.Count;
+        var itemsCount = ConcernData.GetConcerns.Count();
         var paging = new PaginatedRequest(1, itemsCount);
 
         var result = await _repository.GetPagedListAsync(paging);
@@ -54,7 +54,7 @@ public class GetPagedList
     [Test]
     public async Task WhenPagedBeyondExistingItems_ReturnsEmptyList()
     {
-        var itemsCount = ConcernData.GetConcerns.Count;
+        var itemsCount = ConcernData.GetConcerns.Count();
         var paging = new PaginatedRequest(2, itemsCount);
         var result = await _repository.GetPagedListAsync(paging);
         result.Should().BeEmpty();
@@ -63,7 +63,7 @@ public class GetPagedList
     [Test]
     public async Task GivenSorting_SqliteDatabaseIsCaseSensitive_ReturnsSortedList()
     {
-        var itemsCount = ConcernData.GetConcerns.Count;
+        var itemsCount = ConcernData.GetConcerns.Count();
         var paging = new PaginatedRequest(1, itemsCount, "Name desc");
 
         var result = await _repository.GetPagedListAsync(paging);
@@ -83,7 +83,7 @@ public class GetPagedList
         using var repositoryHelper = RepositoryHelper.CreateSqlServerRepositoryHelper(this);
         using var repository = repositoryHelper.GetConcernRepository();
 
-        var itemsCount = ConcernData.GetConcerns.Count;
+        var itemsCount = ConcernData.GetConcerns.Count();
         var paging = new PaginatedRequest(1, itemsCount, "Name desc");
 
         var result = await repository.GetPagedListAsync(paging);
