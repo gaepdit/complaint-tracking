@@ -7,19 +7,15 @@ Visitors to this site who are not logged in can only do the following:
 * Search for and view basic info for all Complaints, excluding caller info.
 * Search for and view all info for Complaints that have been closed, excluding caller info.
 
-## Staff
+## User
 
-All Users with accounts who are logged into the application can:
+All Users with work accounts who are logged into the application can:
 
-* Create new Complaints and either assign them to Users within the same Office or to the Assignor of another Office.
-* Edit Complaints assigned to them.
-* Add/edit Complaint Actions for Complaints assigned to them.
-* Transfer (reassign) their Complaints to other Users within the same Office or to the Assignor of another Office.
 * Search for and view all info for all Complaints, excluding deleted Complaints and deleted Complaint Actions.
 * View a list of CTS Users.
 * View the lookup tables for Complaint Action Types and Areas of Concern.
-* View reports for self.
-* Edit account info for self, including changing assigned Office.
+* View reports for themselves.
+* Edit account info for themselves, including changing assigned Office.
 
 ## Office Assignor
 
@@ -30,6 +26,15 @@ One User in each Office is designated the "Assignor" for that Office. The Assign
 ## CTS Roles
 
 Users can be granted one or more of the following roles.
+
+### Staff
+
+Users in the Staff role can:
+
+* Create new Complaints and either assign them to Users within the same Office or to the Assignor of another Office.
+* Edit Complaints assigned to them.
+* Add/edit Complaint Actions for Complaints assigned to them.
+* Transfer (reassign) their Complaints to other Users within the same Office or to the Assignor of another Office.
 
 ### Manager
 

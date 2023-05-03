@@ -7,6 +7,7 @@ public static class RoleName
 {
     // These are the strings that are stored in the database. Avoid modifying these once set!
 
+    public const string Staff = nameof(Staff);
     public const string AttachmentsEditor = nameof(AttachmentsEditor);
     public const string DataExport = nameof(DataExport);
     public const string DivisionManager = nameof(DivisionManager);
@@ -56,6 +57,12 @@ public class AppRole
     }
 
     // These static Role objects are used for displaying role information in the UI.
+
+    public static AppRole StaffRole { get; } = new(
+        RoleName.Staff, "CTS Staff",
+        "Can create new complaints and work with complaints assigned to them. Can transfer their " +
+        "complaints to other users or offices."
+    );
 
     public static AppRole AttachmentsEditorRole { get; } = new(
         RoleName.AttachmentsEditor, "Attachments Editor",

@@ -12,6 +12,7 @@ internal static class ApplicationSettings
         UseEfMigrations = true,
         UseAzureAd = true,
         LocalUserIsAuthenticated = false,
+        LocalUserIsStaff = false,
         LocalUserIsAdmin = false,
         UseInMemoryFiles = false,
     };
@@ -24,8 +25,8 @@ internal static class ApplicationSettings
         public bool UseInMemoryData { get; [UsedImplicitly] init; }
 
         /// <summary>
-        /// Uses Entity Framework migrations when `true`. When set to `false`, the database is deleted and recreated
-        /// on each run. (Only applies if `UseInMemoryData` is `false`.)
+        /// Uses Entity Framework migrations when `true`. When set to `false`, the database is deleted and
+        /// recreated on each run. (Only applies if <see cref="UseInMemoryData"/> is `false`.)
         /// </summary>
         public bool UseEfMigrations { get; [UsedImplicitly] init; }
 
@@ -37,19 +38,26 @@ internal static class ApplicationSettings
 
         /// <summary>
         /// Simulates a successful login with a test account when `true`. Simulates a failed login when `false`.
-        /// (Only applies if `UseAzureAd` is `false`.)
+        /// (Only applies if <see cref="UseAzureAd"/> is `false`.)
         /// </summary>
         public bool LocalUserIsAuthenticated { get; [UsedImplicitly] init; }
 
         /// <summary>
+        /// Simulates a successful login with a test account with the Staff role when `true`. When `false`, no
+        /// roles are added.
+        /// (Only applies if <see cref="LocalUserIsAuthenticated"/> is `true`.)
+        /// </summary>
+        public bool LocalUserIsStaff { get; [UsedImplicitly] init; }
+
+        /// <summary>
         /// Adds all App Roles to the logged in account when `true` or no roles when `false`. (Applies whether
-        /// `UserAzureAd` is `true` or `false`.)
+        /// <see cref="UseAzureAd"/> is `true` or `false`.)
         /// </summary>
         public bool LocalUserIsAdmin { get; [UsedImplicitly] init; }
 
         /// <summary>
-        /// If `true`, files are seeded from the TestData project and stored in memory. If `false`, attachment files
-        /// are saved/loaded from the file system.
+        /// If `true`, files are seeded from the TestData project and stored in memory. If `false`, attachment
+        /// files are saved/loaded from the file system.
         /// </summary>
         public bool UseInMemoryFiles { get; [UsedImplicitly] init; }
     }
