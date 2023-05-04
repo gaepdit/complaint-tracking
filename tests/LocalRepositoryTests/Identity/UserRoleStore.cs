@@ -1,3 +1,4 @@
+using Cts.Domain.Identity;
 using Cts.LocalRepository.Identity;
 using FluentAssertions.Execution;
 using System.Diagnostics;
@@ -100,9 +101,7 @@ public class UserRoleStore
     public async Task GetUsersInRole_IfSome_ReturnsListOfUsers()
     {
         using var store = new LocalUserStore();
-        var roleName = store.Roles.First().Name;
-        Debug.Assert(roleName != null, nameof(roleName) + " != null");
-        var result = await store.GetUsersInRoleAsync(roleName, CancellationToken.None);
+        var result = await store.GetUsersInRoleAsync(RoleName.DivisionManager, CancellationToken.None);
 
         using (new AssertionScope())
         {

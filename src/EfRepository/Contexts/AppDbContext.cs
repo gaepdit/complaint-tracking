@@ -15,6 +15,9 @@ namespace Cts.EfRepository.Contexts;
 
 public class AppDbContext : IdentityDbContext<ApplicationUser>
 {
+    internal const string SqlServerProvider = "Microsoft.EntityFrameworkCore.SqlServer";
+    internal const string SqliteProvider = "Microsoft.EntityFrameworkCore.Sqlite";
+
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
     // Add domain entities here.
@@ -60,7 +63,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
 
         // Handling DateTimeOffset in SQLite with Entity Framework Core
         // https://blog.dangl.me/archive/handling-datetimeoffset-in-sqlite-with-entity-framework-core/
-        if (Database.ProviderName != "Microsoft.EntityFrameworkCore.Sqlite") return;
+        if (Database.ProviderName != SqliteProvider) return;
         foreach (var entityType in builder.Model.GetEntityTypes())
         {
             var dateTimeOffsetProperties = entityType.ClrType.GetProperties()

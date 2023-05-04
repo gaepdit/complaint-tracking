@@ -1,4 +1,5 @@
-﻿using Cts.TestData;
+﻿using Cts.Domain.Identity;
+using Cts.TestData;
 using Cts.TestData.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -7,8 +8,6 @@ namespace Cts.EfRepository.Contexts.SeedDevData;
 
 public static class DbSeedDataHelpers
 {
-    private const string SqlServerProvider = "Microsoft.EntityFrameworkCore.SqlServer";
-
     public static void SeedAllData(AppDbContext context)
     {
         SeedActionTypeData(context);
@@ -30,13 +29,13 @@ public static class DbSeedDataHelpers
         if (context.Complaints.Any()) return;
 
         context.Database.BeginTransaction();
-        if (context.Database.ProviderName == SqlServerProvider)
+        if (context.Database.ProviderName == AppDbContext.SqlServerProvider)
             context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Complaints ON");
 
         context.Complaints.AddRange(ComplaintData.GetComplaints);
         context.SaveChanges();
 
-        if (context.Database.ProviderName == SqlServerProvider)
+        if (context.Database.ProviderName == AppDbContext.SqlServerProvider)
             context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Complaints OFF");
         context.Database.CommitTransaction();
 
@@ -66,16 +65,40 @@ public static class DbSeedDataHelpers
 
     public static void SeedIdentityData(AppDbContext context)
     {
-        var roles = UserData.GetRoles.ToList();
+        // Seed Users
         var users = UserData.GetUsers.ToList();
-        var userRoles = roles
-            .Select(role => new IdentityUserRole<string> { RoleId = role.Id, UserId = users.First().Id })
-            .ToList();
-
-        if (!context.Roles.Any()) context.Roles.AddRange(roles);
         if (!context.Users.Any()) context.Users.AddRange(users);
-        if (!context.UserRoles.Any()) context.UserRoles.AddRange(userRoles);
 
+        // Seed Roles
+        var roles = UserData.GetRoles.ToList();
+        if (!context.Roles.Any()) context.Roles.AddRange(roles);
+
+        // Seed User Roles
+        if (!context.UserRoles.Any())
+        {
+            // -- admin
+            var adminUserRoles = roles
+                .Select(role => new IdentityUserRole<string>
+                    { RoleId = role.Id, UserId = users.Single(e => e.GivenName == "Admin").Id })
+                .ToList();
+            context.UserRoles.AddRange(adminUserRoles);
+
+            // -- staff
+            var staffUserId = users.Single(e => e.GivenName == "General").Id;
+            context.UserRoles.AddRange(
+                new IdentityUserRole<string>
+                {
+                    RoleId = roles.Single(e => e.Name == RoleName.SiteMaintenance).Id,
+                    UserId = staffUserId,
+                },
+                new IdentityUserRole<string>
+                {
+                    RoleId = roles.Single(e => e.Name == RoleName.Staff).Id,
+                    UserId = staffUserId,
+                });
+        }
+
+        // Seed Office assignors
         OfficeData.SeedOfficeAssignors(context.Offices.AsTracking().ToList(), users);
 
         context.SaveChanges();

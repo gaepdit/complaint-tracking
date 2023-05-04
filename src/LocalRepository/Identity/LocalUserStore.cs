@@ -15,25 +15,44 @@ public sealed class LocalUserStore :
 
     internal ICollection<ApplicationUser> UserStore { get; }
     internal ICollection<IdentityRole> Roles { get; }
-    private ICollection<IdentityUserRole<string>> UserRoles { get; }
+    private List<IdentityUserRole<string>> UserRoles { get; }
     private ICollection<UserLogin> UserLogins { get; }
 
     public LocalUserStore()
     {
+        // Seed Users
         UserStore = UserData.GetUsers.ToList();
+
+        // Seed Roles
         Roles = UserData.GetRoles.ToList();
+
+        // Seed User Roles
+        // -- admin
         UserRoles = Roles
-            .Select(role => new IdentityUserRole<string> { RoleId = role.Id, UserId = UserStore.First().Id })
+            .Select(role => new IdentityUserRole<string>
+                { RoleId = role.Id, UserId = UserStore.Single(e => e.GivenName == "Admin").Id })
             .ToList();
 
-        UserRoles.Add(new IdentityUserRole<string>
+        // -- staff
+        var staffUserId = UserStore.Single(e => e.GivenName == "General").Id;
+        UserRoles.AddRange(new IdentityUserRole<string>[]
         {
-            RoleId = Roles.Single(e => e.Name == RoleName.SiteMaintenance).Id,
-            UserId = UserStore.Single(e => e.GivenName == "General").Id,
+            new()
+            {
+                RoleId = Roles.Single(e => e.Name == RoleName.SiteMaintenance).Id,
+                UserId = staffUserId,
+            },
+            new()
+            {
+                RoleId = Roles.Single(e => e.Name == RoleName.Staff).Id,
+                UserId = staffUserId,
+            },
         });
 
+        // Initialize Logins
         UserLogins = new List<UserLogin>();
 
+        // Seed Office assignors
         OfficeData.SeedOfficeAssignors(OfficeData.GetOffices, UserStore);
     }
 
