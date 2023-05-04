@@ -36,7 +36,7 @@ public class GetPublic
             Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
             AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
 
-        var result = await appService.GetPublicAsync(item.Id);
+        var result = await appService.FindPublicAsync(item.Id);
 
         result.Should().BeEquivalentTo(item);
     }
@@ -51,7 +51,7 @@ public class GetPublic
             Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
             AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
 
-        var result = await appService.GetPublicAsync(0);
+        var result = await appService.FindPublicAsync(0);
 
         result.Should().BeNull();
     }

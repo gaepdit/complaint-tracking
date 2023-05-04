@@ -35,7 +35,7 @@ public sealed class ComplaintService : IComplaintService
         _users = users;
     }
 
-    public async Task<ComplaintPublicViewDto?> GetPublicAsync(int id, CancellationToken token = default)
+    public async Task<ComplaintPublicViewDto?> FindPublicAsync(int id, CancellationToken token = default)
     {
         var item = _mapper.Map<ComplaintPublicViewDto>(
             await _complaints.FindAsync(ComplaintFilters.PublicIdPredicate(id), token));
@@ -83,7 +83,7 @@ public sealed class ComplaintService : IComplaintService
         return complaint is null ? null : _mapper.Map<AttachmentPublicViewDto>(attachment);
     }
 
-    public async Task<ComplaintViewDto?> GetAsync(int id, CancellationToken token = default)
+    public async Task<ComplaintViewDto?> FindAsync(int id, CancellationToken token = default)
     {
         var item = _mapper.Map<ComplaintViewDto>(await _complaints.FindAsync(id, token));
         if (item is null) return item;

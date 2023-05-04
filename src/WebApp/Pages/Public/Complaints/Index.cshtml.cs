@@ -16,7 +16,7 @@ public class IndexModel : PageModel
         int? id)
     {
         if (id is null) return RedirectToPage("../Index");
-        var item = await service.GetPublicAsync(id.Value);
+        var item = await service.FindPublicAsync(id.Value);
         if (item is null) return NotFound();
 
         Item = item;

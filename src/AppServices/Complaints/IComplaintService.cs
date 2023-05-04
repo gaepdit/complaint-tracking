@@ -9,7 +9,7 @@ public interface IComplaintService : IDisposable
 {
     // Public methods
 
-    Task<ComplaintPublicViewDto?> GetPublicAsync(int id, CancellationToken token = default);
+    Task<ComplaintPublicViewDto?> FindPublicAsync(int id, CancellationToken token = default);
 
     Task<bool> PublicExistsAsync(int id, CancellationToken token = default);
 
@@ -20,7 +20,7 @@ public interface IComplaintService : IDisposable
 
     // Admin methods
 
-    Task<ComplaintViewDto?> GetAsync(int id, CancellationToken token = default);
+    Task<ComplaintViewDto?> FindAsync(int id, CancellationToken token = default);
 
     Task<bool> ExistsAsync(int id, CancellationToken token = default);
 
