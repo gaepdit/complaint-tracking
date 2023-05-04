@@ -72,7 +72,6 @@ public class ExternalLoginModel : PageModel
             ApplicationSettings.DevSettings.LocalUserIsAdmin);
         if (!ApplicationSettings.DevSettings.LocalUserIsAuthenticated) return Forbid();
 
-
         var search = new StaffSearchDto { Name = "Limited" };
         if (ApplicationSettings.DevSettings.LocalUserIsStaff)
             search.Name = "General";

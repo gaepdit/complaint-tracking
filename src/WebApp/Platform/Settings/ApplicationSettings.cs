@@ -43,8 +43,7 @@ internal static class ApplicationSettings
         public bool LocalUserIsAuthenticated { get; [UsedImplicitly] init; }
 
         /// <summary>
-        /// Simulates a successful login with a test account with the Staff role when `true`. When `false`, no
-        /// roles are added.
+        /// Adds the Staff and Site Maintenance roles when `true` or no roles when `false`.
         /// (Only applies if <see cref="LocalUserIsAuthenticated"/> is `true`.)
         /// </summary>
         public bool LocalUserIsStaff { get; [UsedImplicitly] init; }
