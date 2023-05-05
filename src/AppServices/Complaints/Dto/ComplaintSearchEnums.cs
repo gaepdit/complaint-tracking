@@ -1,8 +1,10 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Cts.AppServices.Complaints.Dto;
 
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum SortBy
 {
     [Description("Id")] IdAsc,
@@ -16,6 +18,7 @@ public enum SortBy
 // The order of the values in this enum is intentional:
 // The listed order of the items determines the order they appear in the search form dropdown,
 // and the corresponding integer values ensure that previous bookmarks don't break.
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum SearchComplaintStatus
 {
     [Display(Name = "All Open")] AllOpen = 0,
@@ -31,6 +34,7 @@ public enum SearchComplaintStatus
 // "Deleted" = only deleted complaints
 // "All" = all complaints
 // "Not Deleted" (null) = only non-deleted complaints
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum SearchDeleteStatus
 {
     Deleted = 0,

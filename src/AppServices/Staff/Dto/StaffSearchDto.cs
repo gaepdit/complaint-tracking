@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Cts.AppServices.Staff.Dto;
 
@@ -37,6 +38,7 @@ public record StaffSearchDto
 }
 
 // Search enums
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum SearchStaffStatus
 {
     Active,
@@ -44,6 +46,7 @@ public enum SearchStaffStatus
     All,
 }
 
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum SortBy
 {
     [Description("FamilyName, GivenName")] NameAsc,

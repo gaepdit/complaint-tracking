@@ -18,21 +18,27 @@ public class PublicSearch
     [Test]
     public async Task WhenItemsExist_ReturnsPagedList()
     {
+        // Arrange
         var itemList = new ReadOnlyCollection<Complaint>(ComplaintData.GetComplaints.ToList());
         var count = ComplaintData.GetComplaints.Count();
         var paging = new PaginatedRequest(1, 100);
+        
         var repoMock = new Mock<IComplaintRepository>();
         repoMock.Setup(l => l.GetPagedListAsync(It.IsAny<Expression<Func<Complaint, bool>>>(),
                 It.IsAny<PaginatedRequest>(), CancellationToken.None))
             .ReturnsAsync(itemList);
         repoMock.Setup(l => l.CountAsync(It.IsAny<Expression<Func<Complaint, bool>>>(), CancellationToken.None))
             .ReturnsAsync(count);
+        
         var appService = new ComplaintService(repoMock.Object, Mock.Of<IComplaintManager>(),
             Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
             AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
+
+        // Act
         var result = await appService.PublicSearchAsync(Mock.Of<ComplaintPublicSearchDto>(),
             paging, CancellationToken.None);
 
+        // Assert
         using (new AssertionScope())
         {
             result.Items.Should().BeEquivalentTo(itemList);
@@ -43,9 +49,11 @@ public class PublicSearch
     [Test]
     public async Task WhenDoesNotExist_ReturnsEmptyPagedList()
     {
+        // Arrange
         var itemList = new ReadOnlyCollection<Complaint>(new List<Complaint>());
         const int count = 0;
         var paging = new PaginatedRequest(1, 100);
+
         var repoMock = new Mock<IComplaintRepository>();
         repoMock.Setup(l =>
                 l.GetPagedListAsync(It.IsAny<Expression<Func<Complaint, bool>>>(),
@@ -54,13 +62,16 @@ public class PublicSearch
         repoMock.Setup(l =>
                 l.CountAsync(It.IsAny<Expression<Func<Complaint, bool>>>(), CancellationToken.None))
             .ReturnsAsync(count);
+        
         var appService = new ComplaintService(repoMock.Object, Mock.Of<IComplaintManager>(),
             Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
             AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
 
+        // Act
         var result = await appService.PublicSearchAsync(Mock.Of<ComplaintPublicSearchDto>(),
             paging, CancellationToken.None);
 
+        // Assert
         using (new AssertionScope())
         {
             result.Items.Should().BeEmpty();
