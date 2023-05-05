@@ -25,7 +25,7 @@ public class ComplaintAdminApiController : Controller
     [HttpGet("{id:int}")]
     public async Task<ActionResult<ComplaintViewDto>> GetComplaintAsync([FromRoute] int id)
     {
-        var item = await _service.GetAsync(id);
+        var item = await _service.FindAsync(id);
         return item is null ? Problem("ID not found.", statusCode: 404) : Ok(item);
     }
 }

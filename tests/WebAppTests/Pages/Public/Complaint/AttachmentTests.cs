@@ -23,7 +23,7 @@ public class AttachmentTests
         };
 
         var complaintServiceMock = new Mock<IComplaintService>();
-        complaintServiceMock.Setup(l => l.GetPublicAttachmentAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+        complaintServiceMock.Setup(l => l.FindPublicAttachmentAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(item);
         var fileServiceMock = new Mock<IFileService>();
         fileServiceMock.Setup(l => l.GetFileAsync(It.IsAny<string>(), It.IsAny<string?>()))
@@ -44,7 +44,7 @@ public class AttachmentTests
     public async Task NonexistentItem_ReturnsNotFound()
     {
         var complaintServiceMock = new Mock<IComplaintService>();
-        complaintServiceMock.Setup(l => l.GetPublicAttachmentAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+        complaintServiceMock.Setup(l => l.FindPublicAttachmentAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((AttachmentPublicViewDto?)null);
         var pageModel = new AttachmentModel();
 
@@ -67,7 +67,7 @@ public class AttachmentTests
         };
 
         var complaintServiceMock = new Mock<IComplaintService>();
-        complaintServiceMock.Setup(l => l.GetPublicAttachmentAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+        complaintServiceMock.Setup(l => l.FindPublicAttachmentAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(item);
         var pageModel = new AttachmentModel();
 
@@ -94,7 +94,7 @@ public class AttachmentTests
         };
 
         var complaintServiceMock = new Mock<IComplaintService>();
-        complaintServiceMock.Setup(l => l.GetPublicAttachmentAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+        complaintServiceMock.Setup(l => l.FindPublicAttachmentAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(item);
         var fileServiceMock = new Mock<IFileService>();
         fileServiceMock.Setup(l => l.GetFileAsync(It.IsAny<string>(), It.IsAny<string?>()))
@@ -120,7 +120,7 @@ public class AttachmentTests
         };
 
         var complaintServiceMock = new Mock<IComplaintService>();
-        complaintServiceMock.Setup(l => l.GetPublicAttachmentAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+        complaintServiceMock.Setup(l => l.FindPublicAttachmentAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(item);
         var fileServiceMock = new Mock<IFileService>();
         fileServiceMock.Setup(l => l.GetFileAsync(It.IsAny<string>(), It.IsAny<string?>()))

@@ -35,7 +35,7 @@ public sealed class ComplaintService : IComplaintService
         _users = users;
     }
 
-    public async Task<ComplaintPublicViewDto?> GetPublicAsync(int id, CancellationToken token = default)
+    public async Task<ComplaintPublicViewDto?> FindPublicAsync(int id, CancellationToken token = default)
     {
         var item = _mapper.Map<ComplaintPublicViewDto>(
             await _complaints.FindAsync(ComplaintFilters.PublicIdPredicate(id), token));
@@ -74,7 +74,7 @@ public sealed class ComplaintService : IComplaintService
         return new PaginatedResult<ComplaintSearchResultDto>(list, count, paging);
     }
 
-    public async Task<AttachmentPublicViewDto?> GetPublicAttachmentAsync(Guid id, CancellationToken token = default)
+    public async Task<AttachmentPublicViewDto?> FindPublicAttachmentAsync(Guid id, CancellationToken token = default)
     {
         var attachment = await _complaints.FindAttachmentAsync(id, token);
         if (attachment is null || attachment.IsDeleted) return null;
@@ -83,7 +83,7 @@ public sealed class ComplaintService : IComplaintService
         return complaint is null ? null : _mapper.Map<AttachmentPublicViewDto>(attachment);
     }
 
-    public async Task<ComplaintViewDto?> GetAsync(int id, CancellationToken token = default)
+    public async Task<ComplaintViewDto?> FindAsync(int id, CancellationToken token = default)
     {
         var item = _mapper.Map<ComplaintViewDto>(await _complaints.FindAsync(id, token));
         if (item is null) return item;
@@ -104,7 +104,7 @@ public sealed class ComplaintService : IComplaintService
         _mapper.Map<IReadOnlyList<AttachmentViewDto>>(
             await _complaints.GetAttachmentsListAsync(AttachmentFilters.IdPredicate(complaintId), token));
 
-    private async Task<IReadOnlyList<ComplaintTransitionViewDto>?> GetTransitionsAsync(
+    private async Task<IReadOnlyList<ComplaintTransitionViewDto>> GetTransitionsAsync(
         int complaintId, CancellationToken token) =>
         _mapper.Map<IReadOnlyList<ComplaintTransitionViewDto>>(
             await _complaints.GetComplaintTransitionsListAsync(complaintId, token));
@@ -126,7 +126,7 @@ public sealed class ComplaintService : IComplaintService
         return new PaginatedResult<ComplaintSearchResultDto>(list, count, paging);
     }
 
-    public async Task<AttachmentViewDto?> GetAttachmentAsync(Guid id, CancellationToken token = default)
+    public async Task<AttachmentViewDto?> FindAttachmentAsync(Guid id, CancellationToken token = default)
     {
         var attachment = await _complaints.FindAttachmentAsync(id, token);
         return _mapper.Map<AttachmentViewDto>(attachment);
@@ -221,5 +221,10 @@ public sealed class ComplaintService : IComplaintService
         throw new NotImplementedException();
     }
 
-    public void Dispose() => _complaints.Dispose();
+    public void Dispose()
+    {
+        _complaints.Dispose();
+        _concerns.Dispose();
+        _offices.Dispose();
+    }
 }

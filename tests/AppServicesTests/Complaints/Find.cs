@@ -11,7 +11,7 @@ using System.Linq.Expressions;
 
 namespace AppServicesTests.Complaints;
 
-public class Get
+public class Find
 {
     [Test]
     public async Task WhenItemExists_ReturnsViewDto()
@@ -36,7 +36,7 @@ public class Get
             Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
             AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
 
-        var result = await appService.GetAsync(item.Id);
+        var result = await appService.FindAsync(item.Id);
 
         result.Should().BeEquivalentTo(item);
     }
@@ -63,7 +63,7 @@ public class Get
             Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
             AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
 
-        var result = await appService.GetAsync(item.Id);
+        var result = await appService.FindAsync(item.Id);
 
         result.Should().BeEquivalentTo(item);
     }
@@ -78,7 +78,7 @@ public class Get
             Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
             AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
 
-        var result = await appService.GetAsync(0);
+        var result = await appService.FindAsync(0);
 
         result.Should().BeNull();
     }

@@ -9,7 +9,7 @@ using Cts.TestData;
 
 namespace AppServicesTests.Complaints;
 
-public class GetPublicAttachment
+public class FindPublicAttachment
 {
     [Test]
     public async Task WhenItemsExists_ReturnsViewDtoList()
@@ -23,7 +23,7 @@ public class GetPublicAttachment
             Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
             AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
 
-        var result = await appService.GetPublicAttachmentAsync(item.Id);
+        var result = await appService.FindPublicAttachmentAsync(item.Id);
 
         result.Should().BeEquivalentTo(item);
     }
@@ -38,7 +38,7 @@ public class GetPublicAttachment
             Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
             AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
 
-        var result = await appService.GetPublicAttachmentAsync(Guid.Empty);
+        var result = await appService.FindPublicAttachmentAsync(Guid.Empty);
 
         result.Should().BeNull();
     }
@@ -54,7 +54,7 @@ public class GetPublicAttachment
             Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
             AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
 
-        var result = await appService.GetPublicAttachmentAsync(item.Id);
+        var result = await appService.FindPublicAttachmentAsync(item.Id);
 
         result.Should().BeNull();
     }
@@ -71,7 +71,7 @@ public class GetPublicAttachment
             Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
             AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
 
-        var result = await appService.GetPublicAttachmentAsync(item.Id);
+        var result = await appService.FindPublicAttachmentAsync(item.Id);
 
         result.Should().BeNull();
     }

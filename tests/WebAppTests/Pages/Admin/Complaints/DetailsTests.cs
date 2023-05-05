@@ -21,7 +21,7 @@ public class DetailsTests
     public async Task OnGet_GivenManageDeletions_ReturnsWithItemAndPermissions()
     {
         var serviceMock = new Mock<IComplaintService>();
-        serviceMock.Setup(l => l.GetAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
+        serviceMock.Setup(l => l.FindAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(ItemTest);
         var staffServiceMock = new Mock<IStaffService>();
         staffServiceMock.Setup(l => l.GetCurrentUserAsync())

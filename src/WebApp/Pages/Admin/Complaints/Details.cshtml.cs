@@ -37,7 +37,7 @@ public class DetailsModel : PageModel
         if (staff is not { Active: true }) return Forbid();
 
         if (id is null) return RedirectToPage("../Index");
-        var item = await _complaints.GetAsync(id.Value);
+        var item = await _complaints.FindAsync(id.Value);
         if (item is null) return NotFound();
 
         item.CurrentUserOfficeId = staff.Office?.Id ?? Guid.Empty;
