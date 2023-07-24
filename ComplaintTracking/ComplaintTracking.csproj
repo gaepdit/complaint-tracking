@@ -4,12 +4,8 @@
     <Configurations>Debug;Release</Configurations>
     <AssemblyVersion>2023.4.13</AssemblyVersion>
     <UserSecretsId>aspnet-ComplaintTracking-8e46fb5a-9a0a-4c6d-9c94-1676097ed2f4</UserSecretsId>
-    <CodeAnalysisRuleSet>..\.sonarlint\gaepdit.complaint-trackingcsharp.ruleset</CodeAnalysisRuleSet>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
-  <ItemGroup>
-    <AdditionalFiles Include="..\.sonarlint\gaepdit.complaint-tracking\CSharp\SonarLint.xml" Link="SonarLint.xml" />
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.97.0" />
     <PackageReference Include="CsvHelper" Version="30.0.1" />
