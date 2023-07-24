@@ -2,9 +2,9 @@ name: SonarCloud Scan
 
 on:
   push:
-    branches: ["main", "vNext/main"]
+    branches: ["vNext/main"]
   pull_request:
-    branches: ["main", "vNext/main"]
+    types: [opened, synchronize, reopened]
 
 jobs:
   sonarcloud-scan:
@@ -16,50 +16,58 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Set up JDK 11
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v3
         with:
-          java-version: 1.11
+          java-version: 11
+          distribution: "zulu" # Alternative distribution options are available.
+
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+
       - name: Set up .NET
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 7.0.x
+
       - name: Cache SonarCloud packages
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: ~\sonar\cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
+
       - name: Cache SonarCloud scanner
         id: cache-sonar-scanner
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: .\.sonar\scanner
           key: ${{ runner.os }}-sonar-scanner
           restore-keys: ${{ runner.os }}-sonar-scanner
+
       - name: Install SonarCloud scanner
         if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
         shell: powershell
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+
       - name: Install Coverlet as global dotnet tool
         shell: powershell
         run: |
           dotnet tool install --global coverlet.console
+
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"gaepdit.complaint-tracking" /o:"gaepdit" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths=coverage.xml /d:sonar.exclusions=src/EfRepository/Migrations/**,src/TestData/**
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"gaepdit.complaint-tracking" /o:"gaepdit" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths=coverage.xml /d:sonar.exclusions=src/EfRepository/Migrations/**,src/TestData/**
           dotnet build
           coverlet .\.artifacts\DomainTests\bin\Debug\net7.0\DomainTests.dll --target "dotnet" --targetargs "test tests/DomainTests --no-build" --exclude "[TestData]*"
           coverlet .\.artifacts\EfRepositoryTests\bin\Debug\net7.0\EfRepositoryTests.dll --target "dotnet" --targetargs "test tests/EfRepositoryTests --no-build" --exclude "[TestData]*" --exclude "[EfRepository]Cts.EfRepository.Migrations.*" --merge-with "coverage.json"
           coverlet .\.artifacts\LocalRepositoryTests\bin\Debug\net7.0\LocalRepositoryTests.dll --target "dotnet" --targetargs "test tests/LocalRepositoryTests --no-build" --exclude "[TestData]*" --merge-with "coverage.json"
           coverlet .\.artifacts\AppServicesTests\bin\Debug\net7.0\AppServicesTests.dll --target "dotnet" --targetargs "test tests/AppServicesTests --no-build" --exclude "[TestData]*" --merge-with "coverage.json"
           coverlet .\.artifacts\WebAppTests\bin\Debug\net7.0\WebAppTests.dll --target "dotnet" --targetargs "test tests/WebAppTests --no-build" --exclude "[TestData]*" --exclude "[EfRepository]Cts.EfRepository.Migrations.*" --merge-with "coverage.json" -f=opencover -o="coverage.xml"
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
