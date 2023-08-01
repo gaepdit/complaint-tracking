@@ -12,10 +12,9 @@ internal static class SecurityHeaders
         policies.AddReferrerPolicyStrictOriginWhenCrossOrigin();
         policies.RemoveServerHeader();
         policies.AddContentSecurityPolicy(builder => builder.CspBuilder());
-        policies.AddCustomHeader("Reporting-Endpoints",
-            $"default=\"https://report-to-api.raygun.com/reports?apikey={ApplicationSettings.Raygun.ApiKey}\",csp-endpoint=\"https://report-to-api.raygun.com/reports-csp?apikey={ApplicationSettings.Raygun.ApiKey}\"");
-        policies.AddCustomHeader("Report-To",
-            $"{{\"group\":\"default\",\"max_age\":10886400,\"endpoints\":[{{\"url\":\"https://report-to-api.raygun.com/reports?apikey={ApplicationSettings.Raygun.ApiKey}\"}}]}},{{\"group\":\"csp-endpoint\",\"max_age\":10886400,\"endpoints\":[{{\"url\":\"https://report-to-api.raygun.com/reports-csp?apikey={ApplicationSettings.Raygun.ApiKey}\"}}]}}");
+        if (!string.IsNullOrEmpty(ApplicationSettings.Raygun.ApiKey))
+            policies.AddReportingEndpoints(builder => builder.AddEndpoint("csp-endpoint",
+                $"https://report-to-api.raygun.com/reports?apikey={ApplicationSettings.Raygun.ApiKey}"));
     }
 
 #pragma warning disable S1075 // "URIs should not be hardcoded"
@@ -42,15 +41,14 @@ internal static class SecurityHeaders
             .From("https://www.gravatar.com/avatar/");
         builder.AddConnectSrc()
             .Self()
+            .From("https://api.raygun.com")
             .From("https://api.raygun.io");
         builder.AddFontSrc().Self();
         builder.AddFormAction().Self();
         builder.AddManifestSrc().Self();
         builder.AddFrameSrc().Self();
         builder.AddFrameAncestors().Self();
-        builder.AddReportUri()
-            .To($"https://report-to-api.raygun.com/reports-csp?apikey={ApplicationSettings.Raygun.ApiKey}");
-        builder.AddCustomDirective("report-to", "csp-endpoint");
+        builder.AddReportTo("csp-endpoint");
     }
 #pragma warning restore S1075
 }
