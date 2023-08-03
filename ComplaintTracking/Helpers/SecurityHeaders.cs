@@ -1,4 +1,4 @@
-﻿using ComplaintTracking.App;
+using ComplaintTracking.App;
 
 namespace ComplaintTracking.Helpers;
 
@@ -48,6 +48,8 @@ internal static class SecurityHeaders
         builder.AddManifestSrc().Self();
         builder.AddFrameSrc().Self();
         builder.AddFrameAncestors().Self();
+        builder.AddReportUri()
+            .To($"https://report-to-api.raygun.com/reports-csp?apikey={ApplicationSettings.Raygun.ApiKey}");
         builder.AddReportTo("csp-endpoint");
     }
 #pragma warning restore S1075
