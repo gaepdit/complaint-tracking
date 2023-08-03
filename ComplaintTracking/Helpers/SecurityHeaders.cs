@@ -1,4 +1,4 @@
-using ComplaintTracking.App;
+﻿using ComplaintTracking.App;
 
 namespace ComplaintTracking.Helpers;
 
@@ -34,6 +34,7 @@ internal static class SecurityHeaders
         builder.AddStyleSrc()
             .Self()
             .WithHash256("FDaFJEfUmeNNDmh1mlkOgFQnyhlZzheSSA3oNe8/JRE=")
+            .WithHash256("VJk8poT0aZ7cgtqBETrtHQ50XTJbZAOh2WI1W8LG7Xc=") // Fancybox
             .ReportSample();
         builder.AddImgSrc()
             .Self()
