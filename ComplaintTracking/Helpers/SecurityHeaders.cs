@@ -35,6 +35,8 @@ internal static class SecurityHeaders
             .Self()
             .WithHash256("FDaFJEfUmeNNDmh1mlkOgFQnyhlZzheSSA3oNe8/JRE=")
             .WithHash256("VJk8poT0aZ7cgtqBETrtHQ50XTJbZAOh2WI1W8LG7Xc=") // Fancybox
+            .WithHash256("aqNNdDLnnrDOnTNdkJpYlAxKVJtLt9CtFLklmInuUAE=") // Validation summary (requires 'unsafe-hashes')
+            .UnsafeHashes()
             .ReportSample();
         builder.AddImgSrc()
             .Self()
