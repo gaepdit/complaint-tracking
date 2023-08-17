@@ -12,14 +12,14 @@ public class IndexTests
     [Test]
     public async Task OnGet_PopulatesThePageModel()
     {
-        var item = Mock.Of<ComplaintPublicViewDto>();
+        var item = Substitute.For<ComplaintPublicViewDto>();
 
-        var serviceMock = new Mock<IComplaintService>();
-        serviceMock.Setup(l => l.FindPublicAsync(It.IsAny<int>(), CancellationToken.None))
-            .ReturnsAsync(item);
+        var serviceMock = Substitute.For<IComplaintService>();
+        serviceMock.FindPublicAsync(Arg.Any<int>(), Arg.Any<CancellationToken>())
+            .Returns(item);
         var pageModel = new IndexModel();
 
-        var result = await pageModel.OnGetAsync(serviceMock.Object, 1);
+        var result = await pageModel.OnGetAsync(serviceMock, 1);
 
         using (new AssertionScope())
         {
@@ -31,10 +31,10 @@ public class IndexTests
     [Test]
     public async Task OnGet_MissingIdReturnsNotFound()
     {
-        var serviceMock = new Mock<IComplaintService>();
+        var serviceMock = Substitute.For<IComplaintService>();
         var pageModel = new IndexModel();
 
-        var result = await pageModel.OnGetAsync(serviceMock.Object, null);
+        var result = await pageModel.OnGetAsync(serviceMock, null);
 
         using (new AssertionScope())
         {
@@ -46,12 +46,12 @@ public class IndexTests
     [Test]
     public async Task OnGet_NonexistentIdReturnsNotFound()
     {
-        var serviceMock = new Mock<IComplaintService>();
-        serviceMock.Setup(l => l.FindPublicAsync(It.IsAny<int>(), CancellationToken.None))
-            .ReturnsAsync((ComplaintPublicViewDto?)null);
+        var serviceMock = Substitute.For<IComplaintService>();
+        serviceMock.FindPublicAsync(Arg.Any<int>(), Arg.Any<CancellationToken>())
+            .Returns((ComplaintPublicViewDto?)null);
         var pageModel = new IndexModel();
 
-        var result = await pageModel.OnGetAsync(serviceMock.Object, 0);
+        var result = await pageModel.OnGetAsync(serviceMock, 0);
 
         result.Should().BeOfType<NotFoundResult>();
     }

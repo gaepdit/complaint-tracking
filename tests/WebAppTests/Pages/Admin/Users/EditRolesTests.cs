@@ -52,15 +52,15 @@ public class EditRolesTests
                 IsSelected = r.Key == RoleName.SiteMaintenance,
             }).ToList();
 
-        var staffServiceMock = new Mock<IStaffService>();
-        staffServiceMock.Setup(l => l.FindAsync(It.IsAny<string>()))
-            .ReturnsAsync(StaffViewTest);
-        staffServiceMock.Setup(l => l.GetRolesAsync(It.IsAny<string>()))
-            .ReturnsAsync(new List<string> { RoleName.SiteMaintenance });
-        var authorizationMock = new Mock<IAuthorizationService>();
-        authorizationMock.Setup(l => l.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), null, It.IsAny<string>()))
-            .ReturnsAsync(AuthorizationResult.Success);
-        var pageModel = new EditRolesModel(staffServiceMock.Object, authorizationMock.Object)
+        var staffServiceMock = Substitute.For<IStaffService>();
+        staffServiceMock.FindAsync(Arg.Any<string>())
+            .Returns(StaffViewTest);
+        staffServiceMock.GetRolesAsync(Arg.Any<string>())
+            .Returns(new List<string> { RoleName.SiteMaintenance });
+        var authorizationMock = Substitute.For<IAuthorizationService>();
+        authorizationMock.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), Arg.Is((string?)null), Arg.Any<string>())
+            .Returns(AuthorizationResult.Success());
+        var pageModel = new EditRolesModel(staffServiceMock, authorizationMock)
             { TempData = WebAppTestsSetup.PageTempData() };
 
         var result = await pageModel.OnGetAsync(StaffViewTest.Id);
@@ -78,8 +78,8 @@ public class EditRolesTests
     [Test]
     public async Task OnGet_MissingIdReturnsNotFound()
     {
-        var staffServiceMock = new Mock<IStaffService>();
-        var pageModel = new EditRolesModel(staffServiceMock.Object, Mock.Of<IAuthorizationService>())
+        var staffServiceMock = Substitute.For<IStaffService>();
+        var pageModel = new EditRolesModel(staffServiceMock, Substitute.For<IAuthorizationService>())
             { TempData = WebAppTestsSetup.PageTempData() };
 
         var result = await pageModel.OnGetAsync(null);
@@ -94,10 +94,10 @@ public class EditRolesTests
     [Test]
     public async Task OnGet_NonexistentIdReturnsNotFound()
     {
-        var staffServiceMock = new Mock<IStaffService>();
-        staffServiceMock.Setup(l => l.FindAsync(It.IsAny<string>()))
-            .ReturnsAsync((StaffViewDto?)null);
-        var pageModel = new EditRolesModel(staffServiceMock.Object, Mock.Of<IAuthorizationService>())
+        var staffServiceMock = Substitute.For<IStaffService>();
+        staffServiceMock.FindAsync(Arg.Any<string>())
+            .Returns((StaffViewDto?)null);
+        var pageModel = new EditRolesModel(staffServiceMock, Substitute.For<IAuthorizationService>())
             { TempData = WebAppTestsSetup.PageTempData() };
 
         var result = await pageModel.OnGetAsync(Guid.Empty.ToString());
@@ -111,15 +111,15 @@ public class EditRolesTests
         var expectedMessage =
             new DisplayMessage(DisplayMessage.AlertContext.Success, "User roles successfully updated.");
 
-        var staffServiceMock = new Mock<IStaffService>();
-        staffServiceMock.Setup(l => l.UpdateRolesAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, bool>>()))
-            .ReturnsAsync(IdentityResult.Success);
-        staffServiceMock.Setup(l => l.GetRolesAsync(It.IsAny<string>()))
-            .ReturnsAsync(new List<string> { RoleName.SiteMaintenance });
-        var authorizationMock = new Mock<IAuthorizationService>();
-        authorizationMock.Setup(l => l.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), null, It.IsAny<string>()))
-            .ReturnsAsync(AuthorizationResult.Success);
-        var page = new EditRolesModel(staffServiceMock.Object, authorizationMock.Object)
+        var staffServiceMock = Substitute.For<IStaffService>();
+        staffServiceMock.UpdateRolesAsync(Arg.Any<string>(), Arg.Any<Dictionary<string, bool>>())
+            .Returns(IdentityResult.Success);
+        staffServiceMock.GetRolesAsync(Arg.Any<string>())
+            .Returns(new List<string> { RoleName.SiteMaintenance });
+        var authorizationMock = Substitute.For<IAuthorizationService>();
+        authorizationMock.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), Arg.Is((string?)null), Arg.Any<string>())
+            .Returns(AuthorizationResult.Success());
+        var page = new EditRolesModel(staffServiceMock, authorizationMock)
         {
             RoleSettings = RoleSettingsTest,
             UserId = Guid.Empty.ToString(),
@@ -141,15 +141,15 @@ public class EditRolesTests
     [Test]
     public async Task OnPost_GivenMissingUser_ReturnsBadRequest()
     {
-        var staffServiceMock = new Mock<IStaffService>();
-        staffServiceMock.Setup(l => l.UpdateRolesAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, bool>>()))
-            .ReturnsAsync(IdentityResult.Failed());
-        staffServiceMock.Setup(l => l.FindAsync(It.IsAny<string>()))
-            .ReturnsAsync((StaffViewDto?)null);
-        var authorizationMock = new Mock<IAuthorizationService>();
-        authorizationMock.Setup(l => l.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), null, It.IsAny<string>()))
-            .ReturnsAsync(AuthorizationResult.Success);
-        var page = new EditRolesModel(staffServiceMock.Object, authorizationMock.Object)
+        var staffServiceMock = Substitute.For<IStaffService>();
+        staffServiceMock.UpdateRolesAsync(Arg.Any<string>(), Arg.Any<Dictionary<string, bool>>())
+            .Returns(IdentityResult.Failed());
+        staffServiceMock.FindAsync(Arg.Any<string>())
+            .Returns((StaffViewDto?)null);
+        var authorizationMock = Substitute.For<IAuthorizationService>();
+        authorizationMock.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), Arg.Is((string?)null), Arg.Any<string>())
+            .Returns(AuthorizationResult.Success());
+        var page = new EditRolesModel(staffServiceMock, authorizationMock)
         {
             RoleSettings = RoleSettingsTest,
             UserId = Guid.Empty.ToString(),
@@ -165,17 +165,17 @@ public class EditRolesTests
     [Test]
     public async Task OnPost_GivenUpdateFailure_ReturnsPageWithInvalidModelState()
     {
-        var staffServiceMock = new Mock<IStaffService>();
-        staffServiceMock.Setup(l => l.UpdateRolesAsync(It.IsAny<string>(), It.IsAny<Dictionary<string, bool>>()))
-            .ReturnsAsync(IdentityResult.Failed(new IdentityError { Code = "CODE", Description = "DESCRIPTION" }));
-        staffServiceMock.Setup(l => l.FindAsync(It.IsAny<string>()))
-            .ReturnsAsync(StaffViewTest);
-        staffServiceMock.Setup(l => l.GetRolesAsync(It.IsAny<string>()))
-            .ReturnsAsync(new List<string> { RoleName.SiteMaintenance });
-        var authorizationMock = new Mock<IAuthorizationService>();
-        authorizationMock.Setup(l => l.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), null, It.IsAny<string>()))
-            .ReturnsAsync(AuthorizationResult.Success);
-        var page = new EditRolesModel(staffServiceMock.Object, authorizationMock.Object)
+        var staffServiceMock = Substitute.For<IStaffService>();
+        staffServiceMock.UpdateRolesAsync(Arg.Any<string>(), Arg.Any<Dictionary<string, bool>>())
+            .Returns(IdentityResult.Failed(new IdentityError { Code = "CODE", Description = "DESCRIPTION" }));
+        staffServiceMock.FindAsync(Arg.Any<string>())
+            .Returns(StaffViewTest);
+        staffServiceMock.GetRolesAsync(Arg.Any<string>())
+            .Returns(new List<string> { RoleName.SiteMaintenance });
+        var authorizationMock = Substitute.For<IAuthorizationService>();
+        authorizationMock.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), Arg.Is((string?)null), Arg.Any<string>())
+            .Returns(AuthorizationResult.Success());
+        var page = new EditRolesModel(staffServiceMock, authorizationMock)
         {
             RoleSettings = RoleSettingsTest,
             UserId = Guid.Empty.ToString(),

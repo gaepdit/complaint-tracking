@@ -9,10 +9,10 @@ public class Create
     [Test]
     public async Task WhenItemIsValid_CreatesItem()
     {
-        var repoMock = new Mock<IOfficeRepository>();
-        repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((Office?)null);
-        var manager = new OfficeManager(repoMock.Object);
+        var repoMock = Substitute.For<IOfficeRepository>();
+        repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns((Office?)null);
+        var manager = new OfficeManager(repoMock);
 
         var newItem = await manager.CreateAsync(TestConstants.ValidName);
 
@@ -22,10 +22,10 @@ public class Create
     [Test]
     public async Task WhenItemIsInvalid_Throws()
     {
-        var repoMock = new Mock<IOfficeRepository>();
-        repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new Office(Guid.Empty, TestConstants.ValidName));
-        var manager = new OfficeManager(repoMock.Object);
+        var repoMock = Substitute.For<IOfficeRepository>();
+        repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(new Office(Guid.Empty, TestConstants.ValidName));
+        var manager = new OfficeManager(repoMock);
 
         var office = async () => await manager.CreateAsync(TestConstants.ValidName);
 

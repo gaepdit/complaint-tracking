@@ -22,20 +22,21 @@ public class PublicSearch
         var itemList = new ReadOnlyCollection<Complaint>(ComplaintData.GetComplaints.ToList());
         var count = ComplaintData.GetComplaints.Count();
         var paging = new PaginatedRequest(1, 100);
-        
-        var repoMock = new Mock<IComplaintRepository>();
-        repoMock.Setup(l => l.GetPagedListAsync(It.IsAny<Expression<Func<Complaint, bool>>>(),
-                It.IsAny<PaginatedRequest>(), CancellationToken.None))
-            .ReturnsAsync(itemList);
-        repoMock.Setup(l => l.CountAsync(It.IsAny<Expression<Func<Complaint, bool>>>(), CancellationToken.None))
-            .ReturnsAsync(count);
-        
-        var appService = new ComplaintService(repoMock.Object, Mock.Of<IComplaintManager>(),
-            Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
-            AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
+
+        var repoMock = Substitute.For<IComplaintRepository>();
+        repoMock.GetPagedListAsync(Arg.Any<Expression<Func<Complaint, bool>>>(),
+                Arg.Any<PaginatedRequest>(), Arg.Any<CancellationToken>())
+            .Returns(itemList);
+        repoMock.CountAsync(Arg.Any<Expression<Func<Complaint, bool>>>(), Arg.Any<CancellationToken>())
+            .Returns(count);
+
+        var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
+            Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
+            Substitute.For<IComplaintTransitionManager>(),
+            AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
 
         // Act
-        var result = await appService.PublicSearchAsync(Mock.Of<ComplaintPublicSearchDto>(),
+        var result = await appService.PublicSearchAsync(Substitute.For<ComplaintPublicSearchDto>(),
             paging, CancellationToken.None);
 
         // Assert
@@ -54,21 +55,20 @@ public class PublicSearch
         const int count = 0;
         var paging = new PaginatedRequest(1, 100);
 
-        var repoMock = new Mock<IComplaintRepository>();
-        repoMock.Setup(l =>
-                l.GetPagedListAsync(It.IsAny<Expression<Func<Complaint, bool>>>(),
-                    It.IsAny<PaginatedRequest>(), CancellationToken.None))
-            .ReturnsAsync(itemList);
-        repoMock.Setup(l =>
-                l.CountAsync(It.IsAny<Expression<Func<Complaint, bool>>>(), CancellationToken.None))
-            .ReturnsAsync(count);
-        
-        var appService = new ComplaintService(repoMock.Object, Mock.Of<IComplaintManager>(),
-            Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
-            AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
+        var repoMock = Substitute.For<IComplaintRepository>();
+        repoMock.GetPagedListAsync(Arg.Any<Expression<Func<Complaint, bool>>>(),
+                Arg.Any<PaginatedRequest>(), Arg.Any<CancellationToken>())
+            .Returns(itemList);
+        repoMock.CountAsync(Arg.Any<Expression<Func<Complaint, bool>>>(), Arg.Any<CancellationToken>())
+            .Returns(count);
+
+        var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
+            Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
+            Substitute.For<IComplaintTransitionManager>(),
+            AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
 
         // Act
-        var result = await appService.PublicSearchAsync(Mock.Of<ComplaintPublicSearchDto>(),
+        var result = await appService.PublicSearchAsync(Substitute.For<ComplaintPublicSearchDto>(),
             paging, CancellationToken.None);
 
         // Assert

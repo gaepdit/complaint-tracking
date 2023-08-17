@@ -22,13 +22,13 @@ public class GetList
         office.Assignor = user;
         var itemList = new List<Office> { office };
 
-        var repoMock = new Mock<IOfficeRepository>();
-        repoMock.Setup(l => l.GetListIncludeAssignorAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(itemList);
-        var managerMock = new Mock<IOfficeManager>();
-        var userServiceMock = new Mock<IUserService>();
-        var appService = new OfficeService(repoMock.Object, managerMock.Object,
-            AppServicesTestsSetup.Mapper!, userServiceMock.Object);
+        var repoMock = Substitute.For<IOfficeRepository>();
+        repoMock.GetListIncludeAssignorAsync(Arg.Any<CancellationToken>())
+            .Returns(itemList);
+        var managerMock = Substitute.For<IOfficeManager>();
+        var userServiceMock = Substitute.For<IUserService>();
+        var appService = new OfficeService(repoMock, managerMock,
+            AppServicesTestsSetup.Mapper!, userServiceMock);
 
         var result = await appService.GetListAsync();
 
@@ -38,13 +38,13 @@ public class GetList
     [Test]
     public async Task WhenDoesNotExist_ReturnsEmptyList()
     {
-        var repoMock = new Mock<IOfficeRepository>();
-        repoMock.Setup(l => l.GetListIncludeAssignorAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new List<Office>());
-        var managerMock = new Mock<IOfficeManager>();
-        var userServiceMock = new Mock<IUserService>();
-        var appService = new OfficeService(repoMock.Object, managerMock.Object,
-            AppServicesTestsSetup.Mapper!, userServiceMock.Object);
+        var repoMock = Substitute.For<IOfficeRepository>();
+        repoMock.GetListIncludeAssignorAsync(Arg.Any<CancellationToken>())
+            .Returns(new List<Office>());
+        var managerMock = Substitute.For<IOfficeManager>();
+        var userServiceMock = Substitute.For<IUserService>();
+        var appService = new OfficeService(repoMock, managerMock,
+            AppServicesTestsSetup.Mapper!, userServiceMock);
 
         var result = await appService.GetListAsync();
 

@@ -13,13 +13,13 @@ public class PublicExists
     [Test]
     public async Task WhenItemExists_ReturnsTrue()
     {
-        var repoMock = new Mock<IComplaintRepository>();
-        repoMock.Setup(l =>
-                l.ExistsAsync(It.IsAny<Expression<Func<Complaint, bool>>>(), CancellationToken.None))
-            .ReturnsAsync(true);
-        var appService = new ComplaintService(repoMock.Object, Mock.Of<IComplaintManager>(),
-            Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
-            AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
+        var repoMock = Substitute.For<IComplaintRepository>();
+        repoMock.ExistsAsync(Arg.Any<Expression<Func<Complaint, bool>>>(), Arg.Any<CancellationToken>())
+            .Returns(true);
+        var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
+            Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
+            Substitute.For<IComplaintTransitionManager>(),
+            AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
 
         var result = await appService.PublicExistsAsync(0);
 
@@ -29,13 +29,13 @@ public class PublicExists
     [Test]
     public async Task WhenNoItemExists_ReturnsFalse()
     {
-        var repoMock = new Mock<IComplaintRepository>();
-        repoMock.Setup(l =>
-                l.ExistsAsync(It.IsAny<Expression<Func<Complaint, bool>>>(), CancellationToken.None))
-            .ReturnsAsync(false);
-        var appService = new ComplaintService(repoMock.Object, Mock.Of<IComplaintManager>(),
-            Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
-            AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
+        var repoMock = Substitute.For<IComplaintRepository>();
+        repoMock.ExistsAsync(Arg.Any<Expression<Func<Complaint, bool>>>(), Arg.Any<CancellationToken>())
+            .Returns(false);
+        var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
+            Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
+            Substitute.For<IComplaintTransitionManager>(),
+            AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
 
         var result = await appService.PublicExistsAsync(0);
 

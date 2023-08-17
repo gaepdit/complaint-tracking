@@ -11,10 +11,10 @@ public class ChangeName
     public async Task WhenNewNameIsValid_ChangesName()
     {
         var item = new Concern(Guid.Empty, TestConstants.ValidName);
-        var repoMock = new Mock<IConcernRepository>();
-        repoMock.Setup(l => l.FindByNameAsync(TestConstants.NewValidName, It.IsAny<CancellationToken>()))
-            .ReturnsAsync((Concern?)null);
-        var manager = new ConcernManager(repoMock.Object);
+        var repoMock = Substitute.For<IConcernRepository>();
+        repoMock.FindByNameAsync(TestConstants.NewValidName, Arg.Any<CancellationToken>())
+            .Returns((Concern?)null);
+        var manager = new ConcernManager(repoMock);
 
         await manager.ChangeNameAsync(item, TestConstants.NewValidName);
 
@@ -25,10 +25,10 @@ public class ChangeName
     public async Task WhenNewNameIsUnchanged_CompletesWithNoChange()
     {
         var item = new Concern(Guid.Empty, TestConstants.ValidName);
-        var repoMock = new Mock<IConcernRepository>();
-        repoMock.Setup(l => l.FindByNameAsync(TestConstants.ValidName, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(item);
-        var manager = new ConcernManager(repoMock.Object);
+        var repoMock = Substitute.For<IConcernRepository>();
+        repoMock.FindByNameAsync(TestConstants.ValidName, Arg.Any<CancellationToken>())
+            .Returns(item);
+        var manager = new ConcernManager(repoMock);
 
         await manager.ChangeNameAsync(item, TestConstants.ValidName);
 
@@ -40,10 +40,10 @@ public class ChangeName
     {
         var item = new Concern(Guid.Empty, TestConstants.ValidName);
         var existingItem = new Concern(Guid.NewGuid(), TestConstants.NewValidName);
-        var repoMock = new Mock<IConcernRepository>();
-        repoMock.Setup(l => l.FindByNameAsync(TestConstants.NewValidName, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(existingItem);
-        var manager = new ConcernManager(repoMock.Object);
+        var repoMock = Substitute.For<IConcernRepository>();
+        repoMock.FindByNameAsync(TestConstants.NewValidName, Arg.Any<CancellationToken>())
+            .Returns(existingItem);
+        var manager = new ConcernManager(repoMock);
 
         var action = async () => await manager.ChangeNameAsync(item, TestConstants.NewValidName);
 
@@ -55,10 +55,10 @@ public class ChangeName
     public async Task WhenNewNameIsInvalid_Throws()
     {
         var item = new Concern(Guid.Empty, TestConstants.ValidName);
-        var repoMock = new Mock<IConcernRepository>();
-        repoMock.Setup(l => l.FindByNameAsync(TestConstants.NewValidName, It.IsAny<CancellationToken>()))
-            .ReturnsAsync((Concern?)null);
-        var manager = new ConcernManager(repoMock.Object);
+        var repoMock = Substitute.For<IConcernRepository>();
+        repoMock.FindByNameAsync(TestConstants.NewValidName, Arg.Any<CancellationToken>())
+            .Returns((Concern?)null);
+        var manager = new ConcernManager(repoMock);
 
         var action = async () => await manager.ChangeNameAsync(item, TestConstants.ShortName);
 

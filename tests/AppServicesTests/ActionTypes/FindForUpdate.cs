@@ -12,13 +12,13 @@ public class FindForUpdate
     public async Task WhenItemExists_ReturnsViewDto()
     {
         var item = new ActionType(Guid.Empty, TestConstants.ValidName);
-        var repoMock = new Mock<IActionTypeRepository>();
-        repoMock.Setup(l => l.FindAsync(item.Id, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(item);
-        var managerMock = new Mock<IActionTypeManager>();
-        var userServiceMock = new Mock<IUserService>();
-        var appService = new ActionTypeService(repoMock.Object, managerMock.Object,
-            AppServicesTestsSetup.Mapper!, userServiceMock.Object);
+        var repoMock = Substitute.For<IActionTypeRepository>();
+        repoMock.FindAsync(item.Id, Arg.Any<CancellationToken>())
+            .Returns(item);
+        var managerMock = Substitute.For<IActionTypeManager>();
+        var userServiceMock = Substitute.For<IUserService>();
+        var appService = new ActionTypeService(repoMock, managerMock,
+            AppServicesTestsSetup.Mapper!, userServiceMock);
 
         var result = await appService.FindForUpdateAsync(Guid.Empty);
 
@@ -29,14 +29,14 @@ public class FindForUpdate
     public async Task WhenDoesNotExist_ReturnsNull()
     {
         var id = Guid.Empty;
-        var repoMock = new Mock<IActionTypeRepository>();
-        repoMock.Setup(l => l.FindAsync(id, It.IsAny<CancellationToken>()))
-            .ReturnsAsync((ActionType?)null);
-        var managerMock = new Mock<IActionTypeManager>();
-        var mapperMock = new Mock<IMapper>();
-        var userServiceMock = new Mock<IUserService>();
-        var appService = new ActionTypeService(repoMock.Object, managerMock.Object,
-            mapperMock.Object, userServiceMock.Object);
+        var repoMock = Substitute.For<IActionTypeRepository>();
+        repoMock.FindAsync(id, Arg.Any<CancellationToken>())
+            .Returns((ActionType?)null);
+        var managerMock = Substitute.For<IActionTypeManager>();
+        var mapperMock = Substitute.For<IMapper>();
+        var userServiceMock = Substitute.For<IUserService>();
+        var appService = new ActionTypeService(repoMock, managerMock,
+            mapperMock, userServiceMock);
 
         var result = await appService.FindForUpdateAsync(Guid.Empty);
 

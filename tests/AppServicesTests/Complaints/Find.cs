@@ -22,19 +22,18 @@ public class Find
         var item = ComplaintData.GetComplaints.First(e => e is { IsDeleted: false, ComplaintClosed: true });
         item.ComplaintActions = complaintActionsList;
         item.Attachments = attachmentList;
-        var repoMock = new Mock<IComplaintRepository>();
-        repoMock.Setup(l => l.FindAsync(It.IsAny<int>(), CancellationToken.None))
-            .ReturnsAsync(item);
-        repoMock.Setup(l =>
-                l.GetComplaintActionsListAsync(
-                    It.IsAny<Expression<Func<ComplaintAction, bool>>>(), CancellationToken.None))
-            .ReturnsAsync(complaintActionsList);
-        repoMock.Setup(l =>
-                l.GetAttachmentsListAsync(It.IsAny<Expression<Func<Attachment, bool>>>(), CancellationToken.None))
-            .ReturnsAsync(attachmentList);
-        var appService = new ComplaintService(repoMock.Object, Mock.Of<IComplaintManager>(),
-            Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
-            AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
+        var repoMock = Substitute.For<IComplaintRepository>();
+        repoMock.FindAsync(Arg.Any<int>(), Arg.Any<CancellationToken>())
+            .Returns(item);
+        repoMock.GetComplaintActionsListAsync(
+                Arg.Any<Expression<Func<ComplaintAction, bool>>>(), Arg.Any<CancellationToken>())
+            .Returns(complaintActionsList);
+        repoMock.GetAttachmentsListAsync(Arg.Any<Expression<Func<Attachment, bool>>>(), Arg.Any<CancellationToken>())
+            .Returns(attachmentList);
+        var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
+            Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
+            Substitute.For<IComplaintTransitionManager>(),
+            AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
 
         var result = await appService.FindAsync(item.Id);
 
@@ -50,18 +49,19 @@ public class Find
         var item = ComplaintData.GetComplaints.First(e => e.IsDeleted);
         item.ComplaintActions = complaintActionsList;
         item.Attachments = attachmentList;
-        var repoMock = new Mock<IComplaintRepository>();
-        repoMock.Setup(l => l.FindAsync(It.IsAny<int>(), CancellationToken.None))
-            .ReturnsAsync(item);
-        repoMock.Setup(l => l.GetComplaintActionsListAsync(
-                It.IsAny<Expression<Func<ComplaintAction, bool>>>(), CancellationToken.None))
-            .ReturnsAsync(complaintActionsList);
-        repoMock.Setup(l => l.GetAttachmentsListAsync(
-                It.IsAny<Expression<Func<Attachment, bool>>>(), CancellationToken.None))
-            .ReturnsAsync(attachmentList);
-        var appService = new ComplaintService(repoMock.Object, Mock.Of<IComplaintManager>(),
-            Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
-            AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
+        var repoMock = Substitute.For<IComplaintRepository>();
+        repoMock.FindAsync(Arg.Any<int>(), Arg.Any<CancellationToken>())
+            .Returns(item);
+        repoMock.GetComplaintActionsListAsync(
+                Arg.Any<Expression<Func<ComplaintAction, bool>>>(), Arg.Any<CancellationToken>())
+            .Returns(complaintActionsList);
+        repoMock.GetAttachmentsListAsync(
+                Arg.Any<Expression<Func<Attachment, bool>>>(), Arg.Any<CancellationToken>())
+            .Returns(attachmentList);
+        var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
+            Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
+            Substitute.For<IComplaintTransitionManager>(),
+            AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
 
         var result = await appService.FindAsync(item.Id);
 
@@ -71,12 +71,13 @@ public class Find
     [Test]
     public async Task WhenNoItemExists_ReturnsNull()
     {
-        var repoMock = new Mock<IComplaintRepository>();
-        repoMock.Setup(l => l.FindAsync(It.IsAny<int>(), CancellationToken.None))
-            .ReturnsAsync((Complaint?)null);
-        var appService = new ComplaintService(repoMock.Object, Mock.Of<IComplaintManager>(),
-            Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
-            AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
+        var repoMock = Substitute.For<IComplaintRepository>();
+        repoMock.FindAsync(Arg.Any<int>(), Arg.Any<CancellationToken>())
+            .Returns((Complaint?)null);
+        var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
+            Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
+            Substitute.For<IComplaintTransitionManager>(),
+            AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
 
         var result = await appService.FindAsync(0);
 

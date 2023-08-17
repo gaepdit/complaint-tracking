@@ -12,14 +12,13 @@ public class GetActiveListItems
     public async Task ReturnsActiveListItems()
     {
         var itemList = new List<Concern> { new(Guid.Empty, TestConstants.ValidName) };
-        var repoMock = new Mock<IConcernRepository>();
-        repoMock.Setup(l =>
-                l.GetListAsync(It.IsAny<Expression<Func<Concern, bool>>>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(itemList);
-        var managerMock = new Mock<IConcernManager>();
-        var userServiceMock = new Mock<IUserService>();
-        var appService = new ConcernService(repoMock.Object, managerMock.Object,
-            AppServicesTestsSetup.Mapper!, userServiceMock.Object);
+        var repoMock = Substitute.For<IConcernRepository>();
+        repoMock.GetListAsync(Arg.Any<Expression<Func<Concern, bool>>>(), Arg.Any<CancellationToken>())
+            .Returns(itemList);
+        var managerMock = Substitute.For<IConcernManager>();
+        var userServiceMock = Substitute.For<IUserService>();
+        var appService = new ConcernService(repoMock, managerMock,
+            AppServicesTestsSetup.Mapper!, userServiceMock);
 
         var result = await appService.GetActiveListItemsAsync();
 

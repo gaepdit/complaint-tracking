@@ -18,9 +18,9 @@ public class EditTests
     [Test]
     public async Task OnGet_ReturnsWithItem()
     {
-        var serviceMock = new Mock<IActionTypeService>();
-        serviceMock.Setup(l => l.FindForUpdateAsync(ItemTest.Id, CancellationToken.None)).ReturnsAsync(ItemTest);
-        var page = new EditModel(serviceMock.Object, Mock.Of<IValidator<ActionTypeUpdateDto>>())
+        var serviceMock = Substitute.For<IActionTypeService>();
+        serviceMock.FindForUpdateAsync(ItemTest.Id, Arg.Any<CancellationToken>()).Returns(ItemTest);
+        var page = new EditModel(serviceMock, Substitute.For<IValidator<ActionTypeUpdateDto>>())
             { TempData = WebAppTestsSetup.PageTempData() };
 
         await page.OnGetAsync(ItemTest.Id);
@@ -36,8 +36,8 @@ public class EditTests
     [Test]
     public async Task OnGet_GivenNullId_ReturnsNotFound()
     {
-        var serviceMock = new Mock<IActionTypeService>();
-        var page = new EditModel(serviceMock.Object, Mock.Of<IValidator<ActionTypeUpdateDto>>())
+        var serviceMock = Substitute.For<IActionTypeService>();
+        var page = new EditModel(serviceMock, Substitute.For<IValidator<ActionTypeUpdateDto>>())
             { TempData = WebAppTestsSetup.PageTempData() };
 
         var result = await page.OnGetAsync(null);
@@ -52,10 +52,10 @@ public class EditTests
     [Test]
     public async Task OnGet_GivenInvalidId_ReturnsNotFound()
     {
-        var serviceMock = new Mock<IActionTypeService>();
-        serviceMock.Setup(l => l.FindForUpdateAsync(It.IsAny<Guid>(), CancellationToken.None))
-            .ReturnsAsync((ActionTypeUpdateDto?)null);
-        var page = new EditModel(serviceMock.Object, Mock.Of<IValidator<ActionTypeUpdateDto>>())
+        var serviceMock = Substitute.For<IActionTypeService>();
+        serviceMock.FindForUpdateAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns((ActionTypeUpdateDto?)null);
+        var page = new EditModel(serviceMock, Substitute.For<IValidator<ActionTypeUpdateDto>>())
             { TempData = WebAppTestsSetup.PageTempData() };
 
         var result = await page.OnGetAsync(Guid.Empty);
@@ -66,11 +66,11 @@ public class EditTests
     [Test]
     public async Task OnPost_GivenSuccess_ReturnsRedirectWithDisplayMessage()
     {
-        var serviceMock = new Mock<IActionTypeService>();
-        var validatorMock = new Mock<IValidator<ActionTypeUpdateDto>>();
-        validatorMock.Setup(l => l.ValidateAsync(It.IsAny<ActionTypeUpdateDto>(), CancellationToken.None))
-            .ReturnsAsync(new ValidationResult());
-        var page = new EditModel(serviceMock.Object, validatorMock.Object)
+        var serviceMock = Substitute.For<IActionTypeService>();
+        var validatorMock = Substitute.For<IValidator<ActionTypeUpdateDto>>();
+        validatorMock.ValidateAsync(Arg.Any<ActionTypeUpdateDto>(), Arg.Any<CancellationToken>())
+            .Returns(new ValidationResult());
+        var page = new EditModel(serviceMock, validatorMock)
             { Item = ItemTest, TempData = WebAppTestsSetup.PageTempData() };
         var expectedMessage =
             new DisplayMessage(DisplayMessage.AlertContext.Success, $"“{ItemTest.Name}” successfully updated.");
@@ -89,12 +89,12 @@ public class EditTests
     [Test]
     public async Task OnPost_GivenInvalidItem_ReturnsPageWithModelErrors()
     {
-        var serviceMock = new Mock<IActionTypeService>();
-        var validatorMock = new Mock<IValidator<ActionTypeUpdateDto>>();
+        var serviceMock = Substitute.For<IActionTypeService>();
+        var validatorMock = Substitute.For<IValidator<ActionTypeUpdateDto>>();
         var validationFailures = new List<ValidationFailure> { new("property", "message") };
-        validatorMock.Setup(l => l.ValidateAsync(It.IsAny<ActionTypeUpdateDto>(), CancellationToken.None))
-            .ReturnsAsync(new ValidationResult(validationFailures));
-        var page = new EditModel(serviceMock.Object, validatorMock.Object)
+        validatorMock.ValidateAsync(Arg.Any<ActionTypeUpdateDto>(), Arg.Any<CancellationToken>())
+            .Returns(new ValidationResult(validationFailures));
+        var page = new EditModel(serviceMock, validatorMock)
             { Item = ItemTest, TempData = WebAppTestsSetup.PageTempData() };
 
         var result = await page.OnPostAsync();

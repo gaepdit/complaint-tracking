@@ -11,12 +11,12 @@ public class CreateValidator
     [Test]
     public async Task ValidDto_ReturnsAsValid()
     {
-        var repoMock = new Mock<IConcernRepository>();
-        repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((Concern?)null);
+        var repoMock = Substitute.For<IConcernRepository>();
+        repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns((Concern?)null);
         var model = new ConcernCreateDto { Name = TestConstants.ValidName };
 
-        var validator = new ConcernCreateValidator(repoMock.Object);
+        var validator = new ConcernCreateValidator(repoMock);
         var result = await validator.TestValidateAsync(model);
 
         result.ShouldNotHaveValidationErrorFor(e => e.Name);
@@ -25,12 +25,12 @@ public class CreateValidator
     [Test]
     public async Task DuplicateName_ReturnsAsInvalid()
     {
-        var repoMock = new Mock<IConcernRepository>();
-        repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new Concern(Guid.Empty, TestConstants.ValidName));
+        var repoMock = Substitute.For<IConcernRepository>();
+        repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(new Concern(Guid.Empty, TestConstants.ValidName));
         var model = new ConcernCreateDto { Name = TestConstants.ValidName };
 
-        var validator = new ConcernCreateValidator(repoMock.Object);
+        var validator = new ConcernCreateValidator(repoMock);
         var result = await validator.TestValidateAsync(model);
 
         result.ShouldHaveValidationErrorFor(e => e.Name)
@@ -40,12 +40,12 @@ public class CreateValidator
     [Test]
     public async Task NameTooShort_ReturnsAsInvalid()
     {
-        var repoMock = new Mock<IConcernRepository>();
-        repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((Concern?)null);
+        var repoMock = Substitute.For<IConcernRepository>();
+        repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns((Concern?)null);
         var model = new ConcernCreateDto { Name = TestConstants.ShortName };
 
-        var validator = new ConcernCreateValidator(repoMock.Object);
+        var validator = new ConcernCreateValidator(repoMock);
         var result = await validator.TestValidateAsync(model);
 
         result.ShouldHaveValidationErrorFor(e => e.Name);

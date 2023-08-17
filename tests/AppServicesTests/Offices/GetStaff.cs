@@ -21,15 +21,14 @@ public class GetStaff
         };
 
         var itemList = new List<ApplicationUser> { user };
-        var repoMock = new Mock<IOfficeRepository>();
-        repoMock.Setup(l =>
-                l.GetStaffMembersListAsync(It.IsAny<Guid>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(itemList);
-        var managerMock = new Mock<IOfficeManager>();
-        var userServiceMock = new Mock<IUserService>();
+        var repoMock = Substitute.For<IOfficeRepository>();
+        repoMock.GetStaffMembersListAsync(Arg.Any<Guid>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
+            .Returns(itemList);
+        var managerMock = Substitute.For<IOfficeManager>();
+        var userServiceMock = Substitute.For<IUserService>();
 
-        var appService = new OfficeService(repoMock.Object, managerMock.Object,
-            AppServicesTestsSetup.Mapper!, userServiceMock.Object);
+        var appService = new OfficeService(repoMock, managerMock,
+            AppServicesTestsSetup.Mapper!, userServiceMock);
 
         var result = await appService.GetStaffListItemsAsync(Guid.Empty, false);
 

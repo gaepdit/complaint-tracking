@@ -16,12 +16,13 @@ public class FindAttachment
     {
         var item = AttachmentData.GetAttachments.First(e =>
             e is { IsDeleted: false, Complaint: { IsDeleted: false, ComplaintClosed: true } });
-        var repoMock = new Mock<IComplaintRepository>();
-        repoMock.Setup(l => l.FindAttachmentAsync(It.IsAny<Guid>(), CancellationToken.None))
-            .ReturnsAsync(item);
-        var appService = new ComplaintService(repoMock.Object, Mock.Of<IComplaintManager>(),
-            Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
-            AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
+        var repoMock = Substitute.For<IComplaintRepository>();
+        repoMock.FindAttachmentAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(item);
+        var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
+            Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
+            Substitute.For<IComplaintTransitionManager>(),
+            AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
 
         var result = await appService.FindAttachmentAsync(item.Id);
 
@@ -31,12 +32,13 @@ public class FindAttachment
     [Test]
     public async Task WhenNoItemExists_ReturnsNull()
     {
-        var repoMock = new Mock<IComplaintRepository>();
-        repoMock.Setup(l => l.FindAttachmentAsync(It.IsAny<Guid>(), CancellationToken.None))
-            .ReturnsAsync((Attachment?)null);
-        var appService = new ComplaintService(repoMock.Object, Mock.Of<IComplaintManager>(),
-            Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
-            AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
+        var repoMock = Substitute.For<IComplaintRepository>();
+        repoMock.FindAttachmentAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns((Attachment?)null);
+        var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
+            Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
+            Substitute.For<IComplaintTransitionManager>(),
+            AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
 
         var result = await appService.FindAttachmentAsync(Guid.Empty);
 
@@ -47,12 +49,13 @@ public class FindAttachment
     public async Task WhenItemHasBeenDeleted_ReturnsItem()
     {
         var item = AttachmentData.GetAttachments.First(e => e.IsDeleted);
-        var repoMock = new Mock<IComplaintRepository>();
-        repoMock.Setup(l => l.FindAttachmentAsync(It.IsAny<Guid>(), CancellationToken.None))
-            .ReturnsAsync(item);
-        var appService = new ComplaintService(repoMock.Object, Mock.Of<IComplaintManager>(),
-            Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
-            AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
+        var repoMock = Substitute.For<IComplaintRepository>();
+        repoMock.FindAttachmentAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(item);
+        var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
+            Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
+            Substitute.For<IComplaintTransitionManager>(),
+            AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
 
         var result = await appService.FindAttachmentAsync(item.Id);
 
@@ -64,12 +67,13 @@ public class FindAttachment
     {
         var item = AttachmentData.GetAttachments.First(e => e is { IsDeleted: false, Complaint.IsDeleted: true });
 
-        var repoMock = new Mock<IComplaintRepository>();
-        repoMock.Setup(l => l.FindAttachmentAsync(It.IsAny<Guid>(), CancellationToken.None))
-            .ReturnsAsync(item);
-        var appService = new ComplaintService(repoMock.Object, Mock.Of<IComplaintManager>(),
-            Mock.Of<IConcernRepository>(), Mock.Of<IOfficeRepository>(), Mock.Of<IComplaintTransitionManager>(),
-            AppServicesTestsSetup.Mapper!, Mock.Of<IUserService>());
+        var repoMock = Substitute.For<IComplaintRepository>();
+        repoMock.FindAttachmentAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(item);
+        var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
+            Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
+            Substitute.For<IComplaintTransitionManager>(),
+            AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
 
         var result = await appService.FindAttachmentAsync(item.Id);
 

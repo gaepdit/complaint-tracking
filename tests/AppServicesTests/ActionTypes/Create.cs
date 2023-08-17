@@ -12,15 +12,15 @@ public class Create
     public async Task WhenResourceIsValid_ReturnsId()
     {
         var item = new ActionType(Guid.NewGuid(), TestConstants.ValidName);
-        var repoMock = new Mock<IActionTypeRepository>();
-        var managerMock = new Mock<IActionTypeManager>();
-        managerMock.Setup(l => l.CreateAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(item);
-        var userServiceMock = new Mock<IUserService>();
-        userServiceMock.Setup(l => l.GetCurrentUserAsync())
-            .ReturnsAsync((ApplicationUser?)null);
-        var appService = new ActionTypeService(repoMock.Object, managerMock.Object,
-            AppServicesTestsSetup.Mapper!, userServiceMock.Object);
+        var repoMock = Substitute.For<IActionTypeRepository>();
+        var managerMock = Substitute.For<IActionTypeManager>();
+        managerMock.CreateAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(item);
+        var userServiceMock = Substitute.For<IUserService>();
+        userServiceMock.GetCurrentUserAsync()
+            .Returns((ApplicationUser?)null);
+        var appService = new ActionTypeService(repoMock, managerMock,
+            AppServicesTestsSetup.Mapper!, userServiceMock);
 
         var result = await appService.CreateAsync(item.Name);
 

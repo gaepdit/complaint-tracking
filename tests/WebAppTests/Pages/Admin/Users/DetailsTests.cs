@@ -23,17 +23,17 @@ public class DetailsTests
             GivenName = TestConstants.ValidName,
             FamilyName = TestConstants.ValidName,
         };
-        var serviceMock = new Mock<IStaffService>();
-        serviceMock.Setup(l => l.FindAsync(It.IsAny<string>()))
-            .ReturnsAsync(staffView);
-        serviceMock.Setup(l => l.GetAppRolesAsync(It.IsAny<string>()))
-            .ReturnsAsync(new List<AppRole>());
-        var authorizationMock = new Mock<IAuthorizationService>();
-        authorizationMock.Setup(l => l.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), null, It.IsAny<string>()))
-            .ReturnsAsync(AuthorizationResult.Success);
+        var serviceMock = Substitute.For<IStaffService>();
+        serviceMock.FindAsync(Arg.Any<string>())
+            .Returns(staffView);
+        serviceMock.GetAppRolesAsync(Arg.Any<string>())
+            .Returns(new List<AppRole>());
+        var authorizationMock = Substitute.For<IAuthorizationService>();
+        authorizationMock.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), Arg.Is((string?)null), Arg.Any<string>())
+            .Returns(AuthorizationResult.Success());
         var pageModel = new DetailsModel { TempData = WebAppTestsSetup.PageTempData() };
 
-        var result = await pageModel.OnGetAsync(serviceMock.Object, authorizationMock.Object, staffView.Id);
+        var result = await pageModel.OnGetAsync(serviceMock, authorizationMock, staffView.Id);
 
         using (new AssertionScope())
         {
@@ -46,10 +46,10 @@ public class DetailsTests
     [Test]
     public async Task OnGet_MissingIdReturnsNotFound()
     {
-        var serviceMock = new Mock<IStaffService>();
+        var serviceMock = Substitute.For<IStaffService>();
         var pageModel = new DetailsModel { TempData = WebAppTestsSetup.PageTempData() };
 
-        var result = await pageModel.OnGetAsync(serviceMock.Object, Mock.Of<IAuthorizationService>(), null);
+        var result = await pageModel.OnGetAsync(serviceMock, Substitute.For<IAuthorizationService>(), null);
 
         using (new AssertionScope())
         {
@@ -61,13 +61,13 @@ public class DetailsTests
     [Test]
     public async Task OnGet_NonexistentIdReturnsNotFound()
     {
-        var serviceMock = new Mock<IStaffService>();
-        serviceMock.Setup(l => l.FindAsync(It.IsAny<string>()))
-            .ReturnsAsync((StaffViewDto?)null);
+        var serviceMock = Substitute.For<IStaffService>();
+        serviceMock.FindAsync(Arg.Any<string>())
+            .Returns((StaffViewDto?)null);
         var pageModel = new DetailsModel { TempData = WebAppTestsSetup.PageTempData() };
 
         var result = await pageModel
-            .OnGetAsync(serviceMock.Object, Mock.Of<IAuthorizationService>(), Guid.Empty.ToString());
+            .OnGetAsync(serviceMock, Substitute.For<IAuthorizationService>(), Guid.Empty.ToString());
 
         result.Should().BeOfType<NotFoundResult>();
     }

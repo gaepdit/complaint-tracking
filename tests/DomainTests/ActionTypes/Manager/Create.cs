@@ -9,10 +9,10 @@ public class Create
     [Test]
     public async Task WhenItemIsValid_CreatesItem()
     {
-        var repoMock = new Mock<IActionTypeRepository>();
-        repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((ActionType?)null);
-        var manager = new ActionTypeManager(repoMock.Object);
+        var repoMock = Substitute.For<IActionTypeRepository>();
+        repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns((ActionType?)null);
+        var manager = new ActionTypeManager(repoMock);
 
         var newItem = await manager.CreateAsync(TestConstants.ValidName);
 
@@ -22,10 +22,10 @@ public class Create
     [Test]
     public async Task WhenItemIsInvalid_Throws()
     {
-        var repoMock = new Mock<IActionTypeRepository>();
-        repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new ActionType(Guid.Empty, TestConstants.ValidName));
-        var manager = new ActionTypeManager(repoMock.Object);
+        var repoMock = Substitute.For<IActionTypeRepository>();
+        repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(new ActionType(Guid.Empty, TestConstants.ValidName));
+        var manager = new ActionTypeManager(repoMock);
 
         var action = async () => await manager.CreateAsync(TestConstants.ValidName);
 

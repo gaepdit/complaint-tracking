@@ -16,21 +16,21 @@ public class Create
     public async Task OnSuccessfulInsert_ReturnsId()
     {
         // Arrange
-        var complaintManagerMock = new Mock<IComplaintManager>();
-        complaintManagerMock.Setup(l => l.CreateNewComplaintAsync())
-            .ReturnsAsync(new Complaint(0));
+        var complaintManagerMock = Substitute.For<IComplaintManager>();
+        complaintManagerMock.CreateNewComplaintAsync()
+            .Returns(new Complaint(0));
 
-        var userServiceMock = new Mock<IUserService>();
-        userServiceMock.Setup(l => l.GetCurrentUserAsync())
-            .ReturnsAsync(new ApplicationUser { Id = Guid.Empty.ToString() });
+        var userServiceMock = Substitute.For<IUserService>();
+        userServiceMock.GetCurrentUserAsync()
+            .Returns(new ApplicationUser { Id = Guid.Empty.ToString() });
 
-        var officeRepoMock = new Mock<IOfficeRepository>();
-        officeRepoMock.Setup(l => l.GetAsync(It.IsAny<Guid>(), CancellationToken.None))
-            .ReturnsAsync(new Office(Guid.NewGuid(), TestConstants.ValidName));
+        var officeRepoMock = Substitute.For<IOfficeRepository>();
+        officeRepoMock.GetAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(new Office(Guid.NewGuid(), TestConstants.ValidName));
 
-        var appService = new ComplaintService(Mock.Of<IComplaintRepository>(), complaintManagerMock.Object,
-            Mock.Of<IConcernRepository>(), officeRepoMock.Object, Mock.Of<IComplaintTransitionManager>(),
-            AppServicesTestsSetup.Mapper!, userServiceMock.Object);
+        var appService = new ComplaintService(Substitute.For<IComplaintRepository>(), complaintManagerMock,
+            Substitute.For<IConcernRepository>(), officeRepoMock, Substitute.For<IComplaintTransitionManager>(),
+            AppServicesTestsSetup.Mapper!, userServiceMock);
 
         var item = new ComplaintCreateDto { CurrentOfficeId = Guid.Empty };
 
@@ -45,22 +45,22 @@ public class Create
     public async Task CreateComplaint_CalculatesCorrectDateTimeOffset()
     {
         // Arrange
-        var complaintManagerMock = new Mock<IComplaintManager>();
-        complaintManagerMock.Setup(l => l.CreateNewComplaintAsync())
-            .ReturnsAsync(new Complaint(0));
+        var complaintManagerMock = Substitute.For<IComplaintManager>();
+        complaintManagerMock.CreateNewComplaintAsync()
+            .Returns(new Complaint(0));
 
-        var userServiceMock = new Mock<IUserService>();
-        userServiceMock.Setup(l => l.GetCurrentUserAsync())
-            .ReturnsAsync(new ApplicationUser { Id = Guid.Empty.ToString() });
+        var userServiceMock = Substitute.For<IUserService>();
+        userServiceMock.GetCurrentUserAsync()
+            .Returns(new ApplicationUser { Id = Guid.Empty.ToString() });
 
         var office = new Office(Guid.NewGuid(), TestConstants.ValidName);
-        var officeRepoMock = new Mock<IOfficeRepository>();
-        officeRepoMock.Setup(l => l.GetAsync(It.IsAny<Guid>(), CancellationToken.None))
-            .ReturnsAsync(office);
+        var officeRepoMock = Substitute.For<IOfficeRepository>();
+        officeRepoMock.GetAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(office);
 
-        var appService = new ComplaintService(Mock.Of<IComplaintRepository>(), complaintManagerMock.Object,
-            Mock.Of<IConcernRepository>(), officeRepoMock.Object, Mock.Of<IComplaintTransitionManager>(),
-            AppServicesTestsSetup.Mapper!, userServiceMock.Object);
+        var appService = new ComplaintService(Substitute.For<IComplaintRepository>(), complaintManagerMock,
+            Substitute.For<IConcernRepository>(), officeRepoMock, Substitute.For<IComplaintTransitionManager>(),
+            AppServicesTestsSetup.Mapper!, userServiceMock);
 
         var item = new ComplaintCreateDto
         {

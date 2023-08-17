@@ -20,22 +20,20 @@ public class DetailsTests
     [Test]
     public async Task OnGet_GivenManageDeletions_ReturnsWithItemAndPermissions()
     {
-        var serviceMock = new Mock<IComplaintService>();
-        serviceMock.Setup(l => l.FindAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(ItemTest);
-        var staffServiceMock = new Mock<IStaffService>();
-        staffServiceMock.Setup(l => l.GetCurrentUserAsync())
-            .ReturnsAsync(StaffViewTest);
-        var authorizationMock = new Mock<IAuthorizationService>();
-        authorizationMock.Setup(l =>
-                l.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<object?>(),
-                    It.IsAny<IAuthorizationRequirement[]>()))
-            .ReturnsAsync(AuthorizationResult.Failed);
-        authorizationMock.Setup(l =>
-                l.AuthorizeAsync(It.IsAny<ClaimsPrincipal>(), It.IsAny<object?>(),
-                    new[] { ComplaintOperation.ManageDeletions }))
-            .ReturnsAsync(AuthorizationResult.Success);
-        var page = new DetailsModel(serviceMock.Object, staffServiceMock.Object, authorizationMock.Object)
+        var serviceMock = Substitute.For<IComplaintService>();
+        serviceMock.FindAsync(Arg.Any<int>(), Arg.Any<CancellationToken>())
+            .Returns(ItemTest);
+        var staffServiceMock = Substitute.For<IStaffService>();
+        staffServiceMock.GetCurrentUserAsync()
+            .Returns(StaffViewTest);
+        var authorizationMock = Substitute.For<IAuthorizationService>();
+        authorizationMock.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), Arg.Any<object?>(),
+                Arg.Is<IAuthorizationRequirement[]>(x => x.Contains(ComplaintOperation.ManageDeletions)))
+            .Returns(AuthorizationResult.Success());
+        authorizationMock.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), Arg.Any<object?>(),
+                Arg.Is<IAuthorizationRequirement[]>(x => !x.Contains(ComplaintOperation.ManageDeletions)))
+            .Returns(AuthorizationResult.Failed());
+        var page = new DetailsModel(serviceMock, staffServiceMock, authorizationMock)
             { TempData = WebAppTestsSetup.PageTempData(), PageContext = WebAppTestsSetup.PageContextWithUser() };
 
         await page.OnGetAsync(ItemTest.Id);

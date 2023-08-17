@@ -22,15 +22,15 @@ public class AttachmentTests
             Size = 1,
         };
 
-        var complaintServiceMock = new Mock<IComplaintService>();
-        complaintServiceMock.Setup(l => l.FindPublicAttachmentAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(item);
-        var fileServiceMock = new Mock<IFileService>();
-        fileServiceMock.Setup(l => l.GetFileAsync(It.IsAny<string>(), It.IsAny<string?>()))
-            .ReturnsAsync(new byte[] { 0x20 });
+        var complaintServiceMock = Substitute.For<IComplaintService>();
+        complaintServiceMock.FindPublicAttachmentAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(item);
+        var fileServiceMock = Substitute.For<IFileService>();
+        fileServiceMock.GetFileAsync(Arg.Any<string>(), Arg.Any<string?>())
+            .Returns(new byte[] { 0x20 });
         var pageModel = new AttachmentModel();
 
-        var result = await pageModel.OnGetAsync(complaintServiceMock.Object, fileServiceMock.Object,
+        var result = await pageModel.OnGetAsync(complaintServiceMock, fileServiceMock,
             item.Id, item.FileName);
 
         using (new AssertionScope())
@@ -43,12 +43,12 @@ public class AttachmentTests
     [Test]
     public async Task NonexistentItem_ReturnsNotFound()
     {
-        var complaintServiceMock = new Mock<IComplaintService>();
-        complaintServiceMock.Setup(l => l.FindPublicAttachmentAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((AttachmentPublicViewDto?)null);
+        var complaintServiceMock = Substitute.For<IComplaintService>();
+        complaintServiceMock.FindPublicAttachmentAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns((AttachmentPublicViewDto?)null);
         var pageModel = new AttachmentModel();
 
-        var result = await pageModel.OnGetAsync(complaintServiceMock.Object, Mock.Of<IFileService>(),
+        var result = await pageModel.OnGetAsync(complaintServiceMock, Substitute.For<IFileService>(),
             Guid.Empty, TestConstants.ShortName);
 
         result.Should().BeOfType<NotFoundObjectResult>();
@@ -66,12 +66,12 @@ public class AttachmentTests
             Size = 0,
         };
 
-        var complaintServiceMock = new Mock<IComplaintService>();
-        complaintServiceMock.Setup(l => l.FindPublicAttachmentAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(item);
+        var complaintServiceMock = Substitute.For<IComplaintService>();
+        complaintServiceMock.FindPublicAttachmentAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(item);
         var pageModel = new AttachmentModel();
 
-        var result = await pageModel.OnGetAsync(complaintServiceMock.Object, Mock.Of<IFileService>(),
+        var result = await pageModel.OnGetAsync(complaintServiceMock, Substitute.For<IFileService>(),
             item.Id, TestConstants.NonExistentName);
 
         using (new AssertionScope())
@@ -93,15 +93,15 @@ public class AttachmentTests
             Size = 0,
         };
 
-        var complaintServiceMock = new Mock<IComplaintService>();
-        complaintServiceMock.Setup(l => l.FindPublicAttachmentAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(item);
-        var fileServiceMock = new Mock<IFileService>();
-        fileServiceMock.Setup(l => l.GetFileAsync(It.IsAny<string>(), It.IsAny<string?>()))
-            .ReturnsAsync(Array.Empty<byte>());
+        var complaintServiceMock = Substitute.For<IComplaintService>();
+        complaintServiceMock.FindPublicAttachmentAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(item);
+        var fileServiceMock = Substitute.For<IFileService>();
+        fileServiceMock.GetFileAsync(Arg.Any<string>(), Arg.Any<string?>())
+            .Returns(Array.Empty<byte>());
         var pageModel = new AttachmentModel();
 
-        var result = await pageModel.OnGetAsync(complaintServiceMock.Object, fileServiceMock.Object,
+        var result = await pageModel.OnGetAsync(complaintServiceMock, fileServiceMock,
             item.Id, item.FileName);
 
         result.Should().BeOfType<NotFoundObjectResult>();
@@ -119,15 +119,15 @@ public class AttachmentTests
             Size = 0,
         };
 
-        var complaintServiceMock = new Mock<IComplaintService>();
-        complaintServiceMock.Setup(l => l.FindPublicAttachmentAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(item);
-        var fileServiceMock = new Mock<IFileService>();
-        fileServiceMock.Setup(l => l.GetFileAsync(It.IsAny<string>(), It.IsAny<string?>()))
-            .ReturnsAsync(Array.Empty<byte>());
+        var complaintServiceMock = Substitute.For<IComplaintService>();
+        complaintServiceMock.FindPublicAttachmentAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(item);
+        var fileServiceMock = Substitute.For<IFileService>();
+        fileServiceMock.GetFileAsync(Arg.Any<string>(), Arg.Any<string?>())
+            .Returns(Array.Empty<byte>());
         var pageModel = new AttachmentModel();
 
-        var result = await pageModel.OnGetAsync(complaintServiceMock.Object, fileServiceMock.Object,
+        var result = await pageModel.OnGetAsync(complaintServiceMock, fileServiceMock,
             item.Id, item.FileName);
 
         result.Should().BeOfType<RedirectResult>();

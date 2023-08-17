@@ -9,10 +9,10 @@ public class Create
     [Test]
     public async Task WhenItemIsValid_CreatesItem()
     {
-        var repoMock = new Mock<IConcernRepository>();
-        repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((Concern?)null);
-        var manager = new ConcernManager(repoMock.Object);
+        var repoMock = Substitute.For<IConcernRepository>();
+        repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns((Concern?)null);
+        var manager = new ConcernManager(repoMock);
 
         var newItem = await manager.CreateAsync(TestConstants.ValidName);
 
@@ -22,10 +22,10 @@ public class Create
     [Test]
     public async Task WhenItemIsInvalid_Throws()
     {
-        var repoMock = new Mock<IConcernRepository>();
-        repoMock.Setup(l => l.FindByNameAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new Concern(Guid.Empty, TestConstants.ValidName));
-        var manager = new ConcernManager(repoMock.Object);
+        var repoMock = Substitute.For<IConcernRepository>();
+        repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(new Concern(Guid.Empty, TestConstants.ValidName));
+        var manager = new ConcernManager(repoMock);
 
         var action = async () => await manager.CreateAsync(TestConstants.ValidName);
 

@@ -11,13 +11,13 @@ public class GetList
     public async Task WhenItemsExist_ReturnsList()
     {
         var itemList = new List<ActionType> { new(Guid.Empty, TestConstants.ValidName) };
-        var repoMock = new Mock<IActionTypeRepository>();
-        repoMock.Setup(l => l.GetListAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(itemList);
-        var managerMock = new Mock<IActionTypeManager>();
-        var userServiceMock = new Mock<IUserService>();
-        var appService = new ActionTypeService(repoMock.Object, managerMock.Object,
-            AppServicesTestsSetup.Mapper!, userServiceMock.Object);
+        var repoMock = Substitute.For<IActionTypeRepository>();
+        repoMock.GetListAsync(Arg.Any<CancellationToken>())
+            .Returns(itemList);
+        var managerMock = Substitute.For<IActionTypeManager>();
+        var userServiceMock = Substitute.For<IUserService>();
+        var appService = new ActionTypeService(repoMock, managerMock,
+            AppServicesTestsSetup.Mapper!, userServiceMock);
 
         var result = await appService.GetListAsync();
 

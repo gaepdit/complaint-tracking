@@ -12,13 +12,13 @@ public class FindForUpdate
     public async Task WhenItemExists_ReturnsViewDto()
     {
         var item = new Concern(Guid.Empty, TestConstants.ValidName);
-        var repoMock = new Mock<IConcernRepository>();
-        repoMock.Setup(l => l.FindAsync(item.Id, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(item);
-        var managerMock = new Mock<IConcernManager>();
-        var userServiceMock = new Mock<IUserService>();
-        var appService = new ConcernService(repoMock.Object, managerMock.Object,
-            AppServicesTestsSetup.Mapper!, userServiceMock.Object);
+        var repoMock = Substitute.For<IConcernRepository>();
+        repoMock.FindAsync(item.Id, Arg.Any<CancellationToken>())
+            .Returns(item);
+        var managerMock = Substitute.For<IConcernManager>();
+        var userServiceMock = Substitute.For<IUserService>();
+        var appService = new ConcernService(repoMock, managerMock,
+            AppServicesTestsSetup.Mapper!, userServiceMock);
 
         var result = await appService.FindForUpdateAsync(Guid.Empty);
 
@@ -29,14 +29,14 @@ public class FindForUpdate
     public async Task WhenDoesNotExist_ReturnsNull()
     {
         var id = Guid.Empty;
-        var repoMock = new Mock<IConcernRepository>();
-        repoMock.Setup(l => l.FindAsync(id, It.IsAny<CancellationToken>()))
-            .ReturnsAsync((Concern?)null);
-        var managerMock = new Mock<IConcernManager>();
-        var mapperMock = new Mock<IMapper>();
-        var userServiceMock = new Mock<IUserService>();
-        var appService = new ConcernService(repoMock.Object, managerMock.Object,
-            mapperMock.Object, userServiceMock.Object);
+        var repoMock = Substitute.For<IConcernRepository>();
+        repoMock.FindAsync(id, Arg.Any<CancellationToken>())
+            .Returns((Concern?)null);
+        var managerMock = Substitute.For<IConcernManager>();
+        var mapperMock = Substitute.For<IMapper>();
+        var userServiceMock = Substitute.For<IUserService>();
+        var appService = new ConcernService(repoMock, managerMock,
+            mapperMock, userServiceMock);
 
         var result = await appService.FindForUpdateAsync(Guid.Empty);
 
