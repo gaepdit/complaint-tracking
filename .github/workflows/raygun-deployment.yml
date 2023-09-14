@@ -5,7 +5,7 @@ name: Raygun Deployment Tracking
 on:
   push:
     # Update this line with the desired tag prefix, e.g., "prod/*"
-    tags: prod/*
+    tags: [prod/*]
 
 jobs:
   raygun-deployment:
