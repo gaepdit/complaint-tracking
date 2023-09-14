@@ -1,3 +1,4 @@
+using Cts.Domain.Entities.EntityBase;
 using Cts.Domain.Entities.Offices;
 using FluentAssertions.Execution;
 
@@ -31,6 +32,6 @@ public class Constructor
     {
         var action = () => new Office(Guid.Empty, "a");
         action.Should().Throw<ArgumentException>()
-            .WithMessage($"The length must be at least the minimum length '{Office.MinNameLength}'.*");
+            .WithMessage($"The length must be at least the minimum length '{SimpleNamedEntity.MinNameLength}'.*");
     }
 }

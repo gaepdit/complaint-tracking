@@ -8,10 +8,12 @@ public class ActionTypeManager : IActionTypeManager
     private readonly IActionTypeRepository _repository;
     public ActionTypeManager(IActionTypeRepository repository) => _repository = repository;
 
-    public async Task<ActionType> CreateAsync(string name, CancellationToken token = default)
+    public async Task<ActionType> CreateAsync(string name, string? createdById, CancellationToken token = default)
     {
         await ThrowIfDuplicateName(name, ignoreId: null, token: token);
-        return new ActionType(Guid.NewGuid(), name);
+        var type = new ActionType(Guid.NewGuid(), name);
+        type.SetCreator(createdById);
+        return type;
     }
 
     public async Task ChangeNameAsync(ActionType actionType, string name, CancellationToken token = default)

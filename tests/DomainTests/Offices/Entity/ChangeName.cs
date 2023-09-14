@@ -1,3 +1,4 @@
+using Cts.Domain.Entities.EntityBase;
 using Cts.Domain.Entities.Offices;
 
 namespace DomainTests.Offices.Entity;
@@ -37,6 +38,6 @@ public class ChangeName
         var action = () => result.ChangeName("a");
 
         action.Should().Throw<ArgumentException>()
-            .WithMessage($"The length must be at least the minimum length '{Office.MinNameLength}'.*");
+            .WithMessage($"The length must be at least the minimum length '{SimpleNamedEntity.MinNameLength}'.*");
     }
 }

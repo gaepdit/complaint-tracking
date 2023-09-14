@@ -2,7 +2,7 @@
 
 public static partial class Data
 {
-    public static List<string> States => new()
+    public static IEnumerable<string> States => new List<string>
     {
         "Alabama",
         "Alaska",

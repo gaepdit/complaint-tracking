@@ -14,9 +14,9 @@ public class Create
             .Returns((Office?)null);
         var manager = new OfficeManager(repoMock);
 
-        var newItem = await manager.CreateAsync(TestConstants.ValidName);
+        var newItem = await manager.CreateAsync(TextData.ValidName, null);
 
-        newItem.Name.Should().BeEquivalentTo(TestConstants.ValidName);
+        newItem.Name.Should().BeEquivalentTo(TextData.ValidName);
     }
 
     [Test]
@@ -24,12 +24,12 @@ public class Create
     {
         var repoMock = Substitute.For<IOfficeRepository>();
         repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
-            .Returns(new Office(Guid.Empty, TestConstants.ValidName));
+            .Returns(new Office(Guid.Empty, TextData.ValidName));
         var manager = new OfficeManager(repoMock);
 
-        var office = async () => await manager.CreateAsync(TestConstants.ValidName);
+        var office = async () => await manager.CreateAsync(TextData.ValidName, null);
 
         (await office.Should().ThrowAsync<NameAlreadyExistsException>())
-            .WithMessage($"An entity with that name already exists. Name: {TestConstants.ValidName}");
+            .WithMessage($"An entity with that name already exists. Name: {TextData.ValidName}");
     }
 }

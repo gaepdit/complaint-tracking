@@ -1,6 +1,5 @@
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Identity;
-using JetBrains.Annotations;
 
 namespace Cts.Domain.Entities.Attachments;
 

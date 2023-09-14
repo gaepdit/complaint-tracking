@@ -1,5 +1,5 @@
 using Cts.Domain.Entities.ActionTypes;
-using Cts.Domain.Entities.BaseEntities;
+using Cts.Domain.Entities.EntityBase;
 using Cts.TestData.Constants;
 using FluentAssertions.Execution;
 
@@ -11,11 +11,11 @@ public class Constructor
     public void WithValidInput_ReturnsNewEntity()
     {
         var newGuid = Guid.NewGuid();
-        var result = new ActionType(newGuid, TestConstants.ValidName);
+        var result = new ActionType(newGuid, TextData.ValidName);
         using (new AssertionScope())
         {
             result.Id.Should().Be(newGuid);
-            result.Name.Should().Be(TestConstants.ValidName);
+            result.Name.Should().Be(TextData.ValidName);
             result.Active.Should().BeTrue();
         }
     }
@@ -31,7 +31,7 @@ public class Constructor
     [Test]
     public void WithShortName_Throws()
     {
-        var action = () => new ActionType(Guid.Empty, TestConstants.ShortName);
+        var action = () => new ActionType(Guid.Empty, TextData.ShortName);
         action.Should().Throw<ArgumentException>()
             .WithMessage($"The length must be at least the minimum length '{SimpleNamedEntity.MinNameLength}'.*");
     }

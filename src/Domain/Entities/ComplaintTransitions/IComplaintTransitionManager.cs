@@ -13,7 +13,8 @@ public interface IComplaintTransitionManager
     /// </summary>
     /// <param name="complaint">The complaint the Transition is associated with.</param>
     /// <param name="type">The <see cref="TransitionType"/> of Transition to create.</param>
-    /// <param name="user">The <see cref="ApplicationUser"/> commiting the Transition.</param>
+    /// <param name="createdById">The ID of the user creating the entity.</param>
+    /// <param name="user">The <see cref="ApplicationUser"/> committing the Transition.</param>
     /// <returns>The Complaint Transition that was created.</returns>
-    ComplaintTransition Create(Complaint complaint, TransitionType type, ApplicationUser? user);
+    ComplaintTransition Create(Complaint complaint, TransitionType type, ApplicationUser? user, string? createdById);
 }

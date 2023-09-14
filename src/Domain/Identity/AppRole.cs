@@ -1,4 +1,4 @@
-﻿namespace Cts.Domain.Identity;
+namespace Cts.Domain.Identity;
 
 /// <summary>
 /// User Roles available to the application for authorization.
@@ -45,7 +45,7 @@ public class AppRole
     /// </summary>
     /// <param name="roles">A list of role strings.</param>
     /// <returns>A list of AppRoles.</returns>
-    public static IList<AppRole> RolesAsAppRoles(IEnumerable<string> roles)
+    public static IEnumerable<AppRole> RolesAsAppRoles(IEnumerable<string> roles)
     {
         var appRoles = new List<AppRole>();
 
@@ -58,39 +58,46 @@ public class AppRole
 
     // These static Role objects are used for displaying role information in the UI.
 
+    [UsedImplicitly]
     public static AppRole StaffRole { get; } = new(
         RoleName.Staff, "CTS Staff",
         "Can create new complaints and work with complaints assigned to them. Can transfer their " +
         "complaints to other users or offices."
     );
 
+    [UsedImplicitly]
     public static AppRole AttachmentsEditorRole { get; } = new(
         RoleName.AttachmentsEditor, "Attachments Editor",
         "Can edit attachments for all complaints, including closed complaints."
     );
 
+    [UsedImplicitly]
     public static AppRole DataExportRole { get; } = new(
         RoleName.DataExport, "Data Export",
         "Can generate a ZIP archive of complaints."
     );
 
+    [UsedImplicitly]
     public static AppRole DivisionManagerRole { get; } = new(
         RoleName.DivisionManager, "Division Manager",
         "Can register and edit all users and roles. Can manage all complaints. Can delete and restore " +
         "complaints and complaint actions. Can edit offices, assignors, and lookup tables."
     );
 
+    [UsedImplicitly]
     public static AppRole ManagerRole { get; } = new(
         RoleName.Manager, "Manager",
         "Can manage complaints for all users assigned to the same office. Can delete and restore " +
         "complaint actions."
     );
 
+    [UsedImplicitly]
     public static AppRole SiteMaintenanceRole { get; } = new(
         RoleName.SiteMaintenance, "Site Maintenance",
         "Can update values in lookup tables (drop-down lists)."
     );
 
+    [UsedImplicitly]
     public static AppRole UserAdminRole { get; } = new(
         RoleName.UserAdmin, "User Account Admin",
         "Can register and edit all users and roles, excluding the Division Manager role."

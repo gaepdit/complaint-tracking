@@ -1,4 +1,5 @@
-using Cts.Domain.Identity;
+﻿using Cts.Domain.Identity;
+using Cts.TestData.Constants;
 
 namespace Cts.TestData.Identity;
 
@@ -12,7 +13,7 @@ internal static partial class UserData
             GivenName = "Admin",
             FamilyName = "User1",
             Email = "admin.user@example.net",
-            Phone = "123-456-7890",
+            Phone = TextData.ValidPhoneNumber,
             Office = OfficeData.GetOffices.ElementAt(0),
         },
         new()
@@ -21,7 +22,7 @@ internal static partial class UserData
             GivenName = "General",
             FamilyName = "User2",
             Email = "general.user@example.net",
-            Office = OfficeData.GetOffices.ElementAt(1),
+            Office = OfficeData.GetOffices.ElementAt(0),
         },
         new()
         {
@@ -29,7 +30,7 @@ internal static partial class UserData
             GivenName = "Limited",
             FamilyName = "User3",
             Email = "limited.user@example.net",
-            Office = OfficeData.GetOffices.ElementAt(1),
+            Office = OfficeData.GetOffices.ElementAt(0),
         },
         new()
         {
@@ -38,19 +39,19 @@ internal static partial class UserData
             FamilyName = "User4",
             Email = "inactive.user@example.net",
             Active = false,
-            Office = OfficeData.GetOffices.ElementAt(1),
+            Office = OfficeData.GetOffices.ElementAt(0),
         },
     };
 
-    private static IEnumerable<ApplicationUser>? _users;
+    private static List<ApplicationUser>? _users;
 
     public static IEnumerable<ApplicationUser> GetUsers
     {
         get
         {
             if (_users is not null) return _users;
-            _users = UserSeedItems.ToList();
 
+            _users = UserSeedItems.ToList();
             foreach (var user in _users)
             {
                 user.UserName = user.Email?.ToLowerInvariant();

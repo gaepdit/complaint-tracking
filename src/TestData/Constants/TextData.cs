@@ -1,36 +1,51 @@
-﻿namespace Cts.TestData.Constants;
+﻿using System.Diagnostics.CodeAnalysis;
 
-// Words and phrases generated from [Cupcake Ipsum](https://cupcakeipsum.com/).
+namespace Cts.TestData.Constants;
+
+[SuppressMessage("Minor Code Smell", "S1075:URIs should not be hardcoded")]
 public static class TextData
 {
-    // Basics
-    public const string? NullString = null;
-    public const string Empty = "";
+    // Text constants
+    public const string ValidName = "abc";
+    public const string ShortName = "z";
+    public const string NewValidName = "def";
+    public const string NonExistentName = "zzz";
+    public const string ValidEmail = "test@example.net";
+    public const string ValidUrl = "https://example.net";
+    public const string ValidPhoneNumber = "404-555-1212";
+    public const string AlternatePhoneNumber = "678-555-1212";
+    public const string AdditionalPhoneNumber = "770-555-1212";
 
-    // Words and phrases
-    public const string EmailAddress = "sample@example.com";
-    public const string Word = "Croissant";
-    public const string AnotherWord = "Bacon";
-    public const string ThirdWord = "Pie";
+    // GUIDs
 
-    public const string ShortPhrase = "Gummies Macaroon";
-    public const string Phrase = "Soufflé croissant caramels gummi bears marzipan.";
+    public static readonly Guid TestGuid = new("99999999-0000-0000-0000-000000000009");
 
-    public static readonly string ShortMultiline = "Soufflé jelly gummies shortbread." +
-        Environment.NewLine +
-        "Pudding liquorice I love apple pie.";
+    // Words and phrases generated from [Cupcake Ipsum](https://cupcakeipsum.com/).
+    public const string Word = "Cupcake";
+    public const string AnotherWord = "Cookie";
+    public const string ThirdWord = "Apple";
+    public const string EmojiWord = "🙁+🕶=😎";
 
-    public const string Paragraph = "Icing toffee bear claw caramels soufflé croissant. Marshmallow " +
-        "candy cotton candy brownie chocolate candy wafer. Powder candy chocolate bar cake bonbon. " +
-        "Caramels lemon drops caramels jelly gummies cupcake chocolate bar gummi bears icing.";
+    public const string ShortPhrase = "Chocolate bar cookie";
+    public const string AnotherShortPhrase = "Brownie croissant";
+    public const string Phrase = "Pudding bear claw I love liquorice pie fruitcake.";
 
-    public static readonly string MultipleParagraphs = "Gummies powder macaroon powder biscuit. Cake marzipan " +
+    public static readonly string ShortMultiline = "Cake pastry pie I love chocolate cake." +
+        Environment.NewLine +
+        "Pudding ice cream chocolate sweet roll jelly.";
+
+    public const string Paragraph = "Oat cake gummi bears danish I love tart muffin bonbon I love. Danish tiramisu " +
+        "tootsie roll tart marshmallow icing tootsie roll. Shortbread tiramisu tiramisu chocolate bar biscuit. " +
+        "Liquorice I love biscuit bonbon jujubes croissant.";
+
+    public static readonly string MultipleParagraphs = "Dessert cheesecake ice cream fruitcake chocolate bar cookie." +
         Environment.NewLine +
         Environment.NewLine +
-        "Bear claw lemon drops macaroon halvah gingerbread oat cake powder tiramisu biscuit. Powder " +
-        "sesame snaps biscuit dessert cotton candy I love macaroon cake. Ice cream cookie topping " +
-        "carrot cake sugar plum ice cream. Shortbread I love ice cream pudding gummi bears." +
+        "Lemon drops brownie croissant sesame snaps marshmallow caramels. Gummy bears lollipop icing jelly-o toffee " +
+        "candy. Biscuit tootsie roll ice cream muffin macaroon. Brownie donut toffee danish sugar plum " +
+        "candy. Oat cake muffin tart bear claw bonbon lollipop. Marshmallow donut icing chocolate bar dessert." +
         Environment.NewLine +
         Environment.NewLine +
-        "Biscuit carrot cake macaroon marzipan jelly tiramisu danish.";
+        "Dessert cheesecake ice cream fruitcake chocolate bar pie cookie. Croissant marzipan jelly cupcake cupcake " +
+        "lemon drops jelly-o. Shortbread donut pie.";
 }

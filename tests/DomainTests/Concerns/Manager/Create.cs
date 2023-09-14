@@ -14,9 +14,9 @@ public class Create
             .Returns((Concern?)null);
         var manager = new ConcernManager(repoMock);
 
-        var newItem = await manager.CreateAsync(TestConstants.ValidName);
+        var newItem = await manager.CreateAsync(TextData.ValidName, null);
 
-        newItem.Name.Should().BeEquivalentTo(TestConstants.ValidName);
+        newItem.Name.Should().BeEquivalentTo(TextData.ValidName);
     }
 
     [Test]
@@ -24,12 +24,12 @@ public class Create
     {
         var repoMock = Substitute.For<IConcernRepository>();
         repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
-            .Returns(new Concern(Guid.Empty, TestConstants.ValidName));
+            .Returns(new Concern(Guid.Empty, TextData.ValidName));
         var manager = new ConcernManager(repoMock);
 
-        var action = async () => await manager.CreateAsync(TestConstants.ValidName);
+        var action = async () => await manager.CreateAsync(TextData.ValidName, null);
 
         (await action.Should().ThrowAsync<NameAlreadyExistsException>())
-            .WithMessage($"An entity with that name already exists. Name: {TestConstants.ValidName}");
+            .WithMessage($"An entity with that name already exists. Name: {TextData.ValidName}");
     }
 }

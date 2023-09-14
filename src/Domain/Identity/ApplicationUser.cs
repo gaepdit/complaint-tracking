@@ -25,6 +25,7 @@ public class ApplicationUser : IdentityUser, IEntity<string>
     // Editable user/staff properties
     public const int MaxPhoneLength = 25;
 
+    [ProtectedPersonalData]
     [StringLength(MaxPhoneLength)]
     public string? Phone { get; set; }
 

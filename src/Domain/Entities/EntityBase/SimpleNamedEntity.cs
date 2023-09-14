@@ -1,12 +1,12 @@
-﻿using JetBrains.Annotations;
+﻿using System.Text;
 
-namespace Cts.Domain.Entities.BaseEntities;
+namespace Cts.Domain.Entities.EntityBase;
 
 public abstract class SimpleNamedEntity : AuditableEntity
 {
     // Constants
 
-    public const int MaxNameLength = 50;
+    public const int MaxNameLength = 450;
     public const int MinNameLength = 2;
 
     // Constructors
@@ -29,4 +29,17 @@ public abstract class SimpleNamedEntity : AuditableEntity
 
     private void SetName(string name) =>
         Name = Guard.ValidLength(name.Trim(), minLength: MinNameLength, maxLength: MaxNameLength);
+
+    // Display properties
+
+    public string NameWithActivity
+    {
+        get
+        {
+            var sn = new StringBuilder();
+            sn.Append(Name);
+            if (!Active) sn.Append(" [Inactive]");
+            return sn.ToString();
+        }
+    }
 }
