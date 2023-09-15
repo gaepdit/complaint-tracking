@@ -27,7 +27,7 @@
 
 @if (Model.Item.IsDeleted) // implies `ComplaintOperation.ManageDeletions`
 {
-    <h2 class="text-danger">Complaint Has Been Deleted</h2>
+    <h2 class="text-danger-emphasis">Complaint Has Been Deleted</h2>
 
     <div class="d-print-none mb-2">
         <a asp-page="Restore" asp-route-id="@Model.Item.Id" class="btn btn-outline-danger">Restore deleted complaint</a>
@@ -306,7 +306,7 @@ else
 <h2>Audit History</h2>
 
 <div class="container">
-    <dl class="row">
+    <dl class="row small">
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ReceivedBy)</dt>
         <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.ReceivedBy, DisplayTemplate.NameOrNotEntered) on @Html.DisplayFor(m => m.Item.ReceivedDate, DisplayTemplate.LongDateTime)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.EnteredBy)</dt>
@@ -316,35 +316,38 @@ else
 
 @if (Model.Item.ComplaintTransitions is { Count: > 0 })
 {
-    <table class="table table-small align-top" aria-label="Audit history">
-        <thead>
-        <tr>
-            <th scope="col">Action&nbsp;Date</th>
-            <th scope="col">Committed&nbsp;By</th>
-            <th scope="col">Action</th>
-            <th scope="col">From</th>
-            <th scope="col">To</th>
-            <th scope="col">Comment</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var item in Model.Item.ComplaintTransitions)
-        {
+    <details>
+        <summary class="h5 link-info mb-2">Show full audit history</summary>
+        <table class="table table-sm small align-top" aria-label="Audit history">
+            <thead>
             <tr>
-                <td>@Html.DisplayFor(m => item.CommittedDate, DisplayTemplate.ShortDateTime)</td>
-                <td>@Html.DisplayFor(m => item.CommittedByUser, DisplayTemplate.NameOrNotEntered)</td>
-                <td>@item.TransitionType.GetDisplayName()</td>
-                <td>
-                    @Html.DisplayFor(m => item.TransferredFromUser, DisplayTemplate.NameOrBlank)
-                    @Html.DisplayFor(m => item.TransferredFromOffice, DisplayTemplate.NameOrBlank)
-                </td>
-                <td>
-                    @Html.DisplayFor(m => item.TransferredToUser, DisplayTemplate.NameOrBlank)
-                    @Html.DisplayFor(m => item.TransferredToOffice, DisplayTemplate.NameOrBlank)
-                </td>
-                <td class="text-break text-pre-line">@Html.DisplayFor(m => item.Comment)</td>
+                <th scope="col">Action&nbsp;Date</th>
+                <th scope="col">Committed&nbsp;By</th>
+                <th scope="col">Action</th>
+                <th scope="col">From</th>
+                <th scope="col">To</th>
+                <th scope="col">Comment</th>
             </tr>
-        }
-        </tbody>
-    </table>
-}
+            </thead>
+            <tbody>
+            @foreach (var item in Model.Item.ComplaintTransitions)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(m => item.CommittedDate, DisplayTemplate.ShortDateTimeNoBreak)</td>
+                    <td>@Html.DisplayFor(m => item.CommittedByUser, DisplayTemplate.NameOrNotEntered)</td>
+                    <td>@item.TransitionType.GetDisplayName()</td>
+                    <td>
+                        @Html.DisplayFor(m => item.TransferredFromUser, DisplayTemplate.NameOrBlank)
+                        @Html.DisplayFor(m => item.TransferredFromOffice, DisplayTemplate.NameOrBlank)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(m => item.TransferredToUser, DisplayTemplate.NameOrBlank)
+                        @Html.DisplayFor(m => item.TransferredToOffice, DisplayTemplate.NameOrBlank)
+                    </td>
+                    <td class="text-break text-pre-line">@Html.DisplayFor(m => item.Comment)</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </details>
+    }
