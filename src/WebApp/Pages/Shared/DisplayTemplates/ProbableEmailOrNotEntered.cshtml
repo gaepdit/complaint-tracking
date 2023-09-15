@@ -1,8 +1,6 @@
-﻿@using System.Text.RegularExpressions
+﻿@using Cts.Domain.DataProcessing
 @model string?
 @{
-    //-- Email RegEx: https://regex101.com/r/umVx9J/1
-    const string simpleEmailPattern = @"\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b";
 }
 @if (string.IsNullOrEmpty(Model))
 {
@@ -10,7 +8,7 @@
 }
 else
 {
-    @if (Regex.IsMatch(Model, simpleEmailPattern))
+    @if (Regexes.EmailRegex().IsMatch(Model))
     {
         <a href="mailto:@Model">@Model</a>
     }
