@@ -1,5 +1,5 @@
 ﻿using Cts.Domain.Entities.ActionTypes;
-using Cts.Domain.Entities.BaseEntities;
+using Cts.Domain.Entities.EntityBase;
 using FluentValidation;
 
 namespace Cts.AppServices.ActionTypes.Validators;

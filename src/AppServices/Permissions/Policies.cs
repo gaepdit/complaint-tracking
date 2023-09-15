@@ -9,7 +9,7 @@ namespace Cts.AppServices.Permissions;
 //
 // A. As an attribute on a PageModel class:
 //
-//    [Authorize(Policy = PolicyName.SiteMaintainer)]
+//    [Authorize(Policy = nameof(Policies.SiteMaintainer))]
 //    public class AddModel : PageModel
 //
 // B. From a DI authorization service: 
@@ -21,37 +21,33 @@ namespace Cts.AppServices.Permissions;
 //
 #pragma warning restore S125
 
-public static class PolicyName
-{
-    public const string StaffUser = nameof(StaffUser);
-    public const string SiteMaintainer = nameof(SiteMaintainer);
-    public const string UserAdministrator = nameof(UserAdministrator);
-    public const string DivisionManager = nameof(DivisionManager);
-}
-
 public static class Policies
 {
-    public static AuthorizationPolicy StaffUserPolicy() =>
-        new AuthorizationPolicyBuilder()
-            .RequireAuthenticatedUser()
-            .AddRequirements(new StaffUserRequirement())
-            .Build();
+    // Default policy builders
+    private static AuthorizationPolicyBuilder AuthenticatedUserPolicyBuilder =>
+        new AuthorizationPolicyBuilder().RequireAuthenticatedUser();
 
-    public static AuthorizationPolicy SiteMaintainerPolicy() =>
-        new AuthorizationPolicyBuilder()
-            .RequireAuthenticatedUser()
-            .AddRequirements(new SiteMaintainerRequirement())
-            .Build();
+    private static AuthorizationPolicyBuilder ActiveUserPolicyBuilder =>
+        AuthenticatedUserPolicyBuilder.AddRequirements(new ActiveUserRequirement());
 
-    public static AuthorizationPolicy UserAdministratorPolicy() =>
-        new AuthorizationPolicyBuilder()
-            .RequireAuthenticatedUser()
-            .AddRequirements(new UserAdministratorRequirement())
-            .Build();
+    // Basic policies
+    public static AuthorizationPolicy ActiveUser => ActiveUserPolicyBuilder.Build();
 
-    public static AuthorizationPolicy DivisionManagerPolicy() =>
-        new AuthorizationPolicyBuilder()
-            .RequireAuthenticatedUser()
-            .AddRequirements(new DivisionManagerRequirement())
-            .Build();
+    public static AuthorizationPolicy LoggedInUser => AuthenticatedUserPolicyBuilder.Build();
+
+    // Role-based policies
+    public static AuthorizationPolicy AdministrationView =>
+        ActiveUserPolicyBuilder.AddRequirements(new AdministrationViewRequirement()).Build();
+
+    public static AuthorizationPolicy StaffUser =>
+        ActiveUserPolicyBuilder.AddRequirements(new StaffUserRequirement()).Build();
+
+    public static AuthorizationPolicy SiteMaintainer =>
+        ActiveUserPolicyBuilder.AddRequirements(new SiteMaintainerRequirement()).Build();
+
+    public static AuthorizationPolicy UserAdministrator =>
+        ActiveUserPolicyBuilder.AddRequirements(new UserAdministratorRequirement()).Build();
+
+    public static AuthorizationPolicy DivisionManager =>
+        ActiveUserPolicyBuilder.AddRequirements(new DivisionManagerRequirement()).Build();
 }

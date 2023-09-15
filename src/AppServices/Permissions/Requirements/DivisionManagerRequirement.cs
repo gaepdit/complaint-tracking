@@ -10,9 +10,6 @@ internal class DivisionManagerRequirement :
         AuthorizationHandlerContext context,
         DivisionManagerRequirement requirement)
     {
-        if (!(context.User.Identity?.IsAuthenticated ?? false))
-            return Task.FromResult(0);
-
         if (context.User.IsInRole(RoleName.DivisionManager))
             context.Succeed(requirement);
 

@@ -1,4 +1,3 @@
-using Cts.AppServices.Staff;
 using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
@@ -12,11 +11,11 @@ public class UserMapping
     private readonly ApplicationUser _item = new()
     {
         Id = Guid.NewGuid().ToString(),
-        GivenName = TestConstants.ValidName,
-        FamilyName = TestConstants.NewValidName,
-        Email = TestConstants.ValidEmail,
-        Phone = "123-456-7890",
-        Office = new Office(Guid.NewGuid(), TestConstants.ValidName),
+        GivenName = TextData.ValidName,
+        FamilyName = TextData.NewValidName,
+        Email = TextData.ValidEmail,
+        Phone = TextData.ValidPhoneNumber,
+        Office = new Office(Guid.NewGuid(), TextData.ValidName),
     };
 
     [Test]

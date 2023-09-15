@@ -1,4 +1,4 @@
-﻿using Cts.Domain.Entities.BaseEntities;
+﻿using Cts.Domain.Entities.EntityBase;
 using Cts.Domain.Entities.Concerns;
 using FluentValidation;
 

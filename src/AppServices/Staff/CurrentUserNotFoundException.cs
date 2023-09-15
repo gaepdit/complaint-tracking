@@ -9,7 +9,7 @@ namespace Cts.AppServices.Staff;
 public class CurrentUserNotFoundException : Exception
 {
     public CurrentUserNotFoundException()
-        : base($"Information on the current user could not be found.") { }
+        : base("Information on the current user could not be found.") { }
 
     protected CurrentUserNotFoundException(SerializationInfo info, StreamingContext context)
         : base(info, context) { }

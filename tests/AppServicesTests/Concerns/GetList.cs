@@ -10,7 +10,7 @@ public class GetList
     [Test]
     public async Task ReturnsViewDtoList()
     {
-        var itemList = new List<Concern> { new(Guid.Empty, TestConstants.ValidName) };
+        var itemList = new List<Concern> { new(Guid.Empty, TextData.ValidName) };
         var repoMock = Substitute.For<IConcernRepository>();
         repoMock.GetListAsync(Arg.Any<CancellationToken>())
             .Returns(itemList);

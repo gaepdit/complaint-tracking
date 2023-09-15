@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Cts.AppServices.Staff.Dto;
 
-public class StaffUpdateDto
+public record StaffUpdateDto
 {
     public string Id { get; init; } = string.Empty;
 
@@ -16,5 +16,5 @@ public class StaffUpdateDto
     public Guid? OfficeId { get; init; }
 
     [Required]
-    public bool Active { get; init; }
+    public bool Active { get; set; }
 }

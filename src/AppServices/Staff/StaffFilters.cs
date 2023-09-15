@@ -1,6 +1,6 @@
-using Cts.AppServices.Staff.Dto;
+﻿using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Identity;
-using GaEpd.AppLibrary.Enums;
+using GaEpd.AppLibrary.Extensions;
 using GaEpd.AppLibrary.Pagination;
 
 namespace Cts.AppServices.Staff;
@@ -30,7 +30,7 @@ public static class StaffFilters
         this IQueryable<ApplicationUser> query, Guid? officeId) =>
         officeId is null ? query : query.Where(m => m.Office != null && m.Office.Id == officeId);
 
-    public static IQueryable<ApplicationUser> FilterByActiveStatus(
+    private static IQueryable<ApplicationUser> FilterByActiveStatus(
         this IQueryable<ApplicationUser> query, SearchStaffStatus? status) =>
         status == SearchStaffStatus.All
             ? query

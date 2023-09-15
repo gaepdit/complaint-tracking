@@ -11,7 +11,22 @@ public class OfficeMapping
     [Test]
     public void OfficeViewMappingWorks()
     {
-        var item = new Office(Guid.NewGuid(), TestConstants.ValidName);
+        var item = new Office(Guid.NewGuid(), TextData.ValidName);
+
+        var result = AppServicesTestsSetup.Mapper!.Map<OfficeViewDto>(item);
+
+        using (new AssertionScope())
+        {
+            result.Id.Should().Be(item.Id);
+            result.Name.Should().Be(item.Name);
+            result.Active.Should().BeTrue();
+        }
+    }
+
+    [Test]
+    public void OfficeAdminViewMappingWorks()
+    {
+        var item = new Office(Guid.NewGuid(), TextData.ValidName);
 
         var result = AppServicesTestsSetup.Mapper!.Map<OfficeAdminViewDto>(item);
 
@@ -27,8 +42,23 @@ public class OfficeMapping
     [Test]
     public void OfficeUpdateMappingWorks()
     {
+        var item = new Office(Guid.NewGuid(), TextData.ValidName);
+
+        var result = AppServicesTestsSetup.Mapper!.Map<OfficeUpdateDto>(item);
+
+        using (new AssertionScope())
+        {
+            result.Id.Should().Be(item.Id);
+            result.Name.Should().Be(item.Name);
+            result.Active.Should().BeTrue();
+        }
+    }
+
+    [Test]
+    public void OfficeUpdateWithAdminMappingWorks()
+    {
         var user = new ApplicationUser { Id = Guid.NewGuid().ToString() };
-        var item = new Office(Guid.NewGuid(), TestConstants.ValidName) { Assignor = user };
+        var item = new Office(Guid.NewGuid(), TextData.ValidName) { Assignor = user };
 
         var result = AppServicesTestsSetup.Mapper!.Map<OfficeUpdateDto>(item);
 

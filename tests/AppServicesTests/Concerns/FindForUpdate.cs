@@ -11,7 +11,7 @@ public class FindForUpdate
     [Test]
     public async Task WhenItemExists_ReturnsViewDto()
     {
-        var item = new Concern(Guid.Empty, TestConstants.ValidName);
+        var item = new Concern(Guid.Empty, TextData.ValidName);
         var repoMock = Substitute.For<IConcernRepository>();
         repoMock.FindAsync(item.Id, Arg.Any<CancellationToken>())
             .Returns(item);

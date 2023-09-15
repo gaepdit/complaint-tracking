@@ -11,10 +11,10 @@ public class Create
     [Test]
     public async Task WhenResourceIsValid_ReturnsId()
     {
-        var item = new Concern(Guid.NewGuid(), TestConstants.ValidName);
+        var item = new Concern(Guid.NewGuid(), TextData.ValidName);
         var repoMock = Substitute.For<IConcernRepository>();
         var managerMock = Substitute.For<IConcernManager>();
-        managerMock.CreateAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+        managerMock.CreateAsync(Arg.Any<string>(), Arg.Any<string?>(), Arg.Any<CancellationToken>())
             .Returns(item);
         var userServiceMock = Substitute.For<IUserService>();
         userServiceMock.GetCurrentUserAsync()

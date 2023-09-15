@@ -17,16 +17,18 @@ public class Create
     {
         // Arrange
         var complaintManagerMock = Substitute.For<IComplaintManager>();
-        complaintManagerMock.CreateNewComplaintAsync()
+        complaintManagerMock.CreateNewComplaintAsync(Arg.Any<string?>())
             .Returns(new Complaint(0));
 
         var userServiceMock = Substitute.For<IUserService>();
         userServiceMock.GetCurrentUserAsync()
             .Returns(new ApplicationUser { Id = Guid.Empty.ToString() });
+        userServiceMock.GetUserAsync(Arg.Any<string>())
+            .Returns(new ApplicationUser { Id = Guid.Empty.ToString() });
 
         var officeRepoMock = Substitute.For<IOfficeRepository>();
         officeRepoMock.GetAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
-            .Returns(new Office(Guid.NewGuid(), TestConstants.ValidName));
+            .Returns(new Office(Guid.NewGuid(), TextData.ValidName));
 
         var appService = new ComplaintService(Substitute.For<IComplaintRepository>(), complaintManagerMock,
             Substitute.For<IConcernRepository>(), officeRepoMock, Substitute.For<IComplaintTransitionManager>(),
@@ -46,14 +48,14 @@ public class Create
     {
         // Arrange
         var complaintManagerMock = Substitute.For<IComplaintManager>();
-        complaintManagerMock.CreateNewComplaintAsync()
+        complaintManagerMock.CreateNewComplaintAsync(null)
             .Returns(new Complaint(0));
 
         var userServiceMock = Substitute.For<IUserService>();
         userServiceMock.GetCurrentUserAsync()
             .Returns(new ApplicationUser { Id = Guid.Empty.ToString() });
 
-        var office = new Office(Guid.NewGuid(), TestConstants.ValidName);
+        var office = new Office(Guid.NewGuid(), TextData.ValidName);
         var officeRepoMock = Substitute.For<IOfficeRepository>();
         officeRepoMock.GetAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
             .Returns(office);

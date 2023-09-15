@@ -14,12 +14,7 @@ public class UpdateValidator
         var repoMock = Substitute.For<IConcernRepository>();
         repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns((Concern?)null);
-        var model = new ConcernUpdateDto
-        {
-            Id = Guid.Empty,
-            Name = TestConstants.ValidName,
-            Active = true,
-        };
+        var model = new ConcernUpdateDto(Guid.Empty, TextData.ValidName, true);
 
         var validator = new ConcernUpdateValidator(repoMock);
         var result = await validator.TestValidateAsync(model);
@@ -32,13 +27,8 @@ public class UpdateValidator
     {
         var repoMock = Substitute.For<IConcernRepository>();
         repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
-            .Returns(new Concern(Guid.NewGuid(), TestConstants.ValidName));
-        var model = new ConcernUpdateDto
-        {
-            Id = Guid.Empty,
-            Name = TestConstants.ValidName,
-            Active = true,
-        };
+            .Returns(new Concern(Guid.NewGuid(), TextData.ValidName));
+        var model = new ConcernUpdateDto(Guid.Empty, TextData.ValidName, true);
 
         var validator = new ConcernUpdateValidator(repoMock);
         var result = await validator.TestValidateAsync(model);
@@ -52,13 +42,8 @@ public class UpdateValidator
     {
         var repoMock = Substitute.For<IConcernRepository>();
         repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
-            .Returns(new Concern(Guid.Empty, TestConstants.ValidName));
-        var model = new ConcernUpdateDto
-        {
-            Id = Guid.Empty,
-            Name = TestConstants.ValidName,
-            Active = true,
-        };
+            .Returns(new Concern(Guid.Empty, TextData.ValidName));
+        var model = new ConcernUpdateDto(Guid.Empty, TextData.ValidName, true);
 
         var validator = new ConcernUpdateValidator(repoMock);
         var result = await validator.TestValidateAsync(model);
@@ -72,7 +57,7 @@ public class UpdateValidator
         var repoMock = Substitute.For<IConcernRepository>();
         repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns((Concern?)null);
-        var model = new ConcernUpdateDto() { Name = TestConstants.ShortName };
+        var model = new ConcernUpdateDto(Guid.Empty, TextData.ShortName, true);
 
         var validator = new ConcernUpdateValidator(repoMock);
         var result = await validator.TestValidateAsync(model);
