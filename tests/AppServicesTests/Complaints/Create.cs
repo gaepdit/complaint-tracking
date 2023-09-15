@@ -66,15 +66,12 @@ public class Create
 
         var item = new ComplaintCreateDto
         {
-            ReceivedDate = new DateTime(2000, 1, 1),
-            ReceivedTime = new DateTime(2020, 2, 2, 1, 15, 0),
+            ReceivedDate = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Local),
+            ReceivedTime = new DateTime(2020, 2, 2, 1, 15, 0, DateTimeKind.Local),
             CurrentOfficeId = office.Id,
         };
 
-        item.ReceivedDate = DateTime.SpecifyKind(item.ReceivedDate, DateTimeKind.Local);
-
-        var correct = new DateTime(2000, 1, 1, 1, 15, 0);
-        var expected = DateTime.SpecifyKind(correct, DateTimeKind.Local);
+        var expected = new DateTime(2000, 1, 1, 1, 15, 0, DateTimeKind.Local);
 
         // Act
         var result = await appService.CreateComplaintFromDtoAsync(item, null, CancellationToken.None);
