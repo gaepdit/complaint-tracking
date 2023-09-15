@@ -30,7 +30,7 @@ public class GetListByPredicate
     [Test]
     public async Task WhenDoesNotExist_ReturnsEmptyList()
     {
-        var result = await _repository.GetListAsync(e => e.Name == TestConstants.NonExistentName);
+        var result = await _repository.GetListAsync(e => e.Name == TextData.NonExistentName);
         result.Should().BeEmpty();
     }
 }

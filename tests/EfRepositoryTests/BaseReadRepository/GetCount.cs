@@ -1,14 +1,14 @@
-using Cts.Domain.Entities.Offices;
+using Cts.Domain.Entities.Concerns;
 using Cts.TestData;
 
 namespace EfRepositoryTests.BaseReadRepository;
 
 public class GetCount
 {
-    private IOfficeRepository _repository = default!;
+    private IConcernRepository _repository = default!;
 
     [SetUp]
-    public void SetUp() => _repository = RepositoryHelper.CreateRepositoryHelper().GetOfficeRepository();
+    public void SetUp() => _repository = RepositoryHelper.CreateRepositoryHelper().GetConcernRepository();
 
     [TearDown]
     public void TearDown() => _repository.Dispose();
@@ -16,7 +16,7 @@ public class GetCount
     [Test]
     public async Task WhenItemsExist_ReturnsCount()
     {
-        var item = OfficeData.GetOffices.First();
+        var item = ConcernData.GetConcerns.First();
         var result = await _repository.CountAsync(e => e.Id == item.Id);
         result.Should().Be(1);
     }

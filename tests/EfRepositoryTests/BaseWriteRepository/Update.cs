@@ -28,7 +28,7 @@ public class Update
     public async Task WhenItemIsValid_UpdatesItem()
     {
         var item = ConcernData.GetConcerns.First(e => e.Active);
-        item.ChangeName(TestConstants.ValidName);
+        item.ChangeName(TextData.ValidName);
         item.Active = !item.Active;
 
         await _repository.UpdateAsync(item);
@@ -44,7 +44,7 @@ public class Update
         var item = ConcernData.GetConcerns.First(e => e.Active);
         var originalItem = new Concern(item.Id, item.Name);
 
-        item.ChangeName(TestConstants.ValidName);
+        item.ChangeName(TextData.ValidName);
         item.Active = !item.Active;
 
         await _repository.UpdateAsync(item, false);
@@ -57,7 +57,7 @@ public class Update
     [Test]
     public async Task WhenItemDoesNotExist_Throws()
     {
-        var item = new Concern(Guid.Empty, TestConstants.ValidName);
+        var item = new Concern(Guid.Empty, TextData.ValidName);
         var action = async () => await _repository.UpdateAsync(item);
         (await action.Should().ThrowAsync<EntityNotFoundException>())
             .WithMessage($"Entity not found. Entity type: {typeof(Concern).FullName}, id: {item.Id}");

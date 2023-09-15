@@ -49,7 +49,13 @@ public sealed class RepositoryHelper : IDisposable
     /// <param name="callingMember">The unit test method requesting the Repository Helper.</param>
     private RepositoryHelper(object callingClass, string callingMember)
     {
-        _options = callingClass.CreateUniqueMethodOptions<AppDbContext>(callingMember: callingMember);
+        _options = callingClass.CreateUniqueMethodOptions<AppDbContext>(callingMember: callingMember,
+            builder: opts => opts.UseSqlServer(
+                sqlServerOpts =>
+                {
+                    // FUTURE: This will no longer be necessary after upgrading to .NET 8.
+                    sqlServerOpts.UseDateOnlyTimeOnly();
+                }));
         _context = new AppDbContext(_options);
         _context.Database.EnsureClean();
     }
@@ -96,12 +102,12 @@ public sealed class RepositoryHelper : IDisposable
     /// </param>
     /// <returns>A <see cref="RepositoryHelper"/> with a clean SQL Server database.</returns>
     public static RepositoryHelper CreateSqlServerRepositoryHelper(
-        object callingClass,
-        [CallerMemberName] string callingMember = "") =>
+        object callingClass, [CallerMemberName] string callingMember = "") =>
         new(callingClass, callingMember);
 
     /// <summary>
     /// Stops tracking all currently tracked entities.
+    /// ReSharper disable once CommentTypo
     /// See https://github.com/JonPSmith/EfCore.TestSupport/wiki/Using-SQLite-in-memory-databases#1-best-approach-one-instance-and-use-changetrackerclear
     /// </summary>
     public void ClearChangeTracker() => Context.ChangeTracker.Clear();
@@ -130,7 +136,7 @@ public sealed class RepositoryHelper : IDisposable
     }
 
     /// <summary>
-    /// Seeds data for the ActionType entity and returns an instance of ActionTypeRepository.
+    /// Seeds data and returns an instance of ActionTypeRepository.
     /// </summary>
     /// <returns>An <see cref="ActionTypeRepository"/>.</returns>
     public IActionTypeRepository GetActionTypeRepository()
@@ -142,7 +148,7 @@ public sealed class RepositoryHelper : IDisposable
     }
 
     /// <summary>
-    /// Seeds data for the ActionType entity and returns an instance of ActionTypeRepository.
+    /// Seeds data and returns an instance of ActionTypeRepository.
     /// </summary>
     /// <returns>An <see cref="ComplaintRepository"/>.</returns>
     public IComplaintRepository GetComplaintRepository()
@@ -154,7 +160,7 @@ public sealed class RepositoryHelper : IDisposable
     }
 
     /// <summary>
-    /// Seeds data for the ActionType entity and returns an instance of ActionTypeRepository.
+    /// Seeds data and returns an instance of ActionTypeRepository.
     /// </summary>
     /// <returns>An <see cref="ActionTypeRepository"/>.</returns>
     public IConcernRepository GetConcernRepository()
@@ -166,7 +172,7 @@ public sealed class RepositoryHelper : IDisposable
     }
 
     /// <summary>
-    /// Seeds data for the Office entity and returns an instance of OfficeRepository.
+    /// Seeds data and returns an instance of OfficeRepository.
     /// </summary>
     /// <returns>An <see cref="OfficeRepository"/>.</returns>
     public IOfficeRepository GetOfficeRepository()

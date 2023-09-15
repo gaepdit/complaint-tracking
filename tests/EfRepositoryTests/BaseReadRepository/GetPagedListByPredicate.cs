@@ -53,7 +53,7 @@ public class GetPagedListByPredicate
     {
         var itemsCount = ConcernData.GetConcerns.Count();
         var paging = new PaginatedRequest(1, itemsCount);
-        var result = await _repository.GetPagedListAsync(e => e.Name == TestConstants.NonExistentName, paging);
+        var result = await _repository.GetPagedListAsync(e => e.Name == TextData.NonExistentName, paging);
         result.Should().BeEmpty();
     }
 

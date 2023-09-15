@@ -19,7 +19,6 @@ public interface IOfficeRepository : IRepository<Office, Guid>
     /// </summary>
     /// <param name="id">The ID of the Office.</param>
     /// <param name="token"><see cref="T:System.Threading.CancellationToken"/></param>
-    /// <exception cref="EntityNotFoundException">Thrown if no entity exists with the given Id.</exception>
     /// <returns>A list of Users.</returns>
     Task<List<ApplicationUser>> GetActiveStaffMembersListAsync(Guid id, CancellationToken token = default);
 

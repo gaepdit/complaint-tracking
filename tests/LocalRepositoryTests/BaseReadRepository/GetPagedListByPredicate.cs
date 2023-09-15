@@ -5,19 +5,18 @@ using System.Globalization;
 
 namespace LocalRepositoryTests.BaseReadRepository;
 
-[FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
 public class GetPagedListByPredicate
 {
-    private LocalOfficeRepository _repository = default!;
+    private LocalConcernRepository _repository = default!;
 
     [SetUp]
-    public void SetUp() => _repository = new LocalOfficeRepository();
+    public void SetUp() => _repository = RepositoryHelper.GetConcernRepository();
 
     [TearDown]
     public void TearDown() => _repository.Dispose();
 
     [Test]
-    public async Task WhenItemsExist_ReturnsPagedList()
+    public async Task WhenItemsExist_ReturnsList()
     {
         var itemsCount = _repository.Items.Count;
         var paging = new PaginatedRequest(1, itemsCount);

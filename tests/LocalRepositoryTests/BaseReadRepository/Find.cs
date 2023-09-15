@@ -4,10 +4,10 @@ namespace LocalRepositoryTests.BaseReadRepository;
 
 public class Find
 {
-    private LocalOfficeRepository _repository = default!;
+    private LocalConcernRepository _repository = default!;
 
     [SetUp]
-    public void SetUp() => _repository = new LocalOfficeRepository();
+    public void SetUp() => _repository = RepositoryHelper.GetConcernRepository();
 
     [TearDown]
     public void TearDown() => _repository.Dispose();

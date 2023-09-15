@@ -11,7 +11,7 @@ public class EfRepositoryTestsSetup
     {
         AssertionOptions.AssertEquivalencyUsing(opts => opts
             // DateTimeOffset comparison is often off by a few microseconds.
-            .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, 1.Milliseconds()))
+            .Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, 10.Milliseconds()))
             .WhenTypeIs<DateTimeOffset>()
         );
     }

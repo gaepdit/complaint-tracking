@@ -7,7 +7,7 @@ public class ExistsByPredicate
     private LocalConcernRepository _repository = default!;
 
     [SetUp]
-    public void SetUp() => _repository = new LocalConcernRepository();
+    public void SetUp() => _repository = RepositoryHelper.GetConcernRepository();
 
     [TearDown]
     public void TearDown() => _repository.Dispose();

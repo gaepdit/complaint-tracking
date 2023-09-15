@@ -5,7 +5,7 @@ using Cts.TestData.Identity;
 
 namespace Cts.LocalRepository.Identity;
 
-public sealed class LocalUserRepository : BaseReadRepository<ApplicationUser, string>, IUserRepository
+public sealed class LocalUserRepository : BaseRepository<ApplicationUser, string>, IUserRepository
 {
     public LocalUserRepository() : base(UserData.GetUsers) { }
 }

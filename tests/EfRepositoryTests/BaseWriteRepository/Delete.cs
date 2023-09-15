@@ -1,4 +1,4 @@
-using Cts.Domain.Entities.Offices;
+using Cts.Domain.Entities.Concerns;
 using Cts.TestData.Constants;
 using GaEpd.AppLibrary.Domain.Repositories;
 
@@ -7,13 +7,13 @@ namespace EfRepositoryTests.BaseWriteRepository;
 public class Delete
 {
     private RepositoryHelper _repositoryHelper = default!;
-    private IOfficeRepository _repository = default!;
+    private IConcernRepository _repository = default!;
 
     [SetUp]
     public void SetUp()
     {
         _repositoryHelper = RepositoryHelper.CreateRepositoryHelper();
-        _repository = _repositoryHelper.GetOfficeRepository();
+        _repository = _repositoryHelper.GetConcernRepository();
     }
 
     [TearDown]
@@ -27,14 +27,13 @@ public class Delete
     public async Task WhenItemExists_DeletesItem()
     {
         // Arrange
-        var item = new Office(Guid.NewGuid(), TestConstants.ValidName);
+        var item = new Concern(Guid.NewGuid(), TextData.ValidName);
         await _repository.InsertAsync(item);
         _repositoryHelper.ClearChangeTracker();
 
         // (Still part of arrange...)
-        var getResult = await _repository.GetAsync(item.Id);
+        var getResult = await _repository.FindAsync(item.Id);
         getResult.Should().BeEquivalentTo(item);
-        _repositoryHelper.ClearChangeTracker();
 
         // Act
         await _repository.DeleteAsync(item);
@@ -49,7 +48,7 @@ public class Delete
     public async Task WhenAutoSaveIsFalse_NothingIsDeleted()
     {
         // Arrange
-        var item = new Office(Guid.NewGuid(), TestConstants.ValidName);
+        var item = new Concern(Guid.NewGuid(), TextData.ValidName);
         await _repository.InsertAsync(item);
         _repositoryHelper.ClearChangeTracker();
 
@@ -65,9 +64,9 @@ public class Delete
     [Test]
     public async Task WhenItemDoesNotExist_Throws()
     {
-        var item = new Office(Guid.Empty, TestConstants.ValidName);
+        var item = new Concern(Guid.Empty, TextData.ValidName);
         var action = async () => await _repository.DeleteAsync(item);
         (await action.Should().ThrowAsync<EntityNotFoundException>())
-            .WithMessage($"Entity not found. Entity type: {typeof(Office).FullName}, id: {item.Id}");
+            .WithMessage($"Entity not found. Entity type: {typeof(Concern).FullName}, id: {item.Id}");
     }
 }

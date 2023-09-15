@@ -1,4 +1,4 @@
-using Cts.Domain.Entities.Offices;
+using Cts.Domain.Entities.Concerns;
 using Cts.LocalRepository.Repositories;
 using Cts.TestData.Constants;
 using FluentAssertions.Execution;
@@ -8,10 +8,10 @@ namespace LocalRepositoryTests.BaseWriteRepository;
 
 public class Delete
 {
-    private LocalOfficeRepository _repository = default!;
+    private LocalConcernRepository _repository = default!;
 
     [SetUp]
-    public void SetUp() => _repository = new LocalOfficeRepository();
+    public void SetUp() => _repository = RepositoryHelper.GetConcernRepository();
 
     [TearDown]
     public void TearDown() => _repository.Dispose();
@@ -35,9 +35,9 @@ public class Delete
     [Test]
     public async Task WhenItemDoesNotExist_Throws()
     {
-        var item = new Office(Guid.Empty, TestConstants.ValidName);
+        var item = new Concern(Guid.Empty, TextData.ValidName);
         var action = async () => await _repository.DeleteAsync(item);
         (await action.Should().ThrowAsync<EntityNotFoundException>())
-            .WithMessage($"Entity not found. Entity type: {typeof(Office).FullName}, id: {item.Id}");
+            .WithMessage($"Entity not found. Entity type: {typeof(Concern).FullName}, id: {item.Id}");
     }
 }

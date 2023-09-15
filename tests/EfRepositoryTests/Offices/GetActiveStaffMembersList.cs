@@ -3,7 +3,7 @@ using Cts.TestData;
 
 namespace EfRepositoryTests.Offices;
 
-public class GetStaffMembersList
+public class GetActiveStaffMembersList
 {
     private IOfficeRepository _repository = default!;
 
@@ -16,26 +16,25 @@ public class GetStaffMembersList
     [Test]
     public async Task WhenStaffExist_ReturnsList()
     {
-        // First active office was seeded with staff.
         var item = OfficeData.GetOffices.First(e => e.Active);
-        var result = await _repository.GetStaffMembersListAsync(item.Id, false);
-        result.Should().BeEquivalentTo(item.StaffMembers,
-            opts => opts.Excluding(e => e.Office)
-        );
+        var result = await _repository.GetActiveStaffMembersListAsync(item.Id);
+        result.Should().BeEquivalentTo(item.StaffMembers.Where(e => e.Active),
+            options => options.Excluding(u => u.Office));
     }
 
     [Test]
     public async Task WhenStaffDoNotExist_ReturnsEmptyList()
     {
         var item = OfficeData.GetOffices.Last(e => e.Active);
-        var result = await _repository.GetStaffMembersListAsync(item.Id, false);
+        var result = await _repository.GetActiveStaffMembersListAsync(item.Id);
         result.Should().BeEmpty();
     }
 
     [Test]
     public async Task WhenOfficeDoesNotExist_ReturnsEmptyList()
     {
-        var result = await _repository.GetStaffMembersListAsync(Guid.Empty, false);
+        var id = Guid.Empty;
+        var result = await _repository.GetActiveStaffMembersListAsync(id);
         result.Should().BeEmpty();
     }
 }
