@@ -1,0 +1,21 @@
+﻿@using System.Text.RegularExpressions
+@model string?
+@{
+    //-- Email RegEx: https://regex101.com/r/umVx9J/1
+    const string simpleEmailPattern = @"\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b";
+}
+@if (string.IsNullOrEmpty(Model))
+{
+    <span class="text-body-secondary">[Not entered]</span>
+}
+else
+{
+    @if (Regex.IsMatch(Model, simpleEmailPattern))
+    {
+        <a href="mailto:@Model">@Model</a>
+    }
+    else
+    {
+        @Model
+    }
+}

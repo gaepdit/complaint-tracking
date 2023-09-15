@@ -11,7 +11,7 @@ namespace WebAppTests.Pages.Admin.Maintenance.ActionTypes;
 public class IndexTests
 {
     private static readonly List<ActionTypeViewDto> ListTest = new()
-        { new ActionTypeViewDto { Id = Guid.Empty, Name = TestConstants.ValidName } };
+        { new ActionTypeViewDto(Guid.Empty, TextData.ValidName, true) };
 
     [Test]
     public async Task OnGet_ReturnsWithList()

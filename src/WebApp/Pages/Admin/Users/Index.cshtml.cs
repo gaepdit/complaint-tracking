@@ -1,9 +1,11 @@
 ﻿using Cts.AppServices.Offices;
+using Cts.AppServices.Permissions;
 using Cts.AppServices.Staff;
 using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Identity;
+using Cts.WebApp.Models;
 using Cts.WebApp.Platform.Constants;
-using GaEpd.AppLibrary.Enums;
+using GaEpd.AppLibrary.Extensions;
 using GaEpd.AppLibrary.ListItems;
 using GaEpd.AppLibrary.Pagination;
 using Microsoft.AspNetCore.Authorization;
@@ -13,7 +15,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Cts.WebApp.Pages.Admin.Users;
 
-[Authorize]
+[Authorize(Policy = nameof(Policies.ActiveUser))]
 public class IndexModel : PageModel
 {
     // Constructor
@@ -33,9 +35,7 @@ public class IndexModel : PageModel
     public bool ShowResults { get; private set; }
     public IPaginatedResult<StaffSearchResultDto> SearchResults { get; private set; } = default!;
     public string SortByName => Spec.Sort.ToString();
-
-    [TempData]
-    public string? HighlightId { get; set; }
+    public PaginationNavModel PaginationNav => new(SearchResults, Spec.AsRouteValues());
 
     // Select lists
     public SelectList RoleItems { get; private set; } = default!;
@@ -46,14 +46,11 @@ public class IndexModel : PageModel
 
     public async Task<IActionResult> OnGetSearchAsync(StaffSearchDto spec, [FromQuery] int p = 1)
     {
-        spec.TrimAll();
-        var paging = new PaginatedRequest(p, GlobalConstants.PageSize, spec.Sort.GetDescription());
-
-        Spec = spec;
-        ShowResults = true;
-
+        Spec = spec.TrimAll();
         await PopulateSelectListsAsync();
-        SearchResults = await _staffService.SearchAsync(spec, paging);
+        var paging = new PaginatedRequest(p, GlobalConstants.PageSize, Spec.Sort.GetDescription());
+        SearchResults = await _staffService.SearchAsync(Spec, paging);
+        ShowResults = true;
         return Page();
     }
 

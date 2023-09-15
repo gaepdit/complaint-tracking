@@ -1,7 +1,8 @@
-﻿@model Cts.Domain.ValueObjects.IncompleteAddress?
-@if (Model is null)
+﻿@using Cts.Domain.ValueObjects
+@model Cts.Domain.ValueObjects.IncompleteAddress?
+@if (Model is null || Model == IncompleteAddress.EmptyAddress)
 {
-    <span class="text-muted">[Not entered]</span>
+    <span class="text-body-secondary">[Not entered]</span>
 }
 else
 {
@@ -32,11 +33,11 @@ else
         }
         else
         {
-            @Model.State@:&nbsp;
+            @Model.State@:
         }
     }
     @if (!string.IsNullOrWhiteSpace(Model.PostalCode))
     {
-        @Model.PostalCode
+        @:&nbsp;@Model.PostalCode
     }
 }

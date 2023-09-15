@@ -3,7 +3,6 @@
   "defaultProvider": "cdnjs",
   "libraries": [
     {
-      "provider": "cdnjs",
       "library": "jquery@3.6.1",
       "destination": "wwwroot/lib/jquery/",
       "files": [
@@ -13,7 +12,7 @@
       ]
     },
     {
-      "library": "bootstrap@5.2.2",
+      "library": "bootstrap@5.3.1",
       "destination": "wwwroot/lib/bootstrap/",
       "files": [
         "js/bootstrap.bundle.min.js",

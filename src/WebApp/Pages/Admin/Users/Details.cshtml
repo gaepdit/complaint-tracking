@@ -1,6 +1,4 @@
 ﻿@page "{id:Guid?}"
-@using Cts.WebApp.Pages.Shared.DisplayTemplates
-@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model DetailsModel
 @{
     ViewData["Title"] = "User Profile: " + Model.DisplayStaff.Name;
@@ -15,9 +13,11 @@
         <em class="text-warning">Inactive:</em>
     }
     @Model.DisplayStaff.Name
-    @if (Model.DisplayStaff.Email.Equals(User.Identity?.Name))
+    @if (Model.DisplayStaff.Email!.ToLowerInvariant().Equals(User.Identity?.Name!.ToLowerInvariant()))
     {
-        <a asp-page="/Account/Index"><span class="badge text-bg-info">YOU</span></a>
+        <a asp-page="/Account/Index">
+            <span class="badge bg-info-subtle border border-info-subtle text-info-emphasis rounded-pill">YOU</span>
+        </a>
     }
 </h2>
 
@@ -33,10 +33,10 @@
     <dd class="col-sm-9">@Model.DisplayStaff.Email</dd>
 
     <dt class="col-sm-3">Phone</dt>
-    <dd class="col-sm-9">@Html.DisplayFor(m => m.DisplayStaff.Phone, TemplateNames.StringOrNone)</dd>
+    <dd class="col-sm-9">@Html.DisplayFor(m => m.DisplayStaff.Phone, "StringOrNone")</dd>
 
     <dt class="col-sm-3">Office</dt>
-    <dd class="col-sm-9">@Html.DisplayFor(m => m.OfficeName, TemplateNames.StringOrNone)</dd>
+    <dd class="col-sm-9">@Html.DisplayFor(m => m.OfficeName, "StringOrNone")</dd>
 </dl>
 <hr />
 
@@ -51,18 +51,24 @@
 
 @if (Model.Roles.Count == 0)
 {
-    <p>This account has no application roles.</p>
+    <p>
+        This account has no application roles. View a detailed description of
+        <a asp-page="/Admin/Users/Roles" target="_blank">user roles and capabilities</a>.
+    </p>
 }
 else
 {
-    <p>This account has the following application roles.</p>
+    <p>
+        This account has the following application roles. View a detailed description of
+        <a asp-page="/Admin/Users/Roles" target="_blank">user roles and capabilities</a>.
+    </p>
 
-    <dl class="p-3 border rounded-3 bg-light">
+    <dl class="p-3 border rounded-3 bg-light-subtle">
         @foreach (var role in Model.Roles)
         {
             <dt>@role.DisplayName</dt>
             <dd>
-                <p class="text-muted">@role.Description</p>
+                <p class="text-body-secondary">@role.Description</p>
             </dd>
         }
     </dl>

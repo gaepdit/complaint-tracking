@@ -2,8 +2,9 @@
 using Cts.AppServices.Complaints.Dto;
 using Cts.AppServices.Concerns;
 using Cts.Domain.Data;
+using Cts.WebApp.Models;
 using Cts.WebApp.Platform.Constants;
-using GaEpd.AppLibrary.Enums;
+using GaEpd.AppLibrary.Extensions;
 using GaEpd.AppLibrary.ListItems;
 using GaEpd.AppLibrary.Pagination;
 using Microsoft.AspNetCore.Authorization;
@@ -39,6 +40,7 @@ public class IndexModel : PageModel
     public bool ShowResults { get; private set; }
     public IPaginatedResult<ComplaintSearchResultDto> SearchResults { get; private set; } = default!;
     public string SortByName => Spec.Sort.ToString();
+    public PaginationNavModel PaginationNav => new(SearchResults, Spec.AsRouteValues());
 
     // Select lists
     public SelectList ConcernsSelectList { get; private set; } = default!;

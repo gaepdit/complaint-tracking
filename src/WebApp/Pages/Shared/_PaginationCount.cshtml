@@ -1,8 +1,7 @@
 ﻿@model GaEpd.AppLibrary.Pagination.IPaginatedResult
-Total results:
-@Html.DisplayFor(m => Model.TotalCount)
+Total: @Html.DisplayFor(_ => Model.TotalCount)
 @if (Model.TotalPages > 1)
 {
     <br />
-    @($"Showing: {Model.FirstItemIndex} – {Model.LastItemIndex}")
+    @:Showing: @Model.FirstItemIndex.ToString() – @Model.LastItemIndex.ToString()
 }

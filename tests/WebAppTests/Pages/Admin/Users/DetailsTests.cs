@@ -19,15 +19,15 @@ public class DetailsTests
         var staffView = new StaffViewDto
         {
             Id = Guid.Empty.ToString(),
-            Email = TestConstants.ValidEmail,
-            GivenName = TestConstants.ValidName,
-            FamilyName = TestConstants.ValidName,
+            FamilyName = TextData.ValidName,
+            GivenName = TextData.ValidName,
+            Email = TextData.ValidEmail,
+            Active = true,
         };
+
         var serviceMock = Substitute.For<IStaffService>();
-        serviceMock.FindAsync(Arg.Any<string>())
-            .Returns(staffView);
-        serviceMock.GetAppRolesAsync(Arg.Any<string>())
-            .Returns(new List<AppRole>());
+        serviceMock.FindAsync(Arg.Any<string>()).Returns(staffView);
+        serviceMock.GetAppRolesAsync(Arg.Any<string>()).Returns(new List<AppRole>());
         var authorizationMock = Substitute.For<IAuthorizationService>();
         authorizationMock.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), Arg.Is((string?)null), Arg.Any<string>())
             .Returns(AuthorizationResult.Success());
@@ -62,12 +62,11 @@ public class DetailsTests
     public async Task OnGet_NonexistentIdReturnsNotFound()
     {
         var serviceMock = Substitute.For<IStaffService>();
-        serviceMock.FindAsync(Arg.Any<string>())
-            .Returns((StaffViewDto?)null);
+        serviceMock.FindAsync(Arg.Any<string>()).Returns((StaffViewDto?)null);
         var pageModel = new DetailsModel { TempData = WebAppTestsSetup.PageTempData() };
 
-        var result = await pageModel
-            .OnGetAsync(serviceMock, Substitute.For<IAuthorizationService>(), Guid.Empty.ToString());
+        var result =
+            await pageModel.OnGetAsync(serviceMock, Substitute.For<IAuthorizationService>(), Guid.Empty.ToString());
 
         result.Should().BeOfType<NotFoundResult>();
     }

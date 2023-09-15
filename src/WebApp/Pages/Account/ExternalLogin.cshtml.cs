@@ -1,7 +1,7 @@
 using Cts.AppServices.Staff;
 using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Identity;
-using Cts.WebApp.Platform.Models;
+using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using Cts.WebApp.Platform.Settings;
 using Microsoft.AspNetCore.Authentication;
@@ -41,7 +41,7 @@ public class ExternalLoginModel : PageModel
 
     // Properties
     public ApplicationUser? DisplayFailedUser { get; private set; }
-    public string ReturnUrl { get; private set; } = "/";
+    public string? ReturnUrl { get; private set; }
 
     // Methods
 
@@ -51,7 +51,7 @@ public class ExternalLoginModel : PageModel
     // This Post method is called from the Login page
     public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
     {
-        ReturnUrl = returnUrl ?? "/";
+        ReturnUrl = returnUrl;
 
         // Use AzureAD authentication if enabled; otherwise, sign in as local user.
         if (!ApplicationSettings.DevSettings.UseAzureAd) return await SignInAsLocalUser();
@@ -66,31 +66,34 @@ public class ExternalLoginModel : PageModel
     private async Task<IActionResult> SignInAsLocalUser()
     {
         _logger.LogInformation(
-            "Local user signin attempted with settings {LocalUserIsAuthenticated}, {LocalUserIsStaff}, and {LocalUserIsAdmin}",
-            ApplicationSettings.DevSettings.LocalUserIsAuthenticated,
-            ApplicationSettings.DevSettings.LocalUserIsStaff,
-            ApplicationSettings.DevSettings.LocalUserIsAdmin);
+            "Local user signin attempted with settings {LocalUserIsAuthenticated}, {LocalUserIsAdmin}, and {LocalUserIsStaff}",
+            ApplicationSettings.DevSettings.LocalUserIsAuthenticated.ToString(),
+            ApplicationSettings.DevSettings.LocalUserIsAdmin.ToString(),
+            ApplicationSettings.DevSettings.LocalUserIsStaff.ToString());
         if (!ApplicationSettings.DevSettings.LocalUserIsAuthenticated) return Forbid();
 
-        var search = new StaffSearchDto { Name = "Limited" };
-        if (ApplicationSettings.DevSettings.LocalUserIsStaff)
-            search.Name = "General";
-        else if (ApplicationSettings.DevSettings.LocalUserIsAdmin)
-            search.Name = "Admin";
+        StaffSearchDto search;
 
-        var staffId = (await _staffService.GetListAsync(search)).First().Id;
+        if (ApplicationSettings.DevSettings.LocalUserIsAdmin)
+            search = new StaffSearchDto(SortBy.NameAsc, "Admin", null, null, null, null);
+        else if (ApplicationSettings.DevSettings.LocalUserIsStaff)
+            search = new StaffSearchDto(SortBy.NameAsc, "General", null, null, null, null);
+        else
+            search = new StaffSearchDto(SortBy.NameAsc, "Limited", null, null, null, null);
+
+        var staffId = (await _staffService.GetListAsync(search))[0].Id;
 
         var user = await _userManager.FindByIdAsync(staffId);
         _logger.LogInformation("Local user with ID {StaffId} signed in", staffId);
 
         await _signInManager.SignInAsync(user!, false);
-        return LocalRedirect(ReturnUrl);
+        return LocalRedirectOrHome();
     }
 
     // This callback method is called by the external login provider.
     public async Task<IActionResult> OnGetCallbackAsync(string? returnUrl = null, string? remoteError = null)
     {
-        ReturnUrl = returnUrl ?? "/";
+        ReturnUrl = returnUrl;
 
         // Handle errors returned from the external provider.
         if (remoteError is not null)
@@ -180,10 +183,9 @@ public class ExternalLoginModel : PageModel
         }
 
         // Add the external provider info to the user and sign in.
-        ReturnUrl = "/Account/Index";
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success,
             "Your account has successfully been created. Select “Edit Profile” to update your info.");
-        return await AddLoginProviderAndSignInAsync(user, info);
+        return await AddLoginProviderAndSignInAsync(user, info, true);
     }
 
     // Update local store with from external provider. 
@@ -196,11 +198,12 @@ public class ExternalLoginModel : PageModel
         user.FamilyName = info.Principal.FindFirstValue(ClaimTypes.Surname) ?? "";
         await _userManager.UpdateAsync(user);
         await _signInManager.RefreshSignInAsync(user);
-        return LocalRedirect(ReturnUrl);
+        return LocalRedirectOrHome();
     }
 
     // Add external login provider to user account and sign in user.
-    private async Task<IActionResult> AddLoginProviderAndSignInAsync(ApplicationUser user, ExternalLoginInfo info)
+    private async Task<IActionResult> AddLoginProviderAndSignInAsync(
+        ApplicationUser user, ExternalLoginInfo info, bool redirectToAccount = false)
     {
         var addLoginResult = await _userManager.AddLoginAsync(user, info);
 
@@ -220,7 +223,7 @@ public class ExternalLoginModel : PageModel
         props.IsPersistent = true;
 
         await _signInManager.SignInAsync(user, props, info.LoginProvider);
-        return LocalRedirect(ReturnUrl);
+        return redirectToAccount ? RedirectToPage("./Index") : LocalRedirectOrHome();
     }
 
     // Add error info and return this Page.
@@ -229,5 +232,11 @@ public class ExternalLoginModel : PageModel
         DisplayFailedUser = user;
         foreach (var error in result.Errors) ModelState.AddModelError(string.Empty, error.Description);
         return Page();
+    }
+
+    private IActionResult LocalRedirectOrHome()
+    {
+        if (ReturnUrl is null) return RedirectToPage("/Index");
+        return LocalRedirect(ReturnUrl);
     }
 }

@@ -1,0 +1,59 @@
+﻿@page
+@model RolesModel
+@{
+    ViewData["Title"] = "Users, Roles, and Capabilities";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h2>Public</h2>
+<p>
+    <em>Describe the capabilities available to visitors to the site who are not logged in.</em>
+</p>
+
+<h2>User</h2>
+<p>All Users with SOG work accounts who are logged into the application can:</p>
+<ul class="pb-3">
+    <li>View a list of Users.</li>
+    <li>Edit account profile info for themselves, including changing assigned Office.</li>
+    <li>
+        <em>List additional capabilities here.</em>
+    </li>
+</ul>
+
+<h2>User Roles</h2>
+<p>Users can also be granted one or more of the following roles.</p>
+<ul>
+    <li>
+        <h3 class="h4">Staff</h3>
+        <p>Users in the <em>Staff</em> role can:</p>
+        <ul class="pb-3">
+            <li>
+                <em>List capabilities here.</em>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <h3 class="h4">Manager</h3>
+        <p>Users in the <em>Manager</em> role have all the capabilities of the <em>Staff</em> role. Plus they can:</p>
+        <ul class="pb-3">
+            <li>
+                <em>List additional capabilities here.</em>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <h3 class="h4">User Account Admin</h3>
+        <p>Users in the <em>User Account Admin</em> role can:</p>
+        <ul class="pb-3">
+            <li>Manage user accounts and assign roles.</li>
+        </ul>
+    </li>
+    <li>
+        <h3 class="h4">Site Maintenance</h3>
+        <p>Users in the <em>Site Maintenance</em> role can:</p>
+        <ul>
+            <li>Edit the lookup tables used for drop-down lists.</li>
+        </ul>
+    </li>
+</ul>

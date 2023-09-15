@@ -1,4 +1,4 @@
-﻿namespace Cts.WebApp.Platform.Models;
+﻿namespace Cts.WebApp.Models;
 
 public class DisplayMessage
 {

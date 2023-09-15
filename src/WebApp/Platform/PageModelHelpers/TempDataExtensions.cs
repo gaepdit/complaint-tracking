@@ -1,4 +1,4 @@
-using Cts.WebApp.Platform.Models;
+using Cts.WebApp.Models;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System.Text.Json;
 

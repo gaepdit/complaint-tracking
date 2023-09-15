@@ -1,0 +1,16 @@
+﻿@model string
+@{
+    var maxLength = (int?)ViewData["MaxLength"] ?? 100;
+}
+@if (string.IsNullOrEmpty(Model))
+{
+    <span class="text-body-secondary">none</span>
+}
+else if (Model.Length > maxLength)
+{
+    @Model[..maxLength]@:&nbsp;…
+}
+else
+{
+    @Model
+}

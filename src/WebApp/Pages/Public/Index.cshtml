@@ -1,6 +1,6 @@
-﻿@page "{handler?}"
-@using Cts.AppServices.Complaints.Dto
+@page "{handler?}"
 @using Cts.WebApp.Pages.Shared.DisplayTemplates
+@using Cts.AppServices.Complaints.Dto
 @using Cts.WebApp.Platform.Constants
 @using GaEpd.AppLibrary.Pagination
 @model IndexModel
@@ -145,7 +145,7 @@
         {
             <table class="table" aria-label="Facility search results">
                 <caption class="caption-top">
-                    <partial name="Shared/_PaginationNavAndCount" model="((IPaginatedResult)Model.SearchResults, Model.Spec.AsRouteValues())" />
+                    <partial name="Shared/_PaginationNavAndCount" model="Model.PaginationNav" />
                 </caption>
 
                 <thead class="table-light">
@@ -153,14 +153,14 @@
                     <th scope="col" class="text-nowrap">
                         <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
                            asp-route-Sort="@(Model.Spec.Sort == SortBy.IdAsc ? SortBy.IdDesc : SortBy.IdAsc)">
-                            ID @Html.DisplayFor(m => m.SortByName, TemplateNames.SortArrow,
+                            ID @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow,
                                    new { up = SortBy.IdAsc.ToString(), down = SortBy.IdDesc.ToString() })
                         </a>
                     </th>
                     <th scope="col" class="text-nowrap">
                         <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
                            asp-route-Sort="@(Model.Spec.Sort == SortBy.ReceivedDateAsc ? SortBy.ReceivedDateDesc : SortBy.ReceivedDateAsc)">
-                            Date Received @Html.DisplayFor(m => m.SortByName, TemplateNames.SortArrow,
+                            Date Received @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow,
                                               new { up = SortBy.ReceivedDateAsc.ToString(), down = SortBy.ReceivedDateDesc.ToString() })
                         </a>
                     </th>
@@ -177,23 +177,23 @@
                         <th scope="row">
                             <a asp-page="./Complaints/Index" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">@item.Id</a>
                         </th>
-                        <td class="text-nowrap">@Html.DisplayFor(m => item.ReceivedDate, TemplateNames.ShortDate)</td>
+                        <td class="text-nowrap">@Html.DisplayFor(m => item.ReceivedDate, DisplayTemplate.ShortDate)</td>
                         <td>
                             <ul>
-                                <li>@Html.DisplayFor(m => item.SourceFacilityName, TemplateNames.StringOrNotEntered)</li>
+                                <li>@Html.DisplayFor(m => item.SourceFacilityName, DisplayTemplate.StringOrNotEntered)</li>
                                 @if (item.ComplaintCounty != null)
                                 {
                                     <li>@item.ComplaintCounty County</li>
                                 }
                             </ul>
                         </td>
-                        <td>@Html.DisplayFor(m => item.CurrentOfficeName, TemplateNames.StringOrNotEntered)</td>
+                        <td>@Html.DisplayFor(m => item.CurrentOfficeName, DisplayTemplate.StringOrNotEntered)</td>
                         <td>
                             <ol type="I">
-                                <li>@Html.DisplayFor(m => item.PrimaryConcernName, TemplateNames.StringOrNotEntered)</li>
+                                <li>@Html.DisplayFor(m => item.PrimaryConcernName, DisplayTemplate.StringOrNotEntered)</li>
                                 @if (item.SecondaryConcernName is not null)
                                 {
-                                    <li>@Html.DisplayFor(m => item.SecondaryConcernName, TemplateNames.StringOrNotEntered)</li>
+                                    <li>@Html.DisplayFor(m => item.SecondaryConcernName, DisplayTemplate.StringOrNotEntered)</li>
                                 }
                             </ol>
                         </td>
@@ -202,7 +202,7 @@
                 </tbody>
             </table>
 
-            <partial name="_PaginationNav" model="((IPaginatedResult)Model.SearchResults, Model.Spec.AsRouteValues())" />
+            <partial name="_PaginationNav" model="Model.PaginationNav" />
         }
     </div>
 }

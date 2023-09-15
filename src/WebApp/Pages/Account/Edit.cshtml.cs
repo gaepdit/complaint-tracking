@@ -1,7 +1,8 @@
 ﻿using Cts.AppServices.Offices;
+using Cts.AppServices.Permissions;
 using Cts.AppServices.Staff;
 using Cts.AppServices.Staff.Dto;
-using Cts.WebApp.Platform.Models;
+using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using FluentValidation;
 using GaEpd.AppLibrary.ListItems;
@@ -12,7 +13,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Cts.WebApp.Pages.Account;
 
-[Authorize]
+[Authorize(Policy = nameof(Policies.ActiveUser))]
 public class EditModel : PageModel
 {
     // Constructor
@@ -35,13 +36,15 @@ public class EditModel : PageModel
     public StaffUpdateDto UpdateStaff { get; set; } = default!;
 
     public StaffViewDto DisplayStaff { get; private set; } = default!;
+
+    // Select lists
     public SelectList OfficeItems { get; private set; } = default!;
 
     // Methods
     public async Task<IActionResult> OnGetAsync()
     {
         var staff = await _staffService.GetCurrentUserAsync();
-        if (staff is not { Active: true }) return Forbid();
+        if (!staff.Active) return Forbid();
 
         DisplayStaff = staff;
         UpdateStaff = DisplayStaff.AsUpdateDto();
@@ -53,9 +56,15 @@ public class EditModel : PageModel
     public async Task<IActionResult> OnPostAsync()
     {
         var staff = await _staffService.GetCurrentUserAsync();
-        if (staff.Id != UpdateStaff.Id || !UpdateStaff.Active)
-            return BadRequest();
+
+        // Inactive staff cannot do anything here.
         if (!staff.Active) return Forbid();
+
+        // Staff can only update self here.
+        if (staff.Id != UpdateStaff.Id) return BadRequest();
+
+        // User cannot deactivate self.
+        UpdateStaff.Active = true;
 
         await _validator.ApplyValidationAsync(UpdateStaff, ModelState);
 

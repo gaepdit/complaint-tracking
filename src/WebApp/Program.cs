@@ -1,7 +1,9 @@
 using Cts.AppServices.RegisterServices;
 using Cts.WebApp.Platform.Raygun;
+using Cts.WebApp.Platform.SecurityHeaders;
 using Cts.WebApp.Platform.Services;
 using Cts.WebApp.Platform.Settings;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.OpenApi.Models;
 using Mindscape.Raygun4Net.AspNetCore;
@@ -10,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Set default timeout for regular expressions.
 // https://learn.microsoft.com/en-us/dotnet/standard/base-types/best-practices#use-time-out-values
+// ReSharper disable once HeapView.BoxingAllocation
 AppDomain.CurrentDomain.SetData("REGEX_DEFAULT_MATCH_TIMEOUT", TimeSpan.FromMilliseconds(100));
 
 // Bind application settings.
@@ -20,6 +23,7 @@ builder.Services.AddIdentityStores();
 
 // Configure Authentication.
 builder.Services.AddAuthenticationServices(builder.Configuration);
+builder.Services.AddTransient<IClaimsTransformation, ClaimsTransformation>();
 
 // Persist data protection keys.
 var keysFolder = Path.Combine(builder.Configuration["PersistedFilesBasePath"] ?? "", "DataProtectionKeys");
@@ -79,19 +83,18 @@ builder.Services.AddWebOptimizer();
 // Build the application.
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// Configure error handling.
+if (app.Environment.IsDevelopment()) app.UseDeveloperExceptionPage(); // Development
+else app.UseExceptionHandler("/Error"); // Production or Staging
+
+// Configure security HTTP headers
+if (!app.Environment.IsDevelopment() || ApplicationSettings.DevSettings.UseSecurityHeadersInDev)
 {
-    // Development
-    app.UseDeveloperExceptionPage();
-}
-else
-{
-    // Production or Staging
-    app.UseExceptionHandler("/Error");
     app.UseHsts();
-    if (!string.IsNullOrEmpty(ApplicationSettings.RaygunSettings.ApiKey)) app.UseRaygun();
+    app.UseSecurityHeaders(policyCollection => policyCollection.AddSecurityHeaderPolicies());
 }
+
+if (!string.IsNullOrEmpty(ApplicationSettings.RaygunSettings.ApiKey)) app.UseRaygun();
 
 // Configure the application pipeline.
 app.UseStatusCodePagesWithReExecute("/Error/{0}");

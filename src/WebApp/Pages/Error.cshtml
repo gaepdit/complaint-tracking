@@ -1,28 +1,31 @@
 ﻿@page "{statusCode:int?}"
+@inject IAuthorizationService AuthorizationService
+@using Microsoft.AspNetCore.Authorization
+@using Cts.AppServices.Permissions
 @model ErrorModel
 @switch (Model.Status)
 {
     case StatusCodes.Status404NotFound:
     {
         ViewData["Title"] = "Not Found";
-        <h1 class="text-danger">@ViewData["Title"]</h1>
+        <h1 class="text-danger-emphasis">@ViewData["Title"]</h1>
         <p class="lead">The page you're looking for could not be found.</p>
         break;
     }
     default:
     {
         ViewData["Title"] = "Error";
-        <h1 class="text-danger">@ViewData["Title"]</h1>
+        <h1 class="text-danger-emphasis">@ViewData["Title"]</h1>
         <p class="lead">An error occurred while processing your request.</p>
         break;
     }
 }
 
-@if (User.Identity?.IsAuthenticated ?? false)
+@if ((await AuthorizationService.AuthorizeAsync(User, nameof(Policies.ActiveUser))).Succeeded)
 {
     <p>
         If you need assistance related to this error, please
-        <a href="https://gaepd.zendesk.com/">contact EPD IT support</a>.
+        <a href="https://gaepd.zendesk.com/" target="_blank" rel="noopener">contact EPD IT support</a>.
     </p>
 }
 else

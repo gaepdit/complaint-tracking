@@ -1,8 +1,8 @@
-using Cts.AppServices.Offices;
+﻿using Cts.AppServices.Offices;
 using Cts.AppServices.Permissions;
 using Cts.AppServices.Staff;
 using Cts.AppServices.Staff.Dto;
-using Cts.WebApp.Platform.Models;
+using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using FluentValidation;
 using GaEpd.AppLibrary.ListItems;
@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Cts.WebApp.Pages.Admin.Users;
 
-[Authorize(Policy = PolicyName.UserAdministrator)]
+[Authorize(Policy = nameof(Policies.UserAdministrator))]
 public class EditModel : PageModel
 {
     // Constructor

@@ -15,7 +15,7 @@ public class AttachmentTests
     {
         var item = new AttachmentPublicViewDto
         {
-            FileName = TestConstants.ShortName,
+            FileName = TextData.ShortName,
             FileExtension = ".pdf",
             Id = Guid.Empty,
             IsImage = false,
@@ -49,7 +49,7 @@ public class AttachmentTests
         var pageModel = new AttachmentModel();
 
         var result = await pageModel.OnGetAsync(complaintServiceMock, Substitute.For<IFileService>(),
-            Guid.Empty, TestConstants.ShortName);
+            Guid.Empty, TextData.ShortName);
 
         result.Should().BeOfType<NotFoundObjectResult>();
     }
@@ -59,7 +59,7 @@ public class AttachmentTests
     {
         var item = new AttachmentPublicViewDto
         {
-            FileName = TestConstants.ValidName,
+            FileName = TextData.ValidName,
             FileExtension = ".pdf",
             Id = Guid.Empty,
             IsImage = false,
@@ -72,7 +72,7 @@ public class AttachmentTests
         var pageModel = new AttachmentModel();
 
         var result = await pageModel.OnGetAsync(complaintServiceMock, Substitute.For<IFileService>(),
-            item.Id, TestConstants.NonExistentName);
+            item.Id, TextData.NonExistentName);
 
         using (new AssertionScope())
         {
@@ -86,7 +86,7 @@ public class AttachmentTests
     {
         var item = new AttachmentPublicViewDto
         {
-            FileName = TestConstants.ShortName,
+            FileName = TextData.ShortName,
             FileExtension = ".pdf",
             Id = Guid.Empty,
             IsImage = false,
@@ -112,7 +112,7 @@ public class AttachmentTests
     {
         var item = new AttachmentPublicViewDto
         {
-            FileName = TestConstants.ShortName,
+            FileName = TextData.ShortName,
             FileExtension = ".png",
             Id = Guid.Empty,
             IsImage = true,

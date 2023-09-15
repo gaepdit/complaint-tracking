@@ -1,0 +1,16 @@
+﻿@model string?
+@if (string.IsNullOrEmpty(Model))
+{
+    <span class="text-body-secondary">[Not entered]</span>
+}
+else
+{
+    @if (Uri.TryCreate(Model, UriKind.Absolute, out _))
+    {
+        <a href="@Model" target="_blank" rel="noopener">@Model</a>
+    }
+    else
+    {
+        @Model
+    }
+}

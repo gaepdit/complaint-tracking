@@ -1,3 +1,4 @@
+using Cts.AppServices.Permissions;
 using Cts.AppServices.Staff;
 using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Identity;
@@ -7,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Cts.WebApp.Pages.Account;
 
-[Authorize]
+[Authorize(Policy = nameof(Policies.LoggedInUser))]
 public class IndexModel : PageModel
 {
     public StaffViewDto DisplayStaff { get; private set; } = default!;
@@ -16,12 +17,8 @@ public class IndexModel : PageModel
 
     public async Task<IActionResult> OnGetAsync([FromServices] IStaffService staffService)
     {
-        var staff = await staffService.GetCurrentUserAsync();
-        if (staff is not { Active: true }) return Forbid();
-
-        DisplayStaff = staff;
+        DisplayStaff = await staffService.GetCurrentUserAsync();
         Roles = await staffService.GetAppRolesAsync(DisplayStaff.Id);
-
         return Page();
     }
 }

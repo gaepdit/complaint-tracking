@@ -15,6 +15,7 @@ internal static class ApplicationSettings
         LocalUserIsStaff = false,
         LocalUserIsAdmin = false,
         UseInMemoryFiles = false,
+        UseSecurityHeadersInDev = false,
     };
 
     public class DevSettingsSection
@@ -59,6 +60,11 @@ internal static class ApplicationSettings
         /// files are saved/loaded from the file system.
         /// </summary>
         public bool UseInMemoryFiles { get; [UsedImplicitly] init; }
+
+        /// <summary>
+        /// Sets whether to include HTTP security headers when running locally in the Development environment.
+        /// </summary>
+        public bool UseSecurityHeadersInDev { get; [UsedImplicitly] init; }
     }
 
     // Raygun client settings

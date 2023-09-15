@@ -54,12 +54,12 @@ else
                         @if (Model.IsSiteMaintainer)
                         {
                             <a asp-page="Edit" asp-route-id="@item.Id">
-                                @Html.DisplayFor(m => item.Name, TemplateNames.StringOrNone)
+                                @Html.DisplayFor(m => item.Name, DisplayTemplate.StringOrNone)
                             </a>
                         }
                         else
                         {
-                            @Html.DisplayFor(m => item.Name, TemplateNames.StringOrNone)
+                            @Html.DisplayFor(m => item.Name, DisplayTemplate.StringOrNone)
                         }
                     </td>
                     <td>

@@ -4,9 +4,30 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="card">
+@if (!Model.ShowDashboard)
+{
+    <h1>Home Page</h1>
+    <p>See your manager to request access to the application.</p>
+}
+else
+{
+    <h1>Dashboard</h1>
+
+    <div class="card mt-4">
+        <div class="card-header">
+            <h2 class="h5">Open Work</h2>
+        </div>
+        <div class="card-body">
+            <p>
+                <em>None.</em>
+            </p>
+        </div>
+    </div>
+}
+
+<div class="card mt-4">
     <div class="card-header">
-        <h2>Some helpful development links</h2>
+        <h2 class="h5">Some helpful development links</h2>
     </div>
     <div class="card-body">
         <h3>Public pages</h3>

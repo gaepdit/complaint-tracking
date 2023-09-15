@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Cts.AppServices.Permissions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Cts.WebApp.Pages;
@@ -6,11 +8,20 @@ namespace Cts.WebApp.Pages;
 [AllowAnonymous]
 public class IndexModel : PageModel
 {
-    private readonly ILogger<IndexModel> _logger;
-    public IndexModel(ILogger<IndexModel> logger) => _logger = logger;
+    // Constructor
+    private readonly IAuthorizationService _authorization;
+    public IndexModel(IAuthorizationService authorization) => _authorization = authorization;
 
-    public void OnGet()
+    // Properties
+    public bool ShowDashboard { get; private set; }
+
+    // Methods
+    public async Task<IActionResult> OnGetAsync()
     {
-        // Method intentionally left empty.
+        ShowDashboard = await UseDashboardAsync();
+        return Page();
     }
+
+    private async Task<bool> UseDashboardAsync() =>
+        (await _authorization.AuthorizeAsync(User, nameof(Policies.StaffUser))).Succeeded;
 }

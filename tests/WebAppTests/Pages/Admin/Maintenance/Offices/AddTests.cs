@@ -1,8 +1,8 @@
 using Cts.AppServices.Offices;
 using Cts.AppServices.Staff;
 using Cts.TestData.Constants;
+using Cts.WebApp.Models;
 using Cts.WebApp.Pages.Admin.Maintenance.Offices;
-using Cts.WebApp.Platform.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using FluentAssertions.Execution;
 using FluentValidation;
@@ -15,21 +15,19 @@ namespace WebAppTests.Pages.Admin.Maintenance.Offices;
 
 public class AddTests
 {
-    private static readonly OfficeCreateDto ItemTest = new() { Name = TestConstants.ValidName };
+    private static readonly OfficeCreateDto ItemTest = new(TextData.ValidName);
 
     [Test]
     public async Task OnPost_GivenSuccess_ReturnsRedirectWithDisplayMessage()
     {
-        var serviceMock = Substitute.For<IOfficeService>();
-        serviceMock.CreateAsync(Arg.Any<OfficeCreateDto>(), Arg.Any<CancellationToken>())
+        var officeServiceMock = Substitute.For<IOfficeService>();
+        officeServiceMock.CreateAsync(Arg.Any<OfficeCreateDto>(), Arg.Any<CancellationToken>())
             .Returns(Guid.Empty);
-        var staffService = Substitute.For<IStaffService>();
-        staffService.GetStaffListItemsAsync(Arg.Any<bool>())
-            .Returns(new List<ListItem<string>>());
-        var validator = Substitute.For<IValidator<OfficeCreateDto>>();
-        validator.ValidateAsync(Arg.Any<OfficeCreateDto>(), Arg.Any<CancellationToken>())
+        var staffServiceMock = Substitute.For<IStaffService>();
+        var validatorMock = Substitute.For<IValidator<OfficeCreateDto>>();
+        validatorMock.ValidateAsync(Arg.Any<OfficeCreateDto>(), Arg.Any<CancellationToken>())
             .Returns(new ValidationResult());
-        var page = new AddModel(serviceMock, staffService, validator)
+        var page = new AddModel(officeServiceMock, staffServiceMock, validatorMock)
             { Item = ItemTest, TempData = WebAppTestsSetup.PageTempData() };
         var expectedMessage =
             new DisplayMessage(DisplayMessage.AlertContext.Success, $"“{ItemTest.Name}” successfully added.");
@@ -48,15 +46,15 @@ public class AddTests
     [Test]
     public async Task OnPost_GivenInvalidItem_ReturnsPageWithModelErrors()
     {
-        var serviceMock = Substitute.For<IOfficeService>();
+        var officeServiceMock = Substitute.For<IOfficeService>();
         var staffServiceMock = Substitute.For<IStaffService>();
         staffServiceMock.GetStaffListItemsAsync(Arg.Any<bool>())
             .Returns(new List<ListItem<string>>());
-        var validator = Substitute.For<IValidator<OfficeCreateDto>>();
+        var validatorMock = Substitute.For<IValidator<OfficeCreateDto>>();
         var validationFailures = new List<ValidationFailure> { new("property", "message") };
-        validator.ValidateAsync(Arg.Any<OfficeCreateDto>(), Arg.Any<CancellationToken>())
+        validatorMock.ValidateAsync(Arg.Any<OfficeCreateDto>(), Arg.Any<CancellationToken>())
             .Returns(new ValidationResult(validationFailures));
-        var page = new AddModel(serviceMock, staffServiceMock, validator)
+        var page = new AddModel(officeServiceMock, staffServiceMock, validatorMock)
             { Item = ItemTest, TempData = WebAppTestsSetup.PageTempData() };
 
         var result = await page.OnPostAsync();

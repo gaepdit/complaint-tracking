@@ -29,8 +29,7 @@ public class LabelTagHelper : TagHelper
     /// <remarks>Adds text indicating the field is required if the property has the RequiredAttribute.</remarks>
     public override void Process(TagHelperContext context, TagHelperOutput output)
     {
-        // TODO: After updating to Bootstrap 5.3 change class to "text-danger-emphasis"
         if (Model.Metadata.IsRequired && Model.Metadata.ModelType != typeof(bool) && !Model.Metadata.ModelType.IsEnum)
-            output.Content.AppendHtml(@" <span class=""text-danger"">*</span>");
+            output.Content.AppendHtml(""" <span class="text-danger-emphasis">*</span>""");
     }
 }

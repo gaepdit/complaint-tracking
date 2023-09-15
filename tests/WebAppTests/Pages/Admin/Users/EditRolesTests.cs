@@ -3,8 +3,8 @@ using Cts.AppServices.Staff;
 using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Identity;
 using Cts.TestData.Constants;
+using Cts.WebApp.Models;
 using Cts.WebApp.Pages.Admin.Users;
-using Cts.WebApp.Platform.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Authorization;
@@ -17,25 +17,25 @@ namespace WebAppTests.Pages.Admin.Users;
 
 public class EditRolesTests
 {
-    private static readonly OfficeDisplayViewDto OfficeViewTest = new()
-        { Id = Guid.Empty, Name = TestConstants.ValidName };
+    private static readonly OfficeViewDto OfficeViewTest = new(Guid.Empty, TextData.ValidName, true);
 
     private static readonly StaffViewDto StaffViewTest = new()
     {
         Id = Guid.Empty.ToString(),
-        Email = TestConstants.ValidEmail,
-        GivenName = TestConstants.ValidName,
-        FamilyName = TestConstants.ValidName,
+        FamilyName = TextData.ValidName,
+        GivenName = TextData.ValidName,
+        Email = TextData.ValidEmail,
         Office = OfficeViewTest,
+        Active = true,
     };
 
     private static readonly List<EditRolesModel.RoleSetting> RoleSettingsTest = new()
     {
         new EditRolesModel.RoleSetting
         {
-            Name = TestConstants.ValidName,
-            DisplayName = TestConstants.ValidName,
-            Description = TestConstants.ValidName,
+            Name = TextData.ValidName,
+            DisplayName = TextData.ValidName,
+            Description = TextData.ValidName,
             IsSelected = true,
         },
     };
@@ -69,7 +69,7 @@ public class EditRolesTests
         {
             result.Should().BeOfType<PageResult>();
             pageModel.DisplayStaff.Should().Be(StaffViewTest);
-            pageModel.OfficeName.Should().Be(TestConstants.ValidName);
+            pageModel.OfficeName.Should().Be(TextData.ValidName);
             pageModel.UserId.Should().Be(Guid.Empty.ToString());
             pageModel.RoleSettings.Should().BeEquivalentTo(expectedRoleSettings);
         }

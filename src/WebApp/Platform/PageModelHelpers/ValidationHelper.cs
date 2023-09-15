@@ -7,7 +7,8 @@ namespace Cts.WebApp.Platform.PageModelHelpers;
 
 public static class ValidationHelper
 {
-    public static async Task ApplyValidationAsync<T>(this IValidator<T> validator,
+    public static async Task ApplyValidationAsync<T>(
+        this IValidator<T> validator,
         T item,
         ModelStateDictionary modelState,
         [CallerArgumentExpression("item")] string? parameterName = null)

@@ -1,7 +1,7 @@
 using Cts.AppServices.ActionTypes;
 using Cts.TestData.Constants;
 using Cts.WebApp.Pages.Admin.Maintenance.ActionTypes;
-using Cts.WebApp.Platform.Models;
+using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using FluentAssertions.Execution;
 using FluentValidation;
@@ -13,7 +13,7 @@ namespace WebAppTests.Pages.Admin.Maintenance.ActionTypes;
 
 public class EditTests
 {
-    private static readonly ActionTypeUpdateDto ItemTest = new() { Id = Guid.Empty, Name = TestConstants.ValidName };
+    private static readonly ActionTypeUpdateDto ItemTest = new(Guid.Empty, TextData.ValidName, true);
 
     [Test]
     public async Task OnGet_ReturnsWithItem()

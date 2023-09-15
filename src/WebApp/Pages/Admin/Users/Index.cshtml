@@ -1,22 +1,15 @@
 @page "{handler?}"
-@using Cts.AppServices.Staff
 @using Cts.AppServices.Staff.Dto
 @using Cts.WebApp.Pages.Shared.DisplayTemplates
 @using Cts.WebApp.Platform.Constants
-@using GaEpd.AppLibrary.Pagination
-@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model IndexModel
 @{
     ViewData["Title"] = "User Search";
 }
 
-@section Scripts {
-    <script src="~/js/formSearch.js"></script>
-}
-
 <h1>@ViewData["Title"]</h1>
 
-<div class="p-3 rounded-3 bg-light">
+<div class="p-3 rounded-3 bg-light-subtle">
     <form method="get" asp-page-handler="Search" asp-fragment="SearchResults">
         <div class="row">
             <div class="col-md mb-3">
@@ -44,10 +37,13 @@
             </div>
             <div class="col-md mb-3">
                 <div class="form-floating">
-                    <select asp-for="Spec.Role" asp-items="Model.RoleItems" name="@nameof(Model.Spec.Role)" class="form-select">
+                    <select asp-for="Spec.Role" asp-items="Model.RoleItems" name="@nameof(Model.Spec.Role)" class="form-select" aria-describedby="rolesHelpBlock">
                         <option value="">@TextConstants.SelectTextAny</option>
                     </select>
                     <label asp-for="Spec.Role" class="form-label"></label>
+                </div>
+                <div id="rolesHelpBlock" class="form-text">
+                    <a asp-page="Roles" target="_blank">Description of roles</a>
                 </div>
             </div>
             <div class="col-md mb-3">
@@ -66,61 +62,69 @@
 
 @if (Model.ShowResults)
 {
-    <div id="SearchResults" class="mt-4">
-        <h3>Search Results</h3>
+    <h3 id="SearchResults" class="mt-4">Search Results</h3>
 
-        @if (Model.SearchResults.TotalCount == 0)
-        {
-            <p class="lead text-info">No search results found.</p>
-        }
-        else
-        {
-            <table class="table" aria-label="User search results">
-                <caption class="caption-top">
-                    <partial name="Shared/_PaginationNavAndCount" model="((IPaginatedResult)Model.SearchResults, Model.Spec.AsRouteValues())" />
-                </caption>
+    @if (Model.SearchResults.TotalCount == 0)
+    {
+        <p class="lead text-info">No search results found.</p>
+    }
+    else
+    {
+        <table class="table" aria-label="User search results">
+            <caption class="caption-top">
+                <partial name="Shared/_PaginationNavAndCount" model="Model.PaginationNav" />
+            </caption>
 
-                <thead class="table-light">
-                <tr>
-                    <th scope="col">
-                        <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                           asp-route-Sort="@(Model.Spec.Sort == SortBy.NameAsc ? SortBy.NameDesc : SortBy.NameAsc)">
-                            @Html.DisplayNameFor(m => m.Spec.Name)
-                            @Html.DisplayFor(m => m.SortByName, TemplateNames.SortArrow, new { up = SortBy.NameAsc.ToString(), down = SortBy.NameDesc.ToString() })
-                        </a>
-                    </th>
-                    <th scope="col">@Html.DisplayNameFor(m => m.Spec.Email)</th>
-                    <th scope="col">
-                        <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                           asp-route-Sort="@(Model.Spec.Sort == SortBy.OfficeAsc ? SortBy.OfficeDesc : SortBy.OfficeAsc)">
-                            @Html.DisplayNameFor(m => m.Spec.Office)
-                            @Html.DisplayFor(m => m.SortByName, TemplateNames.SortArrow, new { up = SortBy.OfficeAsc.ToString(), down = SortBy.OfficeDesc.ToString() })
-                        </a>
-                    </th>
-                    <th scope="col">@Html.DisplayNameFor(m => m.Spec.Status)</th>
+            <thead>
+            <tr>
+                <th scope="col">
+                    <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
+                       asp-route-Sort="@(Model.Spec.Sort == SortBy.NameAsc ? nameof(SortBy.NameDesc) : nameof(SortBy.NameAsc))">
+                        @Html.DisplayNameFor(m => m.Spec.Name)
+                        @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow, new { up = nameof(SortBy.NameAsc), down = nameof(SortBy.NameDesc) })
+                    </a>
+                </th>
+                <th scope="col">@Html.DisplayNameFor(m => m.Spec.Email)</th>
+                <th scope="col">
+                    <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
+                       asp-route-Sort="@(Model.Spec.Sort == SortBy.OfficeAsc ? nameof(SortBy.OfficeDesc) : nameof(SortBy.OfficeAsc))">
+                        @Html.DisplayNameFor(m => m.Spec.Office)
+                        @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow, new { up = nameof(SortBy.OfficeAsc), down = nameof(SortBy.OfficeDesc) })
+                    </a>
+                </th>
+                <th scope="col">@Html.DisplayNameFor(m => m.Spec.Status)</th>
+                <th scope="col">
+                    <span class="visually-hidden">Actions</span>
+                </th>
+            </tr>
+            </thead>
+
+            <tbody class="table-group-divider">
+            @foreach (var item in Model.SearchResults.Items)
+            {
+                <tr class="@(item.Active ? "" : "bg-secondary bg-opacity-25")">
+                    <td>
+                        @item.SortableFullName
+                        @if (item.Email.ToLowerInvariant().Equals(User.Identity?.Name!.ToLowerInvariant()))
+                        {
+                            <span class="badge bg-info-subtle border border-info-subtle text-info-emphasis rounded-pill">YOU</span>
+                        }
+                    </td>
+                    <td>@item.Email</td>
+                    <td>@Html.DisplayFor(m => item.OfficeName, DisplayTemplate.StringOrNone)</td>
+                    <td>@Html.DisplayFor(m => item.Active, DisplayTemplate.BoolActive)</td>
+                    <td>
+                        <a asp-page="Details" asp-route-id="@item.Id" class="btn btn-outline-info btn-sm">View</a>
+                    </td>
                 </tr>
-                </thead>
+            }
+            </tbody>
+        </table>
 
-                <tbody>
-                @foreach (var item in Model.SearchResults.Items)
-                {
-                    <tr class="@(item.Id == Model.HighlightId ? "list-group-item-warning" : !item.Active ? "bg-secondary bg-opacity-25" : "")">
-                        <td>
-                            @if (item.Email.Equals(User.Identity?.Name))
-                            {
-                                <span class="badge text-bg-info">YOU</span>
-                            }
-                            <a asp-page="Details" asp-route-id="@item.Id">@item.SortableFullName</a>
-                        </td>
-                        <td>@item.Email</td>
-                        <td>@Html.DisplayFor(m => item.OfficeName, TemplateNames.StringOrNone)</td>
-                        <td>@Html.DisplayFor(m => item.Active)</td>
-                    </tr>
-                }
-                </tbody>
-            </table>
+        <partial name="_PaginationNav" model="Model.PaginationNav" />
+    }
+}
 
-            <partial name="_PaginationNav" model="((IPaginatedResult)Model.SearchResults, Model.Spec.AsRouteValues())" />
-        }
-    </div>
+@section Scripts {
+    <script src="~/js/formSearch.js"></script>
 }

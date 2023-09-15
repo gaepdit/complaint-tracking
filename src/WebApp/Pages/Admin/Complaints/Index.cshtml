@@ -225,7 +225,7 @@
         {
             <table class="table" aria-label="Facility search results">
                 <caption class="caption-top">
-                    <partial name="Shared/_PaginationNavAndCount" model="((IPaginatedResult)Model.SearchResults, Model.Spec.AsRouteValues())" />
+                    <partial name="Shared/_PaginationNavAndCount" model="Model.PaginationNav" />
                 </caption>
 
                 <thead class="table-light">
@@ -234,21 +234,21 @@
                         <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
                            asp-route-Sort="@(Model.Spec.Sort == SortBy.IdAsc ? SortBy.IdDesc : SortBy.IdAsc)">
                             ID
-                            @Html.DisplayFor(m => m.SortByName, TemplateNames.SortArrow, new { up = SortBy.IdAsc.ToString(), down = SortBy.IdDesc.ToString() })
+                            @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow, new { up = SortBy.IdAsc.ToString(), down = SortBy.IdDesc.ToString() })
                         </a>
                     </th>
                     <th scope="col" class="text-nowrap">
                         <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
                            asp-route-Sort="@(Model.Spec.Sort == SortBy.ReceivedDateAsc ? SortBy.ReceivedDateDesc : SortBy.ReceivedDateAsc)">
                             Received
-                            @Html.DisplayFor(m => m.SortByName, TemplateNames.SortArrow, new { up = SortBy.ReceivedDateAsc.ToString(), down = SortBy.ReceivedDateDesc.ToString() })
+                            @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow, new { up = SortBy.ReceivedDateAsc.ToString(), down = SortBy.ReceivedDateDesc.ToString() })
                         </a>
                     </th>
                     <th scope="col" class="text-nowrap">
                         <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
                            asp-route-Sort="@(Model.Spec.Sort == SortBy.StatusAsc ? SortBy.StatusDesc : SortBy.StatusAsc)">
                             Status
-                            @Html.DisplayFor(m => m.SortByName, TemplateNames.SortArrow, new { up = SortBy.StatusAsc.ToString(), down = SortBy.StatusDesc.ToString() })
+                            @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow, new { up = SortBy.StatusAsc.ToString(), down = SortBy.StatusDesc.ToString() })
                         </a>
                     </th>
                     <th scope="col">Source/Location</th>
@@ -264,7 +264,7 @@
                         <th scope="row">
                             <a asp-page="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">@item.Id</a>
                         </th>
-                        <td class="text-nowrap">@Html.DisplayFor(m => item.ReceivedDate, TemplateNames.ShortDate)</td>
+                        <td class="text-nowrap">@Html.DisplayFor(m => item.ReceivedDate, DisplayTemplate.ShortDate)</td>
                         <td>
                             @if (item.IsDeleted)
                             {
@@ -275,11 +275,11 @@
                             @if (item.ComplaintClosed && item.ComplaintClosedDate is not null)
                             {
                                 <br />
-                                @:on @Html.DisplayFor(m => item.ComplaintClosedDate, TemplateNames.ShortDate)
+                                @:on @Html.DisplayFor(m => item.ComplaintClosedDate, DisplayTemplate.ShortDate)
                             }
                         </td>
                         <td>
-                            @Html.DisplayFor(m => item.SourceFacilityName, TemplateNames.StringOrNotEntered)
+                            @Html.DisplayFor(m => item.SourceFacilityName, DisplayTemplate.StringOrNotEntered)
                             <ul>
                                 @if (item.SourceFacilityIdNumber != null)
                                 {
@@ -287,21 +287,21 @@
                                 }
                                 @if (item.ComplaintCounty != null)
                                 {
-                                    <li>@Html.DisplayFor(m => item.ComplaintCounty, TemplateNames.County)</li>
+                                    <li>@Html.DisplayFor(m => item.ComplaintCounty, DisplayTemplate.County)</li>
                                 }
                             </ul>
                         </td>
                         <td>
-                            @Html.DisplayFor(m => item.AssignedOwnerName, TemplateNames.StringOrNotEntered)
+                            @Html.DisplayFor(m => item.AssignedOwnerName, DisplayTemplate.StringOrNotEntered)
                             <br />
-                            @Html.DisplayFor(m => item.CurrentOfficeName, TemplateNames.StringOrNotEntered)
+                            @Html.DisplayFor(m => item.CurrentOfficeName, DisplayTemplate.StringOrNotEntered)
                         </td>
                         <td>
                             <ol type="I">
-                                <li>@Html.DisplayFor(m => item.PrimaryConcernName, TemplateNames.StringOrNotEntered)</li>
+                                <li>@Html.DisplayFor(m => item.PrimaryConcernName, DisplayTemplate.StringOrNotEntered)</li>
                                 @if (item.SecondaryConcernName is not null)
                                 {
-                                    <li>@Html.DisplayFor(m => item.SecondaryConcernName, TemplateNames.StringOrNotEntered)</li>
+                                    <li>@Html.DisplayFor(m => item.SecondaryConcernName, DisplayTemplate.StringOrNotEntered)</li>
                                 }
                             </ol>
                         </td>
@@ -310,7 +310,7 @@
                 </tbody>
             </table>
 
-            <partial name="_PaginationNav" model="((IPaginatedResult)Model.SearchResults, Model.Spec.AsRouteValues())" />
+            <partial name="_PaginationNav" model="Model.PaginationNav" />
         }
     </div>
 }

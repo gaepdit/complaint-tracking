@@ -1,37 +1,36 @@
 ﻿@page
-@using Cts.WebApp.Pages.Shared.DisplayTemplates;
 @model ExternalLoginModel
 @{
     ViewData["Title"] = "Account Error";
 }
 
-<h1 class="text-danger">@ViewData["Title"]</h1>
-<p class="text-danger">
-    There was an error creating your account.If you need assistance related to this error,
+<h1 class="text-danger-emphasis">@ViewData["Title"]</h1>
+<p class="lead">
+    There was an error creating your account. If you need assistance related to this error,
     please contact EPD IT support.
 </p>
 
-<div asp-validation-summary="All" class="usa-alert usa-alert-error" role="alert"></div>
+<div asp-validation-summary="All"></div>
 
 @if (Model.DisplayFailedUser is not null)
 {
-    <div class="p-3 border rounded-3 bg-light">
+    <div class="p-3 border rounded-3 bg-light-subtle">
         <p>Data received from work account (for diagnostic purposes):</p>
         <dl class="row">
-            <dt class="col-sm-3">@Html.DisplayNameFor(m => Model.DisplayFailedUser.Email)</dt>
-            <dd class="col-sm-9">@Html.DisplayFor(m => Model.DisplayFailedUser.Email, TemplateNames.StringOrNone)</dd>
+            <dt class="col-sm-3">@Html.DisplayNameFor(_ => Model.DisplayFailedUser.Email)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(_ => Model.DisplayFailedUser.Email, "StringOrNone")</dd>
 
-            <dt class="col-sm-3">@Html.DisplayNameFor(m => Model.DisplayFailedUser.UserName)</dt>
-            <dd class="col-sm-9">@Html.DisplayFor(m => Model.DisplayFailedUser.UserName, TemplateNames.StringOrNone)</dd>
+            <dt class="col-sm-3">@Html.DisplayNameFor(_ => Model.DisplayFailedUser.UserName)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(_ => Model.DisplayFailedUser.UserName, "StringOrNone")</dd>
 
-            <dt class="col-sm-3">@Html.DisplayNameFor(m => Model.DisplayFailedUser.FamilyName)</dt>
-            <dd class="col-sm-9">@Html.DisplayFor(m => Model.DisplayFailedUser.FamilyName, TemplateNames.StringOrNone)</dd>
+            <dt class="col-sm-3">@Html.DisplayNameFor(_ => Model.DisplayFailedUser.FamilyName)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(_ => Model.DisplayFailedUser.FamilyName, "StringOrNone")</dd>
 
-            <dt class="col-sm-3">@Html.DisplayNameFor(m => Model.DisplayFailedUser.GivenName)</dt>
-            <dd class="col-sm-9">@Html.DisplayFor(m => Model.DisplayFailedUser.GivenName, TemplateNames.StringOrNone)</dd>
+            <dt class="col-sm-3">@Html.DisplayNameFor(_ => Model.DisplayFailedUser.GivenName)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(_ => Model.DisplayFailedUser.GivenName, "StringOrNone")</dd>
 
-            <dt class="col-sm-3">@Html.DisplayNameFor(m => Model.DisplayFailedUser.AzureAdObjectId)</dt>
-            <dd class="col-sm-9">@Html.DisplayFor(m => Model.DisplayFailedUser.AzureAdObjectId, TemplateNames.StringOrNone)</dd>
+            <dt class="col-sm-3">@Html.DisplayNameFor(_ => Model.DisplayFailedUser.AzureAdObjectId)</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(_ => Model.DisplayFailedUser.AzureAdObjectId, "StringOrNone")</dd>
         </dl>
     </div>
 }

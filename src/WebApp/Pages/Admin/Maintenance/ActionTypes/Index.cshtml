@@ -41,32 +41,32 @@ else
 {
     <table class="table" aria-describedby="table-description">
         <thead>
-            <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Active</th>
-            </tr>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Active</th>
+        </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.Items)
-            {
-                <tr class="@(item.Id == Model.HighlightId ? "list-group-item-warning" : !item.Active ? "bg-secondary bg-opacity-25" : "")">
-                    <td>
-                        @if (Model.IsSiteMaintainer)
-                        {
-                            <a asp-page="Edit" asp-route-id="@item.Id">
-                                @Html.DisplayFor(m => item.Name, TemplateNames.StringOrNone)
-                            </a>
-                        }
-                        else
-                        {
-                            @Html.DisplayFor(m => item.Name, TemplateNames.StringOrNone)
-                        }
-                    </td>
-                    <td>
-                        @Html.DisplayFor(m => item.Active)
-                    </td>
-                </tr>
-            }
+        @foreach (var item in Model.Items)
+        {
+            <tr class="@(item.Id == Model.HighlightId ? "list-group-item-warning" : !item.Active ? "bg-secondary bg-opacity-25" : "")">
+                <td>
+                    @if (Model.IsSiteMaintainer)
+                    {
+                        <a asp-page="Edit" asp-route-id="@item.Id">
+                            @Html.DisplayFor(m => item.Name, DisplayTemplate.StringOrNone)
+                        </a>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(m => item.Name, DisplayTemplate.StringOrNone)
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(m => item.Active)
+                </td>
+            </tr>
+        }
         </tbody>
     </table>
 }
