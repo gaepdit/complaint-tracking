@@ -1,5 +1,5 @@
-﻿using Cts.Domain.Entities.ActionTypes;
-using Cts.Domain.Entities.EntityBase;
+﻿using Cts.Domain;
+using Cts.Domain.Entities.ActionTypes;
 using FluentValidation;
 
 namespace Cts.AppServices.ActionTypes.Validators;
@@ -13,7 +13,7 @@ public class ActionTypeCreateValidator : AbstractValidator<ActionTypeCreateDto>
         _repository = repository;
 
         RuleFor(e => e.Name)
-            .Length(SimpleNamedEntity.MinNameLength, SimpleNamedEntity.MaxNameLength)
+            .Length(AppConstants.MinimumNameLength, AppConstants.MaximumNameLength)
             .MustAsync(async (_, name, token) => await NotDuplicateName(name, token))
             .WithMessage("The name entered already exists.");
     }

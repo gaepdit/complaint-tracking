@@ -1,4 +1,4 @@
-﻿using Cts.Domain.Entities.EntityBase;
+﻿using Cts.Domain;
 using Cts.Domain.Entities.Offices;
 using FluentValidation;
 
@@ -15,7 +15,7 @@ public class OfficeCreateValidator : AbstractValidator<OfficeCreateDto>
         RuleFor(e => e.Name)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .Length(SimpleNamedEntity.MinNameLength, SimpleNamedEntity.MaxNameLength)
+            .Length(AppConstants.MinimumNameLength, AppConstants.MaximumNameLength)
             .MustAsync(async (_, name, token) => await NotDuplicateName(name, token))
             .WithMessage("The name entered already exists.");
     }

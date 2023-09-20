@@ -1,5 +1,5 @@
-﻿using Cts.AppServices.DtoBase;
-using Cts.AppServices.Offices;
+﻿using Cts.AppServices.Offices;
+using GaEpd.AppLibrary.Domain.Entities;
 using GaEpd.AppLibrary.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 
 namespace Cts.AppServices.Staff.Dto;
 
-public record StaffViewDto : IDtoHasNameProperty
+public record StaffViewDto : INamedEntity
 {
     public string Id { get; init; } = null!;
     public string GivenName { get; init; } = null!;
