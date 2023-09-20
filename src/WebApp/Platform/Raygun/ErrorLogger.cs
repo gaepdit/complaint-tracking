@@ -3,7 +3,6 @@ using Mindscape.Raygun4Net.AspNetCore;
 
 namespace Cts.WebApp.Platform.Raygun;
 
-/// <inheritdoc />
 public class ErrorLogger : IErrorLogger
 {
     private readonly IRaygunAspNetCoreClientProvider _clientProvider;

@@ -5,3 +5,4 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("EfRepositoryTests")]
 [assembly: InternalsVisibleTo("LocalRepositoryTests")]
 [assembly: InternalsVisibleTo("TestData")]
+[assembly: InternalsVisibleTo("WebAppTests")]

@@ -44,16 +44,19 @@ else
         <tr>
             <th scope="col">Name</th>
             <th scope="col">Assignor</th>
-            <th scope="col">Active</th>
-            <th scope="col">
-                <span class="visually-hidden">Actions</span>
-            </th>
+            <th scope="col">Status</th>
+            @if (Model.IsSiteMaintainer)
+            {
+                <th scope="col">
+                    <span class="visually-hidden">Actions</span>
+                </th>
+            }
         </tr>
         </thead>
         <tbody>
         @foreach (var item in Model.Items)
         {
-            <tr class="@(item.Id == Model.HighlightId ? "list-group-item-warning" : !item.Active ? "bg-secondary bg-opacity-25" : "")">
+            <tr class="@(item.Active ? "" : "table-secondary")">
                 <td>
                     @if (item.Id == Model.HighlightId)
                     {
@@ -61,18 +64,14 @@ else
                     }
                     @Html.DisplayFor(m => item.Name, DisplayTemplate.StringOrNone)
                 </td>
-                <td>
-                    @Html.DisplayFor(m => item.AssignorNameWithOffice, DisplayTemplate.StringOrNone)
-                </td>
-                <td>
-                    @Html.DisplayFor(m => item.Active, DisplayTemplate.BoolActive)
-                </td>
-                <td>
-                    @if (Model.IsSiteMaintainer)
-                    {
+                <td>@Html.DisplayFor(m => item.AssignorNameWithOffice, DisplayTemplate.StringOrNone)</td>
+                <td>@Html.DisplayFor(m => item.Active, DisplayTemplate.BoolActive)</td>
+                @if (Model.IsSiteMaintainer)
+                {
+                    <td>
                         <a asp-page="Edit" asp-route-id="@item.Id.ToString()" class="btn btn-outline-primary btn-sm">Edit</a>
-                    }
-                </td>
+                    </td>
+                }
             </tr>
         }
         </tbody>

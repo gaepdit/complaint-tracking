@@ -93,7 +93,7 @@
                         @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow, new { up = nameof(SortBy.OfficeAsc), down = nameof(SortBy.OfficeDesc) })
                     </a>
                 </th>
-                <th scope="col">@Html.DisplayNameFor(m => m.Spec.Status)</th>
+                <th scope="col">Status</th>
                 <th scope="col">
                     <span class="visually-hidden">Actions</span>
                 </th>
@@ -103,7 +103,7 @@
             <tbody class="table-group-divider">
             @foreach (var item in Model.SearchResults.Items)
             {
-                <tr class="@(item.Active ? "" : "bg-secondary bg-opacity-25")">
+                <tr class="@(item.Active ? "" : "table-secondary")">
                     <td>
                         @item.SortableFullName
                         @if (item.Email.ToLowerInvariant().Equals(User.Identity?.Name!.ToLowerInvariant()))
