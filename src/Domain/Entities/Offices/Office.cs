@@ -1,11 +1,13 @@
-﻿using Cts.Domain.Entities.EntityBase;
-using Cts.Domain.Identity;
+﻿using Cts.Domain.Identity;
 
 namespace Cts.Domain.Entities.Offices;
 
-public class Office : SimpleNamedEntity
+public class Office : StandardNamedEntity
 {
-    public Office(Guid id, string name) : base(id, name) { }
+    public override int MinNameLength => AppConstants.MinimumNameLength;
+    public override int MaxNameLength => AppConstants.MaximumNameLength;
+    public Office() { }
+    internal Office(Guid id, string name) : base(id, name) { }
 
     public ApplicationUser? Assignor { get; set; }
 

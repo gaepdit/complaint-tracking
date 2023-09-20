@@ -5,7 +5,6 @@ using System.Linq.Expressions;
 
 namespace Cts.Domain.Entities.Complaints;
 
-/// <inheritdoc />
 public interface IComplaintRepository : IRepository<Complaint, int>
 {
     // Actions

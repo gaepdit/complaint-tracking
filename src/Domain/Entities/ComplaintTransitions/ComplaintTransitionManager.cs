@@ -3,7 +3,6 @@ using Cts.Domain.Identity;
 
 namespace Cts.Domain.Entities.ComplaintTransitions;
 
-/// <inheritdoc />
 public class ComplaintTransitionManager : IComplaintTransitionManager
 {
     public ComplaintTransition Create(Complaint complaint, TransitionType type, ApplicationUser? user, string? createdById)
