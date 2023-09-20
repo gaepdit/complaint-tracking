@@ -16,7 +16,7 @@ jobs:
     name: Run unit tests
     runs-on: windows-latest
     steps:
-      - name: Checkout repository
+      - name: Check out repository
         uses: actions/checkout@v3
 
       - name: Set up .NET
