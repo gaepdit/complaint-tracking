@@ -9,7 +9,7 @@ namespace Cts.WebApp.Pages.Admin.Maintenance.Offices;
 [Authorize(Policy = nameof(Policies.AdministrationView))]
 public class IndexModel : PageModel
 {
-    public IReadOnlyList<OfficeAdminViewDto> Items { get; private set; } = default!;
+    public IReadOnlyList<OfficeWithAssignorViewDto> Items { get; private set; } = default!;
     public static MaintenanceOption ThisOption => MaintenanceOption.Office;
     public bool IsSiteMaintainer { get; private set; }
 

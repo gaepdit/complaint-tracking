@@ -10,8 +10,8 @@ namespace WebAppTests.Pages.Admin.Maintenance.Offices;
 
 public class IndexTests
 {
-    private static readonly List<OfficeAdminViewDto> ListTest = new()
-        { new OfficeAdminViewDto(Guid.Empty, TextData.ValidName, true) };
+    private static readonly List<OfficeWithAssignorViewDto> ListTest = new()
+        { new OfficeWithAssignorViewDto(Guid.Empty, TextData.ValidName, true) };
 
     [Test]
     public async Task OnGet_ReturnsWithList()

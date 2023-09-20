@@ -45,7 +45,7 @@ public class AutoMapperProfile : Profile
         CreateMap<Concern, ConcernUpdateDto>();
 
         CreateMap<Office, OfficeViewDto>();
-        CreateMap<Office, OfficeAdminViewDto>();
+        CreateMap<Office, OfficeWithAssignorViewDto>();
         CreateMap<Office, OfficeUpdateDto>();
     }
 }

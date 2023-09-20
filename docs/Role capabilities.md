@@ -50,7 +50,7 @@ Users in the Manager role can:
 
 ### Division Manager
 
-Users in the Division Manager role have all the capabilities of a Manager, plus they can:
+Users in the Division Manager role have all the capabilities of a Manager. Plus they can:
 
 * Create and manage CTS User accounts and assign roles, including the Division Manager role.
 * Edit EPD Offices and designate the Assignor for each Office.
