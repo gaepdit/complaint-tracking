@@ -1,4 +1,6 @@
+using Cts.Domain.Entities.Offices;
 using Cts.LocalRepository.Repositories;
+using GaEpd.AppLibrary.Domain.Repositories;
 
 namespace LocalRepositoryTests.Offices;
 
@@ -32,7 +34,8 @@ public class GetActiveStaffMembersList
     public async Task WhenOfficeDoesNotExist_Throws()
     {
         var id = Guid.Empty;
-        var result = await _repository.GetActiveStaffMembersListAsync(id);
-        result.Should().BeEmpty();
+        var action = async () => await _repository.GetActiveStaffMembersListAsync(id);
+        (await action.Should().ThrowAsync<EntityNotFoundException>())
+            .WithMessage($"Entity not found. Entity type: {typeof(Office).FullName}, id: {id}");
     }
 }

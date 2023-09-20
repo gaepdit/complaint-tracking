@@ -2,34 +2,31 @@ using Cts.Domain.Entities.Attachments;
 using Cts.Domain.Entities.ComplaintActions;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.ComplaintTransitions;
-using Cts.EfRepository.Contexts;
-using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace Cts.EfRepository.Repositories;
 
-/// <inheritdoc cref="IComplaintRepository" />
-public class ComplaintRepository : BaseRepository<Complaint, int>, IComplaintRepository
+public sealed class ComplaintRepository : BaseRepository<Complaint, int>, IComplaintRepository
 {
-    public ComplaintRepository(AppDbContext context) : base(context) { }
+    public ComplaintRepository(DbContext context) : base(context) { }
 
     public async Task<IReadOnlyCollection<ComplaintAction>> GetComplaintActionsListAsync(
         Expression<Func<ComplaintAction, bool>> predicate, CancellationToken token = default) =>
-        await Context.ComplaintActions.AsNoTracking()
+        await Context.Set<ComplaintAction>().AsNoTracking()
             .Where(predicate)
             .OrderBy(e => e.ActionDate)
             .ToListAsync(token);
 
     public async Task<IReadOnlyCollection<Attachment>> GetAttachmentsListAsync(
         Expression<Func<Attachment, bool>> predicate, CancellationToken token = default) =>
-        await Context.Attachments.AsNoTracking()
+        await Context.Set<Attachment>().AsNoTracking()
             .Where(predicate)
             .OrderBy(e => e.UploadedDate)
             .ToListAsync(token);
 
     public async Task<IReadOnlyCollection<ComplaintTransition>> GetComplaintTransitionsListAsync(
         int complaintId, CancellationToken token = default) =>
-        await Context.ComplaintTransitions.AsNoTracking()
+        await Context.Set<ComplaintTransition>().AsNoTracking()
             .Where(e => e.Complaint.Id == complaintId)
             .OrderBy(e => e.CommittedDate)
             .ToListAsync(token);
@@ -42,7 +39,7 @@ public class ComplaintRepository : BaseRepository<Complaint, int>, IComplaintRep
     }
 
     public async Task<Attachment?> FindAttachmentAsync(Guid id, CancellationToken token = default) =>
-        await Context.Attachments
+        await Context.Set<Attachment>()
             .Include(e => e.Complaint)
             .SingleOrDefaultAsync(e => e.Id == id, token);
 

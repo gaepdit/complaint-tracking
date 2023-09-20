@@ -1,5 +1,4 @@
 ﻿using JetBrains.Annotations;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
 namespace Cts.EfRepository.Contexts;
