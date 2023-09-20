@@ -2,8 +2,8 @@ using Cts.AppServices.Offices;
 using Cts.AppServices.Staff;
 using Cts.AppServices.Staff.Dto;
 using Cts.TestData.Constants;
+using Cts.WebApp.Models;
 using Cts.WebApp.Pages.Admin.Users;
-using Cts.WebApp.Platform.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using FluentAssertions.Execution;
 using FluentValidation;
@@ -17,26 +17,33 @@ namespace WebAppTests.Pages.Admin.Users;
 
 public class EditTests
 {
+    private static readonly OfficeViewDto OfficeViewTest = new(Guid.Empty, TextData.ValidName, true);
+
     private static readonly StaffViewDto StaffViewTest = new()
     {
         Id = Guid.Empty.ToString(),
-        Email = TestConstants.ValidEmail,
-        GivenName = TestConstants.ValidName,
-        FamilyName = TestConstants.ValidName,
+        FamilyName = TextData.ValidName,
+        GivenName = TextData.ValidName,
+        Email = TextData.ValidEmail,
+        Office = OfficeViewTest,
+        Active = true,
     };
 
-    private static readonly StaffUpdateDto StaffUpdateTest = new() { Id = Guid.Empty.ToString() };
+    private static readonly StaffUpdateDto StaffUpdateTest = new()
+    {
+        Id = Guid.Empty.ToString(),
+        Active = true,
+    };
 
     [Test]
     public async Task OnGet_PopulatesThePageModel()
     {
         var staffServiceMock = Substitute.For<IStaffService>();
-        staffServiceMock.FindAsync(Arg.Any<string>())
-            .Returns(StaffViewTest);
+        staffServiceMock.FindAsync(Arg.Any<string>()).Returns(StaffViewTest);
         var officeServiceMock = Substitute.For<IOfficeService>();
-        officeServiceMock.GetActiveListItemsAsync(CancellationToken.None)
-            .Returns(new List<ListItem>());
-        var pageModel = new EditModel(staffServiceMock, officeServiceMock, Substitute.For<IValidator<StaffUpdateDto>>())
+        officeServiceMock.GetActiveListItemsAsync(Arg.Any<CancellationToken>()).Returns(new List<ListItem>());
+        var pageModel = new EditModel(staffServiceMock, officeServiceMock,
+                Substitute.For<IValidator<StaffUpdateDto>>())
             { TempData = WebAppTestsSetup.PageTempData() };
 
         var result = await pageModel.OnGetAsync(StaffViewTest.Id);
@@ -70,8 +77,7 @@ public class EditTests
     public async Task OnGet_NonexistentIdReturnsNotFound()
     {
         var staffServiceMock = Substitute.For<IStaffService>();
-        staffServiceMock.FindAsync(Arg.Any<string>())
-            .Returns((StaffViewDto?)null);
+        staffServiceMock.FindAsync(Arg.Any<string>()).Returns((StaffViewDto?)null);
         var pageModel = new EditModel(staffServiceMock,
                 Substitute.For<IOfficeService>(), Substitute.For<IValidator<StaffUpdateDto>>())
             { TempData = WebAppTestsSetup.PageTempData() };
@@ -88,8 +94,7 @@ public class EditTests
             new DisplayMessage(DisplayMessage.AlertContext.Success, "Successfully updated.");
 
         var staffServiceMock = Substitute.For<IStaffService>();
-        staffServiceMock.UpdateAsync(Arg.Any<StaffUpdateDto>())
-            .Returns(IdentityResult.Success);
+        staffServiceMock.UpdateAsync(Arg.Any<StaffUpdateDto>()).Returns(IdentityResult.Success);
         var validatorMock = Substitute.For<IValidator<StaffUpdateDto>>();
         validatorMock.ValidateAsync(Arg.Any<StaffUpdateDto>(), Arg.Any<CancellationToken>())
             .Returns(new ValidationResult());
@@ -111,13 +116,12 @@ public class EditTests
     [Test]
     public async Task OnPost_GivenUpdateFailure_ReturnsBadRequest()
     {
-        var staffService = Substitute.For<IStaffService>();
-        staffService.UpdateAsync(Arg.Any<StaffUpdateDto>())
-            .Returns(IdentityResult.Failed());
-        var validator = Substitute.For<IValidator<StaffUpdateDto>>();
-        validator.ValidateAsync(Arg.Any<StaffUpdateDto>(), Arg.Any<CancellationToken>())
+        var staffServiceMock = Substitute.For<IStaffService>();
+        staffServiceMock.UpdateAsync(Arg.Any<StaffUpdateDto>()).Returns(IdentityResult.Failed());
+        var validatorMock = Substitute.For<IValidator<StaffUpdateDto>>();
+        validatorMock.ValidateAsync(Arg.Any<StaffUpdateDto>(), Arg.Any<CancellationToken>())
             .Returns(new ValidationResult());
-        var page = new EditModel(staffService, Substitute.For<IOfficeService>(), validator)
+        var page = new EditModel(staffServiceMock, Substitute.For<IOfficeService>(), validatorMock)
             { UpdateStaff = StaffUpdateTest, TempData = WebAppTestsSetup.PageTempData() };
 
         var result = await page.OnPostAsync();
@@ -129,11 +133,9 @@ public class EditTests
     public async Task OnPost_GivenInvalidModel_ReturnsPageWithInvalidModelState()
     {
         var staffServiceMock = Substitute.For<IStaffService>();
-        staffServiceMock.FindAsync(Arg.Any<string>())
-            .Returns(StaffViewTest);
+        staffServiceMock.FindAsync(Arg.Any<string>()).Returns(StaffViewTest);
         var officeServiceMock = Substitute.For<IOfficeService>();
-        officeServiceMock.GetActiveListItemsAsync(CancellationToken.None)
-            .Returns(new List<ListItem>());
+        officeServiceMock.GetActiveListItemsAsync(Arg.Any<CancellationToken>()).Returns(new List<ListItem>());
         var validatorMock = Substitute.For<IValidator<StaffUpdateDto>>();
         var validationFailures = new List<ValidationFailure> { new("property", "message") };
         validatorMock.ValidateAsync(Arg.Any<StaffUpdateDto>(), Arg.Any<CancellationToken>())
@@ -157,8 +159,7 @@ public class EditTests
     public async Task OnPost_GivenMissingUser_ReturnsBadRequest()
     {
         var staffServiceMock = Substitute.For<IStaffService>();
-        staffServiceMock.FindAsync(Arg.Any<string>())
-            .Returns((StaffViewDto?)null);
+        staffServiceMock.FindAsync(Arg.Any<string>()).Returns((StaffViewDto?)null);
         var validatorMock = Substitute.For<IValidator<StaffUpdateDto>>();
         var validationFailures = new List<ValidationFailure> { new("property", "message") };
         validatorMock.ValidateAsync(Arg.Any<StaffUpdateDto>(), Arg.Any<CancellationToken>())

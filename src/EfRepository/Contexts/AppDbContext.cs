@@ -8,7 +8,6 @@ using Cts.Domain.Entities.EmailLogs;
 using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Cts.EfRepository.Contexts;
@@ -16,7 +15,7 @@ namespace Cts.EfRepository.Contexts;
 public class AppDbContext : IdentityDbContext<ApplicationUser>
 {
     internal const string SqlServerProvider = "Microsoft.EntityFrameworkCore.SqlServer";
-    internal const string SqliteProvider = "Microsoft.EntityFrameworkCore.Sqlite";
+    private const string SqliteProvider = "Microsoft.EntityFrameworkCore.Sqlite";
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -35,7 +34,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         base.OnModelCreating(builder);
 
-        // Auto-includes
+        // Some properties should always be included.
         // See https://learn.microsoft.com/en-us/ef/core/querying/related-data/eager#model-configuration-for-auto-including-navigations
         builder.Entity<ApplicationUser>().Navigation(e => e.Office).AutoInclude();
         builder.Entity<Attachment>().Navigation(e => e.UploadedBy).AutoInclude();
@@ -61,13 +60,29 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
         transition.Navigation(e => e.TransferredToOffice).AutoInclude();
         transition.Navigation(e => e.TransferredToUser).AutoInclude();
 
-        // Handling DateTimeOffset in SQLite with Entity Framework Core
-        // https://blog.dangl.me/archive/handling-datetimeoffset-in-sqlite-with-entity-framework-core/
+#pragma warning disable S125
+        // Let's save enums in the database as strings.
+        // See https://stackoverflow.com/a/55260541/212978
+        // builder.Entity<EntityWithEnum>().Property(d => d.MyEnum).HasConversion(new EnumToStringConverter<MyEnumType>());
+#pragma warning restore S125
+
+        // ## The following configurations are Sqlite only. ##
         if (Database.ProviderName != SqliteProvider) return;
+
+#pragma warning disable S125
+        // Sqlite and EF Core are in conflict on how to handle collections of owned types.
+        // See: https://stackoverflow.com/a/69826156/212978
+        // and: https://learn.microsoft.com/en-us/ef/core/modeling/owned-entities#collections-of-owned-types
+        // builder.Entity<EntityWithOwnedType>().OwnsMany(e => e.MyOwnedTypeProperty, b => b.HasKey("Id"));
+#pragma warning restore S125
+
+        // "Handling DateTimeOffset in SQLite with Entity Framework Core"
+        // https://blog.dangl.me/archive/handling-datetimeoffset-in-sqlite-with-entity-framework-core/
         foreach (var entityType in builder.Model.GetEntityTypes())
         {
             var dateTimeOffsetProperties = entityType.ClrType.GetProperties()
-                .Where(p => p.PropertyType == typeof(DateTimeOffset) || p.PropertyType == typeof(DateTimeOffset?));
+                .Where(info =>
+                    info.PropertyType == typeof(DateTimeOffset) || info.PropertyType == typeof(DateTimeOffset?));
             foreach (var property in dateTimeOffsetProperties)
                 builder.Entity(entityType.Name).Property(property.Name)
                     .HasConversion(new DateTimeOffsetToBinaryConverter());

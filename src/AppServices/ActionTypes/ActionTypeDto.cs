@@ -1,9 +1,9 @@
-﻿using Cts.AppServices.BaseDto;
+﻿using Cts.AppServices.DtoBase;
 
 namespace Cts.AppServices.ActionTypes;
 
-public class ActionTypeViewDto : SimpleNamedEntityViewDto { }
+public record ActionTypeViewDto(Guid Id, string Name, bool Active) : StandardNamedEntityViewDto(Id, Name, Active);
 
-public class ActionTypeCreateDto : SimpleNamedEntityCreateDto { }
+public record ActionTypeCreateDto(string Name) : StandardNamedEntityCreateDto(Name);
 
-public class ActionTypeUpdateDto : SimpleNamedEntityUpdateDto { }
+public record ActionTypeUpdateDto(Guid Id, string Name, bool Active) : StandardNamedEntityUpdateDto(Id, Name, Active);

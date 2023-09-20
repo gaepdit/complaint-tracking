@@ -5,20 +5,18 @@ using System.Text.Json.Serialization;
 namespace Cts.AppServices.Staff.Dto;
 
 public record StaffSearchDto
-{
+(
     // Sorting
-    public SortBy Sort { get; init; } = SortBy.NameAsc;
+    SortBy Sort,
 
     // Fields
-    public string? Name { get; set; }
-
-    [EmailAddress]
-    public string? Email { get; set; }
-
-    public string? Role { get; init; }
-    public Guid? Office { get; init; }
-    public SearchStaffStatus? Status { get; init; } = SearchStaffStatus.Active;
-
+    string? Name,
+    [EmailAddress] string? Email,
+    string? Role,
+    Guid? Office,
+    SearchStaffStatus? Status
+)
+{
     // UI Routing
     public IDictionary<string, string?> AsRouteValues() => new Dictionary<string, string?>
     {
@@ -30,11 +28,11 @@ public record StaffSearchDto
         { nameof(Status), Status?.ToString() },
     };
 
-    public void TrimAll()
+    public StaffSearchDto TrimAll() => this with
     {
-        Name = Name?.Trim();
-        Email = Email?.Trim();
-    }
+        Name = Name?.Trim(),
+        Email = Email?.Trim(),
+    };
 }
 
 // Search enums

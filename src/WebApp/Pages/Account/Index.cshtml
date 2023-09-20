@@ -1,5 +1,5 @@
 ﻿@page
-@using Cts.WebApp.Pages.Shared.DisplayTemplates;
+@using Cts.WebApp.Pages.Shared.DisplayTemplates
 @model IndexModel
 @{
     ViewData["Title"] = "Account Profile";
@@ -8,21 +8,30 @@
 <h1>@ViewData["Title"]</h1>
 <hr />
 
-<h2>@Html.DisplayFor(m => m.DisplayStaff.Name, TemplateNames.StringOrNone)</h2>
+<h2>
+    @if (!Model.DisplayStaff.Active)
+    {
+        <em class="text-warning">Inactive:</em>
+    }
+    @Html.DisplayFor(m => m.DisplayStaff, DisplayTemplate.NameOrNone)
+</h2>
 
 <dl class="row">
     <dt class="col-sm-3">Email</dt>
     <dd class="col-sm-9">@Model.DisplayStaff.Email</dd>
 
     <dt class="col-sm-3">Phone</dt>
-    <dd class="col-sm-9">@Html.DisplayFor(m => m.DisplayStaff.Phone, TemplateNames.StringOrNone)</dd>
+    <dd class="col-sm-9">@Html.DisplayFor(m => m.DisplayStaff.Phone, DisplayTemplate.StringOrNone)</dd>
 
     <dt class="col-sm-3">Office</dt>
-    <dd class="col-sm-9">@Html.DisplayFor(m => m.OfficeName, TemplateNames.StringOrNone)</dd>
+    <dd class="col-sm-9">@Html.DisplayFor(m => m.OfficeName, DisplayTemplate.StringOrNone)</dd>
 </dl>
 
 <div class="mb-3">
-    <a asp-page="Edit" class="btn btn-outline-primary me-2">Edit Profile</a>
+    @if (Model.DisplayStaff.Active)
+    {
+        <a asp-page="Edit" class="btn btn-outline-primary me-2">Edit Profile</a>
+    }
     <form class="form-inline d-inline-block" asp-page="Logout" method="post">
         <button type="submit" class="btn btn-danger">Sign out</button>
     </form>
@@ -32,18 +41,24 @@
 
 @if (Model.Roles.Count == 0)
 {
-    <p>Your account has no application roles.</p>
+    <p>
+        Your account has no application roles. View a detailed description of
+        <a asp-page="/Admin/Users/Roles" target="_blank">user roles and capabilities</a>.
+    </p>
 }
 else
 {
-    <p>Your account has the following application roles.</p>
+    <p>
+        Your account has the following application roles. View a detailed description of
+        <a asp-page="/Admin/Users/Roles" target="_blank">user roles and capabilities</a>.
+    </p>
 
-    <dl class="p-3 border rounded-3 bg-light">
+    <dl class="p-3 border rounded-3 bg-light-subtle">
         @foreach (var role in Model.Roles)
         {
             <dt>@role.DisplayName</dt>
             <dd>
-                <p class="text-muted">@role.Description</p>
+                <p class="text-body-secondary">@role.Description</p>
             </dd>
         }
     </dl>

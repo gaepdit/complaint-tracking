@@ -11,7 +11,7 @@ public class GetActiveListItems
     [Test]
     public async Task ReturnsActiveListItems()
     {
-        var itemList = new List<Concern> { new(Guid.Empty, TestConstants.ValidName) };
+        var itemList = new List<Concern> { new(Guid.Empty, TextData.ValidName) };
         var repoMock = Substitute.For<IConcernRepository>();
         repoMock.GetListAsync(Arg.Any<Expression<Func<Concern, bool>>>(), Arg.Any<CancellationToken>())
             .Returns(itemList);

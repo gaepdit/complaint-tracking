@@ -1,7 +1,7 @@
-﻿using Cts.AppServices.Offices;
+using Cts.AppServices.Offices;
 using Cts.AppServices.Permissions;
 using Cts.AppServices.Staff;
-using Cts.WebApp.Platform.Models;
+using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using FluentValidation;
 using GaEpd.AppLibrary.ListItems;
@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Cts.WebApp.Pages.Admin.Maintenance.Offices;
 
-[Authorize(Policy = PolicyName.SiteMaintainer)]
+[Authorize(Policy = nameof(Policies.SiteMaintainer))]
 public class AddModel : PageModel
 {
     // Constructor
@@ -59,9 +59,7 @@ public class AddModel : PageModel
             return Page();
         }
 
-        var id = await _officeService.CreateAsync(Item);
-
-        HighlightId = id;
+        HighlightId = await _officeService.CreateAsync(Item);
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, $"“{Item.Name}” successfully added.");
         return RedirectToPage("Index");
     }

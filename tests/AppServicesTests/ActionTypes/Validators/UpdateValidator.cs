@@ -14,12 +14,7 @@ public class UpdateValidator
         var repoMock = Substitute.For<IActionTypeRepository>();
         repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns((ActionType?)null);
-        var model = new ActionTypeUpdateDto
-        {
-            Id = Guid.Empty,
-            Name = TestConstants.ValidName,
-            Active = true,
-        };
+        var model = new ActionTypeUpdateDto(Guid.Empty, TextData.ValidName, true);
 
         var validator = new ActionTypeUpdateValidator(repoMock);
         var result = await validator.TestValidateAsync(model);
@@ -32,13 +27,8 @@ public class UpdateValidator
     {
         var repoMock = Substitute.For<IActionTypeRepository>();
         repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
-            .Returns(new ActionType(Guid.NewGuid(), TestConstants.ValidName));
-        var model = new ActionTypeUpdateDto
-        {
-            Id = Guid.Empty,
-            Name = TestConstants.ValidName,
-            Active = true,
-        };
+            .Returns(new ActionType(Guid.NewGuid(), TextData.ValidName));
+        var model = new ActionTypeUpdateDto(Guid.Empty, TextData.ValidName, true);
 
         var validator = new ActionTypeUpdateValidator(repoMock);
         var result = await validator.TestValidateAsync(model);
@@ -52,13 +42,8 @@ public class UpdateValidator
     {
         var repoMock = Substitute.For<IActionTypeRepository>();
         repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
-            .Returns(new ActionType(Guid.Empty, TestConstants.ValidName));
-        var model = new ActionTypeUpdateDto
-        {
-            Id = Guid.Empty,
-            Name = TestConstants.ValidName,
-            Active = true,
-        };
+            .Returns(new ActionType(Guid.Empty, TextData.ValidName));
+        var model = new ActionTypeUpdateDto(Guid.Empty, TextData.ValidName, true);
 
         var validator = new ActionTypeUpdateValidator(repoMock);
         var result = await validator.TestValidateAsync(model);
@@ -72,7 +57,7 @@ public class UpdateValidator
         var repoMock = Substitute.For<IActionTypeRepository>();
         repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns((ActionType?)null);
-        var model = new ActionTypeUpdateDto() { Name = TestConstants.ShortName };
+        var model = new ActionTypeUpdateDto(Guid.Empty, TextData.ShortName, true);
 
         var validator = new ActionTypeUpdateValidator(repoMock);
         var result = await validator.TestValidateAsync(model);

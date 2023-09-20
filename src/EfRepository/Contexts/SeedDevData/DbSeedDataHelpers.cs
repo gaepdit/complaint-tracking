@@ -98,8 +98,14 @@ public static class DbSeedDataHelpers
                 });
         }
 
-        // Seed Office assignors
-        OfficeData.SeedOfficeAssignors(context.Offices.AsTracking().ToList(), users);
+        // Seed Office data
+        var offices = context.Offices.ToList();
+        offices[0].Assignor = users[0];
+        offices[1].Assignor = users[1];
+        offices[2].Assignor = users[2];
+        offices[3].Assignor = users[0];
+        
+        foreach (var user in users) user.Office = offices[0];
 
         context.SaveChanges();
     }

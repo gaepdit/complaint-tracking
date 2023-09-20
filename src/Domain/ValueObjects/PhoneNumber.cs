@@ -1,5 +1,4 @@
-﻿using GaEpd.AppLibrary.Domain.ValueObjects;
-using JetBrains.Annotations;
+using GaEpd.AppLibrary.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
@@ -8,17 +7,21 @@ namespace Cts.Domain.ValueObjects;
 [Owned]
 public record PhoneNumber : ValueObject
 {
+    public int Id { get; init; }
+
     [StringLength(25)]
     [DataType(DataType.PhoneNumber)]
     [Display(Name = "Phone number")]
-    public string? Number { get; [UsedImplicitly] init; } = string.Empty;
+    public string? Number { get; [UsedImplicitly] init; }
 
     [Display(Name = "Phone type")]
-    public PhoneType? Type { get; [UsedImplicitly] init; } = PhoneType.Unknown;
+    [Column(TypeName = "nvarchar(25)")]
+    public PhoneType? Type { get; [UsedImplicitly] init; }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Number ?? string.Empty;
+        // ReSharper disable once HeapView.BoxingAllocation
         yield return Type ?? PhoneType.Unknown;
     }
 }
@@ -26,9 +29,9 @@ public record PhoneNumber : ValueObject
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum PhoneType
 {
-    Cell = 0,
-    Fax = 1,
-    Home = 2,
-    Office = 3,
-    Unknown = 4,
+    [UsedImplicitly] Cell = 0,
+    [UsedImplicitly] Fax = 1,
+    [UsedImplicitly] Home = 2,
+    [UsedImplicitly] Office = 3,
+    [UsedImplicitly] Unknown = 4,
 }

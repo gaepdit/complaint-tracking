@@ -1,88 +1,40 @@
-﻿using Cts.AppServices.Offices;
-using Cts.AppServices.Staff;
+﻿using FluentAssertions.Execution;
+using Cts.AppServices.Offices;
 using Cts.AppServices.Staff.Dto;
 using Cts.TestData.Constants;
-using FluentAssertions.Execution;
 
 namespace AppServicesTests.Staff;
 
 public class StaffDtoTests
 {
     [Test]
-    public void DisplayName_ExpectedBehavior()
+    public void DisplayName_TrimAll_TrimsItems()
     {
-        var staffSearchDto = new StaffSearchDto { Name = " abc ", Email = " def " };
+        var staffSearchDto = new StaffSearchDto(SortBy.NameAsc, " abc ", " def ", null, null, null);
 
-        staffSearchDto.TrimAll();
+        var result = staffSearchDto.TrimAll();
 
         using (new AssertionScope())
         {
-            staffSearchDto.Name.Should().Be("abc");
-            staffSearchDto.Email.Should().Be("def");
+            result.Name.Should().Be("abc");
+            result.Email.Should().Be("def");
         }
     }
+
+    private static StaffViewDto ValidStaffView => new()
+    {
+        Id = Guid.Empty.ToString(),
+        FamilyName = string.Empty,
+        GivenName = string.Empty,
+    };
 
     [TestCase("abc", "def", "abc def")]
     [TestCase("abc", "", "abc")]
     [TestCase("", "def", "def")]
     public void DisplayName_ExpectedBehavior(string givenName, string familyName, string expected)
     {
-        var staffViewDto = new StaffViewDto { GivenName = givenName, FamilyName = familyName };
-
+        var staffViewDto = ValidStaffView with { GivenName = givenName, FamilyName = familyName };
         staffViewDto.Name.Should().Be(expected);
-    }
-
-    [TestCase("abc", "def", "abc def")]
-    [TestCase("abc", "", "abc")]
-    [TestCase("", "def", "def")]
-    public void DisplayNameWithOffice_ExpectedBehavior(string givenName, string familyName, string expectedDisplayName)
-    {
-        var staffViewDto = new StaffViewDto
-        {
-            Active = true,
-            GivenName = givenName,
-            FamilyName = familyName,
-            Office = new OfficeDisplayViewDto { Id = Guid.Empty, Name = TextData.Phrase },
-        };
-
-        staffViewDto.DisplayNameWithOffice.Should().Be($"{expectedDisplayName} ({TextData.Phrase})");
-    }
-
-    [TestCase("abc", "def", "abc def")]
-    [TestCase("abc", "", "abc")]
-    [TestCase("", "def", "def")]
-    public void DisplayNameWithOffice_NullOffice_ExpectedBehavior(
-        string givenName,
-        string familyName,
-        string expectedDisplayName)
-    {
-        var staffViewDto = new StaffViewDto
-        {
-            Active = true,
-            GivenName = givenName,
-            FamilyName = familyName,
-        };
-
-        staffViewDto.DisplayNameWithOffice.Should().Be(expectedDisplayName);
-    }
-
-    [TestCase("abc", "def", "abc def")]
-    [TestCase("abc", "", "abc")]
-    [TestCase("", "def", "def")]
-    public void DisplayNameWithOffice_InactiveUser_ExpectedBehavior(
-        string givenName,
-        string familyName,
-        string expectedDisplayName)
-    {
-        var staffViewDto = new StaffViewDto
-        {
-            Active = false,
-            GivenName = givenName,
-            FamilyName = familyName,
-            Office = new OfficeDisplayViewDto { Id = Guid.Empty, Name = TextData.Phrase },
-        };
-
-        staffViewDto.DisplayNameWithOffice.Should().Be($"{expectedDisplayName} ({TextData.Phrase}) [Inactive]");
     }
 
     [TestCase("abc", "def", "def, abc")]
@@ -90,24 +42,26 @@ public class StaffDtoTests
     [TestCase("", "def", "def")]
     public void SortableFullName_ExpectedBehavior(string givenName, string familyName, string expected)
     {
-        var staffViewDto = new StaffViewDto { GivenName = givenName, FamilyName = familyName };
+        var staffViewDto = ValidStaffView with { GivenName = givenName, FamilyName = familyName };
         staffViewDto.SortableFullName.Should().Be(expected);
     }
 
     [Test]
     public void AsUpdateDto_ExpectedBehavior()
     {
-        var staffViewDto = new StaffViewDto
+        var staffViewDto = ValidStaffView with
         {
+            Id = Guid.NewGuid().ToString(),
             Active = true,
-            Phone = TestConstants.ValidPhoneNumber,
-            Office = new OfficeDisplayViewDto { Id = Guid.NewGuid() },
+            Phone = TextData.ValidPhoneNumber,
+            Office = new OfficeViewDto(Guid.NewGuid(), TextData.ValidName, true),
         };
 
         var result = staffViewDto.AsUpdateDto();
 
         using (new AssertionScope())
         {
+            result.Id.Should().Be(staffViewDto.Id);
             result.Active.Should().BeTrue();
             result.Phone.Should().Be(staffViewDto.Phone);
             result.OfficeId.Should().Be(staffViewDto.Office.Id);

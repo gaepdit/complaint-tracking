@@ -27,11 +27,13 @@ public sealed class LocalUserStore :
         Roles = UserData.GetRoles.ToList();
 
         // Seed User Roles
+        UserRoles = new List<IdentityUserRole<string>>();
+
         // -- admin
-        UserRoles = Roles
+        UserRoles.AddRange(Roles
             .Select(role => new IdentityUserRole<string>
                 { RoleId = role.Id, UserId = UserStore.Single(e => e.GivenName == "Admin").Id })
-            .ToList();
+            .ToList());
 
         // -- staff
         var staffUserId = UserStore.Single(e => e.GivenName == "General").Id;
@@ -52,8 +54,14 @@ public sealed class LocalUserStore :
         // Initialize Logins
         UserLogins = new List<UserLogin>();
 
-        // Seed Office assignors
-        OfficeData.SeedOfficeAssignors(OfficeData.GetOffices, UserStore);
+        // Seed Office data
+        var offices = OfficeData.GetOffices.ToList();
+        var users = UserStore.ToList();
+
+        offices[0].Assignor = users[0];
+        offices[1].Assignor = users[1];
+        offices[2].Assignor = users[2];
+        offices[3].Assignor = users[0];
     }
 
     // IUserStore
@@ -115,7 +123,7 @@ public sealed class LocalUserStore :
             string.Equals(r.Name, roleName, StringComparison.InvariantCultureIgnoreCase))?.Id;
         if (roleId is null) return Task.CompletedTask;
 
-        var exists = UserRoles.Any(e => e.UserId == user.Id && e.RoleId == roleId);
+        var exists = UserRoles.Exists(e => e.UserId == user.Id && e.RoleId == roleId);
         if (!exists) UserRoles.Add(new IdentityUserRole<string> { RoleId = roleId, UserId = user.Id });
 
         return Task.CompletedTask;
@@ -148,7 +156,7 @@ public sealed class LocalUserStore :
     {
         var roleId = Roles.SingleOrDefault(r =>
             string.Equals(r.Name, roleName, StringComparison.InvariantCultureIgnoreCase))?.Id;
-        return Task.FromResult(UserRoles.Any(e => e.UserId == user.Id && e.RoleId == roleId));
+        return Task.FromResult(UserRoles.Exists(e => e.UserId == user.Id && e.RoleId == roleId));
     }
 
     public Task<IList<ApplicationUser>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)

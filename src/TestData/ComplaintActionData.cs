@@ -69,7 +69,7 @@ internal static class ComplaintActionData
             if (_complaintActions is not null) return _complaintActions;
 
             _complaintActions = ComplaintActionSeedItems.ToList();
-            _complaintActions.ElementAt(3).SetDeleted("00000000-0000-0000-0000-000000000001");
+            _complaintActions[3].SetDeleted("00000000-0000-0000-0000-000000000001");
             return _complaintActions;
         }
     }

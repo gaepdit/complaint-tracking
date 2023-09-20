@@ -5,7 +5,7 @@ public static class DateTimeExtensions
     public static DateTime RoundToNearestQuarterHour(this DateTime input)
     {
         var newTime = RoundToNearestQuarterHour(input.TimeOfDay);
-        return new DateTime(input.Year, input.Month, input.Day, newTime.Hours, newTime.Minutes, 0);
+        return new DateTime(input.Year, input.Month, input.Day, newTime.Hours, newTime.Minutes, 0, input.Kind);
     }
 
     private static TimeSpan RoundToNearestQuarterHour(this TimeSpan input) =>

@@ -6,17 +6,17 @@ public static class ValueObjectData
 {
     public static PhoneNumber SamplePhoneNumber => new()
     {
-        Number = TestConstants.ValidPhoneNumber,
+        Number = TextData.ValidPhoneNumber,
         Type = PhoneType.Office,
     };
 
     public static PhoneNumber AlternatePhoneNumber => new()
     {
-        Number = TestConstants.AlternatePhoneNumber,
+        Number = TextData.AlternatePhoneNumber,
         Type = PhoneType.Cell,
     };
 
-    public static IncompleteAddress FullCompleteAddress => new()
+    public static IncompleteAddress CompleteAddress => new()
     {
         Street = "123 Main St.",
         Street2 = "Box 456",
@@ -29,7 +29,7 @@ public static class ValueObjectData
     {
         Street = "456 Second St.",
         Street2 = null,
-        City = "Town-ville",
+        City = "Alt-ville",
         PostalCode = "98765",
         State = "GA",
     };

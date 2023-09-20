@@ -1,13 +1,11 @@
 using Cts.AppServices.Files;
 using Cts.Domain.Entities.ActionTypes;
 using Cts.Domain.Entities.Complaints;
-using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
 using Cts.EfRepository.Contexts;
 using Cts.EfRepository.Repositories;
 using Cts.LocalRepository.Files;
-using Cts.LocalRepository.Identity;
 using Cts.LocalRepository.Repositories;
 using Cts.WebApp.Platform.Settings;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +24,7 @@ public static class DataStores
             services.AddSingleton<IComplaintRepository, LocalComplaintRepository>();
             services.AddSingleton<IConcernRepository, LocalConcernRepository>();
             services.AddSingleton<IOfficeRepository, LocalOfficeRepository>();
-            services.AddSingleton<IUserRepository, LocalUserRepository>();
+            // services.AddSingleton<IUserRepository, LocalUserRepository>();
         }
         else
         {
@@ -39,14 +37,20 @@ public static class DataStores
             else
             {
                 services.AddDbContext<AppDbContext>(opts =>
-                    opts.UseSqlServer(connectionString, x => x.MigrationsAssembly("EfRepository")));
+                    opts.UseSqlServer(connectionString, builder =>
+                    {
+                        // DateOnly and TimeOnly entity properties require the following package: 
+                        // ErikEJ.EntityFrameworkCore.SqlServer.DateOnlyTimeOnly
+                        // FUTURE: This will no longer be necessary after upgrading to .NET 8.
+                        builder.UseDateOnlyTimeOnly();
+                    }));
             }
 
             services.AddScoped<IActionTypeRepository, ActionTypeRepository>();
             services.AddScoped<IComplaintRepository, ComplaintRepository>();
             services.AddScoped<IConcernRepository, ConcernRepository>();
             services.AddScoped<IOfficeRepository, OfficeRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
+            // services.AddScoped<IUserRepository, UserRepository>();
         }
 
         // When running locally, you have the option to access file in memory or use the local filesystem.

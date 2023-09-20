@@ -1,4 +1,4 @@
-﻿using Cts.AppServices.Staff;
+using Cts.AppServices.Staff;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Identity;
 using Cts.EfRepository.Contexts;
@@ -14,7 +14,7 @@ public static class IdentityStores
     {
         var identityBuilder = services.AddIdentity<ApplicationUser, IdentityRole>();
 
-        // When running locally, you have the option to use in-memory data or build the database using LocalDB.
+        // When running locally, you have the option to use in-memory data or a database.
         if (ApplicationSettings.DevSettings.UseInMemoryData)
         {
             // Add local UserStore and RoleStore.

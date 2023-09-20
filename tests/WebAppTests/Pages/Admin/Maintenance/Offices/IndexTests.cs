@@ -11,14 +11,13 @@ namespace WebAppTests.Pages.Admin.Maintenance.Offices;
 public class IndexTests
 {
     private static readonly List<OfficeAdminViewDto> ListTest = new()
-        { new OfficeAdminViewDto { Id = Guid.Empty, Name = TestConstants.ValidName } };
+        { new OfficeAdminViewDto(Guid.Empty, TextData.ValidName, true) };
 
     [Test]
     public async Task OnGet_ReturnsWithList()
     {
         var serviceMock = Substitute.For<IOfficeService>();
-        serviceMock.GetListAsync(CancellationToken.None)
-            .Returns(ListTest);
+        serviceMock.GetListAsync(Arg.Any<CancellationToken>()).Returns(ListTest);
         var authorizationMock = Substitute.For<IAuthorizationService>();
         authorizationMock.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), Arg.Is((string?)null), Arg.Any<string>())
             .Returns(AuthorizationResult.Success());

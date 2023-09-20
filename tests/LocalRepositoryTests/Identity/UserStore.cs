@@ -13,7 +13,7 @@ public class UserStore
     private LocalUserStore _store = default!;
 
     [SetUp]
-    public void SetUp() => _store = new LocalUserStore();
+    public void SetUp() => _store = RepositoryHelper.GetLocalUserStore();
 
     [TearDown]
     public void TearDown() => _store.Dispose();
@@ -79,7 +79,7 @@ public class UserStore
     public async Task FindByName_ReturnsUser()
     {
         var user = _store.UserStore.First();
-        Debug.Assert(user.NormalizedUserName != null, "user.NormalizedUserName != null");
+        Debug.Assert(user.NormalizedUserName != null, "role.NormalizedName != null");
         var result = await _store.FindByNameAsync(user.NormalizedUserName, CancellationToken.None);
         result.Should().BeEquivalentTo(user);
     }

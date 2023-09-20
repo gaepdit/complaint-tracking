@@ -14,7 +14,7 @@ public class CreateValidator
         var repoMock = Substitute.For<IOfficeRepository>();
         repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns((Office?)null);
-        var model = new OfficeCreateDto { Name = TestConstants.ValidName };
+        var model = new OfficeCreateDto(TextData.ValidName);
 
         var validator = new OfficeCreateValidator(repoMock);
         var result = await validator.TestValidateAsync(model);
@@ -27,8 +27,8 @@ public class CreateValidator
     {
         var repoMock = Substitute.For<IOfficeRepository>();
         repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
-            .Returns(new Office(Guid.Empty, TestConstants.ValidName));
-        var model = new OfficeCreateDto { Name = TestConstants.ValidName };
+            .Returns(new Office(Guid.Empty, TextData.ValidName));
+        var model = new OfficeCreateDto(TextData.ValidName);
 
         var validator = new OfficeCreateValidator(repoMock);
         var result = await validator.TestValidateAsync(model);
@@ -43,7 +43,7 @@ public class CreateValidator
         var repoMock = Substitute.For<IOfficeRepository>();
         repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns((Office?)null);
-        var model = new OfficeCreateDto { Name = TestConstants.ShortName };
+        var model = new OfficeCreateDto(TextData.ShortName);
 
         var validator = new OfficeCreateValidator(repoMock);
         var result = await validator.TestValidateAsync(model);

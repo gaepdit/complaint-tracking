@@ -14,7 +14,7 @@ public class CreateValidator
         var repoMock = Substitute.For<IConcernRepository>();
         repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns((Concern?)null);
-        var model = new ConcernCreateDto { Name = TestConstants.ValidName };
+        var model = new ConcernCreateDto(TextData.ValidName);
 
         var validator = new ConcernCreateValidator(repoMock);
         var result = await validator.TestValidateAsync(model);
@@ -27,8 +27,8 @@ public class CreateValidator
     {
         var repoMock = Substitute.For<IConcernRepository>();
         repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
-            .Returns(new Concern(Guid.Empty, TestConstants.ValidName));
-        var model = new ConcernCreateDto { Name = TestConstants.ValidName };
+            .Returns(new Concern(Guid.Empty, TextData.ValidName));
+        var model = new ConcernCreateDto(TextData.ValidName);
 
         var validator = new ConcernCreateValidator(repoMock);
         var result = await validator.TestValidateAsync(model);
@@ -43,7 +43,7 @@ public class CreateValidator
         var repoMock = Substitute.For<IConcernRepository>();
         repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns((Concern?)null);
-        var model = new ConcernCreateDto { Name = TestConstants.ShortName };
+        var model = new ConcernCreateDto(TextData.ShortName);
 
         var validator = new ConcernCreateValidator(repoMock);
         var result = await validator.TestValidateAsync(model);

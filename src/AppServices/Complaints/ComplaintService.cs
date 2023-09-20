@@ -152,13 +152,12 @@ public sealed class ComplaintService : IComplaintService
 
     private async Task AddTransitionAsync(
         Complaint complaint, TransitionType type, ApplicationUser? user, CancellationToken token) =>
-        await _complaints.InsertTransitionAsync(_transitions.Create(complaint, type, user), autoSave: false, token);
+        await _complaints.InsertTransitionAsync(_transitions.Create(complaint, type, user, user?.Id), autoSave: false, token);
 
     internal async Task<Complaint> CreateComplaintFromDtoAsync(
         ComplaintCreateDto resource, string? currentUserId, CancellationToken token)
     {
-        var complaint = await _manager.CreateNewComplaintAsync();
-        complaint.SetCreator(currentUserId);
+        var complaint = await _manager.CreateNewComplaintAsync(currentUserId);
 
         // Properties: Meta-data
         if (!string.IsNullOrEmpty(currentUserId))

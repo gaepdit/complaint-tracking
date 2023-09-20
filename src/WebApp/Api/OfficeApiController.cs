@@ -1,5 +1,6 @@
 ﻿using Cts.AppServices.Offices;
 using Cts.AppServices.Staff;
+using Cts.AppServices.UserServices;
 using Cts.Domain.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,11 +13,13 @@ public class OfficeApiController : Controller
 {
     private readonly IOfficeService _office;
     private readonly IStaffService _staff;
+    private readonly IUserService _user;
 
-    public OfficeApiController(IOfficeService office, IStaffService staff)
+    public OfficeApiController(IOfficeService office, IStaffService staff, IUserService user)
     {
         _office = office;
         _staff = staff;
+        _user = user;
     }
 
     [HttpGet]
@@ -37,7 +40,7 @@ public class OfficeApiController : Controller
     [HttpGet("{id:guid}/staff-for-assignment")]
     public async Task<IActionResult> GetStaffForAssignmentAsync([FromRoute] Guid id)
     {
-        var user = await _staff.FindCurrentUserAsync();
+        var user = await _user.GetCurrentUserAsync();
         if (user is null) return Unauthorized();
 
         if (user.Office?.Id == id // user is in this office

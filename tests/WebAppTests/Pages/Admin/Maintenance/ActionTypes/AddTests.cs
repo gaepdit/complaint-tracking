@@ -1,7 +1,7 @@
 using Cts.AppServices.ActionTypes;
 using Cts.TestData.Constants;
+using Cts.WebApp.Models;
 using Cts.WebApp.Pages.Admin.Maintenance.ActionTypes;
-using Cts.WebApp.Platform.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using FluentAssertions.Execution;
 using FluentValidation;
@@ -13,7 +13,7 @@ namespace WebAppTests.Pages.Admin.Maintenance.ActionTypes;
 
 public class AddTests
 {
-    private static readonly ActionTypeCreateDto ItemTest = new() { Name = TestConstants.ValidName };
+    private static readonly ActionTypeCreateDto ItemTest = new(TextData.ValidName);
 
     [Test]
     public async Task OnPost_GivenSuccess_ReturnsRedirectWithDisplayMessage()

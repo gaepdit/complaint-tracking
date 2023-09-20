@@ -36,11 +36,11 @@ public sealed class StaffService : IStaffService
         return _mapper.Map<StaffViewDto>(user);
     }
 
-    public async Task<StaffViewDto?> FindCurrentUserAsync() =>
-        _mapper.Map<StaffViewDto?>(await _userService.GetCurrentUserAsync());
-
-    public async Task<StaffViewDto?> FindAsync(string id) =>
-        _mapper.Map<StaffViewDto?>(await _userManager.FindByIdAsync(id));
+    public async Task<StaffViewDto?> FindAsync(string id)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        return _mapper.Map<StaffViewDto?>(user);
+    }
 
     public async Task<List<StaffViewDto>> GetListAsync(StaffSearchDto spec)
     {
@@ -51,8 +51,7 @@ public sealed class StaffService : IStaffService
         return _mapper.Map<List<StaffViewDto>>(users);
     }
 
-    public async Task<IPaginatedResult<StaffSearchResultDto>> SearchAsync(
-        StaffSearchDto spec, PaginatedRequest paging, CancellationToken token = default)
+    public async Task<IPaginatedResult<StaffSearchResultDto>> SearchAsync(StaffSearchDto spec, PaginatedRequest paging)
     {
         var users = string.IsNullOrEmpty(spec.Role)
             ? _userManager.Users.ApplyFilter(spec)
@@ -63,13 +62,15 @@ public sealed class StaffService : IStaffService
         return new PaginatedResult<StaffSearchResultDto>(listMapped, users.Count(), paging);
     }
 
-    public async Task<IReadOnlyList<ListItem<string>>> GetStaffListItemsAsync(bool activeOnly)
+    public Task<IReadOnlyList<ListItem<string>>> GetStaffListItemsAsync(bool activeOnly)
     {
-        var search = activeOnly
-            ? new StaffSearchDto { Status = SearchStaffStatus.Active }
-            : new StaffSearchDto { Status = SearchStaffStatus.All };
-        return (await GetListAsync(search))
-            .Select(e => new ListItem<string>(e.Id, e.SortableNameWithOffice)).ToList();
+        var status = activeOnly ? SearchStaffStatus.Active : SearchStaffStatus.All;
+        var spec = new StaffSearchDto(SortBy.NameAsc, null, null, null, null, status);
+        var users = _userManager.Users.ApplyFilter(spec);
+        return Task.FromResult(_mapper.Map<List<StaffViewDto>>(users)
+                .Select(e => new ListItem<string>(e.Id, e.SortableNameWithOffice))
+                .ToList()
+            as IReadOnlyList<ListItem<string>>);
     }
 
     public async Task<IList<string>> GetRolesAsync(string id)
@@ -79,7 +80,8 @@ public sealed class StaffService : IStaffService
         return await _userManager.GetRolesAsync(user);
     }
 
-    public async Task<IList<AppRole>> GetAppRolesAsync(string id) => AppRole.RolesAsAppRoles(await GetRolesAsync(id));
+    public async Task<IList<AppRole>> GetAppRolesAsync(string id) =>
+        AppRole.RolesAsAppRoles(await GetRolesAsync(id)).OrderBy(r => r.DisplayName).ToList();
 
     public async Task<bool> HasAppRoleAsync(string id, AppRole role)
     {
@@ -120,7 +122,7 @@ public sealed class StaffService : IStaffService
             ?? throw new EntityNotFoundException(typeof(ApplicationUser), resource.Id);
 
         user.Phone = resource.Phone;
-        user.Office = resource.OfficeId is null ? null : await _officeRepository.FindAsync(resource.OfficeId.Value);
+        user.Office = resource.OfficeId is null ? null : await _officeRepository.GetAsync(resource.OfficeId.Value);
         user.Active = resource.Active;
 
         return await _userManager.UpdateAsync(user);

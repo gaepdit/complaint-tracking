@@ -1,8 +1,8 @@
-﻿using Cts.AppServices.Permissions;
+using Cts.AppServices.Permissions;
 using Cts.AppServices.Staff;
 using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Identity;
-using Cts.WebApp.Platform.Models;
+using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,16 +10,14 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Cts.WebApp.Pages.Admin.Users;
 
-[Authorize(Policy = PolicyName.UserAdministrator)]
+[Authorize(Policy = nameof(Policies.UserAdministrator))]
 public class EditRolesModel : PageModel
 {
     // Constructor
     private readonly IStaffService _staffService;
     private readonly IAuthorizationService _authorization;
 
-    public EditRolesModel(
-        IStaffService staffService,
-        IAuthorizationService authorization)
+    public EditRolesModel(IStaffService staffService, IAuthorizationService authorization)
     {
         _staffService = staffService;
         _authorization = authorization;
@@ -45,7 +43,8 @@ public class EditRolesModel : PageModel
 
         DisplayStaff = staff;
         UserId = id;
-        CanEditDivisionManager = (await _authorization.AuthorizeAsync(User, PolicyName.DivisionManager)).Succeeded;
+        CanEditDivisionManager =
+            (await _authorization.AuthorizeAsync(User, nameof(Policies.DivisionManager))).Succeeded;
 
         await PopulateRoleSettingsAsync();
         return Page();
@@ -53,7 +52,8 @@ public class EditRolesModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        CanEditDivisionManager = (await _authorization.AuthorizeAsync(User, PolicyName.DivisionManager)).Succeeded;
+        CanEditDivisionManager =
+            (await _authorization.AuthorizeAsync(User, nameof(Policies.DivisionManager))).Succeeded;
 
         var roleDictionary = CanEditDivisionManager
             ? RoleSettings.ToDictionary(r => r.Name, r => r.IsSelected)

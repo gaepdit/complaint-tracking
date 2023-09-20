@@ -1,9 +1,8 @@
 ﻿@using Cts.WebApp.Platform.Settings
-@inject IHttpContextAccessor ContextAccessor
 @{
     var apiKey = ApplicationSettings.RaygunSettings.ApiKey;
     if (string.IsNullOrEmpty(apiKey)) return;
-    var identity = ContextAccessor.HttpContext?.User.Identity;
+    var identifier = User.Identity?.Name;
     var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "unknown";
 }
 
@@ -18,9 +17,11 @@
     rg4js('apiKey', '@apiKey');
     rg4js('enableCrashReporting', true);
     rg4js('withTags', ['@environment']);
-    @if (identity?.IsAuthenticated == true)
+    @if (identifier is not null)
     {
-        @:rg4js('setUser', {isAnonymous: false, identifier: '@identity.Name'});
+        @:rg4js('setUser', {isAnonymous: false, identifier: '@identifier'});
     }
 </script>
-<environment names="Production"><script>rg4js('enablePulse', true);</script></environment>
+<environment names="Production">
+    <script>rg4js('enablePulse', true);</script>
+</environment>

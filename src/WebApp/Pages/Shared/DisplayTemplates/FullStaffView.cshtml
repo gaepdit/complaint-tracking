@@ -1,13 +1,13 @@
 ﻿@model Cts.AppServices.Staff.Dto.StaffViewDto?
 @if (Model is null)
 {
-    <span class="text-muted">[Not entered]</span>
+    <span class="text-body-secondary">[Not entered]</span>
 }
 else
 {
     @Model.SortableFullName @if(!Model.Active)
     {
-        <span class="text-muted">[Inactive]</span>
+        <span class="text-body-secondary">[Inactive]</span>
     }
     @if(Model.Office is not null)
     {

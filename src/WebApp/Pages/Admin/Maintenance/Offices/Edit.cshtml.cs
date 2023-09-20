@@ -1,7 +1,7 @@
-﻿using Cts.AppServices.Offices;
+using Cts.AppServices.Offices;
 using Cts.AppServices.Permissions;
 using Cts.AppServices.Staff;
-using Cts.WebApp.Platform.Models;
+using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using FluentValidation;
 using GaEpd.AppLibrary.ListItems;
@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Cts.WebApp.Pages.Admin.Maintenance.Offices;
 
-[Authorize(Policy = PolicyName.SiteMaintainer)]
+[Authorize(Policy = nameof(Policies.SiteMaintainer))]
 public class EditModel : PageModel
 {
     // Constructor
@@ -41,7 +41,7 @@ public class EditModel : PageModel
     public Guid HighlightId { get; set; }
 
     public static MaintenanceOption ThisOption => MaintenanceOption.Office;
-    
+
     // Select lists
     public SelectList ActiveStaffMembers { get; private set; } = default!;
 

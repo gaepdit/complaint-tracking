@@ -1,5 +1,5 @@
 ﻿using Cts.WebApp.Pages;
-using Cts.WebApp.Platform.Models;
+using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using Microsoft.Extensions.Logging;
 

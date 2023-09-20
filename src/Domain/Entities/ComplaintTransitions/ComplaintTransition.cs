@@ -1,7 +1,6 @@
 ﻿using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
-using JetBrains.Annotations;
 using System.Text.Json.Serialization;
 
 namespace Cts.Domain.Entities.ComplaintTransitions;

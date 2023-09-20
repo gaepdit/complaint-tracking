@@ -14,15 +14,15 @@ public class GetStaff
         var user = new ApplicationUser
         {
             Id = Guid.Empty.ToString(),
-            GivenName = TestConstants.ValidName,
-            FamilyName = TestConstants.NewValidName,
-            Email = TestConstants.ValidEmail,
+            GivenName = TextData.ValidName,
+            FamilyName = TextData.NewValidName,
+            Email = TextData.ValidEmail,
             Active = false,
         };
 
         var itemList = new List<ApplicationUser> { user };
         var repoMock = Substitute.For<IOfficeRepository>();
-        repoMock.GetStaffMembersListAsync(Arg.Any<Guid>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
+        repoMock.GetActiveStaffMembersListAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
             .Returns(itemList);
         var managerMock = Substitute.For<IOfficeManager>();
         var userServiceMock = Substitute.For<IUserService>();

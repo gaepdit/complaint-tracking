@@ -1,0 +1,19 @@
+﻿@using Cts.Domain.DataProcessing
+@model string?
+@{
+}
+@if (string.IsNullOrEmpty(Model))
+{
+    <span class="text-body-secondary">[Not entered]</span>
+}
+else
+{
+    @if (Regexes.EmailRegex().IsMatch(Model))
+    {
+        <a href="mailto:@Model">@Model</a>
+    }
+    else
+    {
+        @Model
+    }
+}

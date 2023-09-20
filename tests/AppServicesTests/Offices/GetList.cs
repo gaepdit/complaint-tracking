@@ -1,4 +1,4 @@
-using Cts.AppServices.Offices;
+﻿using Cts.AppServices.Offices;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
@@ -9,22 +9,21 @@ namespace AppServicesTests.Offices;
 public class GetList
 {
     [Test]
-    public async Task WhenItemsExist_ReturnsList()
+    public async Task WhenItemsExist_ReturnsViewDtoList()
     {
-        var office = new Office(Guid.Empty, TestConstants.ValidName);
+        var office = new Office(Guid.Empty, TextData.ValidName);
         var user = new ApplicationUser
         {
             Id = Guid.NewGuid().ToString(),
-            GivenName = TestConstants.ValidName,
-            FamilyName = TestConstants.NewValidName,
-            Email = TestConstants.ValidEmail,
+            GivenName = TextData.ValidName,
+            FamilyName = TextData.NewValidName,
+            Email = TextData.ValidEmail,
         };
         office.Assignor = user;
         var itemList = new List<Office> { office };
 
         var repoMock = Substitute.For<IOfficeRepository>();
-        repoMock.GetListIncludeAssignorAsync(Arg.Any<CancellationToken>())
-            .Returns(itemList);
+        repoMock.GetListAsync(Arg.Any<CancellationToken>()).Returns(itemList);
         var managerMock = Substitute.For<IOfficeManager>();
         var userServiceMock = Substitute.For<IUserService>();
         var appService = new OfficeService(repoMock, managerMock,
@@ -36,11 +35,10 @@ public class GetList
     }
 
     [Test]
-    public async Task WhenDoesNotExist_ReturnsEmptyList()
+    public async Task WhenNoItemsExist_ReturnsEmptyList()
     {
         var repoMock = Substitute.For<IOfficeRepository>();
-        repoMock.GetListIncludeAssignorAsync(Arg.Any<CancellationToken>())
-            .Returns(new List<Office>());
+        repoMock.GetListAsync(Arg.Any<CancellationToken>()).Returns(new List<Office>());
         var managerMock = Substitute.For<IOfficeManager>();
         var userServiceMock = Substitute.For<IUserService>();
         var appService = new OfficeService(repoMock, managerMock,

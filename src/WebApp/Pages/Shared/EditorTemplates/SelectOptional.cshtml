@@ -1,0 +1,12 @@
+﻿@using Cts.WebApp.Platform.Constants
+@model object?
+@{
+    var items = (IEnumerable<SelectListItem>)ViewData["Items"]!;
+}
+
+<div class="form-floating">
+    <select asp-for="@__model" asp-items="items" class="form-select">
+        <option value="">@TextConstants.SelectTextEmpty</option>
+    </select>
+    <label asp-for="@__model" class="form-label"></label>
+</div>

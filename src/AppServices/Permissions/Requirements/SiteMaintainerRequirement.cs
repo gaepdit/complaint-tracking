@@ -10,9 +10,6 @@ internal class SiteMaintainerRequirement :
         AuthorizationHandlerContext context,
         SiteMaintainerRequirement requirement)
     {
-        if (!(context.User.Identity?.IsAuthenticated ?? false))
-            return Task.FromResult(0);
-
         if (context.User.IsInRole(RoleName.SiteMaintenance)
             || context.User.IsInRole(RoleName.DivisionManager))
             context.Succeed(requirement);

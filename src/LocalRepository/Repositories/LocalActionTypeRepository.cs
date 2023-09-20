@@ -3,11 +3,7 @@ using Cts.TestData;
 
 namespace Cts.LocalRepository.Repositories;
 
-/// <inheritdoc cref="IActionTypeRepository" />
-public sealed class LocalActionTypeRepository : BaseRepository<ActionType, Guid>, IActionTypeRepository
+public sealed class LocalActionTypeRepository : NamedEntityRepository<ActionType>, IActionTypeRepository
 {
     public LocalActionTypeRepository() : base(ActionTypeData.GetActionTypes) { }
-
-    public Task<ActionType?> FindByNameAsync(string name, CancellationToken token = default) =>
-        Task.FromResult(Items.SingleOrDefault(e => string.Equals(e.Name.ToUpper(), name.ToUpper())));
 }

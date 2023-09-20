@@ -1,5 +1,4 @@
 ﻿using Cts.AppServices.Offices;
-using Cts.AppServices.Staff;
 using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Entities.ComplaintTransitions;
 
@@ -11,8 +10,8 @@ public class ComplaintTransitionViewDto
     public DateTimeOffset CommittedDate { get; init; }
     public StaffViewDto? CommittedByUser { get; init; }
     public StaffViewDto? TransferredFromUser { get; init; }
-    public OfficeDisplayViewDto? TransferredFromOffice { get; init; }
+    public OfficeViewDto? TransferredFromOffice { get; init; }
     public StaffViewDto? TransferredToUser { get; init; }
-    public OfficeDisplayViewDto? TransferredToOffice { get; init; }
+    public OfficeViewDto? TransferredToOffice { get; init; }
     public string? Comment { get; init; }
 }

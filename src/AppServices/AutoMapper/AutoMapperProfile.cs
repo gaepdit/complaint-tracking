@@ -5,7 +5,6 @@ using Cts.AppServices.ComplaintActions;
 using Cts.AppServices.Complaints.Dto;
 using Cts.AppServices.Concerns;
 using Cts.AppServices.Offices;
-using Cts.AppServices.Staff;
 using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Entities.ActionTypes;
 using Cts.Domain.Entities.Attachments;
@@ -34,7 +33,7 @@ public class AutoMapperProfile : Profile
 
         CreateMap<Complaint, ComplaintPublicViewDto>();
         CreateMap<Complaint, ComplaintViewDto>()
-            .ForMember(d => d.CurrentUserOfficeId, o => o.Ignore());
+            .ForMember(dto => dto.CurrentUserOfficeId, expression => expression.Ignore());
         CreateMap<Complaint, ComplaintSearchResultDto>();
 
         CreateMap<ComplaintAction, ComplaintActionPublicViewDto>();
@@ -45,7 +44,7 @@ public class AutoMapperProfile : Profile
         CreateMap<Concern, ConcernViewDto>();
         CreateMap<Concern, ConcernUpdateDto>();
 
-        CreateMap<Office, OfficeDisplayViewDto>();
+        CreateMap<Office, OfficeViewDto>();
         CreateMap<Office, OfficeAdminViewDto>();
         CreateMap<Office, OfficeUpdateDto>();
     }

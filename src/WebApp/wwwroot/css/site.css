@@ -1,19 +1,106 @@
-/* Branding
+/* Branding colors
 -------------------------------------------------- */
-.bg-brand {
-    background-color: #105367;
+
+/* Change the base-hue variable to set all branding colors. */
+:root {
+    --base-hue: 210deg;
 }
 
-.bg-brand a {
-    color: #c0f1ff;
+/* Light mode theme colors */
+.text-bg-brand {
+    background-color: hsl(var(--base-hue), 75%, 91%);
+    color: hsl(210, 11%, 15%);
 }
 
-.bg-brand a:hover, .bg-brand a:focus {
-    color: #ddecf0;
+.text-bg-brand a {
+    color: hsl(var(--base-hue), 75%, 23%);
 }
 
-.text-brand {
-    color: #105367;
+.text-bg-brand a:hover,
+.text-bg-brand a:focus {
+    color: hsl(var(--base-hue), 100%, 25%);
+}
+
+.text-bg-brand a:active {
+    color: hsl(var(--base-hue), 100%, 15%);
+}
+
+.text-bg-brand .dropdown-item {
+    color: hsl(var(--base-hue), 75%, 35%);
+}
+
+.text-bg-brand .dropdown-item:focus,
+.text-bg-brand .dropdown-item:hover {
+    background-color: hsl(var(--base-hue), 100%, 15%);
+    color: hsl(var(--base-hue), 75%, 95%);
+}
+
+.text-bg-brand .dropdown-item.active,
+.text-bg-brand .dropdown-item:active {
+    color: hsl(var(--base-hue), 0%, 0%);
+    background-color: hsl(var(--base-hue), 75%, 70%)
+}
+
+.text-bg-brand .nav-link,
+.text-bg-brand .nav-link:hover,
+.text-bg-brand .nav-link:focus,
+.text-bg-brand .navbar-nav .nav-link.active,
+.text-bg-brand .navbar-nav .nav-link.show {
+    color: hsl(var(--base-hue), 20%, 20%);
+}
+
+.text-bg-brand .navbar-brand:focus-visible,
+.text-bg-brand .nav-link:focus-visible {
+    box-shadow: 0 0 0 .25rem hsla(var(--base-hue), 10%, 0%, .57);
+}
+
+/* Dark mode theme colors */
+[data-bs-theme="dark"] .text-bg-brand {
+    background-color: hsl(var(--base-hue), 75%, 13%);
+    color: hsl(var(--base-hue), 0%, 100%);
+}
+
+[data-bs-theme="dark"] .text-bg-brand a {
+    color: hsl(var(--base-hue), 100%, 92%);
+}
+
+[data-bs-theme="dark"] .text-bg-brand a:hover,
+[data-bs-theme="dark"] .text-bg-brand a:focus {
+    color: hsl(var(--base-hue), 100%, 85%);
+}
+
+[data-bs-theme="dark"] .text-bg-brand a:active {
+    color: hsl(var(--base-hue), 100%, 95%);
+}
+
+[data-bs-theme="dark"] .text-bg-brand .dropdown-item {
+    color: hsl(var(--base-hue), 75%, 90%);
+}
+
+[data-bs-theme="dark"] .text-bg-brand .dropdown-item:focus,
+[data-bs-theme="dark"] .text-bg-brand .dropdown-item:hover {
+    color: hsl(var(--base-hue), 75%, 90%);
+    background-color: hsl(var(--base-hue), 10%, 19%);
+}
+
+[data-bs-theme="dark"] .text-bg-brand .dropdown-item.active,
+[data-bs-theme="dark"] .text-bg-brand .dropdown-item:active {
+    color: hsl(var(--base-hue), 0%, 100%);
+    background-color: hsl(var(--base-hue), 65%, 29%)
+}
+
+[data-bs-theme="dark"] .text-bg-brand .nav-link {
+    color: hsl(var(--base-hue), 0%, 100%);
+}
+
+[data-bs-theme="dark"] .text-bg-brand .navbar-nav .nav-link.active,
+[data-bs-theme="dark"] .text-bg-brand .navbar-nav .nav-link.show {
+    color: hsl(var(--base-hue), 0%, 100%);
+}
+
+[data-bs-theme="dark"] .text-bg-brand .navbar-brand:focus-visible,
+[data-bs-theme="dark"] .text-bg-brand .nav-link:focus-visible {
+    box-shadow: 0 0 0 .25rem hsla(var(--base-hue), 10%, 100%, .57);
 }
 
 /* Adjust font sizing
@@ -30,78 +117,44 @@ html {
 
 /* Fix color accessibility
 -------------------------------------------------- */
-a {
-    color: #0366d6;
+[data-bs-theme="light"] .btn-primary {
+    color: hsl(var(--base-hue), 0%, 100%);
+    background-color: hsl(210, 76%, 43%);
+    border-color: hsl(210, 76%, 38%);
 }
 
-.btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+[data-bs-theme="light"] .text-warning {
+    color: hsl(45, 100%, 29%) !important;
 }
 
-.text-warning {
-    color: rgb(150, 113, 0) !important;
+[data-bs-theme="light"] .text-danger-emphasis {
+    color: hsl(355, 70%, 54%) !important;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+[data-bs-theme="light"] .bg-dark-subtle .text-danger-emphasis {
+    color: hsl(355, 98%, 24%) !important;
 }
 
-/* Sticky footer
--------------------------------------------------- */
-html {
-    position: relative;
-    min-height: 100%;
-}
-
-body {
-    /* Margin bottom by footer height */
-    /*margin-bottom: 60px;*/ /* Single height for one footer section */
-    margin-bottom: 120px; /* Double height for two footer sections */
-}
-
-.footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    white-space: nowrap;
-    line-height: 60px; /* Vertically center the text there */
-}
-
-/* Header and nav bar
+/* Nav bar logo
 -------------------------------------------------- */
 .img-logo {
-    height: 60px;
-}
-
-.nav-link:hover {
-    text-decoration: underline;
+    height: 40px;
 }
 
 /* Skip to content link
 -------------------------------------------------- */
 .skip-nav {
-    background: transparent;
-    color: #212121;
-    text-decoration: underline;
-    left: 0;
+    left: .2rem;
     padding: 1rem 1.5rem;
     position: absolute;
     top: -4.2rem;
     transition: all 0.2s ease-in-out;
-    z-index: 100;
+    z-index: 2002;
 }
 
 .skip-nav:focus {
-    background: #fff;
-    left: 0;
     outline: 0;
-    position: absolute;
-    top: 0;
-    transition: all 0.2s ease-in-out;
+    top: .2rem;
 }
 
 /* Button with image 
@@ -130,55 +183,80 @@ a[target]::after {
     content: ' \1f5d7';
 }
 
+/* Suppress external link icon */
 a[target].no-external-link::after {
     content: none;
-}
-
-/* Hover style for links with underline removed
--------------------------------------------------- */
-a.text-decoration-none:hover {
-    outline: 2px solid;
 }
 
 /* Banner for test site
 -------------------------------------------------- */
 .banner-test-site {
-    position: sticky;
+    position: fixed;
+    width: 100%;
+    height: 26px;
     top: 0;
-    z-index: 1020;
-    opacity: .9;
-    color: #333;
+    z-index: 2001;
+    color: hsl(var(--base-hue), 0%, 20%);
     font-weight: 700;
     font-size: 16px;
     font-family: system-ui;
     text-transform: uppercase;
     text-align: center;
-    text-shadow: 0 0 4px white;
-    background: repeating-linear-gradient(135deg, #f6da52bb, #f6da52bb 10px, #ffef80bb 10px, #ffef80bb 20px);
-    box-shadow: inset 0 -3px 7px rgba(130, 106, 15, 0.37);
+    text-shadow: 0 0 4px hsl(var(--base-hue), 0%, 100%);
+    background: repeating-linear-gradient(135deg, hsl(50, 90%, 64%), hsl(50, 90%, 64%) 10px, hsl(50, 100%, 75%) 10px, hsl(50, 100%, 75%) 20px);
+    box-shadow: inset 0 -3px 7px hsla(47, 79%, 28%, 0.37);
     padding: 1px 0;
 }
 
+.banner-test-site ~ header {
+    padding-top: 26px;
+}
+
+[data-bs-theme="dark"] .banner-test-site {
+    color: hsl(var(--base-hue), 0%, 100%);
+    text-shadow: 0 0 6px hsl(var(--base-hue), 0%, 0%);
+    background: repeating-linear-gradient(135deg, hsl(50, 90%, 36%), hsl(50, 90%, 36%) 10px, hsl(50, 40%, 25%) 10px, hsl(50, 40%, 25%) 20px);
+}
+
+/* Prevent banner from covering up link target elements. 
+   See: https://www.bram.us/2020/03/01/prevent-content-from-being-hidden-underneath-a-fixed-header-by-using-scroll-margin-top/ */
 :target {
-    /* Prevent banner from covering up link target elements. 
-       See: https://www.bram.us/2020/03/01/prevent-content-from-being-hidden-underneath-a-fixed-header-by-using-scroll-margin-top/ */
     scroll-margin-top: 1.5rem;
+}
+
+/* Card with details/summary
+-------------------------------------------------- */
+details.card:not([open]) summary.card-header {
+    border-bottom: none;
 }
 
 /* Print styles
 -------------------------------------------------- */
 @media print {
+    header.sticky-top {
+        position: static;
+    }
+
     .banner-test-site {
         position: static;
         text-shadow: none;
         box-shadow: none;
         border: 1px solid;
-        margin-top: 1rem;
+        margin-bottom: 1rem;
+        background: hsl(45, 100%, 80%);
     }
 
     .banner-test-site::after {
         content: "— Not for public distribution";
     }
+}
+
+/* Bootstrap Icons
+-------------------------------------------------- */
+.bi {
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
 }
 
 /* Fix for Bootstrap textarea with "floating" label
@@ -203,7 +281,7 @@ Application-specific styles
 
 /* SVG icons
 -------------------------------------------------- */
-svg:not(:root).svgicon {
+svg:not(:root).svg-icon {
     overflow: visible;
 }
 
@@ -211,7 +289,7 @@ svg:not(:root) {
     overflow: hidden;
 }
 
-.svgicon {
+.svg-icon {
     display: inline-block;
     font-size: inherit;
     overflow: visible;

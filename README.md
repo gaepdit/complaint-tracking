@@ -42,21 +42,34 @@ The solution contains the following projects:
 
 There are also corresponding unit test projects for each, plus a **TestData** project containing test data for development and testing.
 
+### Project organization
+
+The solution contains the following projects:
+
+* **Domain** — A class library containing the data models, business logic, and repository interfaces.
+* **AppServices** — A class library containing the services used by an application to interact with the domain.
+* **LocalRepository** — A class library implementing the repositories and data stores using static in-memory test data (for local development).
+* **EfRepository** — A class library implementing the repositories and data stores using Entity Framework and a database (as specified by the configured connection string).
+* **WebApp** — The front end web application and/or API.
+
+There are also corresponding unit test projects for each, plus a **TestData** project containing test data for development and testing.
+
 ### Development settings
 
-The following development settings configure the data stores and authentication. To change these settings, add an "appsettings.Development.json" file in the root of the "WebApp" folder with a `DevSettings` section. (Optionally, the settings file can also include an `AzureAd` section or database connection string as needed.)
+The following settings configure the data stores and authentication for development purposes. To change these settings, add an "appsettings.Development.json" file in the root of the "WebApp" folder with a `DevSettings` section and a top-level setting named `UseDevSettings`.
 
-- *UseInMemoryData* — 
-    - When `true`, the `LocalRepository` project is used for repositories and data stores. Data is initially populated from the `TestData` project. 
-    - When `false`, the `EfRepository` project is used, and a SQL Server database (as specified by the connection string) is seeded from the `TestData` project. <small>(If the connection string is missing, then a temporary EF Core in-memory database provider is used. This option is included for convenience and is not recommended.)</small>
-- *UseEfMigrations* — Uses Entity Framework migrations when `true`. When `false`, the database is deleted and recreated on each run. (Only applies if *UseInMemoryData* is `false`.)
+- *UseDevSettings* — Indicates whether the Dev settings should be applied.
+- *UseInMemoryData*
+    - When `true`, the "LocalRepository" project is used for repositories and data stores. Data is initially seeded from the "TestData" project. 
+    - When `false`, the "EfRepository" project is used, and a SQL Server database (as specified by the connection string) is created. <small>(If the connection string is missing, then a temporary EF Core in-memory database provider is used. This option is included for convenience and is not recommended.)</small>
+- *UseEfMigrations* — Uses Entity Framework database migrations when `true`. When `false`, the database is deleted and recreated on each run. (Only applies if *UseInMemoryData* is `false`.) The database is seeded with data from the "TestData" project only when `UseEfMigrations` is `false`. Otherwise, the database is left empty.
 - *UseAzureAd* — If `true`, connects to Azure AD for user authentication. (The app must be registered in the Azure portal, and configuration added to the settings file.) If `false`, authentication is simulated using test user data.
 - *LocalUserIsAuthenticated* — Simulates a successful login with a test account when `true`. Simulates a failed login when `false`. (Only applies if *UseAzureAd* is `false`.)
 - *LocalUserIsStaff* — Adds the Staff and Site Maintenance Roles to the logged in account when `true` or no roles when `false`. (Applies whether *UserAzureAd* is `true` or `false`.)
-- *LocalUserIsAdmin* — Adds all App Roles to the logged in account when `true` or no roles when `false`. (Applies whether *UserAzureAd* is `true` or `false`.)
-- *UseInMemoryFiles* — If `true`, files are seeded from the TestData project and stored in memory. If `false`, attachment files are saved/loaded from the file system.
+- *LocalUserIsAdmin* — Adds all App Roles to the logged in account when `true` or no roles when `false`. (Applies whether *UserAzureAd* is `true` or `false`.)     <small>An alternative way to create admin users is to add them to the `SeedAdminUsers` setting as an array of email addresses.</small>
+- *UseSecurityHeadersLocally* — Sets whether to include HTTP security headers when running locally in the Development environment.
 
-When running in the production environment, the settings are automatically set as follows:
+When `UseDevSettings` is missing or set to `false` or if the `DevSettings` section is missing, the settings are automatically set to production defaults as follows:
 
 ```csharp
 UseInMemoryData = false,
@@ -65,7 +78,7 @@ UseAzureAd = true,
 LocalUserIsAuthenticated = false,
 LocalUserIsStaff = false,
 LocalUserIsAdmin = false,
-UseInMemoryFiles = false,
+UseSecurityHeadersInDev: false
 ```
 
 Here's a visualization of how the settings configure data storage at runtime.
@@ -125,3 +138,15 @@ flowchart LR
         B --> D
     end
 ```
+
+### Entity Framework database migrations
+
+Instructions for adding a new Entity Framework database migration:
+
+1. Build the solution.
+
+2. Open a command prompt to the "./src/EfRepository/" folder.
+
+3. Run the following command with an appropriate migration name:
+
+   `dotnet ef migrations add NAME_OF_MIGRATION`

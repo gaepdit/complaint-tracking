@@ -3,22 +3,22 @@ using Cts.Domain.Identity;
 
 namespace Cts.Domain.Entities.ComplaintTransitions;
 
-/// <inheritdoc />
 public class ComplaintTransitionManager : IComplaintTransitionManager
 {
-    public ComplaintTransition Create(Complaint complaint, TransitionType type, ApplicationUser? user)
+    public ComplaintTransition Create(Complaint complaint, TransitionType type, ApplicationUser? user, string? createdById)
     {
-        var transition = new ComplaintTransition(Guid.NewGuid(), complaint, type, user);
+        var item = new ComplaintTransition(Guid.NewGuid(), complaint, type, user);
+        item.SetCreator(createdById);
 
         switch (type)
         {
             case TransitionType.New:
-                transition.TransferredToOffice = complaint.CurrentOffice;
+                item.TransferredToOffice = complaint.CurrentOffice;
                 break;
 
             case TransitionType.Assigned:
-                transition.TransferredToUser = complaint.CurrentOwner;
-                transition.TransferredToOffice = complaint.CurrentOffice;
+                item.TransferredToUser = complaint.CurrentOwner;
+                item.TransferredToOffice = complaint.CurrentOffice;
                 break;
 
             case TransitionType.SubmittedForReview:
@@ -53,6 +53,6 @@ public class ComplaintTransitionManager : IComplaintTransitionManager
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }
 
-        return transition;
+        return item;
     }
 }

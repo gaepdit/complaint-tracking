@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using Cts.AppServices.Offices;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Offices;
@@ -15,15 +15,14 @@ public class FindForUpdate
         var user = new ApplicationUser
         {
             Id = Guid.NewGuid().ToString(),
-            GivenName = TestConstants.ValidName,
-            FamilyName = TestConstants.NewValidName,
-            Email = TestConstants.ValidEmail,
+            GivenName = TextData.ValidName,
+            FamilyName = TextData.NewValidName,
+            Email = TextData.ValidEmail,
         };
-        var office = new Office(Guid.Empty, TestConstants.ValidName) { Assignor = user };
+        var office = new Office(Guid.Empty, TextData.ValidName) { Assignor = user };
 
         var repoMock = Substitute.For<IOfficeRepository>();
-        repoMock.FindIncludeAssignorAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
-            .Returns(office);
+        repoMock.FindIncludeAssignorAsync(office.Id, Arg.Any<CancellationToken>()).Returns(office);
         var managerMock = Substitute.For<IOfficeManager>();
         var userServiceMock = Substitute.For<IUserService>();
         var appService = new OfficeService(repoMock, managerMock,
@@ -39,8 +38,7 @@ public class FindForUpdate
     {
         var id = Guid.Empty;
         var repoMock = Substitute.For<IOfficeRepository>();
-        repoMock.FindAsync(id, Arg.Any<CancellationToken>())
-            .Returns((Office?)null);
+        repoMock.FindAsync(id, Arg.Any<CancellationToken>()).Returns((Office?)null);
         var managerMock = Substitute.For<IOfficeManager>();
         var mapperMock = Substitute.For<IMapper>();
         var userServiceMock = Substitute.For<IUserService>();

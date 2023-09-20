@@ -1,9 +1,9 @@
-﻿using Cts.AppServices.BaseDto;
+﻿using Cts.AppServices.DtoBase;
 
 namespace Cts.AppServices.Concerns;
 
-public class ConcernViewDto : SimpleNamedEntityViewDto { }
+public record ConcernViewDto(Guid Id, string Name, bool Active) : StandardNamedEntityViewDto(Id, Name, Active);
 
-public class ConcernCreateDto : SimpleNamedEntityCreateDto { }
+public record ConcernCreateDto(string Name) : StandardNamedEntityCreateDto(Name);
 
-public class ConcernUpdateDto : SimpleNamedEntityUpdateDto { }
+public record ConcernUpdateDto(Guid Id, string Name, bool Active) : StandardNamedEntityUpdateDto(Id, Name, Active);

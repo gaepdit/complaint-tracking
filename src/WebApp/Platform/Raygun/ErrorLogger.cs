@@ -3,7 +3,6 @@ using Mindscape.Raygun4Net.AspNetCore;
 
 namespace Cts.WebApp.Platform.Raygun;
 
-/// <inheritdoc />
 public class ErrorLogger : IErrorLogger
 {
     private readonly IRaygunAspNetCoreClientProvider _clientProvider;
@@ -54,5 +53,6 @@ public interface IErrorLogger
     /// </example>
     /// <param name="exception">The exception to deliver.</param>
     /// <param name="customData">An optional key-value collection of custom data that will be added to the payload.</param>
+    // ReSharper disable once UnusedMember.Global
     Task LogErrorAsync(Exception exception, Dictionary<string, object>? customData = null);
 }

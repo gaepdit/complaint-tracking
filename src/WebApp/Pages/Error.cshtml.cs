@@ -30,5 +30,5 @@ public class ErrorModel : PageModel
         Status = statusCode;
     }
 
-    public void OnPost() => _logger.LogWarning("Error page Post method accessed");
+    public void OnPost() => _logger.LogError("Error page shown from Post method");
 }

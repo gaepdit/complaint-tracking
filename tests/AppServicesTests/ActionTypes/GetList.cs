@@ -10,7 +10,7 @@ public class GetList
     [Test]
     public async Task WhenItemsExist_ReturnsList()
     {
-        var itemList = new List<ActionType> { new(Guid.Empty, TestConstants.ValidName) };
+        var itemList = new List<ActionType> { new(Guid.Empty, TextData.ValidName) };
         var repoMock = Substitute.For<IActionTypeRepository>();
         repoMock.GetListAsync(Arg.Any<CancellationToken>())
             .Returns(itemList);

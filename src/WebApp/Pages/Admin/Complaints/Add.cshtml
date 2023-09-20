@@ -1,11 +1,10 @@
 ﻿@page
-@using Cts.Domain.ValueObjects;
+@using Cts.Domain.ValueObjects
 @using Cts.WebApp.Platform.Constants
-@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model AddModel
 @{
     ViewData["Title"] = "Add A New Complaint";
-    ViewData["NoAnchors"] = true;
+    ViewData["NoAnchors"] = "True";
     var phoneTypesSelectList = Html.GetEnumSelectList<PhoneType>().ToArray();
 }
 
@@ -19,7 +18,7 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<div class="p-3 border rounded-3 bg-light">
+<div class="p-3 border rounded-3 bg-light-subtle">
 <form method="post">
 <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
 
@@ -358,6 +357,6 @@
     <button id="SubmitButton" type="submit" class="btn btn-primary col-md-4 me-2">Add New Complaint</button>
     <a asp-page="Index" class="btn btn-outline-secondary col-md-2">Cancel</a>
 </div>
-<div class="text-danger mt-3">* denotes a required field</div>
+<div class="text-danger-emphasis mt-3">* denotes a required field</div>
 </form>
 </div>

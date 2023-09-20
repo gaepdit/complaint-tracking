@@ -7,7 +7,6 @@ using System.Linq.Expressions;
 
 namespace Cts.LocalRepository.Repositories;
 
-/// <inheritdoc cref="IComplaintRepository" />
 public sealed class LocalComplaintRepository : BaseRepository<Complaint, int>, IComplaintRepository
 {
     internal ICollection<ComplaintAction> ComplaintActionItems { get; }

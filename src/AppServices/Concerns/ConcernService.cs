@@ -42,8 +42,7 @@ public sealed class ConcernService : IConcernService
 
     public async Task<Guid> CreateAsync(string name, CancellationToken token = default)
     {
-        var item = await _manager.CreateAsync(name, token);
-        item.SetCreator((await _userService.GetCurrentUserAsync())?.Id);
+        var item = await _manager.CreateAsync(name, (await _userService.GetCurrentUserAsync())?.Id, token);
         await _repository.InsertAsync(item, token: token);
         return item.Id;
     }
