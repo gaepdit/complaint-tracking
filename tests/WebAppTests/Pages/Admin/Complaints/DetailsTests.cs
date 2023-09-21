@@ -3,7 +3,7 @@ using Cts.AppServices.Complaints.Dto;
 using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Staff;
 using Cts.AppServices.Staff.Dto;
-using Cts.WebApp.Pages.Admin.Complaints;
+using Cts.WebApp.Pages.Staff.Complaints;
 using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;

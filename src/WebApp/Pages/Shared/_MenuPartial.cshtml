@@ -26,7 +26,13 @@
                 @if (isStaff)
                 {
                     <li class="nav-item">
-                        <a class="nav-link" asp-page="/Complaints/Index">Complaints</a>
+                        <a class="nav-link" asp-page="/Staff/Complaints/Index">Complaints</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-page="/Public/Index">Search</a>
                     </li>
                 }
             </ul>

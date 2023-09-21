@@ -56,7 +56,7 @@ else
                 <a href="api-docs/">API docs</a>
                 <ul>
                     <li>
-                        <a href="/api/complaints">Public list</a>
+                        <a href="/api/complaints">Public complaints list</a>
                         <ul>
                             <li>
                                 <a href="/api/complaints/1">Closed complaint</a>
@@ -94,30 +94,30 @@ else
             </li>
         </ul>
 
-        <h3>Admin pages</h3>
+        <h3>Staff pages</h3>
         <ul>
             <li>
-                <a asp-page="/Admin/Complaints/Index">Complaint search</a>
+                <a asp-page="/Staff/Complaints/Index">Complaint search</a>
                 <ul>
                     <li>
-                        <a asp-page="/Admin/Complaints/Details" asp-route-id="1">Closed complaint</a>
+                        <a asp-page="/Staff/Complaints/Details" asp-route-id="1">Closed complaint</a>
                     </li>
                     <li>
-                        <a asp-page="/Admin/Complaints/Details" asp-route-id="2">Open complaint</a>
+                        <a asp-page="/Staff/Complaints/Details" asp-route-id="2">Open complaint</a>
                     </li>
                     <li>
-                        <a asp-page="/Admin/Complaints/Details" asp-route-id="3">Another closed complaint</a>
+                        <a asp-page="/Staff/Complaints/Details" asp-route-id="3">Another closed complaint</a>
                     </li>
                     <li>
-                        <a asp-page="/Admin/Complaints/Details" asp-route-id="4">Non-existent complaint ID</a>
+                        <a asp-page="/Staff/Complaints/Details" asp-route-id="4">Non-existent complaint ID</a>
                     </li>
                     <li>
-                        <a asp-page="/Admin/Complaints/Details" asp-route-id="5">Deleted complaint</a>
+                        <a asp-page="/Staff/Complaints/Details" asp-route-id="5">Deleted complaint</a>
                     </li>
                 </ul>
             </li>
             <li>
-                <a asp-page="/Admin/Complaints/Add">Add new complaint</a>
+                <a asp-page="/Staff/Complaints/Add">Add new complaint</a>
             </li>
             <li>
                 <a asp-page="/Account/Index">Account page</a>
@@ -132,33 +132,33 @@ else
                 API
                 <ul>
                     <li>
-                        <a href="/api/complaints/admin">Admin list</a>
+                        <a href="/api/staff/complaints">Staff complaints list</a>
                         <ul>
                             <li>
-                                <a href="/api/complaints/admin?DeletedStatus=Deleted">Only deleted</a>
+                                <a href="/api/staff/complaints?DeletedStatus=Deleted">Only deleted</a>
                             </li>
                             <li>
-                                <a href="/api/complaints/admin/1">Closed complaint</a>
+                                <a href="/api/staff/complaints/1">Closed complaint</a>
                             </li>
                             <li>
-                                <a href="/api/complaints/admin/2">Open complaint</a>
+                                <a href="/api/staff/complaints/2">Open complaint</a>
                             </li>
                             <li>
-                                <a href="/api/complaints/admin/3">Another closed complaint</a>
+                                <a href="/api/staff/complaints/3">Another closed complaint</a>
                             </li>
                             <li>
-                                <a href="/api/complaints/admin/4">Non-existent ID</a>
+                                <a href="/api/staff/complaints/4">Non-existent ID</a>
                             </li>
                             <li>
-                                <a href="/api/complaints/admin/5">Deleted complaint</a>
+                                <a href="/api/staff/complaints/5">Deleted complaint</a>
                             </li>
                         </ul>
                     </li>
                     <li>
-                        <a href="/api/complaints/admin/2">Admin complaint</a>
+                        <a href="/api/staff/complaints/2">Complaint (staff view)</a>
                     </li>
                     <li>
-                        <a href="/api/complaints/admin/4">Deleted complaint</a>
+                        <a href="/api/staff/complaints/4">Deleted complaint</a>
                     </li>
                 </ul>
             </li>
