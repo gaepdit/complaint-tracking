@@ -7,7 +7,7 @@ namespace Cts.AppServices.Offices;
 
 public record OfficeViewDto(Guid Id, string Name, bool Active) : StandardNamedEntityViewDto(Id, Name, Active);
 
-public record OfficeAdminViewDto(Guid Id, string Name, bool Active) : StandardNamedEntityViewDto(Id, Name, Active)
+public record OfficeWithAssignorViewDto(Guid Id, string Name, bool Active) : StandardNamedEntityViewDto(Id, Name, Active)
 {
     public StaffViewDto? Assignor { get; init; }
 

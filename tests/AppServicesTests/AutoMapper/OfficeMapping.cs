@@ -28,7 +28,7 @@ public class OfficeMapping
     {
         var item = new Office(Guid.NewGuid(), TextData.ValidName);
 
-        var result = AppServicesTestsSetup.Mapper!.Map<OfficeAdminViewDto>(item);
+        var result = AppServicesTestsSetup.Mapper!.Map<OfficeWithAssignorViewDto>(item);
 
         using (new AssertionScope())
         {

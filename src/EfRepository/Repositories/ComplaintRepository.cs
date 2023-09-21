@@ -6,9 +6,9 @@ using System.Linq.Expressions;
 
 namespace Cts.EfRepository.Repositories;
 
-public sealed class ComplaintRepository : BaseRepository<Complaint, int>, IComplaintRepository
+public sealed class ComplaintRepository : BaseRepository<Complaint, int, AppDbContext>, IComplaintRepository
 {
-    public ComplaintRepository(DbContext context) : base(context) { }
+    public ComplaintRepository(AppDbContext context) : base(context) { }
 
     public async Task<IReadOnlyCollection<ComplaintAction>> GetComplaintActionsListAsync(
         Expression<Func<ComplaintAction, bool>> predicate, CancellationToken token = default) =>

@@ -49,14 +49,14 @@
 ## Complaint user actions
 
 * `/Admin/Complaints/Add`
-* `/Admin/Complaints/Details/Approve/{id}`
-* `/Admin/Complaints/Details/Assign/{id}`
-* `/Admin/Complaints/Details/Delete/{id}`
-* `/Admin/Complaints/Details/Edit/{id}`
-* `/Admin/Complaints/Details/Reopen/{id}`
-* `/Admin/Complaints/Details/RequestReview/{id}`
-* `/Admin/Complaints/Details/Restore/{id}`
-* `/Admin/Complaints/Details/Return/{id}`
+* `/Admin/Complaints/Approve/{id}`
+* `/Admin/Complaints/Assign/{id}`
+* `/Admin/Complaints/Delete/{id}`
+* `/Admin/Complaints/Edit/{id}`
+* `/Admin/Complaints/Reopen/{id}`
+* `/Admin/Complaints/RequestReview/{id}`
+* `/Admin/Complaints/Restore/{id}`
+* `/Admin/Complaints/Return/{id}`
 
 ### Redirects
 

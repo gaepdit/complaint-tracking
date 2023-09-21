@@ -21,7 +21,7 @@ public interface IOfficeRepository : INamedEntityRepository<Office>
     /// </summary>
     /// <param name="id">The Id of the entity.</param>
     /// <param name="token"><see cref="T:System.Threading.CancellationToken"/></param>
-    /// <returns>An entity.</returns>
+    /// <returns>An Office.</returns>
     Task<Office?> FindIncludeAssignorAsync(Guid id, CancellationToken token = default);
 
     /// <summary>
@@ -30,6 +30,6 @@ public interface IOfficeRepository : INamedEntityRepository<Office>
     /// Returns an empty collection if none exist.
     /// </summary>
     /// <param name="token"><see cref="T:System.Threading.CancellationToken"/></param>
-    /// <returns>A read-only collection of entities.</returns>
+    /// <returns>A read-only collection of Offices.</returns>
     Task<IReadOnlyCollection<Office>> GetListIncludeAssignorAsync(CancellationToken token = default);
 }
