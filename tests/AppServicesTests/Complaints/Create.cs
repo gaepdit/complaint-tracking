@@ -66,8 +66,8 @@ public class Create
 
         var item = new ComplaintCreateDto
         {
-            ReceivedDate = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Local),
-            ReceivedTime = new DateTime(2020, 2, 2, 1, 15, 0, DateTimeKind.Local),
+            ReceivedDate = new DateOnly(2000, 1, 1),
+            ReceivedTime = new TimeOnly(1, 15, 0),
             CurrentOfficeId = office.Id,
         };
 

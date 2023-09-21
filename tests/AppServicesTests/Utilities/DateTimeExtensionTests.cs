@@ -7,20 +7,28 @@ namespace AppServicesTests.Utilities;
 public class DateTimeExtensionTests
 {
     [TestCaseSource(nameof(_testCases))]
-    public void ReturnsCorrectly(DateTime input, string output)
+    public void ReturnsCorrectly(string input, string output)
     {
-        var result = input.RoundToNearestQuarterHour();
-        result.ToString(CultureInfo.InvariantCulture).Should().Be(output);
+        DateTime.ParseExact(input, D, I)
+            .TimeRoundedToQuarterHour()
+            .Should().Be(TimeOnly.ParseExact(output, T, I));
     }
+
+    private const string D = "yyyy-MM-dd HH:mm:ss";
+    private const string T = "HH:mm:ss";
+    private static readonly CultureInfo I = CultureInfo.InvariantCulture;
 
     [SuppressMessage("ReSharper", "HeapView.BoxingAllocation")]
     private static object[] _testCases =
     {
-        new object[] { new DateTime(2000, 01, 01, 12, 00, 00, DateTimeKind.Unspecified), "01/01/2000 12:00:00" },
-        new object[] { new DateTime(2000, 01, 01, 12, 00, 01, DateTimeKind.Unspecified), "01/01/2000 12:00:00" },
-        new object[] { new DateTime(2000, 01, 01, 12, 01, 00, DateTimeKind.Unspecified), "01/01/2000 12:00:00" },
-        new object[] { new DateTime(2000, 01, 01, 12, 07, 59, DateTimeKind.Unspecified), "01/01/2000 12:00:00" },
-        new object[] { new DateTime(2000, 01, 01, 12, 08, 00, DateTimeKind.Unspecified), "01/01/2000 12:15:00" },
-        new object[] { new DateTime(2000, 01, 01, 12, 59, 00, DateTimeKind.Unspecified), "01/01/2000 13:00:00" },
+        new object[] { "2000-01-01 12:00:00", "12:00:00" },
+        new object[] { "2000-01-01 12:00:01", "12:00:00" },
+        new object[] { "2000-01-01 12:01:00", "12:00:00" },
+        new object[] { "2000-01-01 12:07:59", "12:00:00" },
+        new object[] { "2000-01-01 12:08:00", "12:15:00" },
+        new object[] { "2000-01-01 12:59:00", "13:00:00" },
+        new object[] { "2000-01-01 00:00:00", "00:00:00" },
+        new object[] { "2000-01-01 00:01:00", "00:00:00" },
+        new object[] { "2000-01-01 23:59:00", "00:00:00" },
     };
 }

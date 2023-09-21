@@ -152,7 +152,8 @@ public sealed class ComplaintService : IComplaintService
 
     private async Task AddTransitionAsync(
         Complaint complaint, TransitionType type, ApplicationUser? user, CancellationToken token) =>
-        await _complaints.InsertTransitionAsync(_transitions.Create(complaint, type, user, user?.Id), autoSave: false, token);
+        await _complaints.InsertTransitionAsync(_transitions.Create(complaint, type, user, user?.Id), autoSave: false,
+            token);
 
     internal async Task<Complaint> CreateComplaintFromDtoAsync(
         ComplaintCreateDto resource, string? currentUserId, CancellationToken token)
@@ -162,8 +163,7 @@ public sealed class ComplaintService : IComplaintService
         // Properties: Meta-data
         if (!string.IsNullOrEmpty(currentUserId))
             complaint.EnteredBy = await _users.GetUserAsync(currentUserId);
-        complaint.ReceivedDate = DateTime.SpecifyKind(resource.ReceivedDate, DateTimeKind.Local)
-            .Add(resource.ReceivedTime.TimeOfDay);
+        complaint.ReceivedDate = resource.ReceivedDate.ToDateTime(resource.ReceivedTime);
         complaint.ReceivedBy = await _users.GetUserAsync(resource.ReceivedById!);
 
         // Properties: Caller
