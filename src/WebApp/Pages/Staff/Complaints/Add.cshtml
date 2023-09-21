@@ -8,14 +8,6 @@
     var phoneTypesSelectList = Html.GetEnumSelectList<PhoneType>().ToArray();
 }
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    <script src="~/js/copyContactInfo.js"></script>
-    <script src="~/lib/axios/axios.min.js"></script>
-    <script src="~/js/staffSelect.js"></script>
-    <script>setUpStaffDropdown("Item_CurrentOfficeId","Item_CurrentOwnerId",true);</script>
-}
-
 <h1>@ViewData["Title"]</h1>
 
 <div class="p-3 border rounded-3 bg-light-subtle">
@@ -360,3 +352,11 @@
 <div class="text-danger-emphasis mt-3">* denotes a required field</div>
 </form>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/copyContactInfo.js"></script>
+    <script src="~/lib/axios/axios.min.js"></script>
+    <script src="~/js/staffSelect.js"></script>
+    <script>setUpStaffDropdown("Item_CurrentOfficeId","Item_CurrentOwnerId",true);</script>
+}

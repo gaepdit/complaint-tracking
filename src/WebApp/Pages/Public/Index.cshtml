@@ -1,15 +1,10 @@
 ﻿@page "{handler?}"
-@using Cts.WebApp.Pages.Shared.DisplayTemplates
 @using Cts.AppServices.Complaints.Dto
+@using Cts.WebApp.Pages.Shared.DisplayTemplates
 @using Cts.WebApp.Platform.Constants
-@using GaEpd.AppLibrary.Pagination
 @model IndexModel
 @{
     ViewData["Title"] = "Public Complaint Search";
-}
-
-@section Scripts {
-    <script src="~/js/formSearch.js"></script>
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -152,16 +147,16 @@
                 <tr>
                     <th scope="col" class="text-nowrap">
                         <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                           asp-route-Sort="@(Model.Spec.Sort == SortBy.IdAsc ? SortBy.IdDesc : SortBy.IdAsc)">
+                           asp-route-Sort="@(Model.Spec.Sort == SortBy.IdAsc ? nameof(SortBy.IdDesc) : nameof(SortBy.IdAsc))">
                             ID @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow,
-                                   new { up = SortBy.IdAsc.ToString(), down = SortBy.IdDesc.ToString() })
+                                   new { up = nameof(SortBy.IdAsc), down = nameof(SortBy.IdDesc) })
                         </a>
                     </th>
                     <th scope="col" class="text-nowrap">
                         <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                           asp-route-Sort="@(Model.Spec.Sort == SortBy.ReceivedDateAsc ? SortBy.ReceivedDateDesc : SortBy.ReceivedDateAsc)">
+                           asp-route-Sort="@(Model.Spec.Sort == SortBy.ReceivedDateAsc ? nameof(SortBy.ReceivedDateDesc) : nameof(SortBy.ReceivedDateAsc))">
                             Date Received @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow,
-                                              new { up = SortBy.ReceivedDateAsc.ToString(), down = SortBy.ReceivedDateDesc.ToString() })
+                                              new { up = nameof(SortBy.ReceivedDateAsc), down = nameof(SortBy.ReceivedDateDesc) })
                         </a>
                     </th>
                     <th scope="col">Source/Location</th>
@@ -175,7 +170,7 @@
                 {
                     <tr>
                         <th scope="row">
-                            <a asp-page="./Complaints/Index" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">@item.Id</a>
+                            <a asp-page="./Complaints/Index" asp-route-id="@item.Id.ToString()" class="btn btn-outline-primary btn-sm">@item.Id.ToString()</a>
                         </th>
                         <td class="text-nowrap">@Html.DisplayFor(m => item.ReceivedDate, DisplayTemplate.ShortDate)</td>
                         <td>
@@ -205,4 +200,8 @@
             <partial name="_PaginationNav" model="Model.PaginationNav" />
         }
     </div>
+}
+
+@section Scripts {
+    <script src="~/js/formSearch.js"></script>
 }

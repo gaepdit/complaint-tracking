@@ -43,7 +43,7 @@ public class EditModel : PageModel
     public static MaintenanceOption ThisOption => MaintenanceOption.Office;
 
     // Select lists
-    public SelectList ActiveStaffMembers { get; private set; } = default!;
+    public SelectList ActiveStaffMembersSelectList { get; private set; } = default!;
 
     // Methods
     public async Task<IActionResult> OnGetAsync(Guid? id)
@@ -77,5 +77,5 @@ public class EditModel : PageModel
     }
 
     private async Task PopulateSelectListsAsync() =>
-        ActiveStaffMembers = (await _staffService.GetStaffListItemsAsync(true)).ToSelectList();
+        ActiveStaffMembersSelectList = (await _staffService.GetStaffListItemsAsync(true)).ToSelectList();
 }

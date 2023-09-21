@@ -39,58 +39,21 @@ else
                         <a asp-page="/Public/Complaints/Index" asp-route-id="1">Closed complaint</a>
                     </li>
                     <li>
-                        <a asp-page="/Public/Complaints/Index" asp-route-id="2">Open complaint</a>
+                        <a asp-page="/Public/Complaints/Index" asp-route-id="2">Open complaint (404)</a>
                     </li>
                     <li>
                         <a asp-page="/Public/Complaints/Index" asp-route-id="3">Another closed complaint</a>
                     </li>
                     <li>
-                        <a asp-page="/Public/Complaints/Index" asp-route-id="4">Non-existent complaint ID</a>
+                        <a asp-page="/Public/Complaints/Index" asp-route-id="4">Non-existent complaint ID (404)</a>
                     </li>
                     <li>
-                        <a asp-page="/Public/Complaints/Index" asp-route-id="5">Deleted complaint</a>
+                        <a asp-page="/Public/Complaints/Index" asp-route-id="5">Deleted complaint (404)</a>
                     </li>
                 </ul>
             </li>
             <li>
                 <a href="api-docs/">API docs</a>
-                <ul>
-                    <li>
-                        <a href="/api/complaints">Public complaints list</a>
-                        <ul>
-                            <li>
-                                <a href="/api/complaints/1">Closed complaint</a>
-                            </li>
-                            <li>
-                                <a href="/api/complaints/2">Open complaint</a>
-                            </li>
-                            <li>
-                                <a href="/api/complaints/3">Another closed complaint</a>
-                            </li>
-                            <li>
-                                <a href="/api/complaints/4">Non-existent complaint ID</a>
-                            </li>
-                            <li>
-                                <a href="/api/complaints/5">Deleted complaint</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="/api/offices">Office list</a>
-                        <ul>
-
-                            <li>
-                                <a href="/api/offices/60000000-0000-0000-0000-000000000002">An office</a>
-                            </li>
-                            <li>
-                                <a href="/api/offices/60000000-0000-0000-0000-000000000002/staff">Office staff</a>
-                            </li>
-                            <li>
-                                <a href="/api/offices/60000000-0000-0000-0000-000000000002/staff-for-assignment">Office staff for assignment</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
             </li>
         </ul>
 
@@ -109,7 +72,7 @@ else
                         <a asp-page="/Staff/Complaints/Details" asp-route-id="3">Another closed complaint</a>
                     </li>
                     <li>
-                        <a asp-page="/Staff/Complaints/Details" asp-route-id="4">Non-existent complaint ID</a>
+                        <a asp-page="/Staff/Complaints/Details" asp-route-id="4">Non-existent complaint ID (404)</a>
                     </li>
                     <li>
                         <a asp-page="/Staff/Complaints/Details" asp-route-id="5">Deleted complaint</a>
@@ -127,40 +90,6 @@ else
             </li>
             <li>
                 <a asp-page="/Admin/Maintenance/Index">Site maintenance</a>
-            </li>
-            <li>
-                API
-                <ul>
-                    <li>
-                        <a href="/api/staff/complaints">Staff complaints list</a>
-                        <ul>
-                            <li>
-                                <a href="/api/staff/complaints?DeletedStatus=Deleted">Only deleted</a>
-                            </li>
-                            <li>
-                                <a href="/api/staff/complaints/1">Closed complaint</a>
-                            </li>
-                            <li>
-                                <a href="/api/staff/complaints/2">Open complaint</a>
-                            </li>
-                            <li>
-                                <a href="/api/staff/complaints/3">Another closed complaint</a>
-                            </li>
-                            <li>
-                                <a href="/api/staff/complaints/4">Non-existent ID</a>
-                            </li>
-                            <li>
-                                <a href="/api/staff/complaints/5">Deleted complaint</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="/api/staff/complaints/2">Complaint (staff view)</a>
-                    </li>
-                    <li>
-                        <a href="/api/staff/complaints/4">Deleted complaint</a>
-                    </li>
-                </ul>
             </li>
         </ul>
     </div>

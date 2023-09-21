@@ -33,12 +33,12 @@ public class EditModel : PageModel
 
     // Properties
     [BindProperty]
-    public StaffUpdateDto UpdateStaff { get; set; } = default!;
+    public StaffUpdateDto Item { get; set; } = default!;
 
     public StaffViewDto DisplayStaff { get; private set; } = default!;
 
     // Select lists
-    public SelectList OfficeItems { get; private set; } = default!;
+    public SelectList OfficesSelectList { get; private set; } = default!;
 
     // Methods
     public async Task<IActionResult> OnGetAsync(string? id)
@@ -48,7 +48,7 @@ public class EditModel : PageModel
         if (staff is null) return NotFound();
 
         DisplayStaff = staff;
-        UpdateStaff = DisplayStaff.AsUpdateDto();
+        Item = DisplayStaff.AsUpdateDto();
 
         await PopulateSelectListsAsync();
         return Page();
@@ -56,11 +56,11 @@ public class EditModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        await _validator.ApplyValidationAsync(UpdateStaff, ModelState);
+        await _validator.ApplyValidationAsync(Item, ModelState);
 
         if (!ModelState.IsValid)
         {
-            var staff = await _staffService.FindAsync(UpdateStaff.Id);
+            var staff = await _staffService.FindAsync(Item.Id);
             if (staff is null) return BadRequest();
 
             DisplayStaff = staff;
@@ -69,13 +69,13 @@ public class EditModel : PageModel
             return Page();
         }
 
-        var result = await _staffService.UpdateAsync(UpdateStaff);
+        var result = await _staffService.UpdateAsync(Item);
         if (!result.Succeeded) return BadRequest();
 
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "Successfully updated.");
-        return RedirectToPage("Details", new { id = UpdateStaff.Id });
+        return RedirectToPage("Details", new { id = Item.Id });
     }
 
     private async Task PopulateSelectListsAsync() =>
-        OfficeItems = (await _officeService.GetActiveListItemsAsync()).ToSelectList();
+        OfficesSelectList = (await _officeService.GetActiveListItemsAsync()).ToSelectList();
 }

@@ -26,4 +26,7 @@ public class AttachmentViewDto
 
     [JsonIgnore]
     public string AttachmentFileName => string.Concat(Id.ToString(), FileExtension);
+
+    [JsonIgnore]
+    public string ThumbnailSrc => $"../Attachment/{Id}/{FileName}/?thumbnail=true";
 }

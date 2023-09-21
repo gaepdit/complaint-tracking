@@ -20,7 +20,7 @@
                 @Html.EditorFor(e => e.Item.Name, EditorTemplate.Input)
             </div>
             <div class="col-lg mb-3">
-                @Html.EditorFor(e => e.Item.AssignorId, EditorTemplate.Select, new { Items = Model.ActiveStaffMembers })
+                @Html.EditorFor(e => e.Item.AssignorId, EditorTemplate.Select, new { Items = Model.ActiveStaffMembersSelectList })
             </div>
         </div>
         <div class="mb-3">

@@ -29,7 +29,7 @@
         <div class="row">
             <div class="col-md mb-3">
                 <div class="form-floating">
-                    <select asp-for="Spec.Office" asp-items="Model.OfficeItems" name="@nameof(Model.Spec.Office)" class="form-select">
+                    <select asp-for="Spec.Office" asp-items="Model.OfficesSelectList" name="@nameof(Model.Spec.Office)" class="form-select">
                         <option value="">@TextConstants.SelectTextAny</option>
                     </select>
                     <label asp-for="Spec.Office" class="form-label"></label>
@@ -37,7 +37,7 @@
             </div>
             <div class="col-md mb-3">
                 <div class="form-floating">
-                    <select asp-for="Spec.Role" asp-items="Model.RoleItems" name="@nameof(Model.Spec.Role)" class="form-select" aria-describedby="rolesHelpBlock">
+                    <select asp-for="Spec.Role" asp-items="Model.RolesSelectList" name="@nameof(Model.Spec.Role)" class="form-select" aria-describedby="rolesHelpBlock">
                         <option value="">@TextConstants.SelectTextAny</option>
                     </select>
                     <label asp-for="Spec.Role" class="form-label"></label>
@@ -82,7 +82,8 @@
                     <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
                        asp-route-Sort="@(Model.Spec.Sort == SortBy.NameAsc ? nameof(SortBy.NameDesc) : nameof(SortBy.NameAsc))">
                         @Html.DisplayNameFor(m => m.Spec.Name)
-                        @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow, new { up = nameof(SortBy.NameAsc), down = nameof(SortBy.NameDesc) })
+                        @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow, 
+                            new { up = nameof(SortBy.NameAsc), down = nameof(SortBy.NameDesc) })
                     </a>
                 </th>
                 <th scope="col">@Html.DisplayNameFor(m => m.Spec.Email)</th>
@@ -90,7 +91,8 @@
                     <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
                        asp-route-Sort="@(Model.Spec.Sort == SortBy.OfficeAsc ? nameof(SortBy.OfficeDesc) : nameof(SortBy.OfficeAsc))">
                         @Html.DisplayNameFor(m => m.Spec.Office)
-                        @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow, new { up = nameof(SortBy.OfficeAsc), down = nameof(SortBy.OfficeDesc) })
+                        @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow, 
+                            new { up = nameof(SortBy.OfficeAsc), down = nameof(SortBy.OfficeDesc) })
                     </a>
                 </th>
                 <th scope="col">Status</th>

@@ -22,7 +22,7 @@ public class AttachmentModel : PageModel
 
         var item = await complaintService.FindAttachmentAsync(id.Value);
         if (item is null || string.IsNullOrWhiteSpace(item.FileName))
-            return NotFound($"Attachment ID not found: {id.Value}");
+            return NotFound($"Attachment ID not found: {id.Value.ToString()}");
 
         if (fileName != item.FileName)
             return thumbnail
