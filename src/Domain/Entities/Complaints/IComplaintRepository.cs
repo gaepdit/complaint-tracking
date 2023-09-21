@@ -64,5 +64,5 @@ public interface IComplaintRepository : IRepository<Complaint, int>
 
     // Will return the next available ID if the repository requires it for adding new entities (local repository).
     // Will return null if the repository creates a new ID on insert (Entity Framework).
-    public Task<int?> GetNextIdAsync();
+    public int? GetNextId();
 }

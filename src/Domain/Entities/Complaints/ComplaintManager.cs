@@ -6,9 +6,9 @@ public class ComplaintManager : IComplaintManager
 
     public ComplaintManager(IComplaintRepository repository) => _repository = repository;
 
-    public async Task<Complaint> CreateNewComplaintAsync(string? createdById)
+    public Complaint CreateNewComplaint(string? createdById)
     {
-        var item = new Complaint(await _repository.GetNextIdAsync());
+        var item = new Complaint(_repository.GetNextId());
         item.SetCreator(createdById);
         return item;
     }

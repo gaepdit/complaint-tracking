@@ -158,7 +158,7 @@ public sealed class ComplaintService : IComplaintService
     internal async Task<Complaint> CreateComplaintFromDtoAsync(
         ComplaintCreateDto resource, string? currentUserId, CancellationToken token)
     {
-        var complaint = await _manager.CreateNewComplaintAsync(currentUserId);
+        var complaint = _manager.CreateNewComplaint(currentUserId);
 
         // Properties: Meta-data
         if (!string.IsNullOrEmpty(currentUserId))

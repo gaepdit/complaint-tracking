@@ -17,7 +17,7 @@ public class Create
     {
         // Arrange
         var complaintManagerMock = Substitute.For<IComplaintManager>();
-        complaintManagerMock.CreateNewComplaintAsync(Arg.Any<string?>())
+        complaintManagerMock.CreateNewComplaint(Arg.Any<string?>())
             .Returns(new Complaint(0));
 
         var userServiceMock = Substitute.For<IUserService>();
@@ -48,7 +48,7 @@ public class Create
     {
         // Arrange
         var complaintManagerMock = Substitute.For<IComplaintManager>();
-        complaintManagerMock.CreateNewComplaintAsync(null)
+        complaintManagerMock.CreateNewComplaint(null)
             .Returns(new Complaint(0));
 
         var userServiceMock = Substitute.For<IUserService>();

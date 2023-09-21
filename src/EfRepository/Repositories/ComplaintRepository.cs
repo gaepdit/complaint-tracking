@@ -44,5 +44,5 @@ public sealed class ComplaintRepository : BaseRepository<Complaint, int, AppDbCo
             .SingleOrDefaultAsync(e => e.Id == id, token);
 
     // EF will set the ID automatically.
-    public Task<int?> GetNextIdAsync() => Task.FromResult(null as int?);
+    public int? GetNextId() => null;
 }

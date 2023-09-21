@@ -7,5 +7,5 @@ public interface IComplaintManager
     /// </summary>
     /// <param name="createdById">The ID of the user creating the entity.</param>
     /// <returns>The Complaint that was created.</returns>
-    public Task<Complaint> CreateNewComplaintAsync(string? createdById);
+    public Complaint CreateNewComplaint(string? createdById);
 }

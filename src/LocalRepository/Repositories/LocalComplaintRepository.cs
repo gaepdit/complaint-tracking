@@ -52,5 +52,5 @@ public sealed class LocalComplaintRepository : BaseRepository<Complaint, int>, I
         Task.FromResult(AttachmentItems.SingleOrDefault(e => e.Id == id));
 
     // Local repository requires ID to be manually set.
-    public Task<int?> GetNextIdAsync() => Task.FromResult(Items.Select(e => e.Id).Max() + 1 as int?);
+    public int? GetNextId() => Items.Select(e => e.Id).Max() + 1;
 }
