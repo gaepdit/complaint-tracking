@@ -1,6 +1,5 @@
 using Cts.AppServices.ActionTypes;
 using Cts.Domain.Entities.ActionTypes;
-using FluentAssertions.Execution;
 
 namespace AppServicesTests.AutoMapper;
 

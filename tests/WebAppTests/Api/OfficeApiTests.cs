@@ -6,7 +6,6 @@ using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
 using Cts.TestData.Constants;
 using Cts.WebApp.Api;
-using FluentAssertions.Execution;
 using GaEpd.AppLibrary.ListItems;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

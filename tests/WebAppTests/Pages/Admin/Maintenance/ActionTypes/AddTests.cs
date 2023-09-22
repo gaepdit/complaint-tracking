@@ -3,7 +3,6 @@ using Cts.TestData.Constants;
 using Cts.WebApp.Models;
 using Cts.WebApp.Pages.Admin.Maintenance.ActionTypes;
 using Cts.WebApp.Platform.PageModelHelpers;
-using FluentAssertions.Execution;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;

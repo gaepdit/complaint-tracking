@@ -2,7 +2,6 @@ using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
 using Cts.LocalRepository.Identity;
 using Cts.TestData.Identity;
-using FluentAssertions.Execution;
 using GaEpd.AppLibrary.Domain.Repositories;
 using System.Diagnostics;
 

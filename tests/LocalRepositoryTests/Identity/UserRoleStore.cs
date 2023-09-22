@@ -1,6 +1,5 @@
 using Cts.Domain.Identity;
 using Cts.LocalRepository.Identity;
-using FluentAssertions.Execution;
 using System.Diagnostics;
 
 namespace LocalRepositoryTests.Identity;

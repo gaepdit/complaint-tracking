@@ -1,5 +1,4 @@
 ﻿using Cts.AppServices.Utilities;
-using FluentAssertions.Execution;
 
 namespace AppServicesTests.Utilities;
 
@@ -14,11 +13,6 @@ public class FileSizeTests
     [TestCase(99999999, "95.4 MB")]
     public void ReturnsCorrectString(long value, string expected)
     {
-        var result = FileSize.ToFileSizeString(value);
-
-        using (new AssertionScope())
-        {
-            result.Should().Be(expected);
-        }
+        FileSize.ToFileSizeString(value).Should().Be(expected);
     }
 }

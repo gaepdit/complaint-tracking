@@ -2,7 +2,6 @@ using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
 using Cts.TestData.Constants;
-using FluentAssertions.Execution;
 
 namespace AppServicesTests.AutoMapper;
 
