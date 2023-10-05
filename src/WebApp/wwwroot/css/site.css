@@ -117,21 +117,21 @@ html {
 
 /* Fix color accessibility
 -------------------------------------------------- */
-[data-bs-theme="light"] .btn-primary {
-    color: hsl(var(--base-hue), 0%, 100%);
+html:not([data-bs-theme="dark"]) .btn-primary {
+    color: hsl(0, 0%, 100%);
     background-color: hsl(210, 76%, 43%);
     border-color: hsl(210, 76%, 38%);
 }
 
-[data-bs-theme="light"] .text-warning {
+html:not([data-bs-theme="dark"]) .text-warning {
     color: hsl(45, 100%, 29%) !important;
 }
 
-[data-bs-theme="light"] .text-danger-emphasis {
+html:not([data-bs-theme="dark"]) .text-danger-emphasis {
     color: hsl(355, 70%, 54%) !important;
 }
 
-[data-bs-theme="light"] .bg-dark-subtle .text-danger-emphasis {
+html:not([data-bs-theme="dark"]) .bg-dark-subtle .text-danger-emphasis {
     color: hsl(355, 98%, 24%) !important;
 }
 
