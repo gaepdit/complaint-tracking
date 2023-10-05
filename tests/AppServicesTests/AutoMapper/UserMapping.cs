@@ -56,7 +56,6 @@ public class UserMapping
 
         using (new AssertionScope())
         {
-            result.Id.Should().Be(_item.Id);
             result.Phone.Should().Be(_item.Phone);
             result.OfficeId.Should().Be(_item.Office!.Id);
             result.Active.Should().BeTrue();

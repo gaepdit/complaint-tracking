@@ -5,8 +5,6 @@ namespace Cts.AppServices.Staff.Dto;
 
 public record StaffUpdateDto
 {
-    public string Id { get; init; } = string.Empty;
-
     [StringLength(ApplicationUser.MaxPhoneLength,
         ErrorMessage = "The Phone Number must not be longer than {1} characters.")]
     public string? Phone { get; init; }

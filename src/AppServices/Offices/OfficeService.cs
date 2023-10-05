@@ -12,11 +12,7 @@ public sealed class OfficeService : IOfficeService
     private readonly IMapper _mapper;
     private readonly IUserService _users;
 
-    public OfficeService(
-        IOfficeRepository repository,
-        IOfficeManager manager,
-        IMapper mapper,
-        IUserService users)
+    public OfficeService(IOfficeRepository repository, IOfficeManager manager, IMapper mapper, IUserService users)
     {
         _repository = repository;
         _manager = manager;
@@ -24,10 +20,10 @@ public sealed class OfficeService : IOfficeService
         _users = users;
     }
 
-    public async Task<OfficeWithAssignorViewDto?> FindAsync(Guid id, CancellationToken token = default)
+    public async Task<OfficeWithAssignorDto?> FindAsync(Guid id, CancellationToken token = default)
     {
         var item = await _repository.FindIncludeAssignorAsync(id, token);
-        return _mapper.Map<OfficeWithAssignorViewDto>(item);
+        return _mapper.Map<OfficeWithAssignorDto>(item);
     }
 
     public async Task<OfficeUpdateDto?> FindForUpdateAsync(Guid id, CancellationToken token = default)
@@ -36,10 +32,10 @@ public sealed class OfficeService : IOfficeService
         return _mapper.Map<OfficeUpdateDto>(item);
     }
 
-    public async Task<IReadOnlyList<OfficeWithAssignorViewDto>> GetListAsync(CancellationToken token = default)
+    public async Task<IReadOnlyList<OfficeWithAssignorDto>> GetListAsync(CancellationToken token = default)
     {
         var list = (await _repository.GetListAsync(token)).OrderBy(e => e.Name).ToList();
-        return _mapper.Map<IReadOnlyList<OfficeWithAssignorViewDto>>(list);
+        return _mapper.Map<IReadOnlyList<OfficeWithAssignorDto>>(list);
     }
 
     public async Task<IReadOnlyList<ListItem>> GetActiveListItemsAsync(CancellationToken token = default) =>
@@ -56,9 +52,9 @@ public sealed class OfficeService : IOfficeService
         return item.Id;
     }
 
-    public async Task UpdateAsync(OfficeUpdateDto resource, CancellationToken token = default)
+    public async Task UpdateAsync(Guid id, OfficeUpdateDto resource, CancellationToken token = default)
     {
-        var item = await _repository.GetAsync(resource.Id, token);
+        var item = await _repository.GetAsync(id, token);
         item.SetUpdater((await _users.GetCurrentUserAsync())?.Id);
 
         if (item.Name != resource.Name.Trim())

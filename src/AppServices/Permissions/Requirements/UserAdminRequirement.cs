@@ -3,14 +3,14 @@ using Cts.AppServices.Permissions.Helpers;
 
 namespace Cts.AppServices.Permissions.Requirements;
 
-internal class DivisionManagerRequirement :
-    AuthorizationHandler<DivisionManagerRequirement>, IAuthorizationRequirement
+internal class UserAdminRequirement :
+    AuthorizationHandler<UserAdminRequirement>, IAuthorizationRequirement
 {
     protected override Task HandleRequirementAsync(
         AuthorizationHandlerContext context,
-        DivisionManagerRequirement requirement)
+        UserAdminRequirement requirement)
     {
-        if (context.User.IsDivisionManager())
+        if (context.User.IsUserAdmin())
             context.Succeed(requirement);
 
         return Task.FromResult(0);

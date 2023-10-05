@@ -6,4 +6,4 @@ public record ActionTypeViewDto(Guid Id, string Name, bool Active) : StandardNam
 
 public record ActionTypeCreateDto(string Name) : StandardNamedEntityCreateDto(Name);
 
-public record ActionTypeUpdateDto(Guid Id, string Name, bool Active) : StandardNamedEntityUpdateDto(Id, Name, Active);
+public record ActionTypeUpdateDto(string Name, bool Active) : StandardNamedEntityUpdateDto(Name, Active);

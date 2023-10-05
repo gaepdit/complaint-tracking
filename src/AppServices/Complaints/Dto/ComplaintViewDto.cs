@@ -82,7 +82,7 @@ public class ComplaintViewDto
     // Properties: Assignment
 
     [Display(Name = "Current Assigned Office")]
-    public OfficeWithAssignorViewDto? CurrentOffice { get; init; }
+    public OfficeWithAssignorDto? CurrentOffice { get; init; }
 
     public string? CurrentOfficeAssignorId { get; init; }
     public string? CurrentOfficeName { get; init; }

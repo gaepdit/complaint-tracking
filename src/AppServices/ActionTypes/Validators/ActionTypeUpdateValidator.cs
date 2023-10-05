@@ -12,15 +12,18 @@ public class ActionTypeUpdateValidator : AbstractValidator<ActionTypeUpdateDto>
     {
         _repository = repository;
 
-        RuleFor(e => e.Name)
+        RuleFor(dto => dto.Name)
+            .Cascade(CascadeMode.Stop)
+            .NotEmpty()
             .Length(AppConstants.MinimumNameLength, AppConstants.MaximumNameLength)
-            .MustAsync(async (e, _, token) => await NotDuplicateName(e, token))
+            .MustAsync(async (_, name, context, token) => await NotDuplicateName(name, context, token))
             .WithMessage("The name entered already exists.");
     }
 
-    private async Task<bool> NotDuplicateName(ActionTypeUpdateDto item, CancellationToken token = default)
+    private async Task<bool> NotDuplicateName(string name, IValidationContext context,
+        CancellationToken token = default)
     {
-        var existing = await _repository.FindByNameAsync(item.Name, token);
-        return existing is null || existing.Id == item.Id;
+        var item = await _repository.FindByNameAsync(name, token);
+        return item is null || item.Id == (Guid)context.RootContextData["Id"];
     }
 }

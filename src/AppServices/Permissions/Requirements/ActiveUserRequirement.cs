@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Cts.AppServices.Permissions.Helpers;
 
 namespace Cts.AppServices.Permissions.Requirements;
 
@@ -9,7 +10,7 @@ internal class ActiveUserRequirement :
         AuthorizationHandlerContext context,
         ActiveUserRequirement requirement)
     {
-        if (context.User.HasClaim(c => c.Type == nameof(Policies.ActiveUser) && c.Value == true.ToString()))
+        if (context.User.IsActive())
             context.Succeed(requirement);
 
         return Task.FromResult(0);

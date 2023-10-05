@@ -12,10 +12,7 @@ public sealed class ConcernService : IConcernService
     private readonly IMapper _mapper;
     private readonly IUserService _userService;
 
-    public ConcernService(
-        IConcernRepository repository,
-        IConcernManager manager,
-        IMapper mapper,
+    public ConcernService(IConcernRepository repository, IConcernManager manager, IMapper mapper,
         IUserService userService)
     {
         _repository = repository;
@@ -47,9 +44,9 @@ public sealed class ConcernService : IConcernService
         return item.Id;
     }
 
-    public async Task UpdateAsync(ConcernUpdateDto resource, CancellationToken token = default)
+    public async Task UpdateAsync(Guid id, ConcernUpdateDto resource, CancellationToken token = default)
     {
-        var item = await _repository.GetAsync(resource.Id, token);
+        var item = await _repository.GetAsync(id, token);
 
         if (item.Name != resource.Name.Trim())
             await _manager.ChangeNameAsync(item, resource.Name, token);

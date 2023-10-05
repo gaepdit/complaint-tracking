@@ -16,13 +16,12 @@ public abstract record StandardNamedEntityCreateDto
     [Required(AllowEmptyStrings = false)]
     [StringLength(AppConstants.MaximumNameLength, MinimumLength = AppConstants.MinimumNameLength)]
     string Name
-);
+) : INamedEntity;
 
 public abstract record StandardNamedEntityUpdateDto
 (
-    Guid Id,
     [Required(AllowEmptyStrings = false)]
     [StringLength(AppConstants.MaximumNameLength, MinimumLength = AppConstants.MinimumNameLength)]
     string Name,
     bool Active
-);
+) : INamedEntity;

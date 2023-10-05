@@ -21,8 +21,8 @@ public class OfficeApiTests
     [Test]
     public async Task ListOffices_ReturnsListOfOffices()
     {
-        List<OfficeWithAssignorViewDto> officeList = new()
-            { new OfficeWithAssignorViewDto(Guid.Empty, TextData.ValidName, true) };
+        List<OfficeWithAssignorDto> officeList = new()
+            { new OfficeWithAssignorDto(Guid.Empty, TextData.ValidName, true) };
         var officeServiceMock = Substitute.For<IOfficeService>();
         officeServiceMock.GetListAsync(CancellationToken.None).Returns(officeList);
         var staffServiceMock = Substitute.For<IStaffService>();

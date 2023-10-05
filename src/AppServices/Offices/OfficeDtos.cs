@@ -7,7 +7,7 @@ namespace Cts.AppServices.Offices;
 
 public record OfficeViewDto(Guid Id, string Name, bool Active) : StandardNamedEntityViewDto(Id, Name, Active);
 
-public record OfficeWithAssignorViewDto(Guid Id, string Name, bool Active) : StandardNamedEntityViewDto(Id, Name, Active)
+public record OfficeWithAssignorDto(Guid Id, string Name, bool Active) : StandardNamedEntityViewDto(Id, Name, Active)
 {
     public StaffViewDto? Assignor { get; init; }
 
@@ -22,7 +22,7 @@ public record OfficeCreateDto(string Name) : StandardNamedEntityCreateDto(Name)
     public string? AssignorId { get; init; }
 }
 
-public record OfficeUpdateDto(Guid Id, string Name, bool Active) : StandardNamedEntityUpdateDto(Id, Name, Active)
+public record OfficeUpdateDto(string Name, bool Active) : StandardNamedEntityUpdateDto(Name, Active)
 {
     [Required]
     [Display(Name = "Assignor")]

@@ -8,5 +8,5 @@ public interface IActionTypeService : IDisposable
     Task<IReadOnlyList<ActionTypeViewDto>> GetListAsync(CancellationToken token = default);
     Task<IReadOnlyList<ListItem>> GetActiveListItemsAsync(CancellationToken token = default);
     Task<Guid> CreateAsync(string name, CancellationToken token = default);
-    Task UpdateAsync(ActionTypeUpdateDto resource, CancellationToken token = default);
+    Task UpdateAsync(Guid id, ActionTypeUpdateDto resource, CancellationToken token = default);
 }

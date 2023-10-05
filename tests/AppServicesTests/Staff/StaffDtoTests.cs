@@ -60,7 +60,6 @@ public class StaffDtoTests
 
         using (new AssertionScope())
         {
-            result.Id.Should().Be(staffViewDto.Id);
             result.Active.Should().BeTrue();
             result.Phone.Should().Be(staffViewDto.Phone);
             result.OfficeId.Should().Be(staffViewDto.Office.Id);

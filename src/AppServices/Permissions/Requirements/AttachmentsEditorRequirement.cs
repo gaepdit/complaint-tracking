@@ -3,14 +3,14 @@ using Cts.AppServices.Permissions.Helpers;
 
 namespace Cts.AppServices.Permissions.Requirements;
 
-internal class DivisionManagerRequirement :
-    AuthorizationHandler<DivisionManagerRequirement>, IAuthorizationRequirement
+internal class AttachmentsEditorRequirement :
+    AuthorizationHandler<AttachmentsEditorRequirement>, IAuthorizationRequirement
 {
     protected override Task HandleRequirementAsync(
         AuthorizationHandlerContext context,
-        DivisionManagerRequirement requirement)
+        AttachmentsEditorRequirement requirement)
     {
-        if (context.User.IsDivisionManager())
+        if (context.User.IsAttachmentsEditor())
             context.Succeed(requirement);
 
         return Task.FromResult(0);

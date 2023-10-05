@@ -21,10 +21,7 @@ public class EditModel : PageModel
     private readonly IOfficeService _officeService;
     private readonly IValidator<StaffUpdateDto> _validator;
 
-    public EditModel(
-        IStaffService staffService,
-        IOfficeService officeService,
-        IValidator<StaffUpdateDto> validator)
+    public EditModel(IStaffService staffService, IOfficeService officeService, IValidator<StaffUpdateDto> validator)
     {
         _staffService = staffService;
         _officeService = officeService;
@@ -32,6 +29,9 @@ public class EditModel : PageModel
     }
 
     // Properties
+    [FromRoute]
+    public Guid Id { get; set; }
+
     [BindProperty]
     public StaffUpdateDto Item { get; set; } = default!;
 
@@ -44,9 +44,12 @@ public class EditModel : PageModel
     public async Task<IActionResult> OnGetAsync(string? id)
     {
         if (id is null) return RedirectToPage("Index");
+        if (!Guid.TryParse(id, out var guid)) return NotFound();
+
         var staff = await _staffService.FindAsync(id);
         if (staff is null) return NotFound();
 
+        Id = guid;
         DisplayStaff = staff;
         Item = DisplayStaff.AsUpdateDto();
 
@@ -60,7 +63,7 @@ public class EditModel : PageModel
 
         if (!ModelState.IsValid)
         {
-            var staff = await _staffService.FindAsync(Item.Id);
+            var staff = await _staffService.FindAsync(Id.ToString());
             if (staff is null) return BadRequest();
 
             DisplayStaff = staff;
@@ -69,11 +72,11 @@ public class EditModel : PageModel
             return Page();
         }
 
-        var result = await _staffService.UpdateAsync(Item);
+        var result = await _staffService.UpdateAsync(Id.ToString(), Item);
         if (!result.Succeeded) return BadRequest();
 
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "Successfully updated.");
-        return RedirectToPage("Details", new { id = Item.Id });
+        return RedirectToPage("Details", new { Id });
     }
 
     private async Task PopulateSelectListsAsync() =>

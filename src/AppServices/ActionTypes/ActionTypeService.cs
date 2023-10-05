@@ -12,10 +12,7 @@ public sealed class ActionTypeService : IActionTypeService
     private readonly IMapper _mapper;
     private readonly IUserService _userService;
 
-    public ActionTypeService(
-        IActionTypeRepository repository,
-        IActionTypeManager manager,
-        IMapper mapper,
+    public ActionTypeService(IActionTypeRepository repository, IActionTypeManager manager, IMapper mapper,
         IUserService userService)
     {
         _repository = repository;
@@ -47,9 +44,9 @@ public sealed class ActionTypeService : IActionTypeService
         return item.Id;
     }
 
-    public async Task UpdateAsync(ActionTypeUpdateDto resource, CancellationToken token = default)
+    public async Task UpdateAsync(Guid id, ActionTypeUpdateDto resource, CancellationToken token = default)
     {
-        var item = await _repository.GetAsync(resource.Id, token);
+        var item = await _repository.GetAsync(id, token);
 
         if (item.Name != resource.Name.Trim())
             await _manager.ChangeNameAsync(item, resource.Name, token);

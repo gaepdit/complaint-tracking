@@ -20,10 +20,7 @@ public class EditModel : PageModel
     private readonly IStaffService _staffService;
     private readonly IValidator<OfficeUpdateDto> _validator;
 
-    public EditModel(
-        IOfficeService officeService,
-        IStaffService staffService,
-        IValidator<OfficeUpdateDto> validator)
+    public EditModel(IOfficeService officeService, IStaffService staffService, IValidator<OfficeUpdateDto> validator)
     {
         _officeService = officeService;
         _staffService = staffService;
@@ -31,6 +28,9 @@ public class EditModel : PageModel
     }
 
     // Properties
+    [FromRoute]
+    public Guid Id { get; set; }
+
     [BindProperty]
     public OfficeUpdateDto Item { get; set; } = default!;
 
@@ -61,7 +61,7 @@ public class EditModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        await _validator.ApplyValidationAsync(Item, ModelState);
+        await _validator.ApplyValidationAsync(Item, ModelState, Id);
 
         if (!ModelState.IsValid)
         {
@@ -69,9 +69,9 @@ public class EditModel : PageModel
             return Page();
         }
 
-        await _officeService.UpdateAsync(Item);
+        await _officeService.UpdateAsync(Id, Item);
 
-        HighlightId = Item.Id;
+        HighlightId = Id;
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, $"“{Item.Name}” successfully updated.");
         return RedirectToPage("Index");
     }

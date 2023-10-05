@@ -32,10 +32,9 @@
         </div>
         <div class="mt-3">
             <button type="submit" class="btn btn-primary col-sm-3 me-2">Update Info</button>
-            <a asp-page="Details" asp-route-id="@Model.Item.Id" class="btn btn-outline-secondary col-md-2">Cancel</a>
+            <a asp-page="Details" asp-route-id="@Model.Id.ToString()" class="btn btn-outline-secondary col-md-2">Cancel</a>
         </div>
         <div class="text-danger-emphasis mt-3">* denotes a required field</div>
-        <input asp-for="Item.Id" type="hidden" />
     </form>
 </div>
 

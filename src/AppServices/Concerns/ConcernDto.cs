@@ -6,4 +6,4 @@ public record ConcernViewDto(Guid Id, string Name, bool Active) : StandardNamedE
 
 public record ConcernCreateDto(string Name) : StandardNamedEntityCreateDto(Name);
 
-public record ConcernUpdateDto(Guid Id, string Name, bool Active) : StandardNamedEntityUpdateDto(Id, Name, Active);
+public record ConcernUpdateDto(string Name, bool Active) : StandardNamedEntityUpdateDto(Name, Active);

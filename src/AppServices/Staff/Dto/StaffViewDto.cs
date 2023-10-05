@@ -59,7 +59,6 @@ public record StaffViewDto : INamedEntity
 
     public StaffUpdateDto AsUpdateDto() => new()
     {
-        Id = Id,
         Phone = Phone,
         OfficeId = Office?.Id,
         Active = Active,

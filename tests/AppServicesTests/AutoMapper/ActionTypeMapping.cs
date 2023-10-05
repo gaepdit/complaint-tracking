@@ -30,7 +30,6 @@ public class ActionTypeMapping
 
         using (new AssertionScope())
         {
-            result.Id.Should().Be(item.Id);
             result.Name.Should().Be(item.Name);
             result.Active.Should().BeTrue();
         }
