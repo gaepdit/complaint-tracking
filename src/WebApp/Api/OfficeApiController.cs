@@ -23,11 +23,11 @@ public class OfficeApiController : Controller
     }
 
     [HttpGet]
-    public async Task<IReadOnlyList<OfficeWithAssignorViewDto>> ListOfficesAsync() =>
+    public async Task<IReadOnlyList<OfficeWithAssignorDto>> ListOfficesAsync() =>
         await _office.GetListAsync();
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<OfficeWithAssignorViewDto>> GetOfficeAsync([FromRoute] Guid id)
+    public async Task<ActionResult<OfficeWithAssignorDto>> GetOfficeAsync([FromRoute] Guid id)
     {
         var item = await _office.FindAsync(id);
         return item is null ? Problem("ID not found.", statusCode: 404) : Ok(item);

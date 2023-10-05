@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace Cts.WebApp.Pages.Admin.Complaints;
+namespace Cts.WebApp.Pages.Staff.Complaints;
 
 [Authorize]
 public class IndexModel : PageModel

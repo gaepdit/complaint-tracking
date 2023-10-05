@@ -38,8 +38,8 @@ public class IndexModel : PageModel
     public PaginationNavModel PaginationNav => new(SearchResults, Spec.AsRouteValues());
 
     // Select lists
-    public SelectList RoleItems { get; private set; } = default!;
-    public SelectList OfficeItems { get; private set; } = default!;
+    public SelectList RolesSelectList { get; private set; } = default!;
+    public SelectList OfficesSelectList { get; private set; } = default!;
 
     // Methods
     public Task OnGetAsync() => PopulateSelectListsAsync();
@@ -56,8 +56,8 @@ public class IndexModel : PageModel
 
     private async Task PopulateSelectListsAsync()
     {
-        OfficeItems = (await _officeService.GetActiveListItemsAsync()).ToSelectList();
-        RoleItems = AppRole.AllRoles
+        OfficesSelectList = (await _officeService.GetActiveListItemsAsync()).ToSelectList();
+        RolesSelectList = AppRole.AllRoles
             .Select(r => new ListItem<string>(r.Key, r.Value.DisplayName))
             .ToSelectList();
     }

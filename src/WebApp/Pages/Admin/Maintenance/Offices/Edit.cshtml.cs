@@ -20,10 +20,7 @@ public class EditModel : PageModel
     private readonly IStaffService _staffService;
     private readonly IValidator<OfficeUpdateDto> _validator;
 
-    public EditModel(
-        IOfficeService officeService,
-        IStaffService staffService,
-        IValidator<OfficeUpdateDto> validator)
+    public EditModel(IOfficeService officeService, IStaffService staffService, IValidator<OfficeUpdateDto> validator)
     {
         _officeService = officeService;
         _staffService = staffService;
@@ -31,6 +28,9 @@ public class EditModel : PageModel
     }
 
     // Properties
+    [FromRoute]
+    public Guid Id { get; set; }
+
     [BindProperty]
     public OfficeUpdateDto Item { get; set; } = default!;
 
@@ -43,7 +43,7 @@ public class EditModel : PageModel
     public static MaintenanceOption ThisOption => MaintenanceOption.Office;
 
     // Select lists
-    public SelectList ActiveStaffMembers { get; private set; } = default!;
+    public SelectList ActiveStaffMembersSelectList { get; private set; } = default!;
 
     // Methods
     public async Task<IActionResult> OnGetAsync(Guid? id)
@@ -61,7 +61,7 @@ public class EditModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        await _validator.ApplyValidationAsync(Item, ModelState);
+        await _validator.ApplyValidationAsync(Item, ModelState, Id);
 
         if (!ModelState.IsValid)
         {
@@ -69,13 +69,13 @@ public class EditModel : PageModel
             return Page();
         }
 
-        await _officeService.UpdateAsync(Item);
+        await _officeService.UpdateAsync(Id, Item);
 
-        HighlightId = Item.Id;
+        HighlightId = Id;
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, $"“{Item.Name}” successfully updated.");
         return RedirectToPage("Index");
     }
 
     private async Task PopulateSelectListsAsync() =>
-        ActiveStaffMembers = (await _staffService.GetStaffListItemsAsync(true)).ToSelectList();
+        ActiveStaffMembersSelectList = (await _staffService.GetStaffListItemsAsync(true)).ToSelectList();
 }

@@ -12,16 +12,19 @@ namespace Cts.WebApp.Pages.Admin.Maintenance.ActionTypes;
 [Authorize(Policy = nameof(Policies.SiteMaintainer))]
 public class EditModel : PageModel
 {
+    // Constructor
     private readonly IActionTypeService _service;
     private readonly IValidator<ActionTypeUpdateDto> _validator;
 
-    public EditModel(
-        IActionTypeService service,
-        IValidator<ActionTypeUpdateDto> validator)
+    public EditModel(IActionTypeService service, IValidator<ActionTypeUpdateDto> validator)
     {
         _service = service;
         _validator = validator;
     }
+
+    // Properties
+    [FromRoute]
+    public Guid Id { get; set; }
 
     [BindProperty]
     public ActionTypeUpdateDto Item { get; set; } = default!;
@@ -34,6 +37,7 @@ public class EditModel : PageModel
 
     public static MaintenanceOption ThisOption => MaintenanceOption.ActionType;
 
+    // Methods
     public async Task<IActionResult> OnGetAsync(Guid? id)
     {
         if (id is null) return RedirectToPage("Index");
@@ -47,12 +51,12 @@ public class EditModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        await _validator.ApplyValidationAsync(Item, ModelState);
+        await _validator.ApplyValidationAsync(Item, ModelState, Id);
         if (!ModelState.IsValid) return Page();
 
-        await _service.UpdateAsync(Item);
+        await _service.UpdateAsync(Id, Item);
 
-        HighlightId = Item.Id;
+        HighlightId = Id;
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, $"“{Item.Name}” successfully updated.");
         return RedirectToPage("Index");
     }

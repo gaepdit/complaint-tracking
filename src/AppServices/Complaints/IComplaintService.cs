@@ -1,4 +1,4 @@
-﻿using Cts.AppServices.Attachments;
+using Cts.AppServices.Attachments;
 using Cts.AppServices.Complaints.Dto;
 using GaEpd.AppLibrary.Pagination;
 using Microsoft.AspNetCore.Http;
@@ -18,7 +18,7 @@ public interface IComplaintService : IDisposable
 
     Task<AttachmentPublicViewDto?> FindPublicAttachmentAsync(Guid id, CancellationToken token = default);
 
-    // Admin methods
+    // Staff read methods
 
     Task<ComplaintViewDto?> FindAsync(int id, CancellationToken token = default);
 
@@ -28,6 +28,8 @@ public interface IComplaintService : IDisposable
         ComplaintSearchDto spec, PaginatedRequest paging, CancellationToken token = default);
 
     Task<AttachmentViewDto?> FindAttachmentAsync(Guid id, CancellationToken token = default);
+    
+    // Staff write methods
 
     Task<int> CreateAsync(ComplaintCreateDto resource, CancellationToken token = default);
 

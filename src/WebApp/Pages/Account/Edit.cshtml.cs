@@ -60,9 +60,6 @@ public class EditModel : PageModel
         // Inactive staff cannot do anything here.
         if (!staff.Active) return Forbid();
 
-        // Staff can only update self here.
-        if (staff.Id != UpdateStaff.Id) return BadRequest();
-
         // User cannot deactivate self.
         UpdateStaff.Active = true;
 
@@ -75,7 +72,7 @@ public class EditModel : PageModel
             return Page();
         }
 
-        var result = await _staffService.UpdateAsync(UpdateStaff);
+        var result = await _staffService.UpdateAsync(staff.Id, UpdateStaff);
         if (!result.Succeeded) return BadRequest();
 
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "Successfully updated profile.");

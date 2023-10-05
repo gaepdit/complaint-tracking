@@ -13,8 +13,8 @@ public class GetNextId
     public void TearDown() => _repository.Dispose();
 
     [Test]
-    public async Task GivenEF_ReturnsNull()
+    public void GivenEF_ReturnsNull()
     {
-        (await _repository.GetNextIdAsync()).Should().BeNull();
+        _repository.GetNextId().Should().BeNull();
     }
 }

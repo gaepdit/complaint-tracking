@@ -7,6 +7,6 @@ public class ComplaintCreateValidator : AbstractValidator<ComplaintCreateDto>
 {
     public ComplaintCreateValidator()
     {
-        RuleFor(e => e.CurrentOfficeId).NotEmpty();
+        RuleFor(dto => dto.CurrentOfficeId).NotEmpty();
     }
 }

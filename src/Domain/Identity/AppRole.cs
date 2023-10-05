@@ -7,12 +7,12 @@ public static class RoleName
 {
     // These are the strings that are stored in the database. Avoid modifying these once set!
 
-    public const string Staff = nameof(Staff);
     public const string AttachmentsEditor = nameof(AttachmentsEditor);
     public const string DataExport = nameof(DataExport);
     public const string DivisionManager = nameof(DivisionManager);
     public const string Manager = nameof(Manager);
     public const string SiteMaintenance = nameof(SiteMaintenance);
+    public const string Staff = nameof(Staff);
     public const string UserAdmin = nameof(UserAdmin);
 }
 

@@ -2,17 +2,9 @@
 @using Cts.AppServices.Complaints.Dto
 @using Cts.WebApp.Pages.Shared.DisplayTemplates
 @using Cts.WebApp.Platform.Constants
-@using GaEpd.AppLibrary.Pagination
 @model IndexModel
 @{
     ViewData["Title"] = "Complaint Search";
-}
-
-@section Scripts {
-    <script src="~/js/formSearch.js"></script>
-    <script src="~/lib/axios/axios.min.js"></script>
-    <script src="~/js/staffSelect.js"></script>
-    <script>setUpStaffDropdown("Spec_Office","Spec_Assigned",false);</script>
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -104,7 +96,9 @@
                         <input asp-for="Spec.Description" name="@nameof(Model.Spec.Description)" class="form-control" aria-describedby="DescriptionHelpBlock" />
                         <label asp-for="Spec.Description" class="form-label"></label>
                     </div>
-                    <small id="DescriptionHelpBlock" class="form-text text-body-secondary d-block px-2">(A word or phrase to search for. Will search within <em>nature,</em> <em>location,</em> and <em>description</em> fields.)</small>
+                    <small id="DescriptionHelpBlock" class="form-text text-body-secondary d-block px-2">
+                        (A word or phrase to search for. This will search within the <em>nature,</em> <em>location,</em> and <em>description</em> fields.)
+                    </small>
                 </div>
                 <div class="col-md-6 mb-3">
                     <div class="form-floating">
@@ -195,7 +189,7 @@
                 <div class="col-md-6 mb-3">
                     <div class="form-floating">
                         <select asp-for="Spec.Assigned" name="@nameof(Model.Spec.Assigned)" asp-items="Model.AssignedToSelectList" class="form-select"
-                                aria-describedby="StaffHelpBlock" disabled="@(!Model.AssignedToSelectList.Any())">
+                                aria-describedby="StaffHelpBlock" disabled="@((!Model.AssignedToSelectList.Any()).ToString())">
                             <option value="">@TextConstants.SelectTextAny</option>
                         </select>
                         <label asp-for="Spec.Assigned" class="form-label"></label>
@@ -232,23 +226,23 @@
                 <tr>
                     <th scope="col" class="text-nowrap">
                         <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                           asp-route-Sort="@(Model.Spec.Sort == SortBy.IdAsc ? SortBy.IdDesc : SortBy.IdAsc)">
-                            ID
-                            @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow, new { up = SortBy.IdAsc.ToString(), down = SortBy.IdDesc.ToString() })
+                           asp-route-Sort="@(Model.Spec.Sort == SortBy.IdAsc ? nameof(SortBy.IdDesc) : nameof(SortBy.IdAsc))">
+                            ID @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow,
+                                new { up = nameof(SortBy.IdAsc), down = nameof(SortBy.IdDesc) })
                         </a>
                     </th>
                     <th scope="col" class="text-nowrap">
                         <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                           asp-route-Sort="@(Model.Spec.Sort == SortBy.ReceivedDateAsc ? SortBy.ReceivedDateDesc : SortBy.ReceivedDateAsc)">
-                            Received
-                            @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow, new { up = SortBy.ReceivedDateAsc.ToString(), down = SortBy.ReceivedDateDesc.ToString() })
+                           asp-route-Sort="@(Model.Spec.Sort == SortBy.ReceivedDateAsc ? nameof(SortBy.ReceivedDateDesc) : nameof(SortBy.ReceivedDateAsc))">
+                            Received @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow,
+                                         new { up = nameof(SortBy.ReceivedDateAsc), down = nameof(SortBy.ReceivedDateDesc) })
                         </a>
                     </th>
                     <th scope="col" class="text-nowrap">
                         <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                           asp-route-Sort="@(Model.Spec.Sort == SortBy.StatusAsc ? SortBy.StatusDesc : SortBy.StatusAsc)">
-                            Status
-                            @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow, new { up = SortBy.StatusAsc.ToString(), down = SortBy.StatusDesc.ToString() })
+                           asp-route-Sort="@(Model.Spec.Sort == SortBy.StatusAsc ? nameof(SortBy.StatusDesc) : nameof(SortBy.StatusAsc))">
+                            Status @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow,
+                                       new { up = nameof(SortBy.StatusAsc), down = nameof(SortBy.StatusDesc) })
                         </a>
                     </th>
                     <th scope="col">Source/Location</th>
@@ -262,7 +256,7 @@
                 {
                     <tr class="@(item.IsDeleted ? "table-danger" : "")">
                         <th scope="row">
-                            <a asp-page="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">@item.Id</a>
+                            <a asp-page="Details" asp-route-id="@item.Id.ToString()" class="btn btn-outline-primary btn-sm">@item.Id.ToString()</a>
                         </th>
                         <td class="text-nowrap">@Html.DisplayFor(m => item.ReceivedDate, DisplayTemplate.ShortDate)</td>
                         <td>
@@ -272,7 +266,7 @@
                                 <br />
                             }
                             @Html.DisplayFor(m => item.Status)
-                            @if (item.ComplaintClosed && item.ComplaintClosedDate is not null)
+                            @if (item is { ComplaintClosed: true, ComplaintClosedDate: not null })
                             {
                                 <br />
                                 @:on @Html.DisplayFor(m => item.ComplaintClosedDate, DisplayTemplate.ShortDate)
@@ -313,4 +307,11 @@
             <partial name="_PaginationNav" model="Model.PaginationNav" />
         }
     </div>
+}
+
+@section Scripts {
+    <script src="~/js/formSearch.js"></script>
+    <script src="~/lib/axios/axios.min.js"></script>
+    <script src="~/js/staffSelect.js"></script>
+    <script>setUpStaffDropdown("Spec_Office","Spec_Assigned",false);</script>
 }

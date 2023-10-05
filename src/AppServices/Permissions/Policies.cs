@@ -39,15 +39,24 @@ public static class Policies
     public static AuthorizationPolicy AdministrationView =>
         ActiveUserPolicyBuilder.AddRequirements(new AdministrationViewRequirement()).Build();
 
-    public static AuthorizationPolicy StaffUser =>
-        ActiveUserPolicyBuilder.AddRequirements(new StaffUserRequirement()).Build();
+    public static AuthorizationPolicy AttachmentsEditor =>
+        ActiveUserPolicyBuilder.AddRequirements(new AttachmentsEditorRequirement()).Build();
+
+    public static AuthorizationPolicy DataExporter =>
+        ActiveUserPolicyBuilder.AddRequirements(new DataExporterRequirement()).Build();
+
+    public static AuthorizationPolicy DivisionManager =>
+        ActiveUserPolicyBuilder.AddRequirements(new DivisionManagerRequirement()).Build();
+
+    public static AuthorizationPolicy Manager =>
+        ActiveUserPolicyBuilder.AddRequirements(new ManagerRequirement()).Build();
 
     public static AuthorizationPolicy SiteMaintainer =>
         ActiveUserPolicyBuilder.AddRequirements(new SiteMaintainerRequirement()).Build();
 
-    public static AuthorizationPolicy UserAdministrator =>
-        ActiveUserPolicyBuilder.AddRequirements(new UserAdministratorRequirement()).Build();
+    public static AuthorizationPolicy StaffUser =>
+        ActiveUserPolicyBuilder.AddRequirements(new StaffUserRequirement()).Build();
 
-    public static AuthorizationPolicy DivisionManager =>
-        ActiveUserPolicyBuilder.AddRequirements(new DivisionManagerRequirement()).Build();
+    public static AuthorizationPolicy UserAdministrator =>
+        ActiveUserPolicyBuilder.AddRequirements(new UserAdminRequirement()).Build();
 }

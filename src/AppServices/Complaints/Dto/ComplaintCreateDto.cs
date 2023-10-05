@@ -21,13 +21,14 @@ public class ComplaintCreateDto
 
     [Required]
     [DataType(DataType.Date)]
+    [DisplayFormat(DataFormatString = "{0:O}", ApplyFormatInEditMode = true)]
     [Display(Name = "Date received")]
-    public DateTime ReceivedDate { get; set; } = DateTime.Today;
+    public DateOnly ReceivedDate { get; init; } = DateOnly.FromDateTime(DateTime.Today);
 
     [Required]
     [DataType(DataType.Time)]
     [Display(Name = "Time received")]
-    public DateTime ReceivedTime { get; init; } = DateTime.Now.RoundToNearestQuarterHour();
+    public TimeOnly ReceivedTime { get; init; } = DateTime.Now.TimeRoundedToQuarterHour();
 
     [Required]
     [Display(Name = "Received by")]
@@ -35,11 +36,11 @@ public class ComplaintCreateDto
 
     // Caller
 
-    [Display(Name = "Represents")]
-    public string? CallerRepresents { get; init; }
-
     [Display(Name = "Name")]
     public string? CallerName { get; init; }
+
+    [Display(Name = "Represents")]
+    public string? CallerRepresents { get; init; }
 
     [EmailAddress]
     [StringLength(150)]
@@ -99,6 +100,8 @@ public class ComplaintCreateDto
     [Display(Name = "Facility ID Number")]
     public string? SourceFacilityIdNumber { get; init; }
 
+    // Source Contact
+
     [StringLength(100)]
     [Display(Name = "Name")]
     public string? SourceContactName { get; init; }
@@ -117,6 +120,8 @@ public class ComplaintCreateDto
 
     [Display(Name = "Other phone")]
     public PhoneNumber? SourceTertiaryPhoneNumber { get; init; }
+
+    // Source Address
 
     [Display(Name = "Source address")]
     public IncompleteAddress SourceAddress { get; init; } = new();

@@ -10,8 +10,8 @@
 
 ### Redirects
 
-| Redirect                        | To                       |
-|---------------------------------|--------------------------|
+| Redirect                        | To                        |
+|---------------------------------|---------------------------|
 | `/Public/ComplaintDetails/{id}` | `/Public/Complaints/{id}` |
 
 ## Account & login pages
@@ -19,69 +19,69 @@
 * `/Account` (view profile)
 * `/Account/Login`
 * `/Account/Edit` (edit contact info)
+* `/Account/Support` (help/support)
 
-## Admin Dashboard
+## Staff Dashboard
 
-* `/Admin` (user dashboard)
-* `/Admin/Support` (help/support)
+* `/Staff` (user dashboard)
 
 ## Complaint summary pages
 
-* `/Admin/Complaints` (search)
-* `/Admin/Complaints/Download` (search results export)
-* `/Admin/Complaints/Export` (archive export)
-* `/Admin/Complaints/Reports`
+* `/Staff/Complaints` (search)
+* `/Staff/Complaints/Download` (search results export)
+* `/Staff/Complaints/Export` (archive export)
+* `/Staff/Complaints/Reports`
 
 ### Redirects
 
 | Redirect                | To                          |
 |-------------------------|-----------------------------|
-| `/Complaints`           | `/Admin/Complaints`         |
-| `/Complaints/Export`    | `/Admin/Complaints/Export`  |
-| `/Complaints/Reports`   | `/Admin/Complaints/Reports` |
-| `/Complaints/Reports/*` | `/Admin/Complaints/Reports` |
+| `/Complaints`           | `/Staff/Complaints`         |
+| `/Complaints/Export`    | `/Staff/Complaints/Export`  |
+| `/Complaints/Reports`   | `/Staff/Complaints/Reports` |
+| `/Complaints/Reports/*` | `/Staff/Complaints/Reports` |
 
 ## Complaint details
 
-* `/Admin/Complaints/Details/{id}`
-* `/Admin/Complaints/Attachment/{attachmentId}/{fileName}`
+* `/Staff/Complaints/Details/{id}`
+* `/Staff/Complaints/Attachment/{attachmentId}/{fileName}`
 
 ## Complaint user actions
 
-* `/Admin/Complaints/Add`
-* `/Admin/Complaints/Approve/{id}`
-* `/Admin/Complaints/Assign/{id}`
-* `/Admin/Complaints/Delete/{id}`
-* `/Admin/Complaints/Edit/{id}`
-* `/Admin/Complaints/Reopen/{id}`
-* `/Admin/Complaints/RequestReview/{id}`
-* `/Admin/Complaints/Restore/{id}`
-* `/Admin/Complaints/Return/{id}`
+* `/Staff/Complaints/Add`
+* `/Staff/Complaints/Approve/{id}`
+* `/Staff/Complaints/Assign/{id}`
+* `/Staff/Complaints/Delete/{id}`
+* `/Staff/Complaints/Edit/{id}`
+* `/Staff/Complaints/Reopen/{id}`
+* `/Staff/Complaints/RequestReview/{id}`
+* `/Staff/Complaints/Restore/{id}`
+* `/Staff/Complaints/Return/{id}`
 
 ### Redirects
 
 | Redirect                         | To                       |
 |----------------------------------|--------------------------|
-| `/Complaints/Details/{id}`       | `/Admin/Complaints/{id}` |
-| `/Complaints/[user action]/{id}` | `/Admin/Complaints/{id}` |
-| `/Admin/Complaints/Details`      | `/Admin/Complaints`      |
+| `/Complaints/Details/{id}`       | `/Staff/Complaints/{id}` |
+| `/Complaints/[user action]/{id}` | `/Staff/Complaints/{id}` |
+| `/Staff/Complaints/Details`      | `/Staff/Complaints`      |
 
 ## Complaint Actions
 
-* `/Admin/ComplaintActions` (search)
-* `/Admin/Complaints/Details/{id}#actions` (embedded form)
-* `/Admin/Complaints/Details/{id}/DeleteAction/{actionId}`
-* `/Admin/Complaints/Details/{id}/EditAction/{actionId}`
+* `/Staff/ComplaintActions` (search)
+* `/Staff/Complaints/Details/{id}#actions` (embedded form)
+* `/Staff/Complaints/Details/{id}/DeleteAction/{actionId}`
+* `/Staff/Complaints/Details/{id}/EditAction/{actionId}`
 
 ### Redirects
 
-| Redirect                                      | To                        |
-|-----------------------------------------------|---------------------------|
-| `/ComplaintActions`                           | `/Admin/ComplaintActions` |
-| `/Complaints/Actions/{id}`                    | `/Admin/ComplaintActions` |
-| `/Complaints/EditAction/{actionid}`           | `/Admin/ComplaintActions` |
-| `/Admin/Complaints/Details/{id}/DeleteAction` | `/Admin/Complaints/{id}`  |
-| `/Admin/Complaints/Details/{id}/EditAction`   | `/Admin/Complaints/{id}`  |
+| Redirect                                | To                        |
+|-----------------------------------------|---------------------------|
+| `/ComplaintActions`                     | `/Staff/ComplaintActions` |
+| `/Complaints/Actions/{id}`              | `/Staff/ComplaintActions` |
+| `/Complaints/EditAction/{actionid}`     | `/Staff/ComplaintActions` |
+| `/Complaints/Details/{id}/DeleteAction` | `/Staff/Complaints/{id}`  |
+| `/Complaints/Details/{id}/EditAction`   | `/Staff/Complaints/{id}`  |
 
 ## Users
 

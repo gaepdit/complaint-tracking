@@ -1,5 +1,5 @@
-﻿using Cts.Domain.Identity;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
+using Cts.AppServices.Permissions.Helpers;
 
 namespace Cts.AppServices.Permissions.Requirements;
 
@@ -10,8 +10,7 @@ internal class SiteMaintainerRequirement :
         AuthorizationHandlerContext context,
         SiteMaintainerRequirement requirement)
     {
-        if (context.User.IsInRole(RoleName.SiteMaintenance)
-            || context.User.IsInRole(RoleName.DivisionManager))
+        if (context.User.IsSiteMaintainer())
             context.Succeed(requirement);
 
         return Task.FromResult(0);

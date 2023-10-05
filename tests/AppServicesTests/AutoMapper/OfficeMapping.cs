@@ -2,7 +2,6 @@ using Cts.AppServices.Offices;
 using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
 using Cts.TestData.Constants;
-using FluentAssertions.Execution;
 
 namespace AppServicesTests.AutoMapper;
 
@@ -28,7 +27,7 @@ public class OfficeMapping
     {
         var item = new Office(Guid.NewGuid(), TextData.ValidName);
 
-        var result = AppServicesTestsSetup.Mapper!.Map<OfficeWithAssignorViewDto>(item);
+        var result = AppServicesTestsSetup.Mapper!.Map<OfficeWithAssignorDto>(item);
 
         using (new AssertionScope())
         {
@@ -48,7 +47,6 @@ public class OfficeMapping
 
         using (new AssertionScope())
         {
-            result.Id.Should().Be(item.Id);
             result.Name.Should().Be(item.Name);
             result.Active.Should().BeTrue();
         }
@@ -64,7 +62,6 @@ public class OfficeMapping
 
         using (new AssertionScope())
         {
-            result.Id.Should().Be(item.Id);
             result.Name.Should().Be(item.Name);
             result.AssignorId.Should().Be(user.Id);
             result.Active.Should().BeTrue();

@@ -2,7 +2,6 @@
 using Cts.TestData.Constants;
 using Cts.WebApp.Pages.Admin.Maintenance.Offices;
 using Cts.WebApp.Platform.PageModelHelpers;
-using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 
@@ -10,8 +9,8 @@ namespace WebAppTests.Pages.Admin.Maintenance.Offices;
 
 public class IndexTests
 {
-    private static readonly List<OfficeWithAssignorViewDto> ListTest = new()
-        { new OfficeWithAssignorViewDto(Guid.Empty, TextData.ValidName, true) };
+    private static readonly List<OfficeWithAssignorDto> ListTest = new()
+        { new OfficeWithAssignorDto(Guid.Empty, TextData.ValidName, true) };
 
     [Test]
     public async Task OnGet_ReturnsWithList()

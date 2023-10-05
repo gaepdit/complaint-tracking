@@ -24,7 +24,6 @@ public static class DataStores
             services.AddSingleton<IComplaintRepository, LocalComplaintRepository>();
             services.AddSingleton<IConcernRepository, LocalConcernRepository>();
             services.AddSingleton<IOfficeRepository, LocalOfficeRepository>();
-            // services.AddSingleton<IUserRepository, LocalUserRepository>();
         }
         else
         {
@@ -50,7 +49,6 @@ public static class DataStores
             services.AddScoped<IComplaintRepository, ComplaintRepository>();
             services.AddScoped<IConcernRepository, ConcernRepository>();
             services.AddScoped<IOfficeRepository, OfficeRepository>();
-            // services.AddScoped<IUserRepository, UserRepository>();
         }
 
         // When running locally, you have the option to access file in memory or use the local filesystem.

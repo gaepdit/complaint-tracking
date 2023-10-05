@@ -12,7 +12,7 @@ public class OfficeCreateValidator : AbstractValidator<OfficeCreateDto>
     {
         _repository = repository;
 
-        RuleFor(e => e.Name)
+        RuleFor(dto => dto.Name)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .Length(AppConstants.MinimumNameLength, AppConstants.MaximumNameLength)

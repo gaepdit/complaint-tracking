@@ -6,7 +6,6 @@ using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
 using Cts.TestData.Constants;
 using Cts.WebApp.Api;
-using FluentAssertions.Execution;
 using GaEpd.AppLibrary.ListItems;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,8 +21,8 @@ public class OfficeApiTests
     [Test]
     public async Task ListOffices_ReturnsListOfOffices()
     {
-        List<OfficeWithAssignorViewDto> officeList = new()
-            { new OfficeWithAssignorViewDto(Guid.Empty, TextData.ValidName, true) };
+        List<OfficeWithAssignorDto> officeList = new()
+            { new OfficeWithAssignorDto(Guid.Empty, TextData.ValidName, true) };
         var officeServiceMock = Substitute.For<IOfficeService>();
         officeServiceMock.GetListAsync(CancellationToken.None).Returns(officeList);
         var staffServiceMock = Substitute.For<IStaffService>();

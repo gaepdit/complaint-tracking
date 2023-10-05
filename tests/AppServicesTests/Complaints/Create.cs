@@ -17,7 +17,7 @@ public class Create
     {
         // Arrange
         var complaintManagerMock = Substitute.For<IComplaintManager>();
-        complaintManagerMock.CreateNewComplaintAsync(Arg.Any<string?>())
+        complaintManagerMock.CreateNewComplaint(Arg.Any<string?>())
             .Returns(new Complaint(0));
 
         var userServiceMock = Substitute.For<IUserService>();
@@ -48,7 +48,7 @@ public class Create
     {
         // Arrange
         var complaintManagerMock = Substitute.For<IComplaintManager>();
-        complaintManagerMock.CreateNewComplaintAsync(null)
+        complaintManagerMock.CreateNewComplaint(null)
             .Returns(new Complaint(0));
 
         var userServiceMock = Substitute.For<IUserService>();
@@ -66,8 +66,8 @@ public class Create
 
         var item = new ComplaintCreateDto
         {
-            ReceivedDate = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Local),
-            ReceivedTime = new DateTime(2020, 2, 2, 1, 15, 0, DateTimeKind.Local),
+            ReceivedDate = new DateOnly(2000, 1, 1),
+            ReceivedTime = new TimeOnly(1, 15, 0),
             CurrentOfficeId = office.Id,
         };
 

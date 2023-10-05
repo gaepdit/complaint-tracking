@@ -1,5 +1,5 @@
-﻿using Cts.Domain.Identity;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
+using Cts.AppServices.Permissions.Helpers;
 
 namespace Cts.AppServices.Permissions.Requirements;
 
@@ -10,7 +10,7 @@ internal class DivisionManagerRequirement :
         AuthorizationHandlerContext context,
         DivisionManagerRequirement requirement)
     {
-        if (context.User.IsInRole(RoleName.DivisionManager))
+        if (context.User.IsDivisionManager())
             context.Succeed(requirement);
 
         return Task.FromResult(0);

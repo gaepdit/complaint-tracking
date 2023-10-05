@@ -2,7 +2,6 @@ using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
 using Cts.TestData.Constants;
-using FluentAssertions.Execution;
 
 namespace AppServicesTests.AutoMapper;
 
@@ -57,7 +56,6 @@ public class UserMapping
 
         using (new AssertionScope())
         {
-            result.Id.Should().Be(_item.Id);
             result.Phone.Should().Be(_item.Phone);
             result.OfficeId.Should().Be(_item.Office!.Id);
             result.Active.Should().BeTrue();

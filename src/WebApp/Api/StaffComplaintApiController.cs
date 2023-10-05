@@ -8,12 +8,12 @@ namespace Cts.WebApp.Api;
 
 [Authorize]
 [ApiController]
-[Route("api/complaints/admin")]
+[Route("api/staff/complaints")]
 [Produces("application/json")]
-public class ComplaintAdminApiController : Controller
+public class StaffComplaintApiController : Controller
 {
     private readonly IComplaintService _service;
-    public ComplaintAdminApiController(IComplaintService service) => _service = service;
+    public StaffComplaintApiController(IComplaintService service) => _service = service;
 
     [HttpGet]
     public async Task<IPaginatedResult<ComplaintSearchResultDto>> ListComplaintsAsync(

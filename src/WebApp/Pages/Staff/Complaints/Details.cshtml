@@ -30,13 +30,16 @@
     <h2 class="text-danger-emphasis">Complaint Has Been Deleted</h2>
 
     <div class="d-print-none mb-2">
-        <a asp-page="Restore" asp-route-id="@Model.Item.Id" class="btn btn-outline-danger">Restore deleted complaint</a>
+        <a asp-page="Restore" asp-route-id="@Model.Item.Id.ToString()" class="btn btn-outline-danger">Restore deleted complaint</a>
     </div>
 
     <div class="container">
         <dl class="row">
             <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.DeletedBy)</dt>
-            <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.DeletedBy, DisplayTemplate.NameOrNotEntered) on @Html.DisplayFor(m => m.Item.DeletedAt, DisplayTemplate.LongDateTimeOrNotEntered)</dd>
+            <dd class="col-sm-8 col-lg-9">
+                @Html.DisplayFor(m => m.Item.DeletedBy, DisplayTemplate.NameOrNotEntered)
+                on @Html.DisplayFor(m => m.Item.DeletedAt, DisplayTemplate.LongDateTimeOrNotEntered)
+            </dd>
             <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.DeleteComments)</dt>
             <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Model.Item.DeleteComments</dd>
         </dl>
@@ -56,20 +59,20 @@ else
         {
             @if (Model.UserCan[ComplaintOperation.Edit] || Model.UserCan[ComplaintOperation.EditAsRecentReporter])
             {
-                <a asp-page="Edit" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary me-2">Edit details</a>
+                <a asp-page="Edit" asp-route-id="@Model.Item.Id.ToString()" class="btn btn-outline-primary me-2">Edit details</a>
             }
             @if (Model.UserCan[ComplaintOperation.Edit])
             {
-                <a asp-page="Actions" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary me-2">Add/edit actions</a>
+                <a asp-page="Actions" asp-route-id="@Model.Item.Id.ToString()" class="btn btn-outline-primary me-2">Add/edit actions</a>
             }
         }
         @if (Model.UserCan[ComplaintOperation.ManageDeletions])
         {
-            <a asp-page="Delete" asp-route-id="@Model.Item.Id" class="btn btn-outline-danger me-2">Delete</a>
+            <a asp-page="Delete" asp-route-id="@Model.Item.Id.ToString()" class="btn btn-outline-danger me-2">Delete</a>
         }
         @if (Model.Item.IsPublic)
         {
-            <a asp-page="/Public/Complaints/Index" asp-route-id="@Model.Item.Id">View public copy</a>
+            <a asp-page="/Public/Complaints/Index" asp-route-id="@Model.Item.Id.ToString()">View public copy</a>
         }
     </div>
 }
@@ -79,24 +82,24 @@ else
 <div class="d-print-none mb-2">
     @if (Model.UserCan[ComplaintOperation.Review])
     {
-        <a asp-action="Approve" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary me-2">Close Complaint (approved)</a>
-        <a asp-action="Return" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary me-2">Return to staff (not approved)</a>
+        <a asp-action="Approve" asp-route-id="@Model.Item.Id.ToString()" class="btn btn-outline-primary me-2">Close Complaint (approved)</a>
+        <a asp-action="Return" asp-route-id="@Model.Item.Id.ToString()" class="btn btn-outline-primary me-2">Return to staff (not approved)</a>
     }
     @if (Model.UserCan[ComplaintOperation.Assign])
     {
-        <a asp-action="Assign" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary me-2">Assign</a>
+        <a asp-action="Assign" asp-route-id="@Model.Item.Id.ToString()" class="btn btn-outline-primary me-2">Assign</a>
     }
     @if (Model.UserCan[ComplaintOperation.RequestReview])
     {
-        <a asp-action="RequestReview" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary me-2">Submit for review</a>
+        <a asp-action="RequestReview" asp-route-id="@Model.Item.Id.ToString()" class="btn btn-outline-primary me-2">Submit for review</a>
     }
     @if (Model.UserCan[ComplaintOperation.Reassign])
     {
-        <a asp-action="Assign" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary me-2">Transfer/reassign</a>
+        <a asp-action="Assign" asp-route-id="@Model.Item.Id.ToString()" class="btn btn-outline-primary me-2">Transfer/reassign</a>
     }
     @if (Model.UserCan[ComplaintOperation.Reopen])
     {
-        <a asp-action="Reopen" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary me-2">Reopen</a>
+        <a asp-action="Reopen" asp-route-id="@Model.Item.Id.ToString()" class="btn btn-outline-primary me-2">Reopen</a>
     }
 </div>
 
@@ -105,7 +108,10 @@ else
         @if (Model.Item.ComplaintClosed)
         {
             <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ReviewedBy)</dt>
-            <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.ReviewedBy, DisplayTemplate.NameOrNotEntered) on @Html.DisplayFor(m => m.Item.ComplaintClosedDate, DisplayTemplate.LongDateTimeOrNotEntered)</dd>
+            <dd class="col-sm-8 col-lg-9">
+                @Html.DisplayFor(m => m.Item.ReviewedBy, DisplayTemplate.NameOrNotEntered)
+                on @Html.DisplayFor(m => m.Item.ComplaintClosedDate, DisplayTemplate.LongDateTimeOrNotEntered)
+            </dd>
             <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ReviewComments)</dt>
             <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Model.Item.ReviewComments</dd>
         }
@@ -192,7 +198,7 @@ else
 
 @if (Model.UserCan[ComplaintOperation.Edit])
 {
-    <a asp-page="Actions" asp-route-id="@Model.Item.Id" class="btn btn-outline-primary mb-2">Add/edit actions</a>
+    <a asp-page="Actions" asp-route-id="@Model.Item.Id.ToString()" class="btn btn-outline-primary mb-2">Add/edit actions</a>
 }
 
 <div class="container">
@@ -208,7 +214,10 @@ else
                 <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => item.Investigator)</dt>
                 <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => item.Investigator, DisplayTemplate.StringOrNotEntered)</dd>
                 <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => item.EnteredBy)</dt>
-                <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => item.EnteredBy, DisplayTemplate.NameOrNotEntered) on @Html.DisplayFor(m => item.EnteredDate, DisplayTemplate.LongDateTime)</dd>
+                <dd class="col-sm-8 col-lg-9">
+                    @Html.DisplayFor(m => item.EnteredBy, DisplayTemplate.NameOrNotEntered)
+                    on @Html.DisplayFor(m => item.EnteredDate, DisplayTemplate.LongDateTime)
+                </dd>
                 <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => item.Comments)</dt>
                 <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(m => item.Comments, DisplayTemplate.StringOrNotEntered)</dd>
             </dl>
@@ -245,15 +254,15 @@ else
                 <td>
                     @if (item.IsImage)
                     {
-                        <a asp-page="Attachment" asp-route-id="@item.Id" asp-route-fileName="@item.FileName" target="_blank"
+                        <a asp-page="Attachment" asp-route-id="@item.Id.ToString()" asp-route-fileName="@item.FileName" target="_blank"
                            class="text-decoration-none rounded d-block no-external-link" data-fancybox="attachment" data-caption="@item.FileName">
-                            <img src="../Attachment/@item.Id/@item.FileName/?thumbnail=true" class="img-thumbnail rounded me-2" alt="" />
+                            <img src="@item.ThumbnailSrc" class="img-thumbnail rounded me-2" alt="" />
                             @item.FileName
                         </a>
                     }
                     else
                     {
-                        <a asp-page="Attachment" asp-route-id="@item.Id" asp-route-fileName="@item.FileName" target="_blank"
+                        <a asp-page="Attachment" asp-route-id="@item.Id.ToString()" asp-route-fileName="@item.FileName" target="_blank"
                            class="text-decoration-none rounded d-block p-2 no-external-link">
                             @Html.DisplayFor(m => item.FileExtension, DisplayTemplate.FileTypeIcon) @item.FileName
                         </a>
@@ -267,7 +276,7 @@ else
                 @if (Model.UserCan[ComplaintOperation.EditAttachments])
                 {
                     <td>
-                        <a class="btn btn-outline-danger btn-sm" asp-action="DeleteAttachment" asp-route-id="@item.Id">Delete</a>
+                        <a class="btn btn-outline-danger btn-sm" asp-action="DeleteAttachment" asp-route-id="@item.Id.ToString()">Delete</a>
                     </td>
                 }
             </tr>
@@ -308,9 +317,15 @@ else
 <div class="container">
     <dl class="row small">
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ReceivedBy)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.ReceivedBy, DisplayTemplate.NameOrNotEntered) on @Html.DisplayFor(m => m.Item.ReceivedDate, DisplayTemplate.LongDateTime)</dd>
+        <dd class="col-sm-8 col-lg-9">
+            @Html.DisplayFor(m => m.Item.ReceivedBy, DisplayTemplate.NameOrNotEntered)
+            on @Html.DisplayFor(m => m.Item.ReceivedDate, DisplayTemplate.LongDateTime)
+        </dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.EnteredBy)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.EnteredBy, DisplayTemplate.NameOrNotEntered) on @Html.DisplayFor(m => m.Item.EnteredDate, DisplayTemplate.LongDateTime)</dd>
+        <dd class="col-sm-8 col-lg-9">
+            @Html.DisplayFor(m => m.Item.EnteredBy, DisplayTemplate.NameOrNotEntered)
+            on @Html.DisplayFor(m => m.Item.EnteredDate, DisplayTemplate.LongDateTime)
+        </dd>
     </dl>
 </div>
 
@@ -350,4 +365,4 @@ else
             </tbody>
         </table>
     </details>
-    }
+}

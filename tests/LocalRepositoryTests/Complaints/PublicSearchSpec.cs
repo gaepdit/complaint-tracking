@@ -14,7 +14,8 @@ public class PublicSearchSpec
     public void SetUp()
     {
         _repository = new LocalComplaintRepository();
-        _referenceItem = _repository.Items.Single(e => e.ComplaintNature == "PublicSearchSpec complaint nature reference");
+        _referenceItem =
+            _repository.Items.Single(e => e.ComplaintNature == "PublicSearchSpec complaint nature reference");
     }
 
     [TearDown]

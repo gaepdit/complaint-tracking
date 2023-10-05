@@ -20,7 +20,7 @@
                 @Html.EditorFor(e => e.Item.Name, EditorTemplate.Input)
             </div>
             <div class="col-lg mb-3">
-                @Html.EditorFor(e => e.Item.AssignorId, EditorTemplate.Select, new { Items = Model.ActiveStaffMembers })
+                @Html.EditorFor(e => e.Item.AssignorId, EditorTemplate.Select, new { Items = Model.ActiveStaffMembersSelectList })
             </div>
         </div>
         <div class="mb-3">
@@ -31,7 +31,6 @@
             <a asp-page="Index" class="btn btn-outline-secondary col-md-2">Cancel</a>
         </div>
         <div class="text-danger-emphasis mt-3">* denotes a required field</div>
-        <input asp-for="Item.Id" type="hidden" />
         <input asp-for="OriginalName" type="hidden" />
     </form>
 </div>

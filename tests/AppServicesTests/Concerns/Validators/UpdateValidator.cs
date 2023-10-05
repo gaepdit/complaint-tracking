@@ -2,22 +2,25 @@
 using Cts.AppServices.Concerns.Validators;
 using Cts.Domain.Entities.Concerns;
 using Cts.TestData.Constants;
+using FluentValidation;
 using FluentValidation.TestHelper;
 
 namespace AppServicesTests.Concerns.Validators;
 
 public class UpdateValidator
 {
+    private static ValidationContext<ConcernUpdateDto> GetContext(ConcernUpdateDto model) =>
+        new(model) { RootContextData = { ["Id"] = Guid.Empty } };
+
     [Test]
     public async Task ValidDto_ReturnsAsValid()
     {
         var repoMock = Substitute.For<IConcernRepository>();
         repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns((Concern?)null);
-        var model = new ConcernUpdateDto(Guid.Empty, TextData.ValidName, true);
+        var model = new ConcernUpdateDto(TextData.ValidName, true);
 
-        var validator = new ConcernUpdateValidator(repoMock);
-        var result = await validator.TestValidateAsync(model);
+        var result = await new ConcernUpdateValidator(repoMock).TestValidateAsync(GetContext(model));
 
         result.ShouldNotHaveValidationErrorFor(e => e.Name);
     }
@@ -28,10 +31,9 @@ public class UpdateValidator
         var repoMock = Substitute.For<IConcernRepository>();
         repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new Concern(Guid.NewGuid(), TextData.ValidName));
-        var model = new ConcernUpdateDto(Guid.Empty, TextData.ValidName, true);
+        var model = new ConcernUpdateDto(TextData.ValidName, true);
 
-        var validator = new ConcernUpdateValidator(repoMock);
-        var result = await validator.TestValidateAsync(model);
+        var result = await new ConcernUpdateValidator(repoMock).TestValidateAsync(GetContext(model));
 
         result.ShouldHaveValidationErrorFor(e => e.Name)
             .WithErrorMessage("The name entered already exists.");
@@ -43,10 +45,9 @@ public class UpdateValidator
         var repoMock = Substitute.For<IConcernRepository>();
         repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns(new Concern(Guid.Empty, TextData.ValidName));
-        var model = new ConcernUpdateDto(Guid.Empty, TextData.ValidName, true);
+        var model = new ConcernUpdateDto(TextData.ValidName, true);
 
-        var validator = new ConcernUpdateValidator(repoMock);
-        var result = await validator.TestValidateAsync(model);
+        var result = await new ConcernUpdateValidator(repoMock).TestValidateAsync(GetContext(model));
 
         result.ShouldNotHaveValidationErrorFor(e => e.Name);
     }
@@ -57,10 +58,9 @@ public class UpdateValidator
         var repoMock = Substitute.For<IConcernRepository>();
         repoMock.FindByNameAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns((Concern?)null);
-        var model = new ConcernUpdateDto(Guid.Empty, TextData.ShortName, true);
+        var model = new ConcernUpdateDto(TextData.ShortName, true);
 
-        var validator = new ConcernUpdateValidator(repoMock);
-        var result = await validator.TestValidateAsync(model);
+        var result = await new ConcernUpdateValidator(repoMock).TestValidateAsync(GetContext(model));
 
         result.ShouldHaveValidationErrorFor(e => e.Name);
     }

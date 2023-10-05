@@ -2,18 +2,9 @@
 
 public static class DateTimeExtensions
 {
-    public static DateTime RoundToNearestQuarterHour(this DateTime input)
+    public static TimeOnly TimeRoundedToQuarterHour(this DateTime input)
     {
-        var newTime = RoundToNearestQuarterHour(input.TimeOfDay);
-        return new DateTime(input.Year, input.Month, input.Day, newTime.Hours, newTime.Minutes, 0, input.Kind);
-    }
-
-    private static TimeSpan RoundToNearestQuarterHour(this TimeSpan input) =>
-        RoundToNearestMinutes(input, 15);
-
-    private static TimeSpan RoundToNearestMinutes(this TimeSpan input, int minutes)
-    {
-        var totalMinutes = (int)(input + new TimeSpan(0, minutes / 2, 0)).TotalMinutes;
-        return new TimeSpan(0, totalMinutes - totalMinutes % minutes, 0);
+        var newMinutes = 15 * (int)Math.Round(input.Minute / 15.0);
+        return new TimeOnly((input.Hour + newMinutes / 60) % 24, newMinutes % 60, 0);
     }
 }

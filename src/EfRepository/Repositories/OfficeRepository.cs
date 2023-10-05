@@ -3,7 +3,7 @@ using Cts.Domain.Identity;
 
 namespace Cts.EfRepository.Repositories;
 
-public sealed class OfficeRepository : NamedEntityRepository<Office>, IOfficeRepository
+public sealed class OfficeRepository : NamedEntityRepository<Office, AppDbContext>, IOfficeRepository
 {
     public OfficeRepository(AppDbContext context) : base(context) { }
 
