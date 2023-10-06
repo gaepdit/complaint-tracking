@@ -98,7 +98,7 @@
 
 @if (Model.Item.Attachments is { Count: > 0 })
 {
-    <table class="table align-middle" aria-label="File attachments">
+    <table class="table table-hover align-middle" aria-label="File attachments">
         <thead>
             <tr>
                 <th scope="col">File</th>
@@ -114,7 +114,7 @@
                         @if (item.IsImage)
                         {
                             <a asp-page="Attachment" asp-route-id="@item.Id.ToString()" asp-route-fileName="@item.FileName" target="_blank"
-                               class="text-decoration-none rounded d-block no-external-link" data-fancybox="attachment" data-caption="@item.FileName">
+                               class="text-decoration-hover rounded d-block no-external-link" data-fancybox="attachment" data-caption="@item.FileName">
                                 <img src="Attachment/@item.Id.ToString()/@item.FileName/?thumbnail=true" class="img-thumbnail rounded me-2" alt="" />
                                 @item.FileName
                             </a>
@@ -122,7 +122,7 @@
                         else
                         {
                             <a asp-page="Attachment" asp-route-id="@item.Id.ToString()" asp-route-fileName="@item.FileName" target="_blank"
-                               class="text-decoration-none rounded d-block p-2 no-external-link">
+                               class="text-decoration-hover rounded d-block p-2 no-external-link">
                                 @Html.DisplayFor(m => item.FileExtension, DisplayTemplate.FileTypeIcon) @item.FileName
                             </a>
                         }
