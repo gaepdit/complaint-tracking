@@ -16,10 +16,7 @@ public class DetailsModel : PageModel
     private readonly IStaffService _staff;
     private readonly IAuthorizationService _authorization;
 
-    public DetailsModel(
-        IComplaintService complaints,
-        IStaffService staff,
-        IAuthorizationService authorization)
+    public DetailsModel(IComplaintService complaints, IStaffService staff, IAuthorizationService authorization)
     {
         _complaints = complaints;
         _staff = staff;

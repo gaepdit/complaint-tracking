@@ -61,7 +61,7 @@ public class ComplaintPublicViewDto
     [Display(Name = "Source Name")]
     public string? SourceFacilityName { get; init; }
 
-    [Display(Name = "Source Contact")]
+    [Display(Name = "Contact Name")]
     public string? SourceContactName { get; init; }
 
     [Display(Name = "Source Address")]

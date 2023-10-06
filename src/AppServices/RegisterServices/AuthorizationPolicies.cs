@@ -21,5 +21,6 @@ public static class AuthorizationPolicies
         });
 
         services.AddSingleton<IAuthorizationHandler, ComplaintViewPermissionsHandler>();
+        services.AddSingleton<IAuthorizationHandler, ComplaintUpdatePermissionsHandler>();
     }
 }

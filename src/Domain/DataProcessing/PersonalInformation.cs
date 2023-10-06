@@ -1,6 +1,6 @@
 ﻿namespace Cts.Domain.DataProcessing;
 
-public static partial class PersonalInformation
+public static class PersonalInformation
 {
     public static string? RedactPii(string? input)
     {

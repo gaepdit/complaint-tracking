@@ -25,27 +25,32 @@ public class AutoMapperProfile : Profile
         CreateMap<ActionType, ActionTypeUpdateDto>();
 
         CreateMap<ApplicationUser, StaffViewDto>();
-        CreateMap<ApplicationUser, StaffUpdateDto>();
         CreateMap<ApplicationUser, StaffSearchResultDto>();
 
         CreateMap<Attachment, AttachmentPublicViewDto>();
         CreateMap<Attachment, AttachmentViewDto>();
 
+        CreateMap<Complaint, ComplaintUpdateDto>()
+            .ForMember(dto => dto.ReceivedDate, expression =>
+                expression.MapFrom(complaint => DateOnly.FromDateTime(complaint.ReceivedDate.Date)))
+            .ForMember(dto => dto.ReceivedTime, expression =>
+                expression.MapFrom(complaint => TimeOnly.FromTimeSpan(complaint.ReceivedDate.TimeOfDay)))
+            .ForMember(dto => dto.CurrentUserOfficeId, expression => expression.Ignore());
         CreateMap<Complaint, ComplaintPublicViewDto>();
+        CreateMap<Complaint, ComplaintSearchResultDto>();
         CreateMap<Complaint, ComplaintViewDto>()
             .ForMember(dto => dto.CurrentUserOfficeId, expression => expression.Ignore());
-        CreateMap<Complaint, ComplaintSearchResultDto>();
 
         CreateMap<ComplaintAction, ComplaintActionPublicViewDto>();
         CreateMap<ComplaintAction, ComplaintActionViewDto>();
 
         CreateMap<ComplaintTransition, ComplaintTransitionViewDto>();
 
-        CreateMap<Concern, ConcernViewDto>();
         CreateMap<Concern, ConcernUpdateDto>();
+        CreateMap<Concern, ConcernViewDto>();
 
+        CreateMap<Office, OfficeUpdateDto>();
         CreateMap<Office, OfficeViewDto>();
         CreateMap<Office, OfficeWithAssignorDto>();
-        CreateMap<Office, OfficeUpdateDto>();
     }
 }

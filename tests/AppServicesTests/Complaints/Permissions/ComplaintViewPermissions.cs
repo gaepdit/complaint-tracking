@@ -61,7 +61,7 @@ public class ComplaintViewPermissions
     [Test]
     public async Task RecentReporter_IfEnteredWithinPastHour_Succeeds()
     {
-        var requirements = new[] { ComplaintOperation.EditAsRecentReporter };
+        var requirements = new[] { ComplaintOperation.EditDetails };
         var user = new ClaimsPrincipal(new ClaimsIdentity(
             new Claim[]
             {
@@ -85,7 +85,7 @@ public class ComplaintViewPermissions
     [Test]
     public async Task RecentReporter_IfEnteredBeforePastHour_DoesNotSucceed()
     {
-        var requirements = new[] { ComplaintOperation.EditAsRecentReporter };
+        var requirements = new[] { ComplaintOperation.EditDetails };
         var user = new ClaimsPrincipal(new ClaimsIdentity(
             new Claim[]
             {
