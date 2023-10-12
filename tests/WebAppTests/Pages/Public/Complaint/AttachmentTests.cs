@@ -8,7 +8,7 @@ namespace WebAppTests.Pages.Public.Complaint;
 public class AttachmentTests
 {
     [Test]
-    public async Task OnGet_PopulatesThePageModel()
+    public async Task OnGet_AttachmentExistsAndFileNameMatches_ReturnsFile()
     {
         var item = new AttachmentPublicViewDto
         {
@@ -24,7 +24,7 @@ public class AttachmentTests
             .Returns(item);
         var fileServiceMock = Substitute.For<IFileService>();
         fileServiceMock.GetFileAsync(Arg.Any<string>(), Arg.Any<string?>())
-            .Returns(new byte[] { 0x20 });
+            .Returns(new byte[] { 0x0 });
         var pageModel = new AttachmentModel();
 
         var result = await pageModel.OnGetAsync(complaintServiceMock, fileServiceMock,
@@ -36,7 +36,7 @@ public class AttachmentTests
     }
 
     [Test]
-    public async Task NonexistentItem_ReturnsNotFound()
+    public async Task OnGet_AttachmentDoesNotExist_ReturnsNotfound()
     {
         var complaintServiceMock = Substitute.For<IComplaintService>();
         complaintServiceMock.FindPublicAttachmentAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
@@ -50,7 +50,7 @@ public class AttachmentTests
     }
 
     [Test]
-    public async Task IncorrectFilename_ReturnsRedirect()
+    public async Task OnGet_FileNameDoesNotMatch_RedirectsToValidFileName()
     {
         var item = new AttachmentPublicViewDto
         {
@@ -75,7 +75,7 @@ public class AttachmentTests
     }
 
     [Test]
-    public async Task EmptyNonImageFile_ReturnsNotFound()
+    public async Task OnGet_FileDoesNotExist_ReturnsNotfound()
     {
         var item = new AttachmentPublicViewDto
         {
@@ -101,7 +101,7 @@ public class AttachmentTests
     }
 
     [Test]
-    public async Task EmptyImageFile_ReturnsRedirect()
+    public async Task OnGet_ImageFileDoesNotExist_ReturnsRedirect()
     {
         var item = new AttachmentPublicViewDto
         {

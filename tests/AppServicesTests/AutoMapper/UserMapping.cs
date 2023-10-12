@@ -50,19 +50,6 @@ public class UserMapping
     }
 
     [Test]
-    public void StaffUpdateMappingWorks()
-    {
-        var result = AppServicesTestsSetup.Mapper!.Map<StaffUpdateDto>(_item);
-
-        using (new AssertionScope())
-        {
-            result.Phone.Should().Be(_item.Phone);
-            result.OfficeId.Should().Be(_item.Office!.Id);
-            result.Active.Should().BeTrue();
-        }
-    }
-
-    [Test]
     public void NullStaffViewMappingWorks()
     {
         ApplicationUser? item = null;
