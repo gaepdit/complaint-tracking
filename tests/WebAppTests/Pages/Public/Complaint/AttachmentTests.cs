@@ -1,9 +1,7 @@
 using Cts.AppServices.Attachments;
 using Cts.AppServices.Complaints;
 using Cts.AppServices.Files;
-using Cts.TestData.Constants;
 using Cts.WebApp.Pages.Public.Complaints;
-using Microsoft.AspNetCore.Mvc;
 
 namespace WebAppTests.Pages.Public.Complaint;
 
@@ -32,11 +30,9 @@ public class AttachmentTests
         var result = await pageModel.OnGetAsync(complaintServiceMock, fileServiceMock,
             item.Id, item.FileName);
 
-        using (new AssertionScope())
-        {
-            result.Should().BeOfType<FileContentResult>();
-            ((FileContentResult)result).ContentType.Should().Be("application/pdf");
-        }
+        using var scope = new AssertionScope();
+        result.Should().BeOfType<FileContentResult>();
+        ((FileContentResult)result).ContentType.Should().Be("application/pdf");
     }
 
     [Test]
@@ -73,11 +69,9 @@ public class AttachmentTests
         var result = await pageModel.OnGetAsync(complaintServiceMock, Substitute.For<IFileService>(),
             item.Id, TextData.NonExistentName);
 
-        using (new AssertionScope())
-        {
-            result.Should().BeOfType<RedirectToPageResult>();
-            ((RedirectToPageResult)result).PageName.Should().Be("Attachment");
-        }
+        using var scope = new AssertionScope();
+        result.Should().BeOfType<RedirectToPageResult>();
+        ((RedirectToPageResult)result).PageName.Should().Be("Attachment");
     }
 
     [Test]

@@ -4,11 +4,8 @@ using Cts.AppServices.Staff.Dto;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
-using Cts.TestData.Constants;
 using Cts.WebApp.Api;
-using GaEpd.AppLibrary.ListItems;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 
 namespace WebAppTests.Api;
 
@@ -120,11 +117,9 @@ public class OfficeApiTests
         var response = await controller.GetStaffForAssignmentAsync(Guid.Empty);
 
         // Assert
-        using (new AssertionScope())
-        {
-            response.Should().BeOfType<UnauthorizedResult>();
-            ((UnauthorizedResult)response).StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
-        }
+        using var scope = new AssertionScope();
+        response.Should().BeOfType<UnauthorizedResult>();
+        ((UnauthorizedResult)response).StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
     }
 
     [Test]
@@ -143,12 +138,10 @@ public class OfficeApiTests
         var response = await controller.GetStaffForAssignmentAsync(Guid.Empty);
 
         // Assert
-        using (new AssertionScope())
-        {
-            response.Should().BeOfType<ObjectResult>();
-            ((ObjectResult)response).StatusCode.Should().Be(StatusCodes.Status403Forbidden);
-            ((ProblemDetails)((ObjectResult)response).Value!).Detail.Should().Be("Forbidden");
-        }
+        using var scope = new AssertionScope();
+        response.Should().BeOfType<ObjectResult>();
+        ((ObjectResult)response).StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+        ((ProblemDetails)((ObjectResult)response).Value!).Detail.Should().Be("Forbidden");
     }
 
     [Test]
@@ -173,11 +166,9 @@ public class OfficeApiTests
         var response = await controller.GetStaffForAssignmentAsync(Guid.Empty);
 
         // Assert
-        using (new AssertionScope())
-        {
-            response.Should().BeOfType<ObjectResult>();
-            ((ObjectResult)response).StatusCode.Should().Be(StatusCodes.Status403Forbidden);
-            ((ProblemDetails)((ObjectResult)response).Value!).Detail.Should().Be("Forbidden");
-        }
+        using var scope = new AssertionScope();
+        response.Should().BeOfType<ObjectResult>();
+        ((ObjectResult)response).StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+        ((ProblemDetails)((ObjectResult)response).Value!).Detail.Should().Be("Forbidden");
     }
 }

@@ -1,12 +1,5 @@
 using Cts.AppServices.ActionTypes;
-using Cts.TestData.Constants;
-using Cts.WebApp.Models;
 using Cts.WebApp.Pages.Admin.Maintenance.ActionTypes;
-using Cts.WebApp.Platform.PageModelHelpers;
-using FluentValidation;
-using FluentValidation.Results;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace WebAppTests.Pages.Admin.Maintenance.ActionTypes;
 
@@ -24,12 +17,10 @@ public class EditTests
 
         await page.OnGetAsync(Guid.Empty);
 
-        using (new AssertionScope())
-        {
-            page.Item.Should().BeEquivalentTo(ItemTest);
-            page.OriginalName.Should().Be(ItemTest.Name);
-            page.HighlightId.Should().Be(Guid.Empty);
-        }
+        using var scope = new AssertionScope();
+        page.Item.Should().BeEquivalentTo(ItemTest);
+        page.OriginalName.Should().Be(ItemTest.Name);
+        page.HighlightId.Should().Be(Guid.Empty);
     }
 
     [Test]
@@ -41,11 +32,9 @@ public class EditTests
 
         var result = await page.OnGetAsync(null);
 
-        using (new AssertionScope())
-        {
-            result.Should().BeOfType<RedirectToPageResult>();
-            ((RedirectToPageResult)result).PageName.Should().Be("Index");
-        }
+        using var scope = new AssertionScope();
+        result.Should().BeOfType<RedirectToPageResult>();
+        ((RedirectToPageResult)result).PageName.Should().Be("Index");
     }
 
     [Test]
@@ -76,13 +65,11 @@ public class EditTests
 
         var result = await page.OnPostAsync();
 
-        using (new AssertionScope())
-        {
-            page.HighlightId.Should().Be(page.Id);
-            page.TempData.GetDisplayMessage().Should().BeEquivalentTo(expectedMessage);
-            result.Should().BeOfType<RedirectToPageResult>();
-            ((RedirectToPageResult)result).PageName.Should().Be("Index");
-        }
+        using var scope = new AssertionScope();
+        page.HighlightId.Should().Be(page.Id);
+        page.TempData.GetDisplayMessage().Should().BeEquivalentTo(expectedMessage);
+        result.Should().BeOfType<RedirectToPageResult>();
+        ((RedirectToPageResult)result).PageName.Should().Be("Index");
     }
 
     [Test]
@@ -98,10 +85,8 @@ public class EditTests
 
         var result = await page.OnPostAsync();
 
-        using (new AssertionScope())
-        {
-            result.Should().BeOfType<PageResult>();
-            page.ModelState.IsValid.Should().BeFalse();
-        }
+        using var scope = new AssertionScope();
+        result.Should().BeOfType<PageResult>();
+        page.ModelState.IsValid.Should().BeFalse();
     }
 }

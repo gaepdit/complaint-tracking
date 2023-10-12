@@ -2,15 +2,7 @@ using Cts.AppServices.Offices;
 using Cts.AppServices.Staff;
 using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Identity;
-using Cts.TestData.Constants;
-using Cts.WebApp.Models;
 using Cts.WebApp.Pages.Admin.Users;
-using Cts.WebApp.Platform.PageModelHelpers;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Security.Claims;
 
 namespace WebAppTests.Pages.Admin.Users;
 
@@ -64,14 +56,12 @@ public class EditRolesTests
 
         var result = await pageModel.OnGetAsync(StaffViewTest.Id);
 
-        using (new AssertionScope())
-        {
-            result.Should().BeOfType<PageResult>();
-            pageModel.DisplayStaff.Should().Be(StaffViewTest);
-            pageModel.OfficeName.Should().Be(TextData.ValidName);
-            pageModel.UserId.Should().Be(Guid.Empty.ToString());
-            pageModel.RoleSettings.Should().BeEquivalentTo(expectedRoleSettings);
-        }
+        using var scope = new AssertionScope();
+        result.Should().BeOfType<PageResult>();
+        pageModel.DisplayStaff.Should().Be(StaffViewTest);
+        pageModel.OfficeName.Should().Be(TextData.ValidName);
+        pageModel.UserId.Should().Be(Guid.Empty.ToString());
+        pageModel.RoleSettings.Should().BeEquivalentTo(expectedRoleSettings);
     }
 
     [Test]
@@ -83,11 +73,9 @@ public class EditRolesTests
 
         var result = await pageModel.OnGetAsync(null);
 
-        using (new AssertionScope())
-        {
-            result.Should().BeOfType<RedirectToPageResult>();
-            ((RedirectToPageResult)result).PageName.Should().Be("Index");
-        }
+        using var scope = new AssertionScope();
+        result.Should().BeOfType<RedirectToPageResult>();
+        ((RedirectToPageResult)result).PageName.Should().Be("Index");
     }
 
     [Test]
@@ -127,14 +115,12 @@ public class EditRolesTests
 
         var result = await page.OnPostAsync();
 
-        using (new AssertionScope())
-        {
-            page.ModelState.IsValid.Should().BeTrue();
-            result.Should().BeOfType<RedirectToPageResult>();
-            ((RedirectToPageResult)result).PageName.Should().Be("Details");
-            ((RedirectToPageResult)result).RouteValues!["id"].Should().Be(Guid.Empty.ToString());
-            page.TempData.GetDisplayMessage().Should().BeEquivalentTo(expectedMessage);
-        }
+        using var scope = new AssertionScope();
+        page.ModelState.IsValid.Should().BeTrue();
+        result.Should().BeOfType<RedirectToPageResult>();
+        ((RedirectToPageResult)result).PageName.Should().Be("Details");
+        ((RedirectToPageResult)result).RouteValues!["id"].Should().Be(Guid.Empty.ToString());
+        page.TempData.GetDisplayMessage().Should().BeEquivalentTo(expectedMessage);
     }
 
     [Test]
@@ -184,14 +170,12 @@ public class EditRolesTests
 
         var result = await page.OnPostAsync();
 
-        using (new AssertionScope())
-        {
-            result.Should().BeOfType<PageResult>();
-            page.ModelState.IsValid.Should().BeFalse();
-            page.ModelState[string.Empty]!.Errors[0].ErrorMessage.Should().Be("CODE: DESCRIPTION");
-            page.DisplayStaff.Should().Be(StaffViewTest);
-            page.UserId.Should().Be(Guid.Empty.ToString());
-            page.RoleSettings.Should().BeEquivalentTo(RoleSettingsTest);
-        }
+        using var scope = new AssertionScope();
+        result.Should().BeOfType<PageResult>();
+        page.ModelState.IsValid.Should().BeFalse();
+        page.ModelState[string.Empty]!.Errors[0].ErrorMessage.Should().Be("CODE: DESCRIPTION");
+        page.DisplayStaff.Should().Be(StaffViewTest);
+        page.UserId.Should().Be(Guid.Empty.ToString());
+        page.RoleSettings.Should().BeEquivalentTo(RoleSettingsTest);
     }
 }

@@ -1,6 +1,4 @@
 ﻿using Cts.WebApp.Pages;
-using Cts.WebApp.Models;
-using Cts.WebApp.Platform.PageModelHelpers;
 using Microsoft.Extensions.Logging;
 
 namespace WebAppTests.DisplayMessages;
