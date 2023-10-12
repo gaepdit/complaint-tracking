@@ -177,6 +177,14 @@ html:not([data-bs-theme="dark"]) .bg-dark-subtle .text-danger-emphasis {
     white-space: pre-line !important;
 }
 
+.text-decoration-hover {
+    text-decoration: none !important;
+}
+
+.text-decoration-hover:hover, .text-decoration-hover:focus {
+    text-decoration: underline !important;
+}
+
 /* External links
 -------------------------------------------------- */
 a[target]::after {
@@ -230,27 +238,6 @@ details.card:not([open]) summary.card-header {
     border-bottom: none;
 }
 
-/* Print styles
--------------------------------------------------- */
-@media print {
-    header.sticky-top {
-        position: static;
-    }
-
-    .banner-test-site {
-        position: static;
-        text-shadow: none;
-        box-shadow: none;
-        border: 1px solid;
-        margin-bottom: 1rem;
-        background: hsl(45, 100%, 80%);
-    }
-
-    .banner-test-site::after {
-        content: "— Not for public distribution";
-    }
-}
-
 /* Bootstrap Icons
 -------------------------------------------------- */
 .bi {
@@ -276,7 +263,29 @@ details.card:not([open]) summary.card-header {
 }
 
 /* ==================================================
-Application-specific styles
+Print styles
+================================================== */
+@media print {
+    header.sticky-top {
+        position: static;
+    }
+
+    .banner-test-site {
+        position: static;
+        text-shadow: none;
+        box-shadow: none;
+        border: 1px solid;
+        margin-bottom: 1rem;
+        background: hsl(45, 100%, 80%);
+    }
+
+    .banner-test-site::after {
+        content: "— Not for public distribution";
+    }
+}
+
+/* ==================================================
+Additional application-specific styles
 ================================================== */
 
 /* SVG icons

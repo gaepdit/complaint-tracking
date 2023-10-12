@@ -2,9 +2,7 @@ using Cts.AppServices.Offices;
 using Cts.AppServices.Staff;
 using Cts.AppServices.Staff.Dto;
 using Cts.WebApp.Pages.Admin.Users;
-using GaEpd.AppLibrary.ListItems;
 using GaEpd.AppLibrary.Pagination;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace WebAppTests.Pages.Admin.Users;
 
@@ -31,14 +29,12 @@ public class IndexTests
         var result = await page.OnGetSearchAsync(DefaultStaffSearch);
 
         // Assert
-        using (new AssertionScope())
-        {
-            result.Should().BeOfType<PageResult>();
-            page.ModelState.IsValid.Should().BeTrue();
-            page.SearchResults.Should().Be(output);
-            page.SearchResults.Items.Should().BeEmpty();
-            page.ShowResults.Should().BeTrue();
-        }
+        using var scope = new AssertionScope();
+        result.Should().BeOfType<PageResult>();
+        page.ModelState.IsValid.Should().BeTrue();
+        page.SearchResults.Should().Be(output);
+        page.SearchResults.Items.Should().BeEmpty();
+        page.ShowResults.Should().BeTrue();
     }
 
     [Test]
@@ -53,10 +49,8 @@ public class IndexTests
 
         var result = await page.OnGetSearchAsync(DefaultStaffSearch);
 
-        using (new AssertionScope())
-        {
-            result.Should().BeOfType<PageResult>();
-            page.ModelState.IsValid.Should().BeFalse();
-        }
+        using var scope = new AssertionScope();
+        result.Should().BeOfType<PageResult>();
+        page.ModelState.IsValid.Should().BeFalse();
     }
 }

@@ -26,11 +26,8 @@ public sealed class OfficeService : IOfficeService
         return _mapper.Map<OfficeWithAssignorDto>(item);
     }
 
-    public async Task<OfficeUpdateDto?> FindForUpdateAsync(Guid id, CancellationToken token = default)
-    {
-        var item = await _repository.FindIncludeAssignorAsync(id, token);
-        return _mapper.Map<OfficeUpdateDto>(item);
-    }
+    public async Task<OfficeUpdateDto?> FindForUpdateAsync(Guid id, CancellationToken token = default) => 
+        _mapper.Map<OfficeUpdateDto>(await _repository.FindIncludeAssignorAsync(id, token));
 
     public async Task<IReadOnlyList<OfficeWithAssignorDto>> GetListAsync(CancellationToken token = default)
     {

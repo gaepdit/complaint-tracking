@@ -1,4 +1,4 @@
-using Cts.AppServices.Attachments;
+﻿using Cts.AppServices.Attachments;
 using Cts.AppServices.Complaints.Dto;
 using GaEpd.AppLibrary.Pagination;
 using Microsoft.AspNetCore.Http;
@@ -22,6 +22,8 @@ public interface IComplaintService : IDisposable
 
     Task<ComplaintViewDto?> FindAsync(int id, CancellationToken token = default);
 
+    Task<ComplaintUpdateDto?> FindForUpdateAsync(int id, CancellationToken token = default);
+
     Task<bool> ExistsAsync(int id, CancellationToken token = default);
 
     Task<IPaginatedResult<ComplaintSearchResultDto>> SearchAsync(
@@ -32,6 +34,8 @@ public interface IComplaintService : IDisposable
     // Staff write methods
 
     Task<int> CreateAsync(ComplaintCreateDto resource, CancellationToken token = default);
+
+    Task UpdateAsync(int id, ComplaintUpdateDto resource, CancellationToken token = default);
 
     Task SaveAttachmentAsync(IFormFile file, CancellationToken token = default);
 }

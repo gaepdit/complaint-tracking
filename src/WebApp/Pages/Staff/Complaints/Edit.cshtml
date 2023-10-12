@@ -1,16 +1,16 @@
-﻿@page
+﻿@page "{id:int?}"
 @using Cts.Domain.ValueObjects
 @using Cts.WebApp.Pages.Shared.EditorTemplates
-@model AddModel
+@model EditModel
 @{
-    ViewData["Title"] = "Add A New Complaint";
+    ViewData["Title"] = $"Edit Complaint ID {Model.Id.ToString()}";
     ViewData["NoAnchors"] = "True";
     var phoneTypesSelectList = Html.GetEnumSelectList<PhoneType>().ToArray();
 }
 
 <h1>@ViewData["Title"]</h1>
 
-<div class="p-3 border rounded-3 bg-light-subtle">
+<div class="p-3 border rounded-3 bg-light-subtle mb-3">
     <form method="post">
         <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
 
@@ -192,40 +192,16 @@
             </div>
         </div>
 
-        <h2>Attachments</h2>
-        <div class="mb-4">
-            <p>Selected files will be uploaded when Complaint is saved.</p>
-            @* TODO *@
-            <p>
-                <em>
-                    Supported file types are images, documents, and spreadsheets.<br />
-                    All files must comply with <a href="#" target="_blank">EPD’s complaint attachments policy (<abbr>PDF</abbr>)</a>.
-                </em>
-            </p>
-        </div>
-
-        <h2>Assignment</h2>
-        <div class="row mb-3">
-            <div class="col-md mb-3">
-                @Html.EditorFor(e => e.Item.CurrentOfficeId, EditorTemplate.Select, new { Items = Model.OfficesSelectList })
-            </div>
-            <div class="col-md mb-3">
-                @Html.EditorFor(e => e.Item.CurrentOwnerId, EditorTemplate.Select, new { Items = Model.StaffInOfficeSelectList })
-            </div>
-        </div>
-
         <div class="mt-3 mb-1">
-            <button id="SubmitButton" type="submit" class="btn btn-primary col-6 col-sm-4 col-lg-3 me-2">Add New Complaint</button>
-            <a asp-page="Index" class="btn btn-outline-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary col-6 col-sm-4 col-lg-3 me-2">Save Changes</button>
+            <a asp-page="Details" asp-route-id="@Model.Id.ToString()" class="btn btn-outline-secondary">Cancel</a>
         </div>
         <div class="text-danger-emphasis mt-3">* denotes a required field</div>
     </form>
 </div>
 
-@section Scripts {
+@section Scripts
+{
     <partial name="_ValidationScriptsPartial" />
     <script src="~/js/copyContactInfo.js"></script>
-    <script src="~/lib/axios/axios.min.js"></script>
-    <script src="~/js/staffSelect.js"></script>
-    <script>setUpStaffDropdown("Item_CurrentOfficeId","Item_CurrentOwnerId",true);</script>
 }

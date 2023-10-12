@@ -21,11 +21,8 @@ public sealed class ConcernService : IConcernService
         _userService = userService;
     }
 
-    public async Task<ConcernUpdateDto?> FindForUpdateAsync(Guid id, CancellationToken token = default)
-    {
-        var item = await _repository.FindAsync(id, token);
-        return _mapper.Map<ConcernUpdateDto>(item);
-    }
+    public async Task<ConcernUpdateDto?> FindForUpdateAsync(Guid id, CancellationToken token = default) => 
+        _mapper.Map<ConcernUpdateDto>(await _repository.FindAsync(id, token));
 
     public async Task<IReadOnlyList<ConcernViewDto>> GetListAsync(CancellationToken token = default)
     {

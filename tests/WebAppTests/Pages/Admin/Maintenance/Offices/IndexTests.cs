@@ -1,9 +1,5 @@
 ﻿using Cts.AppServices.Offices;
-using Cts.TestData.Constants;
 using Cts.WebApp.Pages.Admin.Maintenance.Offices;
-using Cts.WebApp.Platform.PageModelHelpers;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
 
 namespace WebAppTests.Pages.Admin.Maintenance.Offices;
 
@@ -24,11 +20,9 @@ public class IndexTests
 
         await page.OnGetAsync(serviceMock, authorizationMock);
 
-        using (new AssertionScope())
-        {
-            page.Items.Should().BeEquivalentTo(ListTest);
-            page.TempData.GetDisplayMessage().Should().BeNull();
-            page.HighlightId.Should().BeNull();
-        }
+        using var scope = new AssertionScope();
+        page.Items.Should().BeEquivalentTo(ListTest);
+        page.TempData.GetDisplayMessage().Should().BeNull();
+        page.HighlightId.Should().BeNull();
     }
 }

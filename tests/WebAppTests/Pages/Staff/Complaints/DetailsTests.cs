@@ -4,10 +4,8 @@ using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Staff;
 using Cts.AppServices.Staff.Dto;
 using Cts.WebApp.Pages.Staff.Complaints;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
 
-namespace WebAppTests.Pages.Admin.Complaints;
+namespace WebAppTests.Pages.Staff.Complaints;
 
 public class DetailsTests
 {
@@ -37,12 +35,10 @@ public class DetailsTests
 
         await page.OnGetAsync(ItemTest.Id);
 
-        using (new AssertionScope())
-        {
-            page.Item.Should().BeEquivalentTo(ItemTest);
-            page.UserCan.Should().NotBeEmpty();
-            page.UserCan[ComplaintOperation.ManageDeletions].Should().BeTrue();
-            page.UserCan[ComplaintOperation.Accept].Should().BeFalse();
-        }
+        using var scope = new AssertionScope();
+        page.Item.Should().BeEquivalentTo(ItemTest);
+        page.UserCan.Should().NotBeEmpty();
+        page.UserCan[ComplaintOperation.ManageDeletions].Should().BeTrue();
+        page.UserCan[ComplaintOperation.Accept].Should().BeFalse();
     }
 }

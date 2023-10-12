@@ -1,8 +1,6 @@
 using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.Dto;
 using Cts.WebApp.Pages.Public.Complaints;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace WebAppTests.Pages.Public.Complaint;
 
@@ -20,11 +18,9 @@ public class IndexTests
 
         var result = await pageModel.OnGetAsync(serviceMock, 1);
 
-        using (new AssertionScope())
-        {
-            result.Should().BeOfType<PageResult>();
-            pageModel.Item.Should().Be(item);
-        }
+        using var scope = new AssertionScope();
+        result.Should().BeOfType<PageResult>();
+        pageModel.Item.Should().Be(item);
     }
 
     [Test]
@@ -35,11 +31,9 @@ public class IndexTests
 
         var result = await pageModel.OnGetAsync(serviceMock, null);
 
-        using (new AssertionScope())
-        {
-            result.Should().BeOfType<RedirectToPageResult>();
-            ((RedirectToPageResult)result).PageName.Should().Be("../Index");
-        }
+        using var scope = new AssertionScope();
+        result.Should().BeOfType<RedirectToPageResult>();
+        ((RedirectToPageResult)result).PageName.Should().Be("../Index");
     }
 
     [Test]

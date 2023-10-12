@@ -1,16 +1,14 @@
 using Cts.AppServices.Attachments;
 using Cts.AppServices.Complaints;
 using Cts.AppServices.Files;
-using Cts.TestData.Constants;
 using Cts.WebApp.Pages.Public.Complaints;
-using Microsoft.AspNetCore.Mvc;
 
 namespace WebAppTests.Pages.Public.Complaint;
 
 public class AttachmentTests
 {
     [Test]
-    public async Task OnGet_PopulatesThePageModel()
+    public async Task OnGet_AttachmentExistsAndFileNameMatches_ReturnsFile()
     {
         var item = new AttachmentPublicViewDto
         {
@@ -26,21 +24,19 @@ public class AttachmentTests
             .Returns(item);
         var fileServiceMock = Substitute.For<IFileService>();
         fileServiceMock.GetFileAsync(Arg.Any<string>(), Arg.Any<string?>())
-            .Returns(new byte[] { 0x20 });
+            .Returns(new byte[] { 0x0 });
         var pageModel = new AttachmentModel();
 
         var result = await pageModel.OnGetAsync(complaintServiceMock, fileServiceMock,
             item.Id, item.FileName);
 
-        using (new AssertionScope())
-        {
-            result.Should().BeOfType<FileContentResult>();
-            ((FileContentResult)result).ContentType.Should().Be("application/pdf");
-        }
+        using var scope = new AssertionScope();
+        result.Should().BeOfType<FileContentResult>();
+        ((FileContentResult)result).ContentType.Should().Be("application/pdf");
     }
 
     [Test]
-    public async Task NonexistentItem_ReturnsNotFound()
+    public async Task OnGet_AttachmentDoesNotExist_ReturnsNotfound()
     {
         var complaintServiceMock = Substitute.For<IComplaintService>();
         complaintServiceMock.FindPublicAttachmentAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
@@ -54,7 +50,7 @@ public class AttachmentTests
     }
 
     [Test]
-    public async Task IncorrectFilename_ReturnsRedirect()
+    public async Task OnGet_FileNameDoesNotMatch_RedirectsToValidFileName()
     {
         var item = new AttachmentPublicViewDto
         {
@@ -73,15 +69,13 @@ public class AttachmentTests
         var result = await pageModel.OnGetAsync(complaintServiceMock, Substitute.For<IFileService>(),
             item.Id, TextData.NonExistentName);
 
-        using (new AssertionScope())
-        {
-            result.Should().BeOfType<RedirectToPageResult>();
-            ((RedirectToPageResult)result).PageName.Should().Be("Attachment");
-        }
+        using var scope = new AssertionScope();
+        result.Should().BeOfType<RedirectToPageResult>();
+        ((RedirectToPageResult)result).PageName.Should().Be("Attachment");
     }
 
     [Test]
-    public async Task EmptyNonImageFile_ReturnsNotFound()
+    public async Task OnGet_FileDoesNotExist_ReturnsNotfound()
     {
         var item = new AttachmentPublicViewDto
         {
@@ -107,7 +101,7 @@ public class AttachmentTests
     }
 
     [Test]
-    public async Task EmptyImageFile_ReturnsRedirect()
+    public async Task OnGet_ImageFileDoesNotExist_ReturnsRedirect()
     {
         var item = new AttachmentPublicViewDto
         {

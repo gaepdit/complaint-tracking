@@ -41,6 +41,9 @@ public class ComplaintViewDto
     [Display(Name = "Location of Complaint")]
     public string? ComplaintLocation { get; init; }
 
+    [Display(Name = "Directions to Complaint")]
+    public string? ComplaintDirections { get; init; }
+
     [Display(Name = "City of Complaint")]
     public string? ComplaintCity { get; init; }
 
@@ -61,7 +64,7 @@ public class ComplaintViewDto
     [Display(Name = "Source Name")]
     public string? SourceFacilityName { get; init; }
 
-    [Display(Name = "Source Contact")]
+    [Display(Name = "Contact Name")]
     public string? SourceContactName { get; init; }
 
     [Display(Name = "Source Address")]

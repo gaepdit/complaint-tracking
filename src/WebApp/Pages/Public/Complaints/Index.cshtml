@@ -34,11 +34,9 @@
     </dl>
 </div>
 
-<h2>@Html.DisplayNameFor(m => m.Item.ComplaintNature)</h2>
+<h2>Nature of Complaint</h2>
 
 <p class="container text-break text-pre-line">@Html.DisplayFor(m => Model.Item.ComplaintNature, DisplayTemplate.StringOrNotEntered)</p>
-
-<h2>Complaint Details</h2>
 
 <div class="container">
     <dl class="row">
@@ -46,6 +44,13 @@
         <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.PrimaryConcernName, DisplayTemplate.StringOrNotEntered)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SecondaryConcernName)</dt>
         <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.SecondaryConcernName, DisplayTemplate.StringOrNotEntered)</dd>
+    </dl>
+</div>
+
+<h2>Complaint Location</h2>
+
+<div class="container">
+    <dl class="row">
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ComplaintLocation)</dt>
         <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(m => Model.Item.ComplaintLocation, DisplayTemplate.StringOrNotEntered)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ComplaintCity)</dt>
@@ -59,10 +64,17 @@
 
 <div class="container">
     <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceFacilityIdNumber)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.SourceFacilityIdNumber, DisplayTemplate.StringOrNotEntered)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceFacilityName)</dt>
         <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.SourceFacilityName, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceFacilityIdNumber)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.SourceFacilityIdNumber, DisplayTemplate.StringOrNotEntered)</dd>
+    </dl>
+</div>
+
+<h2>Source Contact</h2>
+
+<div class="container">
+    <dl class="row">
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceContactName)</dt>
         <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.SourceContactName, DisplayTemplate.StringOrNotEntered)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceAddress)</dt>
@@ -98,7 +110,7 @@
 
 @if (Model.Item.Attachments is { Count: > 0 })
 {
-    <table class="table align-middle" aria-label="File attachments">
+    <table class="table table-hover align-middle" aria-label="File attachments">
         <thead>
             <tr>
                 <th scope="col">File</th>
@@ -114,7 +126,7 @@
                         @if (item.IsImage)
                         {
                             <a asp-page="Attachment" asp-route-id="@item.Id.ToString()" asp-route-fileName="@item.FileName" target="_blank"
-                               class="text-decoration-none rounded d-block no-external-link" data-fancybox="attachment" data-caption="@item.FileName">
+                               class="text-decoration-hover rounded d-block no-external-link" data-fancybox="attachment" data-caption="@item.FileName">
                                 <img src="Attachment/@item.Id.ToString()/@item.FileName/?thumbnail=true" class="img-thumbnail rounded me-2" alt="" />
                                 @item.FileName
                             </a>
@@ -122,7 +134,7 @@
                         else
                         {
                             <a asp-page="Attachment" asp-route-id="@item.Id.ToString()" asp-route-fileName="@item.FileName" target="_blank"
-                               class="text-decoration-none rounded d-block p-2 no-external-link">
+                               class="text-decoration-hover rounded d-block p-2 no-external-link">
                                 @Html.DisplayFor(m => item.FileExtension, DisplayTemplate.FileTypeIcon) @item.FileName
                             </a>
                         }
