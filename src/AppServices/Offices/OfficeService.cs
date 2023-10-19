@@ -26,12 +26,12 @@ public sealed class OfficeService : IOfficeService
         return _mapper.Map<OfficeWithAssignorDto>(item);
     }
 
-    public async Task<OfficeUpdateDto?> FindForUpdateAsync(Guid id, CancellationToken token = default) => 
+    public async Task<OfficeUpdateDto?> FindForUpdateAsync(Guid id, CancellationToken token = default) =>
         _mapper.Map<OfficeUpdateDto>(await _repository.FindIncludeAssignorAsync(id, token));
 
     public async Task<IReadOnlyList<OfficeWithAssignorDto>> GetListAsync(CancellationToken token = default)
     {
-        var list = (await _repository.GetListAsync(token)).OrderBy(e => e.Name).ToList();
+        var list = (await _repository.GetListIncludeAssignorAsync(token)).OrderBy(e => e.Name).ToList();
         return _mapper.Map<IReadOnlyList<OfficeWithAssignorDto>>(list);
     }
 
@@ -64,11 +64,11 @@ public sealed class OfficeService : IOfficeService
         await _repository.UpdateAsync(item, token: token);
     }
 
-    public async Task<IReadOnlyList<ListItem<string>>> GetStaffListItemsAsync(
-        Guid? id, bool activeOnly, CancellationToken token = default) =>
+    public async Task<IReadOnlyList<ListItem<string>>> GetStaffListItemsAsync(Guid? id, bool includeInactive = false,
+        CancellationToken token = default) =>
         id is null
             ? Array.Empty<ListItem<string>>()
-            : (await _repository.GetActiveStaffMembersListAsync(id.Value, token))
+            : (await _repository.GetStaffMembersListAsync(id.Value, includeInactive, token))
             .Select(e => new ListItem<string>(e.Id, e.SortableNameWithInactive))
             .ToList();
 

@@ -17,8 +17,8 @@ public class GetActiveStaffMembersList
     public async Task WhenStaffExist_ReturnsList()
     {
         var item = OfficeData.GetOffices.First(e => e.Active);
-        var result = await _repository.GetActiveStaffMembersListAsync(item.Id);
-        result.Should().BeEquivalentTo(item.StaffMembers.Where(e => e.Active),
+        var result = await _repository.GetStaffMembersListAsync(item.Id, true);
+        result.Should().BeEquivalentTo(item.StaffMembers,
             options => options.Excluding(u => u.Office));
     }
 
@@ -26,7 +26,7 @@ public class GetActiveStaffMembersList
     public async Task WhenStaffDoNotExist_ReturnsEmptyList()
     {
         var item = OfficeData.GetOffices.Last(e => e.Active);
-        var result = await _repository.GetActiveStaffMembersListAsync(item.Id);
+        var result = await _repository.GetStaffMembersListAsync(item.Id, false);
         result.Should().BeEmpty();
     }
 
@@ -34,7 +34,7 @@ public class GetActiveStaffMembersList
     public async Task WhenOfficeDoesNotExist_ReturnsEmptyList()
     {
         var id = Guid.Empty;
-        var result = await _repository.GetActiveStaffMembersListAsync(id);
+        var result = await _repository.GetStaffMembersListAsync(id, false);
         result.Should().BeEmpty();
     }
 }

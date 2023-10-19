@@ -35,21 +35,29 @@ public class OfficeApiController : Controller
 
     [HttpGet("{id:guid}/staff")]
     public async Task<JsonResult> GetStaffAsync([FromRoute] Guid id) =>
-        Json(await _office.GetStaffListItemsAsync(id, false));
+        Json(await _office.GetStaffListItemsAsync(id));
+
+    [HttpGet("{id:guid}/all-staff")]
+    public async Task<IActionResult> GetAllStaffAsync([FromRoute] Guid id)
+    {
+        var user = await _user.GetCurrentUserAsync();
+        if (user is null || !user.Active) return Unauthorized();
+        return Json(await _office.GetStaffListItemsAsync(id, true));
+    }
 
     [HttpGet("{id:guid}/staff-for-assignment")]
     public async Task<IActionResult> GetStaffForAssignmentAsync([FromRoute] Guid id)
     {
         var user = await _user.GetCurrentUserAsync();
-        if (user is null) return Unauthorized();
+        if (user is null || !user.Active) return Unauthorized();
 
         if (user.Office?.Id == id // user is in this office
             || await _office.UserIsAssignorAsync(id, user.Id) // user is assignor for this office
             || await _staff.HasAppRoleAsync(user.Id, AppRole.DivisionManagerRole)) // user is Division Manager
         {
-            return Json(await _office.GetStaffListItemsAsync(id, true));
+            return Json(await _office.GetStaffListItemsAsync(id));
         }
 
-        return Problem("Forbidden", statusCode: StatusCodes.Status403Forbidden);
+        return Json(null);
     }
 }

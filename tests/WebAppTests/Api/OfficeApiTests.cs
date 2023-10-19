@@ -108,10 +108,11 @@ public class OfficeApiTests
     public async Task GetStaffForAssignment_GivenNoAuthenticatedUser_ReturnsUnauthorized()
     {
         // Arrange
-        var staffMock = Substitute.For<IStaffService>();
         var userMock = Substitute.For<IUserService>();
         userMock.GetCurrentUserAsync().Returns((ApplicationUser?)null);
-        var controller = new OfficeApiController(Substitute.For<IOfficeService>(), staffMock, userMock);
+
+        var controller =
+            new OfficeApiController(Substitute.For<IOfficeService>(), Substitute.For<IStaffService>(), userMock);
 
         // Act
         var response = await controller.GetStaffForAssignmentAsync(Guid.Empty);
@@ -126,26 +127,23 @@ public class OfficeApiTests
     public async Task GetStaffForAssignment_GivenUserIsInactive_ReturnsForbidden()
     {
         // Arrange
-        var staffMock = Substitute.For<IStaffService>();
-        staffMock.GetCurrentUserAsync().Returns(new StaffViewDto { Active = false });
-
         var userMock = Substitute.For<IUserService>();
-        userMock.GetCurrentUserAsync().Returns(new ApplicationUser());
+        userMock.GetCurrentUserAsync().Returns(new ApplicationUser { Active = false });
 
-        var controller = new OfficeApiController(Substitute.For<IOfficeService>(), staffMock, userMock);
+        var controller =
+            new OfficeApiController(Substitute.For<IOfficeService>(), Substitute.For<IStaffService>(), userMock);
 
         // Act
         var response = await controller.GetStaffForAssignmentAsync(Guid.Empty);
 
         // Assert
         using var scope = new AssertionScope();
-        response.Should().BeOfType<ObjectResult>();
-        ((ObjectResult)response).StatusCode.Should().Be(StatusCodes.Status403Forbidden);
-        ((ProblemDetails)((ObjectResult)response).Value!).Detail.Should().Be("Forbidden");
+        response.Should().BeOfType<UnauthorizedResult>();
+        ((UnauthorizedResult)response).StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
     }
 
     [Test]
-    public async Task GetStaffForAssignment_GivenUserDoesNotHavePermission_ReturnsForbidden()
+    public async Task GetStaffForAssignment_GivenUserDoesNotHaveAccess_ReturnsEmptyList()
     {
         // Arrange
         var officeMock = Substitute.For<IOfficeService>();
@@ -166,9 +164,6 @@ public class OfficeApiTests
         var response = await controller.GetStaffForAssignmentAsync(Guid.Empty);
 
         // Assert
-        using var scope = new AssertionScope();
-        response.Should().BeOfType<ObjectResult>();
-        ((ObjectResult)response).StatusCode.Should().Be(StatusCodes.Status403Forbidden);
-        ((ProblemDetails)((ObjectResult)response).Value!).Detail.Should().Be("Forbidden");
+        ((JsonResult)response).Value.Should().BeNull();
     }
 }

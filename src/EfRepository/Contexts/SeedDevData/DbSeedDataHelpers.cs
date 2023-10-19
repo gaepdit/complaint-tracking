@@ -1,4 +1,4 @@
-﻿using Cts.Domain.Identity;
+using Cts.Domain.Identity;
 using Cts.TestData;
 using Cts.TestData.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -98,14 +98,12 @@ public static class DbSeedDataHelpers
                 });
         }
 
-        // Seed Office data
+        // Seed Office Assignor data
         var offices = context.Offices.ToList();
         offices[0].Assignor = users[0];
         offices[1].Assignor = users[1];
         offices[2].Assignor = users[2];
         offices[3].Assignor = users[0];
-        
-        foreach (var user in users) user.Office = offices[0];
 
         context.SaveChanges();
     }

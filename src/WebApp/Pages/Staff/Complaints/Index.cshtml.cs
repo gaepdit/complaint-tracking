@@ -75,9 +75,9 @@ public class IndexModel : PageModel
 
     private async Task PopulateSelectListsAsync()
     {
-        ReceivedBySelectList = (await _staff.GetStaffListItemsAsync(false)).ToSelectList();
+        ReceivedBySelectList = (await _staff.GetStaffListItemsAsync(true)).ToSelectList();
         ConcernsSelectList = (await _concerns.GetActiveListItemsAsync()).ToSelectList();
         OfficesSelectList = (await _offices.GetActiveListItemsAsync()).ToSelectList();
-        AssignedToSelectList = (await _offices.GetStaffListItemsAsync(Spec.Office, false)).ToSelectList();
+        AssignedToSelectList = (await _offices.GetStaffListItemsAsync(Spec.Office, true)).ToSelectList();
     }
 }

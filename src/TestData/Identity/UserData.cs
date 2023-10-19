@@ -22,7 +22,7 @@ internal static partial class UserData
             GivenName = "General",
             FamilyName = "User2",
             Email = "general.user@example.net",
-            Office = OfficeData.GetOffices.ElementAt(0),
+            Office = OfficeData.GetOffices.ElementAt(1),
         },
         new()
         {

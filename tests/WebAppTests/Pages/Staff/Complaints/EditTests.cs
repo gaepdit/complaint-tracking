@@ -20,7 +20,7 @@ public class EditTests
         _staffService = Substitute.For<IStaffService>();
         _concernService = Substitute.For<IConcernService>();
         _concernService.GetActiveListItemsAsync().Returns(new List<ListItem>());
-        _staffService.GetStaffListItemsAsync(true).Returns(new List<ListItem<string>>());
+        _staffService.GetStaffListItemsAsync(Arg.Any<bool>()).Returns(new List<ListItem<string>>());
     }
 
     [TearDown]

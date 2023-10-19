@@ -46,7 +46,7 @@ public class EditModel : PageModel
 
     // Select lists
     public SelectList ConcernsSelectList { get; private set; } = default!;
-    public SelectList AllStaffSelectList { get; private set; } = default!;
+    public SelectList AllActiveStaffSelectList { get; private set; } = default!;
     public SelectList StatesSelectList => new(Data.States);
     public SelectList CountiesSelectList => new(Data.Counties);
 
@@ -87,7 +87,7 @@ public class EditModel : PageModel
     private async Task PopulateSelectListsAsync()
     {
         ConcernsSelectList = (await _concernService.GetActiveListItemsAsync()).ToSelectList();
-        AllStaffSelectList = (await _staffService.GetStaffListItemsAsync(true)).ToSelectList();
+        AllActiveStaffSelectList = (await _staffService.GetStaffListItemsAsync()).ToSelectList();
     }
 
     private async Task<bool> UserCanEditAsync(ComplaintUpdateDto item) =>

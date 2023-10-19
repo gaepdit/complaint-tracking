@@ -47,8 +47,8 @@ public class AddModel : PageModel
     // Select lists
     public SelectList ConcernsSelectList { get; private set; } = default!;
     public SelectList OfficesSelectList { get; private set; } = default!;
-    public SelectList AllStaffSelectList { get; private set; } = default!;
-    public SelectList StaffInOfficeSelectList { get; private set; } = default!;
+    public SelectList AllActiveStaffSelectList { get; private set; } = default!;
+    public SelectList ActiveStaffInOfficeSelectList { get; private set; } = default!;
 
     public SelectList StatesSelectList => new(Data.States);
     public SelectList CountiesSelectList => new(Data.Counties);
@@ -80,7 +80,7 @@ public class AddModel : PageModel
     {
         ConcernsSelectList = (await _concerns.GetActiveListItemsAsync()).ToSelectList();
         OfficesSelectList = (await _offices.GetActiveListItemsAsync()).ToSelectList();
-        AllStaffSelectList = (await _staff.GetStaffListItemsAsync(true)).ToSelectList();
-        StaffInOfficeSelectList = (await _offices.GetStaffListItemsAsync(currentOfficeId, true)).ToSelectList();
+        AllActiveStaffSelectList = (await _staff.GetStaffListItemsAsync()).ToSelectList();
+        ActiveStaffInOfficeSelectList = (await _offices.GetStaffListItemsAsync(currentOfficeId)).ToSelectList();
     }
 }

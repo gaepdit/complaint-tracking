@@ -7,10 +7,11 @@ public sealed class OfficeRepository : NamedEntityRepository<Office, AppDbContex
 {
     public OfficeRepository(AppDbContext context) : base(context) { }
 
-    public Task<List<ApplicationUser>> GetActiveStaffMembersListAsync(Guid id, CancellationToken token = default) =>
+    public Task<List<ApplicationUser>> GetStaffMembersListAsync(Guid id, bool includeInactive,
+        CancellationToken token = default) =>
         Context.Set<ApplicationUser>().AsNoTracking()
             .Where(e => e.Office != null && e.Office.Id == id)
-            .Where(e => e.Active)
+            .Where(e => includeInactive || e.Active)
             .OrderBy(e => e.FamilyName).ThenBy(e => e.GivenName)
             .ToListAsync(token);
 
