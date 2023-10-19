@@ -41,7 +41,7 @@ public class OfficeApiController : Controller
     public async Task<IActionResult> GetAllStaffAsync([FromRoute] Guid id)
     {
         var user = await _user.GetCurrentUserAsync();
-        if (user is null) return Unauthorized();
+        if (user is null || !user.Active) return Unauthorized();
         return Json(await _office.GetStaffListItemsAsync(id, true));
     }
 
@@ -49,7 +49,7 @@ public class OfficeApiController : Controller
     public async Task<IActionResult> GetStaffForAssignmentAsync([FromRoute] Guid id)
     {
         var user = await _user.GetCurrentUserAsync();
-        if (user is null) return Unauthorized();
+        if (user is null || !user.Active) return Unauthorized();
 
         if (user.Office?.Id == id // user is in this office
             || await _office.UserIsAssignorAsync(id, user.Id) // user is assignor for this office

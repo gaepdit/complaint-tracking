@@ -23,7 +23,7 @@ public class GetList
         var itemList = new List<Office> { office };
 
         var repoMock = Substitute.For<IOfficeRepository>();
-        repoMock.GetListAsync(Arg.Any<CancellationToken>()).Returns(itemList);
+        repoMock.GetListIncludeAssignorAsync(Arg.Any<CancellationToken>()).Returns(itemList);
         var managerMock = Substitute.For<IOfficeManager>();
         var userServiceMock = Substitute.For<IUserService>();
         var appService = new OfficeService(repoMock, managerMock,
