@@ -77,5 +77,5 @@ public class EditModel : PageModel
     }
 
     private async Task PopulateSelectListsAsync() =>
-        ActiveStaffMembersSelectList = (await _staffService.GetStaffListItemsAsync(true)).ToSelectList();
+        ActiveStaffMembersSelectList = (await _staffService.GetStaffListItemsAsync()).ToSelectList();
 }

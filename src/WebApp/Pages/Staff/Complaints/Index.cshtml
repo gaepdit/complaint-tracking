@@ -189,7 +189,7 @@
                 <div class="col-md-6 mb-3">
                     <div class="form-floating">
                         <select asp-for="Spec.Assigned" name="@nameof(Model.Spec.Assigned)" asp-items="Model.AssignedToSelectList" class="form-select"
-                                aria-describedby="StaffHelpBlock" disabled="@((!Model.AssignedToSelectList.Any()).ToString())">
+                                aria-describedby="StaffHelpBlock" disabled="@(!Model.AssignedToSelectList.Any())">
                             <option value="">@TextConstants.SelectTextAny</option>
                         </select>
                         <label asp-for="Spec.Assigned" class="form-label"></label>

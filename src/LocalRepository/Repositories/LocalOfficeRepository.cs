@@ -8,10 +8,10 @@ public sealed class LocalOfficeRepository : NamedEntityRepository<Office>, IOffi
 {
     public LocalOfficeRepository() : base(OfficeData.GetOffices) { }
 
-    public async Task<List<ApplicationUser>> GetActiveStaffMembersListAsync(
-        Guid id, CancellationToken token = default) =>
+    public async Task<List<ApplicationUser>> GetStaffMembersListAsync(Guid id, bool includeInactive,
+        CancellationToken token = default) =>
         (await GetAsync(id, token)).StaffMembers
-        .Where(e => e.Active)
+        .Where(e => includeInactive || e.Active)
         .OrderBy(e => e.FamilyName).ThenBy(e => e.GivenName).ToList();
 
     public Task<Office?> FindIncludeAssignorAsync(Guid id, CancellationToken token = default) =>

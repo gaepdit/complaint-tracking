@@ -21,7 +21,7 @@
                 @Html.EditorFor(e => e.Item.ReceivedTime, EditorTemplate.InputTimeOnly)
             </div>
             <div class="col-md mb-3">
-                @Html.EditorFor(e => e.Item.ReceivedById, EditorTemplate.Select, new { Items = Model.AllStaffSelectList })
+                @Html.EditorFor(e => e.Item.ReceivedById, EditorTemplate.Select, new { Items = Model.AllActiveStaffSelectList })
             </div>
         </div>
 
@@ -210,7 +210,7 @@
                 @Html.EditorFor(e => e.Item.CurrentOfficeId, EditorTemplate.Select, new { Items = Model.OfficesSelectList })
             </div>
             <div class="col-md mb-3">
-                @Html.EditorFor(e => e.Item.CurrentOwnerId, EditorTemplate.Select, new { Items = Model.StaffInOfficeSelectList })
+                @Html.EditorFor(e => e.Item.CurrentOwnerId, EditorTemplate.Select, new { Items = Model.ActiveStaffInOfficeSelectList })
             </div>
         </div>
 

@@ -11,6 +11,7 @@ public class GetStaff
     [Test]
     public async Task WhenOfficeExists_ReturnsViewDtoList()
     {
+        var guid = Guid.NewGuid();
         var user = new ApplicationUser
         {
             Id = Guid.Empty.ToString(),
@@ -22,7 +23,7 @@ public class GetStaff
 
         var itemList = new List<ApplicationUser> { user };
         var repoMock = Substitute.For<IOfficeRepository>();
-        repoMock.GetActiveStaffMembersListAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+        repoMock.GetStaffMembersListAsync(guid, false, Arg.Any<CancellationToken>())
             .Returns(itemList);
         var managerMock = Substitute.For<IOfficeManager>();
         var userServiceMock = Substitute.For<IUserService>();
@@ -30,7 +31,7 @@ public class GetStaff
         var appService = new OfficeService(repoMock, managerMock,
             AppServicesTestsSetup.Mapper!, userServiceMock);
 
-        var result = await appService.GetStaffListItemsAsync(Guid.Empty, false);
+        var result = await appService.GetStaffListItemsAsync(guid);
 
         result.Should().ContainSingle(e =>
             string.Equals(e.Id, user.Id, StringComparison.Ordinal) &&

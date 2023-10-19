@@ -11,7 +11,7 @@ public interface IOfficeService : IDisposable
     Task<Guid> CreateAsync(OfficeCreateDto resource, CancellationToken token = default);
     Task UpdateAsync(Guid id, OfficeUpdateDto resource, CancellationToken token = default);
 
-    Task<IReadOnlyList<ListItem<string>>> GetStaffListItemsAsync(Guid? id, bool activeOnly,
+    Task<IReadOnlyList<ListItem<string>>> GetStaffListItemsAsync(Guid? id, bool includeInactive = false,
         CancellationToken token = default);
 
     Task<bool> UserIsAssignorAsync(Guid id, string userId, CancellationToken token = default);

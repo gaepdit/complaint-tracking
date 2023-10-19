@@ -62,9 +62,9 @@ public sealed class StaffService : IStaffService
         return new PaginatedResult<StaffSearchResultDto>(listMapped, users.Count(), paging);
     }
 
-    public Task<IReadOnlyList<ListItem<string>>> GetStaffListItemsAsync(bool activeOnly)
+    public Task<IReadOnlyList<ListItem<string>>> GetStaffListItemsAsync(bool includeInactive = false)
     {
-        var status = activeOnly ? SearchStaffStatus.Active : SearchStaffStatus.All;
+        var status = includeInactive ? SearchStaffStatus.All : SearchStaffStatus.Active;
         var spec = new StaffSearchDto(SortBy.NameAsc, null, null, null, null, status);
         var users = _userManager.Users.ApplyFilter(spec);
         return Task.FromResult(_mapper.Map<List<StaffViewDto>>(users)
