@@ -29,12 +29,31 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Update="appsettings.Development.json" CopyToPublishDirectory="Never">
+        <Content Update="appsettings.Development.json">
             <DependentUpon>appsettings.json</DependentUpon>
+            <CopyToPublishDirectory>Never</CopyToPublishDirectory>
         </Content>
-        <Content Update="appsettings.Local.json" CopyToPublishDirectory="Never">
-            <DependentUpon>appsettings.json</DependentUpon>
+        <Content Update="libman.json">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+            <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </Content>
+        <None Update="Properties\PublishProfiles\*.pubxml">
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+            <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <MsDeploySkipRules Include="SkipAppSettings">
+            <ObjectName>filePath</ObjectName>
+            <AbsolutePath>appsettings.*.json</AbsolutePath>
+        </MsDeploySkipRules>
+        <MsDeploySkipRules Include="SkipWebConfig">
+            <ObjectName>filePath</ObjectName>
+            <AbsolutePath>web.config</AbsolutePath>
+        </MsDeploySkipRules>
     </ItemGroup>
 
 </Project>
