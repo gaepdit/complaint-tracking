@@ -6,7 +6,7 @@
     <PackageVersion Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageVersion Include="AutoMapper" Version="12.0.1" />
     <PackageVersion Include="FluentValidation.AspNetCore" Version="11.3.0" />
-    <PackageVersion Include="GaEpd.AppLibrary" Version="3.5.1" />
+    <PackageVersion Include="GaEpd.AppLibrary" Version="4.1.0" />
     <PackageVersion Include="JetBrains.Annotations" Version="2023.3.0" />
     <PackageVersion Include="LigerShark.WebOptimizer.Core" Version="3.0.396" />
     <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />

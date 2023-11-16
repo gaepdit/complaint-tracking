@@ -193,7 +193,8 @@ public sealed class ComplaintService : IComplaintService
         return complaint;
     }
 
-    private async Task FillInComplaintDetailsAsync(Complaint complaint, IComplaintDtoDetails resource, CancellationToken token)
+    private async Task FillInComplaintDetailsAsync(Complaint complaint, IComplaintDtoDetails resource,
+        CancellationToken token)
     {
         // Properties: Meta-data
         complaint.ReceivedDate = resource.ReceivedDate.ToDateTime(resource.ReceivedTime);
@@ -243,5 +244,12 @@ public sealed class ComplaintService : IComplaintService
         _complaints.Dispose();
         _concerns.Dispose();
         _offices.Dispose();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await _complaints.DisposeAsync();
+        await _concerns.DisposeAsync();
+        await _offices.DisposeAsync();
     }
 }

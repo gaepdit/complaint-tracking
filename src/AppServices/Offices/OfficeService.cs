@@ -79,4 +79,5 @@ public sealed class OfficeService : IOfficeService
     }
 
     public void Dispose() => _repository.Dispose();
+    public ValueTask DisposeAsync() => _repository.DisposeAsync();
 }
