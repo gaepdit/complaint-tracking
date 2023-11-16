@@ -56,7 +56,7 @@ else
         <tbody>
         @foreach (var item in Model.Items)
         {
-            <tr class="@(item.Active ? "" : "table-secondary")">
+            <tr class="@(item.Active ? "" : "bg-secondary-subtle")">
                 <td>
                     @if (item.Id == Model.HighlightId)
                     {
