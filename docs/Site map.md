@@ -1,119 +1,109 @@
 # Site Map
 
-* `/` (links to public inquiry and employee access portals)
+* `/` (Home page with links to public inquiry and employee access portals)
 
-## Public pages
+## Public Pages
 
-* `/Public` (public search)
-* `/Public/Complaints/{id}` (public detail view)
-* `/Public/Complaints/Attachment/{attachmentId}/{fileName}` (public attachment download)
+These pages are available to the public.
 
-### Redirects
+* `/Public` (Public complaint search)
+* `/Public/Complaints/{id}` (Public complaint detail view with list of Actions)
+* `/Public/Complaints/Attachment/{attachmentId}/{fileName}` (Public complaint attachment download)
 
-| Redirect                        | To                        |
-|---------------------------------|---------------------------|
-| `/Public/ComplaintDetails/{id}` | `/Public/Complaints/{id}` |
+## Staff Pages
 
-## Account & login pages
+These pages are only available to logged-in staff.
 
-* `/Account` (view profile)
-* `/Account/Login`
-* `/Account/Edit` (edit contact info)
-* `/Account/Support` (help/support)
+* `/Staff` (Home page/staff dashboard)
 
-## Staff Dashboard
+### Complaints
 
-* `/Staff` (user dashboard)
+* `/Staff/Complaints` (Complaint search)
+* `/Staff/Complaints/Download` (Export search results)
 
-## Complaint summary pages
+#### Complaint Details
 
-* `/Staff/Complaints` (search)
-* `/Staff/Complaints/Download` (search results export)
-* `/Staff/Complaints/Export` (archive export)
-* `/Staff/Complaints/Reports`
+* `/Staff/Complaints/Details/{id}` (Complaint details with list of Actions and a new Action form)
+* `/Staff/Complaints/Attachment/{attachmentId}/{fileName}` (Attachment download)
 
-### Redirects
+#### Complaint Workflow
 
-| Redirect                | To                          |
-|-------------------------|-----------------------------|
-| `/Complaints`           | `/Staff/Complaints`         |
-| `/Complaints/Export`    | `/Staff/Complaints/Export`  |
-| `/Complaints/Reports`   | `/Staff/Complaints/Reports` |
-| `/Complaints/Reports/*` | `/Staff/Complaints/Reports` |
+* `/Staff/Complaints/Add` (Add new complaint)
+* `/Staff/Complaints/Approve/{id}` (Review and close a complaint)
+* `/Staff/Complaints/Assign/{id}` (Transfer/reassign a complaint)
+* `/Staff/Complaints/Delete/{id}` (Delete a complaint)
+* `/Staff/Complaints/Edit/{id}` (Edit complaint details)
+* `/Staff/Complaints/Reopen/{id}` (Reopen a closed complaint)
+* `/Staff/Complaints/RequestReview/{id}` (Request a complaint to be reviewed & closed)
+* `/Staff/Complaints/Restore/{id}` (Restore a deleted complaint)
+* `/Staff/Complaints/Return/{id}` (Review and return a complaint)
 
-## Complaint details
+### Complaint Actions
 
-* `/Staff/Complaints/Details/{id}`
-* `/Staff/Complaints/Attachment/{attachmentId}/{fileName}`
+* `/Staff/ComplaintActions` (Search complaint actions)
+* `/Staff/Complaints/Details/{complaintId}#actions` (Embedded form for adding an action)
+* `/Staff/Complaints/Details/{complaintId}/DeleteAction/{actionId}` (Delete an action)
+* `/Staff/Complaints/Details/{complaintId}/EditAction/{actionId}` (Edit action details)
 
-## Complaint user actions
+## User Account
 
-* `/Staff/Complaints/Add`
-* `/Staff/Complaints/Approve/{id}`
-* `/Staff/Complaints/Assign/{id}`
-* `/Staff/Complaints/Delete/{id}`
-* `/Staff/Complaints/Edit/{id}`
-* `/Staff/Complaints/Reopen/{id}`
-* `/Staff/Complaints/RequestReview/{id}`
-* `/Staff/Complaints/Restore/{id}`
-* `/Staff/Complaints/Return/{id}`
+* `/Account/Login` (Work account login form)
+* `/Account` (View profile)
+* `/Account/Edit` (Edit contact info)
+* `/Account/Support` (Help/support page)
 
-### Redirects
+## Admin pages
 
-| Redirect                         | To                       |
-|----------------------------------|--------------------------|
-| `/Complaints/Details/{id}`       | `/Staff/Complaints/{id}` |
-| `/Complaints/[user action]/{id}` | `/Staff/Complaints/{id}` |
-| `/Staff/Complaints/Details`      | `/Staff/Complaints`      |
+### Reports
 
-## Complaint Actions
+* `/Admin/Reports` (Management & error reports)
+* `/Admin/Reports/[report type]` (View report)
+* `/Admin/Reports/Export` (Export database archive)
 
-* `/Staff/ComplaintActions` (search)
-* `/Staff/Complaints/Details/{id}#actions` (embedded form)
-* `/Staff/Complaints/Details/{id}/DeleteAction/{actionId}`
-* `/Staff/Complaints/Details/{id}/EditAction/{actionId}`
+### Site Maintenance
 
-### Redirects
-
-| Redirect                                | To                        |
-|-----------------------------------------|---------------------------|
-| `/ComplaintActions`                     | `/Staff/ComplaintActions` |
-| `/Complaints/Actions/{id}`              | `/Staff/ComplaintActions` |
-| `/Complaints/EditAction/{actionid}`     | `/Staff/ComplaintActions` |
-| `/Complaints/Details/{id}/DeleteAction` | `/Staff/Complaints/{id}`  |
-| `/Complaints/Details/{id}/EditAction`   | `/Staff/Complaints/{id}`  |
-
-## Users
-
-* `/Admin/Users` (search)
-* `/Admin/Users/Details/{id}`
-* `/Admin/Users/Edit/{id}` (edit contact info)
-* `/Admin/Users/EditRoles/{id}` (edit roles)
-
-### Redirects
-
-| Redirect               | To                          |
-|------------------------|-----------------------------|
-| `/Users`               | `/Admin/Users`              |
-| `/Users/Details/{id}`  | `/Admin/Users/Details/{id}` |
-| `/Users/Edit/{id}`     | `/Admin/Users/Details/{id}` |
-| `/Admin/Users/Details` | `/Admin/Users`              |
-
-## Site Maintenance
+Maintenance pages available to Site Admin personnel to modify lookup tables used for drop-down lists. Editable items
+comprise Action Types, Areas of Concern, and Offices.
 
 * `/Admin/Maintenance`
-* `/Admin/Maintenance/Offices`
 * `/Admin/Maintenance/ActionTypes`
 * `/Admin/Maintenance/Concerns`
-* `/Admin/Maintenance/[type]/Add`
-* `/Admin/Maintenance/[type]/Edit/{id}`
+* `/Admin/Maintenance/Offices`
+* `/Admin/Maintenance/[maintenance option]/Add`
+* `/Admin/Maintenance/[maintenance option]/Edit/{id}`
 
-### Redirects
+### User Management
 
-| Redirect            | To                          |
-|---------------------|-----------------------------|
-| `/Maintenance`      | `/Admin/Maintenance`        |
-| `/[type]`           | `/Admin/Maintenance/[type]` |
-| `/[type]/Create`    | `/Admin/Maintenance/[type]` |
-| `/[type]/Details/*` | `/Admin/Maintenance/[type]` |
-| `/[type]/Edit/*`    | `/Admin/Maintenance/[type]` |
+* `/Admin/Users` (User search)
+* `/Admin/Users/Details/{id}` (View user profile)
+* `/Admin/Users/Edit/{id}` (Edit contact info)
+* `/Admin/Users/EditRoles/{id}` (Edit roles)
+
+# Menu Bar
+
+## Public
+
+Shown when user is not logged in.
+
+* {Logo} (`~/`)
+* Search (`~/Public`)
+* Sign In (`~/Account/Login`)
+
+## Staff
+
+Shown when staff is logged in.
+
+* {Logo} (`~/Staff`)
+* New Complaint (`~/Staff/Complaints/Add`)
+* Complaint Search (`~/Staff/Complaints`)
+* Action Search (`~/Staff/ComplaintActions`)
+* More (Drop-down)
+    * Reports (`~/Admin/Reports`)
+    * CTS Users (`~/Admin/Users`)
+    * Site Maintenance (`~/Admin/Maintenance`)
+    * Public Portal (`~/Public`)
+* Account (Drop-down)
+    * You profile (`~/Account`)
+    * Support (`~/Account/Support`)
+    * Sign out (*form*)
+* Theme toggle
