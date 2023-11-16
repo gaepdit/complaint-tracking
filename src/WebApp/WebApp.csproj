@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <AssemblyVersion>2023.9.13</AssemblyVersion>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>Cts.WebApp</RootNamespace>
