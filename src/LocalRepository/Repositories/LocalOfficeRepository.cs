@@ -4,10 +4,8 @@ using Cts.TestData;
 
 namespace Cts.LocalRepository.Repositories;
 
-public sealed class LocalOfficeRepository : NamedEntityRepository<Office>, IOfficeRepository
+public sealed class LocalOfficeRepository() : NamedEntityRepository<Office>(OfficeData.GetOffices), IOfficeRepository
 {
-    public LocalOfficeRepository() : base(OfficeData.GetOffices) { }
-
     public async Task<List<ApplicationUser>> GetStaffMembersListAsync(Guid id, bool includeInactive,
         CancellationToken token = default) =>
         (await GetAsync(id, token)).StaffMembers

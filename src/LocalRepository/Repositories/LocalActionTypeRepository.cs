@@ -3,7 +3,5 @@ using Cts.TestData;
 
 namespace Cts.LocalRepository.Repositories;
 
-public sealed class LocalActionTypeRepository : NamedEntityRepository<ActionType>, IActionTypeRepository
-{
-    public LocalActionTypeRepository() : base(ActionTypeData.GetActionTypes) { }
-}
+public sealed class LocalActionTypeRepository() :
+    NamedEntityRepository<ActionType>(ActionTypeData.GetActionTypes), IActionTypeRepository;
