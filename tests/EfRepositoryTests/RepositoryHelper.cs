@@ -50,12 +50,7 @@ public sealed class RepositoryHelper : IDisposable
     private RepositoryHelper(object callingClass, string callingMember)
     {
         _options = callingClass.CreateUniqueMethodOptions<AppDbContext>(callingMember: callingMember,
-            builder: opts => opts.UseSqlServer(
-                sqlServerOpts =>
-                {
-                    // FUTURE: This will no longer be necessary after upgrading to .NET 8.
-                    sqlServerOpts.UseDateOnlyTimeOnly();
-                }));
+            builder: opts => opts.UseSqlServer());
         _context = new AppDbContext(_options);
         _context.Database.EnsureClean();
     }

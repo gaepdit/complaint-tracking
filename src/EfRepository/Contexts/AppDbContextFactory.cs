@@ -13,9 +13,7 @@ public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
     public AppDbContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-        optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=cts-app;",
-            // FUTURE: This will no longer be necessary after upgrading to .NET 8.
-            builder => builder.UseDateOnlyTimeOnly());
+        optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=cts-app;");
         return new AppDbContext(optionsBuilder.Options);
     }
 }
