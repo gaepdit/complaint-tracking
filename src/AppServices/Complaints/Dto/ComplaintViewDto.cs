@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Cts.AppServices.Complaints.Dto;
 
-public class ComplaintViewDto
+public record ComplaintViewDto
 {
     // Authorization handler assist properties
     public Guid CurrentUserOfficeId { get; set; }
@@ -152,9 +152,14 @@ public class ComplaintViewDto
 
     // === Lists ===
 
-    public IReadOnlyList<ComplaintActionViewDto>? ComplaintActions { get; set; }
-    public IReadOnlyList<AttachmentViewDto>? Attachments { get; set; }
-    public IReadOnlyList<ComplaintTransitionViewDto>? ComplaintTransitions { get; set; }
+    [UsedImplicitly]
+    public List<ComplaintActionViewDto> ComplaintActions { get; init; } = new();
+
+    [UsedImplicitly]
+    public List<AttachmentViewDto> Attachments { get; init; } = new();
+
+    [UsedImplicitly]
+    public List<ComplaintTransitionViewDto> ComplaintTransitions { get; init; } = new();
 
     // === Calculated properties ===
 

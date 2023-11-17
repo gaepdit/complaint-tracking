@@ -7,49 +7,40 @@ using System.Linq.Expressions;
 
 namespace Cts.LocalRepository.Repositories;
 
-public sealed class LocalComplaintRepository : BaseRepository<Complaint, int>, IComplaintRepository
+public sealed class LocalComplaintRepository(IAttachmentRepository attachmentRepository,
+        IComplaintActionRepository actionRepository, IComplaintTransitionRepository transitionRepository)
+    : BaseRepository<Complaint, int>(ComplaintData.GetComplaints), IComplaintRepository
 {
-    internal ICollection<ComplaintAction> ComplaintActionItems { get; }
-    internal ICollection<Attachment> AttachmentItems { get; }
-    internal ICollection<ComplaintTransition> ComplaintTransitionItems { get; }
-
-    public LocalComplaintRepository() : base(ComplaintData.GetComplaints)
+    public async Task<Complaint?> FindIncludeAllAsync(Expression<Func<Complaint, bool>> predicate,
+        CancellationToken token = default)
     {
-        ComplaintActionItems = ComplaintActionData.GetComplaintActions.ToList();
-        AttachmentItems = AttachmentData.GetAttachments.ToList();
-        ComplaintTransitionItems = ComplaintTransitionData.GetComplaintTransitions.ToList();
-    }
+        var complaint = await FindAsync(predicate, token);
+        if (complaint is null) return null;
 
-    public Task<IReadOnlyCollection<ComplaintAction>> GetComplaintActionsListAsync(
-        Expression<Func<ComplaintAction, bool>> predicate, CancellationToken token = default) => Task.FromResult(
-        ComplaintActionItems
-            .Where(predicate.Compile())
-            .OrderBy(e => e.ActionDate)
-            .ToList() as IReadOnlyCollection<ComplaintAction>);
+        complaint.Attachments = (await attachmentRepository
+                .GetListAsync(attachment => attachment.Complaint.Id == complaint.Id, token))
+            .OrderByDescending(attachment => attachment.UploadedDate)
+            .ToList();
 
-    public Task<IReadOnlyCollection<Attachment>> GetAttachmentsListAsync(
-        Expression<Func<Attachment, bool>> predicate, CancellationToken token = default) => Task.FromResult(
-        AttachmentItems
-            .Where(predicate.Compile())
-            .OrderBy(e => e.UploadedDate)
-            .ToList() as IReadOnlyCollection<Attachment>);
+        complaint.ComplaintActions = (await actionRepository
+                .GetListAsync(action => action.Complaint.Id == complaint.Id && !action.IsDeleted, token))
+            .OrderByDescending(action => action.ActionDate).ThenByDescending(action => action.EnteredDate)
+            .ToList();
 
-    public Task<IReadOnlyCollection<ComplaintTransition>> GetComplaintTransitionsListAsync(
-        int complaintId, CancellationToken token = default) => Task.FromResult(
-        ComplaintTransitionItems
-            .Where(e => e.Complaint.Id == complaintId)
-            .OrderBy(e => e.CommittedDate)
-            .ToList() as IReadOnlyCollection<ComplaintTransition>);
+        complaint.ComplaintTransitions = (await transitionRepository
+                .GetListAsync(transition => transition.Complaint.Id == complaint.Id, token))
+            .OrderBy(transition => transition.CommittedDate)
+            .ToList();
 
-    public Task InsertTransitionAsync(
-        ComplaintTransition transition, bool autoSave = true, CancellationToken token = default)
-    {
-        ComplaintTransitionItems.Add(transition);
-        return Task.CompletedTask;
+        return complaint;
     }
 
     public Task<Attachment?> FindAttachmentAsync(Guid id, CancellationToken token = default) =>
-        Task.FromResult(AttachmentItems.SingleOrDefault(e => e.Id == id));
+        attachmentRepository.FindAsync(id, token);
+
+    public Task InsertTransitionAsync(ComplaintTransition transition, bool autoSave = true,
+        CancellationToken token = default) =>
+        transitionRepository.InsertAsync(transition, autoSave, token);
 
     // Local repository requires ID to be manually set.
     public int? GetNextId() => Items.Select(e => e.Id).Max() + 1;

@@ -9,7 +9,7 @@ public class IndexTests
     [Test]
     public async Task OnGet_PopulatesThePageModel()
     {
-        var item = Substitute.For<ComplaintPublicViewDto>();
+        var item = new ComplaintPublicViewDto();
 
         var serviceMock = Substitute.For<IComplaintService>();
         serviceMock.FindPublicAsync(Arg.Any<int>(), Arg.Any<CancellationToken>())

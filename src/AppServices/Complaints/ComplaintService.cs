@@ -1,7 +1,7 @@
 using AutoMapper;
 using Cts.AppServices.Attachments;
-using Cts.AppServices.ComplaintActions;
 using Cts.AppServices.Complaints.Dto;
+using Cts.AppServices.Staff.Dto;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.ComplaintTransitions;
@@ -37,25 +37,9 @@ public sealed class ComplaintService : IComplaintService
 
     public async Task<ComplaintPublicViewDto?> FindPublicAsync(int id, CancellationToken token = default)
     {
-        var item = _mapper.Map<ComplaintPublicViewDto>(
-            await _complaints.FindAsync(ComplaintFilters.PublicIdPredicate(id), token));
-        if (item is null) return item;
-
-        item.ComplaintActions = await GetPublicComplaintActionsAsync(id, token);
-        item.Attachments = await GetPublicAttachmentsAsync(id, token);
-        return item;
+        var complaint = await _complaints.FindIncludeAllAsync(ComplaintFilters.PublicIdPredicate(id), token);
+        return complaint is null ? null : _mapper.Map<ComplaintPublicViewDto>(complaint);
     }
-
-    private async Task<IReadOnlyList<ComplaintActionPublicViewDto>> GetPublicComplaintActionsAsync(
-        int complaintId, CancellationToken token) =>
-        _mapper.Map<IReadOnlyList<ComplaintActionPublicViewDto>>(
-            await _complaints.GetComplaintActionsListAsync(
-                ComplaintActionFilters.PublicIdPredicate(complaintId), token));
-
-    private async Task<IReadOnlyList<AttachmentPublicViewDto>> GetPublicAttachmentsAsync(
-        int complaintId, CancellationToken token = default) =>
-        _mapper.Map<IReadOnlyList<AttachmentPublicViewDto>>(
-            await _complaints.GetAttachmentsListAsync(AttachmentFilters.PublicIdPredicate(complaintId), token));
 
     public async Task<bool> PublicExistsAsync(int id, CancellationToken token = default) =>
         await _complaints.ExistsAsync(ComplaintFilters.PublicIdPredicate(id), token);
@@ -85,33 +69,18 @@ public sealed class ComplaintService : IComplaintService
 
     public async Task<ComplaintViewDto?> FindAsync(int id, CancellationToken token = default)
     {
-        var item = _mapper.Map<ComplaintViewDto>(await _complaints.FindAsync(id, token));
-        if (item is null) return item;
+        var complaint = await _complaints.FindIncludeAllAsync(ComplaintFilters.IdPredicate(id), token);
+        if (complaint is null) return null;
 
-        item.ComplaintActions = await GetActionsAsync(id, token);
-        item.Attachments = await GetAttachmentsAsync(id, token);
-        item.ComplaintTransitions = await GetTransitionsAsync(id, token);
-        return item;
+        var view = _mapper.Map<ComplaintViewDto>(complaint);
+        return complaint is { IsDeleted: true, DeletedById: not null }
+            ? view with { DeletedBy = _mapper.Map<StaffViewDto>(await _users.FindUserAsync(complaint.DeletedById)) }
+            : view;
     }
 
     public async Task<ComplaintUpdateDto?> FindForUpdateAsync(int id, CancellationToken token = default) =>
         _mapper.Map<ComplaintUpdateDto>(await _complaints.FindAsync(e =>
             e.Id == id && !e.IsDeleted && !e.ComplaintClosed, token));
-
-    private async Task<IReadOnlyList<ComplaintActionViewDto>> GetActionsAsync(
-        int complaintId, CancellationToken token) =>
-        _mapper.Map<IReadOnlyList<ComplaintActionViewDto>>(
-            await _complaints.GetComplaintActionsListAsync(ComplaintActionFilters.IdPredicate(complaintId), token));
-
-    private async Task<IReadOnlyList<AttachmentViewDto>> GetAttachmentsAsync(
-        int complaintId, CancellationToken token) =>
-        _mapper.Map<IReadOnlyList<AttachmentViewDto>>(
-            await _complaints.GetAttachmentsListAsync(AttachmentFilters.IdPredicate(complaintId), token));
-
-    private async Task<IReadOnlyList<ComplaintTransitionViewDto>> GetTransitionsAsync(
-        int complaintId, CancellationToken token) =>
-        _mapper.Map<IReadOnlyList<ComplaintTransitionViewDto>>(
-            await _complaints.GetComplaintTransitionsListAsync(complaintId, token));
 
     public async Task<bool> ExistsAsync(int id, CancellationToken token = default) =>
         await _complaints.ExistsAsync(id, token);
@@ -232,10 +201,12 @@ public sealed class ComplaintService : IComplaintService
 
     public Task SaveAttachmentAsync(IFormFile file, CancellationToken token = default)
     {
+#pragma warning disable S125
         // var fileName = file.FileName.Trim();
         // var fileExtension = Path.GetExtension(fileName);
         // var fileId = Guid.NewGuid();
         // var saveFileName = string.Concat(fileId.ToString(), fileExtension);
+#pragma warning restore S125
         throw new NotImplementedException();
     }
 
