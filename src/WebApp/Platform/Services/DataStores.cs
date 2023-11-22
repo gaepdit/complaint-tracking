@@ -35,14 +35,7 @@ public static class DataStores
             }
             else
             {
-                services.AddDbContext<AppDbContext>(opts =>
-                    opts.UseSqlServer(connectionString, builder =>
-                    {
-                        // DateOnly and TimeOnly entity properties require the following package: 
-                        // ErikEJ.EntityFrameworkCore.SqlServer.DateOnlyTimeOnly
-                        // FUTURE: This will no longer be necessary after upgrading to .NET 8.
-                        builder.UseDateOnlyTimeOnly();
-                    }));
+                services.AddDbContext<AppDbContext>(opts => opts.UseSqlServer(connectionString));
             }
 
             services.AddScoped<IActionTypeRepository, ActionTypeRepository>();
