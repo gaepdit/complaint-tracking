@@ -57,4 +57,5 @@ public sealed class ActionTypeService : IActionTypeService
     }
 
     public void Dispose() => _repository.Dispose();
+    public ValueTask DisposeAsync() => _repository.DisposeAsync();
 }

@@ -105,7 +105,7 @@
             <tbody class="table-group-divider">
             @foreach (var item in Model.SearchResults.Items)
             {
-                <tr class="@(item.Active ? "" : "table-secondary")">
+                <tr class="@(item.Active ? "" : "bg-secondary-subtle")">
                     <td>
                         @item.SortableFullName
                         @if (item.Email.ToLowerInvariant().Equals(User.Identity?.Name!.ToLowerInvariant()))

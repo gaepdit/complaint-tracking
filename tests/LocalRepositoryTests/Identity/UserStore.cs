@@ -44,12 +44,13 @@ public class UserStore
     [Test]
     public async Task Update_WhenItemIsValid_UpdatesItem()
     {
-        var user = _store.UserStore.First();
+        var store = RepositoryHelper.GetLocalUserStore();
+        var user = store.UserStore.First();
         user.Phone = "1";
         user.Office = new Office(Guid.NewGuid(), "abc");
 
-        var result = await _store.UpdateAsync(user, CancellationToken.None);
-        var updatedUser = await _store.FindByIdAsync(user.Id, CancellationToken.None);
+        var result = await store.UpdateAsync(user, CancellationToken.None);
+        var updatedUser = await store.FindByIdAsync(user.Id, CancellationToken.None);
 
         using (new AssertionScope())
         {

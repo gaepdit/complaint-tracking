@@ -25,7 +25,7 @@ namespace EfRepositoryTests;
 /// If SQL Server-specific features need to be tested, then use <see cref="CreateSqlServerRepositoryHelper"/>.
 /// </para>
 /// </summary>
-public sealed class RepositoryHelper : IDisposable
+public sealed class RepositoryHelper : IDisposable, IAsyncDisposable
 {
     private AppDbContext Context { get; set; } = default!;
 
@@ -183,5 +183,11 @@ public sealed class RepositoryHelper : IDisposable
     {
         _context.Dispose();
         Context.Dispose();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await _context.DisposeAsync();
+        await Context.DisposeAsync();
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Cts.AppServices.ActionTypes;
 
-public interface IActionTypeService : IDisposable
+public interface IActionTypeService : IDisposable, IAsyncDisposable
 {
     Task<ActionTypeUpdateDto?> FindForUpdateAsync(Guid id, CancellationToken token = default);
     Task<IReadOnlyList<ActionTypeViewDto>> GetListAsync(CancellationToken token = default);

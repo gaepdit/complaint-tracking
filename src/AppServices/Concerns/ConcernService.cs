@@ -54,4 +54,5 @@ public sealed class ConcernService : IConcernService
     }
 
     public void Dispose() => _repository.Dispose();
+    public ValueTask DisposeAsync() => _repository.DisposeAsync();
 }
