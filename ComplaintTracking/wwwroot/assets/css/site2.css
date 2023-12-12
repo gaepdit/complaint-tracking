@@ -97,6 +97,15 @@ summary::marker { font-size: 3rem; }
     }
 }
 
+/* Banners
+-------------------------------------------------- */
+.banner {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    margin-bottom: 10px;
+    background: #fff9d0ba;
+}
+
 /* Test site banner */
 
 .banner-test-site {
@@ -116,7 +125,8 @@ summary::marker { font-size: 3rem; }
 
 @media print {
     .usa-search,
-    .gaepd-form-fileupload {
+    .gaepd-form-fileupload,
+    .banner {
         display: none;
     }
 
