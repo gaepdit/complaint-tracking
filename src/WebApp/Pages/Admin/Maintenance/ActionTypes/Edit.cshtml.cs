@@ -10,19 +10,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace Cts.WebApp.Pages.Admin.Maintenance.ActionTypes;
 
 [Authorize(Policy = nameof(Policies.SiteMaintainer))]
-public class EditModel : PageModel
+public class EditModel(IActionTypeService service, IValidator<ActionTypeUpdateDto> validator) : PageModel
 {
-    // Constructor
-    private readonly IActionTypeService _service;
-    private readonly IValidator<ActionTypeUpdateDto> _validator;
-
-    public EditModel(IActionTypeService service, IValidator<ActionTypeUpdateDto> validator)
-    {
-        _service = service;
-        _validator = validator;
-    }
-
-    // Properties
     [FromRoute]
     public Guid Id { get; set; }
 
@@ -37,11 +26,10 @@ public class EditModel : PageModel
 
     public static MaintenanceOption ThisOption => MaintenanceOption.ActionType;
 
-    // Methods
     public async Task<IActionResult> OnGetAsync(Guid? id)
     {
         if (id is null) return RedirectToPage("Index");
-        var item = await _service.FindForUpdateAsync(id.Value);
+        var item = await service.FindForUpdateAsync(id.Value);
         if (item is null) return NotFound();
 
         Item = item;
@@ -51,10 +39,10 @@ public class EditModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        await _validator.ApplyValidationAsync(Item, ModelState, Id);
+        await validator.ApplyValidationAsync(Item, ModelState, Id);
         if (!ModelState.IsValid) return Page();
 
-        await _service.UpdateAsync(Id, Item);
+        await service.UpdateAsync(Id, Item);
 
         HighlightId = Id;
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, $"“{Item.Name}” successfully updated.");

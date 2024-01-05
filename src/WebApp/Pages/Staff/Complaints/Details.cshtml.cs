@@ -9,32 +9,19 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace Cts.WebApp.Pages.Staff.Complaints;
 
 [Authorize]
-public class DetailsModel : PageModel
+public class DetailsModel(IComplaintService complaints, IStaffService staffService, IAuthorizationService authorization)
+    : PageModel
 {
-    // Constructor
-    private readonly IComplaintService _complaints;
-    private readonly IStaffService _staff;
-    private readonly IAuthorizationService _authorization;
-
-    public DetailsModel(IComplaintService complaints, IStaffService staff, IAuthorizationService authorization)
-    {
-        _complaints = complaints;
-        _staff = staff;
-        _authorization = authorization;
-    }
-
-    // Properties
     public ComplaintViewDto Item { get; private set; } = default!;
     public Dictionary<IAuthorizationRequirement, bool> UserCan { get; set; } = new();
 
-    // Methods
     public async Task<IActionResult> OnGetAsync(int? id)
     {
-        var staff = await _staff.GetCurrentUserAsync();
+        var staff = await staffService.GetCurrentUserAsync();
         if (staff is not { Active: true }) return Forbid();
 
         if (id is null) return RedirectToPage("../Index");
-        var item = await _complaints.FindAsync(id.Value);
+        var item = await complaints.FindAsync(id.Value);
         if (item is null) return NotFound();
 
         item.CurrentUserOfficeId = staff.Office?.Id ?? Guid.Empty;
@@ -48,5 +35,5 @@ public class DetailsModel : PageModel
     }
 
     private async Task SetPermissionAsync(IAuthorizationRequirement operation) =>
-        UserCan[operation] = (await _authorization.AuthorizeAsync(User, Item, operation)).Succeeded;
+        UserCan[operation] = (await authorization.AuthorizeAsync(User, Item, operation)).Succeeded;
 }

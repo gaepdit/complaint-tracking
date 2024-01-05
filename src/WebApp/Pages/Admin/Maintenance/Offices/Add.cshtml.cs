@@ -13,24 +13,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace Cts.WebApp.Pages.Admin.Maintenance.Offices;
 
 [Authorize(Policy = nameof(Policies.SiteMaintainer))]
-public class AddModel : PageModel
+public class AddModel(IOfficeService officeService, IStaffService staffService, IValidator<OfficeCreateDto> validator)
+    : PageModel
 {
-    // Constructor
-    private readonly IOfficeService _officeService;
-    private readonly IStaffService _staffService;
-    private readonly IValidator<OfficeCreateDto> _validator;
-
-    public AddModel(
-        IOfficeService officeService,
-        IStaffService staffService,
-        IValidator<OfficeCreateDto> validator)
-    {
-        _officeService = officeService;
-        _staffService = staffService;
-        _validator = validator;
-    }
-
-    // Properties
     [BindProperty]
     public OfficeCreateDto Item { get; set; } = default!;
 
@@ -39,10 +24,8 @@ public class AddModel : PageModel
 
     public static MaintenanceOption ThisOption => MaintenanceOption.Office;
 
-    // Select lists
     public SelectList ActiveStaffMembersSelectList { get; private set; } = default!;
 
-    // Methods
     public async Task<IActionResult> OnGetAsync()
     {
         await PopulateSelectListsAsync();
@@ -51,7 +34,7 @@ public class AddModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        await _validator.ApplyValidationAsync(Item, ModelState);
+        await validator.ApplyValidationAsync(Item, ModelState);
 
         if (!ModelState.IsValid)
         {
@@ -59,11 +42,11 @@ public class AddModel : PageModel
             return Page();
         }
 
-        HighlightId = await _officeService.CreateAsync(Item);
+        HighlightId = await officeService.CreateAsync(Item);
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, $"“{Item.Name}” successfully added.");
         return RedirectToPage("Index");
     }
 
     private async Task PopulateSelectListsAsync() =>
-        ActiveStaffMembersSelectList = (await _staffService.GetStaffListItemsAsync()).ToSelectList();
+        ActiveStaffMembersSelectList = (await staffService.GetStaffListItemsAsync()).ToSelectList();
 }

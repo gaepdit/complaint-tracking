@@ -16,32 +16,17 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace Cts.WebApp.Pages.Admin.Users;
 
 [Authorize(Policy = nameof(Policies.ActiveUser))]
-public class IndexModel : PageModel
+public class IndexModel(IOfficeService officeService, IStaffService staffService) : PageModel
 {
-    // Constructor
-    private readonly IOfficeService _officeService;
-    private readonly IStaffService _staffService;
-
-    public IndexModel(
-        IOfficeService officeService,
-        IStaffService staffService)
-    {
-        _officeService = officeService;
-        _staffService = staffService;
-    }
-
-    // Properties
     public StaffSearchDto Spec { get; set; } = default!;
     public bool ShowResults { get; private set; }
     public IPaginatedResult<StaffSearchResultDto> SearchResults { get; private set; } = default!;
     public string SortByName => Spec.Sort.ToString();
     public PaginationNavModel PaginationNav => new(SearchResults, Spec.AsRouteValues());
 
-    // Select lists
     public SelectList RolesSelectList { get; private set; } = default!;
     public SelectList OfficesSelectList { get; private set; } = default!;
 
-    // Methods
     public Task OnGetAsync() => PopulateSelectListsAsync();
 
     public async Task<IActionResult> OnGetSearchAsync(StaffSearchDto spec, [FromQuery] int p = 1)
@@ -49,14 +34,14 @@ public class IndexModel : PageModel
         Spec = spec.TrimAll();
         await PopulateSelectListsAsync();
         var paging = new PaginatedRequest(p, GlobalConstants.PageSize, Spec.Sort.GetDescription());
-        SearchResults = await _staffService.SearchAsync(Spec, paging);
+        SearchResults = await staffService.SearchAsync(Spec, paging);
         ShowResults = true;
         return Page();
     }
 
     private async Task PopulateSelectListsAsync()
     {
-        OfficesSelectList = (await _officeService.GetActiveListItemsAsync()).ToSelectList();
+        OfficesSelectList = (await officeService.GetActiveListItemsAsync()).ToSelectList();
         RolesSelectList = AppRole.AllRoles
             .Select(r => new ListItem<string>(r.Key, r.Value.DisplayName))
             .ToSelectList();
