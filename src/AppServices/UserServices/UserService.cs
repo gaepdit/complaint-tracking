@@ -16,7 +16,7 @@ public class UserService(UserManager<ApplicationUser> userManager, IHttpContextA
 
     public async Task<ApplicationUser> GetUserAsync(string id) =>
         await userManager.FindByIdAsync(id)
-        ?? throw new EntityNotFoundException(typeof(ApplicationUser), id);
+        ?? throw new EntityNotFoundException<ApplicationUser>(id);
 
     public Task<ApplicationUser?> FindUserAsync(string id) =>
         userManager.FindByIdAsync(id);

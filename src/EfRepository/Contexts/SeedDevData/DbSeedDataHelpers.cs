@@ -2,7 +2,6 @@ using Cts.Domain.Identity;
 using Cts.TestData;
 using Cts.TestData.Identity;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace Cts.EfRepository.Contexts.SeedDevData;
 

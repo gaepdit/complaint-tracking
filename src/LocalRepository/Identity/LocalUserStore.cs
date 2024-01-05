@@ -96,7 +96,7 @@ public sealed class LocalUserStore :
     public async Task<IdentityResult> UpdateAsync(ApplicationUser user, CancellationToken cancellationToken)
     {
         var existingUser = await FindByIdAsync(user.Id, cancellationToken)
-            ?? throw new EntityNotFoundException(typeof(ApplicationUser), user.Id);
+            ?? throw new EntityNotFoundException<ApplicationUser>(user.Id);
         UserStore.Remove(existingUser);
         UserStore.Add(user);
         return IdentityResult.Success;

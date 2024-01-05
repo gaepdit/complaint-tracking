@@ -81,7 +81,7 @@ public sealed class StaffService(
     public async Task<IdentityResult> UpdateRolesAsync(string id, Dictionary<string, bool> roles)
     {
         var user = await userManager.FindByIdAsync(id)
-            ?? throw new EntityNotFoundException(typeof(ApplicationUser), id);
+            ?? throw new EntityNotFoundException<ApplicationUser>(id);
 
         foreach (var (role, value) in roles)
         {
@@ -107,7 +107,7 @@ public sealed class StaffService(
     public async Task<IdentityResult> UpdateAsync(string id, StaffUpdateDto resource)
     {
         var user = await userManager.FindByIdAsync(id)
-            ?? throw new EntityNotFoundException(typeof(ApplicationUser), id);
+            ?? throw new EntityNotFoundException<ApplicationUser>(id);
 
         user.Phone = resource.Phone;
         user.Office = resource.OfficeId is null ? null : await officeRepository.GetAsync(resource.OfficeId.Value);
