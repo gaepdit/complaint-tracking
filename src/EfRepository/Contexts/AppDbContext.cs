@@ -12,12 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Cts.EfRepository.Contexts;
 
-public class AppDbContext : IdentityDbContext<ApplicationUser>
+public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<ApplicationUser>(options)
 {
     internal const string SqlServerProvider = "Microsoft.EntityFrameworkCore.SqlServer";
     private const string SqliteProvider = "Microsoft.EntityFrameworkCore.Sqlite";
-
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
     // Add domain entities here.
 

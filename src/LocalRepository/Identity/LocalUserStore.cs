@@ -12,7 +12,6 @@ public sealed class LocalUserStore :
     IQueryableUserStore<ApplicationUser>
 {
     public IQueryable<ApplicationUser> Users => UserStore.AsQueryable();
-
     internal ICollection<ApplicationUser> UserStore { get; }
     internal ICollection<IdentityRole> Roles { get; }
     private List<IdentityUserRole<string>> UserRoles { get; }

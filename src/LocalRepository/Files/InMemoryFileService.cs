@@ -5,9 +5,7 @@ namespace Cts.LocalRepository.Files;
 
 public class InMemoryFileService : IFileService
 {
-    private ICollection<AttachmentFile> Items { get; }
-
-    public InMemoryFileService() => Items = AttachmentData.GetAttachmentFiles;
+    private ICollection<AttachmentFile> Items { get; } = AttachmentData.GetAttachmentFiles;
 
     public Task<byte[]> GetFileAsync(string path, string? location = null)
     {

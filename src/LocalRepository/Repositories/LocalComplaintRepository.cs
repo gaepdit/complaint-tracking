@@ -7,8 +7,10 @@ using System.Linq.Expressions;
 
 namespace Cts.LocalRepository.Repositories;
 
-public sealed class LocalComplaintRepository(IAttachmentRepository attachmentRepository,
-        IComplaintActionRepository actionRepository, IComplaintTransitionRepository transitionRepository)
+public sealed class LocalComplaintRepository(
+    IAttachmentRepository attachmentRepository,
+    IComplaintActionRepository actionRepository,
+    IComplaintTransitionRepository transitionRepository)
     : BaseRepository<Complaint, int>(ComplaintData.GetComplaints), IComplaintRepository
 {
     public async Task<Complaint?> FindIncludeAllAsync(Expression<Func<Complaint, bool>> predicate,
