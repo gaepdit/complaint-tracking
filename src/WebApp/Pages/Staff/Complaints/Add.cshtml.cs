@@ -17,34 +17,17 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace Cts.WebApp.Pages.Staff.Complaints;
 
 [Authorize(Policy = nameof(Policies.StaffUser))]
-public class AddModel : PageModel
+public class AddModel(
+    IComplaintService service,
+    IStaffService staff,
+    IConcernService concerns,
+    IOfficeService offices,
+    IValidator<ComplaintCreateDto> validator)
+    : PageModel
 {
-    // Constructor
-    private readonly IComplaintService _complaints;
-    private readonly IStaffService _staff;
-    private readonly IConcernService _concerns;
-    private readonly IOfficeService _offices;
-    private readonly IValidator<ComplaintCreateDto> _validator;
-
-    public AddModel(
-        IComplaintService service,
-        IStaffService staff,
-        IConcernService concerns,
-        IOfficeService offices,
-        IValidator<ComplaintCreateDto> validator)
-    {
-        _complaints = service;
-        _staff = staff;
-        _concerns = concerns;
-        _offices = offices;
-        _validator = validator;
-    }
-
-    // Properties
     [BindProperty]
     public ComplaintCreateDto Item { get; set; } = default!;
 
-    // Select lists
     public SelectList ConcernsSelectList { get; private set; } = default!;
     public SelectList OfficesSelectList { get; private set; } = default!;
     public SelectList AllActiveStaffSelectList { get; private set; } = default!;
@@ -53,17 +36,16 @@ public class AddModel : PageModel
     public SelectList StatesSelectList => new(Data.States);
     public SelectList CountiesSelectList => new(Data.Counties);
 
-    // Methods
     public async Task OnGetAsync()
     {
-        var user = await _staff.GetCurrentUserAsync();
+        var user = await staff.GetCurrentUserAsync();
         Item = new ComplaintCreateDto(user.Id, user.Office?.Id);
         await PopulateSelectListsAsync(user.Office?.Id);
     }
 
     public async Task<IActionResult> OnPostAsync()
     {
-        await _validator.ApplyValidationAsync(Item, ModelState);
+        await validator.ApplyValidationAsync(Item, ModelState);
 
         if (!ModelState.IsValid)
         {
@@ -71,16 +53,16 @@ public class AddModel : PageModel
             return Page();
         }
 
-        var id = await _complaints.CreateAsync(Item);
+        var id = await service.CreateAsync(Item);
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "Complaint successfully created.");
         return RedirectToPage("Details", new { id });
     }
 
     private async Task PopulateSelectListsAsync(Guid? currentOfficeId)
     {
-        ConcernsSelectList = (await _concerns.GetActiveListItemsAsync()).ToSelectList();
-        OfficesSelectList = (await _offices.GetActiveListItemsAsync()).ToSelectList();
-        AllActiveStaffSelectList = (await _staff.GetStaffListItemsAsync()).ToSelectList();
-        ActiveStaffInOfficeSelectList = (await _offices.GetStaffListItemsAsync(currentOfficeId)).ToSelectList();
+        ConcernsSelectList = (await concerns.GetActiveListItemsAsync()).ToSelectList();
+        OfficesSelectList = (await offices.GetActiveListItemsAsync()).ToSelectList();
+        AllActiveStaffSelectList = (await staff.GetStaffListItemsAsync()).ToSelectList();
+        ActiveStaffInOfficeSelectList = (await offices.GetStaffListItemsAsync(currentOfficeId)).ToSelectList();
     }
 }

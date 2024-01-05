@@ -16,21 +16,8 @@ using System.ComponentModel.DataAnnotations;
 namespace Cts.WebApp.Pages.Public;
 
 [AllowAnonymous]
-public class IndexModel : PageModel
+public class IndexModel(IComplaintService complaints, IConcernService concerns) : PageModel
 {
-    // Constructor
-    private readonly IComplaintService _complaints;
-    private readonly IConcernService _concerns;
-
-    public IndexModel(
-        IComplaintService complaints,
-        IConcernService concerns)
-    {
-        _complaints = complaints;
-        _concerns = concerns;
-    }
-
-    // Properties
     [BindProperty]
     [Required(ErrorMessage = "Please enter a complaint ID.")]
     [Display(Name = "Complaint ID")]
@@ -42,12 +29,10 @@ public class IndexModel : PageModel
     public string SortByName => Spec.Sort.ToString();
     public PaginationNavModel PaginationNav => new(SearchResults, Spec.AsRouteValues());
 
-    // Select lists
     public SelectList ConcernsSelectList { get; private set; } = default!;
     public SelectList CountiesSelectList => new(Data.Counties);
     public SelectList StatesSelectList => new(Data.States);
 
-    // Methods
     public Task OnGetAsync()
     {
         Spec = new ComplaintPublicSearchDto();
@@ -62,7 +47,7 @@ public class IndexModel : PageModel
         {
             ModelState.AddModelError(nameof(FindId), "Complaint ID must be a number.");
         }
-        else if (!await _complaints.PublicExistsAsync(idInt))
+        else if (!await complaints.PublicExistsAsync(idInt))
         {
             ModelState.AddModelError(nameof(FindId),
                 "The Complaint ID entered does not exist or is not publicly available. " +
@@ -82,10 +67,10 @@ public class IndexModel : PageModel
         ShowResults = true;
 
         await PopulateSelectListsAsync();
-        SearchResults = await _complaints.PublicSearchAsync(spec, paging);
+        SearchResults = await complaints.PublicSearchAsync(spec, paging);
         return Page();
     }
 
     private async Task PopulateSelectListsAsync() =>
-        ConcernsSelectList = (await _concerns.GetActiveListItemsAsync()).ToSelectList();
+        ConcernsSelectList = (await concerns.GetActiveListItemsAsync()).ToSelectList();
 }

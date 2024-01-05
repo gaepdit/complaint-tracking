@@ -18,5 +18,5 @@ internal static class ComplaintActionFilters
 
     private static Expression<Func<ComplaintAction, bool>> ForComplaint(
         this Expression<Func<ComplaintAction, bool>> predicate, int complaintId) =>
-        predicate.And(e => e.Complaint.Id == complaintId);
+        predicate.And(action => action.Complaint.Id == complaintId);
 }

@@ -1,6 +1,9 @@
 ﻿using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.Dto;
+using Cts.Domain.Entities.Attachments;
+using Cts.Domain.Entities.ComplaintActions;
 using Cts.Domain.Entities.Complaints;
+using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.LocalRepository.Repositories;
 
 namespace LocalRepositoryTests.Complaints;
@@ -13,7 +16,8 @@ public class PublicSearchSpec
     [SetUp]
     public void SetUp()
     {
-        _repository = new LocalComplaintRepository();
+        _repository = new LocalComplaintRepository(Substitute.For<IAttachmentRepository>(),
+            Substitute.For<IComplaintActionRepository>(), Substitute.For<IComplaintTransitionRepository>());
         _referenceItem =
             _repository.Items.Single(e => e.ComplaintNature == "PublicSearchSpec complaint nature reference");
     }

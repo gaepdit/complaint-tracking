@@ -2,7 +2,5 @@
 
 namespace Cts.EfRepository.Repositories;
 
-public sealed class ActionTypeRepository : NamedEntityRepository<ActionType, AppDbContext>, IActionTypeRepository
-{
-    public ActionTypeRepository(AppDbContext dbContext) : base(dbContext) { }
-}
+public sealed class ActionTypeRepository(AppDbContext dbContext) :
+    NamedEntityRepository<ActionType, AppDbContext>(dbContext), IActionTypeRepository;

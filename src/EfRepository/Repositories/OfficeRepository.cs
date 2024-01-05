@@ -3,10 +3,9 @@ using Cts.Domain.Identity;
 
 namespace Cts.EfRepository.Repositories;
 
-public sealed class OfficeRepository : NamedEntityRepository<Office, AppDbContext>, IOfficeRepository
+public sealed class OfficeRepository(AppDbContext context) :
+    NamedEntityRepository<Office, AppDbContext>(context), IOfficeRepository
 {
-    public OfficeRepository(AppDbContext context) : base(context) { }
-
     public Task<List<ApplicationUser>> GetStaffMembersListAsync(Guid id, bool includeInactive,
         CancellationToken token = default) =>
         Context.Set<ApplicationUser>().AsNoTracking()

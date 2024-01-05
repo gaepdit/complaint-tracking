@@ -10,12 +10,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace Cts.WebApp.Pages.Account;
 
 [AllowAnonymous]
-public class LogoutModel : PageModel
+public class LogoutModel(SignInManager<ApplicationUser> signInManager) : PageModel
 {
-    private readonly SignInManager<ApplicationUser> _signInManager;
-
-    public LogoutModel(SignInManager<ApplicationUser> signInManager) => _signInManager = signInManager;
-
     public Task<IActionResult> OnGetAsync() => LogOutAndRedirectToIndex();
 
     public Task<IActionResult> OnPostAsync() => LogOutAndRedirectToIndex();
@@ -29,7 +25,7 @@ public class LogoutModel : PageModel
                 OpenIdConnectDefaults.AuthenticationScheme);
 
         // If a local user is enabled instead, sign out locally and redirect to home page.
-        await _signInManager.SignOutAsync();
+        await signInManager.SignOutAsync();
         return RedirectToPage("/Index");
     }
 }

@@ -1,47 +1,41 @@
 using Cts.Domain.Entities.Attachments;
-using Cts.Domain.Entities.ComplaintActions;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.ComplaintTransitions;
 using System.Linq.Expressions;
 
 namespace Cts.EfRepository.Repositories;
 
-public sealed class ComplaintRepository : BaseRepository<Complaint, int, AppDbContext>, IComplaintRepository
+public sealed class ComplaintRepository(AppDbContext context)
+    : BaseRepository<Complaint, int, AppDbContext>(context), IComplaintRepository
 {
-    public ComplaintRepository(AppDbContext context) : base(context) { }
+    public async Task<Complaint?> FindIncludeAllAsync(Expression<Func<Complaint, bool>> predicate,
+        CancellationToken token = default) =>
+        await Context.Set<Complaint>()
+            .Include(complaint => complaint.Attachments
+                .Where(attachment => !attachment.IsDeleted)
+                .OrderByDescending(attachment => attachment.UploadedDate)
+            )
+            .Include(complaint => complaint.ComplaintActions
+                .Where(action => !action.IsDeleted)
+                .OrderByDescending(action => action.ActionDate)
+                .ThenByDescending(action => action.EnteredDate)
+            )
+            .Include(complaint => complaint.ComplaintTransitions
+                .OrderBy(transition => transition.CommittedDate))
+            .SingleOrDefaultAsync(predicate, token);
 
-    public async Task<IReadOnlyCollection<ComplaintAction>> GetComplaintActionsListAsync(
-        Expression<Func<ComplaintAction, bool>> predicate, CancellationToken token = default) =>
-        await Context.Set<ComplaintAction>().AsNoTracking()
-            .Where(predicate)
-            .OrderBy(e => e.ActionDate)
-            .ToListAsync(token);
-
-    public async Task<IReadOnlyCollection<Attachment>> GetAttachmentsListAsync(
-        Expression<Func<Attachment, bool>> predicate, CancellationToken token = default) =>
-        await Context.Set<Attachment>().AsNoTracking()
-            .Where(predicate)
-            .OrderBy(e => e.UploadedDate)
-            .ToListAsync(token);
-
-    public async Task<IReadOnlyCollection<ComplaintTransition>> GetComplaintTransitionsListAsync(
-        int complaintId, CancellationToken token = default) =>
-        await Context.Set<ComplaintTransition>().AsNoTracking()
-            .Where(e => e.Complaint.Id == complaintId)
-            .OrderBy(e => e.CommittedDate)
-            .ToListAsync(token);
-
-    public async Task InsertTransitionAsync(
-        ComplaintTransition transition, bool autoSave = true, CancellationToken token = default)
-    {
-        await Context.Set<ComplaintTransition>().AddAsync(transition, token);
-        if (autoSave) await Context.SaveChangesAsync(token);
-    }
 
     public async Task<Attachment?> FindAttachmentAsync(Guid id, CancellationToken token = default) =>
         await Context.Set<Attachment>()
             .Include(e => e.Complaint)
             .SingleOrDefaultAsync(e => e.Id == id, token);
+
+    public async Task InsertTransitionAsync(ComplaintTransition transition, bool autoSave = true,
+        CancellationToken token = default)
+    {
+        await Context.Set<ComplaintTransition>().AddAsync(transition, token);
+        if (autoSave) await Context.SaveChangesAsync(token);
+    }
 
     // EF will set the ID automatically.
     public int? GetNextId() => null;

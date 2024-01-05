@@ -6,16 +6,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace Cts.WebApp.Pages;
 
 [AllowAnonymous]
-public class IndexModel : PageModel
+public class IndexModel(IAuthorizationService authorization) : PageModel
 {
-    // Constructor
-    private readonly IAuthorizationService _authorization;
-    public IndexModel(IAuthorizationService authorization) => _authorization = authorization;
-
-    // Properties
     public bool ShowDashboard { get; private set; }
 
-    // Methods
     public async Task<IActionResult> OnGetAsync()
     {
         ShowDashboard = await UseDashboardAsync();
@@ -23,5 +17,5 @@ public class IndexModel : PageModel
     }
 
     private async Task<bool> UseDashboardAsync() =>
-        (await _authorization.AuthorizeAsync(User, nameof(Policies.StaffUser))).Succeeded;
+        (await authorization.AuthorizeAsync(User, nameof(Policies.StaffUser))).Succeeded;
 }

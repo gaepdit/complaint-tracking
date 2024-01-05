@@ -11,10 +11,7 @@ public class ComplaintAction : AuditableSoftDeleteEntity
     [UsedImplicitly] // Used by ORM.
     private ComplaintAction() { }
 
-    internal ComplaintAction(Guid id, Complaint complaint) : base(id)
-    {
-        Complaint = complaint;
-    }
+    internal ComplaintAction(Guid id, Complaint complaint) : base(id) => Complaint = complaint;
 
     // Properties
 

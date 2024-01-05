@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Cts.AppServices.Complaints.Dto;
 
-public class ComplaintPublicViewDto
+public record ComplaintPublicViewDto
 {
     // Backing fields
     private readonly string? _complaintNature;
@@ -89,10 +89,10 @@ public class ComplaintPublicViewDto
     // Properties: Actions
 
     [Display(Name = "Actions")]
-    public IReadOnlyList<ComplaintActionPublicViewDto>? ComplaintActions { get; set; }
+    public List<ComplaintActionPublicViewDto> ComplaintActions { get; init; } = new();
 
     // Properties: Attachments
 
     [Display(Name = "Attachments")]
-    public IReadOnlyList<AttachmentPublicViewDto>? Attachments { get; set; }
+    public List<AttachmentPublicViewDto> Attachments { get; init; } = new();
 }

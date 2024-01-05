@@ -9,16 +9,14 @@ public static class AuthorizationPolicies
 {
     public static void AddAuthorizationPolicies(this IServiceCollection services)
     {
-        services.AddAuthorization(opts =>
-        {
-            opts.AddPolicy(nameof(Policies.ActiveUser), Policies.ActiveUser);
-            opts.AddPolicy(nameof(Policies.AdministrationView), Policies.AdministrationView);
-            opts.AddPolicy(nameof(Policies.DivisionManager), Policies.DivisionManager);
-            opts.AddPolicy(nameof(Policies.LoggedInUser), Policies.LoggedInUser);
-            opts.AddPolicy(nameof(Policies.SiteMaintainer), Policies.SiteMaintainer);
-            opts.AddPolicy(nameof(Policies.StaffUser), Policies.StaffUser);
-            opts.AddPolicy(nameof(Policies.UserAdministrator), Policies.UserAdministrator);
-        });
+        services.AddAuthorizationBuilder()
+            .AddPolicy(nameof(Policies.ActiveUser), Policies.ActiveUser)
+            .AddPolicy(nameof(Policies.AdministrationView), Policies.AdministrationView)
+            .AddPolicy(nameof(Policies.DivisionManager), Policies.DivisionManager)
+            .AddPolicy(nameof(Policies.LoggedInUser), Policies.LoggedInUser)
+            .AddPolicy(nameof(Policies.SiteMaintainer), Policies.SiteMaintainer)
+            .AddPolicy(nameof(Policies.StaffUser), Policies.StaffUser)
+            .AddPolicy(nameof(Policies.UserAdministrator), Policies.UserAdministrator);
 
         services.AddSingleton<IAuthorizationHandler, ComplaintViewPermissionsHandler>();
         services.AddSingleton<IAuthorizationHandler, ComplaintUpdatePermissionsHandler>();

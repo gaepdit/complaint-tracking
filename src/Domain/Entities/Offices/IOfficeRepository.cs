@@ -11,7 +11,7 @@ public interface IOfficeRepository : INamedEntityRepository<Office>
     /// <param name="id">The ID of the Office.</param>
     /// <param name="includeInactive">A flag indicating whether to include inactive Staff Members.</param>
     /// <param name="token"><see cref="T:System.Threading.CancellationToken"/></param>
-    /// <exception cref="EntityNotFoundException">Thrown if no entity exists with the given Id.</exception>
+    /// <exception cref="EntityNotFoundException{Office}">Thrown if no entity exists with the given Id.</exception>
     /// <returns>A list of Users.</returns>
     Task<List<ApplicationUser>> GetStaffMembersListAsync(Guid id, bool includeInactive,
         CancellationToken token = default);

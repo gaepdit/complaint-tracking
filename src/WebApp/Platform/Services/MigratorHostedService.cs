@@ -7,27 +7,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Cts.WebApp.Platform.Services;
 
-public class MigratorHostedService : IHostedService
+public class MigratorHostedService(IServiceProvider serviceProvider, IConfiguration configuration) : IHostedService
 {
-    // Inject the IServiceProvider so we can create the DbContext scoped service.
-    private readonly IServiceProvider _serviceProvider;
-    private readonly IConfiguration _configuration;
-
-    public MigratorHostedService(IServiceProvider serviceProvider, IConfiguration configuration)
-    {
-        _serviceProvider = serviceProvider;
-        _configuration = configuration;
-    }
-
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         // If using in-memory data, no further action required.
         if (ApplicationSettings.DevSettings.UseInMemoryData) return;
 
-        // Retrieve scoped services.
-        using var scope = _serviceProvider.CreateScope();
+        // Inject the IServiceProvider so we can create the DbContext scoped service.
+        using var scope = serviceProvider.CreateScope();
 
-        var migrationConnectionString = _configuration.GetConnectionString("MigrationConnection");
+        var migrationConnectionString = configuration.GetConnectionString("MigrationConnection");
         var migrationOptions = new DbContextOptionsBuilder<AppDbContext>()
             .UseSqlServer(migrationConnectionString, builder => builder.MigrationsAssembly("EfRepository"))
             .Options;

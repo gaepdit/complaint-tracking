@@ -16,27 +16,25 @@ public class FindPublic
     [Test]
     public async Task WhenItemExists_ReturnsViewDto()
     {
-        var complaintActionsList = new List<ComplaintAction>
-            { ComplaintActionData.GetComplaintActions.First(e => !e.IsDeleted) };
-        var attachmentList = new List<Attachment> { AttachmentData.GetAttachments.First(e => !e.IsDeleted) };
+        // Arrange
         var item = ComplaintData.GetComplaints.First(e => e is { IsDeleted: false, ComplaintClosed: true });
-        item.ComplaintActions = complaintActionsList;
-        item.Attachments = attachmentList;
+        item.ComplaintActions = new List<ComplaintAction>
+            { ComplaintActionData.GetComplaintActions.First(e => !e.IsDeleted) };
+        item.Attachments = new List<Attachment> { AttachmentData.GetAttachments.First(e => !e.IsDeleted) };
+
         var repoMock = Substitute.For<IComplaintRepository>();
-        repoMock.FindAsync(Arg.Any<Expression<Func<Complaint, bool>>>(), Arg.Any<CancellationToken>())
+        repoMock.FindIncludeAllAsync(Arg.Any<Expression<Func<Complaint, bool>>>(), Arg.Any<CancellationToken>())
             .Returns(item);
-        repoMock.GetComplaintActionsListAsync(
-                Arg.Any<Expression<Func<ComplaintAction, bool>>>(), Arg.Any<CancellationToken>())
-            .Returns(complaintActionsList);
-        repoMock.GetAttachmentsListAsync(Arg.Any<Expression<Func<Attachment, bool>>>(), Arg.Any<CancellationToken>())
-            .Returns(attachmentList);
+
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
             Substitute.For<IComplaintTransitionManager>(),
             AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
 
+        // Act
         var result = await appService.FindPublicAsync(item.Id);
 
+        // Assert
         result.Should().BeEquivalentTo(item);
     }
 

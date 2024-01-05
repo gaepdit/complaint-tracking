@@ -1,5 +1,8 @@
 ﻿using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.Dto;
+using Cts.Domain.Entities.Attachments;
+using Cts.Domain.Entities.ComplaintActions;
+using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.LocalRepository.Repositories;
 
 namespace LocalRepositoryTests.Complaints;
@@ -9,7 +12,8 @@ public class SearchSpec
     private LocalComplaintRepository _repository = default!;
 
     [SetUp]
-    public void SetUp() => _repository = new LocalComplaintRepository();
+    public void SetUp() => _repository = new LocalComplaintRepository(Substitute.For<IAttachmentRepository>(),
+        Substitute.For<IComplaintActionRepository>(), Substitute.For<IComplaintTransitionRepository>());
 
     [TearDown]
     public void TearDown() => _repository.Dispose();

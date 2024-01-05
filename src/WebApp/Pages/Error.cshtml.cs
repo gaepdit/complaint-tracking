@@ -9,26 +9,23 @@ namespace Cts.WebApp.Pages;
 [IgnoreAntiforgeryToken]
 #pragma warning restore S4502
 [AllowAnonymous]
-public class ErrorModel : PageModel
+public class ErrorModel(ILogger<ErrorModel> logger) : PageModel
 {
-    private readonly ILogger<ErrorModel> _logger;
-    public ErrorModel(ILogger<ErrorModel> logger) => _logger = logger;
-
     public int? Status { get; private set; }
 
     public void OnGet(int? statusCode)
     {
         if (statusCode is null)
         {
-            _logger.LogError("Error page shown from Get method");
+            logger.LogError("Error page shown from Get method");
         }
         else
         {
-            _logger.LogError("Error page shown from Get method with status code {StatusCode}", statusCode);
+            logger.LogError("Error page shown from Get method with status code {StatusCode}", statusCode);
         }
 
         Status = statusCode;
     }
 
-    public void OnPost() => _logger.LogError("Error page shown from Post method");
+    public void OnPost() => logger.LogError("Error page shown from Post method");
 }

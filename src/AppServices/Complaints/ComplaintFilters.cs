@@ -7,6 +7,9 @@ namespace Cts.AppServices.Complaints;
 
 internal static class ComplaintFilters
 {
+    public static Expression<Func<Complaint, bool>> IdPredicate(int id) =>
+        PredicateBuilder.True<Complaint>().WithId(id);
+
     public static Expression<Func<Complaint, bool>> PublicIdPredicate(int id) =>
         PredicateBuilder.True<Complaint>().WithId(id).IsPublic();
 
@@ -84,28 +87,28 @@ internal static class ComplaintFilters
         _ => predicate.And(e => !e.IsDeleted),
     };
 
-    private static Expression<Func<Complaint, bool>> FromDate(
-        this Expression<Func<Complaint, bool>> predicate, DateOnly? input) =>
+    private static Expression<Func<Complaint, bool>> FromDate(this Expression<Func<Complaint, bool>> predicate,
+        DateOnly? input) =>
         input is null
             ? predicate
             : predicate.And(e => e.ReceivedDate.Date >= input.Value.ToDateTime(TimeOnly.MinValue));
 
-    private static Expression<Func<Complaint, bool>> ToDate(
-        this Expression<Func<Complaint, bool>> predicate, DateOnly? input) =>
+    private static Expression<Func<Complaint, bool>> ToDate(this Expression<Func<Complaint, bool>> predicate,
+        DateOnly? input) =>
         input is null
             ? predicate
             : predicate.And(e => e.ReceivedDate.Date <= input.Value.ToDateTime(TimeOnly.MinValue));
 
-    private static Expression<Func<Complaint, bool>> FromClosedDate(
-        this Expression<Func<Complaint, bool>> predicate, DateOnly? input) =>
+    private static Expression<Func<Complaint, bool>> FromClosedDate(this Expression<Func<Complaint, bool>> predicate,
+        DateOnly? input) =>
         input is null
             ? predicate
             : predicate.And(e =>
                 e.ComplaintClosed && e.ComplaintClosedDate != null &&
                 e.ComplaintClosedDate.Value.Date >= input.Value.ToDateTime(TimeOnly.MinValue));
 
-    private static Expression<Func<Complaint, bool>> ToClosedDate(
-        this Expression<Func<Complaint, bool>> predicate, DateOnly? input) =>
+    private static Expression<Func<Complaint, bool>> ToClosedDate(this Expression<Func<Complaint, bool>> predicate,
+        DateOnly? input) =>
         input is null
             ? predicate
             : predicate.And(e =>
@@ -113,74 +116,94 @@ internal static class ComplaintFilters
                 e.ComplaintClosedDate.Value.Date <= input.Value.ToDateTime(TimeOnly.MinValue));
 
     private static Expression<Func<Complaint, bool>> ReceivedBy(this Expression<Func<Complaint, bool>> predicate,
-        string? input) => string.IsNullOrWhiteSpace(input) ? predicate : predicate.And(e => e.ReceivedBy.Id == input);
+        string? input) =>
+        string.IsNullOrWhiteSpace(input) ? predicate : predicate.And(e => e.ReceivedBy.Id == input);
 
     private static Expression<Func<Complaint, bool>> ContainsCaller(this Expression<Func<Complaint, bool>> predicate,
-        string? input) => string.IsNullOrWhiteSpace(input)
-        ? predicate
-        : predicate.And(e => e.CallerName != null && e.CallerName.Contains(input));
+        string? input) =>
+        string.IsNullOrWhiteSpace(input)
+            ? predicate
+            : predicate.And(e => e.CallerName != null && e.CallerName.Contains(input));
 
-    private static Expression<Func<Complaint, bool>> ContainsRepresents(this Expression<Func<Complaint, bool>> predicate,
-        string? input) => string.IsNullOrWhiteSpace(input)
-        ? predicate
-        : predicate.And(e => e.CallerRepresents != null && e.CallerRepresents.Contains(input));
+    private static Expression<Func<Complaint, bool>> ContainsRepresents(
+        this Expression<Func<Complaint, bool>> predicate, string? input) =>
+        string.IsNullOrWhiteSpace(input)
+            ? predicate
+            : predicate.And(e => e.CallerRepresents != null && e.CallerRepresents.Contains(input));
 
     private static Expression<Func<Complaint, bool>> ContainsNature(this Expression<Func<Complaint, bool>> predicate,
-        string? input) => string.IsNullOrWhiteSpace(input)
-        ? predicate
-        : predicate.And(e => e.ComplaintNature != null && e.ComplaintNature.Contains(input));
+        string? input) =>
+        string.IsNullOrWhiteSpace(input)
+            ? predicate
+            : predicate.And(e => e.ComplaintNature != null && e.ComplaintNature.Contains(input));
 
     private static Expression<Func<Complaint, bool>> ContainsText(this Expression<Func<Complaint, bool>> predicate,
-        string? input) => string.IsNullOrWhiteSpace(input)
-        ? predicate
-        : predicate.And(e => (e.ComplaintNature != null && e.ComplaintNature.Contains(input))
-            || (e.ComplaintLocation != null && e.ComplaintLocation.Contains(input))
-            || (e.ComplaintDirections != null && e.ComplaintDirections.Contains(input)));
-    
-    private static Expression<Func<Complaint, bool>> ContainsComplaintCity(this Expression<Func<Complaint, bool>> predicate,
-    string? input) => string.IsNullOrWhiteSpace(input)
-        ? predicate
-        : predicate.And(e => e.ComplaintCity != null && e.ComplaintCity.Contains(input));
+        string? input) =>
+        string.IsNullOrWhiteSpace(input)
+            ? predicate
+            : predicate.And(e => (e.ComplaintNature != null && e.ComplaintNature.Contains(input))
+                || (e.ComplaintLocation != null && e.ComplaintLocation.Contains(input))
+                || (e.ComplaintDirections != null && e.ComplaintDirections.Contains(input)));
+
+    private static Expression<Func<Complaint, bool>> ContainsComplaintCity(
+        this Expression<Func<Complaint, bool>> predicate, string? input) =>
+        string.IsNullOrWhiteSpace(input)
+            ? predicate
+            : predicate.And(e => e.ComplaintCity != null && e.ComplaintCity.Contains(input));
 
     private static Expression<Func<Complaint, bool>> IsConcernType(this Expression<Func<Complaint, bool>> predicate,
-        Guid? input) => input is null
-        ? predicate
-        : predicate.And(e => e.PrimaryConcern.Id == input || (e.SecondaryConcern != null && e.SecondaryConcern.Id == input));
+        Guid? input) =>
+        input is null
+            ? predicate
+            : predicate.And(e =>
+                e.PrimaryConcern.Id == input || (e.SecondaryConcern != null && e.SecondaryConcern.Id == input));
 
-    private static Expression<Func<Complaint, bool>> ContainsSourceName(this Expression<Func<Complaint, bool>> predicate,
-        string? input) => string.IsNullOrWhiteSpace(input)
-        ? predicate
-        : predicate.And(e => e.SourceFacilityName != null && e.SourceFacilityName.Contains(input));
+    private static Expression<Func<Complaint, bool>> ContainsSourceName(
+        this Expression<Func<Complaint, bool>> predicate, string? input) =>
+        string.IsNullOrWhiteSpace(input)
+            ? predicate
+            : predicate.And(e => e.SourceFacilityName != null && e.SourceFacilityName.Contains(input));
 
     private static Expression<Func<Complaint, bool>> InCounty(this Expression<Func<Complaint, bool>> predicate,
-        string? input) => string.IsNullOrWhiteSpace(input) ? predicate : predicate.And(e => e.ComplaintCounty == input);
+        string? input) =>
+        string.IsNullOrWhiteSpace(input) ? predicate : predicate.And(e => e.ComplaintCounty == input);
 
     private static Expression<Func<Complaint, bool>> ContainsStreet(this Expression<Func<Complaint, bool>> predicate,
-        string? input) => string.IsNullOrWhiteSpace(input)
-        ? predicate
-        : predicate.And(e => e.SourceAddress != null
-            && ((e.SourceAddress.Street != null && e.SourceAddress.Street.Contains(input))
-                || (e.SourceAddress.Street2 != null && e.SourceAddress.Street2.Contains(input))));
+        string? input) =>
+        string.IsNullOrWhiteSpace(input)
+            ? predicate
+            : predicate.And(e => e.SourceAddress != null
+                && ((e.SourceAddress.Street != null && e.SourceAddress.Street.Contains(input))
+                    || (e.SourceAddress.Street2 != null && e.SourceAddress.Street2.Contains(input))));
 
     private static Expression<Func<Complaint, bool>> ContainsCity(this Expression<Func<Complaint, bool>> predicate,
-        string? input) => string.IsNullOrWhiteSpace(input)
-        ? predicate
-        : predicate.And(e => e.SourceAddress != null && e.SourceAddress.City != null && e.SourceAddress.City.Contains(input));
+        string? input) =>
+        string.IsNullOrWhiteSpace(input)
+            ? predicate
+            : predicate.And(e =>
+                e.SourceAddress != null && e.SourceAddress.City != null && e.SourceAddress.City.Contains(input));
 
     private static Expression<Func<Complaint, bool>> ContainsState(this Expression<Func<Complaint, bool>> predicate,
-        string? input) => string.IsNullOrWhiteSpace(input)
-        ? predicate
-        : predicate.And(e => e.SourceAddress != null && e.SourceAddress.State != null && e.SourceAddress.State.Contains(input));
+        string? input) =>
+        string.IsNullOrWhiteSpace(input)
+            ? predicate
+            : predicate.And(e =>
+                e.SourceAddress != null && e.SourceAddress.State != null && e.SourceAddress.State.Contains(input));
 
-    private static Expression<Func<Complaint, bool>> ContainsPostalCode(this Expression<Func<Complaint, bool>> predicate,
-        string? input) => string.IsNullOrWhiteSpace(input)
-        ? predicate
-        : predicate.And(e => e.SourceAddress != null
-            && e.SourceAddress.PostalCode != null && e.SourceAddress.PostalCode.Contains(input));
+    private static Expression<Func<Complaint, bool>> ContainsPostalCode(
+        this Expression<Func<Complaint, bool>> predicate, string? input) =>
+        string.IsNullOrWhiteSpace(input)
+            ? predicate
+            : predicate.And(e => e.SourceAddress != null
+                && e.SourceAddress.PostalCode != null && e.SourceAddress.PostalCode.Contains(input));
 
     private static Expression<Func<Complaint, bool>> AssignedToOffice(this Expression<Func<Complaint, bool>> predicate,
-        Guid? input) => input is null ? predicate : predicate.And(e => e.CurrentOffice.Id == input);
+        Guid? input) =>
+        input is null ? predicate : predicate.And(e => e.CurrentOffice.Id == input);
 
-    private static Expression<Func<Complaint, bool>> AssignedToAssociate(this Expression<Func<Complaint, bool>> predicate,
-        string? input) => input is null ? predicate : predicate.And(e => e.CurrentOwner != null && e.CurrentOwner.Id == input);
+    private static Expression<Func<Complaint, bool>> AssignedToAssociate(
+        this Expression<Func<Complaint, bool>> predicate, string? input) =>
+        input is null
+            ? predicate
+            : predicate.And(e => e.CurrentOwner != null && e.CurrentOwner.Id == input);
 }

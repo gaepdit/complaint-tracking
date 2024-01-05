@@ -13,21 +13,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace Cts.WebApp.Pages.Admin.Maintenance.Offices;
 
 [Authorize(Policy = nameof(Policies.SiteMaintainer))]
-public class EditModel : PageModel
+public class EditModel(IOfficeService officeService, IStaffService staffService, IValidator<OfficeUpdateDto> validator)
+    : PageModel
 {
-    // Constructor
-    private readonly IOfficeService _officeService;
-    private readonly IStaffService _staffService;
-    private readonly IValidator<OfficeUpdateDto> _validator;
-
-    public EditModel(IOfficeService officeService, IStaffService staffService, IValidator<OfficeUpdateDto> validator)
-    {
-        _officeService = officeService;
-        _staffService = staffService;
-        _validator = validator;
-    }
-
-    // Properties
     [FromRoute]
     public Guid Id { get; set; }
 
@@ -42,14 +30,12 @@ public class EditModel : PageModel
 
     public static MaintenanceOption ThisOption => MaintenanceOption.Office;
 
-    // Select lists
     public SelectList ActiveStaffMembersSelectList { get; private set; } = default!;
 
-    // Methods
     public async Task<IActionResult> OnGetAsync(Guid? id)
     {
         if (id is null) return RedirectToPage("Index");
-        var item = await _officeService.FindForUpdateAsync(id.Value);
+        var item = await officeService.FindForUpdateAsync(id.Value);
         if (item is null) return NotFound();
 
         Item = item;
@@ -61,7 +47,7 @@ public class EditModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        await _validator.ApplyValidationAsync(Item, ModelState, Id);
+        await validator.ApplyValidationAsync(Item, ModelState, Id);
 
         if (!ModelState.IsValid)
         {
@@ -69,7 +55,7 @@ public class EditModel : PageModel
             return Page();
         }
 
-        await _officeService.UpdateAsync(Id, Item);
+        await officeService.UpdateAsync(Id, Item);
 
         HighlightId = Id;
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, $"“{Item.Name}” successfully updated.");
@@ -77,5 +63,5 @@ public class EditModel : PageModel
     }
 
     private async Task PopulateSelectListsAsync() =>
-        ActiveStaffMembersSelectList = (await _staffService.GetStaffListItemsAsync()).ToSelectList();
+        ActiveStaffMembersSelectList = (await staffService.GetStaffListItemsAsync()).ToSelectList();
 }

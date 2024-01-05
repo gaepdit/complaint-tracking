@@ -16,36 +16,18 @@ using System.Security.Claims;
 namespace Cts.WebApp.Pages.Account;
 
 [AllowAnonymous]
-public class ExternalLoginModel : PageModel
+public class ExternalLoginModel(
+    SignInManager<ApplicationUser> signInManager,
+    UserManager<ApplicationUser> userManager,
+    IConfiguration configuration,
+    IStaffService staffService,
+    ILogger<ExternalLoginModel> logger)
+    : PageModel
 {
-    // Constructor
-    private readonly SignInManager<ApplicationUser> _signInManager;
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IConfiguration _configuration;
-    private readonly IStaffService _staffService;
-    private readonly ILogger<ExternalLoginModel> _logger;
-
-    public ExternalLoginModel(
-        SignInManager<ApplicationUser> signInManager,
-        UserManager<ApplicationUser> userManager,
-        IConfiguration configuration,
-        IStaffService staffService,
-        ILogger<ExternalLoginModel> logger)
-    {
-        _signInManager = signInManager;
-        _userManager = userManager;
-        _configuration = configuration;
-        _staffService = staffService;
-        _logger = logger;
-    }
-
-    // Properties
     public ApplicationUser? DisplayFailedUser { get; private set; }
     public string? ReturnUrl { get; private set; }
 
-    // Methods
-
-    // Don't call the page directly
+    // Don't call this page directly
     public IActionResult OnGet() => RedirectToPage("./Login");
 
     // This Post method is called from the Login page
@@ -59,13 +41,13 @@ public class ExternalLoginModel : PageModel
         // Request a redirect to the external login provider.
         const string provider = OpenIdConnectDefaults.AuthenticationScheme;
         var redirectUrl = Url.Page("./ExternalLogin", pageHandler: "Callback", values: new { returnUrl });
-        var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+        var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
         return Challenge(properties, provider);
     }
 
     private async Task<IActionResult> SignInAsLocalUser()
     {
-        _logger.LogInformation(
+        logger.LogInformation(
             "Local user signin attempted with settings {LocalUserIsAuthenticated}, {LocalUserIsAdmin}, and {LocalUserIsStaff}",
             ApplicationSettings.DevSettings.LocalUserIsAuthenticated.ToString(),
             ApplicationSettings.DevSettings.LocalUserIsAdmin.ToString(),
@@ -81,12 +63,12 @@ public class ExternalLoginModel : PageModel
         else
             search = new StaffSearchDto(SortBy.NameAsc, "Limited", null, null, null, null);
 
-        var staffId = (await _staffService.GetListAsync(search))[0].Id;
+        var staffId = (await staffService.GetListAsync(search))[0].Id;
 
-        var user = await _userManager.FindByIdAsync(staffId);
-        _logger.LogInformation("Local user with ID {StaffId} signed in", staffId);
+        var user = await userManager.FindByIdAsync(staffId);
+        logger.LogInformation("Local user with ID {StaffId} signed in", staffId);
 
-        await _signInManager.SignInAsync(user!, false);
+        await signInManager.SignInAsync(user!, false);
         return LocalRedirectOrHome();
     }
 
@@ -100,7 +82,7 @@ public class ExternalLoginModel : PageModel
             return RedirectToLoginPageWithError($"Error from work account provider: {remoteError}");
 
         // Get information about the user from the external provider.
-        var externalLoginInfo = await _signInManager.GetExternalLoginInfoAsync();
+        var externalLoginInfo = await signInManager.GetExternalLoginInfoAsync();
         if (externalLoginInfo?.Principal is null)
             return RedirectToLoginPageWithError("Error loading work account information.");
 
@@ -109,7 +91,7 @@ public class ExternalLoginModel : PageModel
             return RedirectToLoginPageWithError("Error loading detailed work account information.");
 
         // Determine if a user account already exists.
-        var user = await _userManager.FindByNameAsync(preferredUserName);
+        var user = await userManager.FindByNameAsync(preferredUserName);
 
         // If the user does not have an account yet, then create one and sign in.
         if (user is null)
@@ -118,12 +100,12 @@ public class ExternalLoginModel : PageModel
         // If user has been marked as inactive, don't sign in.
         if (!user.Active)
         {
-            _logger.LogWarning("Inactive user {UserName} attempted signin", preferredUserName);
+            logger.LogWarning("Inactive user {UserName} attempted signin", preferredUserName);
             return RedirectToPage("./Unavailable");
         }
 
         // Sign in the user locally with the external provider key.
-        var signInResult = await _signInManager.ExternalLoginSignInAsync(externalLoginInfo.LoginProvider,
+        var signInResult = await signInManager.ExternalLoginSignInAsync(externalLoginInfo.LoginProvider,
             externalLoginInfo.ProviderKey, true, true);
 
         if (signInResult.Succeeded)
@@ -140,7 +122,7 @@ public class ExternalLoginModel : PageModel
     // Redirect to Login page with error message.
     private IActionResult RedirectToLoginPageWithError(string message)
     {
-        _logger.LogWarning("External login error: {Message}", message);
+        logger.LogWarning("External login error: {Message}", message);
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Danger, message);
         return RedirectToPage("./Login", new { ReturnUrl });
     }
@@ -158,28 +140,28 @@ public class ExternalLoginModel : PageModel
         };
 
         // Create the user in the backing store.
-        var createUserResult = await _userManager.CreateAsync(user);
+        var createUserResult = await userManager.CreateAsync(user);
         if (!createUserResult.Succeeded)
         {
-            _logger.LogWarning("Failed to create new user {UserName}", user.UserName);
+            logger.LogWarning("Failed to create new user {UserName}", user.UserName);
             return FailedLogin(createUserResult, user);
         }
 
-        _logger.LogInformation("Created new user {UserName}", user.UserName);
+        logger.LogInformation("Created new user {UserName}", user.UserName);
 
         // Add new user to application Roles if seeded in app settings or local admin user setting is enabled.
-        var seedAdminUsers = _configuration.GetSection("SeedAdminUsers").Get<string[]>();
+        var seedAdminUsers = configuration.GetSection("SeedAdminUsers").Get<string[]>();
         if (ApplicationSettings.DevSettings.LocalUserIsStaff)
         {
-            _logger.LogInformation("Seeding staff role for new user {UserName}", user.UserName);
-            await _userManager.AddToRoleAsync(user, RoleName.Staff);
+            logger.LogInformation("Seeding staff role for new user {UserName}", user.UserName);
+            await userManager.AddToRoleAsync(user, RoleName.Staff);
         }
 
         if (ApplicationSettings.DevSettings.LocalUserIsAdmin ||
             (seedAdminUsers != null && seedAdminUsers.Contains(user.Email, StringComparer.InvariantCultureIgnoreCase)))
         {
-            _logger.LogInformation("Seeding all roles for new user {UserName}", user.UserName);
-            foreach (var role in AppRole.AllRoles) await _userManager.AddToRoleAsync(user, role.Key);
+            logger.LogInformation("Seeding all roles for new user {UserName}", user.UserName);
+            foreach (var role in AppRole.AllRoles) await userManager.AddToRoleAsync(user, role.Key);
         }
 
         // Add the external provider info to the user and sign in.
@@ -191,13 +173,13 @@ public class ExternalLoginModel : PageModel
     // Update local store with from external provider. 
     private async Task<IActionResult> RefreshUserInfoAndSignInAsync(ApplicationUser user, ExternalLoginInfo info)
     {
-        _logger.LogInformation("Existing user {UserName} logged in with {LoginProvider} provider",
+        logger.LogInformation("Existing user {UserName} logged in with {LoginProvider} provider",
             user.UserName, info.LoginProvider);
         user.Email = info.Principal.FindFirstValue(ClaimTypes.Email);
         user.GivenName = info.Principal.FindFirstValue(ClaimTypes.GivenName) ?? "";
         user.FamilyName = info.Principal.FindFirstValue(ClaimTypes.Surname) ?? "";
-        await _userManager.UpdateAsync(user);
-        await _signInManager.RefreshSignInAsync(user);
+        await userManager.UpdateAsync(user);
+        await signInManager.RefreshSignInAsync(user);
         return LocalRedirectOrHome();
     }
 
@@ -205,16 +187,16 @@ public class ExternalLoginModel : PageModel
     private async Task<IActionResult> AddLoginProviderAndSignInAsync(
         ApplicationUser user, ExternalLoginInfo info, bool redirectToAccount = false)
     {
-        var addLoginResult = await _userManager.AddLoginAsync(user, info);
+        var addLoginResult = await userManager.AddLoginAsync(user, info);
 
         if (!addLoginResult.Succeeded)
         {
-            _logger.LogWarning("Failed to add login provider {LoginProvider} for user {UserName}",
+            logger.LogWarning("Failed to add login provider {LoginProvider} for user {UserName}",
                 info.LoginProvider, user.UserName);
             return FailedLogin(addLoginResult, user);
         }
 
-        _logger.LogInformation("Login provider {LoginProvider} added for user {UserName}",
+        logger.LogInformation("Login provider {LoginProvider} added for user {UserName}",
             info.LoginProvider, user.UserName);
 
         // Include the access token in the properties.
@@ -222,7 +204,7 @@ public class ExternalLoginModel : PageModel
         if (info.AuthenticationTokens is not null) props.StoreTokens(info.AuthenticationTokens);
         props.IsPersistent = true;
 
-        await _signInManager.SignInAsync(user, props, info.LoginProvider);
+        await signInManager.SignInAsync(user, props, info.LoginProvider);
         return redirectToAccount ? RedirectToPage("./Index") : LocalRedirectOrHome();
     }
 

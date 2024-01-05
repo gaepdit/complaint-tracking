@@ -10,54 +10,42 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Cts.AppServices.Staff;
 
-public sealed class StaffService : IStaffService
+public sealed class StaffService(
+    IUserService userService,
+    UserManager<ApplicationUser> userManager,
+    IMapper mapper,
+    IOfficeRepository officeRepository)
+    : IStaffService
 {
-    private readonly IUserService _userService;
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IMapper _mapper;
-    private readonly IOfficeRepository _officeRepository;
-
-    public StaffService(
-        IUserService userService,
-        UserManager<ApplicationUser> userManager,
-        IMapper mapper,
-        IOfficeRepository officeRepository)
-    {
-        _userService = userService;
-        _userManager = userManager;
-        _mapper = mapper;
-        _officeRepository = officeRepository;
-    }
-
     public async Task<StaffViewDto> GetCurrentUserAsync()
     {
-        var user = await _userService.GetCurrentUserAsync()
+        var user = await userService.GetCurrentUserAsync()
             ?? throw new CurrentUserNotFoundException();
-        return _mapper.Map<StaffViewDto>(user);
+        return mapper.Map<StaffViewDto>(user);
     }
 
     public async Task<StaffViewDto?> FindAsync(string id)
     {
-        var user = await _userManager.FindByIdAsync(id);
-        return _mapper.Map<StaffViewDto?>(user);
+        var user = await userManager.FindByIdAsync(id);
+        return mapper.Map<StaffViewDto?>(user);
     }
 
     public async Task<List<StaffViewDto>> GetListAsync(StaffSearchDto spec)
     {
         var users = string.IsNullOrEmpty(spec.Role)
-            ? _userManager.Users.ApplyFilter(spec)
-            : (await _userManager.GetUsersInRoleAsync(spec.Role)).AsQueryable().ApplyFilter(spec);
+            ? userManager.Users.ApplyFilter(spec)
+            : (await userManager.GetUsersInRoleAsync(spec.Role)).AsQueryable().ApplyFilter(spec);
 
-        return _mapper.Map<List<StaffViewDto>>(users);
+        return mapper.Map<List<StaffViewDto>>(users);
     }
 
     public async Task<IPaginatedResult<StaffSearchResultDto>> SearchAsync(StaffSearchDto spec, PaginatedRequest paging)
     {
         var users = string.IsNullOrEmpty(spec.Role)
-            ? _userManager.Users.ApplyFilter(spec)
-            : (await _userManager.GetUsersInRoleAsync(spec.Role)).AsQueryable().ApplyFilter(spec);
+            ? userManager.Users.ApplyFilter(spec)
+            : (await userManager.GetUsersInRoleAsync(spec.Role)).AsQueryable().ApplyFilter(spec);
         var list = users.Skip(paging.Skip).Take(paging.Take);
-        var listMapped = _mapper.Map<List<StaffSearchResultDto>>(list);
+        var listMapped = mapper.Map<List<StaffSearchResultDto>>(list);
 
         return new PaginatedResult<StaffSearchResultDto>(listMapped, users.Count(), paging);
     }
@@ -66,8 +54,8 @@ public sealed class StaffService : IStaffService
     {
         var status = includeInactive ? SearchStaffStatus.All : SearchStaffStatus.Active;
         var spec = new StaffSearchDto(SortBy.NameAsc, null, null, null, null, status);
-        var users = _userManager.Users.ApplyFilter(spec);
-        return Task.FromResult(_mapper.Map<List<StaffViewDto>>(users)
+        var users = userManager.Users.ApplyFilter(spec);
+        return Task.FromResult(mapper.Map<List<StaffViewDto>>(users)
                 .Select(e => new ListItem<string>(e.Id, e.SortableNameWithOffice))
                 .ToList()
             as IReadOnlyList<ListItem<string>>);
@@ -75,9 +63,9 @@ public sealed class StaffService : IStaffService
 
     public async Task<IList<string>> GetRolesAsync(string id)
     {
-        var user = await _userManager.FindByIdAsync(id);
+        var user = await userManager.FindByIdAsync(id);
         if (user is null) return new List<string>();
-        return await _userManager.GetRolesAsync(user);
+        return await userManager.GetRolesAsync(user);
     }
 
     public async Task<IList<AppRole>> GetAppRolesAsync(string id) =>
@@ -85,15 +73,15 @@ public sealed class StaffService : IStaffService
 
     public async Task<bool> HasAppRoleAsync(string id, AppRole role)
     {
-        var user = await _userManager.FindByIdAsync(id);
+        var user = await userManager.FindByIdAsync(id);
         if (user is null) return false;
-        return await _userManager.IsInRoleAsync(user, role.Name);
+        return await userManager.IsInRoleAsync(user, role.Name);
     }
 
     public async Task<IdentityResult> UpdateRolesAsync(string id, Dictionary<string, bool> roles)
     {
-        var user = await _userManager.FindByIdAsync(id)
-            ?? throw new EntityNotFoundException(typeof(ApplicationUser), id);
+        var user = await userManager.FindByIdAsync(id)
+            ?? throw new EntityNotFoundException<ApplicationUser>(id);
 
         foreach (var (role, value) in roles)
         {
@@ -105,39 +93,39 @@ public sealed class StaffService : IStaffService
 
         async Task<IdentityResult> UpdateUserRoleAsync(ApplicationUser u, string r, bool addToRole)
         {
-            var isInRole = await _userManager.IsInRoleAsync(u, r);
+            var isInRole = await userManager.IsInRoleAsync(u, r);
             if (addToRole == isInRole) return IdentityResult.Success;
 
             return addToRole switch
             {
-                true => await _userManager.AddToRoleAsync(u, r),
-                false => await _userManager.RemoveFromRoleAsync(u, r),
+                true => await userManager.AddToRoleAsync(u, r),
+                false => await userManager.RemoveFromRoleAsync(u, r),
             };
         }
     }
 
     public async Task<IdentityResult> UpdateAsync(string id, StaffUpdateDto resource)
     {
-        var user = await _userManager.FindByIdAsync(id)
-            ?? throw new EntityNotFoundException(typeof(ApplicationUser), id);
+        var user = await userManager.FindByIdAsync(id)
+            ?? throw new EntityNotFoundException<ApplicationUser>(id);
 
         user.Phone = resource.Phone;
-        user.Office = resource.OfficeId is null ? null : await _officeRepository.GetAsync(resource.OfficeId.Value);
+        user.Office = resource.OfficeId is null ? null : await officeRepository.GetAsync(resource.OfficeId.Value);
         user.Active = resource.Active;
 
-        return await _userManager.UpdateAsync(user);
+        return await userManager.UpdateAsync(user);
     }
 
     public void Dispose()
     {
-        _userManager.Dispose();
-        _officeRepository.Dispose();
+        userManager.Dispose();
+        officeRepository.Dispose();
     }
 
     public async ValueTask DisposeAsync()
     {
-        var task = _officeRepository.DisposeAsync();
-        _userManager.Dispose();
+        var task = officeRepository.DisposeAsync();
+        userManager.Dispose();
         await task;
     }
 }

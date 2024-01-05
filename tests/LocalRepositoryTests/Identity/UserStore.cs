@@ -64,7 +64,7 @@ public class UserStore
     {
         var user = new ApplicationUser { Id = Guid.Empty.ToString() };
         var action = async () => await _store.UpdateAsync(user, CancellationToken.None);
-        await action.Should().ThrowAsync<EntityNotFoundException>();
+        await action.Should().ThrowAsync<EntityNotFoundException<ApplicationUser>>();
     }
 
     [Test]

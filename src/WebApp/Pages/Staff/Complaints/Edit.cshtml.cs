@@ -17,44 +17,29 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace Cts.WebApp.Pages.Staff.Complaints;
 
 [Authorize(Policy = nameof(Policies.StaffUser))]
-public class EditModel : PageModel
+public class EditModel(
+    IComplaintService complaintService,
+    IStaffService staffService,
+    IConcernService concernService,
+    IValidator<ComplaintUpdateDto> validator,
+    IAuthorizationService authorization)
+    : PageModel
 {
-    // Constructor
-    private readonly IComplaintService _complaintService;
-    private readonly IStaffService _staffService;
-    private readonly IConcernService _concernService;
-    private readonly IValidator<ComplaintUpdateDto> _validator;
-    private readonly IAuthorizationService _authorization;
-
-    public EditModel(IComplaintService complaintService, IStaffService staffService, IConcernService concernService,
-        IValidator<ComplaintUpdateDto> validator, IAuthorizationService authorization)
-    {
-        _complaintService = complaintService;
-        _staffService = staffService;
-        _concernService = concernService;
-        _validator = validator;
-        _authorization = authorization;
-    }
-
-    // Properties
-
     [FromRoute]
     public int Id { get; set; }
 
     [BindProperty]
     public ComplaintUpdateDto Item { get; set; } = default!;
 
-    // Select lists
     public SelectList ConcernsSelectList { get; private set; } = default!;
     public SelectList AllActiveStaffSelectList { get; private set; } = default!;
     public SelectList StatesSelectList => new(Data.States);
     public SelectList CountiesSelectList => new(Data.Counties);
 
-    // Methods
     public async Task<IActionResult> OnGetAsync(int? id)
     {
         if (id is null) return RedirectToPage("Index");
-        var item = await _complaintService.FindForUpdateAsync(id.Value);
+        var item = await complaintService.FindForUpdateAsync(id.Value);
         if (item is null) return NotFound();
         if (!await UserCanEditAsync(item)) return Forbid();
 
@@ -66,11 +51,11 @@ public class EditModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        var original = await _complaintService.FindForUpdateAsync(Id);
+        var original = await complaintService.FindForUpdateAsync(Id);
         if (original is null) return BadRequest();
         if (!await UserCanEditAsync(original)) return BadRequest();
 
-        await _validator.ApplyValidationAsync(Item, ModelState);
+        await validator.ApplyValidationAsync(Item, ModelState);
 
         if (!ModelState.IsValid)
         {
@@ -78,7 +63,7 @@ public class EditModel : PageModel
             return Page();
         }
 
-        await _complaintService.UpdateAsync(Id, Item);
+        await complaintService.UpdateAsync(Id, Item);
 
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "Complaint successfully updated.");
         return RedirectToPage("Details", new { Id });
@@ -86,10 +71,10 @@ public class EditModel : PageModel
 
     private async Task PopulateSelectListsAsync()
     {
-        ConcernsSelectList = (await _concernService.GetActiveListItemsAsync()).ToSelectList();
-        AllActiveStaffSelectList = (await _staffService.GetStaffListItemsAsync()).ToSelectList();
+        ConcernsSelectList = (await concernService.GetActiveListItemsAsync()).ToSelectList();
+        AllActiveStaffSelectList = (await staffService.GetStaffListItemsAsync()).ToSelectList();
     }
 
     private async Task<bool> UserCanEditAsync(ComplaintUpdateDto item) =>
-        (await _authorization.AuthorizeAsync(User, item, ComplaintOperation.EditDetails)).Succeeded;
+        (await authorization.AuthorizeAsync(User, item, ComplaintOperation.EditDetails)).Succeeded;
 }
