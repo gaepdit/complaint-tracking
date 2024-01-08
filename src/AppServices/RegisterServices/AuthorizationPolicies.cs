@@ -11,7 +11,6 @@ public static class AuthorizationPolicies
     {
         services.AddAuthorizationBuilder()
             .AddPolicy(nameof(Policies.ActiveUser), Policies.ActiveUser)
-            .AddPolicy(nameof(Policies.AdministrationView), Policies.AdministrationView)
             .AddPolicy(nameof(Policies.DivisionManager), Policies.DivisionManager)
             .AddPolicy(nameof(Policies.LoggedInUser), Policies.LoggedInUser)
             .AddPolicy(nameof(Policies.SiteMaintainer), Policies.SiteMaintainer)

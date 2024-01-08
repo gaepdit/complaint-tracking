@@ -1,6 +1,7 @@
 ﻿using Cts.AppServices.Attachments;
 using Cts.AppServices.Complaints;
 using Cts.AppServices.Files;
+using Cts.AppServices.Permissions;
 using Cts.Domain.Entities.Attachments;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Cts.WebApp.Pages.Staff.Complaints;
 
-[Authorize]
+[Authorize(Policy = nameof(Policies.ActiveUser))]
 public class AttachmentModel : PageModel
 {
     public async Task<IActionResult> OnGetAsync(

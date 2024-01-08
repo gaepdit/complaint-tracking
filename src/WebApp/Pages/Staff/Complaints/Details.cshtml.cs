@@ -1,6 +1,7 @@
 ﻿using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.Dto;
 using Cts.AppServices.Complaints.Permissions;
+using Cts.AppServices.Permissions;
 using Cts.AppServices.Staff;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Cts.WebApp.Pages.Staff.Complaints;
 
-[Authorize]
+[Authorize(Policy = nameof(Policies.ActiveUser))]
 public class DetailsModel(IComplaintService complaints, IStaffService staffService, IAuthorizationService authorization)
     : PageModel
 {

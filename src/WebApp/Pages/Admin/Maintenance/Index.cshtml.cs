@@ -4,7 +4,7 @@ using Cts.AppServices.Permissions;
 
 namespace Cts.WebApp.Pages.Admin.Maintenance;
 
-[Authorize(Policy = nameof(Policies.AdministrationView))]
+[Authorize(Policy = nameof(Policies.ActiveUser))]
 public class IndexModel : PageModel
 {
     public void OnGet()

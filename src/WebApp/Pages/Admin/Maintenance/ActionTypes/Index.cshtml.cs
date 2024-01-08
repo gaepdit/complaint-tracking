@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Cts.WebApp.Pages.Admin.Maintenance.ActionTypes;
 
-[Authorize]
+[Authorize(Policy = nameof(Policies.ActiveUser))]
 public class IndexModel : PageModel
 {
     public IReadOnlyList<ActionTypeViewDto> Items { get; private set; } = default!;
