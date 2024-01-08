@@ -11,7 +11,11 @@ public class ComplaintAction : AuditableSoftDeleteEntity
     [UsedImplicitly] // Used by ORM.
     private ComplaintAction() { }
 
-    internal ComplaintAction(Guid id, Complaint complaint) : base(id) => Complaint = complaint;
+    internal ComplaintAction(Guid id, Complaint complaint, ActionType actionType) : base(id)
+    {
+        Complaint = complaint;
+        ActionType = actionType;
+    }
 
     // Properties
 
@@ -19,7 +23,7 @@ public class ComplaintAction : AuditableSoftDeleteEntity
 
     public DateTimeOffset ActionDate { get; init; }
 
-    public ActionType ActionType { get; init; } = default!;
+    public ActionType ActionType { get; private set; } = default!;
 
     [StringLength(100)]
     public string? Investigator { get; init; }
