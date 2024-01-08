@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Cts.AppServices.ComplaintActions;
 
-public class ComplaintActionViewDto
+public record ComplaintActionViewDto
 {
     public DateTimeOffset ActionDate { get; init; }
     public string ActionTypeName { get; init; } = default!;

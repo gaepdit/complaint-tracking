@@ -11,7 +11,7 @@ internal static class ComplaintActionData
         new(new Guid("30000000-0000-0000-0000-000000000001"),
             ComplaintData.GetComplaints.ElementAt(0), ActionTypeData.GetActionTypes.ElementAt(0))
         {
-            ActionDate = DateTimeOffset.Now.AddDays(-3).Date,
+            ActionDate = DateOnly.FromDateTime(DateTimeOffset.Now.AddDays(-3).Date),
             Investigator = TextData.Word,
             EnteredDate = DateTimeOffset.Now.AddDays(-3),
             EnteredBy = UserData.GetUsers.ElementAt(1),
@@ -20,7 +20,7 @@ internal static class ComplaintActionData
         new(new Guid("30000000-0000-0000-0000-000000000002"),
             ComplaintData.GetComplaints.ElementAt(0), ActionTypeData.GetActionTypes.ElementAt(1))
         {
-            ActionDate = DateTimeOffset.Now.AddDays(-2).Date,
+            ActionDate = DateOnly.FromDateTime(DateTimeOffset.Now.AddDays(-2).Date),
             Investigator = null,
             EnteredDate = DateTimeOffset.Now.AddDays(-1),
             EnteredBy = UserData.GetUsers.ElementAt(0),
@@ -29,7 +29,7 @@ internal static class ComplaintActionData
         new(new Guid("30000000-0000-0000-0000-000000000003"),
             ComplaintData.GetComplaints.ElementAt(0), ActionTypeData.GetActionTypes.ElementAt(5))
         {
-            ActionDate = DateTimeOffset.Now.AddDays(-1).Date,
+            ActionDate = DateOnly.FromDateTime(DateTimeOffset.Now.AddDays(-1).Date),
             Investigator = TextData.AnotherWord,
             EnteredDate = DateTimeOffset.Now.AddDays(-1),
             EnteredBy = UserData.GetUsers.ElementAt(1),
@@ -38,7 +38,7 @@ internal static class ComplaintActionData
         new(new Guid("30000000-0000-0000-0000-000000000004"),
             ComplaintData.GetComplaints.ElementAt(2), ActionTypeData.GetActionTypes.ElementAt(7))
         {
-            ActionDate = DateTimeOffset.Now.AddDays(-10).Date,
+            ActionDate = DateOnly.FromDateTime(DateTimeOffset.Now.AddDays(-10).Date),
             Investigator = "Deleted complaint action",
             EnteredDate = DateTimeOffset.Now.AddDays(-10),
             EnteredBy = UserData.GetUsers.ElementAt(0),
@@ -47,7 +47,7 @@ internal static class ComplaintActionData
         new(new Guid("30000000-0000-0000-0000-000000000005"),
             ComplaintData.GetComplaints.ElementAt(3), ActionTypeData.GetActionTypes.ElementAt(0))
         {
-            ActionDate = DateTimeOffset.Now.AddDays(-1).Date,
+            ActionDate = DateOnly.FromDateTime(DateTimeOffset.Now.AddDays(-1).Date),
             Investigator = "Complaint action on a deleted complaint",
             EnteredDate = DateTimeOffset.Now.AddDays(-1),
             EnteredBy = UserData.GetUsers.ElementAt(1),

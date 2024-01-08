@@ -2,7 +2,7 @@
 
 namespace Cts.AppServices.Complaints.Dto;
 
-public class ComplaintPublicSearchDto
+public record ComplaintPublicSearchDto
 {
     // Sorting
 

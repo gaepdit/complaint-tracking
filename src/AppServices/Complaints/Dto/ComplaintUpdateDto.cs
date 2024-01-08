@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Cts.AppServices.Complaints.Dto;
 
-public class ComplaintUpdateDto : IComplaintDtoDetails
+public record ComplaintUpdateDto : IComplaintDtoDetails
 {
     // Authorization handler assist properties
     public bool ComplaintClosed { get; init; }

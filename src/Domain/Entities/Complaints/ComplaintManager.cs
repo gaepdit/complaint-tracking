@@ -1,5 +1,6 @@
 ﻿using Cts.Domain.Entities.ActionTypes;
 using Cts.Domain.Entities.ComplaintActions;
+using Cts.Domain.Identity;
 
 namespace Cts.Domain.Entities.Complaints;
 
@@ -12,10 +13,11 @@ public class ComplaintManager(IComplaintRepository repository) : IComplaintManag
         return item;
     }
 
-    public ComplaintAction AddAction(Complaint complaint, ActionType actionType, string? createdById)
+    public ComplaintAction AddAction(Complaint complaint, ActionType actionType, ApplicationUser? user)
     {
-        var item = new ComplaintAction(Guid.NewGuid(), complaint, actionType);
-        item.SetCreator(createdById);
-        return item;
+        var action = new ComplaintAction(Guid.NewGuid(), complaint, actionType);
+        action.SetCreator(user?.Id);
+        action.SetEnteredBy(user);
+        return action;
     }
 }
