@@ -18,14 +18,11 @@ public class DetailsModel(IComplaintService complaints, IStaffService staffServi
 
     public async Task<IActionResult> OnGetAsync(int? id)
     {
-        var staff = await staffService.GetCurrentUserAsync();
-        if (staff is not { Active: true }) return Forbid();
-
         if (id is null) return RedirectToPage("../Index");
         var item = await complaints.FindAsync(id.Value);
         if (item is null) return NotFound();
 
-        item.CurrentUserOfficeId = staff.Office?.Id ?? Guid.Empty;
+        item.CurrentUserOfficeId = (await staffService.GetCurrentUserAsync()).Office?.Id ?? Guid.Empty;
         Item = item;
 
         foreach (var operation in ComplaintOperation.AllOperations)
