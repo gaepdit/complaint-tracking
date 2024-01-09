@@ -8,22 +8,19 @@ namespace Cts.WebApp.Api;
 [ApiController]
 [Route("api/complaints")]
 [Produces("application/json")]
-public class ComplaintApiController : Controller
+public class ComplaintApiController(IComplaintService complaintService) : Controller
 {
-    private readonly IComplaintService _service;
-    public ComplaintApiController(IComplaintService service) => _service = service;
-
     [HttpGet]
     public async Task<IPaginatedResult<ComplaintSearchResultDto>> ListComplaintsAsync(
         [FromQuery] ComplaintPublicSearchDto spec,
         [FromQuery] ushort page = 1,
         [FromQuery] ushort pageSize = 25) =>
-        await _service.PublicSearchAsync(spec, new PaginatedRequest(page, pageSize));
+        await complaintService.PublicSearchAsync(spec, new PaginatedRequest(page, pageSize));
 
     [HttpGet("{id:int}")]
     public async Task<ActionResult<ComplaintPublicViewDto>> GetComplaintAsync([FromRoute] int id)
     {
-        var item = await _service.FindPublicAsync(id);
+        var item = await complaintService.FindPublicAsync(id);
         return item is null ? Problem("ID not found.", statusCode: 404) : Ok(item);
     }
 }
