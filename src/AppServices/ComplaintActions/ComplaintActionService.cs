@@ -23,7 +23,7 @@ public sealed class ComplaintActionService(
         var currentUser = await userService.GetCurrentUserAsync();
         var action = complaintManager.AddAction(complaint, actionItemType, currentUser);
 
-        action.ActionDate = resource.ActionDate;
+        action.ActionDate = resource.ActionDate ?? DateOnly.FromDateTime(DateTime.Today);
         action.Investigator = resource.Investigator;
         action.Comments = resource.Comments;
 

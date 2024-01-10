@@ -19,6 +19,7 @@ public static class DisplayTemplate
     public const string IncompleteAddress = nameof(IncompleteAddress);
     public const string IncompleteAddressOneLine = nameof(IncompleteAddressOneLine);
     public const string LongDate = nameof(LongDate);
+    public const string LongDateOnly = nameof(LongDateOnly);
     public const string LongDateTime = nameof(LongDateTime);
     public const string LongDateTimeOrNotEntered = nameof(LongDateTimeOrNotEntered);
     public const string NameOrBlank = nameof(NameOrBlank);

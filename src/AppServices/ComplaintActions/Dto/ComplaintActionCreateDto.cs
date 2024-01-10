@@ -12,7 +12,7 @@ public record ComplaintActionCreateDto(int ComplaintId)
     [Display(Name = "Action Date")]
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = "{0:O}", ApplyFormatInEditMode = true)]
-    public DateOnly ActionDate { get; init; } = DateOnly.FromDateTime(DateTime.Today);
+    public DateOnly? ActionDate { get; init; } = DateOnly.FromDateTime(DateTime.Today);
 
     [Required]
     [StringLength(100)]

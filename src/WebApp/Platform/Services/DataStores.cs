@@ -1,6 +1,9 @@
 using Cts.AppServices.Files;
 using Cts.Domain.Entities.ActionTypes;
+using Cts.Domain.Entities.Attachments;
+using Cts.Domain.Entities.ComplaintActions;
 using Cts.Domain.Entities.Complaints;
+using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
 using Cts.EfRepository.Contexts;
@@ -21,7 +24,10 @@ public static class DataStores
         {
             // Uses local static data if no database is built.
             services.AddSingleton<IActionTypeRepository, LocalActionTypeRepository>();
+            services.AddSingleton<IAttachmentRepository, LocalAttachmentRepository>();
+            services.AddSingleton<IComplaintActionRepository, LocalComplaintActionRepository>();
             services.AddSingleton<IComplaintRepository, LocalComplaintRepository>();
+            services.AddSingleton<IComplaintTransitionRepository, LocalComplaintTransitionRepository>();
             services.AddSingleton<IConcernRepository, LocalConcernRepository>();
             services.AddSingleton<IOfficeRepository, LocalOfficeRepository>();
         }
@@ -39,7 +45,10 @@ public static class DataStores
             }
 
             services.AddScoped<IActionTypeRepository, ActionTypeRepository>();
+            services.AddScoped<IAttachmentRepository, AttachmentRepository>();
+            services.AddScoped<IComplaintActionRepository, ComplaintActionRepository>();
             services.AddScoped<IComplaintRepository, ComplaintRepository>();
+            services.AddScoped<IComplaintTransitionRepository, ComplaintTransitionRepository>();
             services.AddScoped<IConcernRepository, ConcernRepository>();
             services.AddScoped<IOfficeRepository, OfficeRepository>();
         }

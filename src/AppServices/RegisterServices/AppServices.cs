@@ -1,4 +1,5 @@
 using Cts.AppServices.ActionTypes;
+using Cts.AppServices.ComplaintActions;
 using Cts.AppServices.Complaints;
 using Cts.AppServices.Concerns;
 using Cts.AppServices.Offices;
@@ -23,9 +24,12 @@ public static class AppServices
         services.AddScoped<IComplaintManager, ComplaintManager>();
         services.AddScoped<IComplaintService, ComplaintService>();
 
+        // Complaint Actions
+        services.AddScoped<IComplaintActionService, ComplaintActionService>();
+
         // Complaint Transitions
         services.AddScoped<IComplaintTransitionManager, ComplaintTransitionManager>();
-        
+
         // Concerns
         services.AddScoped<IConcernManager, ConcernManager>();
         services.AddScoped<IConcernService, ConcernService>();
