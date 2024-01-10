@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Cts.AppServices.Complaints.Dto;
 
-public class ComplaintCreateDto : IComplaintDtoDetails
+public record ComplaintCreateDto : IComplaintDtoDetails
 {
     // Constructors
 

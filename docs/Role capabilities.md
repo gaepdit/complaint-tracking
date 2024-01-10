@@ -12,8 +12,10 @@ Visitors to this site who are not logged in can only do the following:
 All Users with work accounts who are logged into the application can:
 
 * Search for and view all info for all Complaints, excluding deleted Complaints and deleted Complaint Actions.
-* View a list of CTS Users.
-* View the lookup tables for Complaint Action Types and Areas of Concern.
+* Search for and view CTS Users.
+* View the list of EPD Offices and Assignors.
+* View the lists of Complaint Action Types and Areas of Concern.
+* View list of roles and capabilities.
 * View reports for themselves.
 * Edit account info for themselves, including changing assigned Office.
 
@@ -41,13 +43,14 @@ Users in the Staff role can:
 
 Users in the Manager role have all the capabilities of the Staff role. Plus they can:
 
-* Reassign open Complaints currently assigned to Users in the same Office.
-* Edit Complaints assigned to Users in the same Office.
-* Edit attachments for open Complaints assigned to Users in the same Office.
+* Manage open Complaints currently assigned to Users in the same Office, including:
+  * Edit.
+  * Reassign.
+  * Edit attachments.
+  * Edit Complaint Actions.
+  * Delete and restore Complaint Actions.
+  * View deleted Complaint Actions.
 * Approve & close Complaints that have been submitted for review.
-* Edit all Complaint Actions.
-* Delete and restore Complaint Actions.
-* View deleted Complaint Actions.
 * View reports for all Users within the same Office.
 
 ### User Account Admin

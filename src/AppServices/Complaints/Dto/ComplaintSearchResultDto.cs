@@ -3,7 +3,7 @@ using Cts.Domain.Entities.Complaints;
 
 namespace Cts.AppServices.Complaints.Dto;
 
-public class ComplaintSearchResultDto
+public record ComplaintSearchResultDto
 {
     public int Id { get; init; }
     public DateTimeOffset ReceivedDate { get; init; }

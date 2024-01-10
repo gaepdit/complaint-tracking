@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Cts.WebApp.Pages.Admin.Maintenance.Offices;
 
-[Authorize(Policy = nameof(Policies.AdministrationView))]
+[Authorize(Policy = nameof(Policies.ActiveUser))]
 public class IndexModel : PageModel
 {
     public IReadOnlyList<OfficeWithAssignorDto> Items { get; private set; } = default!;

@@ -4,7 +4,7 @@ using Cts.Domain.Entities.ComplaintTransitions;
 
 namespace Cts.AppServices.Complaints.Dto;
 
-public class ComplaintTransitionViewDto
+public record ComplaintTransitionViewDto
 {
     public TransitionType TransitionType { get; init; }
     public DateTimeOffset CommittedDate { get; init; }

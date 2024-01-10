@@ -127,7 +127,7 @@ public sealed class ComplaintService(
     internal async Task<Complaint> CreateComplaintFromDtoAsync(
         ComplaintCreateDto resource, string? currentUserId, CancellationToken token)
     {
-        var complaint = manager.CreateNewComplaint(currentUserId);
+        var complaint = manager.Create(currentUserId);
         await FillInComplaintDetailsAsync(complaint, resource, token);
 
         // Auditing data

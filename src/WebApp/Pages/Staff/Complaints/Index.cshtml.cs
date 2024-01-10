@@ -2,6 +2,7 @@
 using Cts.AppServices.Complaints.Dto;
 using Cts.AppServices.Concerns;
 using Cts.AppServices.Offices;
+using Cts.AppServices.Permissions;
 using Cts.AppServices.Staff;
 using Cts.Domain.Data;
 using Cts.WebApp.Models;
@@ -16,7 +17,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Cts.WebApp.Pages.Staff.Complaints;
 
-[Authorize]
+[Authorize(Policy = nameof(Policies.ActiveUser))]
 public class IndexModel(
     IComplaintService complaints,
     IStaffService staff,

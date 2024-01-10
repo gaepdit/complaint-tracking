@@ -11,7 +11,7 @@ public class ComplaintOperation :
         AllOperations.Add(this);
     }
 
-    public static List<ComplaintOperation> AllOperations { get; } = new();
+    public static List<ComplaintOperation> AllOperations { get; } = [];
 
     public static readonly ComplaintOperation Accept = new(nameof(Accept));
     public static readonly ComplaintOperation Assign = new(nameof(Assign));

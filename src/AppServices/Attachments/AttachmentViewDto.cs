@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace Cts.AppServices.Attachments;
 
-public class AttachmentViewDto
+public record AttachmentViewDto
 {
     public Guid Id { get; init; }
     public string FileName { get; init; } = string.Empty;

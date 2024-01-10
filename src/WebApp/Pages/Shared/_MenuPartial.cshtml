@@ -7,7 +7,6 @@
     var isActive = (await AuthorizationService.AuthorizeAsync(User, nameof(Policies.ActiveUser))).Succeeded;
     var isLoggedIn = (await AuthorizationService.AuthorizeAsync(User, nameof(Policies.LoggedInUser))).Succeeded;
     var isStaff = (await AuthorizationService.AuthorizeAsync(User, nameof(Policies.StaffUser))).Succeeded;
-    var canViewMaintenance = (await AuthorizationService.AuthorizeAsync(User, nameof(Policies.AdministrationView))).Succeeded;
 }
 
 <nav id="main-nav" class="navbar nav-underline navbar-expand-sm text-bg-brand bg-gradient border-bottom shadow-sm mb-3 d-print-none">
@@ -49,12 +48,9 @@
                             <li>
                                 <a class="dropdown-item" asp-page="/Admin/Users/Index">CTS Users</a>
                             </li>
-                            @if (canViewMaintenance)
-                            {
-                                <li>
-                                    <a class="dropdown-item" asp-page="/Admin/Maintenance/Index">Site Maintenance</a>
-                                </li>
-                            }
+                            <li>
+                                <a class="dropdown-item" asp-page="/Admin/Maintenance/Index">Site Maintenance</a>
+                            </li>
                         </ul>
                     </li>
                 </ul>

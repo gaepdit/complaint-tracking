@@ -9,50 +9,45 @@ internal static class ComplaintActionData
     private static IEnumerable<ComplaintAction> ComplaintActionSeedItems => new List<ComplaintAction>
     {
         new(new Guid("30000000-0000-0000-0000-000000000001"),
-            ComplaintData.GetComplaints.ElementAt(0))
+            ComplaintData.GetComplaints.ElementAt(0), ActionTypeData.GetActionTypes.ElementAt(0))
         {
-            ActionDate = DateTimeOffset.Now.AddDays(-3).Date,
-            ActionType = ActionTypeData.GetActionTypes.ElementAt(0),
+            ActionDate = DateOnly.FromDateTime(DateTimeOffset.Now.AddDays(-3).Date),
             Investigator = TextData.Word,
             EnteredDate = DateTimeOffset.Now.AddDays(-3),
             EnteredBy = UserData.GetUsers.ElementAt(1),
             Comments = TextData.Paragraph,
         },
         new(new Guid("30000000-0000-0000-0000-000000000002"),
-            ComplaintData.GetComplaints.ElementAt(0))
+            ComplaintData.GetComplaints.ElementAt(0), ActionTypeData.GetActionTypes.ElementAt(1))
         {
-            ActionDate = DateTimeOffset.Now.AddDays(-2).Date,
-            ActionType = ActionTypeData.GetActionTypes.ElementAt(1),
+            ActionDate = DateOnly.FromDateTime(DateTimeOffset.Now.AddDays(-2).Date),
             Investigator = null,
             EnteredDate = DateTimeOffset.Now.AddDays(-1),
             EnteredBy = UserData.GetUsers.ElementAt(0),
             Comments = null,
         },
         new(new Guid("30000000-0000-0000-0000-000000000003"),
-            ComplaintData.GetComplaints.ElementAt(0))
+            ComplaintData.GetComplaints.ElementAt(0), ActionTypeData.GetActionTypes.ElementAt(5))
         {
-            ActionDate = DateTimeOffset.Now.AddDays(-1).Date,
-            ActionType = ActionTypeData.GetActionTypes.ElementAt(5),
+            ActionDate = DateOnly.FromDateTime(DateTimeOffset.Now.AddDays(-1).Date),
             Investigator = TextData.AnotherWord,
             EnteredDate = DateTimeOffset.Now.AddDays(-1),
             EnteredBy = UserData.GetUsers.ElementAt(1),
             Comments = TextData.MultipleParagraphs,
         },
         new(new Guid("30000000-0000-0000-0000-000000000004"),
-            ComplaintData.GetComplaints.ElementAt(2))
+            ComplaintData.GetComplaints.ElementAt(2), ActionTypeData.GetActionTypes.ElementAt(7))
         {
-            ActionDate = DateTimeOffset.Now.AddDays(-10).Date,
-            ActionType = ActionTypeData.GetActionTypes.ElementAt(7),
+            ActionDate = DateOnly.FromDateTime(DateTimeOffset.Now.AddDays(-10).Date),
             Investigator = "Deleted complaint action",
             EnteredDate = DateTimeOffset.Now.AddDays(-10),
             EnteredBy = UserData.GetUsers.ElementAt(0),
             Comments = TextData.Phrase,
         },
         new(new Guid("30000000-0000-0000-0000-000000000005"),
-            ComplaintData.GetComplaints.ElementAt(3))
+            ComplaintData.GetComplaints.ElementAt(3), ActionTypeData.GetActionTypes.ElementAt(0))
         {
-            ActionDate = DateTimeOffset.Now.AddDays(-1).Date,
-            ActionType = ActionTypeData.GetActionTypes.ElementAt(0),
+            ActionDate = DateOnly.FromDateTime(DateTimeOffset.Now.AddDays(-1).Date),
             Investigator = "Complaint action on a deleted complaint",
             EnteredDate = DateTimeOffset.Now.AddDays(-1),
             EnteredBy = UserData.GetUsers.ElementAt(1),
