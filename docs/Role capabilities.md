@@ -43,13 +43,14 @@ Users in the Staff role can:
 
 Users in the Manager role have all the capabilities of the Staff role. Plus they can:
 
-* Reassign open Complaints currently assigned to Users in the same Office.
-* Edit Complaints assigned to Users in the same Office.
-* Edit attachments for open Complaints assigned to Users in the same Office.
+* Manage open Complaints currently assigned to Users in the same Office, including:
+  * Edit.
+  * Reassign.
+  * Edit attachments.
+  * Edit Complaint Actions.
+  * Delete and restore Complaint Actions.
+  * View deleted Complaint Actions.
 * Approve & close Complaints that have been submitted for review.
-* Edit all Complaint Actions.
-* Delete and restore Complaint Actions.
-* View deleted Complaint Actions.
 * View reports for all Users within the same Office.
 
 ### User Account Admin

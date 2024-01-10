@@ -55,7 +55,7 @@ internal class ComplaintViewPermissionsHandler :
                 IsClosed() && _user.IsDivisionManager(), // Only the Division Manager can reopen.
 
             nameof(ComplaintOperation.EditAttachments) =>
-                _user.IsAttachmentsEditor() || // Attachments editor can edit attachments on closed complaints.
+                _user.IsAttachmentsEditor() || // Attachments editor (and Division Manager) can edit attachments on closed complaints.
                 IsOpen() && (IsCurrentOwnerOrManager() || IsRecentReporter()),
 
             _ => throw new ArgumentOutOfRangeException(nameof(requirement)),
@@ -83,7 +83,8 @@ internal class ComplaintViewPermissionsHandler :
 
     // Managers can edit within their office.
     private bool IsCurrentManager() =>
-        _user.IsManager() && _resource.CurrentOffice?.Id == _resource.CurrentUserOfficeId;
+        _user.IsManager() && _resource.CurrentOffice?.Id == _resource.CurrentUserOfficeId ||
+        _user.IsDivisionManager();
 
     // Users can edit their own.
     private bool IsCurrentOwner() => _user.IsStaff() && _resource.CurrentOwner?.Id == _user.GetUserIdValue();
