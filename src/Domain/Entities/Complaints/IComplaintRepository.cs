@@ -13,11 +13,12 @@ public interface IComplaintRepository : IRepository<Complaint, int>
     /// Returns null if there are no matches.
     /// </summary>
     /// <param name="predicate">The search conditions.</param>
+    /// <param name="includeDeletedActions">Whether to include deleted Complaint Actions in the result.</param>
     /// <param name="token"><see cref="T:System.Threading.CancellationToken"/></param>
     /// <exception cref="InvalidOperationException">Thrown if there are multiple matches.</exception>
     /// <returns>A Complaint entity.</returns>
     Task<Complaint?> FindIncludeAllAsync(Expression<Func<Complaint, bool>> predicate,
-        CancellationToken token = default);
+        bool includeDeletedActions = false, CancellationToken token = default);
 
     // Attachments
 

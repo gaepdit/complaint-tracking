@@ -14,6 +14,7 @@ public sealed class LocalComplaintRepository(
     : BaseRepository<Complaint, int>(ComplaintData.GetComplaints), IComplaintRepository
 {
     public async Task<Complaint?> FindIncludeAllAsync(Expression<Func<Complaint, bool>> predicate,
+        bool includeDeletedActions = false,
         CancellationToken token = default)
     {
         var complaint = await FindAsync(predicate, token);
@@ -25,7 +26,8 @@ public sealed class LocalComplaintRepository(
             .ToList();
 
         complaint.ComplaintActions = (await actionRepository
-                .GetListAsync(action => action.Complaint.Id == complaint.Id && !action.IsDeleted, token))
+                .GetListAsync(action => action.Complaint.Id == complaint.Id &&
+                    (!action.IsDeleted || includeDeletedActions), token))
             .OrderByDescending(action => action.ActionDate).ThenByDescending(action => action.EnteredDate)
             .ToList();
 

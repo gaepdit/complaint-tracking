@@ -9,6 +9,7 @@ public sealed class ComplaintRepository(AppDbContext context)
     : BaseRepository<Complaint, int, AppDbContext>(context), IComplaintRepository
 {
     public async Task<Complaint?> FindIncludeAllAsync(Expression<Func<Complaint, bool>> predicate,
+        bool includeDeletedActions = false,
         CancellationToken token = default) =>
         await Context.Set<Complaint>()
             .Include(complaint => complaint.Attachments
@@ -16,7 +17,7 @@ public sealed class ComplaintRepository(AppDbContext context)
                 .OrderByDescending(attachment => attachment.UploadedDate)
             )
             .Include(complaint => complaint.ComplaintActions
-                .Where(action => !action.IsDeleted)
+                .Where(action => !action.IsDeleted || includeDeletedActions)
                 .OrderByDescending(action => action.ActionDate)
                 .ThenByDescending(action => action.EnteredDate)
             )

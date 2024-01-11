@@ -23,4 +23,6 @@ public record ComplaintActionViewDto
 
     [Display(Name = "Entered On")]
     public DateTimeOffset? EnteredDate { get; init; }
+
+    public bool IsDeleted { get; init; }
 }

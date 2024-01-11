@@ -24,7 +24,7 @@ public class DetailsModel(
     IAuthorizationService authorization)
     : PageModel
 {
-    public ComplaintViewDto Item { get; private set; } = default!;
+    public ComplaintViewDto ComplaintView { get; private set; } = default!;
     public Dictionary<IAuthorizationRequirement, bool> UserCan { get; set; } = new();
 
     [BindProperty]
@@ -35,10 +35,14 @@ public class DetailsModel(
 
     public SelectList ActionItemTypeSelectList { get; private set; } = default!;
 
+    public bool ViewableComplaintActions => ComplaintView.ComplaintActions.Exists(action =>
+        !action.IsDeleted || UserCan[ComplaintOperation.ViewDeletedActions]);
+
     public async Task<IActionResult> OnGetAsync(int? id)
     {
         if (id is null) return RedirectToPage("../Index");
-        var complaintView = await complaints.FindAsync(id.Value);
+
+        var complaintView = await complaints.FindAsync(id.Value, true);
         if (complaintView is null) return NotFound();
 
         var currentUser = await staffService.GetCurrentUserAsync();
@@ -47,7 +51,7 @@ public class DetailsModel(
         await SetPermissionsAsync(complaintView);
         if (complaintView.IsDeleted && !UserCan[ComplaintOperation.ManageDeletions]) return NotFound();
 
-        Item = complaintView;
+        ComplaintView = complaintView;
         NewAction = new ComplaintActionCreateDto(complaintView.Id) { Investigator = currentUser.Name };
         await PopulateSelectListsAsync();
         return Page();
@@ -61,7 +65,7 @@ public class DetailsModel(
         if (id is null) return RedirectToPage("../Index");
         if (NewAction.ComplaintId != id) return BadRequest();
 
-        var complaintView = await complaints.FindAsync(id.Value);
+        var complaintView = await complaints.FindAsync(id.Value, true);
         if (complaintView is null || complaintView.IsDeleted) return BadRequest();
 
         complaintView.CurrentUserOfficeId = (await staffService.GetCurrentUserAsync()).Office?.Id ?? Guid.Empty;
@@ -71,7 +75,7 @@ public class DetailsModel(
 
         if (!ModelState.IsValid)
         {
-            Item = complaintView;
+            ComplaintView = complaintView;
             await PopulateSelectListsAsync();
             return Page();
         }

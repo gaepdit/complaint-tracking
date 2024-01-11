@@ -20,7 +20,7 @@ public interface IComplaintService : IDisposable, IAsyncDisposable
 
     // Staff read methods
 
-    Task<ComplaintViewDto?> FindAsync(int id, CancellationToken token = default);
+    Task<ComplaintViewDto?> FindAsync(int id, bool includeDeletedActions = false, CancellationToken token = default);
 
     Task<ComplaintUpdateDto?> FindForUpdateAsync(int id, CancellationToken token = default);
 
@@ -30,7 +30,7 @@ public interface IComplaintService : IDisposable, IAsyncDisposable
         ComplaintSearchDto spec, PaginatedRequest paging, CancellationToken token = default);
 
     Task<AttachmentViewDto?> FindAttachmentAsync(Guid id, CancellationToken token = default);
-    
+
     // Staff write methods
 
     Task<int> CreateAsync(ComplaintCreateDto resource, CancellationToken token = default);

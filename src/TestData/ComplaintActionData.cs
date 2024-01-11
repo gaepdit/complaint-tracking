@@ -36,11 +36,11 @@ internal static class ComplaintActionData
             Comments = TextData.MultipleParagraphs,
         },
         new(new Guid("30000000-0000-0000-0000-000000000004"),
-            ComplaintData.GetComplaints.ElementAt(2), ActionTypeData.GetActionTypes.ElementAt(7))
+            ComplaintData.GetComplaints.ElementAt(0), ActionTypeData.GetActionTypes.ElementAt(7))
         {
-            ActionDate = DateOnly.FromDateTime(DateTimeOffset.Now.AddDays(-10).Date),
-            Investigator = "Deleted complaint action",
-            EnteredDate = DateTimeOffset.Now.AddDays(-10),
+            ActionDate = DateOnly.FromDateTime(DateTimeOffset.Now.AddDays(-2).Date),
+            Investigator = "Deleted complaint action on closed complaint",
+            EnteredDate = DateTimeOffset.Now.AddDays(-2),
             EnteredBy = UserData.GetUsers.ElementAt(0),
             Comments = TextData.Phrase,
         },
@@ -51,6 +51,24 @@ internal static class ComplaintActionData
             Investigator = "Complaint action on a deleted complaint",
             EnteredDate = DateTimeOffset.Now.AddDays(-1),
             EnteredBy = UserData.GetUsers.ElementAt(1),
+            Comments = TextData.Phrase,
+        },
+        new(new Guid("30000000-0000-0000-0000-000000000006"),
+            ComplaintData.GetComplaints.ElementAt(5), ActionTypeData.GetActionTypes.ElementAt(0))
+        {
+            ActionDate = DateOnly.FromDateTime(DateTimeOffset.Now.AddDays(-2).Date),
+            Investigator = "Action on current complaint",
+            EnteredDate = DateTimeOffset.Now.AddDays(-2),
+            EnteredBy = UserData.GetUsers.ElementAt(1),
+            Comments = TextData.Paragraph,
+        },
+        new(new Guid("30000000-0000-0000-0000-000000000007"),
+            ComplaintData.GetComplaints.ElementAt(5), ActionTypeData.GetActionTypes.ElementAt(7))
+        {
+            ActionDate = DateOnly.FromDateTime(DateTimeOffset.Now.AddDays(-3).Date),
+            Investigator = "Deleted complaint action on current complaint",
+            EnteredDate = DateTimeOffset.Now.AddDays(-2),
+            EnteredBy = UserData.GetUsers.ElementAt(0),
             Comments = TextData.Phrase,
         },
     };
@@ -65,6 +83,7 @@ internal static class ComplaintActionData
 
             _complaintActions = ComplaintActionSeedItems.ToList();
             _complaintActions[3].SetDeleted("00000000-0000-0000-0000-000000000001");
+            _complaintActions[6].SetDeleted("00000000-0000-0000-0000-000000000001");
             return _complaintActions;
         }
     }
