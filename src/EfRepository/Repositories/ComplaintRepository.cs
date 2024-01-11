@@ -8,8 +8,7 @@ namespace Cts.EfRepository.Repositories;
 public sealed class ComplaintRepository(AppDbContext context)
     : BaseRepository<Complaint, int, AppDbContext>(context), IComplaintRepository
 {
-    public async Task<Complaint?> FindIncludeAllAsync(Expression<Func<Complaint, bool>> predicate,
-        bool includeDeletedActions = false,
+    public async Task<Complaint?> FindIncludeAllAsync(int id, bool includeDeletedActions = false,
         CancellationToken token = default) =>
         await Context.Set<Complaint>()
             .Include(complaint => complaint.Attachments
@@ -23,7 +22,7 @@ public sealed class ComplaintRepository(AppDbContext context)
             )
             .Include(complaint => complaint.ComplaintTransitions
                 .OrderBy(transition => transition.CommittedDate))
-            .SingleOrDefaultAsync(predicate, token);
+            .SingleOrDefaultAsync(e => e.Id.Equals(id), token);
 
 
     public async Task<Attachment?> FindAttachmentAsync(Guid id, CancellationToken token = default) =>

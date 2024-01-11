@@ -20,8 +20,7 @@ public class FindPublic
         item.Attachments = [AttachmentData.GetAttachments.First(e => !e.IsDeleted)];
 
         var repoMock = Substitute.For<IComplaintRepository>();
-        repoMock.FindIncludeAllAsync(Arg.Any<Expression<Func<Complaint, bool>>>(), Arg.Any<bool>(),
-                Arg.Any<CancellationToken>())
+        repoMock.FindIncludeAllAsync(Arg.Any<int>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
             .Returns(item);
 
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),

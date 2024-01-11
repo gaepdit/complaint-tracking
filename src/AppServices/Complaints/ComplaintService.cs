@@ -25,7 +25,7 @@ public sealed class ComplaintService(
 {
     public async Task<ComplaintPublicViewDto?> FindPublicAsync(int id, CancellationToken token = default)
     {
-        var complaint = await complaints.FindIncludeAllAsync(ComplaintFilters.PublicIdPredicate(id), token: token);
+        var complaint = await complaints.FindIncludeAllAsync(id, token: token);
         return complaint is null ? null : mapper.Map<ComplaintPublicViewDto>(complaint);
     }
 
@@ -58,14 +58,18 @@ public sealed class ComplaintService(
     public async Task<ComplaintViewDto?> FindAsync(int id, bool includeDeletedActions = false,
         CancellationToken token = default)
     {
-        var complaint =
-            await complaints.FindIncludeAllAsync(ComplaintFilters.IdPredicate(id), includeDeletedActions, token);
+        var complaint = await complaints.FindIncludeAllAsync(id, includeDeletedActions, token);
         if (complaint is null) return null;
+        var complaintView = mapper.Map<ComplaintViewDto>(complaint);
 
-        var view = mapper.Map<ComplaintViewDto>(complaint);
-        return complaint is { IsDeleted: true, DeletedById: not null }
-            ? view with { DeletedBy = mapper.Map<StaffViewDto>(await users.FindUserAsync(complaint.DeletedById)) }
-            : view;
+        if (complaint is { IsDeleted: true, DeletedById: not null })
+            complaintView.DeletedBy = mapper.Map<StaffViewDto>(await users.FindUserAsync(complaint.DeletedById));
+
+        foreach (var action in complaintView.ComplaintActions.Where(action =>
+                     action is { IsDeleted: true, DeletedById: not null }))
+            action.DeletedBy = mapper.Map<StaffViewDto>(await users.FindUserAsync(action.DeletedById.ToString()!));
+
+        return complaintView;
     }
 
     public async Task<ComplaintUpdateDto?> FindForUpdateAsync(int id, CancellationToken token = default) =>
