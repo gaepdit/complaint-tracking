@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
 using Mindscape.Raygun4Net.AspNetCore;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.InteropServices;
 
 namespace ComplaintTracking
 {
@@ -31,6 +32,12 @@ namespace ComplaintTracking
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Persist data protection keys
+            var directory = Directory.CreateDirectory(Configuration["DataProtectionKeysPath"]!);
+            var dataProtectionBuilder = services.AddDataProtection().PersistKeysToFileSystem(directory);
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                dataProtectionBuilder.ProtectKeysWithDpapi(protectToLocalMachine: true);
+
             // Bind Application Settings
             Configuration.GetSection(nameof(ApplicationSettings.RaygunSettings)).Bind(ApplicationSettings.RaygunSettings);
 
@@ -68,10 +75,6 @@ namespace ComplaintTracking
                 options.AccessDeniedPath = new PathString("/Account/AccessDenied/");
             });
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
-
-            // Data protection
-            services.AddDataProtection()
-                .PersistKeysToFileSystem(new DirectoryInfo(FilePaths.DataProtectionKeysFolder));
 
             // Add error logging
             services.AddRaygun(Configuration, new RaygunMiddlewareSettings()
@@ -167,17 +170,13 @@ namespace ComplaintTracking
 
             // Set file paths
             FilePaths.AttachmentsFolder = Path.Combine(FilePaths.BasePath, "UserFiles", "attachments");
-            FilePaths.DataProtectionKeysFolder = Path.Combine(FilePaths.BasePath, "cts-keys");
             FilePaths.ExportFolder = Path.Combine(FilePaths.BasePath, "DataExport");
-            FilePaths.LogsFolder = Path.Combine("..", "..", "logs", "cts-logs");
             FilePaths.ThumbnailsFolder = Path.Combine(FilePaths.BasePath, "UserFiles", "thumbnails");
             FilePaths.UnsentEmailFolder = Path.Combine(FilePaths.BasePath, "UnsentEmail");
 
             // Create Directories
             Directory.CreateDirectory(FilePaths.AttachmentsFolder);
-            Directory.CreateDirectory(FilePaths.DataProtectionKeysFolder);
             Directory.CreateDirectory(FilePaths.ExportFolder);
-            Directory.CreateDirectory(FilePaths.LogsFolder);
             Directory.CreateDirectory(FilePaths.ThumbnailsFolder);
             Directory.CreateDirectory(FilePaths.UnsentEmailFolder);
         }
