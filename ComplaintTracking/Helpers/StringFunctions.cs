@@ -1,10 +1,8 @@
-﻿using System;
-using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace ComplaintTracking
 {
-    public static class StringFunctions
+    public static partial class StringFunctions
     {
         /// <summary>
         /// Implodes a String array to a single string, concatenating the items using the separator, and ignoring null or empty string items
@@ -15,7 +13,7 @@ namespace ComplaintTracking
         /// <remarks></remarks>
         public static string ConcatNonEmptyStrings(string[] items, string separator)
         {
-            return String.Join(separator, items.Where(s => !String.IsNullOrEmpty(s)));
+            return string.Join(separator, items.Where(s => !string.IsNullOrEmpty(s)));
         }
 
         public static string RedactPII(string input)
@@ -25,8 +23,8 @@ namespace ComplaintTracking
                 return null;
             }
 
-            input = Regex.Replace(input, RegexPatterns.SimpleEmailPattern, RegexPatterns.EmailReplacementText);
-            input = Regex.Replace(input, RegexPatterns.SimplePhonePattern, RegexPatterns.PhoneReplacementText);
+            input = SimpleEmailRegex().Replace(input, RegexPatterns.EmailReplacementText);
+            input = SimplePhoneRegex().Replace(input, RegexPatterns.PhoneReplacementText);
 
             return input;
         }
@@ -41,5 +39,11 @@ namespace ComplaintTracking
 
             return "";
         }
+
+        [GeneratedRegex(RegexPatterns.SimpleEmailPattern)]
+        private static partial Regex SimpleEmailRegex();
+
+        [GeneratedRegex(RegexPatterns.SimplePhonePattern)]
+        private static partial Regex SimplePhoneRegex();
     }
 }
