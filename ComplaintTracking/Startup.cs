@@ -1,4 +1,4 @@
-using ComplaintTracking.App;
+﻿using ComplaintTracking.App;
 using ComplaintTracking.Data;
 using ComplaintTracking.Helpers;
 using ComplaintTracking.Models;
@@ -31,8 +31,8 @@ namespace ComplaintTracking
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Set Application Settings
-            Configuration.GetSection(ApplicationSettings.RaygunSettingsSection).Bind(ApplicationSettings.Raygun);
+            // Bind Application Settings
+            Configuration.GetSection(nameof(ApplicationSettings.RaygunSettings)).Bind(ApplicationSettings.RaygunSettings);
 
             // Add database context
             var connectionString = Configuration.GetConnectionString("DefaultConnection");

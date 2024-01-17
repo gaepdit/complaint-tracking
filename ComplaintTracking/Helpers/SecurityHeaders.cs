@@ -12,9 +12,9 @@ internal static class SecurityHeaders
         policies.AddReferrerPolicyStrictOriginWhenCrossOrigin();
         policies.RemoveServerHeader();
         policies.AddContentSecurityPolicy(builder => builder.CspBuilder());
-        if (!string.IsNullOrEmpty(ApplicationSettings.Raygun.ApiKey))
+        if (!string.IsNullOrEmpty(ApplicationSettings.RaygunSettings.ApiKey))
             policies.AddReportingEndpoints(builder => builder.AddEndpoint("csp-endpoint",
-                $"https://report-to-api.raygun.com/reports?apikey={ApplicationSettings.Raygun.ApiKey}"));
+                $"https://report-to-api.raygun.com/reports?apikey={ApplicationSettings.RaygunSettings.ApiKey}"));
     }
 
 #pragma warning disable S1075 // "URIs should not be hardcoded"
@@ -52,7 +52,7 @@ internal static class SecurityHeaders
         builder.AddFrameSrc().Self();
         builder.AddFrameAncestors().Self();
         builder.AddReportUri()
-            .To($"https://report-to-api.raygun.com/reports-csp?apikey={ApplicationSettings.Raygun.ApiKey}");
+            .To($"https://report-to-api.raygun.com/reports-csp?apikey={ApplicationSettings.RaygunSettings.ApiKey}");
         builder.AddReportTo("csp-endpoint");
     }
 #pragma warning restore S1075

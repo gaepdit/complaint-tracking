@@ -2,11 +2,10 @@
 
 internal static class ApplicationSettings
 {
-    public const string RaygunSettingsSection = "RaygunSettings";
-    public static RaygunSettings Raygun { get; } = new();
+    public static RaygunClientSettings RaygunSettings { get; } = new();
 }
 
-internal class RaygunSettings
+internal class RaygunClientSettings
 {
     public string ApiKey { get; init; }
 }
