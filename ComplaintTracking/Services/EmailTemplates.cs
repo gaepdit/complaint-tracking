@@ -1,4 +1,6 @@
-﻿namespace ComplaintTracking
+﻿using ComplaintTracking.App;
+
+namespace ComplaintTracking
 {
     internal static class EmailTemplates
     {
@@ -25,13 +27,13 @@
 -- 
 This email was sent to {1}
 From the Complaint Tracking System: {0}
-For support contact: " + CTS.AdminEmail;
+For support contact: " + ApplicationSettings.ContactEmails.Admin;
 
         public static readonly string HtmlSignature =
             "<p>-- <br />"
             + "This email was sent to {1}<br/>"
             + "From the Complaint Tracking System: {0}<br />"
-            + "For support contact: " + CTS.AdminEmail + "</p>";
+            + "For support contact: " + ApplicationSettings.ContactEmails.Admin + "</p>";
 
         #endregion
 

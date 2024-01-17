@@ -1,4 +1,5 @@
 ﻿using ComplaintTracking.AlertMessages;
+using ComplaintTracking.App;
 using ComplaintTracking.Data;
 using ComplaintTracking.Generic;
 using ComplaintTracking.Models;
@@ -447,17 +448,17 @@ namespace ComplaintTracking.Controllers
                             oldEmail,
                             EmailTemplates.NotifyEmailChange.Subject,
                             string.Format(EmailTemplates.NotifyEmailChange.PlainBody, oldEmail, user.Email,
-                                CTS.AdminEmail),
+                                ApplicationSettings.ContactEmails.Admin),
                             string.Format(EmailTemplates.NotifyEmailChange.HtmlBody, oldEmail, user.Email,
-                                CTS.AdminEmail),
+                                ApplicationSettings.ContactEmails.Admin),
                             replyTo: currentUser.Email);
                         await _emailSender.SendEmailAsync(
                             user.Email,
                             EmailTemplates.NotifyEmailChange.Subject,
                             string.Format(EmailTemplates.NotifyEmailChange.PlainBody, oldEmail, user.Email,
-                                CTS.AdminEmail),
+                                ApplicationSettings.ContactEmails.Admin),
                             string.Format(EmailTemplates.NotifyEmailChange.HtmlBody, oldEmail, user.Email,
-                                CTS.AdminEmail),
+                                ApplicationSettings.ContactEmails.Admin),
                             replyTo: currentUser.Email);
                     }
 

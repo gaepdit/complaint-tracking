@@ -1,4 +1,5 @@
-﻿using ComplaintTracking.Models;
+﻿using ComplaintTracking.App;
+using ComplaintTracking.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -89,7 +90,7 @@ namespace ComplaintTracking.Data
             }
 
             // Create Default Admin User
-            var email = CTS.AdminEmail;
+            var email = ApplicationSettings.ContactEmails.Admin;
             var password = configuration.GetValue<string>("DefaultAdminPassword");
             if (!await context.Users.AnyAsync(e => e.Email == email))
             {

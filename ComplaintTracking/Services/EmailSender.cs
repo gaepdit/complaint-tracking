@@ -1,13 +1,10 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
+﻿using ComplaintTracking.App;
 using ComplaintTracking.Data;
 using ComplaintTracking.ExtensionMethods;
 using ComplaintTracking.Models;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using MimeKit;
 
 namespace ComplaintTracking.Services
@@ -58,7 +55,7 @@ namespace ComplaintTracking.Services
 
             var emailMessage = new MimeMessage();
 
-            emailMessage.From.Add(new MailboxAddress("Complaint Tracking System", CTS.AdminEmail));
+            emailMessage.From.Add(new MailboxAddress("Complaint Tracking System", ApplicationSettings.ContactEmails.Admin));
             emailMessage.To.Add(new MailboxAddress("", email));
 
             if (!string.IsNullOrEmpty(replyTo) && replyTo != email)
@@ -90,7 +87,7 @@ namespace ComplaintTracking.Services
                 if (CTS.CurrentEnvironment == ServerEnvironment.Development)
                 {
                     emailMessage.To.Clear();
-                    emailMessage.To.Add(new MailboxAddress("", CTS.DevEmail));
+                    emailMessage.To.Add(new MailboxAddress("", ApplicationSettings.ContactEmails.Developer));
                 }
 
                 using var client = new SmtpClient();

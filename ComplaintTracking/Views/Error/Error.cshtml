@@ -1,11 +1,12 @@
-﻿@{
+﻿@using ComplaintTracking.App
+@{
     string statusCode = StringFunctions.ForceToString(ViewData["statusCode"]);
 
     string statusCodeDesc = StringFunctions.ForceToString(ViewData["statusCodeDesc"]);
 
     string shortId = StringFunctions.ForceToString(ViewData["shortId"]);
 
-    string mailto = CTS.AdminEmail + "?subject=CTS Support";
+    string mailto = ApplicationSettings.ContactEmails.Admin + "?subject=CTS Support";
     if (shortId != "")
     {
         mailto = mailto + " " + ViewData["shortId"];

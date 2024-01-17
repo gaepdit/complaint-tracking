@@ -1,7 +1,8 @@
-﻿@{
+﻿@using ComplaintTracking.App
+@{
     ViewData["Title"] = "CTS Support";
-    var accountMailto = $"mailto:{CTS.AccountAdminEmail}?subject=CTS Account";
-    var supportMailto = $"mailto:{CTS.SupportEmail}?subject=CTS Support Request";
+    var accountMailto = $"mailto:{ApplicationSettings.ContactEmails.AccountAdmin}?subject=CTS Account";
+    var supportMailto = $"mailto:{ApplicationSettings.ContactEmails.Support}?subject=CTS Support Request";
 
     var v = System.Reflection.Assembly.GetEntryAssembly()?.GetName().Version;
     var ctsVersion = v is null ? string.Empty : new Version(v.Major, v.Minor, v.Build).ToString();
@@ -15,8 +16,8 @@
     <li>
         <a href="~/static/Complaint-Attachments-Policy.pdf" target="_blank">Complaint Attachments Policy (<abbr>PDF</abbr>)</a>
     </li>
-    <li>For account management requests, contact <a href="@accountMailto">@CTS.AccountAdminEmail</a></li>
-    <li>For technical support, contact <a href="@supportMailto">@CTS.SupportEmail</a></li>
+    <li>For account management requests, contact <a href="@accountMailto">@ApplicationSettings.ContactEmails.AccountAdmin</a></li>
+    <li>For technical support, contact <a href="@supportMailto">@ApplicationSettings.ContactEmails.Support</a></li>
 </ul>
 
 <p>

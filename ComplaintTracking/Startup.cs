@@ -40,6 +40,7 @@ namespace ComplaintTracking
 
             // Bind Application Settings
             Configuration.GetSection(nameof(ApplicationSettings.RaygunSettings)).Bind(ApplicationSettings.RaygunSettings);
+            Configuration.GetSection(nameof(ApplicationSettings.ContactEmails)).Bind(ApplicationSettings.ContactEmails);
 
             // Add database context
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
@@ -157,16 +158,8 @@ namespace ComplaintTracking
 
         private void Setup()
         {
-            SetContacts();
-            SetDirectories();
-        }
-
-        private void SetDirectories()
-        {
             // Base path for all generated/uploaded files
-            FilePaths.BasePath = string.IsNullOrWhiteSpace(Configuration["UserFilesBasePath"])
-                ? "../_UserFiles"
-                : StringFunctions.ForceToString(Configuration["UserFilesBasePath"]);
+            FilePaths.BasePath = Configuration["UserFilesBasePath"];
 
             // Set file paths
             FilePaths.AttachmentsFolder = Path.Combine(FilePaths.BasePath, "UserFiles", "attachments");
@@ -179,14 +172,6 @@ namespace ComplaintTracking
             Directory.CreateDirectory(FilePaths.ExportFolder);
             Directory.CreateDirectory(FilePaths.ThumbnailsFolder);
             Directory.CreateDirectory(FilePaths.UnsentEmailFolder);
-        }
-
-        private void SetContacts()
-        {
-            CTS.AdminEmail = StringFunctions.ForceToString(Configuration["Contacts:AdminEmail"]);
-            CTS.DevEmail = StringFunctions.ForceToString(Configuration["Contacts:DevEmail"]);
-            CTS.SupportEmail = StringFunctions.ForceToString(Configuration["Contacts:SupportEmail"]);
-            CTS.AccountAdminEmail = StringFunctions.ForceToString(Configuration["Contacts:AccountAdminEmail"]);
         }
     }
 }
