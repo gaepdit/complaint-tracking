@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using ComplaintTracking.Models;
-using Microsoft.AspNetCore.Http;
+﻿using ComplaintTracking.Models;
 
 namespace ComplaintTracking.Services
 {
-    public class FileService : IFileService
+    public class CtsFileService : ICtsFileService
     {
         private readonly IErrorLogger _errorLogger;
-        private readonly IImageService _imageService;
+        private readonly ICtsImageService _imageService;
 
-        public FileService(IErrorLogger errorLogger, IImageService imageService)
+        public CtsFileService(IErrorLogger errorLogger, ICtsImageService imageService)
         {
             _errorLogger = errorLogger;
             _imageService = imageService;
@@ -109,7 +103,7 @@ namespace ComplaintTracking.Services
         WrongType
     }
 
-    public interface IFileService
+    public interface ICtsFileService
     {
         Task TryDeleteFileAsync(string filePath);
         Task SaveFileAsync(IFormFile file, string savePath);

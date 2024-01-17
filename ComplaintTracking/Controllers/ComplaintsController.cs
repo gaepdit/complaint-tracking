@@ -15,7 +15,7 @@ namespace ComplaintTracking.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IErrorLogger _errorLogger;
         private readonly IEmailSender _emailSender;
-        private readonly IFileService _fileService;
+        private readonly ICtsFileService _fileService;
         private readonly HtmlEncoder _htmlEncoder;
         private readonly DAL _dal;
 
@@ -26,7 +26,7 @@ namespace ComplaintTracking.Controllers
             UserManager<ApplicationUser> userManager,
             IErrorLogger errorLogger,
             IEmailSender emailSender,
-            IFileService fileService,
+            ICtsFileService fileService,
             HtmlEncoder htmlEncoder,
             DAL dal
         )

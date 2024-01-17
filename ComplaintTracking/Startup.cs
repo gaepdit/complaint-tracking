@@ -1,4 +1,4 @@
-﻿using ComplaintTracking.App;
+using ComplaintTracking.App;
 using ComplaintTracking.Data;
 using ComplaintTracking.Helpers;
 using ComplaintTracking.Models;
@@ -93,8 +93,8 @@ namespace ComplaintTracking
             // Add application services
             services.AddTransient<IErrorLogger, ErrorLogger>();
             services.AddTransient<IEmailSender, EmailSender>();
-            services.AddTransient<IImageService, ImageService>();
-            services.AddTransient<IFileService, FileService>();
+            services.AddTransient<ICtsImageService, CtsImageService>();
+            services.AddTransient<ICtsFileService, CtsFileService>();
 
             // URL/Http Request helpers
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

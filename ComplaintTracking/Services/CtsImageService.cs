@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using SixLabors.ImageSharp;
+﻿using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 
 namespace ComplaintTracking.Services
 {
-    public class ImageService : IImageService
+    public class CtsImageService : ICtsImageService
     {
         private readonly IErrorLogger _errorLogger;
 
-        public ImageService(IErrorLogger errorLogger)
+        public CtsImageService(IErrorLogger errorLogger)
         {
             _errorLogger = errorLogger;
         }
@@ -63,7 +59,7 @@ namespace ComplaintTracking.Services
         }
     }
 
-    public interface IImageService
+    public interface ICtsImageService
     {
         Task<bool> SaveThumbnailAsync(IFormFile file, string savePath);
         Task<bool> SaveImageAsync(IFormFile file, string savePath, bool asThumbnail = false);
