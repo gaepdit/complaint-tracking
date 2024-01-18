@@ -41,6 +41,7 @@ namespace ComplaintTracking
             // Bind Application Settings
             Configuration.GetSection(nameof(ApplicationSettings.RaygunSettings)).Bind(ApplicationSettings.RaygunSettings);
             Configuration.GetSection(nameof(ApplicationSettings.ContactEmails)).Bind(ApplicationSettings.ContactEmails);
+            Configuration.GetSection(nameof(ApplicationSettings.EmailOptions)).Bind(ApplicationSettings.EmailOptions);
 
             // Add database context
             var connectionString = Configuration.GetConnectionString("DefaultConnection");

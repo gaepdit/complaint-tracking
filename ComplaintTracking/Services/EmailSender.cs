@@ -9,27 +9,17 @@ using MimeKit;
 
 namespace ComplaintTracking.Services
 {
-    public class EmailOptions
-    {
-        public bool EnableEmail { get; set; }
-        public string SmtpHost { get; set; }
-        public int SmtpPort { get; set; }
-    }
-
     public class EmailSender : IEmailSender
     {
         private readonly IUrlHelper _urlHelper;
         private readonly ApplicationDbContext _context;
-        private readonly IConfiguration _configuration;
 
         public EmailSender(
             IUrlHelper urlHelper,
-            ApplicationDbContext context,
-            IConfiguration configuration)
+            ApplicationDbContext context)
         {
             _urlHelper = urlHelper;
             _context = context;
-            _configuration = configuration;
         }
 
         public async Task SendEmailAsync(
@@ -48,10 +38,7 @@ namespace ComplaintTracking.Services
                 _ => ""
             };
 
-            var emailOptions = new EmailOptions();
-            _configuration.GetSection("EmailOptions").Bind(emailOptions);
-
-            var disableEmail = saveLocallyOnly || !emailOptions.EnableEmail;
+            var disableEmail = saveLocallyOnly || !ApplicationSettings.EmailOptions.EnableEmail;
 
             var emailMessage = new MimeMessage();
 
@@ -91,7 +78,7 @@ namespace ComplaintTracking.Services
                 }
 
                 using var client = new SmtpClient();
-                await client.ConnectAsync(emailOptions.SmtpHost, emailOptions.SmtpPort, SecureSocketOptions.None)
+                await client.ConnectAsync(ApplicationSettings.EmailOptions.SmtpHost, ApplicationSettings.EmailOptions.SmtpPort, SecureSocketOptions.None)
                     .ConfigureAwait(false);
                 await client.SendAsync(emailMessage).ConfigureAwait(false);
                 await client.DisconnectAsync(true).ConfigureAwait(false);
