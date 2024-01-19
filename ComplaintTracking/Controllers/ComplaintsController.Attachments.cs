@@ -11,7 +11,7 @@ namespace ComplaintTracking.Controllers
     {
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UploadFiles(int id, List<IFormFile> files)
+        public async Task<IActionResult> UploadFiles(int id, List<IFormFile> files, CancellationToken token)
         {
             var currentUser = await GetCurrentUserAsync();
 
@@ -19,7 +19,7 @@ namespace ComplaintTracking.Controllers
 
             var complaint = await _context.Complaints.AsNoTracking()
                 .Where(e => e.Id == id)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync(token);
 
             if (complaint == null)
             {
@@ -78,9 +78,9 @@ namespace ComplaintTracking.Controllers
                 var fileCount = 0;
                 var savedFileList = new List<Attachment>();
 
-                foreach (var file in files)
+                foreach (var formFile in files)
                 {
-                    var attachment = await _fileService.SaveAttachmentAsync(file);
+                    var attachment = await _fileService.SaveAttachmentAsync(formFile);
                     if (attachment == null) continue;
 
                     attachment.ComplaintId = complaint.Id;
@@ -98,10 +98,10 @@ namespace ComplaintTracking.Controllers
                 {
                     foreach (var attachment in savedFileList)
                     {
-                        await _fileService.TryDeleteFileAsync(attachment.FilePath);
+                        await _fileService.TryDeleteFileAsync(attachment.FileId, FilePaths.AttachmentsFolder);
                         if (attachment.IsImage)
                         {
-                            await _fileService.TryDeleteFileAsync(attachment.ThumbnailPath);
+                            await _fileService.TryDeleteFileAsync(attachment.FileId, FilePaths.ThumbnailsFolder);
                         }
                     }
 
@@ -344,10 +344,10 @@ namespace ComplaintTracking.Controllers
 
                 try
                 {
-                    await _fileService.TryDeleteFileAsync(attachment.FilePath);
+                    await _fileService.TryDeleteFileAsync(attachment.FileId, FilePaths.AttachmentsFolder);
                     if (attachment.IsImage)
                     {
-                        await _fileService.TryDeleteFileAsync(attachment.ThumbnailPath);
+                        await _fileService.TryDeleteFileAsync(attachment.FileId, FilePaths.ThumbnailsFolder);
                     }
 
                     _context.Update(attachment);
