@@ -31,6 +31,7 @@ namespace ComplaintTracking.Data
             if (_environment.IsDevelopment())
             {
                 optionsBuilder.EnableSensitiveDataLogging();
+                optionsBuilder.EnableDetailedErrors();
             }
         }
 

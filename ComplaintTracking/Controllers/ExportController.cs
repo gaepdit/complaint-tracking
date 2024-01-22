@@ -205,9 +205,9 @@ namespace ComplaintTracking.Controllers
             public string ComplaintNature { get; set; }
             public string CurrentOffice { get; set; }
             public string CurrentOwner { get; set; }
-            public DateTime DateComplaintClosed { get; set; }
-            public DateTime DateCurrentOwnerAccepted { get; set; }
-            public DateTime DateCurrentOwnerAssigned { get; set; }
+            public DateTime? DateComplaintClosed { get; set; }
+            public DateTime? DateCurrentOwnerAccepted { get; set; }
+            public DateTime? DateCurrentOwnerAssigned { get; set; }
             public DateTime DateEntered { get; set; }
             public DateTime DateReceived { get; set; }
             public string EnteredBy { get; set; }
@@ -233,7 +233,7 @@ namespace ComplaintTracking.Controllers
             public DateTime ActionDate { get; set; }
             public string ActionType { get; set; }
             public string Comments { get; set; }
-            public DateTime DateEntered { get; set; }
+            public DateTime? DateEntered { get; set; }
             public string EnteredBy { get; set; }
             public string Investigator { get; set; }
         }
