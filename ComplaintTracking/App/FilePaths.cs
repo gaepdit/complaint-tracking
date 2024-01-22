@@ -3,10 +3,13 @@
     // File system folder names
     internal static class FilePaths
     {
-        public static string BasePath { get; set; }
-        public static string AttachmentsFolder { get; set; }
-        public static string ExportFolder { get; set; }
-        public static string ThumbnailsFolder { get; set; }
-        public static string UnsentEmailFolder { get; set; }
+        // TODO
+        public static string AttachmentsFolder { get; } = Path.Combine("UserFiles", "Attachments");
+        // TODO
+        public static string ExportFolder { get; } = "DataExport";
+        // TODO
+        public static string ThumbnailsFolder { get; } = Path.Combine("UserFiles", "Thumbnails");
+        // Done
+        public static string UnsentEmailFolder { get; } = "UnsentEmail";
     }
 }
