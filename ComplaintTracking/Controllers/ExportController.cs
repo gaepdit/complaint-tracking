@@ -1,4 +1,4 @@
-using ComplaintTracking.AlertMessages;
+﻿using ComplaintTracking.AlertMessages;
 using ComplaintTracking.Data;
 using GaEpd.FileService;
 using JetBrains.Annotations;
@@ -18,7 +18,7 @@ namespace ComplaintTracking.Controllers
         private const int ExportTimeout = 600; // seconds
         private const int ExportDaysToKeep = 7; // days
 
-        private MemoryStream CurrentFile { get; set; }
+        private MemoryStream CurrentFile { get; set; } = new MemoryStream();
 
         public IActionResult Index() => View();
 
@@ -36,9 +36,9 @@ namespace ComplaintTracking.Controllers
         {
             try
             {
-                var xm = await GetOrCreateDataExportAsync();
+                var exportMeta = await GetOrCreateDataExportAsync();
                 if (CurrentFile == null) return BadRequest();
-                return File(CurrentFile.ToArray(), FileTypes.ZipContentType, xm.FileName);
+                return File(CurrentFile.ToArray(), FileTypes.ZipContentType, exportMeta.FileName);
             }
             catch (SqlException)
             {
@@ -51,43 +51,44 @@ namespace ComplaintTracking.Controllers
 
         private async Task<DataExportMeta> GetOrCreateDataExportAsync()
         {
-            if (!cache.TryGetValue(CacheKeys.DataExportDate, out DataExportMeta xm))
+            if (!cache.TryGetValue(CacheKeys.DataExportDate, out DataExportMeta exportMeta))
             {
-                xm = new DataExportMeta(DateTime.Now);
+                exportMeta = new DataExportMeta(DateTime.Now);
             }
 
-            await using var response = await fileService.TryGetFileAsync(xm.FileName, FilePaths.ExportFolder);
+            await using var response = await fileService.TryGetFileAsync(exportMeta.FileName, FilePaths.ExportFolder);
 
             if (response.Success)
             {
-                CurrentFile = response.Value as MemoryStream;
+                await response.Value.CopyToAsync(CurrentFile);
             }
             else
             {
-                await DeleteOldExportFilesAsync();
-                xm = await CreateDataExportFileAsync();
+                // TODO: Delete old files:
+                //await DeleteOldExportFilesAsync();
+                exportMeta = await CreateDataExportFileAsync();
             }
 
-            cache.Set(CacheKeys.DataExportDate, xm, xm.FileExpirationDate);
-            return xm;
+            cache.Set(CacheKeys.DataExportDate, exportMeta, exportMeta.FileExpirationDate);
+            return exportMeta;
         }
 
         private async Task<DataExportMeta> CreateDataExportFileAsync()
         {
-            var xm = new DataExportMeta(DateTime.Now);
+            var exportMeta = new DataExportMeta(DateTime.Now);
 
             var dataFiles = new Dictionary<string, Task<MemoryStream>>
             {
-                {$"{nameof(OpenComplaints)}_{xm.FileDateString}.csv", OpenComplaintsCsvStreamAsync()},
-                {$"{nameof(ClosedComplaints)}_{xm.FileDateString}.csv", ClosedComplaintsCsvStreamAsync()},
-                {$"{nameof(ClosedComplaintActions)}_{xm.FileDateString}.csv", ClosedComplaintActionsCsvStreamAsync()}
+                {$"{nameof(OpenComplaints)}_{exportMeta.FileDateString}.csv", OpenComplaintsCsvStreamAsync()},
+                // TODO: Restore remaining export files:
+                //{$"{nameof(ClosedComplaints)}_{exportMeta.FileDateString}.csv", ClosedComplaintsCsvStreamAsync()},
+                //{$"{nameof(ClosedComplaintActions)}_{exportMeta.FileDateString}.csv", ClosedComplaintActionsCsvStreamAsync()},
             };
 
-            CurrentFile = await dataFiles.GetZipMemoryStreamAsync();
-
-            await fileService.SaveFileAsync(CurrentFile, xm.FileName, FilePaths.ExportFolder);
-
-            return xm;
+            await (await dataFiles.GetZipMemoryStreamAsync()).CopyToAsync(CurrentFile);
+            await fileService.SaveFileAsync(CurrentFile, exportMeta.FileName, FilePaths.ExportFolder);
+            
+            return exportMeta;
         }
 
         private async Task DeleteOldExportFilesAsync()
@@ -103,33 +104,33 @@ namespace ComplaintTracking.Controllers
 
         private sealed class DataExportMeta(DateTime ExportDate)
         {
-            public string FileDateString => $"{ExportDate:yyyy-MM-dd-HH-mm-ss.FFF}";
+            public string FileDateString => $"{ExportDate:yyyy-MM-dd_HH-mm-ss}";
             public string FileName => $"cts_export_{FileDateString}.zip";
             public DateTimeOffset FileExpirationDate => new(ExportDate.AddHours(ExportLifespan));
         }
 
-        private async Task<MemoryStream> OpenComplaintsCsvStreamAsync()
+        private Task<MemoryStream> OpenComplaintsCsvStreamAsync()
         {
             const string query = "SELECT * FROM gora.OpenComplaints ORDER BY ComplaintId";
             context.Database.SetCommandTimeout(ExportTimeout);
             var result = context.Database.SqlQueryRaw<OpenComplaints>(query);
-            return await result.GetCsvMemoryStreamAsync();
+            return result.GetCsvMemoryStreamAsync();
         }
 
-        private async Task<MemoryStream> ClosedComplaintsCsvStreamAsync()
+        private Task<MemoryStream> ClosedComplaintsCsvStreamAsync()
         {
             const string query = "SELECT * FROM gora.ClosedComplaints ORDER BY ComplaintId";
             context.Database.SetCommandTimeout(ExportTimeout);
             var result = context.Database.SqlQueryRaw<ClosedComplaints>(query);
-            return await result.GetCsvMemoryStreamAsync();
+            return result.GetCsvMemoryStreamAsync();
         }
 
-        private async Task<MemoryStream> ClosedComplaintActionsCsvStreamAsync()
+        private Task<MemoryStream> ClosedComplaintActionsCsvStreamAsync()
         {
             const string query = "SELECT * FROM gora.ClosedComplaintActions ORDER BY ComplaintId, ActionDate";
             context.Database.SetCommandTimeout(ExportTimeout);
             var result = context.Database.SqlQueryRaw<ClosedComplaintActions>(query);
-            return await result.GetCsvMemoryStreamAsync();
+            return result.GetCsvMemoryStreamAsync();
         }
 
         [UsedImplicitly(ImplicitUseTargetFlags.Members)]
