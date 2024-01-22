@@ -172,14 +172,14 @@ namespace ComplaintTracking.Controllers
                         var list = await complaints
                             .Select(e => new SearchResultsWithDeleteExportViewModel(e))
                             .ToListAsync().ConfigureAwait(false);
-                        return File(list.ExportExcelAsByteArray(), FileTypes.ExcelContentType, fileName);
+                        return File(list.ExportExcelAsStream(), FileTypes.ExcelContentType, fileName);
                     }
                     else
                     {
                         var list = await complaints
                             .Select(e => new SearchResultsExportViewModel(e))
                             .ToListAsync().ConfigureAwait(false);
-                        return File(list.ExportExcelAsByteArray(), FileTypes.ExcelContentType, fileName);
+                        return File(list.ExportExcelAsStream(), FileTypes.ExcelContentType, fileName);
                     }
                 }
 
