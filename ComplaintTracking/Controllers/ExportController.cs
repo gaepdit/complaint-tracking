@@ -1,4 +1,4 @@
-﻿using ComplaintTracking.AlertMessages;
+using ComplaintTracking.AlertMessages;
 using ComplaintTracking.Data;
 using GaEpd.FileService;
 using JetBrains.Annotations;
@@ -12,7 +12,8 @@ using static ComplaintTracking.Caching;
 namespace ComplaintTracking.Controllers
 {
     [Authorize(Roles = nameof(CtsRole.DataExport))]
-    public class ExportController(ApplicationDbContext context, IMemoryCache cache, IFileService fileService) : Controller
+    public class ExportController(ApplicationDbContext context, IMemoryCache cache, IFileService fileService)
+        : Controller
     {
         private const int ExportLifespan = 15; // hours
         private const int ExportTimeout = 600; // seconds
@@ -64,8 +65,7 @@ namespace ComplaintTracking.Controllers
             }
             else
             {
-                // TODO: Delete old files:
-                //await DeleteOldExportFilesAsync();
+                await DeleteOldExportFilesAsync();
                 exportMeta = await CreateDataExportFileAsync();
             }
 
@@ -79,15 +79,17 @@ namespace ComplaintTracking.Controllers
 
             var dataFiles = new Dictionary<string, Task<MemoryStream>>
             {
-                {$"{nameof(OpenComplaints)}_{exportMeta.FileDateString}.csv", OpenComplaintsCsvStreamAsync()},
-                // TODO: Restore remaining export files:
-                //{$"{nameof(ClosedComplaints)}_{exportMeta.FileDateString}.csv", ClosedComplaintsCsvStreamAsync()},
-                //{$"{nameof(ClosedComplaintActions)}_{exportMeta.FileDateString}.csv", ClosedComplaintActionsCsvStreamAsync()},
+                { $"{nameof(OpenComplaints)}_{exportMeta.FileDateString}.csv", OpenComplaintsCsvStreamAsync() },
+                { $"{nameof(ClosedComplaints)}_{exportMeta.FileDateString}.csv", ClosedComplaintsCsvStreamAsync() },
+                {
+                    $"{nameof(ClosedComplaintActions)}_{exportMeta.FileDateString}.csv",
+                    ClosedComplaintActionsCsvStreamAsync()
+                },
             };
 
             await (await dataFiles.GetZipMemoryStreamAsync()).CopyToAsync(CurrentFile);
             await fileService.SaveFileAsync(CurrentFile, exportMeta.FileName, FilePaths.ExportFolder);
-            
+
             return exportMeta;
         }
 
@@ -102,11 +104,11 @@ namespace ComplaintTracking.Controllers
             }
         }
 
-        private sealed class DataExportMeta(DateTime ExportDate)
+        private sealed class DataExportMeta(DateTime exportDate)
         {
-            public string FileDateString => $"{ExportDate:yyyy-MM-dd_HH-mm-ss}";
+            public string FileDateString => $"{exportDate:yyyy-MM-dd_HH-mm-ss}";
             public string FileName => $"cts_export_{FileDateString}.zip";
-            public DateTimeOffset FileExpirationDate => new(ExportDate.AddHours(ExportLifespan));
+            public DateTimeOffset FileExpirationDate => new(exportDate.AddHours(ExportLifespan));
         }
 
         private Task<MemoryStream> OpenComplaintsCsvStreamAsync()
