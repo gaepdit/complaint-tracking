@@ -201,7 +201,7 @@ namespace ComplaintTracking.Controllers
             string attachmentErrorMessage = null;
             if (model.Attachments is { Count: > 0 })
             {
-                switch (_fileService.ValidateUploadedFiles(model.Attachments))
+                switch (_attachmentService.ValidateUploadedFiles(model.Attachments))
                 {
                     case FilesValidationResult.TooMany:
                         saveStatus = AlertStatus.Warning;
@@ -223,7 +223,7 @@ namespace ComplaintTracking.Controllers
                         {
                             foreach (var file in model.Attachments)
                             {
-                                var attachment = await _fileService.SaveAttachmentAsync(file);
+                                var attachment = await _attachmentService.SaveAttachmentAsync(file);
                                 if (attachment == null) continue;
 
                                 attachment.ComplaintId = complaint.Id;
@@ -249,11 +249,7 @@ namespace ComplaintTracking.Controllers
 
                             foreach (var attachment in savedFileList)
                             {
-                                await _fileService.TryDeleteFileAsync(attachment.FileId, FilePaths.AttachmentsFolder);
-                                if (attachment.IsImage)
-                                {
-                                    await _fileService.TryDeleteFileAsync(attachment.FileId, FilePaths.ThumbnailsFolder);
-                                }
+                                await _attachmentService.DeleteAttachmentAsync(attachment.FileId, attachment.IsImage);
                             }
 
                             fileCount = 0;

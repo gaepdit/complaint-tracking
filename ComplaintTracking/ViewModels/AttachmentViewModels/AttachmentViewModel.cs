@@ -45,5 +45,7 @@ namespace ComplaintTracking.ViewModels
         public ApplicationUser UploadedBy { get; set; }
 
         public bool IsImage { get; set; }
+
+        public string FileId => string.Concat(Id, FileExtension);
     }
 }

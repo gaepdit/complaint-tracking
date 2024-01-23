@@ -88,7 +88,7 @@ namespace ComplaintTracking
             // Add application services
             services.AddTransient<IErrorLogger, ErrorLogger>();
             services.AddTransient<IEmailSender, EmailSender>();
-            services.AddTransient<ICtsFileService, CtsFileService>();
+            services.AddTransient<ICtsAttachmentService, CtsAttachmentService>();
             services.AddFileServices(Configuration);
 
             // URL/Http Request helpers

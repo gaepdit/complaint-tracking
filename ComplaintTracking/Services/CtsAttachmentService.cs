@@ -1,17 +1,27 @@
-﻿using ComplaintTracking.Models;
+using ComplaintTracking.Models;
 using GaEpd.FileService;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Processing;
 
 namespace ComplaintTracking.Services
 {
-    public class CtsFileService(IFileService fileService, IErrorLogger errorLogger) : ICtsFileService
+    public class CtsAttachmentService(IFileService fileService, IErrorLogger errorLogger) : ICtsAttachmentService
     {
-        public async Task TryDeleteFileAsync(string fileId, string path)
+        public async Task<byte[]> GetAttachmentAsync(string fileId, bool getThumbnail)
+        {
+            await using var response = await fileService.TryGetFileAsync(fileId, getThumbnail ? FilePaths.ThumbnailsFolder : FilePaths.AttachmentsFolder);
+            if (!response.Success) return [];
+
+            using var ms = new MemoryStream();
+            await response.Value.CopyToAsync(ms);
+            return ms.ToArray();
+        }
+
+        public async Task DeleteAttachmentAsync(string fileId, bool isImage)
         {
             if (string.IsNullOrEmpty(fileId)) return;
-            await fileService.DeleteFileAsync(fileId, path);
+            await fileService.DeleteFileAsync(fileId, FilePaths.AttachmentsFolder);
+            if (isImage) await fileService.DeleteFileAsync(fileId, FilePaths.ThumbnailsFolder);
         }
 
         public async Task<Attachment> SaveAttachmentAsync(IFormFile formFile)
@@ -36,7 +46,7 @@ namespace ComplaintTracking.Services
             };
         }
 
-        // SaveFileAsyncInternal returns true if formFile is an image; otherwise false.
+        // SaveFileAsync returns true if formFile is an image; otherwise false.
         private async Task<bool> SaveFileAsync(IFormFile formFile, string fileId)
         {
             // Try to save using the image service (which handles image rotation and thumbnail generation).
@@ -44,12 +54,6 @@ namespace ComplaintTracking.Services
             if (await TrySaveImageAsync(formFile, fileId)) return true;
 
             // If image service fails, save file directly. File is not an image type.
-
-            // TODO: See which of these approaches works best.
-            //await using var stream = new MemoryStream();
-            //await file.CopyToAsync(stream);
-            //await fileService.SaveFileAsync(stream, fileId, FilePaths.AttachmentsFolder);
-
             await fileService.SaveFileAsync(formFile.OpenReadStream(), fileId, FilePaths.AttachmentsFolder);
             return false;
         }
@@ -62,7 +66,6 @@ namespace ComplaintTracking.Services
             {
                 using var image = await Image.LoadAsync(formFile.OpenReadStream());
                 if (image == null) return false;
-                var format = await Image.DetectFormatAsync(formFile.OpenReadStream());
 
                 // Save full size image.
                 image.Mutate(x => x.AutoOrient());
@@ -89,12 +92,14 @@ namespace ComplaintTracking.Services
                 return false;
             }
         }
+
         private async Task SaveImageFileAsync(Image image, string fileId, string path)
         {
             await using var ms = new MemoryStream();
             await image.SaveAsync(ms, image.Metadata.DecodedImageFormat);
             await fileService.SaveFileAsync(ms, fileId, path);
         }
+
         public FilesValidationResult ValidateUploadedFiles(List<IFormFile> formFiles)
         {
             if (formFiles.Count > 10)
@@ -114,9 +119,10 @@ namespace ComplaintTracking.Services
         WrongType
     }
 
-    public interface ICtsFileService
+    public interface ICtsAttachmentService
     {
-        Task TryDeleteFileAsync(string fileId, string path);
+        Task<byte[]> GetAttachmentAsync(string fileId, bool getThumbnail);
+        Task DeleteAttachmentAsync(string fileId, bool isImage);
         Task<Attachment> SaveAttachmentAsync(IFormFile formFile);
         FilesValidationResult ValidateUploadedFiles(List<IFormFile> formFiles);
     }

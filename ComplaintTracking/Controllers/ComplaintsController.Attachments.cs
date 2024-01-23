@@ -61,7 +61,7 @@ namespace ComplaintTracking.Controllers
                     return RedirectToAction("Details", new { id });
                 }
 
-                switch (_fileService.ValidateUploadedFiles(files))
+                switch (_attachmentService.ValidateUploadedFiles(files))
                 {
                     case FilesValidationResult.TooMany:
                         msg = "Too many files selected. Please don't upload more than 10 files at a time.";
@@ -80,7 +80,7 @@ namespace ComplaintTracking.Controllers
 
                 foreach (var formFile in files)
                 {
-                    var attachment = await _fileService.SaveAttachmentAsync(formFile);
+                    var attachment = await _attachmentService.SaveAttachmentAsync(formFile);
                     if (attachment == null) continue;
 
                     attachment.ComplaintId = complaint.Id;
@@ -98,11 +98,7 @@ namespace ComplaintTracking.Controllers
                 {
                     foreach (var attachment in savedFileList)
                     {
-                        await _fileService.TryDeleteFileAsync(attachment.FileId, FilePaths.AttachmentsFolder);
-                        if (attachment.IsImage)
-                        {
-                            await _fileService.TryDeleteFileAsync(attachment.FileId, FilePaths.ThumbnailsFolder);
-                        }
+                        await _attachmentService.DeleteAttachmentAsync(attachment.FileId, attachment.IsImage);
                     }
 
                     throw;
@@ -161,10 +157,7 @@ namespace ComplaintTracking.Controllers
                 return NotFound();
             }
 
-            var filePath = Path.Combine(FilePaths.AttachmentsFolder,
-                string.Concat(attachment.Id, attachment.FileExtension));
-
-            return await TryReturnFile(filePath, attachment.FileName);
+            return await TryReturnAttachmentFile(attachment.FileId);
         }
 
         [Route("/Complaints/Thumbnail/{attachmentId:guid}")]
@@ -177,30 +170,16 @@ namespace ComplaintTracking.Controllers
                 return NotFound();
             }
 
-            var filePath = Path.Combine(FilePaths.ThumbnailsFolder,
-                string.Concat(attachment.Id, attachment.FileExtension));
-
-            return await TryReturnFile(filePath, attachment.FileName);
+            return await TryReturnThumbnailFile(attachment.FileId);
         }
 
-        private async Task<IActionResult> TryReturnFile(string filePath, string fileName)
+        private Task<IActionResult> TryReturnAttachmentFile(string fileId) => TryReturnFile(fileId, false);
+        private Task<IActionResult> TryReturnThumbnailFile(string fileId) => TryReturnFile(fileId, true);
+
+        private async Task<IActionResult> TryReturnFile(string fileId, bool thumbnail)
         {
-            byte[] fileBytes;
-
-            try
-            {
-                fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
-            }
-            catch (FileNotFoundException)
-            {
-                return FileNotFound(fileName);
-            }
-            catch (DirectoryNotFoundException)
-            {
-                return FileNotFound(fileName);
-            }
-
-            return fileBytes.Length == 0 ? FileNotFound(fileName) : File(fileBytes, FileTypes.GetContentType(fileName));
+            var fileBytes = await _attachmentService.GetAttachmentAsync(fileId, thumbnail);
+            return fileBytes.Length == 0 ? FileNotFound(fileId) : File(fileBytes, FileTypes.GetContentType(fileId));
         }
 
         public IActionResult FileNotFound(string fileName)
@@ -344,11 +323,7 @@ namespace ComplaintTracking.Controllers
 
                 try
                 {
-                    await _fileService.TryDeleteFileAsync(attachment.FileId, FilePaths.AttachmentsFolder);
-                    if (attachment.IsImage)
-                    {
-                        await _fileService.TryDeleteFileAsync(attachment.FileId, FilePaths.ThumbnailsFolder);
-                    }
+                    await _attachmentService.DeleteAttachmentAsync(attachment.FileId, attachment.IsImage);
 
                     _context.Update(attachment);
                     await _context.SaveChangesAsync();
