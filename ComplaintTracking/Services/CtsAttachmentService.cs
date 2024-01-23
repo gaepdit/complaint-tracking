@@ -1,4 +1,4 @@
-using ComplaintTracking.Models;
+﻿using ComplaintTracking.Models;
 using GaEpd.FileService;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
@@ -68,7 +68,6 @@ namespace ComplaintTracking.Services
                 if (image == null) return false;
 
                 // Save full size image.
-                image.Mutate(x => x.AutoOrient());
                 await SaveImageFileAsync(image, fileId, FilePaths.AttachmentsFolder);
 
                 // Save thumbnail.
