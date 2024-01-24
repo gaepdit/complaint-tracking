@@ -118,6 +118,7 @@ namespace ComplaintTracking
             {
                 app.UseHsts();
                 app.UseExceptionHandler("/Error");
+                app.UseStatusCodePagesWithReExecute("/Error/Status/{0}");
             }
 
             // Configure security HTTP headers
@@ -125,7 +126,6 @@ namespace ComplaintTracking
 
             app.UseRaygun();
 
-            app.UseStatusCodePagesWithReExecute("/Error/Status/{0}");
 
             // Set current environment
             if (env.IsStaging())
