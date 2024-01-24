@@ -1,38 +1,25 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
+﻿using ComplaintTracking.App;
 using ComplaintTracking.Data;
 using ComplaintTracking.ExtensionMethods;
 using ComplaintTracking.Models;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using MimeKit;
 
 namespace ComplaintTracking.Services
 {
-    public class EmailOptions
-    {
-        public bool EnableEmail { get; set; }
-        public string SmtpHost { get; set; }
-        public int SmtpPort { get; set; }
-    }
-
     public class EmailSender : IEmailSender
     {
         private readonly IUrlHelper _urlHelper;
         private readonly ApplicationDbContext _context;
-        private readonly IConfiguration _configuration;
 
         public EmailSender(
             IUrlHelper urlHelper,
-            ApplicationDbContext context,
-            IConfiguration configuration)
+            ApplicationDbContext context)
         {
             _urlHelper = urlHelper;
             _context = context;
-            _configuration = configuration;
         }
 
         public async Task SendEmailAsync(
@@ -51,14 +38,11 @@ namespace ComplaintTracking.Services
                 _ => ""
             };
 
-            var emailOptions = new EmailOptions();
-            _configuration.GetSection("EmailOptions").Bind(emailOptions);
-
-            var disableEmail = saveLocallyOnly || !emailOptions.EnableEmail;
+            var disableEmail = saveLocallyOnly || !ApplicationSettings.EmailOptions.EnableEmail;
 
             var emailMessage = new MimeMessage();
 
-            emailMessage.From.Add(new MailboxAddress("Complaint Tracking System", CTS.AdminEmail));
+            emailMessage.From.Add(new MailboxAddress("Complaint Tracking System", ApplicationSettings.ContactEmails.Admin));
             emailMessage.To.Add(new MailboxAddress("", email));
 
             if (!string.IsNullOrEmpty(replyTo) && replyTo != email)
@@ -90,11 +74,11 @@ namespace ComplaintTracking.Services
                 if (CTS.CurrentEnvironment == ServerEnvironment.Development)
                 {
                     emailMessage.To.Clear();
-                    emailMessage.To.Add(new MailboxAddress("", CTS.DevEmail));
+                    emailMessage.To.Add(new MailboxAddress("", ApplicationSettings.ContactEmails.Developer));
                 }
 
                 using var client = new SmtpClient();
-                await client.ConnectAsync(emailOptions.SmtpHost, emailOptions.SmtpPort, SecureSocketOptions.None)
+                await client.ConnectAsync(ApplicationSettings.EmailOptions.SmtpHost, ApplicationSettings.EmailOptions.SmtpPort, SecureSocketOptions.None)
                     .ConfigureAwait(false);
                 await client.SendAsync(emailMessage).ConfigureAwait(false);
                 await client.DisconnectAsync(true).ConfigureAwait(false);

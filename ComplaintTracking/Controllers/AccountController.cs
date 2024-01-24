@@ -1,19 +1,15 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using ComplaintTracking.AlertMessages;
+﻿using ComplaintTracking.AlertMessages;
+using ComplaintTracking.App;
 using ComplaintTracking.Data;
 using ComplaintTracking.Models;
 using ComplaintTracking.Services;
 using ComplaintTracking.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Logging;
 using static ComplaintTracking.Caching;
 
 namespace ComplaintTracking.Controllers
@@ -458,16 +454,16 @@ namespace ComplaintTracking.Controllers
                             oldEmail,
                             EmailTemplates.NotifyEmailChange.Subject,
                             string.Format(EmailTemplates.NotifyEmailChange.PlainBody, oldEmail, user.Email,
-                                CTS.AdminEmail),
+                                ApplicationSettings.ContactEmails.Admin),
                             string.Format(EmailTemplates.NotifyEmailChange.HtmlBody, oldEmail, user.Email,
-                                CTS.AdminEmail));
+                                ApplicationSettings.ContactEmails.Admin));
                         await _emailSender.SendEmailAsync(
                             user.Email,
                             EmailTemplates.NotifyEmailChange.Subject,
                             string.Format(EmailTemplates.NotifyEmailChange.PlainBody, oldEmail, user.Email,
-                                CTS.AdminEmail),
+                                ApplicationSettings.ContactEmails.Admin),
                             string.Format(EmailTemplates.NotifyEmailChange.HtmlBody, oldEmail, user.Email,
-                                CTS.AdminEmail));
+                                ApplicationSettings.ContactEmails.Admin));
                     }
 
                     _logger.LogInformation(3, "User updated");

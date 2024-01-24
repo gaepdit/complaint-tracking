@@ -176,6 +176,5 @@ namespace ComplaintTracking.Controllers
     public class CtsStatusCodeException : Exception
     {
         public CtsStatusCodeException(string message) : base(message) { }
-        protected CtsStatusCodeException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 }

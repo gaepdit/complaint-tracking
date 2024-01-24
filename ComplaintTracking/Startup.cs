@@ -1,4 +1,4 @@
-using ComplaintTracking.App;
+﻿using ComplaintTracking.App;
 using ComplaintTracking.Data;
 using ComplaintTracking.Helpers;
 using ComplaintTracking.Models;
@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
 using Mindscape.Raygun4Net.AspNetCore;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.InteropServices;
 
 namespace ComplaintTracking
 {
@@ -31,8 +32,16 @@ namespace ComplaintTracking
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Set Application Settings
-            Configuration.GetSection(ApplicationSettings.RaygunSettingsSection).Bind(ApplicationSettings.Raygun);
+            // Persist data protection keys
+            var directory = Directory.CreateDirectory(Configuration["DataProtectionKeysPath"]!);
+            var dataProtectionBuilder = services.AddDataProtection().PersistKeysToFileSystem(directory);
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                dataProtectionBuilder.ProtectKeysWithDpapi(protectToLocalMachine: true);
+
+            // Bind Application Settings
+            Configuration.GetSection(nameof(ApplicationSettings.RaygunSettings)).Bind(ApplicationSettings.RaygunSettings);
+            Configuration.GetSection(nameof(ApplicationSettings.ContactEmails)).Bind(ApplicationSettings.ContactEmails);
+            Configuration.GetSection(nameof(ApplicationSettings.EmailOptions)).Bind(ApplicationSettings.EmailOptions);
 
             // Add database context
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
@@ -68,10 +77,6 @@ namespace ComplaintTracking
                 options.AccessDeniedPath = new PathString("/Account/AccessDenied/");
             });
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
-
-            // Data protection
-            services.AddDataProtection()
-                .PersistKeysToFileSystem(new DirectoryInfo(FilePaths.DataProtectionKeysFolder));
 
             // Add error logging
             services.AddRaygun(Configuration, new RaygunMiddlewareSettings()
@@ -154,40 +159,20 @@ namespace ComplaintTracking
 
         private void Setup()
         {
-            SetContacts();
-            SetDirectories();
-        }
-
-        private void SetDirectories()
-        {
             // Base path for all generated/uploaded files
-            FilePaths.BasePath = string.IsNullOrWhiteSpace(Configuration["UserFilesBasePath"])
-                ? "../_UserFiles"
-                : StringFunctions.ForceToString(Configuration["UserFilesBasePath"]);
+            FilePaths.BasePath = Configuration["UserFilesBasePath"];
 
             // Set file paths
             FilePaths.AttachmentsFolder = Path.Combine(FilePaths.BasePath, "UserFiles", "attachments");
-            FilePaths.DataProtectionKeysFolder = Path.Combine(FilePaths.BasePath, "cts-keys");
             FilePaths.ExportFolder = Path.Combine(FilePaths.BasePath, "DataExport");
-            FilePaths.LogsFolder = Path.Combine("..", "..", "logs", "cts-logs");
             FilePaths.ThumbnailsFolder = Path.Combine(FilePaths.BasePath, "UserFiles", "thumbnails");
             FilePaths.UnsentEmailFolder = Path.Combine(FilePaths.BasePath, "UnsentEmail");
 
             // Create Directories
             Directory.CreateDirectory(FilePaths.AttachmentsFolder);
-            Directory.CreateDirectory(FilePaths.DataProtectionKeysFolder);
             Directory.CreateDirectory(FilePaths.ExportFolder);
-            Directory.CreateDirectory(FilePaths.LogsFolder);
             Directory.CreateDirectory(FilePaths.ThumbnailsFolder);
             Directory.CreateDirectory(FilePaths.UnsentEmailFolder);
-        }
-
-        private void SetContacts()
-        {
-            CTS.AdminEmail = StringFunctions.ForceToString(Configuration["Contacts:AdminEmail"]);
-            CTS.DevEmail = StringFunctions.ForceToString(Configuration["Contacts:DevEmail"]);
-            CTS.SupportEmail = StringFunctions.ForceToString(Configuration["Contacts:SupportEmail"]);
-            CTS.AccountAdminEmail = StringFunctions.ForceToString(Configuration["Contacts:AccountAdminEmail"]);
         }
     }
 }

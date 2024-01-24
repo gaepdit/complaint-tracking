@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-
-namespace ComplaintTracking
+﻿namespace ComplaintTracking
 {
     public static class Program
     {
