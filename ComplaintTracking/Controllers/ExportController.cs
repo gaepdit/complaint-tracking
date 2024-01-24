@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,6 +10,7 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using static ComplaintTracking.Caching;
 
@@ -143,24 +144,24 @@ namespace ComplaintTracking.Controllers
         private async Task<MemoryStream> OpenComplaintsCsvStreamAsync()
         {
             const string query = "SELECT * FROM gora.OpenComplaints ORDER BY ComplaintId";
-            var result = await DataSqlHelper.ExecSQL<OpenComplaints>(query, _context, ExportTimeout);
-
+            _context.Database.SetCommandTimeout(ExportTimeout);
+            var result = _context.Database.SqlQueryRaw<OpenComplaints>(query);
             return await result.GetCsvMemoryStreamAsync();
         }
 
         private async Task<MemoryStream> ClosedComplaintsCsvStreamAsync()
         {
             const string query = "SELECT * FROM gora.ClosedComplaints ORDER BY ComplaintId";
-            var result = await DataSqlHelper.ExecSQL<ClosedComplaints>(query, _context, ExportTimeout);
-
+            _context.Database.SetCommandTimeout(ExportTimeout);
+            var result = _context.Database.SqlQueryRaw<ClosedComplaints>(query);
             return await result.GetCsvMemoryStreamAsync();
         }
 
         private async Task<MemoryStream> ClosedComplaintActionsCsvStreamAsync()
         {
             const string query = "SELECT * FROM gora.ClosedComplaintActions ORDER BY ComplaintId, ActionDate";
-            var result = await DataSqlHelper.ExecSQL<ClosedComplaintActions>(query, _context, ExportTimeout);
-
+            _context.Database.SetCommandTimeout(ExportTimeout);
+            var result = _context.Database.SqlQueryRaw<ClosedComplaintActions>(query);
             return await result.GetCsvMemoryStreamAsync();
         }
 
@@ -204,9 +205,9 @@ namespace ComplaintTracking.Controllers
             public string ComplaintNature { get; set; }
             public string CurrentOffice { get; set; }
             public string CurrentOwner { get; set; }
-            public DateTime DateComplaintClosed { get; set; }
-            public DateTime DateCurrentOwnerAccepted { get; set; }
-            public DateTime DateCurrentOwnerAssigned { get; set; }
+            public DateTime? DateComplaintClosed { get; set; }
+            public DateTime? DateCurrentOwnerAccepted { get; set; }
+            public DateTime? DateCurrentOwnerAssigned { get; set; }
             public DateTime DateEntered { get; set; }
             public DateTime DateReceived { get; set; }
             public string EnteredBy { get; set; }
@@ -232,7 +233,7 @@ namespace ComplaintTracking.Controllers
             public DateTime ActionDate { get; set; }
             public string ActionType { get; set; }
             public string Comments { get; set; }
-            public DateTime DateEntered { get; set; }
+            public DateTime? DateEntered { get; set; }
             public string EnteredBy { get; set; }
             public string Investigator { get; set; }
         }

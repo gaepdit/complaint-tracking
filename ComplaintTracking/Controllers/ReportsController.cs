@@ -255,8 +255,7 @@ namespace ComplaintTracking.Controllers
                         AND a.MinActionDate BETWEEN '{beginDate:d}' AND '{endDate:d}'
                         ORDER BY c.Id";
 
-                    user.Complaints = await DataSqlHelper
-                        .ExecSQL<ReportDaysToFollowUpByStaffViewModel.ComplaintList>(query, _context);
+                    user.Complaints = _context.Database.SqlQueryRaw<ReportDaysToFollowUpByStaffViewModel.ComplaintList>(query);
                 }
             }
 
@@ -305,8 +304,7 @@ namespace ComplaintTracking.Controllers
                     WHERE c.Deleted = 0 and c.ComplaintClosed = 0 AND c.CurrentOwnerId = '{user.Id}'
                     ORDER BY c.Id desc";
 
-                user.Complaints = (await DataSqlHelper
-                    .ExecSQL<ReportDaysSinceLastActionViewModel.ComplaintList>(query, _context))
+                user.Complaints = _context.Database.SqlQueryRaw<ReportDaysSinceLastActionViewModel.ComplaintList>(query)
                     .Where(e => e.DaysSinceLastAction >= threshold);
             }
 
