@@ -1,4 +1,4 @@
-using ComplaintTracking.AlertMessages;
+﻿using ComplaintTracking.AlertMessages;
 using ComplaintTracking.Data;
 using GaEpd.FileService;
 using JetBrains.Annotations;
@@ -35,6 +35,8 @@ namespace ComplaintTracking.Controllers
         [Produces(FileTypes.ZipContentType)]
         public async Task<IActionResult> ZipArchive()
         {
+            HttpContext.Response.RegisterForDispose(CurrentFile);
+
             try
             {
                 var exportMeta = await GetOrCreateDataExportAsync();
@@ -87,7 +89,8 @@ namespace ComplaintTracking.Controllers
                 },
             };
 
-            await (await dataFiles.GetZipMemoryStreamAsync()).CopyToAsync(CurrentFile);
+            using var zipMemoryStream = await dataFiles.GetZipMemoryStreamAsync();
+            await zipMemoryStream.CopyToAsync(CurrentFile);
             await fileService.SaveFileAsync(CurrentFile, exportMeta.FileName, FilePaths.ExportFolder);
 
             return exportMeta;
