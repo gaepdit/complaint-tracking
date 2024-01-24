@@ -1,10 +1,7 @@
 ﻿using ClosedXML.Excel;
 using CsvHelper;
 using CsvHelper.Configuration;
-using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace ComplaintTracking
 {
@@ -26,7 +23,7 @@ namespace ComplaintTracking
             return ms;
         }
 
-        public static byte[] ExportExcelAsByteArray<T>(this IEnumerable<T> records)
+        public static MemoryStream ExportExcelAsStream<T>(this IEnumerable<T> records)
         {
             var wb = new XLWorkbook();
             var ws = wb.AddWorksheet("CTS Search Results");
@@ -37,7 +34,8 @@ namespace ComplaintTracking
             var ms = new MemoryStream();
             wb.SaveAs(ms);
 
-            return ms.ToArray();
+            ms.Position = 0;
+            return ms;
         }
     }
 }

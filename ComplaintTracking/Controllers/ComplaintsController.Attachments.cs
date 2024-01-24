@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using ComplaintTracking.AlertMessages;
+﻿using ComplaintTracking.AlertMessages;
 using ComplaintTracking.Models;
 using ComplaintTracking.Services;
 using ComplaintTracking.ViewModels;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +11,7 @@ namespace ComplaintTracking.Controllers
     {
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UploadFiles(int id, List<IFormFile> files)
+        public async Task<IActionResult> UploadFiles(int id, List<IFormFile> files, CancellationToken token)
         {
             var currentUser = await GetCurrentUserAsync();
 
@@ -25,7 +19,7 @@ namespace ComplaintTracking.Controllers
 
             var complaint = await _context.Complaints.AsNoTracking()
                 .Where(e => e.Id == id)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync(token);
 
             if (complaint == null)
             {
@@ -39,7 +33,7 @@ namespace ComplaintTracking.Controllers
                 {
                     msg = "This Complaint has been deleted and cannot be edited.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new {id});
+                    return RedirectToAction("Details", new { id });
                 }
 
                 if (currentUser.Id != complaint.CurrentOwnerId
@@ -50,43 +44,43 @@ namespace ComplaintTracking.Controllers
                 {
                     msg = "You do not have permission to edit this Complaint.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new {id});
+                    return RedirectToAction("Details", new { id });
                 }
 
                 if (currentUser.Id == complaint.CurrentOwnerId && complaint.DateCurrentOwnerAccepted == null)
                 {
                     msg = "You must accept this Complaint before you can edit it.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new {id});
+                    return RedirectToAction("Details", new { id });
                 }
 
                 if (complaint.ComplaintClosed && !User.IsInRole(CtsRole.AttachmentsEditor.ToString()))
                 {
                     msg = "This Complaint has been closed and cannot be edited unless it is reopened.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new {id});
+                    return RedirectToAction("Details", new { id });
                 }
 
-                switch (_fileService.ValidateUploadedFiles(files))
+                switch (_attachmentService.ValidateUploadedFiles(files))
                 {
                     case FilesValidationResult.TooMany:
                         msg = "Too many files selected. Please don't upload more than 10 files at a time.";
                         TempData.SaveAlertForSession(msg, AlertStatus.Warning, "No files saved");
-                        return RedirectToAction("Details", "Complaints", new {id}, "attachments");
+                        return RedirectToAction("Details", "Complaints", new { id }, "attachments");
 
                     case FilesValidationResult.WrongType:
                         msg = "Invalid file type selected. No files were attached. Please try again. " +
                             "(Supported file types are images, documents, and spreadsheets.)";
                         TempData.SaveAlertForSession(msg, AlertStatus.Error, "Error");
-                        return RedirectToAction("Details", "Complaints", new {id}, "attachments");
+                        return RedirectToAction("Details", "Complaints", new { id }, "attachments");
                 }
 
                 var fileCount = 0;
                 var savedFileList = new List<Attachment>();
 
-                foreach (var file in files)
+                foreach (var formFile in files)
                 {
-                    var attachment = await _fileService.SaveAttachmentAsync(file);
+                    var attachment = await _attachmentService.SaveAttachmentAsync(formFile);
                     if (attachment == null) continue;
 
                     attachment.ComplaintId = complaint.Id;
@@ -104,11 +98,7 @@ namespace ComplaintTracking.Controllers
                 {
                     foreach (var attachment in savedFileList)
                     {
-                        await _fileService.TryDeleteFileAsync(attachment.FilePath);
-                        if (attachment.IsImage)
-                        {
-                            await _fileService.TryDeleteFileAsync(attachment.ThumbnailPath);
-                        }
+                        await _attachmentService.DeleteAttachmentAsync(attachment.FileId, attachment.IsImage);
                     }
 
                     throw;
@@ -136,7 +126,7 @@ namespace ComplaintTracking.Controllers
                 TempData.SaveAlertForSession(msg, AlertStatus.Error, "Error");
             }
 
-            return RedirectToAction("Details", "Complaints", new {id}, "attachments");
+            return RedirectToAction("Details", "Complaints", new { id }, "attachments");
         }
 
         [Route("/Complaints/Attachment/{attachmentId:guid}")]
@@ -149,7 +139,7 @@ namespace ComplaintTracking.Controllers
                 return NotFound();
             }
 
-            return RedirectToAction(nameof(Attachment), new {attachmentId, fileName});
+            return RedirectToAction(nameof(Attachment), new { attachmentId, fileName });
         }
 
         [Route("/Complaints/Attachment/{attachmentId:guid}/{fileName}")]
@@ -167,10 +157,7 @@ namespace ComplaintTracking.Controllers
                 return NotFound();
             }
 
-            var filePath = Path.Combine(FilePaths.AttachmentsFolder,
-                string.Concat(attachment.Id, attachment.FileExtension));
-
-            return await TryReturnFile(filePath, attachment.FileName);
+            return await TryReturnAttachmentFile(attachment.FileId);
         }
 
         [Route("/Complaints/Thumbnail/{attachmentId:guid}")]
@@ -183,30 +170,16 @@ namespace ComplaintTracking.Controllers
                 return NotFound();
             }
 
-            var filePath = Path.Combine(FilePaths.ThumbnailsFolder,
-                string.Concat(attachment.Id, attachment.FileExtension));
-
-            return await TryReturnFile(filePath, attachment.FileName);
+            return await TryReturnThumbnailFile(attachment.FileId);
         }
 
-        private async Task<IActionResult> TryReturnFile(string filePath, string fileName)
+        private Task<IActionResult> TryReturnAttachmentFile(string fileId) => TryReturnFile(fileId, false);
+        private Task<IActionResult> TryReturnThumbnailFile(string fileId) => TryReturnFile(fileId, true);
+
+        private async Task<IActionResult> TryReturnFile(string fileId, bool thumbnail)
         {
-            byte[] fileBytes;
-
-            try
-            {
-                fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
-            }
-            catch (FileNotFoundException)
-            {
-                return FileNotFound(fileName);
-            }
-            catch (DirectoryNotFoundException)
-            {
-                return FileNotFound(fileName);
-            }
-
-            return fileBytes.Length == 0 ? FileNotFound(fileName) : File(fileBytes, FileTypes.GetContentType(fileName));
+            var fileBytes = await _attachmentService.GetAttachmentAsync(fileId, thumbnail);
+            return fileBytes.Length == 0 ? FileNotFound(fileId) : File(fileBytes, FileTypes.GetContentType(fileId));
         }
 
         public IActionResult FileNotFound(string fileName)
@@ -248,7 +221,7 @@ namespace ComplaintTracking.Controllers
             {
                 msg = "This Complaint has been deleted and cannot be edited.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new {id = model.ComplaintId});
+                return RedirectToAction("Details", new { id = model.ComplaintId });
             }
 
             if (currentUser.Id != complaint.CurrentOwnerId
@@ -259,7 +232,7 @@ namespace ComplaintTracking.Controllers
             {
                 msg = "You do not have permission to edit this Complaint.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new {id = model.ComplaintId});
+                return RedirectToAction("Details", new { id = model.ComplaintId });
             }
 
             if (currentUser.Id == complaint.CurrentOwnerId
@@ -267,14 +240,14 @@ namespace ComplaintTracking.Controllers
             {
                 msg = "You must accept this Complaint before you can edit it.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new {id = model.ComplaintId});
+                return RedirectToAction("Details", new { id = model.ComplaintId });
             }
 
             if (complaint.ComplaintClosed && !User.IsInRole(CtsRole.AttachmentsEditor.ToString()))
             {
                 msg = "This Complaint has been closed and cannot be edited unless it is reopened.";
                 TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                return RedirectToAction("Details", new {id = model.ComplaintId});
+                return RedirectToAction("Details", new { id = model.ComplaintId });
             }
 
             return View(model);
@@ -314,7 +287,7 @@ namespace ComplaintTracking.Controllers
                 {
                     msg = "This Complaint has been deleted and cannot be edited.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new {id = attachment.ComplaintId});
+                    return RedirectToAction("Details", new { id = attachment.ComplaintId });
                 }
 
                 if (currentUser.Id != complaint.CurrentOwnerId
@@ -325,7 +298,7 @@ namespace ComplaintTracking.Controllers
                 {
                     msg = "You do not have permission to edit this Complaint.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new {id = attachment.ComplaintId});
+                    return RedirectToAction("Details", new { id = attachment.ComplaintId });
                 }
 
                 if (currentUser.Id == complaint.CurrentOwnerId
@@ -333,14 +306,14 @@ namespace ComplaintTracking.Controllers
                 {
                     msg = "You must accept this Complaint before you can edit it.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new {id = attachment.ComplaintId});
+                    return RedirectToAction("Details", new { id = attachment.ComplaintId });
                 }
 
                 if (complaint.ComplaintClosed && !User.IsInRole(CtsRole.AttachmentsEditor.ToString()))
                 {
                     msg = "This Complaint has been closed and cannot be edited unless it is reopened.";
                     TempData.SaveAlertForSession(msg, AlertStatus.Warning, "Access Denied");
-                    return RedirectToAction("Details", new {id = attachment.ComplaintId});
+                    return RedirectToAction("Details", new { id = attachment.ComplaintId });
                 }
 
                 // Delete attachment
@@ -350,11 +323,7 @@ namespace ComplaintTracking.Controllers
 
                 try
                 {
-                    await _fileService.TryDeleteFileAsync(attachment.FilePath);
-                    if (attachment.IsImage)
-                    {
-                        await _fileService.TryDeleteFileAsync(attachment.ThumbnailPath);
-                    }
+                    await _attachmentService.DeleteAttachmentAsync(attachment.FileId, attachment.IsImage);
 
                     _context.Update(attachment);
                     await _context.SaveChangesAsync();
@@ -374,7 +343,7 @@ namespace ComplaintTracking.Controllers
                 TempData.SaveAlertForSession(msg, AlertStatus.Error, "Error");
             }
 
-            return RedirectToAction("Details", "Complaints", new {id = attachment.ComplaintId}, "attachments");
+            return RedirectToAction("Details", "Complaints", new { id = attachment.ComplaintId }, "attachments");
         }
     }
 }

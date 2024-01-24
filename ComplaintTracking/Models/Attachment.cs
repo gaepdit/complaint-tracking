@@ -1,6 +1,4 @@
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ComplaintTracking.Models
 {
@@ -25,7 +23,7 @@ namespace ComplaintTracking.Models
         public string UploadedById { get; set; }
 
         public bool IsImage { get; set; }
-        
+
         public bool Deleted { get; set; }
 
         public DateTime? DateDeleted { get; set; }
@@ -33,8 +31,6 @@ namespace ComplaintTracking.Models
         public virtual ApplicationUser DeletedBy { get; set; }
         public string DeletedById { get; set; }
 
-        public string FilePath => Path.Combine(FilePaths.AttachmentsFolder, Id + FileExtension);
-
-        public string ThumbnailPath => IsImage ? Path.Combine(FilePaths.ThumbnailsFolder, Id + FileExtension) : null;
+        public string FileId => string.Concat(Id, FileExtension);
     }
 }

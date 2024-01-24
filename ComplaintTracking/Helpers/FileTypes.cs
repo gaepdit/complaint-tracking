@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace ComplaintTracking
+﻿namespace ComplaintTracking
 {
     public static class FileTypes
     {

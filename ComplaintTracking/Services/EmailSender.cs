@@ -2,6 +2,7 @@
 using ComplaintTracking.Data;
 using ComplaintTracking.ExtensionMethods;
 using ComplaintTracking.Models;
+using GaEpd.FileService;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.AspNetCore.Mvc;
@@ -9,19 +10,9 @@ using MimeKit;
 
 namespace ComplaintTracking.Services
 {
-    public class EmailSender : IEmailSender
+    public class EmailSender(IUrlHelper urlHelper, ApplicationDbContext context, IFileService fileService)
+        : IEmailSender
     {
-        private readonly IUrlHelper _urlHelper;
-        private readonly ApplicationDbContext _context;
-
-        public EmailSender(
-            IUrlHelper urlHelper,
-            ApplicationDbContext context)
-        {
-            _urlHelper = urlHelper;
-            _context = context;
-        }
-
         public async Task SendEmailAsync(
             string email,
             string subject,
@@ -53,7 +44,7 @@ namespace ComplaintTracking.Services
             emailMessage.Subject = subjectPrefix + subject;
 
             var builder = new BodyBuilder();
-            var appUrl = _urlHelper.AbsoluteAction("Index", "Home");
+            var appUrl = urlHelper.AbsoluteAction("Index", "Home");
             builder.TextBody = plainMessage + string.Format(EmailTemplates.PlainSignature, appUrl, email);
 
             if (!string.IsNullOrWhiteSpace(htmlMessage))
@@ -65,9 +56,10 @@ namespace ComplaintTracking.Services
 
             if (disableEmail)
             {
-                var fileName = $"email_{DateTime.Now:yyyy-MM-dd-HH-mm-ss.FFF}.txt";
-                await using var sw = File.CreateText(Path.Combine(FilePaths.UnsentEmailFolder, fileName));
-                await emailMessage.WriteToAsync(sw.BaseStream);
+                var fileName = $"{subjectPrefix}email_{DateTime.Now:yyyy-MM-dd-HH-mm-ss.FFF}.txt";
+                await using var ms = new MemoryStream();
+                await emailMessage.WriteToAsync(ms);
+                await fileService.SaveFileAsync(ms, fileName, FilePaths.UnsentEmailFolder);
             }
             else
             {
@@ -84,7 +76,7 @@ namespace ComplaintTracking.Services
                 await client.DisconnectAsync(true).ConfigureAwait(false);
             }
 
-            _context.EmailLogs.Add(new EmailLog()
+            context.EmailLogs.Add(new EmailLog()
             {
                 DateSent = DateTime.Now,
                 To = emailMessage.To.ToString(),
@@ -93,7 +85,7 @@ namespace ComplaintTracking.Services
                 TextBody = plainMessage,
                 HtmlBody = htmlMessage
             });
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
     }
 

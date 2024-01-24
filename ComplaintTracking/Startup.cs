@@ -3,6 +3,7 @@ using ComplaintTracking.Data;
 using ComplaintTracking.Helpers;
 using ComplaintTracking.Models;
 using ComplaintTracking.Services;
+using GaEpd.FileService;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
@@ -17,17 +18,11 @@ using System.Runtime.InteropServices;
 
 namespace ComplaintTracking
 {
-    public class Startup
+    public class Startup(IConfiguration configuration)
     {
         internal static bool IsLocal { get; private set; }
 
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-            Setup();
-        }
-
-        private IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; } = configuration;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -93,8 +88,8 @@ namespace ComplaintTracking
             // Add application services
             services.AddTransient<IErrorLogger, ErrorLogger>();
             services.AddTransient<IEmailSender, EmailSender>();
-            services.AddTransient<IImageService, ImageService>();
-            services.AddTransient<IFileService, FileService>();
+            services.AddTransient<ICtsAttachmentService, CtsAttachmentService>();
+            services.AddFileServices(Configuration);
 
             // URL/Http Request helpers
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -123,6 +118,7 @@ namespace ComplaintTracking
             {
                 app.UseHsts();
                 app.UseExceptionHandler("/Error");
+                app.UseStatusCodePagesWithReExecute("/Error/Status/{0}");
             }
 
             // Configure security HTTP headers
@@ -130,7 +126,6 @@ namespace ComplaintTracking
 
             app.UseRaygun();
 
-            app.UseStatusCodePagesWithReExecute("/Error/Status/{0}");
 
             // Set current environment
             if (env.IsStaging())
@@ -155,24 +150,6 @@ namespace ComplaintTracking
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); });
-        }
-
-        private void Setup()
-        {
-            // Base path for all generated/uploaded files
-            FilePaths.BasePath = Configuration["UserFilesBasePath"];
-
-            // Set file paths
-            FilePaths.AttachmentsFolder = Path.Combine(FilePaths.BasePath, "UserFiles", "attachments");
-            FilePaths.ExportFolder = Path.Combine(FilePaths.BasePath, "DataExport");
-            FilePaths.ThumbnailsFolder = Path.Combine(FilePaths.BasePath, "UserFiles", "thumbnails");
-            FilePaths.UnsentEmailFolder = Path.Combine(FilePaths.BasePath, "UnsentEmail");
-
-            // Create Directories
-            Directory.CreateDirectory(FilePaths.AttachmentsFolder);
-            Directory.CreateDirectory(FilePaths.ExportFolder);
-            Directory.CreateDirectory(FilePaths.ThumbnailsFolder);
-            Directory.CreateDirectory(FilePaths.UnsentEmailFolder);
         }
     }
 }
