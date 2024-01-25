@@ -4,6 +4,7 @@ using ComplaintTracking.Models;
 using ComplaintTracking.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace ComplaintTracking.Controllers
@@ -289,24 +290,37 @@ namespace ComplaintTracking.Controllers
                 .Select(e => new ReportDaysSinceLastActionViewModel.StaffList(e))
                 .ToListAsync();
 
-            foreach (var user in staffList)
-            {
-                var query =
-                    $@"SELECT c.Id, l.Name AS ComplaintCounty, c.SourceFacilityName,
-                           convert(date, c.DateReceived) AS DateReceived, c.Status, a.LastActionDate
+            var query =
+                $@"SELECT c.Id,
+                            l.Name AS ComplaintCounty,
+                            c.SourceFacilityName,
+                            convert(date, c.DateReceived) AS DateReceived,
+                            c.Status,
+                            a.LastActionDate,
+                            IIF(a.LastActionDate is null, datediff(day, c.DateReceived, getdate()), datediff(day, a.LastActionDate, getdate())) as DaysSinceLastAction,
+                            c.CurrentOwnerId
                     FROM Complaints c
-                    left JOIN LookupCounties l ON c.ComplaintCountyId = l.Id
-                    INNER JOIN
+                        left JOIN LookupCounties l
+                        ON c.ComplaintCountyId = l.Id
+                        INNER JOIN
                     (SELECT c.Id, convert(date, max(a.ActionDate)) AS LastActionDate
-                     FROM Complaints c
-                     left JOIN ComplaintActions a ON c.Id = a.ComplaintId
-                     GROUP BY c.Id) a ON c.Id = a.Id
-                    WHERE c.Deleted = 0 and c.ComplaintClosed = 0 AND c.CurrentOwnerId = '{user.Id}'
-                    ORDER BY c.Id desc";
+                        FROM Complaints c
+                            left JOIN ComplaintActions a ON c.Id = a.ComplaintId
+                        GROUP BY c.Id) a
+                        ON c.Id = a.Id
+                    WHERE c.Deleted = 0
+                        and c.ComplaintClosed = 0
+                        and IIF(a.LastActionDate is null, datediff(day, c.DateReceived, getdate()), datediff(day, a.LastActionDate, getdate())) 
+                        > @thresholdParam";
 
-                user.Complaints = _context.Database.SqlQueryRaw<ReportDaysSinceLastActionViewModel.ComplaintList>(query)
-                    .Where(e => e.DaysSinceLastAction >= threshold);
-            }
+            var thresholdParam = new SqlParameter("thresholdParam ", threshold);
+            var thresholdComplaints = _context.Database.SqlQueryRaw<ReportDaysSinceLastActionViewModel.ComplaintList>(query, thresholdParam).ToList();
+
+            foreach (var user in staffList) 
+                user.Complaints = thresholdComplaints
+                    .Where(e => e.CurrentOwnerId == user.Id)
+                    .OrderBy(e => e.Id)
+                    .ToList();
 
             return View("DaysSinceLastAction", new ReportDaysSinceLastActionViewModel
             {

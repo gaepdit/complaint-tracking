@@ -118,10 +118,10 @@ namespace ComplaintTracking
             {
                 app.UseHsts();
                 app.UseExceptionHandler("/Error");
-            }
 
-            // Configure security HTTP headers
-            app.UseSecurityHeaders(policies => policies.AddSecurityHeaderPolicies());
+                // Configure security HTTP headers
+                app.UseSecurityHeaders(policies => policies.AddSecurityHeaderPolicies());
+            }
 
             app.UseRaygun();
 
