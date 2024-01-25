@@ -4,6 +4,7 @@ using ComplaintTracking.Models;
 using ComplaintTracking.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace ComplaintTracking.Controllers
@@ -310,12 +311,14 @@ namespace ComplaintTracking.Controllers
                             ON c.Id = a.Id
                         WHERE c.Deleted = 0
                           and c.ComplaintClosed = 0
-                          AND c.CurrentOwnerId = '{user.Id}'
+                          AND c.CurrentOwnerId = @userIdParam
                           and IIF(a.LastActionDate is null, datediff(day, c.DateReceived, getdate()), datediff(day, a.LastActionDate, getdate())) 
-                            > {threshold}
+                            > @thresholdParam
                         ORDER BY c.Id desc";
 
-                user.Complaints = _context.Database.SqlQueryRaw<ReportDaysSinceLastActionViewModel.ComplaintList>(query, user.Id, threshold);
+                var userIdParam = new SqlParameter("userIdParam", user.Id);
+                var thresholdParam = new SqlParameter("thresholdParam ", threshold);
+                user.Complaints = _context.Database.SqlQueryRaw<ReportDaysSinceLastActionViewModel.ComplaintList>(query, userIdParam, thresholdParam);
             }
 
             return View("DaysSinceLastAction", new ReportDaysSinceLastActionViewModel
