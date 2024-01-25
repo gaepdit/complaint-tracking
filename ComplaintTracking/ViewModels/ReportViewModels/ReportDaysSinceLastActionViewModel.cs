@@ -74,6 +74,8 @@ namespace ComplaintTracking.ViewModels
 
             [Display(Name = "Days Since Last Action")]
             public int DaysSinceLastAction { get; init; }
+
+            public string CurrentOwnerId { get; init; }
         }
     }
 }
