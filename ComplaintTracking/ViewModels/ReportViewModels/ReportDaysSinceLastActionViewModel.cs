@@ -1,10 +1,7 @@
 ﻿using ComplaintTracking.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
 namespace ComplaintTracking.ViewModels
 {
@@ -76,10 +73,7 @@ namespace ComplaintTracking.ViewModels
             public DateTime? LastActionDate { get; init; }
 
             [Display(Name = "Days Since Last Action")]
-            public int DaysSinceLastAction =>
-                LastActionDate.HasValue
-                    ? DateTime.Today.Date.Subtract(LastActionDate.Value).Days
-                    : DateTime.Today.Date.Subtract(DateReceived).Days;
+            public int DaysSinceLastAction { get; init; }
         }
     }
 }

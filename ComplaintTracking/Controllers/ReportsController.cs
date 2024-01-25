@@ -292,20 +292,30 @@ namespace ComplaintTracking.Controllers
             foreach (var user in staffList)
             {
                 var query =
-                    $@"SELECT c.Id, l.Name AS ComplaintCounty, c.SourceFacilityName,
-                           convert(date, c.DateReceived) AS DateReceived, c.Status, a.LastActionDate
-                    FROM Complaints c
-                    left JOIN LookupCounties l ON c.ComplaintCountyId = l.Id
-                    INNER JOIN
-                    (SELECT c.Id, convert(date, max(a.ActionDate)) AS LastActionDate
-                     FROM Complaints c
-                     left JOIN ComplaintActions a ON c.Id = a.ComplaintId
-                     GROUP BY c.Id) a ON c.Id = a.Id
-                    WHERE c.Deleted = 0 and c.ComplaintClosed = 0 AND c.CurrentOwnerId = '{user.Id}'
-                    ORDER BY c.Id desc";
+                    $@"SELECT c.Id,
+                               l.Name AS ComplaintCounty,
+                               c.SourceFacilityName,
+                               convert(date, c.DateReceived) AS DateReceived,
+                               c.Status,
+                               a.LastActionDate,
+                               IIF(a.LastActionDate is null, datediff(day, c.DateReceived, getdate()), datediff(day, a.LastActionDate, getdate())) as DaysSinceLastAction
+                        FROM Complaints c
+                            left JOIN LookupCounties l
+                            ON c.ComplaintCountyId = l.Id
+                            INNER JOIN
+                        (SELECT c.Id, convert(date, max(a.ActionDate)) AS LastActionDate
+                         FROM Complaints c
+                             left JOIN ComplaintActions a ON c.Id = a.ComplaintId
+                         GROUP BY c.Id) a
+                            ON c.Id = a.Id
+                        WHERE c.Deleted = 0
+                          and c.ComplaintClosed = 0
+                          AND c.CurrentOwnerId = '{user.Id}'
+                          and IIF(a.LastActionDate is null, datediff(day, c.DateReceived, getdate()), datediff(day, a.LastActionDate, getdate())) 
+                            > {threshold}
+                        ORDER BY c.Id desc";
 
-                user.Complaints = _context.Database.SqlQueryRaw<ReportDaysSinceLastActionViewModel.ComplaintList>(query)
-                    .Where(e => e.DaysSinceLastAction >= threshold);
+                user.Complaints = _context.Database.SqlQueryRaw<ReportDaysSinceLastActionViewModel.ComplaintList>(query, user.Id, threshold);
             }
 
             return View("DaysSinceLastAction", new ReportDaysSinceLastActionViewModel
