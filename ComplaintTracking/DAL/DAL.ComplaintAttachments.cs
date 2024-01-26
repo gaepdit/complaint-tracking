@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using ComplaintTracking.ViewModels;
+﻿using ComplaintTracking.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace ComplaintTracking

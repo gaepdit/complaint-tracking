@@ -1,28 +1,18 @@
 ﻿using ComplaintTracking.AlertMessages;
 using ComplaintTracking.Data;
 using ComplaintTracking.Generic;
+using ComplaintTracking.Services;
 using ComplaintTracking.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using static ComplaintTracking.ViewModels.PublicSearchViewModel;
 
 namespace ComplaintTracking.Controllers
 {
     [AllowAnonymous]
-    public partial class PublicController : Controller
+    public partial class PublicController(ApplicationDbContext context, ICtsAttachmentService attachmentService) : Controller
     {
-        private readonly ApplicationDbContext _context;
-
-        public PublicController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(PublicSearchViewModel model)
@@ -97,7 +87,7 @@ namespace ComplaintTracking.Controllers
             else
             {
                 // Search
-                var complaints = _context.Complaints.AsNoTracking()
+                var complaints = context.Complaints.AsNoTracking()
                     .Where(e => !e.Deleted && e.ComplaintClosed);
 
                 // Filters
@@ -237,16 +227,10 @@ namespace ComplaintTracking.Controllers
             return View(model);
         }
 
-        [Route("/Public/Attachment/{attachmentId}")]
+        [Route("/Public/Attachment/{attachmentId:guid}")]
         public async Task<IActionResult> Attachment(Guid attachmentId)
         {
-            var fileName = await _context.Attachments.AsNoTracking()
-                .Where(e => e.Id == attachmentId)
-                .Where(e => !e.Deleted)
-                .Where(e => !e.Complaint.Deleted)
-                .Where(e => e.Complaint.ComplaintClosed)
-                .Select(e => e.FileName)
-                .SingleOrDefaultAsync();
+            var fileName = await GetPublicAttachmentFilenameByIdAsync(attachmentId);
 
             if (fileName == null || string.IsNullOrWhiteSpace(fileName))
             {
@@ -256,7 +240,7 @@ namespace ComplaintTracking.Controllers
             return RedirectToAction(nameof(Attachment), new { attachmentId, fileName });
         }
 
-        [Route("/Public/Attachment/{attachmentId}/{fileName}")]
+        [Route("/Public/Attachment/{attachmentId:guid}/{fileName}")]
         public async Task<IActionResult> Attachment(Guid attachmentId, string fileName)
         {
             if (string.IsNullOrWhiteSpace(fileName))
@@ -264,65 +248,36 @@ namespace ComplaintTracking.Controllers
                 return NotFound();
             }
 
-            var attachment = await _context.Attachments.AsNoTracking()
-                .Where(e => e.Id == attachmentId)
-                .Where(e => !e.Deleted)
-                .Where(e => !e.Complaint.Deleted)
-                .Where(e => e.Complaint.ComplaintClosed)
-                .Select(e => new AttachmentViewModel(e))
-                .SingleOrDefaultAsync();
+            var attachment = await GetPublicAttachmentByIdAsync(attachmentId);
 
             if (attachment == null || string.IsNullOrWhiteSpace(attachment.FileName))
             {
                 return NotFound();
             }
 
-            var filePath = Path.Combine(FilePaths.AttachmentsFolder,
-                string.Concat(attachment.Id, attachment.FileExtension));
-
-            return await TryReturnFile(filePath, attachment.FileName);
+            return await TryReturnAttachmentFile(attachment.FileId);
         }
 
-        [Route("/Public/Thumbnail/{attachmentId}")]
+        [Route("/Public/Thumbnail/{attachmentId:guid}")]
         public async Task<IActionResult> Thumbnail(Guid attachmentId)
         {
-            var attachment = await _context.Attachments.AsNoTracking()
-                .Where(e => e.Id == attachmentId)
-                .Where(e => !e.Deleted)
-                .Where(e => !e.Complaint.Deleted)
-                .Where(e => e.Complaint.ComplaintClosed)
-                .Select(e => new AttachmentViewModel(e))
-                .SingleOrDefaultAsync();
+            var attachment = await GetPublicAttachmentByIdAsync(attachmentId);
 
             if (attachment == null || string.IsNullOrWhiteSpace(attachment.FileName) || !attachment.IsImage)
             {
                 return NotFound();
             }
 
-            var filePath = Path.Combine(FilePaths.ThumbnailsFolder,
-                string.Concat(attachment.Id, attachment.FileExtension));
-
-            return await TryReturnFile(filePath, attachment.FileName);
+            return await TryReturnThumbnailFile(attachment.FileId);
         }
 
-        private async Task<IActionResult> TryReturnFile(string filePath, string fileName)
+        private Task<IActionResult> TryReturnAttachmentFile(string fileId) => TryReturnFile(fileId, false);
+        private Task<IActionResult> TryReturnThumbnailFile(string fileId) => TryReturnFile(fileId, true);
+
+        private async Task<IActionResult> TryReturnFile(string fileId, bool thumbnail)
         {
-            byte[] fileBytes;
-
-            try
-            {
-                fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
-            }
-            catch (FileNotFoundException)
-            {
-                return FileNotFound(fileName);
-            }
-            catch (DirectoryNotFoundException)
-            {
-                return FileNotFound(fileName);
-            }
-
-            return fileBytes.Length == 0 ? FileNotFound(fileName) : File(fileBytes, FileTypes.GetContentType(fileName));
+            var fileBytes = await attachmentService.GetAttachmentAsync(fileId, thumbnail);
+            return fileBytes.Length == 0 ? FileNotFound(fileId) : File(fileBytes, FileTypes.GetContentType(fileId));
         }
 
         private IActionResult FileNotFound(string fileName)

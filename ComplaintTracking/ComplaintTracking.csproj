@@ -9,7 +9,7 @@
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.102.2" />
     <PackageReference Include="CsvHelper" Version="30.0.1" />
-    <PackageReference Include="GaEpd.FileService" Version="3.0.0" />
+    <PackageReference Include="GaEpd.FileService" Version="3.1.0" />
     <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" />
     <PackageReference Include="MailKit" Version="4.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.1" />
@@ -31,6 +31,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="wwwroot\static\Complaint-Tracking-System-Instructions.pdf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="appsettings.Development.json">
+      <DependentUpon>appsettings.json</DependentUpon>
+    </Content>
   </ItemGroup>
   <Target Name="CreateLogsFolderDuringCliPublish" AfterTargets="AfterPublish">
     <MakeDir Directories="$(PublishDir)logs" Condition="!Exists('$(PublishDir)logs')" />
