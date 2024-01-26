@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using ComplaintTracking.Models;
+﻿using ComplaintTracking.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,7 +8,7 @@ namespace ComplaintTracking.Controllers
     {
         private async Task<SelectList> GetCountiesSelectListAsync()
         {
-            var items = await _context.LookupCounties.AsNoTracking()
+            var items = await context.LookupCounties.AsNoTracking()
                 .OrderBy(t => t.Name)
                 .ToListAsync();
 
@@ -19,7 +17,7 @@ namespace ComplaintTracking.Controllers
 
         private async Task<SelectList> GetStatesSelectListAsync()
         {
-            var items = await _context.LookupStates.AsNoTracking()
+            var items = await context.LookupStates.AsNoTracking()
                 .OrderBy(t => t.Name)
                 .ToListAsync();
 
@@ -28,7 +26,7 @@ namespace ComplaintTracking.Controllers
 
         private async Task<SelectList> GetAreasOfConcernSelectListAsync()
         {
-            var items = await _context.LookupConcerns.AsNoTracking()
+            var items = await context.LookupConcerns.AsNoTracking()
                 .Where(t => t.Active)
                 .OrderBy(t => t.Name)
                 .ToListAsync();

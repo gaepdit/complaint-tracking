@@ -182,7 +182,7 @@ namespace ComplaintTracking.Controllers
             return fileBytes.Length == 0 ? FileNotFound(fileId) : File(fileBytes, FileTypes.GetContentType(fileId));
         }
 
-        public IActionResult FileNotFound(string fileName)
+        private IActionResult FileNotFound(string fileName)
         {
             if (FileTypes.FilenameImpliesImage(fileName))
             {
