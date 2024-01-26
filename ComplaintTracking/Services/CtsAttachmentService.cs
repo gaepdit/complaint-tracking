@@ -1,4 +1,4 @@
-﻿using ComplaintTracking.Models;
+using ComplaintTracking.Models;
 using GaEpd.FileService;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
@@ -9,7 +9,7 @@ namespace ComplaintTracking.Services
     {
         public async Task<byte[]> GetAttachmentAsync(string fileId, bool getThumbnail)
         {
-            await using var response = await fileService.TryGetFileAsync(fileId, getThumbnail ? FilePaths.ThumbnailsFolder : FilePaths.AttachmentsFolder);
+            await using var response = await fileService.TryGetFileAsync(fileId, ExpandPath(fileId, getThumbnail));
             if (!response.Success) return [];
 
             using var ms = new MemoryStream();
@@ -20,8 +20,8 @@ namespace ComplaintTracking.Services
         public async Task DeleteAttachmentAsync(string fileId, bool isImage)
         {
             if (string.IsNullOrEmpty(fileId)) return;
-            await fileService.DeleteFileAsync(fileId, FilePaths.AttachmentsFolder);
-            if (isImage) await fileService.DeleteFileAsync(fileId, FilePaths.ThumbnailsFolder);
+            await fileService.DeleteFileAsync(fileId, ExpandPath(fileId));
+            if (isImage) await fileService.DeleteFileAsync(fileId, ExpandPath(fileId, true));
         }
 
         public async Task<Attachment> SaveAttachmentAsync(IFormFile formFile)
@@ -32,7 +32,8 @@ namespace ComplaintTracking.Services
             var fileName = Path.GetFileName(formFile.FileName).Trim();
             var fileExtension = Path.GetExtension(fileName);
             var attachmentId = Guid.NewGuid();
-            var fileId = string.Concat(attachmentId.ToString(), fileExtension);
+            var fileId = $"{attachmentId}{fileExtension}";
+
             var isImage = await SaveFileAsync(formFile, fileId);
 
             return new Attachment
@@ -54,9 +55,10 @@ namespace ComplaintTracking.Services
             if (await TrySaveImageAsync(formFile, fileId)) return true;
 
             // If image service fails, save file directly. File is not an image type.
-            await fileService.SaveFileAsync(formFile.OpenReadStream(), fileId, FilePaths.AttachmentsFolder);
+            await fileService.SaveFileAsync(formFile.OpenReadStream(), fileId, ExpandPath(fileId));
             return false;
         }
+
 
         private async Task<bool> TrySaveImageAsync(IFormFile formFile, string fileId)
         {
@@ -65,16 +67,15 @@ namespace ComplaintTracking.Services
             try
             {
                 using var image = await Image.LoadAsync(formFile.OpenReadStream());
-                if (image == null) return false;
 
                 // Save full size image.
-                await SaveImageFileAsync(image, fileId, FilePaths.AttachmentsFolder);
+                await SaveImageAsFileAsync(image, fileId);
 
                 // Save thumbnail.
                 var imageThumbnail = image.Clone(x => x
                     .Resize(new ResizeOptions { Size = new Size(CTS.ThumbnailSize), Mode = ResizeMode.Pad })
                     .BackgroundColor(Color.White));
-                await SaveImageFileAsync(imageThumbnail, fileId, FilePaths.ThumbnailsFolder);
+                await SaveThumbnailAsFileAsync(imageThumbnail, fileId);
 
                 return true;
             }
@@ -83,22 +84,28 @@ namespace ComplaintTracking.Services
                 // Log error but take no other action here
                 var customData = new Dictionary<string, object>
                 {
-                    {"Action", "Saving Image"},
-                    {"IFormFile", formFile},
-                    {"Save Path", fileId}
+                    { "Action", "Saving Image" },
+                    { "IFormFile", formFile },
+                    { "Save Path", fileId }
                 };
                 await errorLogger.LogErrorAsync(ex, "TrySaveImageAsync", customData);
                 return false;
             }
         }
 
-        private async Task SaveImageFileAsync(Image image, string fileId, string path)
+        private Task SaveThumbnailAsFileAsync(Image image, string fileId) => SaveImageAsFileAsync(image, fileId, true);
+
+        private async Task SaveImageAsFileAsync(Image image, string fileId, bool asThumbnail = false)
         {
             await using var ms = new MemoryStream();
-            await image.SaveAsync(ms, image.Metadata.DecodedImageFormat);
-            await fileService.SaveFileAsync(ms, fileId, path);
+            await image.SaveAsync(ms, image.Metadata.DecodedImageFormat!);
+            await fileService.SaveFileAsync(ms, fileId, ExpandPath(fileId, asThumbnail));
         }
 
+        private static string ExpandPath(string fileId, bool thumbnail = false) =>
+            $"{(thumbnail ? FilePaths.ThumbnailsFolder : FilePaths.AttachmentsFolder)}/{fileId[..2]}";
+
+        // ReSharper disable once ConvertIfStatementToReturnStatement
         public FilesValidationResult ValidateUploadedFiles(List<IFormFile> formFiles)
         {
             if (formFiles.Count > 10)
