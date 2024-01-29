@@ -36,6 +36,7 @@ Users in the Staff role can:
 * Create new Complaints and either assign them to Users within the same Office or to the Assignor of another Office.
 * Edit Complaints assigned to them.
 * Add/edit Complaint Actions for Complaints assigned to them.
+* Delete/restore Complaint Actions for Complaints assigned to them.
 * Transfer (reassign) their Complaints to other Users within the same Office or to the Assignor of another Office.
 * Edit attachments for open Complaints assigned to them.
 
@@ -47,9 +48,7 @@ Users in the Manager role have all the capabilities of the Staff role. Plus they
   * Edit.
   * Reassign.
   * Edit attachments.
-  * Edit Complaint Actions.
-  * Delete and restore Complaint Actions.
-  * View deleted Complaint Actions.
+  * Edit, delete, and restore Complaint Actions.
 * Approve & close Complaints that have been submitted for review.
 * View reports for all Users within the same Office.
 
@@ -77,9 +76,9 @@ Users in the Site Maintenance role can:
 Users in the Division Manager role have all the capabilities of the Staff, Manager, User Account Admin, Attachments Editor, and Site Maintenance roles. Plus they can:
 
 * Assign CTS roles, including the Division Manager role.
-* Edit all Complaints.
+* Edit all Complaints and Complaint Actions.
 * Reopen Complaints that have been closed.
-* Delete and restore Complaints and view deleted Complaints.
+* Delete and restore all Complaints and Complaint Actions.
 * View reports for all Users.
 
 ### Data Export

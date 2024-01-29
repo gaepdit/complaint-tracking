@@ -33,7 +33,7 @@ public sealed class ComplaintActionService(
 
     public async Task<ComplaintActionViewDto?> FindAsync(Guid id, CancellationToken token = default) =>
         mapper.Map<ComplaintActionViewDto>(
-            await actionRepository.FindAsync(action => action.Id == id && !action.IsDeleted, token));
+            await actionRepository.FindAsync(id, token));
 
     public async Task<ComplaintActionUpdateDto?> FindForUpdateAsync(Guid id, CancellationToken token = default) =>
         mapper.Map<ComplaintActionUpdateDto>(
@@ -56,6 +56,13 @@ public sealed class ComplaintActionService(
     {
         var action = await actionRepository.GetAsync(actionItemId, token);
         action.SetDeleted((await userService.GetCurrentUserAsync())?.Id);
+        await actionRepository.UpdateAsync(action, token: token);
+    }
+
+    public async Task RestoreAsync(Guid actionItemId, CancellationToken token = default)
+    {
+        var action = await actionRepository.GetAsync(actionItemId, token);
+        action.SetNotDeleted();
         await actionRepository.UpdateAsync(action, token: token);
     }
 

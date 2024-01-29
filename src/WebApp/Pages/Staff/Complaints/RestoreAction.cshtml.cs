@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Cts.WebApp.Pages.Staff.Complaints;
 
-public class DeleteActionModel(
+public class RestoreActionModel(
     IComplaintActionService actionService,
     IComplaintService complaintService,
     IAuthorizationService authorizationService)
@@ -34,12 +34,12 @@ public class DeleteActionModel(
         var complaintView = await complaintService.FindAsync(actionItem.ComplaintId);
         if (complaintView is null) return NotFound();
 
-        if (!await UserCanDeleteActionItemsAsync(complaintView)) return Forbid();
+        if (!await UserCanRestoreActionItemsAsync(complaintView)) return Forbid();
 
-        if (actionItem.IsDeleted)
+        if (!actionItem.IsDeleted)
         {
             TempData.SetDisplayMessage(DisplayMessage.AlertContext.Warning,
-                "Complaint Action cannot be deleted because it is already deleted.");
+                "Complaint Action cannot be restored because it is not deleted.");
             return RedirectToPage("Details", routeValues: new { complaintView.Id });
         }
 
@@ -56,16 +56,16 @@ public class DeleteActionModel(
         if (originalActionItem is null) return BadRequest();
 
         var complaintView = await complaintService.FindAsync(originalActionItem.ComplaintId);
-        if (complaintView is null || !await UserCanDeleteActionItemsAsync(complaintView))
+        if (complaintView is null || !await UserCanRestoreActionItemsAsync(complaintView))
             return BadRequest();
 
-        await actionService.DeleteAsync(ActionItemId);
+        await actionService.RestoreAsync(ActionItemId);
         HighlightId = ActionItemId;
-        TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "Complaint Action successfully deleted.");
+        TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "Complaint Action successfully restored.");
         return RedirectToPage("Details", pageHandler: null, routeValues: new { complaintView.Id },
             fragment: HighlightId.ToString());
     }
 
-    private async Task<bool> UserCanDeleteActionItemsAsync(ComplaintViewDto item) =>
+    private async Task<bool> UserCanRestoreActionItemsAsync(ComplaintViewDto item) =>
         (await authorizationService.AuthorizeAsync(User, item, ComplaintOperation.EditActions)).Succeeded;
 }
