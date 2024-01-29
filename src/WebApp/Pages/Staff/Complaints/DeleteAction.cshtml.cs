@@ -53,7 +53,7 @@ public class DeleteActionModel(
         if (!ModelState.IsValid) return BadRequest();
 
         var originalActionItem = await actionService.FindAsync(ActionItemId);
-        if (originalActionItem is null) return BadRequest();
+        if (originalActionItem is null || originalActionItem.IsDeleted) return BadRequest();
 
         var complaintView = await complaintService.FindAsync(originalActionItem.ComplaintId);
         if (complaintView is null || !await UserCanDeleteActionItemsAsync(complaintView))
