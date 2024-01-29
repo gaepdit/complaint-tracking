@@ -15,13 +15,17 @@ public class ErrorModel(ILogger<ErrorModel> logger) : PageModel
 
     public void OnGet(int? statusCode)
     {
-        if (statusCode is null)
+        switch (statusCode)
         {
-            logger.LogError("Error page shown from Get method");
-        }
-        else
-        {
-            logger.LogError("Error page shown from Get method with status code {StatusCode}", statusCode);
+            case null:
+                logger.LogError("Error page shown from Get method");
+                break;
+            case StatusCodes.Status404NotFound:
+                logger.LogWarning("Error page shown from Get method with status code {StatusCode}", statusCode);
+                break;
+            default:
+                logger.LogError("Error page shown from Get method with status code {StatusCode}", statusCode);
+                break;
         }
 
         Status = statusCode;
