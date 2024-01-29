@@ -1,5 +1,6 @@
 ﻿@page "{id:int?}"
-@using Cts.WebApp.Pages.Shared.DisplayTemplates;
+@using Cts.WebApp.Pages.Shared.DisplayTemplates
+@using Cts.WebApp.Platform.Constants
 @using GaEpd.AppLibrary.Extensions
 @model IndexModel
 @{
@@ -11,7 +12,7 @@
 </h1>
 
 <p>
-    <small class="text-body-secondary">Report generated @(DateTime.Now.ToString(Platform.Constants.DateTimeFormatConstants.LongDateTimeFormat)).</small>
+    <small class="text-body-secondary">Report generated @(DateTime.Now.ToString(DateTimeFormatConstants.LongDateTimeFormat)).</small>
 </p>
 
 <div class="container">
@@ -84,23 +85,39 @@
 
 <h2>Actions</h2>
 
-<div class="container">
-    @if (Model.Item.ComplaintActions is { Count: > 0 })
-    {
-        @foreach (var item in Model.Item.ComplaintActions)
+@if (Model.Item.ComplaintActions is { Count: > 0 })
+{
+    <div class="row row-cols-1 g-3 mb-3">
+        @foreach (var action in Model.Item.ComplaintActions)
         {
-            <h3 class="h4 pt-2">
-                @Html.DisplayFor(m => item.ActionDate, DisplayTemplate.DateOnlyOrNotEntered) —
-                <em class="text-brand">@item.ActionTypeName</em>
-            </h3>
-            <p class="text-break text-pre-line">@item.Comments</p>
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 id="@action.Id.ToString()" class="h5 card-title">
+                            @action.ActionTypeName
+                        </h3>
+                        <h4 class="h5 card-subtitle text-body-secondary">
+                            @Html.DisplayFor(_ => action.ActionDate, DisplayTemplate.DateOnlyOrNotEntered)
+                            @if (!string.IsNullOrWhiteSpace(action.Investigator))
+                            {
+                                @:by @Html.DisplayFor(_ => action.Investigator)
+                            }
+                        </h4>
+                    </div>
+                    <div class="card-body ">
+                        <div class="text-break text-pre-line">@Html.DisplayFor(_ => action.Comments, DisplayTemplate.StringOrNone)</div>
+                    </div>
+                </div>
+            </div>
         }
-    }
-    else
-    {
-        <p><em>None.</em></p>
-    }
-</div>
+    </div>
+}
+else
+{
+    <p>
+        <em>None.</em>
+    </p>
+}
 
 <h2>Attachments</h2>
 
@@ -112,41 +129,43 @@
 {
     <table class="table table-hover align-middle" aria-label="File attachments">
         <thead>
-            <tr>
-                <th scope="col">File</th>
-                <th scope="col">Size</th>
-                <th scope="col">Date Uploaded</th>
-            </tr>
+        <tr>
+            <th scope="col">File</th>
+            <th scope="col">Size</th>
+            <th scope="col">Date Uploaded</th>
+        </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.Item.Attachments)
-            {
-                <tr>
-                    <td>
-                        @if (item.IsImage)
-                        {
-                            <a asp-page="Attachment" asp-route-id="@item.Id.ToString()" asp-route-fileName="@item.FileName" target="_blank"
-                               class="text-decoration-hover rounded d-block no-external-link" data-fancybox="attachment" data-caption="@item.FileName">
-                                <img src="Attachment/@item.Id.ToString()/@item.FileName/?thumbnail=true" class="img-thumbnail rounded me-2" alt="" />
-                                @item.FileName
-                            </a>
-                        }
-                        else
-                        {
-                            <a asp-page="Attachment" asp-route-id="@item.Id.ToString()" asp-route-fileName="@item.FileName" target="_blank"
-                               class="text-decoration-hover rounded d-block p-2 no-external-link">
-                                @Html.DisplayFor(m => item.FileExtension, DisplayTemplate.FileTypeIcon) @item.FileName
-                            </a>
-                        }
-                    </td>
-                    <td>@Html.DisplayFor(m => item.Size, DisplayTemplate.FileSize)</td>
-                    <td>@Html.DisplayFor(m => item.UploadedDate, DisplayTemplate.ShortDate)</td>
-                </tr>
-            }
+        @foreach (var item in Model.Item.Attachments)
+        {
+            <tr>
+                <td>
+                    @if (item.IsImage)
+                    {
+                        <a asp-page="Attachment" asp-route-id="@item.Id.ToString()" asp-route-fileName="@item.FileName" target="_blank"
+                           class="text-decoration-hover rounded d-block no-external-link" data-fancybox="attachment" data-caption="@item.FileName">
+                            <img src="Attachment/@item.Id.ToString()/@item.FileName/?thumbnail=true" class="img-thumbnail rounded me-2" alt="" />
+                            @item.FileName
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-page="Attachment" asp-route-id="@item.Id.ToString()" asp-route-fileName="@item.FileName" target="_blank"
+                           class="text-decoration-hover rounded d-block p-2 no-external-link">
+                            @Html.DisplayFor(m => item.FileExtension, DisplayTemplate.FileTypeIcon) @item.FileName
+                        </a>
+                    }
+                </td>
+                <td>@Html.DisplayFor(m => item.Size, DisplayTemplate.FileSize)</td>
+                <td>@Html.DisplayFor(m => item.UploadedDate, DisplayTemplate.ShortDate)</td>
+            </tr>
+        }
         </tbody>
     </table>
 }
 else
 {
-    <p class="container"><em>None.</em></p>
+    <p class="container">
+        <em>None.</em>
+    </p>
 }

@@ -272,7 +272,10 @@ else
                                     </h3>
                                     <h4 class="h5 card-subtitle text-body-secondary">
                                         @Html.DisplayFor(_ => action.ActionDate, DisplayTemplate.DateOnlyOrNotEntered)
-                                        by @Html.DisplayFor(_ => action.Investigator)
+                                        @if (!string.IsNullOrWhiteSpace(action.Investigator))
+                                        {
+                                            @:by @Html.DisplayFor(_ => action.Investigator)
+                                        }
                                     </h4>
                                 </div>
                                 @if (Model.UserCan[ComplaintOperation.EditActions])
