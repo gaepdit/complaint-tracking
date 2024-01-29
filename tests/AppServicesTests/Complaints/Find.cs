@@ -5,7 +5,6 @@ using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
 using Cts.TestData;
-using System.Linq.Expressions;
 
 namespace AppServicesTests.Complaints;
 

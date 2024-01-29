@@ -67,7 +67,7 @@ public sealed class ComplaintService(
 
         foreach (var action in complaintView.ComplaintActions.Where(action =>
                      action is { IsDeleted: true, DeletedById: not null }))
-            action.DeletedBy = mapper.Map<StaffViewDto>(await users.FindUserAsync(action.DeletedById.ToString()!));
+            action.DeletedBy = mapper.Map<StaffViewDto>(await users.FindUserAsync(action.DeletedById!));
 
         return complaintView;
     }

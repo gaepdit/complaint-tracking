@@ -30,7 +30,7 @@ public record ComplaintActionViewDto
     [Display(Name = "Deleted?")]
     public bool IsDeleted { get; init; }
 
-    public Guid? DeletedById { get; init; }
+    public string? DeletedById { get; init; }
 
     [Display(Name = "Deleted By")]
     public StaffViewDto? DeletedBy { get; set; }
