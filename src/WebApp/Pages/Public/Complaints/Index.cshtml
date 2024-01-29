@@ -17,9 +17,9 @@
 
 <div class="container">
     <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ReceivedDate)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.ReceivedDate, DisplayTemplate.LongDateTime)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CurrentOfficeName)</dt>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ReceivedDate)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.Item.ReceivedDate, DisplayTemplate.LongDateTime)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.CurrentOfficeName)</dt>
         <dd class="col-sm-8 col-lg-9">@Model.Item.CurrentOfficeName</dd>
     </dl>
 </div>
@@ -28,23 +28,23 @@
 
 <div class="container">
     <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ComplaintClosedDate)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.ComplaintClosedDate, DisplayTemplate.LongDateTimeOrNotEntered)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ReviewComments)</dt>
-        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(m => Model.Item.ReviewComments, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ComplaintClosedDate)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.Item.ComplaintClosedDate, DisplayTemplate.LongDateTimeOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ReviewComments)</dt>
+        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(_ => Model.Item.ReviewComments, DisplayTemplate.StringOrNotEntered)</dd>
     </dl>
 </div>
 
 <h2>Nature of Complaint</h2>
 
-<p class="container text-break text-pre-line">@Html.DisplayFor(m => Model.Item.ComplaintNature, DisplayTemplate.StringOrNotEntered)</p>
+<p class="container text-break text-pre-line">@Html.DisplayFor(_ => Model.Item.ComplaintNature, DisplayTemplate.StringOrNotEntered)</p>
 
 <div class="container">
     <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.PrimaryConcernName)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.PrimaryConcernName, DisplayTemplate.StringOrNotEntered)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SecondaryConcernName)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.SecondaryConcernName, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.PrimaryConcernName)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.PrimaryConcernName, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.SecondaryConcernName)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SecondaryConcernName, DisplayTemplate.StringOrNotEntered)</dd>
     </dl>
 </div>
 
@@ -52,12 +52,12 @@
 
 <div class="container">
     <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ComplaintLocation)</dt>
-        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(m => Model.Item.ComplaintLocation, DisplayTemplate.StringOrNotEntered)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ComplaintCity)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.ComplaintCity, DisplayTemplate.StringOrNotEntered)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ComplaintCounty)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.ComplaintCounty, DisplayTemplate.County)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ComplaintLocation)</dt>
+        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(_ => Model.Item.ComplaintLocation, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ComplaintCity)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.ComplaintCity, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ComplaintCounty)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.ComplaintCounty, DisplayTemplate.County)</dd>
     </dl>
 </div>
 
@@ -65,10 +65,10 @@
 
 <div class="container">
     <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceFacilityName)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.SourceFacilityName, DisplayTemplate.StringOrNotEntered)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceFacilityIdNumber)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.SourceFacilityIdNumber, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.SourceFacilityName)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SourceFacilityName, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.SourceFacilityIdNumber)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SourceFacilityIdNumber, DisplayTemplate.StringOrNotEntered)</dd>
     </dl>
 </div>
 
@@ -76,10 +76,10 @@
 
 <div class="container">
     <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceContactName)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.SourceContactName, DisplayTemplate.StringOrNotEntered)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceAddress)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.SourceAddress)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.SourceContactName)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SourceContactName, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.SourceAddress)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SourceAddress)</dd>
     </dl>
 </div>
 
@@ -152,12 +152,12 @@ else
                     {
                         <a asp-page="Attachment" asp-route-id="@item.Id.ToString()" asp-route-fileName="@item.FileName" target="_blank"
                            class="text-decoration-hover rounded d-block p-2 no-external-link">
-                            @Html.DisplayFor(m => item.FileExtension, DisplayTemplate.FileTypeIcon) @item.FileName
+                            @Html.DisplayFor(_ => item.FileExtension, DisplayTemplate.FileTypeIcon) @item.FileName
                         </a>
                     }
                 </td>
-                <td>@Html.DisplayFor(m => item.Size, DisplayTemplate.FileSize)</td>
-                <td>@Html.DisplayFor(m => item.UploadedDate, DisplayTemplate.ShortDate)</td>
+                <td>@Html.DisplayFor(_ => item.Size, DisplayTemplate.FileSize)</td>
+                <td>@Html.DisplayFor(_ => item.UploadedDate, DisplayTemplate.ShortDate)</td>
             </tr>
         }
         </tbody>
