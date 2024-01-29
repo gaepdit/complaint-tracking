@@ -90,7 +90,7 @@
         @foreach (var item in Model.Item.ComplaintActions)
         {
             <h3 class="h4 pt-2">
-                @Html.DisplayFor(m => item.ActionDate, DisplayTemplate.LongDate) —
+                @Html.DisplayFor(m => item.ActionDate, DisplayTemplate.DateOnlyOrNotEntered) —
                 <em class="text-brand">@item.ActionTypeName</em>
             </h3>
             <p class="text-break text-pre-line">@item.Comments</p>
