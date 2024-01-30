@@ -7,7 +7,7 @@ namespace Cts.AppServices.Complaints;
 
 public interface IComplaintService : IDisposable, IAsyncDisposable
 {
-    // Public methods
+    // Public read methods
 
     Task<ComplaintPublicViewDto?> FindPublicAsync(int id, CancellationToken token = default);
 
@@ -38,4 +38,8 @@ public interface IComplaintService : IDisposable, IAsyncDisposable
     Task UpdateAsync(int id, ComplaintUpdateDto resource, CancellationToken token = default);
 
     Task SaveAttachmentAsync(IFormFile file, CancellationToken token = default);
+
+    // Management write methods
+    Task DeleteAsync(int complaintId, CancellationToken token = default);
+    Task RestoreAsync(int complaintId, CancellationToken token = default);
 }

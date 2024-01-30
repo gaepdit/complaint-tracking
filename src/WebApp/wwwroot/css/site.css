@@ -107,17 +107,11 @@
     background-color: var(--bs-secondary-bg-subtle) !important;
 }
 
-/* Accessibility fix for "warning" button on medium background */
-.bg-secondary-subtle .btn-outline-warning {
+/* Accessibility fix for "warning" button on medium/light background */
+html:not([data-bs-theme="dark"]) .btn-outline-warning {
     --bs-btn-color: #b98b00;
     --bs-btn-border-color: #b98b00;
     --bs-btn-bg: #fff;
-}
-
-[data-bs-theme="dark"] .bg-secondary-subtle .btn-outline-warning {
-    --bs-btn-color: #ffc107;
-    --bs-btn-border-color: #ffc107;
-    --bs-btn-bg: transparent;
 }
 
 /* Adjust font sizing

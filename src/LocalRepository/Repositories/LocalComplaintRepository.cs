@@ -13,9 +13,17 @@ public sealed class LocalComplaintRepository(
     IComplaintTransitionRepository transitionRepository)
     : BaseRepository<Complaint, int>(ComplaintData.GetComplaints), IComplaintRepository
 {
-    public async Task<Complaint?> FindIncludeAllAsync(int id, bool includeDeletedActions = false, CancellationToken token = default)
+    public async Task<Complaint?> FindIncludeAllAsync(int id, bool includeDeletedActions = false,
+        CancellationToken token = default) =>
+        await GetComplaintDetailsAsync(await FindAsync(id, token), includeDeletedActions, token);
+
+    public async Task<Complaint?> FindIncludeAllAsync(Expression<Func<Complaint, bool>> predicate,
+        bool includeDeletedActions = false, CancellationToken token = default) =>
+        await GetComplaintDetailsAsync(await FindAsync(predicate, token), includeDeletedActions, token);
+
+    private async Task<Complaint?> GetComplaintDetailsAsync(Complaint? complaint, bool includeDeletedActions,
+        CancellationToken token)
     {
-        var complaint = await FindAsync(id, token);
         if (complaint is null) return null;
 
         complaint.Attachments = (await attachmentRepository

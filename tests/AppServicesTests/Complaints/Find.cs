@@ -4,7 +4,6 @@ using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
-using Cts.TestData;
 
 namespace AppServicesTests.Complaints;
 
@@ -14,7 +13,7 @@ public class Find
     public async Task WhenItemExists_ReturnsViewDto()
     {
         // Arrange
-        var item = ComplaintData.GetComplaints.First(e => e is { IsDeleted: false, ComplaintClosed: true });
+        var item = new Complaint(1);
 
         var repoMock = Substitute.For<IComplaintRepository>();
         repoMock.FindIncludeAllAsync(Arg.Any<int>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
@@ -36,7 +35,8 @@ public class Find
     public async Task WhenNonPublicItemExists_ReturnsViewDto()
     {
         // Arrange
-        var item = ComplaintData.GetComplaints.First(e => e.IsDeleted);
+        var item = new Complaint(1);
+        item.SetDeleted(null);
 
         var repoMock = Substitute.For<IComplaintRepository>();
         repoMock.FindIncludeAllAsync(Arg.Any<int>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())

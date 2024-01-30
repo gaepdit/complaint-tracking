@@ -18,16 +18,18 @@
     </p>
 
     <div class="container small">
-        <p class="col-md-4 col-lg-3"><em>For Complaint ID @Model.ActionItemView.ComplaintId.ToString()</em></p>
+        <p class="col-md-4 col-lg-3">
+            <em>For Complaint ID @Model.ActionItemView.ComplaintId.ToString()</em>
+        </p>
         <dl class="row">
-            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(m => m.ActionItemView.ActionTypeName)</dt>
-            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(m => m.ActionItemView.ActionTypeName)</dd>
-            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(m => m.ActionItemView.ActionDate)</dt>
-            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(m => m.ActionItemView.ActionDate, DisplayTemplate.DateOnly)</dd>
-            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(m => m.ActionItemView.Investigator)</dt>
-            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(m => m.ActionItemView.Investigator)</dd>
-            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(m => m.ActionItemView.Comments)</dt>
-            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(m => m.ActionItemView.Comments, DisplayTemplate.TruncateText)</dd>
+            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(model => model.ActionItemView.ActionTypeName)</dt>
+            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(model => model.ActionItemView.ActionTypeName)</dd>
+            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(model => model.ActionItemView.ActionDate)</dt>
+            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(model => model.ActionItemView.ActionDate, DisplayTemplate.DateOnly)</dd>
+            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(model => model.ActionItemView.Investigator)</dt>
+            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(model => model.ActionItemView.Investigator)</dd>
+            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(model => model.ActionItemView.Comments)</dt>
+            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(model => model.ActionItemView.Comments, DisplayTemplate.TruncateText)</dd>
         </dl>
     </div>
 

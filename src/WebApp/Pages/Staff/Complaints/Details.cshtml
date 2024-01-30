@@ -12,7 +12,47 @@
 @* TODO: Remove when complaint actions have all been implemented: *@
 @* ReSharper disable Mvc.ActionNotResolved *@
 
-<h1>@ViewData["Title"]</h1>
+<div class="container-full">
+    <div class="row justify-content-between align-items-baseline g-0 my-1">
+        <div class="col">
+            <h1>@ViewData["Title"]</h1>
+        </div>
+        @if (Model.ComplaintView.IsPublic)
+        {
+            <div class="col-auto d-print-none ms-2">
+                <a asp-page="/Public/Complaints/Index" asp-route-id="@Model.ComplaintView.Id.ToString()" class="link-offset-2">📢 View public copy</a>
+            </div>
+        }
+    </div>
+</div>
+
+@if (Model.ComplaintView.IsDeleted) // implies `ComplaintOperation.ManageDeletions`
+{
+    <div class="bg-danger-subtle border border-danger-subtle p-2 rounded mb-3">
+        <div class="container-full">
+            <div class="row justify-content-between align-items-start g-0 my-1">
+                <div class="col">
+                    <h2 class="text-danger-emphasis">Complaint Has Been Deleted</h2>
+                </div>
+                <div class="col-auto d-print-none ms-2">
+                    <a asp-page="Restore" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-warning">Restore deleted complaint</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <dl class="row">
+                <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.DeletedBy)</dt>
+                <dd class="col-sm-8 col-lg-9">
+                    @Html.DisplayFor(model => model.ComplaintView.DeletedBy, DisplayTemplate.NameOrNotEntered)
+                    on @Html.DisplayFor(model => model.ComplaintView.DeletedAt, DisplayTemplate.LongDateTimeOrNotEntered)
+                </dd>
+                <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.DeleteComments)</dt>
+                <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Model.ComplaintView.DeleteComments</dd>
+            </dl>
+        </div>
+    </div>
+}
 
 @if (Model.UserCan[ComplaintOperation.ViewAsOwner])
 {
@@ -26,55 +66,16 @@
     </div>
 }
 
-@if (Model.ComplaintView.IsDeleted) // implies `ComplaintOperation.ManageDeletions`
-{
-    <h2 class="text-danger-emphasis">Complaint Has Been Deleted</h2>
-
-    <div class="d-print-none mb-2">
-        <a asp-page="Restore" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-danger">Restore deleted complaint</a>
-    </div>
-
-    <div class="container">
-        <dl class="row">
-            <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.DeletedBy)</dt>
-            <dd class="col-sm-8 col-lg-9">
-                @Html.DisplayFor(model => model.ComplaintView.DeletedBy, DisplayTemplate.NameOrNotEntered)
-                on @Html.DisplayFor(model => model.ComplaintView.DeletedAt, DisplayTemplate.LongDateTimeOrNotEntered)
-            </dd>
-            <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.DeleteComments)</dt>
-            <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Model.ComplaintView.DeleteComments</dd>
-        </dl>
-    </div>
-}
-else
+@if (!Model.ComplaintView.IsDeleted)
 {
     <div class="d-print-none mb-3">
-        @if (Model.UserCan[ComplaintOperation.Accept])
+        @if (Model.UserCan[ComplaintOperation.EditDetails])
         {
-            <form asp-action="Accept">
-                <button id="AcceptSubmitButton" type="submit" class="btn btn-primary me-2">Accept</button>
-                @Html.HiddenFor(model => model.ComplaintView.Id)
-            </form>
-        }
-        else
-        {
-            @if (Model.UserCan[ComplaintOperation.EditDetails])
-            {
-                <a asp-page="Edit" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Edit details</a>
-            }
-
-            @if (Model.UserCan[ComplaintOperation.EditActions])
-            {
-                <a asp-page="Actions" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Add/edit actions</a>
-            }
+            <a asp-page="Edit" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Edit details</a>
         }
         @if (Model.UserCan[ComplaintOperation.ManageDeletions])
         {
             <a asp-page="Delete" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-danger me-2">Delete</a>
-        }
-        @if (Model.ComplaintView.IsPublic)
-        {
-            <a asp-page="/Public/Complaints/Index" asp-route-id="@Model.ComplaintView.Id.ToString()">View public copy</a>
         }
     </div>
 }
@@ -82,6 +83,13 @@ else
 <h2 id="status">Status: <em class="text-brand">@Model.ComplaintView.Status.GetDisplayName()</em></h2>
 
 <div class="d-print-none mb-2">
+    @if (Model.UserCan[ComplaintOperation.Accept])
+    {
+        <form asp-action="Accept">
+            <button id="AcceptSubmitButton" type="submit" class="btn btn-primary me-2">Accept</button>
+            @Html.HiddenFor(model => model.ComplaintView.Id)
+        </form>
+    }
     @if (Model.UserCan[ComplaintOperation.Review])
     {
         <a asp-action="Approve" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Close Complaint (approved)</a>

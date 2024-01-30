@@ -88,6 +88,8 @@ public record ComplaintViewDto
     public OfficeWithAssignorDto? CurrentOffice { get; init; }
 
     public string? CurrentOfficeAssignorId { get; init; }
+
+    [Display(Name = "Current Assigned Office")]
     public string? CurrentOfficeName { get; init; }
 
     [Display(Name = "Current Assigned Staff")]

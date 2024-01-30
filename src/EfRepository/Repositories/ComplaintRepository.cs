@@ -1,6 +1,7 @@
 using Cts.Domain.Entities.Attachments;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.ComplaintTransitions;
+using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 
 namespace Cts.EfRepository.Repositories;
@@ -10,7 +11,16 @@ public sealed class ComplaintRepository(AppDbContext context)
 {
     public async Task<Complaint?> FindIncludeAllAsync(int id, bool includeDeletedActions = false,
         CancellationToken token = default) =>
-        await Context.Set<Complaint>()
+        await ComplaintIncludeAllQueryable(includeDeletedActions)
+            .SingleOrDefaultAsync(complaint => complaint.Id.Equals(id), token);
+
+    public async Task<Complaint?> FindIncludeAllAsync(Expression<Func<Complaint, bool>> predicate,
+        bool includeDeletedActions = false, CancellationToken token = default) =>
+        await ComplaintIncludeAllQueryable(includeDeletedActions).SingleOrDefaultAsync(predicate, token);
+
+    private IIncludableQueryable<Complaint, IOrderedEnumerable<ComplaintTransition>> ComplaintIncludeAllQueryable(
+        bool includeDeletedActions) =>
+        Context.Set<Complaint>()
             .Include(complaint => complaint.Attachments
                 .Where(attachment => !attachment.IsDeleted)
                 .OrderByDescending(attachment => attachment.UploadedDate)
@@ -21,9 +31,7 @@ public sealed class ComplaintRepository(AppDbContext context)
                 .ThenByDescending(action => action.EnteredDate)
             )
             .Include(complaint => complaint.ComplaintTransitions
-                .OrderBy(transition => transition.CommittedDate))
-            .SingleOrDefaultAsync(e => e.Id.Equals(id), token);
-
+                .OrderBy(transition => transition.CommittedDate));
 
     public async Task<Attachment?> FindAttachmentAsync(Guid id, CancellationToken token = default) =>
         await Context.Set<Attachment>()
