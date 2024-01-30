@@ -24,29 +24,27 @@ internal class ComplaintViewPermissionsHandler :
 
         var success = requirement.Name switch
         {
-            nameof(ComplaintOperation.ManageDeletions) =>
-                _user.IsDivisionManager(), // Only the Division Manager can delete or restore.
-
-            nameof(ComplaintOperation.ViewAsOwner) =>
-                IsCurrentOwner(),
-
             nameof(ComplaintOperation.Accept) =>
                 IsOpen() && !ReviewPending() && !Accepted() && IsCurrentOwner(),
-
-            nameof(ComplaintOperation.EditDetails) =>
-                IsOpen() && !MustAccept() && UserHasEditAccess(),
-
-            nameof(ComplaintOperation.EditActions) =>
-                IsOpen() && !MustAccept() && IsCurrentOwnerOrManager(),
-
-            nameof(ComplaintOperation.Review) =>
-                IsOpen() && ReviewPending() && IsCurrentManager(),
 
             nameof(ComplaintOperation.Assign) =>
                 !ReviewPending() && NoCurrentOwner() && IsCurrentManagerOrAssignor(),
 
-            nameof(ComplaintOperation.RequestReview) =>
-                IsOpen() && !ReviewPending() && IsCurrentOwnerOrManager(),
+            nameof(ComplaintOperation.EditActions) =>
+                IsOpen() && !MustAccept() && IsCurrentOwnerOrManager(),
+
+            nameof(ComplaintOperation.EditAttachments) =>
+                _user.IsAttachmentsEditor() || // Attachments editor (and Division Manager) can edit attachments on closed complaints.
+                IsOpen() && (IsCurrentOwnerOrManager() || IsRecentReporter()),
+
+            nameof(ComplaintOperation.EditDetails) =>
+                IsOpen() && !MustAccept() && UserHasEditAccess(),
+
+            nameof(ComplaintOperation.ManageDeletedActions) =>
+                IsOpen() && !MustAccept() && IsCurrentManager(),
+
+            nameof(ComplaintOperation.ManageDeletions) =>
+                _user.IsDivisionManager(), // Only the Division Manager can delete or restore complaints.
 
             nameof(ComplaintOperation.Reassign) =>
                 IsOpen() && !ReviewPending() && IsCurrentOwnerOrManager() && HasCurrentOwner(),
@@ -54,9 +52,17 @@ internal class ComplaintViewPermissionsHandler :
             nameof(ComplaintOperation.Reopen) =>
                 IsClosed() && _user.IsDivisionManager(), // Only the Division Manager can reopen.
 
-            nameof(ComplaintOperation.EditAttachments) =>
-                _user.IsAttachmentsEditor() || // Attachments editor (and Division Manager) can edit attachments on closed complaints.
-                IsOpen() && (IsCurrentOwnerOrManager() || IsRecentReporter()),
+            nameof(ComplaintOperation.RequestReview) =>
+                IsOpen() && !ReviewPending() && IsCurrentOwnerOrManager(),
+
+            nameof(ComplaintOperation.Review) =>
+                IsOpen() && ReviewPending() && IsCurrentManager(),
+
+            nameof(ComplaintOperation.ViewAsOwner) =>
+                IsCurrentOwner(),
+
+            nameof(ComplaintOperation.ViewDeletedActions) =>
+                IsCurrentManager(),
 
             _ => throw new ArgumentOutOfRangeException(nameof(requirement)),
         };

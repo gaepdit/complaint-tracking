@@ -1,5 +1,6 @@
 ﻿@page "{id:int?}"
-@using Cts.WebApp.Pages.Shared.DisplayTemplates;
+@using Cts.WebApp.Pages.Shared.DisplayTemplates
+@using Cts.WebApp.Platform.Constants
 @using GaEpd.AppLibrary.Extensions
 @model IndexModel
 @{
@@ -11,14 +12,14 @@
 </h1>
 
 <p>
-    <small class="text-body-secondary">Report generated @(DateTime.Now.ToString(Platform.Constants.DateTimeFormatConstants.LongDateTimeFormat)).</small>
+    <small class="text-body-secondary">Report generated @(DateTime.Now.ToString(DateTimeFormatConstants.LongDateTimeFormat)).</small>
 </p>
 
 <div class="container">
     <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ReceivedDate)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.ReceivedDate, DisplayTemplate.LongDateTime)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CurrentOfficeName)</dt>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ReceivedDate)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.Item.ReceivedDate, DisplayTemplate.LongDateTime)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.CurrentOfficeName)</dt>
         <dd class="col-sm-8 col-lg-9">@Model.Item.CurrentOfficeName</dd>
     </dl>
 </div>
@@ -27,23 +28,23 @@
 
 <div class="container">
     <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ComplaintClosedDate)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.ComplaintClosedDate, DisplayTemplate.LongDateTimeOrNotEntered)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ReviewComments)</dt>
-        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(m => Model.Item.ReviewComments, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ComplaintClosedDate)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.Item.ComplaintClosedDate, DisplayTemplate.LongDateTimeOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ReviewComments)</dt>
+        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(_ => Model.Item.ReviewComments, DisplayTemplate.StringOrNotEntered)</dd>
     </dl>
 </div>
 
 <h2>Nature of Complaint</h2>
 
-<p class="container text-break text-pre-line">@Html.DisplayFor(m => Model.Item.ComplaintNature, DisplayTemplate.StringOrNotEntered)</p>
+<p class="container text-break text-pre-line">@Html.DisplayFor(_ => Model.Item.ComplaintNature, DisplayTemplate.StringOrNotEntered)</p>
 
 <div class="container">
     <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.PrimaryConcernName)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.PrimaryConcernName, DisplayTemplate.StringOrNotEntered)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SecondaryConcernName)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.SecondaryConcernName, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.PrimaryConcernName)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.PrimaryConcernName, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.SecondaryConcernName)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SecondaryConcernName, DisplayTemplate.StringOrNotEntered)</dd>
     </dl>
 </div>
 
@@ -51,12 +52,12 @@
 
 <div class="container">
     <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ComplaintLocation)</dt>
-        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(m => Model.Item.ComplaintLocation, DisplayTemplate.StringOrNotEntered)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ComplaintCity)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.ComplaintCity, DisplayTemplate.StringOrNotEntered)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ComplaintCounty)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.ComplaintCounty, DisplayTemplate.County)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ComplaintLocation)</dt>
+        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(_ => Model.Item.ComplaintLocation, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ComplaintCity)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.ComplaintCity, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ComplaintCounty)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.ComplaintCounty, DisplayTemplate.County)</dd>
     </dl>
 </div>
 
@@ -64,10 +65,10 @@
 
 <div class="container">
     <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceFacilityName)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.SourceFacilityName, DisplayTemplate.StringOrNotEntered)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceFacilityIdNumber)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.SourceFacilityIdNumber, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.SourceFacilityName)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SourceFacilityName, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.SourceFacilityIdNumber)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SourceFacilityIdNumber, DisplayTemplate.StringOrNotEntered)</dd>
     </dl>
 </div>
 
@@ -75,32 +76,48 @@
 
 <div class="container">
     <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceContactName)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.SourceContactName, DisplayTemplate.StringOrNotEntered)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceAddress)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => Model.Item.SourceAddress)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.SourceContactName)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SourceContactName, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.SourceAddress)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SourceAddress)</dd>
     </dl>
 </div>
 
 <h2>Actions</h2>
 
-<div class="container">
-    @if (Model.Item.ComplaintActions is { Count: > 0 })
-    {
-        @foreach (var item in Model.Item.ComplaintActions)
+@if (Model.Item.ComplaintActions is { Count: > 0 })
+{
+    <div class="row row-cols-1 g-3 mb-3">
+        @foreach (var action in Model.Item.ComplaintActions)
         {
-            <h3 class="h4 pt-2">
-                @Html.DisplayFor(m => item.ActionDate, DisplayTemplate.DateOnlyOrNotEntered) —
-                <em class="text-brand">@item.ActionTypeName</em>
-            </h3>
-            <p class="text-break text-pre-line">@item.Comments</p>
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 id="@action.Id.ToString()" class="h5 card-title">
+                            @action.ActionTypeName
+                        </h3>
+                        <h4 class="h5 card-subtitle text-body-secondary">
+                            @Html.DisplayFor(_ => action.ActionDate, DisplayTemplate.DateOnlyOrNotEntered)
+                            @if (!string.IsNullOrWhiteSpace(action.Investigator))
+                            {
+                                @:by @Html.DisplayFor(_ => action.Investigator)
+                            }
+                        </h4>
+                    </div>
+                    <div class="card-body ">
+                        <div class="text-break text-pre-line">@Html.DisplayFor(_ => action.Comments, DisplayTemplate.StringOrNone)</div>
+                    </div>
+                </div>
+            </div>
         }
-    }
-    else
-    {
-        <p><em>None.</em></p>
-    }
-</div>
+    </div>
+}
+else
+{
+    <p>
+        <em>None.</em>
+    </p>
+}
 
 <h2>Attachments</h2>
 
@@ -112,41 +129,43 @@
 {
     <table class="table table-hover align-middle" aria-label="File attachments">
         <thead>
-            <tr>
-                <th scope="col">File</th>
-                <th scope="col">Size</th>
-                <th scope="col">Date Uploaded</th>
-            </tr>
+        <tr>
+            <th scope="col">File</th>
+            <th scope="col">Size</th>
+            <th scope="col">Date Uploaded</th>
+        </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.Item.Attachments)
-            {
-                <tr>
-                    <td>
-                        @if (item.IsImage)
-                        {
-                            <a asp-page="Attachment" asp-route-id="@item.Id.ToString()" asp-route-fileName="@item.FileName" target="_blank"
-                               class="text-decoration-hover rounded d-block no-external-link" data-fancybox="attachment" data-caption="@item.FileName">
-                                <img src="Attachment/@item.Id.ToString()/@item.FileName/?thumbnail=true" class="img-thumbnail rounded me-2" alt="" />
-                                @item.FileName
-                            </a>
-                        }
-                        else
-                        {
-                            <a asp-page="Attachment" asp-route-id="@item.Id.ToString()" asp-route-fileName="@item.FileName" target="_blank"
-                               class="text-decoration-hover rounded d-block p-2 no-external-link">
-                                @Html.DisplayFor(m => item.FileExtension, DisplayTemplate.FileTypeIcon) @item.FileName
-                            </a>
-                        }
-                    </td>
-                    <td>@Html.DisplayFor(m => item.Size, DisplayTemplate.FileSize)</td>
-                    <td>@Html.DisplayFor(m => item.UploadedDate, DisplayTemplate.ShortDate)</td>
-                </tr>
-            }
+        @foreach (var item in Model.Item.Attachments)
+        {
+            <tr>
+                <td>
+                    @if (item.IsImage)
+                    {
+                        <a asp-page="Attachment" asp-route-id="@item.Id.ToString()" asp-route-fileName="@item.FileName" target="_blank"
+                           class="text-decoration-hover rounded d-block no-external-link" data-fancybox="attachment" data-caption="@item.FileName">
+                            <img src="Attachment/@item.Id.ToString()/@item.FileName/?thumbnail=true" class="img-thumbnail rounded me-2" alt="" />
+                            @item.FileName
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-page="Attachment" asp-route-id="@item.Id.ToString()" asp-route-fileName="@item.FileName" target="_blank"
+                           class="text-decoration-hover rounded d-block p-2 no-external-link">
+                            @Html.DisplayFor(_ => item.FileExtension, DisplayTemplate.FileTypeIcon) @item.FileName
+                        </a>
+                    }
+                </td>
+                <td>@Html.DisplayFor(_ => item.Size, DisplayTemplate.FileSize)</td>
+                <td>@Html.DisplayFor(_ => item.UploadedDate, DisplayTemplate.ShortDate)</td>
+            </tr>
+        }
         </tbody>
     </table>
 }
 else
 {
-    <p class="container"><em>None.</em></p>
+    <p class="container">
+        <em>None.</em>
+    </p>
 }

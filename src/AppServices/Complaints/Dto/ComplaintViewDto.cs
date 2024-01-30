@@ -142,7 +142,7 @@ public record ComplaintViewDto
     public bool IsDeleted { get; init; }
 
     [Display(Name = "Deleted By")]
-    public StaffViewDto? DeletedBy { get; init; }
+    public StaffViewDto? DeletedBy { get; set; }
 
     [Display(Name = "Date Deleted")]
     public DateTimeOffset? DeletedAt { get; init; }

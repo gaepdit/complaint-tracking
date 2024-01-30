@@ -5,8 +5,8 @@
 @using GaEpd.AppLibrary.Extensions
 @model DetailsModel
 @{
-    ViewData["Title"] = $"Complaint ID {Model.Item.Id.ToString()}";
-    var alertClass = Model.Item.ComplaintClosed ? "alert-secondary" : "alert-info";
+    ViewData["Title"] = $"Complaint ID {Model.ComplaintView.Id.ToString()}";
+    var alertClass = Model.ComplaintView.ComplaintClosed ? "alert-secondary" : "alert-info";
 }
 
 @* TODO: Remove when complaint actions have all been implemented: *@
@@ -17,32 +17,32 @@
 @if (Model.UserCan[ComplaintOperation.ViewAsOwner])
 {
     <div class="alert @alertClass" role="alert">
-        This Complaint was assigned to you on @Html.DisplayFor(m => m.Item.CurrentOwnerAssignedDate, DisplayTemplate.LongDateTimeOrNotEntered).
-        @if (Model.Item.CurrentOwnerAcceptedDate != null)
+        This Complaint was assigned to you on @Html.DisplayFor(model => model.ComplaintView.CurrentOwnerAssignedDate, DisplayTemplate.LongDateTimeOrNotEntered).
+        @if (Model.ComplaintView.CurrentOwnerAcceptedDate != null)
         {
             <br />
-            @:You accepted it on @Html.DisplayFor(m => m.Item.CurrentOwnerAcceptedDate, DisplayTemplate.LongDateTimeOrNotEntered).
+            @:You accepted it on @Html.DisplayFor(model => model.ComplaintView.CurrentOwnerAcceptedDate, DisplayTemplate.LongDateTimeOrNotEntered).
         }
     </div>
 }
 
-@if (Model.Item.IsDeleted) // implies `ComplaintOperation.ManageDeletions`
+@if (Model.ComplaintView.IsDeleted) // implies `ComplaintOperation.ManageDeletions`
 {
     <h2 class="text-danger-emphasis">Complaint Has Been Deleted</h2>
 
     <div class="d-print-none mb-2">
-        <a asp-page="Restore" asp-route-id="@Model.Item.Id.ToString()" class="btn btn-outline-danger">Restore deleted complaint</a>
+        <a asp-page="Restore" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-danger">Restore deleted complaint</a>
     </div>
 
     <div class="container">
         <dl class="row">
-            <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.DeletedBy)</dt>
+            <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.DeletedBy)</dt>
             <dd class="col-sm-8 col-lg-9">
-                @Html.DisplayFor(m => m.Item.DeletedBy, DisplayTemplate.NameOrNotEntered)
-                on @Html.DisplayFor(m => m.Item.DeletedAt, DisplayTemplate.LongDateTimeOrNotEntered)
+                @Html.DisplayFor(model => model.ComplaintView.DeletedBy, DisplayTemplate.NameOrNotEntered)
+                on @Html.DisplayFor(model => model.ComplaintView.DeletedAt, DisplayTemplate.LongDateTimeOrNotEntered)
             </dd>
-            <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.DeleteComments)</dt>
-            <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Model.Item.DeleteComments</dd>
+            <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.DeleteComments)</dt>
+            <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Model.ComplaintView.DeleteComments</dd>
         </dl>
     </div>
 }
@@ -53,94 +53,94 @@ else
         {
             <form asp-action="Accept">
                 <button id="AcceptSubmitButton" type="submit" class="btn btn-primary me-2">Accept</button>
-                @Html.HiddenFor(m => m.Item.Id)
+                @Html.HiddenFor(model => model.ComplaintView.Id)
             </form>
         }
         else
         {
             @if (Model.UserCan[ComplaintOperation.EditDetails])
             {
-                <a asp-page="Edit" asp-route-id="@Model.Item.Id.ToString()" class="btn btn-outline-primary me-2">Edit details</a>
+                <a asp-page="Edit" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Edit details</a>
             }
 
             @if (Model.UserCan[ComplaintOperation.EditActions])
             {
-                <a asp-page="Actions" asp-route-id="@Model.Item.Id.ToString()" class="btn btn-outline-primary me-2">Add/edit actions</a>
+                <a asp-page="Actions" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Add/edit actions</a>
             }
         }
         @if (Model.UserCan[ComplaintOperation.ManageDeletions])
         {
-            <a asp-page="Delete" asp-route-id="@Model.Item.Id.ToString()" class="btn btn-outline-danger me-2">Delete</a>
+            <a asp-page="Delete" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-danger me-2">Delete</a>
         }
-        @if (Model.Item.IsPublic)
+        @if (Model.ComplaintView.IsPublic)
         {
-            <a asp-page="/Public/Complaints/Index" asp-route-id="@Model.Item.Id.ToString()">View public copy</a>
+            <a asp-page="/Public/Complaints/Index" asp-route-id="@Model.ComplaintView.Id.ToString()">View public copy</a>
         }
     </div>
 }
 
-<h2 id="status">Status: <em class="text-brand">@Model.Item.Status.GetDisplayName()</em></h2>
+<h2 id="status">Status: <em class="text-brand">@Model.ComplaintView.Status.GetDisplayName()</em></h2>
 
 <div class="d-print-none mb-2">
     @if (Model.UserCan[ComplaintOperation.Review])
     {
-        <a asp-action="Approve" asp-route-id="@Model.Item.Id.ToString()" class="btn btn-outline-primary me-2">Close Complaint (approved)</a>
-        <a asp-action="Return" asp-route-id="@Model.Item.Id.ToString()" class="btn btn-outline-primary me-2">Return to staff (not approved)</a>
+        <a asp-action="Approve" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Close Complaint (approved)</a>
+        <a asp-action="Return" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Return to staff (not approved)</a>
     }
     @if (Model.UserCan[ComplaintOperation.Assign])
     {
-        <a asp-action="Assign" asp-route-id="@Model.Item.Id.ToString()" class="btn btn-outline-primary me-2">Assign</a>
+        <a asp-action="Assign" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Assign</a>
     }
     @if (Model.UserCan[ComplaintOperation.RequestReview])
     {
-        <a asp-action="RequestReview" asp-route-id="@Model.Item.Id.ToString()" class="btn btn-outline-primary me-2">Submit for review</a>
+        <a asp-action="RequestReview" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Submit for review</a>
     }
     @if (Model.UserCan[ComplaintOperation.Reassign])
     {
-        <a asp-action="Assign" asp-route-id="@Model.Item.Id.ToString()" class="btn btn-outline-primary me-2">Transfer/reassign</a>
+        <a asp-action="Assign" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Transfer/reassign</a>
     }
     @if (Model.UserCan[ComplaintOperation.Reopen])
     {
-        <a asp-action="Reopen" asp-route-id="@Model.Item.Id.ToString()" class="btn btn-outline-primary me-2">Reopen</a>
+        <a asp-action="Reopen" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Reopen</a>
     }
 </div>
 
 <div class="container">
     <dl class="row">
-        @if (Model.Item.ComplaintClosed)
+        @if (Model.ComplaintView.ComplaintClosed)
         {
-            <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ReviewedBy)</dt>
+            <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.ReviewedBy)</dt>
             <dd class="col-sm-8 col-lg-9">
-                @Html.DisplayFor(m => m.Item.ReviewedBy, DisplayTemplate.NameOrNotEntered)
-                on @Html.DisplayFor(m => m.Item.ComplaintClosedDate, DisplayTemplate.LongDateTimeOrNotEntered)
+                @Html.DisplayFor(model => model.ComplaintView.ReviewedBy, DisplayTemplate.NameOrNotEntered)
+                on @Html.DisplayFor(model => model.ComplaintView.ComplaintClosedDate, DisplayTemplate.LongDateTimeOrNotEntered)
             </dd>
-            <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ReviewComments)</dt>
-            <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Model.Item.ReviewComments</dd>
+            <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.ReviewComments)</dt>
+            <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Model.ComplaintView.ReviewComments</dd>
         }
 
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CurrentOffice)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.CurrentOfficeName, DisplayTemplate.StringOrNotEntered)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CurrentOwner)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.CurrentOwner, DisplayTemplate.NameOrNotEntered)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ReceivedDate)</dt>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.CurrentOffice)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.CurrentOfficeName, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.CurrentOwner)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.CurrentOwner, DisplayTemplate.NameOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.ReceivedDate)</dt>
         <dd class="col-sm-8 col-lg-9">
-            @Html.DisplayFor(m => m.Item.ReceivedDate, DisplayTemplate.LongDateTime)
+            @Html.DisplayFor(model => model.ComplaintView.ReceivedDate, DisplayTemplate.LongDateTime)
         </dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CurrentOwnerAssignedDate)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.CurrentOwnerAssignedDate, DisplayTemplate.LongDateTimeOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.CurrentOwnerAssignedDate)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.CurrentOwnerAssignedDate, DisplayTemplate.LongDateTimeOrNotEntered)</dd>
     </dl>
 </div>
 
 <h2 class="h3">Nature of Complaint</h2>
 
-<p class="container text-break text-pre-line">@Html.DisplayFor(m => Model.Item.ComplaintNature, DisplayTemplate.StringOrNotEntered)</p>
+<p class="container text-break text-pre-line">@Html.DisplayFor(_ => Model.ComplaintView.ComplaintNature, DisplayTemplate.StringOrNotEntered)</p>
 
 <div class="container">
     <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.PrimaryConcernName)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.PrimaryConcernName, DisplayTemplate.StringOrNotEntered)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SecondaryConcernName)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.SecondaryConcernName, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.PrimaryConcernName)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.PrimaryConcernName, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.SecondaryConcernName)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.SecondaryConcernName, DisplayTemplate.StringOrNotEntered)</dd>
     </dl>
 </div>
 
@@ -148,20 +148,20 @@ else
 
 <div class="container">
     <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CallerName)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.CallerName, DisplayTemplate.StringOrNotEntered)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CallerRepresents)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.CallerRepresents, DisplayTemplate.StringOrNotEntered)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CallerAddress)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.CallerAddress)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CallerPhoneNumber)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.CallerPhoneNumber)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CallerSecondaryPhoneNumber)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.CallerSecondaryPhoneNumber)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CallerTertiaryPhoneNumber)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.CallerTertiaryPhoneNumber)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.CallerEmail)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.CallerEmail, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.CallerName)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.CallerName, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.CallerRepresents)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.CallerRepresents, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.CallerAddress)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.CallerAddress)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.CallerPhoneNumber)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.CallerPhoneNumber)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.CallerSecondaryPhoneNumber)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.CallerSecondaryPhoneNumber)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.CallerTertiaryPhoneNumber)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.CallerTertiaryPhoneNumber)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.CallerEmail)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.CallerEmail, DisplayTemplate.StringOrNotEntered)</dd>
     </dl>
 </div>
 
@@ -169,14 +169,14 @@ else
 
 <div class="container">
     <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ComplaintLocation)</dt>
-        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(m => m.Item.ComplaintLocation, DisplayTemplate.StringOrNotEntered)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ComplaintDirections)</dt>
-        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(m => m.Item.ComplaintDirections, DisplayTemplate.StringOrNotEntered)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ComplaintCity)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.ComplaintCity, DisplayTemplate.StringOrNotEntered)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ComplaintCounty)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.ComplaintCounty, DisplayTemplate.County)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.ComplaintLocation)</dt>
+        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(model => model.ComplaintView.ComplaintLocation, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.ComplaintDirections)</dt>
+        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(model => model.ComplaintView.ComplaintDirections, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.ComplaintCity)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.ComplaintCity, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.ComplaintCounty)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.ComplaintCounty, DisplayTemplate.County)</dd>
     </dl>
 </div>
 
@@ -184,10 +184,10 @@ else
 
 <div class="container">
     <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceFacilityName)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.SourceFacilityName, DisplayTemplate.StringOrNotEntered)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceFacilityIdNumber)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.SourceFacilityIdNumber, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.SourceFacilityName)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.SourceFacilityName, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.SourceFacilityIdNumber)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.SourceFacilityIdNumber, DisplayTemplate.StringOrNotEntered)</dd>
     </dl>
 </div>
 
@@ -195,24 +195,24 @@ else
 
 <div class="container">
     <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceContactName)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.SourceContactName, DisplayTemplate.StringOrNotEntered)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceAddress)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.SourceAddress)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourcePhoneNumber)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.SourcePhoneNumber)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceSecondaryPhoneNumber)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.SourceSecondaryPhoneNumber)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceTertiaryPhoneNumber)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.SourceTertiaryPhoneNumber)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.SourceEmail)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(m => m.Item.SourceEmail, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.SourceContactName)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.SourceContactName, DisplayTemplate.StringOrNotEntered)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.SourceAddress)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.SourceAddress)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.SourcePhoneNumber)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.SourcePhoneNumber)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.SourceSecondaryPhoneNumber)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.SourceSecondaryPhoneNumber)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.SourceTertiaryPhoneNumber)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.SourceTertiaryPhoneNumber)</dd>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.SourceEmail)</dt>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.SourceEmail, DisplayTemplate.StringOrNotEntered)</dd>
     </dl>
 </div>
 
 <h2 class="h3">Actions</h2>
 
-@if (Model.Item.ComplaintActions.Count == 0)
+@if (!Model.ViewableComplaintActions)
 {
     <p class="container">
         <em>None.</em>
@@ -252,25 +252,44 @@ else
     </div>
 }
 
-@if (Model.Item.ComplaintActions.Count > 0)
+@if (Model.ViewableComplaintActions)
 {
     <div class="row row-cols-1 g-3 mb-3">
-        @foreach (var action in Model.Item.ComplaintActions)
+        @foreach (var action in Model.ComplaintView.ComplaintActions.Where(action => !action.IsDeleted || Model.UserCan[ComplaintOperation.ViewDeletedActions]))
         {
             <div class="col">
-                <div class="card @(action.Id == Model.HighlightId ? "border-success" : "")">
+                <div class="card @(action.Id == Model.HighlightId ? "border-success" : "") @(action.IsDeleted ? "bg-secondary-subtle" : "")">
                     <div class="card-header">
                         <div class="container-full">
                             <div class="row justify-content-between align-items-start g-0 my-1">
                                 <div class="col">
-                                    <h3 id="@action.Id.ToString()" class="h5 card-title">@action.ActionTypeName</h3>
-                                    <h4 class="h5 card-subtitle text-body-secondary">@Html.DisplayFor(m => action.ActionDate, DisplayTemplate.DateOnlyOrNotEntered)</h4>
+                                    <h3 id="@action.Id.ToString()" class="h5 card-title">
+                                        @if (action.IsDeleted)
+                                        {
+                                            <em class="text-body-secondary">(Deleted Action)</em>
+                                        }
+                                        @action.ActionTypeName
+                                    </h3>
+                                    <h4 class="h5 card-subtitle text-body-secondary">
+                                        @Html.DisplayFor(_ => action.ActionDate, DisplayTemplate.DateOnlyOrNotEntered)
+                                        @if (!string.IsNullOrWhiteSpace(action.Investigator))
+                                        {
+                                            @:by @Html.DisplayFor(_ => action.Investigator)
+                                        }
+                                    </h4>
                                 </div>
                                 @if (Model.UserCan[ComplaintOperation.EditActions])
                                 {
                                     <div class="col-auto d-print-none ms-2">
-                                        <a asp-page="EditAction" asp-route-actionId="@action.Id.ToString()" class="btn btn-sm btn-outline-primary">Edit</a>
-                                        <a asp-page="DeleteAction" asp-route-actionId="@action.Id.ToString()" class="btn btn-sm btn-outline-danger ms-1">Delete</a>
+                                        @if (!action.IsDeleted)
+                                        {
+                                            <a asp-page="EditAction" asp-route-actionId="@action.Id.ToString()" class="btn btn-sm btn-outline-primary">Edit</a>
+                                            <a asp-page="DeleteAction" asp-route-actionId="@action.Id.ToString()" class="btn btn-sm btn-outline-danger ms-1">Delete</a>
+                                        }
+                                        else if (Model.UserCan[ComplaintOperation.ManageDeletedActions])
+                                        {
+                                            <a asp-page="RestoreAction" asp-route-actionId="@action.Id.ToString()" class="btn btn-sm btn-outline-warning ms-1">Restore</a>
+                                        }
                                     </div>
                                 }
                             </div>
@@ -278,7 +297,7 @@ else
                     </div>
 
                     <div class="card-body ">
-                        <div class="text-break text-pre-line">@Html.DisplayFor(m => action.Comments, DisplayTemplate.StringOrNone)</div>
+                        <div class="text-break text-pre-line">@Html.DisplayFor(_ => action.Comments, DisplayTemplate.StringOrNone)</div>
                     </div>
                     @if (action.EnteredBy is not null || action.EnteredDate is not null)
                     {
@@ -286,13 +305,25 @@ else
                             Entered
                             @if (action.EnteredBy is not null)
                             {
-                                @:by
-                                @action.EnteredBy.Name
+                                <text>by @action.EnteredBy.Name</text>
                             }
                             @if (action.EnteredDate is not null)
                             {
-                                @:on
-                                @Html.DisplayFor(m => action.EnteredDate.Value, DisplayTemplate.ShortDate)
+                                <text> on @Html.DisplayFor(_ => action.EnteredDate.Value, DisplayTemplate.ShortDate)</text>
+                            }
+                        </small>
+                    }
+                    @if (action.DeletedBy is not null || action.DeletedAt is not null)
+                    {
+                        <small class="card-footer text-body-secondary">
+                            Deleted
+                            @if (action.DeletedBy is not null)
+                            {
+                                <text>by @action.DeletedBy.Name</text>
+                            }
+                            @if (action.DeletedAt is not null)
+                            {
+                                <text> on @Html.DisplayFor(_ => action.DeletedAt.Value, DisplayTemplate.ShortDate)</text>
                             }
                         </small>
                     }
@@ -304,7 +335,7 @@ else
 
 <h2 class="h3">Attachments</h2>
 
-@if (Model.Item.Attachments is { Count: > 0 })
+@if (Model.ComplaintView.Attachments is { Count: > 0 })
 {
     <table class="table table-hover align-middle" aria-label="File attachments">
         <thead>
@@ -319,7 +350,7 @@ else
         </tr>
         </thead>
         <tbody>
-        @foreach (var item in Model.Item.Attachments)
+        @foreach (var item in Model.ComplaintView.Attachments)
         {
             <tr>
                 <td>
@@ -335,14 +366,14 @@ else
                     {
                         <a asp-page="Attachment" asp-route-id="@item.Id.ToString()" asp-route-fileName="@item.FileName" target="_blank"
                            class="text-decoration-hover rounded d-block p-2 no-external-link">
-                            @Html.DisplayFor(m => item.FileExtension, DisplayTemplate.FileTypeIcon) @item.FileName
+                            @Html.DisplayFor(_ => item.FileExtension, DisplayTemplate.FileTypeIcon) @item.FileName
                         </a>
                     }
                 </td>
-                <td>@Html.DisplayFor(m => item.Size, DisplayTemplate.FileSize)</td>
+                <td>@Html.DisplayFor(_ => item.Size, DisplayTemplate.FileSize)</td>
                 <td>
-                    @Html.DisplayFor(m => item.UploadedBy, DisplayTemplate.NameOrNotEntered) <br />
-                    on @Html.DisplayFor(m => item.UploadedDate, DisplayTemplate.ShortDateTime)
+                    @Html.DisplayFor(_ => item.UploadedBy, DisplayTemplate.NameOrNotEntered) <br />
+                    on @Html.DisplayFor(_ => item.UploadedDate, DisplayTemplate.ShortDateTime)
                 </td>
                 @if (Model.UserCan[ComplaintOperation.EditAttachments])
                 {
@@ -365,7 +396,7 @@ else
 @if (Model.UserCan[ComplaintOperation.EditAttachments])
 {
     <div class="container">
-        @if (Model.Item.ComplaintClosed)
+        @if (Model.ComplaintView.ComplaintClosed)
         {
             <p>
                 <strong>Be careful! This complaint has already been approved/closed.</strong>
@@ -387,20 +418,20 @@ else
 
 <div class="container">
     <dl class="row small">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.ReceivedBy)</dt>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.ReceivedBy)</dt>
         <dd class="col-sm-8 col-lg-9">
-            @Html.DisplayFor(m => m.Item.ReceivedBy, DisplayTemplate.NameOrNotEntered)
-            on @Html.DisplayFor(m => m.Item.ReceivedDate, DisplayTemplate.LongDateTime)
+            @Html.DisplayFor(model => model.ComplaintView.ReceivedBy, DisplayTemplate.NameOrNotEntered)
+            on @Html.DisplayFor(model => model.ComplaintView.ReceivedDate, DisplayTemplate.LongDateTime)
         </dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(m => m.Item.EnteredBy)</dt>
+        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.EnteredBy)</dt>
         <dd class="col-sm-8 col-lg-9">
-            @Html.DisplayFor(m => m.Item.EnteredBy, DisplayTemplate.NameOrNotEntered)
-            on @Html.DisplayFor(m => m.Item.EnteredDate, DisplayTemplate.LongDateTime)
+            @Html.DisplayFor(model => model.ComplaintView.EnteredBy, DisplayTemplate.NameOrNotEntered)
+            on @Html.DisplayFor(model => model.ComplaintView.EnteredDate, DisplayTemplate.LongDateTime)
         </dd>
     </dl>
 </div>
 
-@if (Model.Item.ComplaintTransitions is { Count: > 0 })
+@if (Model.ComplaintView.ComplaintTransitions is { Count: > 0 })
 {
     <details>
         <summary class="h5 text-secondary mb-2">Show full audit history</summary>
@@ -416,21 +447,21 @@ else
             </tr>
             </thead>
             <tbody>
-            @foreach (var item in Model.Item.ComplaintTransitions)
+            @foreach (var item in Model.ComplaintView.ComplaintTransitions)
             {
                 <tr>
-                    <td>@Html.DisplayFor(m => item.CommittedDate, DisplayTemplate.ShortDateTimeNoBreak)</td>
-                    <td>@Html.DisplayFor(m => item.CommittedByUser, DisplayTemplate.NameOrNotEntered)</td>
+                    <td>@Html.DisplayFor(_ => item.CommittedDate, DisplayTemplate.ShortDateTimeNoBreak)</td>
+                    <td>@Html.DisplayFor(_ => item.CommittedByUser, DisplayTemplate.NameOrNotEntered)</td>
                     <td>@item.TransitionType.GetDisplayName()</td>
                     <td>
-                        @Html.DisplayFor(m => item.TransferredFromUser, DisplayTemplate.NameOrBlank)
-                        @Html.DisplayFor(m => item.TransferredFromOffice, DisplayTemplate.NameOrBlank)
+                        @Html.DisplayFor(_ => item.TransferredFromUser, DisplayTemplate.NameOrBlank)
+                        @Html.DisplayFor(_ => item.TransferredFromOffice, DisplayTemplate.NameOrBlank)
                     </td>
                     <td>
-                        @Html.DisplayFor(m => item.TransferredToUser, DisplayTemplate.NameOrBlank)
-                        @Html.DisplayFor(m => item.TransferredToOffice, DisplayTemplate.NameOrBlank)
+                        @Html.DisplayFor(_ => item.TransferredToUser, DisplayTemplate.NameOrBlank)
+                        @Html.DisplayFor(_ => item.TransferredToOffice, DisplayTemplate.NameOrBlank)
                     </td>
-                    <td class="text-break text-pre-line">@Html.DisplayFor(m => item.Comment)</td>
+                    <td class="text-break text-pre-line">@Html.DisplayFor(_ => item.Comment)</td>
                 </tr>
             }
             </tbody>

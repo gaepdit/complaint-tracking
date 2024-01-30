@@ -5,7 +5,6 @@ using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
 using Cts.TestData;
-using System.Linq.Expressions;
 
 namespace AppServicesTests.Complaints;
 
@@ -18,7 +17,7 @@ public class Find
         var item = ComplaintData.GetComplaints.First(e => e is { IsDeleted: false, ComplaintClosed: true });
 
         var repoMock = Substitute.For<IComplaintRepository>();
-        repoMock.FindIncludeAllAsync(Arg.Any<Expression<Func<Complaint, bool>>>(), Arg.Any<CancellationToken>())
+        repoMock.FindIncludeAllAsync(Arg.Any<int>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
             .Returns(item);
 
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
@@ -40,7 +39,7 @@ public class Find
         var item = ComplaintData.GetComplaints.First(e => e.IsDeleted);
 
         var repoMock = Substitute.For<IComplaintRepository>();
-        repoMock.FindIncludeAllAsync(Arg.Any<Expression<Func<Complaint, bool>>>(), Arg.Any<CancellationToken>())
+        repoMock.FindIncludeAllAsync(Arg.Any<int>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
             .Returns(item);
 
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
@@ -59,7 +58,7 @@ public class Find
     public async Task WhenNoItemExists_ReturnsNull()
     {
         var repoMock = Substitute.For<IComplaintRepository>();
-        repoMock.FindIncludeAllAsync(Arg.Any<Expression<Func<Complaint, bool>>>(), Arg.Any<CancellationToken>())
+        repoMock.FindIncludeAllAsync(Arg.Any<int>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
             .Returns((Complaint?)null);
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),

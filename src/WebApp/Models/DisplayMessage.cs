@@ -1,17 +1,11 @@
 ﻿namespace Cts.WebApp.Models;
 
-public class DisplayMessage
+public class DisplayMessage(DisplayMessage.AlertContext context, string message)
 {
-    // ReSharper disable once MemberCanBePrivate.Global
     // Context must be public so it works with deserialization in TempDataExtensions class
-    public AlertContext Context { get; }
-    public string Message { get; }
-
-    public DisplayMessage(AlertContext context, string message)
-    {
-        Context = context;
-        Message = message;
-    }
+    // ReSharper disable once MemberCanBePrivate.Global
+    public AlertContext Context { get; } = context;
+    public string Message { get; } = message;
 
     public string AlertClass => Context switch
     {
@@ -19,6 +13,7 @@ public class DisplayMessage
         AlertContext.Secondary => "alert-secondary",
         AlertContext.Success => "alert-success",
         AlertContext.Danger => "alert-danger",
+        AlertContext.Warning => "alert-warning",
         AlertContext.Info => "alert-info",
         _ => string.Empty,
     };
@@ -29,6 +24,7 @@ public class DisplayMessage
         Secondary,
         Success,
         Danger,
+        Warning,
         Info,
     }
 }

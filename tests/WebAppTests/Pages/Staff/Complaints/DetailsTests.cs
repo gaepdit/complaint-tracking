@@ -49,7 +49,7 @@ public class DetailsTests
     {
         // Arrange
         var complaintServiceMock = Substitute.For<IComplaintService>();
-        complaintServiceMock.FindAsync(Arg.Any<int>(), Arg.Any<CancellationToken>())
+        complaintServiceMock.FindAsync(Arg.Any<int>(),Arg.Any<bool>(), Arg.Any<CancellationToken>())
             .Returns(ItemTest);
 
         var authorizationServiceMock = Substitute.For<IAuthorizationService>();
@@ -69,7 +69,7 @@ public class DetailsTests
 
         // Assert
         using var scope = new AssertionScope();
-        page.Item.Should().BeEquivalentTo(ItemTest);
+        page.ComplaintView.Should().BeEquivalentTo(ItemTest);
         page.UserCan.Should().NotBeEmpty();
         page.UserCan[ComplaintOperation.ManageDeletions].Should().BeTrue();
         page.UserCan[ComplaintOperation.Accept].Should().BeFalse();

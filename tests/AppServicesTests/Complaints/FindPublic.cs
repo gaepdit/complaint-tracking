@@ -1,7 +1,5 @@
 ﻿using Cts.AppServices.Complaints;
 using Cts.AppServices.UserServices;
-using Cts.Domain.Entities.Attachments;
-using Cts.Domain.Entities.ComplaintActions;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Entities.Concerns;
@@ -18,12 +16,11 @@ public class FindPublic
     {
         // Arrange
         var item = ComplaintData.GetComplaints.First(e => e is { IsDeleted: false, ComplaintClosed: true });
-        item.ComplaintActions = new List<ComplaintAction>
-            { ComplaintActionData.GetComplaintActions.First(e => !e.IsDeleted) };
-        item.Attachments = new List<Attachment> { AttachmentData.GetAttachments.First(e => !e.IsDeleted) };
+        item.ComplaintActions = [ComplaintActionData.GetComplaintActions.First(e => !e.IsDeleted)];
+        item.Attachments = [AttachmentData.GetAttachments.First(e => !e.IsDeleted)];
 
         var repoMock = Substitute.For<IComplaintRepository>();
-        repoMock.FindIncludeAllAsync(Arg.Any<Expression<Func<Complaint, bool>>>(), Arg.Any<CancellationToken>())
+        repoMock.FindIncludeAllAsync(Arg.Any<int>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
             .Returns(item);
 
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
