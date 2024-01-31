@@ -22,5 +22,5 @@ public sealed class OfficeRepository(AppDbContext context) :
     public async Task<IReadOnlyCollection<Office>> GetListIncludeAssignorAsync(CancellationToken token = default) =>
         await Context.Set<Office>().AsNoTracking()
             .Include(e => e.Assignor)
-            .ToListAsync(token);
+            .ToListAsync(token).ConfigureAwait(false);
 }

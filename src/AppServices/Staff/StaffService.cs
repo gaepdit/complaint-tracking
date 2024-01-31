@@ -19,14 +19,14 @@ public sealed class StaffService(
 {
     public async Task<StaffViewDto> GetCurrentUserAsync()
     {
-        var user = await userService.GetCurrentUserAsync()
+        var user = await userService.GetCurrentUserAsync().ConfigureAwait(false)
             ?? throw new CurrentUserNotFoundException();
         return mapper.Map<StaffViewDto>(user);
     }
 
     public async Task<StaffViewDto?> FindAsync(string id)
     {
-        var user = await userManager.FindByIdAsync(id);
+        var user = await userManager.FindByIdAsync(id).ConfigureAwait(false);
         return mapper.Map<StaffViewDto?>(user);
     }
 
@@ -34,7 +34,7 @@ public sealed class StaffService(
     {
         var users = string.IsNullOrEmpty(spec.Role)
             ? userManager.Users.ApplyFilter(spec)
-            : (await userManager.GetUsersInRoleAsync(spec.Role)).AsQueryable().ApplyFilter(spec);
+            : (await userManager.GetUsersInRoleAsync(spec.Role).ConfigureAwait(false)).AsQueryable().ApplyFilter(spec);
 
         return mapper.Map<List<StaffViewDto>>(users);
     }
@@ -43,7 +43,7 @@ public sealed class StaffService(
     {
         var users = string.IsNullOrEmpty(spec.Role)
             ? userManager.Users.ApplyFilter(spec)
-            : (await userManager.GetUsersInRoleAsync(spec.Role)).AsQueryable().ApplyFilter(spec);
+            : (await userManager.GetUsersInRoleAsync(spec.Role).ConfigureAwait(false)).AsQueryable().ApplyFilter(spec);
         var list = users.Skip(paging.Skip).Take(paging.Take);
         var listMapped = mapper.Map<List<StaffSearchResultDto>>(list);
 
@@ -63,29 +63,29 @@ public sealed class StaffService(
 
     public async Task<IList<string>> GetRolesAsync(string id)
     {
-        var user = await userManager.FindByIdAsync(id);
+        var user = await userManager.FindByIdAsync(id).ConfigureAwait(false);
         if (user is null) return new List<string>();
-        return await userManager.GetRolesAsync(user);
+        return await userManager.GetRolesAsync(user).ConfigureAwait(false);
     }
 
     public async Task<IList<AppRole>> GetAppRolesAsync(string id) =>
-        AppRole.RolesAsAppRoles(await GetRolesAsync(id)).OrderBy(r => r.DisplayName).ToList();
+        AppRole.RolesAsAppRoles(await GetRolesAsync(id).ConfigureAwait(false)).OrderBy(r => r.DisplayName).ToList();
 
     public async Task<bool> HasAppRoleAsync(string id, AppRole role)
     {
-        var user = await userManager.FindByIdAsync(id);
+        var user = await userManager.FindByIdAsync(id).ConfigureAwait(false);
         if (user is null) return false;
-        return await userManager.IsInRoleAsync(user, role.Name);
+        return await userManager.IsInRoleAsync(user, role.Name).ConfigureAwait(false);
     }
 
     public async Task<IdentityResult> UpdateRolesAsync(string id, Dictionary<string, bool> roles)
     {
-        var user = await userManager.FindByIdAsync(id)
+        var user = await userManager.FindByIdAsync(id).ConfigureAwait(false)
             ?? throw new EntityNotFoundException<ApplicationUser>(id);
 
         foreach (var (role, value) in roles)
         {
-            var result = await UpdateUserRoleAsync(user, role, value);
+            var result = await UpdateUserRoleAsync(user, role, value).ConfigureAwait(false);
             if (result != IdentityResult.Success) return result;
         }
 
@@ -93,27 +93,27 @@ public sealed class StaffService(
 
         async Task<IdentityResult> UpdateUserRoleAsync(ApplicationUser u, string r, bool addToRole)
         {
-            var isInRole = await userManager.IsInRoleAsync(u, r);
+            var isInRole = await userManager.IsInRoleAsync(u, r).ConfigureAwait(false);
             if (addToRole == isInRole) return IdentityResult.Success;
 
             return addToRole switch
             {
-                true => await userManager.AddToRoleAsync(u, r),
-                false => await userManager.RemoveFromRoleAsync(u, r),
+                true => await userManager.AddToRoleAsync(u, r).ConfigureAwait(false),
+                false => await userManager.RemoveFromRoleAsync(u, r).ConfigureAwait(false),
             };
         }
     }
 
     public async Task<IdentityResult> UpdateAsync(string id, StaffUpdateDto resource)
     {
-        var user = await userManager.FindByIdAsync(id)
+        var user = await userManager.FindByIdAsync(id).ConfigureAwait(false)
             ?? throw new EntityNotFoundException<ApplicationUser>(id);
 
         user.Phone = resource.Phone;
-        user.Office = resource.OfficeId is null ? null : await officeRepository.GetAsync(resource.OfficeId.Value);
+        user.Office = resource.OfficeId is null ? null : await officeRepository.GetAsync(resource.OfficeId.Value).ConfigureAwait(false);
         user.Active = resource.Active;
 
-        return await userManager.UpdateAsync(user);
+        return await userManager.UpdateAsync(user).ConfigureAwait(false);
     }
 
     public void Dispose()
@@ -126,6 +126,6 @@ public sealed class StaffService(
     {
         var task = officeRepository.DisposeAsync();
         userManager.Dispose();
-        await task;
+        await task.ConfigureAwait(false);
     }
 }

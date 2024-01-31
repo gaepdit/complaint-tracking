@@ -12,11 +12,11 @@ public sealed class ComplaintRepository(AppDbContext context)
     public async Task<Complaint?> FindIncludeAllAsync(int id, bool includeDeletedActions = false,
         CancellationToken token = default) =>
         await ComplaintIncludeAllQueryable(includeDeletedActions)
-            .SingleOrDefaultAsync(complaint => complaint.Id.Equals(id), token);
+            .SingleOrDefaultAsync(complaint => complaint.Id.Equals(id), token).ConfigureAwait(false);
 
     public async Task<Complaint?> FindIncludeAllAsync(Expression<Func<Complaint, bool>> predicate,
         bool includeDeletedActions = false, CancellationToken token = default) =>
-        await ComplaintIncludeAllQueryable(includeDeletedActions).SingleOrDefaultAsync(predicate, token);
+        await ComplaintIncludeAllQueryable(includeDeletedActions).SingleOrDefaultAsync(predicate, token).ConfigureAwait(false);
 
     private IIncludableQueryable<Complaint, IOrderedEnumerable<ComplaintTransition>> ComplaintIncludeAllQueryable(
         bool includeDeletedActions) =>
@@ -36,13 +36,13 @@ public sealed class ComplaintRepository(AppDbContext context)
     public async Task<Attachment?> FindAttachmentAsync(Guid id, CancellationToken token = default) =>
         await Context.Set<Attachment>()
             .Include(e => e.Complaint)
-            .SingleOrDefaultAsync(e => e.Id == id, token);
+            .SingleOrDefaultAsync(e => e.Id == id, token).ConfigureAwait(false);
 
     public async Task InsertTransitionAsync(ComplaintTransition transition, bool autoSave = true,
         CancellationToken token = default)
     {
-        await Context.Set<ComplaintTransition>().AddAsync(transition, token);
-        if (autoSave) await Context.SaveChangesAsync(token);
+        await Context.Set<ComplaintTransition>().AddAsync(transition, token).ConfigureAwait(false);
+        if (autoSave) await Context.SaveChangesAsync(token).ConfigureAwait(false);
     }
 
     // EF will set the ID automatically.

@@ -9,7 +9,7 @@ public class FileSystemFileService(string filesBasePath) : IFileService
             : Path.Combine(filesBasePath, location, path);
         try
         {
-            return await File.ReadAllBytesAsync(savePath);
+            return await File.ReadAllBytesAsync(savePath).ConfigureAwait(false);
         }
         catch (Exception e) when (e is FileNotFoundException or DirectoryNotFoundException)
         {
@@ -32,7 +32,8 @@ public class FileSystemFileService(string filesBasePath) : IFileService
             ? Path.Combine(filesBasePath, path)
             : Path.Combine(filesBasePath, location, path);
         Directory.CreateDirectory(savePath);
-        await using var fs = new FileStream(Path.Combine(filesBasePath, savePath), FileMode.Create);
-        await stream.CopyToAsync(fs);
+        var fs = new FileStream(Path.Combine(filesBasePath, savePath), FileMode.Create);
+        await using var _ = fs.ConfigureAwait(false);
+        await stream.CopyToAsync(fs).ConfigureAwait(false);
     }
 }

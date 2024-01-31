@@ -94,7 +94,7 @@ public sealed class LocalUserStore :
 
     public async Task<IdentityResult> UpdateAsync(ApplicationUser user, CancellationToken cancellationToken)
     {
-        var existingUser = await FindByIdAsync(user.Id, cancellationToken)
+        var existingUser = await FindByIdAsync(user.Id, cancellationToken).ConfigureAwait(false)
             ?? throw new EntityNotFoundException<ApplicationUser>(user.Id);
         UserStore.Remove(existingUser);
         UserStore.Add(user);
@@ -103,7 +103,7 @@ public sealed class LocalUserStore :
 
     public async Task<IdentityResult> DeleteAsync(ApplicationUser user, CancellationToken cancellationToken)
     {
-        var existingUser = await FindByIdAsync(user.Id, cancellationToken);
+        var existingUser = await FindByIdAsync(user.Id, cancellationToken).ConfigureAwait(false);
         if (existingUser is not null) UserStore.Remove(existingUser);
         return IdentityResult.Success;
     }
