@@ -63,5 +63,5 @@ public class EditModel(IOfficeService officeService, IStaffService staffService,
     }
 
     private async Task PopulateSelectListsAsync() =>
-        ActiveStaffMembersSelectList = (await staffService.GetStaffListItemsAsync()).ToSelectList();
+        ActiveStaffMembersSelectList = (await staffService.GetAsListItemsAsync()).ToSelectList();
 }

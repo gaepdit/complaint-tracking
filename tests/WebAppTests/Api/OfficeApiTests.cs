@@ -1,4 +1,4 @@
-﻿using Cts.AppServices.Offices;
+using Cts.AppServices.Offices;
 using Cts.AppServices.Staff;
 using Cts.AppServices.Staff.Dto;
 using Cts.AppServices.UserServices;
@@ -35,7 +35,7 @@ public class OfficeApiTests
     {
         // Arrange
         var officeMock = Substitute.For<IOfficeService>();
-        officeMock.GetStaffListItemsAsync(Arg.Any<Guid?>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
+        officeMock.GetStaffAsListItemsAsync(Arg.Any<Guid?>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
             .Returns(ListItems);
 
         var staffMock = Substitute.For<IStaffService>();
@@ -60,7 +60,7 @@ public class OfficeApiTests
     {
         // Arrange
         var officeMock = Substitute.For<IOfficeService>();
-        officeMock.GetStaffListItemsAsync(Arg.Any<Guid?>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
+        officeMock.GetStaffAsListItemsAsync(Arg.Any<Guid?>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
             .Returns(ListItems);
         officeMock.UserIsAssignorAsync(Arg.Any<Guid>(), Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(true);
 
@@ -84,7 +84,7 @@ public class OfficeApiTests
     {
         // Arrange
         var officeMock = Substitute.For<IOfficeService>();
-        officeMock.GetStaffListItemsAsync(Arg.Any<Guid?>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
+        officeMock.GetStaffAsListItemsAsync(Arg.Any<Guid?>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
             .Returns(ListItems);
 
         var staffMock = Substitute.For<IStaffService>();
@@ -146,7 +146,7 @@ public class OfficeApiTests
     {
         // Arrange
         var officeMock = Substitute.For<IOfficeService>();
-        officeMock.GetStaffListItemsAsync(Arg.Any<Guid?>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
+        officeMock.GetStaffAsListItemsAsync(Arg.Any<Guid?>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
             .Returns(ListItems);
         officeMock.UserIsAssignorAsync(Arg.Any<Guid>(), Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(false);
 

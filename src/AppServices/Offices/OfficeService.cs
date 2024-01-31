@@ -59,7 +59,7 @@ public sealed class OfficeService(
         return office.Id;
     }
 
-    public async Task<IReadOnlyList<ListItem<string>>> GetStaffListItemsAsync(Guid? id, bool includeInactive = false,
+    public async Task<IReadOnlyList<ListItem<string>>> GetStaffAsListItemsAsync(Guid? id, bool includeInactive = false,
         CancellationToken token = default) =>
         id is null
             ? Array.Empty<ListItem<string>>()

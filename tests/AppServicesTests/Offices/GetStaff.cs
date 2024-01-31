@@ -31,7 +31,7 @@ public class GetStaff
         var appService = new OfficeService(repoMock, managerMock,
             AppServicesTestsSetup.Mapper!, userServiceMock);
 
-        var result = await appService.GetStaffListItemsAsync(guid);
+        var result = await appService.GetStaffAsListItemsAsync(guid);
 
         result.Should().ContainSingle(e =>
             string.Equals(e.Id, user.Id, StringComparison.Ordinal) &&

@@ -1,4 +1,4 @@
-﻿using Cts.AppServices.Offices;
+using Cts.AppServices.Offices;
 using Cts.AppServices.Staff;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Identity;
@@ -25,14 +25,14 @@ public class OfficeApiController(IOfficeService officeService, IStaffService sta
 
     [HttpGet("{id:guid}/staff")]
     public async Task<JsonResult> GetStaffAsync([FromRoute] Guid id) =>
-        Json(await officeService.GetStaffListItemsAsync(id));
+        Json(await officeService.GetStaffAsListItemsAsync(id));
 
     [HttpGet("{id:guid}/all-staff")]
     public async Task<IActionResult> GetAllStaffAsync([FromRoute] Guid id)
     {
         var user = await userService.GetCurrentUserAsync();
         if (user is null || !user.Active) return Unauthorized();
-        return Json(await officeService.GetStaffListItemsAsync(id, true));
+        return Json(await officeService.GetStaffAsListItemsAsync(id, includeInactive: true));
     }
 
     [HttpGet("{id:guid}/staff-for-assignment")]
@@ -45,7 +45,7 @@ public class OfficeApiController(IOfficeService officeService, IStaffService sta
             || await officeService.UserIsAssignorAsync(id, user.Id) // user is assignor for this office
             || await staffService.HasAppRoleAsync(user.Id, AppRole.DivisionManagerRole)) // user is Division Manager
         {
-            return Json(await officeService.GetStaffListItemsAsync(id));
+            return Json(await officeService.GetStaffAsListItemsAsync(id));
         }
 
         return Json(null);

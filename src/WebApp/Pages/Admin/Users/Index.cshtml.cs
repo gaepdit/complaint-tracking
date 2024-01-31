@@ -41,7 +41,7 @@ public class IndexModel(IOfficeService officeService, IStaffService staffService
 
     private async Task PopulateSelectListsAsync()
     {
-        OfficesSelectList = (await officeService.GetActiveListItemsAsync()).ToSelectList();
+        OfficesSelectList = (await officeService.GetAsListItemsAsync(includeInactive: true)).ToSelectList();
         RolesSelectList = AppRole.AllRoles
             .Select(r => new ListItem<string>(r.Key, r.Value.DisplayName))
             .ToSelectList();

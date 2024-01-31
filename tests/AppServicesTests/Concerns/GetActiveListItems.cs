@@ -1,7 +1,6 @@
 ﻿using Cts.AppServices.Concerns;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Concerns;
-using Cts.TestData.Constants;
 using System.Linq.Expressions;
 
 namespace AppServicesTests.Concerns;
@@ -9,19 +8,27 @@ namespace AppServicesTests.Concerns;
 public class GetActiveListItems
 {
     [Test]
-    public async Task ReturnsActiveListItems()
+    public async Task GetAsListItems_ReturnsListOfListItems()
     {
-        var itemList = new List<Concern> { new(Guid.Empty, TextData.ValidName) };
+        // Arrange
+        var itemList = new List<Concern>
+        {
+            new(Guid.Empty, "One"),
+            new(Guid.Empty, "Two"),
+        };
+
         var repoMock = Substitute.For<IConcernRepository>();
         repoMock.GetListAsync(Arg.Any<Expression<Func<Concern, bool>>>(), Arg.Any<CancellationToken>())
             .Returns(itemList);
+
         var managerMock = Substitute.For<IConcernManager>();
         var userServiceMock = Substitute.For<IUserService>();
-        var appService = new ConcernService(repoMock, managerMock,
-            AppServicesTestsSetup.Mapper!, userServiceMock);
+        var appService = new ConcernService(repoMock, managerMock, AppServicesTestsSetup.Mapper!, userServiceMock);
 
-        var result = await appService.GetActiveListItemsAsync();
+        // Act
+        var result = await appService.GetAsListItemsAsync();
 
+        // Assert
         result.Should().BeEquivalentTo(itemList);
     }
 }
