@@ -11,25 +11,52 @@ public sealed class OfficeService(
     IOfficeManager manager,
     IMapper mapper,
     IUserService userService)
-    : MaintenanceItemService<Office, OfficeWithAssignorDto, OfficeUpdateDto>
+    : MaintenanceItemService<Office, OfficeViewDto, OfficeUpdateDto>
         (repository, manager, mapper, userService),
         IOfficeService
 {
     private readonly IMapper _mapper = mapper;
     private readonly IUserService _userService = userService;
 
+    // Hide the following base methods in order to include the assignor.
+    public new async Task<OfficeUpdateDto?> FindForUpdateAsync(Guid id, CancellationToken token = default) =>
+        _mapper.Map<OfficeUpdateDto>(await repository.FindIncludeAssignorAsync(id, token));
+
+    public new async Task UpdateAsync(Guid id, OfficeUpdateDto resource, CancellationToken token = default)
+    {
+        var office = await repository.GetAsync(id, token);
+        office.SetUpdater((await _userService.GetCurrentUserAsync())?.Id);
+
+        if (office.Name != resource.Name.Trim())
+            await manager.ChangeNameAsync(office, resource.Name, token);
+
+        office.Active = resource.Active;
+
+        if (resource.AssignorId != null)
+            office.Assignor = await _userService.FindUserAsync(resource.AssignorId);
+
+        await repository.UpdateAsync(office, token: token);
+    }
+
+    public async Task<IReadOnlyList<OfficeWithAssignorDto>> GetListIncludeAssignorAsync(
+        CancellationToken token = default)
+    {
+        var list = (await repository.GetListIncludeAssignorAsync(token)).OrderBy(office => office.Name).ToList();
+        return _mapper.Map<IReadOnlyList<OfficeWithAssignorDto>>(list);
+    }
+
     public async Task<OfficeWithAssignorDto?> FindAsync(Guid id, CancellationToken token = default)
     {
-        var item = await repository.FindIncludeAssignorAsync(id, token);
-        return _mapper.Map<OfficeWithAssignorDto>(item);
+        var office = await repository.FindIncludeAssignorAsync(id, token);
+        return _mapper.Map<OfficeWithAssignorDto>(office);
     }
 
     public async Task<Guid> CreateAsync(OfficeCreateDto resource, CancellationToken token = default)
     {
-        var item = await manager.CreateAsync(resource.Name, (await _userService.GetCurrentUserAsync())?.Id, token);
-        if (resource.AssignorId != null) item.Assignor = await _userService.FindUserAsync(resource.AssignorId);
-        await repository.InsertAsync(item, token: token);
-        return item.Id;
+        var office = await manager.CreateAsync(resource.Name, (await _userService.GetCurrentUserAsync())?.Id, token);
+        if (resource.AssignorId != null) office.Assignor = await _userService.FindUserAsync(resource.AssignorId);
+        await repository.InsertAsync(office, token: token);
+        return office.Id;
     }
 
     public async Task<IReadOnlyList<ListItem<string>>> GetStaffListItemsAsync(Guid? id, bool includeInactive = false,

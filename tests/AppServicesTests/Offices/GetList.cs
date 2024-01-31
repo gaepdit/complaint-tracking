@@ -29,7 +29,7 @@ public class GetList
         var appService = new OfficeService(repoMock, managerMock,
             AppServicesTestsSetup.Mapper!, userServiceMock);
 
-        var result = await appService.GetListAsync();
+        var result = await appService.GetListIncludeAssignorAsync();
 
         result.Should().BeEquivalentTo(itemList);
     }

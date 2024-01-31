@@ -14,7 +14,7 @@ public class OfficeApiController(IOfficeService officeService, IStaffService sta
 {
     [HttpGet]
     public async Task<IReadOnlyList<OfficeWithAssignorDto>> ListOfficesAsync() =>
-        await officeService.GetListAsync();
+        await officeService.GetListIncludeAssignorAsync();
 
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<OfficeWithAssignorDto>> GetOfficeAsync([FromRoute] Guid id)
