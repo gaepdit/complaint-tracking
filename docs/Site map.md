@@ -42,8 +42,9 @@ These pages are only available to logged-in staff.
 
 * `/Staff/ComplaintActions` (Search complaint actions)
 * `/Staff/Complaints/Details/{complaintId}#actions` (Embedded form for adding an action)
-* `/Staff/Complaints/DeleteAction/{actionId}` (Delete an action)
 * `/Staff/Complaints/EditAction/{actionId}` (Edit action details)
+* `/Staff/Complaints/DeleteAction/{actionId}` (Delete an action)
+* `/Staff/Complaints/RestoreAction/{actionId}` (Restore a deleted action)
 
 ## User Account
 

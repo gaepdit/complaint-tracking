@@ -18,7 +18,8 @@ public sealed class ComplaintActionService(
     public async Task<Guid> CreateAsync(ComplaintActionCreateDto resource, CancellationToken token = default)
     {
         var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
-        var actionItemType = await actionTypeRepository.GetAsync(resource.ActionTypeId!.Value, token).ConfigureAwait(false);
+        var actionItemType = await actionTypeRepository.GetAsync(resource.ActionTypeId!.Value, token)
+            .ConfigureAwait(false);
 
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
         var action = complaintManager.AddAction(complaint, actionItemType, currentUser);
@@ -37,14 +38,16 @@ public sealed class ComplaintActionService(
 
     public async Task<ComplaintActionUpdateDto?> FindForUpdateAsync(Guid id, CancellationToken token = default) =>
         mapper.Map<ComplaintActionUpdateDto>(
-            await actionRepository.FindAsync(action => action.Id == id && !action.IsDeleted, token).ConfigureAwait(false));
+            await actionRepository.FindAsync(action => action.Id == id && !action.IsDeleted, token)
+                .ConfigureAwait(false));
 
     public async Task UpdateAsync(Guid id, ComplaintActionUpdateDto resource, CancellationToken token = default)
     {
         var action = await actionRepository.GetAsync(id, token).ConfigureAwait(false);
         action.SetUpdater((await userService.GetCurrentUserAsync().ConfigureAwait(false))?.Id);
 
-        action.ActionType = await actionTypeRepository.GetAsync(resource.ActionTypeId!.Value, token).ConfigureAwait(false);
+        action.ActionType = await actionTypeRepository.GetAsync(resource.ActionTypeId!.Value, token)
+            .ConfigureAwait(false);
         action.ActionDate = resource.ActionDate;
         action.Investigator = resource.Investigator;
         action.Comments = resource.Comments;

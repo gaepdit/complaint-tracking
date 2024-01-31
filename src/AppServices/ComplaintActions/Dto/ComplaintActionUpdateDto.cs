@@ -2,8 +2,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Cts.AppServices.ComplaintActions;
 
-public record ComplaintActionUpdateDto(Guid ComplaintId)
+public record ComplaintActionUpdateDto
 {
+    public int ComplaintId { get; init; }
+
     [Required]
     [Display(Name = "Action Date")]
     [DataType(DataType.Date)]
