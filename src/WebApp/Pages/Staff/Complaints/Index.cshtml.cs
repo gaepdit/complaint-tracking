@@ -60,9 +60,10 @@ public class IndexModel(
 
     private async Task PopulateSelectListsAsync()
     {
-        ReceivedBySelectList = (await staff.GetStaffListItemsAsync(true)).ToSelectList();
-        ConcernsSelectList = (await concerns.GetActiveListItemsAsync()).ToSelectList();
-        OfficesSelectList = (await offices.GetActiveListItemsAsync()).ToSelectList();
-        AssignedToSelectList = (await offices.GetStaffListItemsAsync(Spec.Office, true)).ToSelectList();
+        ReceivedBySelectList = (await staff.GetAsListItemsAsync(includeInactive: true)).ToSelectList();
+        ConcernsSelectList = (await concerns.GetAsListItemsAsync(includeInactive: true)).ToSelectList();
+        OfficesSelectList = (await offices.GetAsListItemsAsync(includeInactive: true)).ToSelectList();
+        AssignedToSelectList =
+            (await offices.GetStaffAsListItemsAsync(Spec.Office, includeInactive: true)).ToSelectList();
     }
 }

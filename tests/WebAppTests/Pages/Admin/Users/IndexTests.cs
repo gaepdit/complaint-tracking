@@ -15,7 +15,8 @@ public class IndexTests
     {
         // Arrange
         var officeServiceMock = Substitute.For<IOfficeService>();
-        officeServiceMock.GetActiveListItemsAsync(Arg.Any<CancellationToken>()).Returns(new List<ListItem>());
+        officeServiceMock.GetAsListItemsAsync(Arg.Any<bool>(), Arg.Any<CancellationToken>())
+            .Returns(new List<ListItem>());
 
         var paging = new PaginatedRequest(1, 1);
         var output = new PaginatedResult<StaffSearchResultDto>(new List<StaffSearchResultDto>(), 1, paging);
@@ -41,7 +42,8 @@ public class IndexTests
     public async Task OnSearch_IfInvalidModel_ReturnPageWithInvalidModelState()
     {
         var officeServiceMock = Substitute.For<IOfficeService>();
-        officeServiceMock.GetActiveListItemsAsync(Arg.Any<CancellationToken>()).Returns(new List<ListItem>());
+        officeServiceMock.GetAsListItemsAsync(Arg.Any<bool>(), Arg.Any<CancellationToken>())
+            .Returns(new List<ListItem>());
         var staffServiceMock = Substitute.For<IStaffService>();
         var page = new IndexModel(officeServiceMock, staffServiceMock)
             { TempData = WebAppTestsSetup.PageTempData() };

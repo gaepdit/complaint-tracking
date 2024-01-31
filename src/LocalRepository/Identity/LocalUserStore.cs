@@ -15,7 +15,7 @@ public sealed class LocalUserStore :
     internal ICollection<ApplicationUser> UserStore { get; }
     internal ICollection<IdentityRole> Roles { get; }
     private List<IdentityUserRole<string>> UserRoles { get; }
-    private ICollection<UserLogin> UserLogins { get; }
+    private List<UserLogin> UserLogins { get; }
 
     public LocalUserStore()
     {

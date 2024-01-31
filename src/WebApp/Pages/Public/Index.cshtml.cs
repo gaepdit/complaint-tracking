@@ -72,5 +72,5 @@ public class IndexModel(IComplaintService complaints, IConcernService concerns) 
     }
 
     private async Task PopulateSelectListsAsync() =>
-        ConcernsSelectList = (await concerns.GetActiveListItemsAsync()).ToSelectList();
+        ConcernsSelectList = (await concerns.GetAsListItemsAsync(includeInactive: true)).ToSelectList();
 }

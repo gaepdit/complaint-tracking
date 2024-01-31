@@ -71,8 +71,8 @@ public class EditModel(
 
     private async Task PopulateSelectListsAsync()
     {
-        ConcernsSelectList = (await concernService.GetActiveListItemsAsync()).ToSelectList();
-        AllActiveStaffSelectList = (await staffService.GetStaffListItemsAsync()).ToSelectList();
+        ConcernsSelectList = (await concernService.GetAsListItemsAsync()).ToSelectList();
+        AllActiveStaffSelectList = (await staffService.GetAsListItemsAsync()).ToSelectList();
     }
 
     private async Task<bool> UserCanEditAsync(ComplaintUpdateDto item) =>

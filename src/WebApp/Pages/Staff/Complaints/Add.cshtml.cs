@@ -18,10 +18,10 @@ namespace Cts.WebApp.Pages.Staff.Complaints;
 
 [Authorize(Policy = nameof(Policies.StaffUser))]
 public class AddModel(
-    IComplaintService service,
-    IStaffService staff,
-    IConcernService concerns,
-    IOfficeService offices,
+    IComplaintService complaintService,
+    IStaffService staffService,
+    IConcernService concernService,
+    IOfficeService officeService,
     IValidator<ComplaintCreateDto> validator)
     : PageModel
 {
@@ -38,7 +38,7 @@ public class AddModel(
 
     public async Task OnGetAsync()
     {
-        var user = await staff.GetCurrentUserAsync();
+        var user = await staffService.GetCurrentUserAsync();
         Item = new ComplaintCreateDto(user.Id, user.Office?.Id);
         await PopulateSelectListsAsync(user.Office?.Id);
     }
@@ -53,16 +53,16 @@ public class AddModel(
             return Page();
         }
 
-        var id = await service.CreateAsync(Item);
+        var id = await complaintService.CreateAsync(Item);
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "Complaint successfully created.");
         return RedirectToPage("Details", new { id });
     }
 
     private async Task PopulateSelectListsAsync(Guid? currentOfficeId)
     {
-        ConcernsSelectList = (await concerns.GetActiveListItemsAsync()).ToSelectList();
-        OfficesSelectList = (await offices.GetActiveListItemsAsync()).ToSelectList();
-        AllActiveStaffSelectList = (await staff.GetStaffListItemsAsync()).ToSelectList();
-        ActiveStaffInOfficeSelectList = (await offices.GetStaffListItemsAsync(currentOfficeId)).ToSelectList();
+        ConcernsSelectList = (await concernService.GetAsListItemsAsync()).ToSelectList();
+        OfficesSelectList = (await officeService.GetAsListItemsAsync()).ToSelectList();
+        AllActiveStaffSelectList = (await staffService.GetAsListItemsAsync()).ToSelectList();
+        ActiveStaffInOfficeSelectList = (await officeService.GetStaffAsListItemsAsync(currentOfficeId)).ToSelectList();
     }
 }

@@ -35,15 +35,14 @@ public class AddTests
     [Test]
     public async Task OnPost_GivenInvalidItem_ReturnsPageWithModelErrors()
     {
-        var officeServiceMock = Substitute.For<IOfficeService>();
         var staffServiceMock = Substitute.For<IStaffService>();
-        staffServiceMock.GetStaffListItemsAsync(Arg.Any<bool>())
+        staffServiceMock.GetAsListItemsAsync(Arg.Any<bool>())
             .Returns(new List<ListItem<string>>());
         var validatorMock = Substitute.For<IValidator<OfficeCreateDto>>();
         var validationFailures = new List<ValidationFailure> { new("property", "message") };
         validatorMock.ValidateAsync(Arg.Any<OfficeCreateDto>(), Arg.Any<CancellationToken>())
             .Returns(new ValidationResult(validationFailures));
-        var page = new AddModel(officeServiceMock, staffServiceMock, validatorMock)
+        var page = new AddModel(Substitute.For<IOfficeService>(), staffServiceMock, validatorMock)
             { Item = ItemTest, TempData = WebAppTestsSetup.PageTempData() };
 
         var result = await page.OnPostAsync();

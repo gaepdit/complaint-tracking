@@ -27,7 +27,8 @@ public class EditTests
         var staffServiceMock = Substitute.For<IStaffService>();
         staffServiceMock.FindAsync(Arg.Any<string>()).Returns(StaffViewTest);
         var officeServiceMock = Substitute.For<IOfficeService>();
-        officeServiceMock.GetActiveListItemsAsync(Arg.Any<CancellationToken>()).Returns(new List<ListItem>());
+        officeServiceMock.GetAsListItemsAsync(Arg.Any<bool>(), Arg.Any<CancellationToken>())
+            .Returns(new List<ListItem>());
         var pageModel = new EditModel(staffServiceMock, officeServiceMock,
                 Substitute.For<IValidator<StaffUpdateDto>>())
             { TempData = WebAppTestsSetup.PageTempData() };
@@ -115,7 +116,8 @@ public class EditTests
         var staffServiceMock = Substitute.For<IStaffService>();
         staffServiceMock.FindAsync(Arg.Any<string>()).Returns(StaffViewTest);
         var officeServiceMock = Substitute.For<IOfficeService>();
-        officeServiceMock.GetActiveListItemsAsync(Arg.Any<CancellationToken>()).Returns(new List<ListItem>());
+        officeServiceMock.GetAsListItemsAsync(Arg.Any<bool>(), Arg.Any<CancellationToken>())
+            .Returns(new List<ListItem>());
         var validatorMock = Substitute.For<IValidator<StaffUpdateDto>>();
         var validationFailures = new List<ValidationFailure> { new("property", "message") };
         validatorMock.ValidateAsync(Arg.Any<StaffUpdateDto>(), Arg.Any<CancellationToken>())

@@ -86,7 +86,7 @@ public class DetailsModel(
     }
 
     private async Task PopulateSelectListsAsync() =>
-        ActionItemTypeSelectList = (await actionTypeService.GetActiveListItemsAsync()).ToSelectList();
+        ActionItemTypeSelectList = (await actionTypeService.GetAsListItemsAsync()).ToSelectList();
 
     private async Task SetPermissionsAsync(ComplaintViewDto item)
     {

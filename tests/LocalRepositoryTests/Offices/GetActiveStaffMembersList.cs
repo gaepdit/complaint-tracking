@@ -1,6 +1,4 @@
-using Cts.Domain.Entities.Offices;
 using Cts.LocalRepository.Repositories;
-using GaEpd.AppLibrary.Domain.Repositories;
 
 namespace LocalRepositoryTests.Offices;
 
@@ -17,9 +15,16 @@ public class GetActiveStaffMembersList
     [Test]
     public async Task WhenStaffExist_ReturnsList()
     {
-        var item = _repository.Items.First(e => e.Active);
-        var result = await _repository.GetStaffMembersListAsync(item.Id, true);
-        result.Should().BeEquivalentTo(item.StaffMembers);
+        // Arrange
+        var officeId = _repository.Items.First(e => e.Active).Id;
+        var expected = _repository.Staff.Users
+            .Where(e => e.Office != null && e.Office.Id == officeId);
+
+        // Act
+        var result = await _repository.GetStaffMembersListAsync(officeId, true);
+
+        // Assert
+        result.Should().BeEquivalentTo(expected);
     }
 
     [Test]
@@ -31,11 +36,10 @@ public class GetActiveStaffMembersList
     }
 
     [Test]
-    public async Task WhenOfficeDoesNotExist_Throws()
+    public async Task WhenOfficeDoesNotExist_ReturnsEmptyList()
     {
         var id = Guid.Empty;
-        var action = async () => await _repository.GetStaffMembersListAsync(id, false);
-        (await action.Should().ThrowAsync<EntityNotFoundException<Office>>())
-            .WithMessage($"Entity not found. Entity type: {typeof(Office).FullName}, id: {id}");
+        var result = await _repository.GetStaffMembersListAsync(id, false);
+        result.Should().BeEmpty();
     }
 }

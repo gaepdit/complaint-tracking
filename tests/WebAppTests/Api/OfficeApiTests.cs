@@ -1,4 +1,4 @@
-﻿using Cts.AppServices.Offices;
+using Cts.AppServices.Offices;
 using Cts.AppServices.Staff;
 using Cts.AppServices.Staff.Dto;
 using Cts.AppServices.UserServices;
@@ -18,10 +18,9 @@ public class OfficeApiTests
     [Test]
     public async Task ListOffices_ReturnsListOfOffices()
     {
-        List<OfficeWithAssignorDto> officeList = new()
-            { new OfficeWithAssignorDto(Guid.Empty, TextData.ValidName, true) };
+        List<OfficeWithAssignorDto> officeList = [new OfficeWithAssignorDto(Guid.Empty, TextData.ValidName, true)];
         var officeServiceMock = Substitute.For<IOfficeService>();
-        officeServiceMock.GetListAsync(CancellationToken.None).Returns(officeList);
+        officeServiceMock.GetListIncludeAssignorAsync(CancellationToken.None).Returns(officeList);
         var staffServiceMock = Substitute.For<IStaffService>();
         var userServiceMock = Substitute.For<IUserService>();
         var apiController = new OfficeApiController(officeServiceMock, staffServiceMock, userServiceMock);
@@ -36,7 +35,7 @@ public class OfficeApiTests
     {
         // Arrange
         var officeMock = Substitute.For<IOfficeService>();
-        officeMock.GetStaffListItemsAsync(Arg.Any<Guid?>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
+        officeMock.GetStaffAsListItemsAsync(Arg.Any<Guid?>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
             .Returns(ListItems);
 
         var staffMock = Substitute.For<IStaffService>();
@@ -61,7 +60,7 @@ public class OfficeApiTests
     {
         // Arrange
         var officeMock = Substitute.For<IOfficeService>();
-        officeMock.GetStaffListItemsAsync(Arg.Any<Guid?>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
+        officeMock.GetStaffAsListItemsAsync(Arg.Any<Guid?>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
             .Returns(ListItems);
         officeMock.UserIsAssignorAsync(Arg.Any<Guid>(), Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(true);
 
@@ -85,7 +84,7 @@ public class OfficeApiTests
     {
         // Arrange
         var officeMock = Substitute.For<IOfficeService>();
-        officeMock.GetStaffListItemsAsync(Arg.Any<Guid?>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
+        officeMock.GetStaffAsListItemsAsync(Arg.Any<Guid?>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
             .Returns(ListItems);
 
         var staffMock = Substitute.For<IStaffService>();
@@ -147,7 +146,7 @@ public class OfficeApiTests
     {
         // Arrange
         var officeMock = Substitute.For<IOfficeService>();
-        officeMock.GetStaffListItemsAsync(Arg.Any<Guid?>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
+        officeMock.GetStaffAsListItemsAsync(Arg.Any<Guid?>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
             .Returns(ListItems);
         officeMock.UserIsAssignorAsync(Arg.Any<Guid>(), Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(false);
 

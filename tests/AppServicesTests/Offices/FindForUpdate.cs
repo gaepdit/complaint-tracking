@@ -36,9 +36,8 @@ public class FindForUpdate
     [Test]
     public async Task WhenDoesNotExist_ReturnsNull()
     {
-        var id = Guid.Empty;
         var repoMock = Substitute.For<IOfficeRepository>();
-        repoMock.FindAsync(id, Arg.Any<CancellationToken>()).Returns((Office?)null);
+        repoMock.FindAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>()).Returns((Office?)null);
         var managerMock = Substitute.For<IOfficeManager>();
         var mapperMock = Substitute.For<IMapper>();
         var userServiceMock = Substitute.For<IUserService>();

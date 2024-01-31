@@ -19,8 +19,9 @@ public class EditTests
         _complaintService = Substitute.For<IComplaintService>();
         _staffService = Substitute.For<IStaffService>();
         _concernService = Substitute.For<IConcernService>();
-        _concernService.GetActiveListItemsAsync().Returns(new List<ListItem>());
-        _staffService.GetStaffListItemsAsync(Arg.Any<bool>()).Returns(new List<ListItem<string>>());
+        _concernService.GetAsListItemsAsync(Arg.Any<bool>(), Arg.Any<CancellationToken>())
+            .Returns(new List<ListItem>());
+        _staffService.GetAsListItemsAsync(Arg.Any<bool>()).Returns(new List<ListItem<string>>());
     }
 
     [TearDown]
