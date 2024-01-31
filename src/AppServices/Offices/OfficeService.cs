@@ -1,4 +1,5 @@
 using AutoMapper;
+using Cts.AppServices.ServiceBase;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Offices;
 using GaEpd.AppLibrary.ListItems;
@@ -9,51 +10,26 @@ public sealed class OfficeService(
     IOfficeRepository repository,
     IOfficeManager manager,
     IMapper mapper,
-    IUserService users)
-    : IOfficeService
+    IUserService userService)
+    : MaintenanceItemService<Office, OfficeWithAssignorDto, OfficeUpdateDto>
+        (repository, manager, mapper, userService),
+        IOfficeService
 {
+    private readonly IMapper _mapper = mapper;
+    private readonly IUserService _userService = userService;
+
     public async Task<OfficeWithAssignorDto?> FindAsync(Guid id, CancellationToken token = default)
     {
         var item = await repository.FindIncludeAssignorAsync(id, token);
-        return mapper.Map<OfficeWithAssignorDto>(item);
+        return _mapper.Map<OfficeWithAssignorDto>(item);
     }
-
-    public async Task<OfficeUpdateDto?> FindForUpdateAsync(Guid id, CancellationToken token = default) =>
-        mapper.Map<OfficeUpdateDto>(await repository.FindIncludeAssignorAsync(id, token));
-
-    public async Task<IReadOnlyList<OfficeWithAssignorDto>> GetListAsync(CancellationToken token = default)
-    {
-        var list = (await repository.GetListIncludeAssignorAsync(token)).OrderBy(e => e.Name).ToList();
-        return mapper.Map<IReadOnlyList<OfficeWithAssignorDto>>(list);
-    }
-
-    public async Task<IReadOnlyList<ListItem>> GetActiveListItemsAsync(CancellationToken token = default) =>
-        (await repository.GetListAsync(e => e.Active, token)).OrderBy(e => e.Name)
-        .Select(e => new ListItem(e.Id, e.Name)).ToList();
 
     public async Task<Guid> CreateAsync(OfficeCreateDto resource, CancellationToken token = default)
     {
-        var item = await manager.CreateAsync(resource.Name, (await users.GetCurrentUserAsync())?.Id, token);
-
-        if (resource.AssignorId != null) item.Assignor = await users.FindUserAsync(resource.AssignorId);
-
+        var item = await manager.CreateAsync(resource.Name, (await _userService.GetCurrentUserAsync())?.Id, token);
+        if (resource.AssignorId != null) item.Assignor = await _userService.FindUserAsync(resource.AssignorId);
         await repository.InsertAsync(item, token: token);
         return item.Id;
-    }
-
-    public async Task UpdateAsync(Guid id, OfficeUpdateDto resource, CancellationToken token = default)
-    {
-        var item = await repository.GetAsync(id, token);
-        item.SetUpdater((await users.GetCurrentUserAsync())?.Id);
-
-        if (item.Name != resource.Name.Trim())
-            await manager.ChangeNameAsync(item, resource.Name, token);
-        item.Active = resource.Active;
-
-        if (resource.AssignorId != null)
-            item.Assignor = await users.FindUserAsync(resource.AssignorId);
-
-        await repository.UpdateAsync(item, token: token);
     }
 
     public async Task<IReadOnlyList<ListItem<string>>> GetStaffListItemsAsync(Guid? id, bool includeInactive = false,
@@ -69,7 +45,4 @@ public sealed class OfficeService(
         var office = await repository.FindIncludeAssignorAsync(id, token);
         return office is { Active: true } && office.Assignor?.Id == userId;
     }
-
-    public void Dispose() => repository.Dispose();
-    public ValueTask DisposeAsync() => repository.DisposeAsync();
 }
