@@ -15,11 +15,13 @@ public sealed class LocalComplaintRepository(
 {
     public async Task<Complaint?> FindIncludeAllAsync(int id, bool includeDeletedActions = false,
         CancellationToken token = default) =>
-        await GetComplaintDetailsAsync(await FindAsync(id, token), includeDeletedActions, token);
+        await GetComplaintDetailsAsync(await FindAsync(id, token).ConfigureAwait(false), includeDeletedActions, token)
+            .ConfigureAwait(false);
 
     public async Task<Complaint?> FindIncludeAllAsync(Expression<Func<Complaint, bool>> predicate,
         bool includeDeletedActions = false, CancellationToken token = default) =>
-        await GetComplaintDetailsAsync(await FindAsync(predicate, token), includeDeletedActions, token);
+        await GetComplaintDetailsAsync(await FindAsync(predicate, token).ConfigureAwait(false), includeDeletedActions,
+            token).ConfigureAwait(false);
 
     private async Task<Complaint?> GetComplaintDetailsAsync(Complaint? complaint, bool includeDeletedActions,
         CancellationToken token)
@@ -27,18 +29,18 @@ public sealed class LocalComplaintRepository(
         if (complaint is null) return null;
 
         complaint.Attachments = (await attachmentRepository
-                .GetListAsync(attachment => attachment.Complaint.Id == complaint.Id, token))
+                .GetListAsync(attachment => attachment.Complaint.Id == complaint.Id, token).ConfigureAwait(false))
             .OrderByDescending(attachment => attachment.UploadedDate)
             .ToList();
 
         complaint.ComplaintActions = (await actionRepository
                 .GetListAsync(action => action.Complaint.Id == complaint.Id &&
-                    (!action.IsDeleted || includeDeletedActions), token))
+                    (!action.IsDeleted || includeDeletedActions), token).ConfigureAwait(false))
             .OrderByDescending(action => action.ActionDate).ThenByDescending(action => action.EnteredDate)
             .ToList();
 
         complaint.ComplaintTransitions = (await transitionRepository
-                .GetListAsync(transition => transition.Complaint.Id == complaint.Id, token))
+                .GetListAsync(transition => transition.Complaint.Id == complaint.Id, token).ConfigureAwait(false))
             .OrderBy(transition => transition.CommittedDate)
             .ToList();
 
