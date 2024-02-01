@@ -1,5 +1,6 @@
+using Cts.AppServices.ErrorLogging;
 using Cts.AppServices.RegisterServices;
-using Cts.WebApp.Platform.Raygun;
+using Cts.WebApp.Platform.ErrorLogging;
 using Cts.WebApp.Platform.SecurityHeaders;
 using Cts.WebApp.Platform.Services;
 using Cts.WebApp.Platform.Settings;
