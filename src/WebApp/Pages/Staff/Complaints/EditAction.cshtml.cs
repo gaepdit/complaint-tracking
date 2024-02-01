@@ -35,7 +35,7 @@ public class EditActionModel(
     public async Task<IActionResult> OnGetAsync(Guid? actionId)
     {
         if (actionId is null) return RedirectToPage("Index");
-
+        
         var actionItem = await actionService.FindForUpdateAsync(actionId.Value);
         if (actionItem is null) return NotFound();
 
@@ -43,13 +43,6 @@ public class EditActionModel(
         if (complaintView is null) return NotFound();
 
         if (!await UserCanEditActionItemsAsync(complaintView)) return Forbid();
-
-        if (complaintView.IsDeleted)
-        {
-            TempData.SetDisplayMessage(DisplayMessage.AlertContext.Warning,
-                "Complaint Actions cannot be edit because the complaint is deleted.");
-            return RedirectToPage("Details", routeValues: new { complaintView.Id });
-        }
 
         ActionItemUpdate = actionItem;
         ActionItemId = actionId.Value;
@@ -60,14 +53,19 @@ public class EditActionModel(
 
     public async Task<IActionResult> OnPostAsync()
     {
-        if (!ModelState.IsValid) return BadRequest();
-
         var originalActionItem = await actionService.FindAsync(ActionItemId);
         if (originalActionItem is null || originalActionItem.IsDeleted) return BadRequest();
 
         var complaintView = await complaintService.FindAsync(originalActionItem.ComplaintId);
         if (complaintView is null || !await UserCanEditActionItemsAsync(complaintView))
             return BadRequest();
+
+        if (!ModelState.IsValid)
+        {
+            ComplaintView = complaintView;
+            await PopulateSelectListsAsync();
+            return Page();
+        }
 
         await actionService.UpdateAsync(ActionItemId, ActionItemUpdate);
 

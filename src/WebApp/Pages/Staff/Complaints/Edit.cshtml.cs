@@ -52,8 +52,7 @@ public class EditModel(
     public async Task<IActionResult> OnPostAsync()
     {
         var original = await complaintService.FindForUpdateAsync(Id);
-        if (original is null) return BadRequest();
-        if (!await UserCanEditAsync(original)) return BadRequest();
+        if (original is null || !await UserCanEditAsync(original)) return BadRequest();
 
         await validator.ApplyValidationAsync(Item, ModelState);
 
