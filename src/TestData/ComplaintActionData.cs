@@ -21,10 +21,10 @@ internal static class ComplaintActionData
             ComplaintData.GetComplaints.ElementAt(0), ActionTypeData.GetActionTypes.ElementAt(1))
         {
             ActionDate = DateOnly.FromDateTime(DateTimeOffset.Now.AddDays(-2).Date),
-            Investigator = null,
+            Investigator = TextData.EmojiWord,
             EnteredDate = DateTimeOffset.Now.AddDays(-1),
             EnteredBy = UserData.GetUsers.ElementAt(0),
-            Comments = null,
+            Comments = TextData.EmojiWord,
         },
         new(new Guid("30000000-0000-0000-0000-000000000003"),
             ComplaintData.GetComplaints.ElementAt(0), ActionTypeData.GetActionTypes.ElementAt(5))

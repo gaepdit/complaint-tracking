@@ -38,13 +38,17 @@ public class EditTests
         // Arrange
         const int complaintId = 0;
         var dto = new ComplaintUpdateDto();
-        _complaintService.FindForUpdateAsync(complaintId).Returns(dto);
-        var validator = Substitute.For<IValidator<ComplaintUpdateDto>>();
+
+        await using var complaintService = Substitute.For<IComplaintService>();
+        complaintService.FindForUpdateAsync(complaintId).Returns(dto);
+
         var authorization = Substitute.For<IAuthorizationService>();
         authorization.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), Arg.Any<ComplaintUpdateDto>(),
                 Arg.Any<IAuthorizationRequirement[]>())
             .Returns(AuthorizationResult.Success());
-        var page = new EditModel(_complaintService, _staffService, _concernService, validator, authorization);
+
+        var page = new EditModel(complaintService, _staffService, _concernService,
+            Substitute.For<IValidator<ComplaintUpdateDto>>(), authorization);
 
         // Act
         var result = await page.OnGetAsync(complaintId);
