@@ -21,14 +21,14 @@ public class ComplaintAction : AuditableSoftDeleteEntity
 
     public Complaint Complaint { get; private init; } = default!;
 
-    public ActionType ActionType { get;  set; } = default!;
+    public ActionType ActionType { get; set; } = default!;
 
     public DateOnly ActionDate { get; set; }
 
     [StringLength(100)]
-    public string? Investigator { get; set; }
+    public string Investigator { get; set; } = string.Empty;
 
-    public string? Comments { get; set; }
+    public string Comments { get; set; } = string.Empty;
 
     public DateTimeOffset EnteredDate { get; set; }
 

@@ -47,20 +47,25 @@
     <div class="container small">
         <h2>For Complaint ID @Model.ActionItemUpdate.ComplaintId.ToString()</h2>
         <dl class="row">
-            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(m => m.ComplaintView.Status)</dt>
+            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.Status)</dt>
             <dd class="col-md-8 col-lg-9">@Model.ComplaintView.Status.GetDisplayName()</dd>
-            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(m => m.ComplaintView.CurrentOfficeName)</dt>
-            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(m => m.ComplaintView.CurrentOfficeName)</dd>
-            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(m => m.ComplaintView.CurrentOwner)</dt>
-            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(m => m.ComplaintView.CurrentOwner, DisplayTemplate.FullStaffView)</dd>
-            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(m => m.ComplaintView.PrimaryConcernName)</dt>
-            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(m => m.ComplaintView.PrimaryConcernName)</dd>
-            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(m => m.ComplaintView.SecondaryConcernName)</dt>
-            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(m => m.ComplaintView.SecondaryConcernName)</dd>
-            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(m => m.ComplaintView.ComplaintCounty)</dt>
-            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(m => m.ComplaintView.ComplaintCounty)</dd>
-            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(m => m.ComplaintView.ComplaintNature)</dt>
-            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(m => m.ComplaintView.ComplaintNature, DisplayTemplate.TruncateText)</dd>
+            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.CurrentOfficeName)</dt>
+            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.CurrentOfficeName, DisplayTemplate.StringOrNotEntered)</dd>
+            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.CurrentOwner)</dt>
+            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.CurrentOwner, DisplayTemplate.FullStaffView)</dd>
+            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.PrimaryConcernName)</dt>
+            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.PrimaryConcernName, DisplayTemplate.StringOrNotEntered)</dd>
+            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.SecondaryConcernName)</dt>
+            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.SecondaryConcernName, DisplayTemplate.StringOrNotEntered)</dd>
+            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.ComplaintCounty)</dt>
+            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.ComplaintCounty, DisplayTemplate.StringOrNotEntered)</dd>
+            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.ComplaintNature)</dt>
+            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.ComplaintNature, DisplayTemplate.TruncateText)</dd>
         </dl>
     </div>
 </div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

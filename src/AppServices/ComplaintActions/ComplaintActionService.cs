@@ -18,13 +18,13 @@ public sealed class ComplaintActionService(
     public async Task<Guid> CreateAsync(ComplaintActionCreateDto resource, CancellationToken token = default)
     {
         var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
-        var actionItemType = await actionTypeRepository.GetAsync(resource.ActionTypeId!.Value, token)
+        var actionItemType = await actionTypeRepository.GetAsync(resource.ActionTypeId, token)
             .ConfigureAwait(false);
 
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
         var action = complaintManager.AddAction(complaint, actionItemType, currentUser);
 
-        action.ActionDate = resource.ActionDate ?? DateOnly.FromDateTime(DateTime.Today);
+        action.ActionDate = resource.ActionDate;
         action.Investigator = resource.Investigator;
         action.Comments = resource.Comments;
 
@@ -46,7 +46,7 @@ public sealed class ComplaintActionService(
         var action = await actionRepository.GetAsync(id, token).ConfigureAwait(false);
         action.SetUpdater((await userService.GetCurrentUserAsync().ConfigureAwait(false))?.Id);
 
-        action.ActionType = await actionTypeRepository.GetAsync(resource.ActionTypeId!.Value, token)
+        action.ActionType = await actionTypeRepository.GetAsync(resource.ActionTypeId, token)
             .ConfigureAwait(false);
         action.ActionDate = resource.ActionDate;
         action.Investigator = resource.Investigator;
