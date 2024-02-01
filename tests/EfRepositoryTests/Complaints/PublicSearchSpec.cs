@@ -26,7 +26,7 @@ public class PublicSearchSpec
         var spec = new ComplaintPublicSearchDto();
         var predicate = ComplaintFilters.PublicSearchPredicate(spec);
 
-        using var repository = RepositoryHelper.CreateSqlServerRepositoryHelper(this).GetComplaintRepository();
+        await using var repository = RepositoryHelper.CreateSqlServerRepositoryHelper(this).GetComplaintRepository();
         var results = await repository.GetListAsync(predicate);
 
         var expected = ComplaintData.GetComplaints
