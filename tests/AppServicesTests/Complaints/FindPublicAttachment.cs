@@ -6,6 +6,7 @@ using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
 using Cts.TestData;
+using System.Linq.Expressions;
 
 namespace AppServicesTests.Complaints;
 
@@ -17,7 +18,7 @@ public class FindPublicAttachment
         var item = AttachmentData.GetAttachments.First(e =>
             e is { IsDeleted: false, Complaint: { IsDeleted: false, ComplaintClosed: true } });
         var repoMock = Substitute.For<IComplaintRepository>();
-        repoMock.FindAttachmentAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+        repoMock.FindAttachmentAsync(Arg.Any<Expression<Func<Attachment, bool>>>(), Arg.Any<CancellationToken>())
             .Returns(item);
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
@@ -30,10 +31,10 @@ public class FindPublicAttachment
     }
 
     [Test]
-    public async Task WhenNoItemExists_ReturnsNull()
+    public async Task WhenNoPublicItemExists_ReturnsNull()
     {
         var repoMock = Substitute.For<IComplaintRepository>();
-        repoMock.FindAttachmentAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+        repoMock.FindAttachmentAsync(Arg.Any<Expression<Func<Attachment, bool>>>(), Arg.Any<CancellationToken>())
             .Returns((Attachment?)null);
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
@@ -41,41 +42,6 @@ public class FindPublicAttachment
             AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
 
         var result = await appService.FindPublicAttachmentAsync(Guid.Empty);
-
-        result.Should().BeNull();
-    }
-
-    [Test]
-    public async Task WhenItemHasBeenDeleted_ReturnsNull()
-    {
-        var item = AttachmentData.GetAttachments.First(e => e.IsDeleted);
-        var repoMock = Substitute.For<IComplaintRepository>();
-        repoMock.FindAttachmentAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
-            .Returns(item);
-        var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
-            Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
-            Substitute.For<IComplaintTransitionManager>(),
-            AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
-
-        var result = await appService.FindPublicAttachmentAsync(item.Id);
-
-        result.Should().BeNull();
-    }
-
-    [Test]
-    public async Task WhenCorrespondingComplaintIsNotPublic_ReturnsNull()
-    {
-        var item = AttachmentData.GetAttachments.First(e => e is { IsDeleted: false, Complaint.IsDeleted: true });
-
-        var repoMock = Substitute.For<IComplaintRepository>();
-        repoMock.FindAttachmentAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
-            .Returns(item);
-        var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
-            Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
-            Substitute.For<IComplaintTransitionManager>(),
-            AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
-
-        var result = await appService.FindPublicAttachmentAsync(item.Id);
 
         result.Should().BeNull();
     }

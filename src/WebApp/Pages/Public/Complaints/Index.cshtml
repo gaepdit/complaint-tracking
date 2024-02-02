@@ -121,7 +121,7 @@ else
 
 <h2>Attachments</h2>
 
-<p class="container">
+<p>
     <em>(Attachments may not be available for complaints resolved before April 2018. Please note that not every complaint has attachments.)</em>
 </p>
 
@@ -136,28 +136,28 @@ else
         </tr>
         </thead>
         <tbody>
-        @foreach (var item in Model.Item.Attachments)
+        @foreach (var attachment in Model.Item.Attachments)
         {
             <tr>
                 <td>
-                    @if (item.IsImage)
+                    @if (attachment.IsImage)
                     {
-                        <a asp-page="Attachment" asp-route-id="@item.Id.ToString()" asp-route-fileName="@item.FileName" target="_blank"
-                           class="text-decoration-hover rounded d-block no-external-link" data-fancybox="attachment" data-caption="@item.FileName">
-                            <img src="Attachment/@item.Id.ToString()/@item.FileName/?thumbnail=true" class="img-thumbnail rounded me-2" alt="" />
-                            @item.FileName
+                        <a asp-page="Attachment" asp-route-id="@attachment.Id.ToString()" asp-route-fileName="@attachment.FileName" target="_blank"
+                           class="text-decoration-hover rounded d-block no-external-link" data-fancybox="attachment" data-caption="@attachment.FileName">
+                            <img src="Attachment/@attachment.Id.ToString()/@Uri.EscapeDataString(attachment.FileName)?thumbnail=true" class="img-thumbnail rounded me-2" alt="" />
+                            @attachment.FileName
                         </a>
                     }
                     else
                     {
-                        <a asp-page="Attachment" asp-route-id="@item.Id.ToString()" asp-route-fileName="@item.FileName" target="_blank"
+                        <a asp-page="Attachment" asp-route-id="@attachment.Id.ToString()" asp-route-fileName="@attachment.FileName" target="_blank"
                            class="text-decoration-hover rounded d-block p-2 no-external-link">
-                            @Html.DisplayFor(_ => item.FileExtension, DisplayTemplate.FileTypeIcon) @item.FileName
+                            @Html.DisplayFor(_ => attachment.FileExtension, DisplayTemplate.FileTypeIcon) @attachment.FileName
                         </a>
                     }
                 </td>
-                <td>@Html.DisplayFor(_ => item.Size, DisplayTemplate.FileSize)</td>
-                <td>@Html.DisplayFor(_ => item.UploadedDate, DisplayTemplate.ShortDate)</td>
+                <td>@Html.DisplayFor(_ => attachment.Size, DisplayTemplate.FileSize)</td>
+                <td>@Html.DisplayFor(_ => attachment.UploadedDate, DisplayTemplate.ShortDate)</td>
             </tr>
         }
         </tbody>
@@ -165,7 +165,7 @@ else
 }
 else
 {
-    <p class="container">
+    <p>
         <em>None.</em>
     </p>
 }

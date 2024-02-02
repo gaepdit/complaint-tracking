@@ -1,4 +1,4 @@
-﻿using Cts.Domain.Entities.Attachments;
+using Cts.Domain.Entities.Attachments;
 using Cts.Domain.Entities.ComplaintActions;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.ComplaintTransitions;
@@ -47,8 +47,9 @@ public sealed class LocalComplaintRepository(
         return complaint;
     }
 
-    public Task<Attachment?> FindAttachmentAsync(Guid id, CancellationToken token = default) =>
-        attachmentRepository.FindAsync(id, token);
+    public Task<Attachment?> FindAttachmentAsync(Expression<Func<Attachment, bool>> predicate,
+        CancellationToken token = default) =>
+        attachmentRepository.FindAsync(predicate, token);
 
     public Task InsertTransitionAsync(ComplaintTransition transition, bool autoSave = true,
         CancellationToken token = default) =>

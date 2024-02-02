@@ -1,3 +1,4 @@
+using Cts.AppServices.Attachments;
 using Cts.Domain.Entities.Complaints;
 using Cts.TestData;
 
@@ -17,7 +18,7 @@ public class FindAttachment
     public async Task WhenItemsExist_ReturnsItem()
     {
         var item = AttachmentData.GetAttachments.First();
-        var result = await _repository.FindAttachmentAsync(item.Id);
+        var result = await _repository.FindAttachmentAsync(AttachmentFilters.IdPredicate(item.Id));
         result.Should().BeEquivalentTo(item, opts => opts
             .Excluding(e => e.UploadedBy!.Office)
             .Excluding(e => e.Complaint));
@@ -26,7 +27,7 @@ public class FindAttachment
     [Test]
     public async Task WhenDoesNotExist_ReturnsNull()
     {
-        var result = await _repository.FindAttachmentAsync(Guid.Empty);
+        var result = await _repository.FindAttachmentAsync(AttachmentFilters.IdPredicate(Guid.Empty));
         result.Should().BeNull();
     }
 }

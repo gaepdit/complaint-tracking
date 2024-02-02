@@ -155,13 +155,13 @@ public record ComplaintViewDto
     // === Lists ===
 
     [UsedImplicitly]
-    public List<ComplaintActionViewDto> ComplaintActions { get; init; } = new();
+    public List<ComplaintActionViewDto> ComplaintActions { get; init; } = [];
 
     [UsedImplicitly]
-    public List<AttachmentViewDto> Attachments { get; init; } = new();
+    public List<AttachmentViewDto> Attachments { get; init; } = [];
 
     [UsedImplicitly]
-    public List<ComplaintTransitionViewDto> ComplaintTransitions { get; init; } = new();
+    public List<ComplaintTransitionViewDto> ComplaintTransitions { get; init; } = [];
 
     // === Calculated properties ===
 

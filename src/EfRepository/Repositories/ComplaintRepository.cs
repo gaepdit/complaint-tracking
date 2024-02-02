@@ -16,7 +16,8 @@ public sealed class ComplaintRepository(AppDbContext context)
 
     public async Task<Complaint?> FindIncludeAllAsync(Expression<Func<Complaint, bool>> predicate,
         bool includeDeletedActions = false, CancellationToken token = default) =>
-        await ComplaintIncludeAllQueryable(includeDeletedActions).SingleOrDefaultAsync(predicate, token).ConfigureAwait(false);
+        await ComplaintIncludeAllQueryable(includeDeletedActions).SingleOrDefaultAsync(predicate, token)
+            .ConfigureAwait(false);
 
     private IIncludableQueryable<Complaint, IOrderedEnumerable<ComplaintTransition>> ComplaintIncludeAllQueryable(
         bool includeDeletedActions) =>
@@ -33,10 +34,9 @@ public sealed class ComplaintRepository(AppDbContext context)
             .Include(complaint => complaint.ComplaintTransitions
                 .OrderBy(transition => transition.CommittedDate));
 
-    public async Task<Attachment?> FindAttachmentAsync(Guid id, CancellationToken token = default) =>
-        await Context.Set<Attachment>()
-            .Include(e => e.Complaint)
-            .SingleOrDefaultAsync(e => e.Id == id, token).ConfigureAwait(false);
+    public async Task<Attachment?> FindAttachmentAsync(Expression<Func<Attachment, bool>> predicate,
+        CancellationToken token = default) =>
+        await Context.Set<Attachment>().SingleOrDefaultAsync(predicate, token).ConfigureAwait(false);
 
     public async Task InsertTransitionAsync(ComplaintTransition transition, bool autoSave = true,
         CancellationToken token = default)

@@ -44,7 +44,10 @@
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </None>
     </ItemGroup>
-
+    <ItemGroup>
+        <None Include="../../README.md"/>
+    </ItemGroup>
+    
     <ItemGroup>
         <MsDeploySkipRules Include="SkipAppSettings">
             <ObjectName>filePath</ObjectName>

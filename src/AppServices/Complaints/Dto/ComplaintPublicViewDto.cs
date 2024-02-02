@@ -89,10 +89,10 @@ public record ComplaintPublicViewDto
     // Properties: Actions
 
     [Display(Name = "Actions")]
-    public List<ComplaintActionPublicViewDto> ComplaintActions { get; init; } = new();
+    public List<ComplaintActionPublicViewDto> ComplaintActions { get; init; } = [];
 
     // Properties: Attachments
 
     [Display(Name = "Attachments")]
-    public List<AttachmentPublicViewDto> Attachments { get; init; } = new();
+    public List<AttachmentViewDto> Attachments { get; init; } = [];
 }

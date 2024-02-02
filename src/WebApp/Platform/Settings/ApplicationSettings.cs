@@ -8,20 +8,25 @@ internal static class ApplicationSettings
 
     public static readonly DevSettingsSection ProductionDefault = new()
     {
+        UseDevSettings = false,
         UseInMemoryData = false,
         UseEfMigrations = true,
         UseAzureAd = true,
         LocalUserIsAuthenticated = false,
         LocalUserIsStaff = false,
         LocalUserIsAdmin = false,
-        UseInMemoryFiles = false,
         UseSecurityHeadersInDev = false,
     };
 
     public class DevSettingsSection
     {
         /// <summary>
-        /// Uses in-memory data when `true`. Connects to a SQL Server database when `false`.
+        /// Equals `true` when dev settings are in use, otherwise `false`.
+        /// </summary>
+        public bool UseDevSettings { get; [UsedImplicitly] init; }
+
+        /// <summary>
+        /// Uses in-memory data store when `true`. Connects to a SQL Server database when `false`.
         /// </summary>
         public bool UseInMemoryData { get; [UsedImplicitly] init; }
 
@@ -54,12 +59,6 @@ internal static class ApplicationSettings
         /// <see cref="UseAzureAd"/> is `true` or `false`.)
         /// </summary>
         public bool LocalUserIsAdmin { get; [UsedImplicitly] init; }
-
-        /// <summary>
-        /// If `true`, files are seeded from the TestData project and stored in memory. If `false`, attachment
-        /// files are saved/loaded from the file system.
-        /// </summary>
-        public bool UseInMemoryFiles { get; [UsedImplicitly] init; }
 
         /// <summary>
         /// Sets whether to include HTTP security headers when running locally in the Development environment.

@@ -41,35 +41,35 @@ public sealed class ComplaintService(
         var count = await complaintRepository.CountAsync(predicate, token).ConfigureAwait(false);
 
         var list = count > 0
-            ? mapper.Map<List<ComplaintSearchResultDto>>(
-                await complaintRepository.GetPagedListAsync(predicate, paging, token).ConfigureAwait(false))
-            : new List<ComplaintSearchResultDto>();
+            ? mapper.Map<List<ComplaintSearchResultDto>>(await complaintRepository
+                .GetPagedListAsync(predicate, paging, token).ConfigureAwait(false))
+            : [];
 
         return new PaginatedResult<ComplaintSearchResultDto>(list, count, paging);
     }
 
-    public async Task<AttachmentPublicViewDto?> FindPublicAttachmentAsync(Guid id, CancellationToken token = default)
-    {
-        var attachment = await complaintRepository.FindAttachmentAsync(id, token).ConfigureAwait(false);
-        if (attachment is null || attachment.IsDeleted) return null;
-        var complaint = new List<Complaint> { attachment.Complaint }
-            .SingleOrDefault(ComplaintFilters.IsPublicPredicate().Compile());
-        return complaint is null ? null : mapper.Map<AttachmentPublicViewDto>(attachment);
-    }
+    public async Task<AttachmentViewDto?> FindPublicAttachmentAsync(Guid id, CancellationToken token = default) =>
+        mapper.Map<AttachmentViewDto>(await complaintRepository
+            .FindAttachmentAsync(AttachmentFilters.PublicIdPredicate(id), token).ConfigureAwait(false));
 
     public async Task<ComplaintViewDto?> FindAsync(int id, bool includeDeletedActions = false,
         CancellationToken token = default)
     {
-        var complaint = await complaintRepository.FindIncludeAllAsync(id, includeDeletedActions, token).ConfigureAwait(false);
+        var complaint = await complaintRepository.FindIncludeAllAsync(id, includeDeletedActions, token)
+            .ConfigureAwait(false);
         if (complaint is null) return null;
         var complaintView = mapper.Map<ComplaintViewDto>(complaint);
 
         if (complaint is { IsDeleted: true, DeletedById: not null })
-            complaintView.DeletedBy = mapper.Map<StaffViewDto>(await userService.FindUserAsync(complaint.DeletedById).ConfigureAwait(false));
+            complaintView.DeletedBy = mapper.Map<StaffViewDto>(await userService.FindUserAsync(complaint.DeletedById)
+                .ConfigureAwait(false));
 
-        foreach (var action in complaintView.ComplaintActions.Where(action =>
-                     action is { IsDeleted: true, DeletedById: not null }))
-            action.DeletedBy = mapper.Map<StaffViewDto>(await userService.FindUserAsync(action.DeletedById!).ConfigureAwait(false));
+        foreach (var action in complaintView.ComplaintActions
+                     .Where(action => action is { IsDeleted: true, DeletedById: not null }))
+        {
+            action.DeletedBy = mapper.Map<StaffViewDto>(await userService.FindUserAsync(action.DeletedById!)
+                .ConfigureAwait(false));
+        }
 
         return complaintView;
     }
@@ -91,16 +91,14 @@ public sealed class ComplaintService(
         var list = count > 0
             ? mapper.Map<List<ComplaintSearchResultDto>>(
                 await complaintRepository.GetPagedListAsync(predicate, paging, token).ConfigureAwait(false))
-            : new List<ComplaintSearchResultDto>();
+            : [];
 
         return new PaginatedResult<ComplaintSearchResultDto>(list, count, paging);
     }
 
-    public async Task<AttachmentViewDto?> FindAttachmentAsync(Guid id, CancellationToken token = default)
-    {
-        var attachment = await complaintRepository.FindAttachmentAsync(id, token).ConfigureAwait(false);
-        return mapper.Map<AttachmentViewDto>(attachment);
-    }
+    public async Task<AttachmentViewDto?> FindAttachmentAsync(Guid id, CancellationToken token = default) =>
+        mapper.Map<AttachmentViewDto>(await complaintRepository
+            .FindAttachmentAsync(AttachmentFilters.IdPredicate(id), token).ConfigureAwait(false));
 
     public async Task<int> CreateAsync(ComplaintCreateDto resource, CancellationToken token = default)
     {
@@ -145,7 +143,8 @@ public sealed class ComplaintService(
             complaint.EnteredBy = await userService.GetUserAsync(currentUserId).ConfigureAwait(false);
 
         // Properties: Assignment
-        complaint.CurrentOffice = await officeRepository.GetAsync(resource.CurrentOfficeId!.Value, token).ConfigureAwait(false);
+        complaint.CurrentOffice = await officeRepository.GetAsync(resource.CurrentOfficeId!.Value, token)
+            .ConfigureAwait(false);
 
         if (resource.CurrentOwnerId == null) return complaint;
 
@@ -182,9 +181,13 @@ public sealed class ComplaintService(
         complaint.ComplaintDirections = resource.ComplaintDirections;
         complaint.ComplaintCity = resource.ComplaintCity;
         complaint.ComplaintCounty = resource.ComplaintCounty;
-        complaint.PrimaryConcern = await concernRepository.GetAsync(resource.PrimaryConcernId, token).ConfigureAwait(false);
+        complaint.PrimaryConcern = await concernRepository.GetAsync(resource.PrimaryConcernId, token)
+            .ConfigureAwait(false);
         if (resource.SecondaryConcernId is not null)
-            complaint.SecondaryConcern = await concernRepository.FindAsync(resource.SecondaryConcernId.Value, token).ConfigureAwait(false);
+        {
+            complaint.SecondaryConcern = await concernRepository.FindAsync(resource.SecondaryConcernId.Value, token)
+                .ConfigureAwait(false);
+        }
 
         // Properties: Source
         complaint.SourceFacilityIdNumber = resource.SourceFacilityIdNumber;
