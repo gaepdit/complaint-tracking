@@ -1,11 +1,10 @@
-﻿using Cts.AppServices.Attachments;
+using Cts.AppServices.Attachments;
 using Cts.AppServices.Complaints;
-using Cts.WebApp.Pages.Staff.Complaints;
+using Cts.WebApp.Pages.Public.Complaints;
 
-namespace WebAppTests.Pages.Staff.Complaints;
+namespace WebAppTests.Pages.Public.Complaint;
 
-[TestFixture]
-public class AttachmentTests
+public class PublicAttachmentTests
 {
     [Test]
     public async Task OnGet_AttachmentExistsAndFileNameMatches_ReturnsFile()
@@ -21,7 +20,7 @@ public class AttachmentTests
         };
 
         var complaintService = Substitute.For<IComplaintService>();
-        complaintService.FindAttachmentAsync(guid).Returns(attachment);
+        complaintService.FindPublicAttachmentAsync(guid).Returns(attachment);
 
         var fileService = Substitute.For<IAttachmentFileService>();
         fileService.GetAttachmentFileAsync(Arg.Any<string>(), Arg.Any<bool>()).Returns(fileBytes);
@@ -45,7 +44,7 @@ public class AttachmentTests
         var guid = Guid.NewGuid();
 
         var complaintService = Substitute.For<IComplaintService>();
-        complaintService.FindAttachmentAsync(guid).Returns((AttachmentViewDto?)null);
+        complaintService.FindPublicAttachmentAsync(guid).Returns((AttachmentViewDto?)null);
 
         var pageModel = new AttachmentModel(complaintService, Substitute.For<IAttachmentFileService>());
 
@@ -69,7 +68,7 @@ public class AttachmentTests
         };
 
         var complaintService = Substitute.For<IComplaintService>();
-        complaintService.FindAttachmentAsync(guid).Returns(attachment);
+        complaintService.FindPublicAttachmentAsync(guid).Returns(attachment);
 
         var pageModel = new AttachmentModel(complaintService, Substitute.For<IAttachmentFileService>());
 
@@ -95,7 +94,7 @@ public class AttachmentTests
         };
 
         var complaintService = Substitute.For<IComplaintService>();
-        complaintService.FindAttachmentAsync(guid).Returns(attachment);
+        complaintService.FindPublicAttachmentAsync(guid).Returns(attachment);
 
         var fileService = Substitute.For<IAttachmentFileService>();
         fileService.GetAttachmentFileAsync(Arg.Any<string>(), Arg.Any<bool>()).Returns([]);
@@ -121,7 +120,7 @@ public class AttachmentTests
         };
 
         var complaintService = Substitute.For<IComplaintService>();
-        complaintService.FindAttachmentAsync(guid).Returns(attachment);
+        complaintService.FindPublicAttachmentAsync(guid).Returns(attachment);
 
         var fileService = Substitute.For<IAttachmentFileService>();
         fileService.GetAttachmentFileAsync(Arg.Any<string>(), Arg.Any<bool>()).Returns([]);

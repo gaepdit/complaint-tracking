@@ -9,10 +9,11 @@ public static class AppConfiguration
         builder.Configuration.GetSection(nameof(ApplicationSettings.RaygunSettings))
             .Bind(ApplicationSettings.RaygunSettings);
 
-        var useDevConfig = Convert.ToBoolean(builder.Configuration["UseDevSettings"]);
         var devConfig = builder.Configuration.GetSection(nameof(ApplicationSettings.DevSettings));
+        var useDevConfig = devConfig.Exists() &&
+            Convert.ToBoolean(devConfig[nameof(ApplicationSettings.DevSettings.UseDevSettings)]);
 
-        if (useDevConfig && devConfig.Exists())
+        if (useDevConfig)
             devConfig.Bind(ApplicationSettings.DevSettings);
         else
             ApplicationSettings.DevSettings = ApplicationSettings.ProductionDefault;

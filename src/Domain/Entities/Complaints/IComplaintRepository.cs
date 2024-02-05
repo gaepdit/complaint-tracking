@@ -35,13 +35,14 @@ public interface IComplaintRepository : IRepository<Complaint, int>
     // Attachments
 
     /// <summary>
-    /// Returns the <see cref="Attachment"/> with the given <paramref name="id"/>.
+    /// Returns the <see cref="Attachment"/> matching the conditions of the <paramref name="predicate"/>.
     /// Returns null if no entity exists with the given Id.
     /// </summary>
-    /// <param name="id">The Id of the entity.</param>
+    /// <param name="predicate">The search conditions.</param>
     /// <param name="token"><see cref="T:System.Threading.CancellationToken"/></param>
     /// <returns>An Attachment or null.</returns>
-    Task<Attachment?> FindAttachmentAsync(Guid id, CancellationToken token = default);
+    Task<Attachment?> FindAttachmentAsync(Expression<Func<Attachment, bool>> predicate,
+        CancellationToken token = default);
 
     // Transitions
 

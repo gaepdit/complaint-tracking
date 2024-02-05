@@ -1,6 +1,6 @@
 ﻿namespace Cts.WebApp.Platform.Constants;
 
-public static class DateTimeFormatConstants
+internal static class DateTimeFormatConstants
 {
     public const string LongDateTimeFormat = "MMMM\u00a0d, yyyy h:mm\u00a0tt";
     public const string LongDateFormat = "MMMM\u00a0d, yyyy";

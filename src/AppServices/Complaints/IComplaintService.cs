@@ -16,7 +16,7 @@ public interface IComplaintService : IDisposable, IAsyncDisposable
     Task<IPaginatedResult<ComplaintSearchResultDto>> PublicSearchAsync(
         ComplaintPublicSearchDto spec, PaginatedRequest paging, CancellationToken token = default);
 
-    Task<AttachmentPublicViewDto?> FindPublicAttachmentAsync(Guid id, CancellationToken token = default);
+    Task<AttachmentViewDto?> FindPublicAttachmentAsync(Guid id, CancellationToken token = default);
 
     // Staff read methods
 

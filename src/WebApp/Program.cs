@@ -1,8 +1,13 @@
+using Cts.AppServices.Attachments;
+using Cts.AppServices.ErrorLogging;
 using Cts.AppServices.RegisterServices;
-using Cts.WebApp.Platform.Raygun;
+using Cts.Domain.Entities.Attachments;
+using Cts.WebApp.Platform.Constants;
+using Cts.WebApp.Platform.ErrorLogging;
 using Cts.WebApp.Platform.SecurityHeaders;
 using Cts.WebApp.Platform.Services;
 using Cts.WebApp.Platform.Settings;
+using GaEpd.FileService;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.OpenApi.Models;
@@ -54,9 +59,14 @@ if (!string.IsNullOrEmpty(ApplicationSettings.RaygunSettings.ApiKey))
 builder.Services.AddAutoMapperProfiles();
 builder.Services.AddAppServices();
 builder.Services.AddValidators();
+builder.Services.AddTransient<IAttachmentFileService, AttachmentFileService>(provider =>
+    new AttachmentFileService(FilePaths.AttachmentsFolder, FilePaths.ThumbnailsFolder, GlobalConstants.ThumbnailSize,
+        provider.GetService<IFileService>()!, provider.GetService<IAttachmentManager>()!,
+        provider.GetService<IErrorLogger>()!));
 
 // Add data stores.
-builder.Services.AddDataStores(builder.Configuration);
+builder.Services.AddDataPersistence(builder.Configuration);
+builder.Services.AddFileServices(builder.Configuration);
 
 // Initialize database.
 builder.Services.AddHostedService<MigratorHostedService>();

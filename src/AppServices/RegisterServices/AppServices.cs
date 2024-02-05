@@ -4,6 +4,7 @@ using Cts.AppServices.Complaints;
 using Cts.AppServices.Concerns;
 using Cts.AppServices.Offices;
 using Cts.Domain.Entities.ActionTypes;
+using Cts.Domain.Entities.Attachments;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Entities.Concerns;
@@ -19,6 +20,9 @@ public static class AppServices
         // Action Types
         services.AddScoped<IActionTypeManager, ActionTypeManager>();
         services.AddScoped<IActionTypeService, ActionTypeService>();
+
+        // Attachments
+        services.AddScoped<IAttachmentManager, AttachmentManager>();
 
         // Complaints
         services.AddScoped<IComplaintManager, ComplaintManager>();

@@ -1,7 +1,6 @@
 ﻿using Cts.AppServices.Attachments;
 using Cts.AppServices.Complaints;
-using Cts.AppServices.Files;
-using Cts.Domain.Entities.Attachments;
+using Cts.WebApp.Platform.PageModelHelpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,37 +8,15 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace Cts.WebApp.Pages.Public.Complaints;
 
 [AllowAnonymous]
-public class AttachmentModel : PageModel
+public class AttachmentModel(IComplaintService complaintService, IAttachmentFileService attachmentFileService)
+    : PageModel
 {
-    public async Task<IActionResult> OnGetAsync(
-        [FromServices] IComplaintService complaintService,
-        [FromServices] IFileService fileService,
-        [FromRoute] Guid? id,
-        [FromRoute] string? fileName,
+    public async Task<IActionResult> OnGetAsync([FromRoute] Guid? id, [FromRoute] string? fileName,
         [FromQuery] bool thumbnail = false)
     {
         if (id is null) return NotFound();
-
-        var item = await complaintService.FindPublicAttachmentAsync(id.Value);
-        if (item is null || string.IsNullOrWhiteSpace(item.FileName))
-            return NotFound($"Attachment ID not found: {id.Value}");
-
-        if (fileName != item.FileName)
-            return thumbnail
-                ? RedirectToPage("Attachment", new { id, item.FileName, thumbnail = true })
-                : RedirectToPage("Attachment", new { id, item.FileName });
-
-        var fileBytes = thumbnail
-            ? await fileService.GetFileAsync(item.AttachmentFileName, Attachment.DefaultThumbnailsLocation)
-            : await fileService.GetFileAsync(item.AttachmentFileName, Attachment.DefaultAttachmentsLocation);
-
-        return fileBytes.Length > 0
-            ? File(fileBytes, FileTypes.GetContentType(item.FileExtension))
-            : FileNotFound(item);
+        var attachmentView = await complaintService.FindPublicAttachmentAsync(id.Value);
+        return await new AttachmentFileHandler(this, attachmentFileService)
+            .GetAttachmentFile(id.Value, attachmentView, fileName, thumbnail);
     }
-
-    private IActionResult FileNotFound(AttachmentPublicViewDto item) =>
-        item.IsImage || FileTypes.FilenameImpliesImage(item.FileExtension)
-            ? Redirect("~/images/Georgia_404.svg")
-            : NotFound($"File not available: {item.FileName}");
 }

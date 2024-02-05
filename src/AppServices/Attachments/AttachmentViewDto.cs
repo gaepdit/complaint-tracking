@@ -13,6 +13,9 @@ public record AttachmentViewDto
     [JsonIgnore]
     public string FileExtension { get; init; } = string.Empty;
 
+    [JsonIgnore]
+    public string FileId => string.Concat(Id.ToString(), FileExtension);
+
     [Display(Name = "Size in bytes")]
     public long Size { get; init; }
 
@@ -22,11 +25,6 @@ public record AttachmentViewDto
     public StaffViewDto? UploadedBy { get; init; }
 
     public DateTimeOffset UploadedDate { get; init; }
+
     public bool IsImage { get; init; }
-
-    [JsonIgnore]
-    public string AttachmentFileName => string.Concat(Id.ToString(), FileExtension);
-
-    [JsonIgnore]
-    public string ThumbnailSrc => IsImage ? $"../Attachment/{Id}/{FileName}/?thumbnail=true" : string.Empty;
 }

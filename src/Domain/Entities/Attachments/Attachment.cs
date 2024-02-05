@@ -5,11 +5,6 @@ namespace Cts.Domain.Entities.Attachments;
 
 public class Attachment : AuditableSoftDeleteEntity
 {
-    // Constants
-
-    public const string DefaultAttachmentsLocation = "attachments";
-    public const string DefaultThumbnailsLocation = "thumbnails";
-
     // Constructors
 
     [UsedImplicitly] // Used by ORM.
@@ -27,11 +22,13 @@ public class Attachment : AuditableSoftDeleteEntity
     [StringLength(10)]
     public string FileExtension { get; init; } = string.Empty;
 
+    public string FileId => $"{Id}{FileExtension}";
+
     public long Size { get; init; }
 
-    public DateTimeOffset UploadedDate { get; init; }
+    public DateTimeOffset UploadedDate { get; init; } = DateTimeOffset.Now;
 
     public ApplicationUser? UploadedBy { get; init; }
 
-    public bool IsImage { get; init; }
+    public bool IsImage { get; set; }
 }

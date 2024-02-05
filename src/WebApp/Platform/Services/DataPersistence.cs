@@ -1,4 +1,3 @@
-using Cts.AppServices.Files;
 using Cts.Domain.Entities.ActionTypes;
 using Cts.Domain.Entities.Attachments;
 using Cts.Domain.Entities.ComplaintActions;
@@ -8,16 +7,15 @@ using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
 using Cts.EfRepository.Contexts;
 using Cts.EfRepository.Repositories;
-using Cts.LocalRepository.Files;
 using Cts.LocalRepository.Repositories;
 using Cts.WebApp.Platform.Settings;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cts.WebApp.Platform.Services;
 
-public static class DataStores
+public static class DataPersistence
 {
-    public static void AddDataStores(this IServiceCollection services, ConfigurationManager configuration)
+    public static void AddDataPersistence(this IServiceCollection services, ConfigurationManager configuration)
     {
         // When configured, use in-memory data; otherwise use a SQL Server database.
         if (ApplicationSettings.DevSettings.UseInMemoryData)
@@ -51,17 +49,6 @@ public static class DataStores
             services.AddScoped<IComplaintTransitionRepository, ComplaintTransitionRepository>();
             services.AddScoped<IConcernRepository, ConcernRepository>();
             services.AddScoped<IOfficeRepository, OfficeRepository>();
-        }
-
-        // When running locally, you have the option to access file in memory or use the local filesystem.
-        if (ApplicationSettings.DevSettings.UseInMemoryFiles)
-        {
-            services.AddTransient<IFileService, InMemoryFileService>();
-        }
-        else
-        {
-            services.AddTransient<IFileService,
-                FileSystemFileService>(_ => new FileSystemFileService(configuration["PersistedFilesBasePath"] ?? ""));
         }
     }
 }

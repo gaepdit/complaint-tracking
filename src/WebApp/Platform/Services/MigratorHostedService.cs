@@ -1,7 +1,9 @@
 using Cts.Domain.Identity;
 using Cts.EfRepository.Contexts;
 using Cts.EfRepository.Contexts.SeedDevData;
+using Cts.TestData;
 using Cts.WebApp.Platform.Settings;
+using GaEpd.FileService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,11 +13,12 @@ public class MigratorHostedService(IServiceProvider serviceProvider, IConfigurat
 {
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        // If using in-memory data, no further action required.
-        if (ApplicationSettings.DevSettings.UseInMemoryData) return;
-
-        // Inject the IServiceProvider so we can create the DbContext scoped service.
         using var scope = serviceProvider.CreateScope();
+
+        if (ApplicationSettings.DevSettings.UseDevSettings) await SeedFileStoreAsync(scope, cancellationToken);
+
+        // If using in-memory data store, no further action required.
+        if (ApplicationSettings.DevSettings.UseInMemoryData) return;
 
         var migrationConnectionString = configuration.GetConnectionString("MigrationConnection");
         var migrationOptions = new DbContextOptionsBuilder<AppDbContext>()
@@ -43,6 +46,22 @@ public class MigratorHostedService(IServiceProvider serviceProvider, IConfigurat
 
             // Add seed data to database.
             DbSeedDataHelpers.SeedAllData(migrationContext);
+        }
+    }
+
+    // Initialize the attachments file store
+    private static async Task SeedFileStoreAsync(IServiceScope scope, CancellationToken cancellationToken)
+    {
+        var fileService = scope.ServiceProvider.GetRequiredService<IFileService>();
+
+        foreach (var attachment in AttachmentData.GetAttachmentFiles())
+        {
+            var fileBytes = attachment.Base64EncodedFile == null
+                ? []
+                : Convert.FromBase64String(attachment.Base64EncodedFile);
+
+            await using var fileStream = new MemoryStream(fileBytes);
+            await fileService.SaveFileAsync(fileStream, attachment.FileName, attachment.Path, token: cancellationToken);
         }
     }
 

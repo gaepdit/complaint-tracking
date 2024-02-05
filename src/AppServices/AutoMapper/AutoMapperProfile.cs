@@ -27,7 +27,6 @@ public class AutoMapperProfile : Profile
         CreateMap<ApplicationUser, StaffViewDto>();
         CreateMap<ApplicationUser, StaffSearchResultDto>();
 
-        CreateMap<Attachment, AttachmentPublicViewDto>();
         CreateMap<Attachment, AttachmentViewDto>();
 
         CreateMap<Complaint, ComplaintUpdateDto>()
