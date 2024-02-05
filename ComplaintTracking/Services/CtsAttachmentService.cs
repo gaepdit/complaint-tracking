@@ -59,7 +59,6 @@ namespace ComplaintTracking.Services
             return false;
         }
 
-
         private async Task<bool> TrySaveImageAsync(IFormFile formFile, string fileId)
         {
             if (!FileTypes.FilenameImpliesImage(formFile.FileName.Trim())) return false;
@@ -111,7 +110,7 @@ namespace ComplaintTracking.Services
             if (formFiles.Count > 10)
                 return FilesValidationResult.TooMany;
 
-            if (formFiles.Exists(file => file.Length > 0 && !FileTypes.FileUploadAllowed(file.FileName)))
+            if (formFiles.Exists(file => !FileTypes.FileUploadAllowed(file.FileName)))
                 return FilesValidationResult.WrongType;
 
             return FilesValidationResult.Valid;

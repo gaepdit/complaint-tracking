@@ -29,7 +29,7 @@ else
                             <a asp-action="Attachment" asp-route-attachmentId="@item.Id" asp-route-fileName="@item.FileName"
                                data-fancybox="attachment" data-caption="@item.FileName"
                                class="gaepd-file-link" target="_blank">
-                                <img src="~/Complaints/Thumbnail/@item.Id" width="@CTS.ThumbnailSize" height="@CTS.ThumbnailSize" />
+                                <img src="~/Complaints/Thumbnail/@item.Id" width="@CTS.ThumbnailSize" height="@CTS.ThumbnailSize" alt="" />
                                 @Html.DisplayFor(m => item.FileName)
                             </a>
                         }
