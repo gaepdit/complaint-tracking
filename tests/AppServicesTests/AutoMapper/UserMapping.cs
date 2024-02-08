@@ -22,16 +22,14 @@ public class UserMapping
     {
         var result = AppServicesTestsSetup.Mapper!.Map<StaffViewDto>(_item);
 
-        using (new AssertionScope())
-        {
-            result.Id.Should().Be(_item.Id);
-            result.GivenName.Should().Be(_item.GivenName);
-            result.FamilyName.Should().Be(_item.FamilyName);
-            result.Email.Should().Be(_item.Email);
-            result.Phone.Should().Be(_item.Phone);
-            result.Office.Should().BeEquivalentTo(_item.Office);
-            result.Active.Should().BeTrue();
-        }
+        using var scope = new AssertionScope();
+        result.Id.Should().Be(_item.Id);
+        result.GivenName.Should().Be(_item.GivenName);
+        result.FamilyName.Should().Be(_item.FamilyName);
+        result.Email.Should().Be(_item.Email);
+        result.Phone.Should().Be(_item.Phone);
+        result.Office.Should().BeEquivalentTo(_item.Office);
+        result.Active.Should().BeTrue();
     }
 
     [Test]
@@ -39,14 +37,12 @@ public class UserMapping
     {
         var result = AppServicesTestsSetup.Mapper!.Map<StaffSearchResultDto>(_item);
 
-        using (new AssertionScope())
-        {
-            result.Id.Should().Be(_item.Id);
-            result.SortableFullName.Should().Be($"{_item.FamilyName}, {_item.GivenName}");
-            result.Email.Should().Be(_item.Email);
-            result.OfficeName.Should().Be(_item.Office!.Name);
-            result.Active.Should().BeTrue();
-        }
+        using var scope = new AssertionScope();
+        result.Id.Should().Be(_item.Id);
+        result.SortableFullName.Should().Be($"{_item.FamilyName}, {_item.GivenName}");
+        result.Email.Should().Be(_item.Email);
+        result.OfficeName.Should().Be(_item.Office!.Name);
+        result.Active.Should().BeTrue();
     }
 
     [Test]

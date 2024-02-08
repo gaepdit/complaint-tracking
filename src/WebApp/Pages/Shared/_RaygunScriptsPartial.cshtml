@@ -1,6 +1,6 @@
 ﻿@using Cts.WebApp.Platform.Settings
 @{
-    var apiKey = ApplicationSettings.RaygunSettings.ApiKey;
+    var apiKey = AppSettings.RaygunSettings.ApiKey;
     if (string.IsNullOrEmpty(apiKey)) return;
     var identifier = User.Identity?.Name;
     var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "unknown";

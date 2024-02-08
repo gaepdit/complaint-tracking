@@ -8,4 +8,8 @@ internal static class GlobalConstants
 
     // Image thumbnail size
     public const int ThumbnailSize = 90;
+
+    // Attachment file paths
+    public const string AttachmentsFolder = "UserFiles/Attachments";
+    public const string ThumbnailsFolder = "UserFiles/Thumbnails";
 }

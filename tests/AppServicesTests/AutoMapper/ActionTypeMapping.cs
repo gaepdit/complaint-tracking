@@ -28,10 +28,8 @@ public class ActionTypeMapping
 
         var result = AppServicesTestsSetup.Mapper!.Map<ActionTypeUpdateDto>(item);
 
-        using (new AssertionScope())
-        {
-            result.Name.Should().Be(item.Name);
-            result.Active.Should().BeTrue();
-        }
+        using var scope = new AssertionScope();
+        result.Name.Should().Be(item.Name);
+        result.Active.Should().BeTrue();
     }
 }

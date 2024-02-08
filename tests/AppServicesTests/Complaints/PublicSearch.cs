@@ -39,11 +39,9 @@ public class PublicSearch
             paging, CancellationToken.None);
 
         // Assert
-        using (new AssertionScope())
-        {
-            result.Items.Should().BeEquivalentTo(itemList);
-            result.CurrentCount.Should().Be(count);
-        }
+        using var scope = new AssertionScope();
+        result.Items.Should().BeEquivalentTo(itemList);
+        result.CurrentCount.Should().Be(count);
     }
 
     [Test]
@@ -71,10 +69,8 @@ public class PublicSearch
             paging, CancellationToken.None);
 
         // Assert
-        using (new AssertionScope())
-        {
-            result.Items.Should().BeEmpty();
-            result.CurrentCount.Should().Be(count);
-        }
+        using var scope = new AssertionScope();
+        result.Items.Should().BeEmpty();
+        result.CurrentCount.Should().Be(count);
     }
 }

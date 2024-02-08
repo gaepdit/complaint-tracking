@@ -9,9 +9,9 @@ public interface IComplaintManager
     /// <summary>
     /// Creates a new <see cref="Complaint"/>.
     /// </summary>
-    /// <param name="createdById">The ID of the user creating the entity.</param>
+    /// <param name="user">The user creating the entity.</param>
     /// <returns>The Complaint that was created.</returns>
-    public Complaint Create(string? createdById);
+    public Complaint Create(ApplicationUser? user);
 
     /// <summary>
     /// Creates a new <see cref="ComplaintAction"/>.

@@ -7,7 +7,7 @@ using Cts.WebApp.Pages.Staff.Complaints;
 namespace WebAppTests.Pages.Staff.Complaints;
 
 [TestFixture]
-public class EditTests
+public class EditPageTests
 {
     private IComplaintService _complaintService = null!;
     private IStaffService _staffService = null!;

@@ -19,7 +19,7 @@ public class LogoutModel(SignInManager<ApplicationUser> signInManager) : PageMod
     private async Task<IActionResult> LogOutAndRedirectToIndex()
     {
         // If Azure AD is enabled, sign out all authentication schemes.
-        if (ApplicationSettings.DevSettings.UseAzureAd)
+        if (AppSettings.DevSettings.UseAzureAd)
             return SignOut(new AuthenticationProperties { RedirectUri = "/Index" },
                 IdentityConstants.ApplicationScheme,
                 OpenIdConnectDefaults.AuthenticationScheme);

@@ -1,5 +1,8 @@
 ﻿using Cts.AppServices.ActionTypes;
+using Cts.AppServices.Attachments;
+using Cts.AppServices.Attachments.Dto;
 using Cts.AppServices.ComplaintActions;
+using Cts.AppServices.ComplaintActions.Dto;
 using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.Dto;
 using Cts.AppServices.Complaints.Permissions;
@@ -7,6 +10,7 @@ using Cts.AppServices.Permissions;
 using Cts.AppServices.Staff;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
+using Cts.WebApp.Platform.Settings;
 using GaEpd.AppLibrary.ListItems;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,9 +21,10 @@ namespace Cts.WebApp.Pages.Staff.Complaints;
 
 [Authorize(Policy = nameof(Policies.ActiveUser))]
 public class DetailsModel(
-    IComplaintService complaints,
+    IComplaintService complaintService,
     IComplaintActionService actionService,
     IActionTypeService actionTypeService,
+    IAttachmentService attachmentService,
     IStaffService staffService,
     IAuthorizationService authorization)
     : PageModel
@@ -27,8 +32,8 @@ public class DetailsModel(
     public ComplaintViewDto ComplaintView { get; private set; } = default!;
     public Dictionary<IAuthorizationRequirement, bool> UserCan { get; set; } = new();
 
-    [BindProperty]
     public ComplaintActionCreateDto NewAction { get; set; } = default!;
+    public AttachmentsCreateDto NewAttachments { get; set; } = default!;
 
     [TempData]
     public Guid HighlightId { get; set; }
@@ -42,7 +47,7 @@ public class DetailsModel(
     {
         if (id is null) return RedirectToPage("../Index");
 
-        var complaintView = await complaints.FindAsync(id.Value, true);
+        var complaintView = await complaintService.FindAsync(id.Value, true);
         if (complaintView is null) return NotFound();
 
         var currentUser = await staffService.GetCurrentUserAsync();
@@ -53,19 +58,21 @@ public class DetailsModel(
 
         ComplaintView = complaintView;
         NewAction = new ComplaintActionCreateDto(complaintView.Id) { Investigator = currentUser.Name };
+        NewAttachments = new AttachmentsCreateDto(complaintView.Id);
         await PopulateSelectListsAsync();
         return Page();
     }
 
     /// <summary>
-    /// Post is used to add a new Action for this Complaint
+    /// PostNewAction is used to add a new Action for this Complaint.
     /// </summary>
-    public async Task<IActionResult> OnPostAsync(int? id)
+    public async Task<IActionResult> OnPostNewActionAsync(int? id, ComplaintActionCreateDto newAction,
+        CancellationToken token)
     {
         if (id is null) return RedirectToPage("../Index");
-        if (NewAction.ComplaintId != id) return BadRequest();
+        if (newAction.ComplaintId != id) return BadRequest();
 
-        var complaintView = await complaints.FindAsync(id.Value, true);
+        var complaintView = await complaintService.FindAsync(id.Value, includeDeletedActions: true, token);
         if (complaintView is null || complaintView.IsDeleted) return BadRequest();
 
         complaintView.CurrentUserOfficeId = (await staffService.GetCurrentUserAsync()).Office?.Id ?? Guid.Empty;
@@ -80,9 +87,39 @@ public class DetailsModel(
             return Page();
         }
 
-        HighlightId = await actionService.CreateAsync(NewAction);
+        HighlightId = await actionService.CreateAsync(newAction, token);
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "New Action successfully added.");
         return RedirectToPage("Details", pageHandler: null, routeValues: new { id }, fragment: HighlightId.ToString());
+    }
+
+    /// <summary>
+    /// PostUploadFiles is used to add attachment files to this Complaint.
+    /// </summary>
+    public async Task<IActionResult> OnPostUploadFilesAsync(int? id, AttachmentsCreateDto newAttachments,
+        CancellationToken token)
+    {
+        if (id is null) return RedirectToPage("../Index");
+        if (newAttachments.ComplaintId != id) return BadRequest();
+
+        var complaintView = await complaintService.FindAsync(id.Value, true, token);
+        if (complaintView is null || complaintView.IsDeleted) return BadRequest();
+
+        complaintView.CurrentUserOfficeId = (await staffService.GetCurrentUserAsync()).Office?.Id ?? Guid.Empty;
+
+        await SetPermissionsAsync(complaintView);
+        if (!UserCan[ComplaintOperation.EditAttachments]) return BadRequest();
+
+        newAttachments.FormFiles.ValidateUploadedFiles(ModelState);
+
+        if (!ModelState.IsValid)
+        {
+            ComplaintView = complaintView;
+            await PopulateSelectListsAsync();
+            return Page();
+        }
+
+        await attachmentService.SaveAttachmentsAsync(newAttachments, AppSettings.AttachmentServiceConfig, token);
+        return RedirectToPage("Details", pageHandler: null, routeValues: new { id }, fragment: "attachments");
     }
 
     private async Task PopulateSelectListsAsync() =>

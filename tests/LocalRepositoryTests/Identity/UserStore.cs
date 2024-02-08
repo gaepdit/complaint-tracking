@@ -52,11 +52,9 @@ public class UserStore
         var result = await store.UpdateAsync(user, CancellationToken.None);
         var updatedUser = await store.FindByIdAsync(user.Id, CancellationToken.None);
 
-        using (new AssertionScope())
-        {
-            result.Succeeded.Should().BeTrue();
-            updatedUser.Should().BeEquivalentTo(user);
-        }
+        using var scope = new AssertionScope();
+        result.Succeeded.Should().BeTrue();
+        updatedUser.Should().BeEquivalentTo(user);
     }
 
     [Test]

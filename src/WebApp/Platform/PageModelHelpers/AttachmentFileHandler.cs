@@ -1,14 +1,30 @@
 ﻿using Cts.AppServices.Attachments;
+using Cts.WebApp.Platform.Settings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using PublicComplaints = Cts.WebApp.Pages.Public.Complaints;
+using StaffComplaints = Cts.WebApp.Pages.Staff.Complaints;
 
 namespace Cts.WebApp.Platform.PageModelHelpers;
 
-internal class AttachmentFileHandler(PageModel page, IAttachmentFileService attachmentFileService)
+internal static class AttachmentFileHandler
 {
-    public async Task<IActionResult> GetAttachmentFile(Guid id, AttachmentViewDto? attachmentView, string? fileName,
-        bool thumbnail)
+    public static Task<IActionResult> GetAttachmentFile(this PublicComplaints.AttachmentModel page,
+        IAttachmentService attachmentService, Guid? id, string? fileName, bool thumbnail) =>
+        page.GetAttachmentFile(attachmentService, id, fileName, thumbnail, forPublic: true);
+
+    public static Task<IActionResult> GetAttachmentFile(this StaffComplaints.AttachmentModel page,
+        IAttachmentService attachmentService, Guid? id, string? fileName, bool thumbnail) =>
+        page.GetAttachmentFile(attachmentService, id, fileName, thumbnail, forPublic: false);
+
+    private static async Task<IActionResult> GetAttachmentFile(this PageModel page,
+        IAttachmentService attachmentService, Guid? id, string? fileName, bool thumbnail, bool forPublic)
     {
+        if (id is null) return page.NotFound();
+        var attachmentView = forPublic
+            ? await attachmentService.FindPublicAttachmentAsync(id.Value)
+            : await attachmentService.FindAttachmentAsync(id.Value);
+
         if (attachmentView is null || string.IsNullOrWhiteSpace(attachmentView.FileName))
             return page.NotFound($"Attachment ID not found: {id}");
 
@@ -18,7 +34,8 @@ internal class AttachmentFileHandler(PageModel page, IAttachmentFileService atta
                 ? page.RedirectToPage("Attachment", new { id, attachmentView.FileName, thumbnail = true })
                 : page.RedirectToPage("Attachment", new { id, attachmentView.FileName });
 
-        var fileBytes = await attachmentFileService.GetAttachmentFileAsync(attachmentView.FileId, thumbnail);
+        var fileBytes = await attachmentService.GetAttachmentFileAsync(attachmentView.FileId, thumbnail,
+            AppSettings.AttachmentServiceConfig);
 
         if (fileBytes.Length > 0) return page.File(fileBytes, FileTypes.GetContentType(attachmentView.FileExtension));
 

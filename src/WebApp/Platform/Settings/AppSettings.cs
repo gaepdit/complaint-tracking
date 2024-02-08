@@ -1,9 +1,24 @@
-﻿using JetBrains.Annotations;
+﻿using Cts.AppServices.Attachments;
+using Cts.WebApp.Platform.Constants;
+using JetBrains.Annotations;
 
 namespace Cts.WebApp.Platform.Settings;
 
-internal static class ApplicationSettings
+internal static class AppSettings
 {
+    // Raygun client settings
+    public static RaygunClientSettings RaygunSettings { get; } = new();
+
+    public record RaygunClientSettings
+    {
+        public string? ApiKey { get; [UsedImplicitly] init; }
+    }
+
+    // Attachment File Service configuration
+    public static IAttachmentService.AttachmentServiceConfig AttachmentServiceConfig { get; } =
+        new(GlobalConstants.AttachmentsFolder, GlobalConstants.ThumbnailsFolder, GlobalConstants.ThumbnailSize);
+
+    // DEV configuration settings
     public static DevSettingsSection DevSettings { get; set; } = new();
 
     public static readonly DevSettingsSection ProductionDefault = new()
@@ -18,7 +33,7 @@ internal static class ApplicationSettings
         UseSecurityHeadersInDev = false,
     };
 
-    public class DevSettingsSection
+    public record DevSettingsSection
     {
         /// <summary>
         /// Equals `true` when dev settings are in use, otherwise `false`.
@@ -64,13 +79,5 @@ internal static class ApplicationSettings
         /// Sets whether to include HTTP security headers when running locally in the Development environment.
         /// </summary>
         public bool UseSecurityHeadersInDev { get; [UsedImplicitly] init; }
-    }
-
-    // Raygun client settings
-    public static RaygunClientSettings RaygunSettings { get; } = new();
-
-    public class RaygunClientSettings
-    {
-        public string? ApiKey { get; [UsedImplicitly] init; }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Cts.AppServices.ActionTypes;
 using Cts.AppServices.Attachments;
+using Cts.AppServices.Attachments.Dto;
 using Cts.AppServices.ComplaintActions;
+using Cts.AppServices.ComplaintActions.Dto;
 using Cts.AppServices.Complaints.Dto;
 using Cts.AppServices.Concerns;
 using Cts.AppServices.Offices;

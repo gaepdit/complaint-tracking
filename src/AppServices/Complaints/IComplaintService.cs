@@ -1,7 +1,5 @@
-﻿using Cts.AppServices.Attachments;
-using Cts.AppServices.Complaints.Dto;
+﻿using Cts.AppServices.Complaints.Dto;
 using GaEpd.AppLibrary.Pagination;
-using Microsoft.AspNetCore.Http;
 
 namespace Cts.AppServices.Complaints;
 
@@ -16,8 +14,6 @@ public interface IComplaintService : IDisposable, IAsyncDisposable
     Task<IPaginatedResult<ComplaintSearchResultDto>> PublicSearchAsync(
         ComplaintPublicSearchDto spec, PaginatedRequest paging, CancellationToken token = default);
 
-    Task<AttachmentViewDto?> FindPublicAttachmentAsync(Guid id, CancellationToken token = default);
-
     // Staff read methods
 
     Task<ComplaintViewDto?> FindAsync(int id, bool includeDeletedActions = false, CancellationToken token = default);
@@ -29,15 +25,12 @@ public interface IComplaintService : IDisposable, IAsyncDisposable
     Task<IPaginatedResult<ComplaintSearchResultDto>> SearchAsync(
         ComplaintSearchDto spec, PaginatedRequest paging, CancellationToken token = default);
 
-    Task<AttachmentViewDto?> FindAttachmentAsync(Guid id, CancellationToken token = default);
-
     // Staff write methods
 
     Task<int> CreateAsync(ComplaintCreateDto resource, CancellationToken token = default);
 
     Task UpdateAsync(int id, ComplaintUpdateDto resource, CancellationToken token = default);
 
-    Task SaveAttachmentAsync(IFormFile file, CancellationToken token = default);
 
     // Management write methods
     Task DeleteAsync(int complaintId, CancellationToken token = default);

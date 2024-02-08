@@ -1,5 +1,9 @@
+using AutoMapper;
+using Cts.AppServices.Attachments.Dto;
 using Cts.AppServices.ErrorLogging;
+using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Attachments;
+using Cts.Domain.Entities.Complaints;
 using GaEpd.FileService;
 using Microsoft.AspNetCore.Http;
 using SixLabors.ImageSharp;
@@ -7,60 +11,68 @@ using SixLabors.ImageSharp.Processing;
 
 namespace Cts.AppServices.Attachments;
 
-public class AttachmentFileService(
-    string attachmentsFolder,
-    string thumbnailsFolder,
-    int thumbnailSize,
+public class AttachmentService(
     IFileService fileService,
     IAttachmentManager attachmentManager,
+    IAttachmentRepository attachmentRepository,
+    IComplaintRepository complaintRepository,
+    IUserService userService,
+    IMapper mapper,
     IErrorLogger errorLogger)
-    : IAttachmentFileService
+    : IAttachmentService
 {
-    public async Task<byte[]> GetAttachmentFileAsync(string fileId, bool getThumbnail)
+    private IAttachmentService.AttachmentServiceConfig Config { get; set; } = null!;
+
+    public async Task<AttachmentViewDto?> FindAttachmentAsync(Guid id, CancellationToken token = default) =>
+        mapper.Map<AttachmentViewDto>(await attachmentRepository
+            .FindAsync(AttachmentFilters.IdPredicate(id), token).ConfigureAwait(false));
+
+    public async Task<AttachmentViewDto?> FindPublicAttachmentAsync(Guid id, CancellationToken token = default) =>
+        mapper.Map<AttachmentViewDto>(await attachmentRepository
+            .FindAsync(AttachmentFilters.PublicIdPredicate(id), token).ConfigureAwait(false));
+
+    public async Task<byte[]> GetAttachmentFileAsync(string fileId, bool getThumbnail,
+        IAttachmentService.AttachmentServiceConfig config, CancellationToken token = default)
     {
-        await using var response = await fileService.TryGetFileAsync(fileId, ExpandPath(fileId, getThumbnail))
+        Config = config;
+        await using var response = await fileService.TryGetFileAsync(fileId, ExpandPath(fileId, getThumbnail), token)
             .ConfigureAwait(false);
         if (!response.Success) return [];
 
         using var ms = new MemoryStream();
-        await response.Value.CopyToAsync(ms).ConfigureAwait(false);
+        await response.Value.CopyToAsync(ms, token).ConfigureAwait(false);
         return ms.ToArray();
     }
 
-    public async Task DeleteAttachmentFileAsync(string fileId, bool isImage)
+    public async Task DeleteAttachmentFileAsync(string fileId, bool isImage,
+        IAttachmentService.AttachmentServiceConfig config)
     {
+        // TODO: Delete Attachment entity also.
+        Config = config;
         if (string.IsNullOrEmpty(fileId)) return;
         await fileService.DeleteFileAsync(fileId, ExpandPath(fileId)).ConfigureAwait(false);
         if (isImage) await fileService.DeleteFileAsync(fileId, ExpandPath(fileId, true)).ConfigureAwait(false);
     }
 
-    public async Task<Attachment?> SaveAttachmentFileAsync(IFormFile formFile)
+    public async Task SaveAttachmentsAsync(AttachmentsCreateDto resource,
+        IAttachmentService.AttachmentServiceConfig config, CancellationToken token = default)
     {
-        if (formFile.Length == 0 || string.IsNullOrWhiteSpace(formFile.FileName))
-            return null;
+        Config = config;
+        var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
+        var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
 
-        var fileName = Path.GetFileName(formFile.FileName).Trim();
-        var attachment = attachmentManager.Create(fileName, formFile.Length);
+        foreach (var formFile in resource.FormFiles)
+        {
+            if (formFile.Length == 0 || string.IsNullOrWhiteSpace(formFile.FileName)) continue;
 
-        attachment.IsImage = await SaveFileAsync(formFile, attachment.FileId).ConfigureAwait(false);
-
-        return attachment;
-    }
-
-    // ReSharper disable once ConvertIfStatementToReturnStatement
-    public FilesValidationResult ValidateUploadedFiles(List<IFormFile> formFiles)
-    {
-        if (formFiles.Count > 10)
-            return FilesValidationResult.TooMany;
-
-        if (formFiles.Exists(file => !FileTypes.FileUploadAllowed(file.FileName)))
-            return FilesValidationResult.WrongType;
-
-        return FilesValidationResult.Valid;
+            var attachment = attachmentManager.Create(formFile, complaint, currentUser);
+            attachment.IsImage = await SaveFileAsync(formFile, attachment.FileId).ConfigureAwait(false);
+            await attachmentRepository.InsertAsync(attachment, token: token).ConfigureAwait(false);
+        }
     }
 
     private string ExpandPath(string fileId, bool thumbnail = false) =>
-        $"{(thumbnail ? thumbnailsFolder : attachmentsFolder)}/{fileId[..2]}";
+        $"{(thumbnail ? Config.ThumbnailsFolder : Config.AttachmentsFolder)}/{fileId[..2]}";
 
     // SaveFileAsync returns true if formFile is an image; otherwise false.
     private async Task<bool> SaveFileAsync(IFormFile formFile, string fileId)
@@ -87,7 +99,7 @@ public class AttachmentFileService(
 
             // Save thumbnail.
             image.Mutate(context => context
-                .Resize(new ResizeOptions { Size = new Size(thumbnailSize), Mode = ResizeMode.Pad })
+                .Resize(new ResizeOptions { Size = new Size(Config.ThumbnailSize), Mode = ResizeMode.Pad })
                 .BackgroundColor(Color.White));
             await SaveThumbnailAsFileAsync(image, fileId).ConfigureAwait(false);
 

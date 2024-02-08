@@ -4,7 +4,7 @@ using Cts.WebApp.Pages.Public.Complaints;
 
 namespace WebAppTests.Pages.Public.Complaint;
 
-public class IndexTests
+public class IndexPageTests
 {
     [Test]
     public async Task OnGet_PopulatesThePageModel()

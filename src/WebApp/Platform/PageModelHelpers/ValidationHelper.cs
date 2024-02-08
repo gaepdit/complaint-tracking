@@ -1,3 +1,4 @@
+using Cts.AppServices.Attachments;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -30,5 +31,17 @@ public static class ValidationHelper
                 { RootContextData = { [dataKey] = dataValue } });
 
         if (!validationResult.IsValid) validationResult.AddToModelState(modelState, parameterName);
+    }
+
+
+    // ReSharper disable once ConvertIfStatementToReturnStatement
+    public static void ValidateUploadedFiles(this List<IFormFile> formFiles, ModelStateDictionary modelState)
+    {
+        if (formFiles.Count > 10)
+            modelState.AddModelError(string.Empty,
+                "No more than ten files may be uploaded at a time. No files were attached.");
+
+        if (formFiles.Exists(file => !FileTypes.FileUploadAllowed(file.FileName)))
+            modelState.AddModelError(string.Empty, "Invalid file type selected. No files were attached.");
     }
 }

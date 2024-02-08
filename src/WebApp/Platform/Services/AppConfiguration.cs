@@ -6,16 +6,16 @@ public static class AppConfiguration
 {
     public static void BindSettings(WebApplicationBuilder builder)
     {
-        builder.Configuration.GetSection(nameof(ApplicationSettings.RaygunSettings))
-            .Bind(ApplicationSettings.RaygunSettings);
+        builder.Configuration.GetSection(nameof(AppSettings.RaygunSettings))
+            .Bind(AppSettings.RaygunSettings);
 
-        var devConfig = builder.Configuration.GetSection(nameof(ApplicationSettings.DevSettings));
+        var devConfig = builder.Configuration.GetSection(nameof(AppSettings.DevSettings));
         var useDevConfig = devConfig.Exists() &&
-            Convert.ToBoolean(devConfig[nameof(ApplicationSettings.DevSettings.UseDevSettings)]);
+            Convert.ToBoolean(devConfig[nameof(AppSettings.DevSettings.UseDevSettings)]);
 
         if (useDevConfig)
-            devConfig.Bind(ApplicationSettings.DevSettings);
+            devConfig.Bind(AppSettings.DevSettings);
         else
-            ApplicationSettings.DevSettings = ApplicationSettings.ProductionDefault;
+            AppSettings.DevSettings = AppSettings.ProductionDefault;
     }
 }

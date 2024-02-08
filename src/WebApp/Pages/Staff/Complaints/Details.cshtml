@@ -1,4 +1,5 @@
 @page "{id:int?}"
+@using Cts.AppServices.Attachments
 @using Cts.AppServices.Complaints.Permissions
 @using Cts.WebApp.Pages.Shared.DisplayTemplates
 @using Cts.WebApp.Pages.Shared.EditorTemplates
@@ -231,9 +232,9 @@
 @if (Model.UserCan[ComplaintOperation.EditActions])
 {
     <div class="container bg-light-subtle border border-primary-subtle rounded-1 my-3 py-2 d-print-none">
-        <h3 id="new-action" class="h5">Add a new Action Item</h3>
+        <h3 id="new-action" class="h5">Add An Action Item</h3>
 
-        <form method="post">
+        <form method="post" asp-page-handler="NewAction">
             <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
             <div class="row">
                 <div class="col-md-4 mb-3">
@@ -342,7 +343,7 @@
     </div>
 }
 
-<h2 class="h3">Attachments</h2>
+<h2 class="h3" id="attachments">Attachments</h2>
 
 @if (Model.ComplaintView.Attachments is { Count: > 0 })
 {
@@ -407,20 +408,30 @@ else
 
 @if (Model.UserCan[ComplaintOperation.EditAttachments])
 {
-    <div class="container">
+    <div class="container bg-light-subtle border border-primary-subtle rounded-1 my-3 py-2 d-print-none">
+        <h3 class="h5">Upload Attachments</h3>
         @if (Model.ComplaintView.ComplaintClosed)
         {
             <p>
                 <strong>Be careful! This complaint has already been approved/closed.</strong>
             </p>
         }
+        <form method="post" asp-page-handler="UploadFiles" enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
 
-        @* TODO *@
+            <div class="row row-cols-sm-auto g-3 align-items-center mb-3 mt-2">
+                <div class="col-12">
+                    <input class="form-control" type="file" asp-for="NewAttachments.FormFiles" multiple accept="@FileTypes.AcceptFileTypes">
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Upload selected files</button>
+                </div>
+            </div>
+            <input asp-for="NewAttachments.ComplaintId" type="hidden" />
+        </form>
         <p>
-            <em>
-                Supported file types are images, documents, and spreadsheets.<br />
-                All files must comply with <a href="#" target="_blank">EPD’s complaint attachments policy (<abbr>PDF</abbr>)</a>.
-            </em>
+            Up to ten files may be uploaded at a time. Supported file types are images, documents, and spreadsheets.
+            All files must comply with the <a href="~/static/Complaint-Attachments-Policy.pdf" target="_blank">EPD Complaint Attachments Policy (<abbr>PDF</abbr>)</a>.
         </p>
     </div>
 }

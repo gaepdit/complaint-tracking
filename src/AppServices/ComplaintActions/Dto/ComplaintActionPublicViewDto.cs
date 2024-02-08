@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Cts.AppServices.ComplaintActions;
+namespace Cts.AppServices.ComplaintActions.Dto;
 
 public record ComplaintActionPublicViewDto
 {

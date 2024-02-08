@@ -18,11 +18,9 @@ public class ComplaintUpdateMapping
 
         var result = AppServicesTestsSetup.Mapper!.Map<ComplaintUpdateDto>(item);
 
-        using (new AssertionScope())
-        {
-            result.ReceivedDate.Should().Be(DateOnly.FromDateTime(item.ReceivedDate.Date));
-            result.ReceivedTime.Should().Be(TimeOnly.FromTimeSpan(item.ReceivedDate.TimeOfDay));
-        }
+        using var scope = new AssertionScope();
+        result.ReceivedDate.Should().Be(DateOnly.FromDateTime(item.ReceivedDate.Date));
+        result.ReceivedTime.Should().Be(TimeOnly.FromTimeSpan(item.ReceivedDate.TimeOfDay));
     }
 
     [Test]
@@ -53,17 +51,15 @@ public class ComplaintUpdateMapping
         var result = AppServicesTestsSetup.Mapper!.Map<ComplaintUpdateDto>(item);
 
         // Assert
-        using (new AssertionScope())
-        {
-            result.ComplaintClosed.Should().BeTrue();
-            result.IsDeleted.Should().BeTrue();
-            result.CurrentOwnerId.Should().Be(expectedCurrentOwnerId);
-            result.CurrentOfficeId.Should().Be(expectedCurrentOfficeId);
-            result.CurrentUserOfficeId.Should().Be(Guid.Empty);
-            result.EnteredById.Should().Be(expectedEnteredById);
-            result.EnteredDate.Should().Be(expectedEnteredDate);
-            result.CurrentOwnerAcceptedDate.Should().Be(expectedCurrentOwnerAcceptedDate);
-            result.Status.Should().Be(ComplaintStatus.Closed);
-        }
+        using var scope = new AssertionScope();
+        result.ComplaintClosed.Should().BeTrue();
+        result.IsDeleted.Should().BeTrue();
+        result.CurrentOwnerId.Should().Be(expectedCurrentOwnerId);
+        result.CurrentOfficeId.Should().Be(expectedCurrentOfficeId);
+        result.CurrentUserOfficeId.Should().Be(Guid.Empty);
+        result.EnteredById.Should().Be(expectedEnteredById);
+        result.EnteredDate.Should().Be(expectedEnteredDate);
+        result.CurrentOwnerAcceptedDate.Should().Be(expectedCurrentOwnerAcceptedDate);
+        result.Status.Should().Be(ComplaintStatus.Closed);
     }
 }

@@ -1,4 +1,3 @@
-using Cts.Domain.Entities.Attachments;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.ComplaintTransitions;
 using Microsoft.EntityFrameworkCore.Query;
@@ -33,10 +32,6 @@ public sealed class ComplaintRepository(AppDbContext context)
             )
             .Include(complaint => complaint.ComplaintTransitions
                 .OrderBy(transition => transition.CommittedDate));
-
-    public async Task<Attachment?> FindAttachmentAsync(Expression<Func<Attachment, bool>> predicate,
-        CancellationToken token = default) =>
-        await Context.Set<Attachment>().SingleOrDefaultAsync(predicate, token).ConfigureAwait(false);
 
     public async Task InsertTransitionAsync(ComplaintTransition transition, bool autoSave = true,
         CancellationToken token = default)

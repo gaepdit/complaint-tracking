@@ -13,8 +13,8 @@ internal static class SecurityHeaders
             .AddReferrerPolicyStrictOriginWhenCrossOrigin()
             .RemoveServerHeader();
 
-        if (!string.IsNullOrEmpty(ApplicationSettings.RaygunSettings.ApiKey))
+        if (!string.IsNullOrEmpty(AppSettings.RaygunSettings.ApiKey))
             policies.AddReportingEndpoints(builder => builder.AddEndpoint("csp-endpoint",
-                $"https://report-to-api.raygun.com/reports-csp?apikey={ApplicationSettings.RaygunSettings.ApiKey}"));
+                $"https://report-to-api.raygun.com/reports-csp?apikey={AppSettings.RaygunSettings.ApiKey}"));
     }
 }

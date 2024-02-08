@@ -8,8 +8,7 @@ using System.Security.Claims;
 namespace Cts.AppServices.Complaints.Permissions;
 
 // TODO: Review these permissions carefully.
-internal class ComplaintViewPermissionsHandler :
-    AuthorizationHandler<ComplaintOperation, ComplaintViewDto>
+internal class ComplaintViewPermissionsHandler : AuthorizationHandler<ComplaintOperation, ComplaintViewDto>
 {
     private ClaimsPrincipal _user = default!;
     private ComplaintViewDto _resource = default!;
@@ -34,8 +33,9 @@ internal class ComplaintViewPermissionsHandler :
                 IsOpen() && !MustAccept() && IsCurrentOwnerOrManager(),
 
             nameof(ComplaintOperation.EditAttachments) =>
-                _user.IsAttachmentsEditor() || // Attachments editor (and Division Manager) can edit attachments on closed complaints.
-                IsOpen() && (IsCurrentOwnerOrManager() || IsRecentReporter()),
+                IsOpen() && (IsCurrentOwnerOrManager() || IsRecentReporter()) ||
+                // Attachments editor (and Division Manager) can edit attachments on closed complaints.
+                IsNotDeleted() && _user.IsAttachmentsEditor(),
 
             nameof(ComplaintOperation.EditDetails) =>
                 IsOpen() && !MustAccept() && UserHasEditAccess(),
@@ -80,6 +80,7 @@ internal class ComplaintViewPermissionsHandler :
     private bool IsOpen() => _resource is { ComplaintClosed: false, IsDeleted: false };
 
     private bool IsClosed() => _resource is { ComplaintClosed: true, IsDeleted: false };
+    private bool IsNotDeleted() => !_resource.IsDeleted;
 
     private bool ReviewPending() => _resource is { Status: ComplaintStatus.ReviewPending };
 
