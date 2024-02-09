@@ -6,8 +6,8 @@ public static class FileTypes
 {
     private static string[] AllowedFileTypes { get; } =
     [
-        ".csv", ".docx", ".gif", ".htm", ".html", ".jpeg", ".jpg", ".pdf", ".png", ".pptx", ".rtf", ".svg", ".txt",
-        ".xlsx",
+        ".csv", ".docx", ".gif", ".htm", ".html", ".jpeg", ".jpg", ".markdown", ".md", ".pdf", ".png", ".pptx", ".rtf",
+        ".svg", ".txt", ".xlsx",
     ];
 
     public static string AcceptFileTypes { get; } = string.Join(",", AllowedFileTypes);

@@ -1,0 +1,13 @@
+﻿@model string
+@if (Model == ViewData["ValidatingSection"]!.ToString())
+{
+    <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
+}
+else
+{
+    <div class="alert alert-danger validation-summary-valid" role="alert" data-valmsg-summary="true">
+        <ul>
+            <li style="display:none"></li>
+        </ul>
+    </div>
+}

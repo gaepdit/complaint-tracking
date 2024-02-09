@@ -30,7 +30,7 @@ public class DetailsModel(
     : PageModel
 {
     public ComplaintViewDto ComplaintView { get; private set; } = default!;
-    public Dictionary<IAuthorizationRequirement, bool> UserCan { get; set; } = new();
+    public Dictionary<IAuthorizationRequirement, bool> UserCan { get; private set; } = new();
 
     public ComplaintActionCreateDto NewAction { get; set; } = default!;
     public AttachmentsCreateDto NewAttachments { get; set; } = default!;
@@ -38,6 +38,7 @@ public class DetailsModel(
     [TempData]
     public Guid HighlightId { get; set; }
 
+    public string? ValidatingSection { get; private set; }
     public SelectList ActionItemTypeSelectList { get; private set; } = default!;
 
     public bool ViewableComplaintActions => ComplaintView.ComplaintActions.Exists(action =>
@@ -82,7 +83,9 @@ public class DetailsModel(
 
         if (!ModelState.IsValid)
         {
+            ValidatingSection = nameof(OnPostNewActionAsync);
             ComplaintView = complaintView;
+            NewAttachments = new AttachmentsCreateDto(complaintView.Id);
             await PopulateSelectListsAsync();
             return Page();
         }
@@ -104,7 +107,8 @@ public class DetailsModel(
         var complaintView = await complaintService.FindAsync(id.Value, true, token);
         if (complaintView is null || complaintView.IsDeleted) return BadRequest();
 
-        complaintView.CurrentUserOfficeId = (await staffService.GetCurrentUserAsync()).Office?.Id ?? Guid.Empty;
+        var currentUser = await staffService.GetCurrentUserAsync();
+        complaintView.CurrentUserOfficeId = currentUser.Office?.Id ?? Guid.Empty;
 
         await SetPermissionsAsync(complaintView);
         if (!UserCan[ComplaintOperation.EditAttachments]) return BadRequest();
@@ -113,7 +117,9 @@ public class DetailsModel(
 
         if (!ModelState.IsValid)
         {
+            ValidatingSection = nameof(OnPostUploadFilesAsync);
             ComplaintView = complaintView;
+            NewAction = new ComplaintActionCreateDto(complaintView.Id) { Investigator = currentUser.Name };
             await PopulateSelectListsAsync();
             return Page();
         }
