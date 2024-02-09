@@ -113,7 +113,7 @@ public class DetailsModel(
         await SetPermissionsAsync(complaintView);
         if (!UserCan[ComplaintOperation.EditAttachments]) return BadRequest();
 
-        newAttachments.FormFiles.ValidateUploadedFiles(ModelState);
+        // newAttachments.FormFiles.ValidateUploadedFiles(ModelState);
 
         if (!ModelState.IsValid)
         {

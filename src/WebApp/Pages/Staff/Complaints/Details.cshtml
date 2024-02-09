@@ -420,7 +420,7 @@ else
                 new { ValidatingSection = nameof(DetailsModel.OnPostUploadFilesAsync) })
             <div class="row row-cols-sm-auto g-3 align-items-center mb-3 mt-2">
                 <div class="col-12">
-                    <input class="form-control" type="file" asp-for="NewAttachments.FormFiles" multiple accept="@FileTypes.AcceptFileTypes">
+                    <input class="form-control" type="file" asp-for="NewAttachments.FormFiles" multiple accept="@FileTypes.FileTypesAcceptString">
                 </div>
                 <div class="col-12">
                     <button type="submit" class="btn btn-primary">Upload selected files</button>

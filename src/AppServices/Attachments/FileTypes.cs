@@ -4,22 +4,25 @@ namespace Cts.AppServices.Attachments;
 
 public static class FileTypes
 {
-    private static string[] AllowedFileTypes { get; } =
+    public static readonly IEnumerable<string> AllowedFileTypes =
     [
         ".csv", ".docx", ".gif", ".htm", ".html", ".jpeg", ".jpg", ".markdown", ".md", ".pdf", ".png", ".pptx", ".rtf",
         ".svg", ".txt", ".xlsx",
     ];
 
-    public static string AcceptFileTypes { get; } = string.Join(",", AllowedFileTypes);
+    private static readonly IEnumerable<string> ImageFileTypes = [".gif", ".jpeg", ".jpg", ".png"];
 
-    public static bool FileUploadAllowed(string fileName) =>
-        AllowedFileTypes.Contains(Path.GetExtension(fileName).ToLower());
+    public static readonly IEnumerable<string> TextFileTypes =
+        [".csv", ".htm", ".html", ".markdown", ".md", ".svg", ".txt"];
+
+    public static string FileTypesAcceptString { get; } = string.Join(",", AllowedFileTypes);
+
 
     public static bool FileNameImpliesImage(string fileName) =>
-        Path.GetExtension(fileName).ToLower() is ".gif" or ".jpeg" or ".jpg" or ".png";
+        ImageFileTypes.Contains(Path.GetExtension(fileName).ToLowerInvariant());
 
     public static string GetContentType(string extension) =>
-        FileContentTypes.GetValueOrDefault(extension.ToLower(), "application/octet-stream");
+        FileContentTypes.GetValueOrDefault(extension.ToLowerInvariant(), "application/octet-stream");
 
     [SuppressMessage("ReSharper", "StringLiteralTypo")]
     // This list contains file types that are no longer allowed but may exist for previous uploads. 
