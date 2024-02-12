@@ -18,11 +18,9 @@ public class EditValidator
 
         var result = await validator.TestValidateAsync(model);
 
-        using (new AssertionScope())
-        {
-            result.ShouldNotHaveValidationErrorFor(e => e.ReceivedById);
-            result.ShouldNotHaveValidationErrorFor(e => e.ComplaintNature);
-        }
+        using var scope = new AssertionScope();
+        result.ShouldNotHaveValidationErrorFor(e => e.ReceivedById);
+        result.ShouldNotHaveValidationErrorFor(e => e.ComplaintNature);
     }
 
     [Test]
@@ -33,12 +31,10 @@ public class EditValidator
 
         var result = await validator.TestValidateAsync(model);
 
-        using (new AssertionScope())
-        {
-            result.ShouldHaveValidationErrorFor(e => e.ReceivedById)
-                .WithErrorMessage("'Received By Id' must not be empty.");
-            result.ShouldHaveValidationErrorFor(e => e.ComplaintNature)
-                .WithErrorMessage("'Complaint Nature' must not be empty.");
-        }
+        using var scope = new AssertionScope();
+        result.ShouldHaveValidationErrorFor(e => e.ReceivedById)
+            .WithErrorMessage("'Received By Id' must not be empty.");
+        result.ShouldHaveValidationErrorFor(e => e.ComplaintNature)
+            .WithErrorMessage("'Complaint Nature' must not be empty.");
     }
 }

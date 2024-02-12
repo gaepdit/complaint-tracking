@@ -13,11 +13,9 @@ public class StaffDtoTests
 
         var result = staffSearchDto.TrimAll();
 
-        using (new AssertionScope())
-        {
-            result.Name.Should().Be("abc");
-            result.Email.Should().Be("def");
-        }
+        using var scope = new AssertionScope();
+        result.Name.Should().Be("abc");
+        result.Email.Should().Be("def");
     }
 
     private static StaffViewDto ValidStaffView => new()
@@ -58,11 +56,9 @@ public class StaffDtoTests
 
         var result = staffViewDto.AsUpdateDto();
 
-        using (new AssertionScope())
-        {
-            result.Active.Should().BeTrue();
-            result.Phone.Should().Be(staffViewDto.Phone);
-            result.OfficeId.Should().Be(staffViewDto.Office.Id);
-        }
+        using var scope = new AssertionScope();
+        result.Active.Should().BeTrue();
+        result.Phone.Should().Be(staffViewDto.Phone);
+        result.OfficeId.Should().Be(staffViewDto.Office.Id);
     }
 }

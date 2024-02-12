@@ -1,12 +1,17 @@
-﻿namespace Cts.Domain.Entities.Attachments;
+﻿using Cts.Domain.Entities.Complaints;
+using Cts.Domain.Identity;
+using Microsoft.AspNetCore.Http;
+
+namespace Cts.Domain.Entities.Attachments;
 
 public interface IAttachmentManager
 {
     /// <summary>
     /// Creates a new <see cref="Attachment"/>.
     /// </summary>
-    /// <param name="fileName">The name of the uploaded file.</param>
-    /// <param name="size">The size of the uploaded file.</param>
+    /// <param name="formFile"></param>
+    /// <param name="complaint">The <see cref="Complaint"/> the file is attached to.</param>
+    /// <param name="user">The user adding the Attachment.</param>
     /// <returns>The Attachment that was created.</returns>
-    public Attachment Create(string fileName, long size);
+    public Attachment Create(IFormFile formFile, Complaint complaint, ApplicationUser? user);
 }

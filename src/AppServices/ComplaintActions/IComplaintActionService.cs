@@ -1,4 +1,6 @@
-﻿namespace Cts.AppServices.ComplaintActions;
+﻿using Cts.AppServices.ComplaintActions.Dto;
+
+namespace Cts.AppServices.ComplaintActions;
 
 public interface IComplaintActionService : IDisposable, IAsyncDisposable
 {

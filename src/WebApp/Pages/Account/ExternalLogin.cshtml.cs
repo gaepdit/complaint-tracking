@@ -36,7 +36,7 @@ public class ExternalLoginModel(
         ReturnUrl = returnUrl;
 
         // Use AzureAD authentication if enabled; otherwise, sign in as local user.
-        if (!ApplicationSettings.DevSettings.UseAzureAd) return await SignInAsLocalUser();
+        if (!AppSettings.DevSettings.UseAzureAd) return await SignInAsLocalUser();
 
         // Request a redirect to the external login provider.
         const string provider = OpenIdConnectDefaults.AuthenticationScheme;
@@ -49,16 +49,16 @@ public class ExternalLoginModel(
     {
         logger.LogInformation(
             "Local user signin attempted with settings {LocalUserIsAuthenticated}, {LocalUserIsAdmin}, and {LocalUserIsStaff}",
-            ApplicationSettings.DevSettings.LocalUserIsAuthenticated.ToString(),
-            ApplicationSettings.DevSettings.LocalUserIsAdmin.ToString(),
-            ApplicationSettings.DevSettings.LocalUserIsStaff.ToString());
-        if (!ApplicationSettings.DevSettings.LocalUserIsAuthenticated) return Forbid();
+            AppSettings.DevSettings.LocalUserIsAuthenticated.ToString(),
+            AppSettings.DevSettings.LocalUserIsAdmin.ToString(),
+            AppSettings.DevSettings.LocalUserIsStaff.ToString());
+        if (!AppSettings.DevSettings.LocalUserIsAuthenticated) return Forbid();
 
         StaffSearchDto search;
 
-        if (ApplicationSettings.DevSettings.LocalUserIsAdmin)
+        if (AppSettings.DevSettings.LocalUserIsAdmin)
             search = new StaffSearchDto(SortBy.NameAsc, "Admin", null, null, null, null);
-        else if (ApplicationSettings.DevSettings.LocalUserIsStaff)
+        else if (AppSettings.DevSettings.LocalUserIsStaff)
             search = new StaffSearchDto(SortBy.NameAsc, "General", null, null, null, null);
         else
             search = new StaffSearchDto(SortBy.NameAsc, "Limited", null, null, null, null);
@@ -151,13 +151,13 @@ public class ExternalLoginModel(
 
         // Add new user to application Roles if seeded in app settings or local admin user setting is enabled.
         var seedAdminUsers = configuration.GetSection("SeedAdminUsers").Get<string[]>();
-        if (ApplicationSettings.DevSettings.LocalUserIsStaff)
+        if (AppSettings.DevSettings.LocalUserIsStaff)
         {
             logger.LogInformation("Seeding staff role for new user {UserName}", user.UserName);
             await userManager.AddToRoleAsync(user, RoleName.Staff);
         }
 
-        if (ApplicationSettings.DevSettings.LocalUserIsAdmin ||
+        if (AppSettings.DevSettings.LocalUserIsAdmin ||
             (seedAdminUsers != null && seedAdminUsers.Contains(user.Email, StringComparer.InvariantCultureIgnoreCase)))
         {
             logger.LogInformation("Seeding all roles for new user {UserName}", user.UserName);

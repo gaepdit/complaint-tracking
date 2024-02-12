@@ -14,17 +14,17 @@ public class Attachment : AuditableSoftDeleteEntity
 
     // Properties
 
-    public Complaint Complaint { get; init; } = default!;
+    public required Complaint Complaint { get; init; } = default!;
 
     [StringLength(245)]
-    public string FileName { get; init; } = string.Empty;
+    public required string FileName { get; init; } = string.Empty;
 
     [StringLength(10)]
-    public string FileExtension { get; init; } = string.Empty;
+    public required string FileExtension { get; init; } = string.Empty;
 
     public string FileId => $"{Id}{FileExtension}";
 
-    public long Size { get; init; }
+    public required long Size { get; init; }
 
     public DateTimeOffset UploadedDate { get; init; } = DateTimeOffset.Now;
 

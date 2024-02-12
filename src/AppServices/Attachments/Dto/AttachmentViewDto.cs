@@ -3,7 +3,7 @@ using Cts.AppServices.Utilities;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace Cts.AppServices.Attachments;
+namespace Cts.AppServices.Attachments.Dto;
 
 public record AttachmentViewDto
 {

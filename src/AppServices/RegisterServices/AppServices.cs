@@ -1,4 +1,5 @@
 using Cts.AppServices.ActionTypes;
+using Cts.AppServices.Attachments;
 using Cts.AppServices.ComplaintActions;
 using Cts.AppServices.Complaints;
 using Cts.AppServices.Concerns;
@@ -23,6 +24,7 @@ public static class AppServices
 
         // Attachments
         services.AddScoped<IAttachmentManager, AttachmentManager>();
+        services.AddScoped<IAttachmentService, AttachmentService>();
 
         // Complaints
         services.AddScoped<IComplaintManager, ComplaintManager>();

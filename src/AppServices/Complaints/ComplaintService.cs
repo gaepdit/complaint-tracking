@@ -1,5 +1,4 @@
 using AutoMapper;
-using Cts.AppServices.Attachments;
 using Cts.AppServices.Complaints.Dto;
 using Cts.AppServices.Staff.Dto;
 using Cts.AppServices.UserServices;
@@ -9,7 +8,6 @@ using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
 using GaEpd.AppLibrary.Pagination;
-using Microsoft.AspNetCore.Http;
 
 namespace Cts.AppServices.Complaints;
 
@@ -48,9 +46,6 @@ public sealed class ComplaintService(
         return new PaginatedResult<ComplaintSearchResultDto>(list, count, paging);
     }
 
-    public async Task<AttachmentViewDto?> FindPublicAttachmentAsync(Guid id, CancellationToken token = default) =>
-        mapper.Map<AttachmentViewDto>(await complaintRepository
-            .FindAttachmentAsync(AttachmentFilters.PublicIdPredicate(id), token).ConfigureAwait(false));
 
     public async Task<ComplaintViewDto?> FindAsync(int id, bool includeDeletedActions = false,
         CancellationToken token = default)
@@ -96,14 +91,10 @@ public sealed class ComplaintService(
         return new PaginatedResult<ComplaintSearchResultDto>(list, count, paging);
     }
 
-    public async Task<AttachmentViewDto?> FindAttachmentAsync(Guid id, CancellationToken token = default) =>
-        mapper.Map<AttachmentViewDto>(await complaintRepository
-            .FindAttachmentAsync(AttachmentFilters.IdPredicate(id), token).ConfigureAwait(false));
-
     public async Task<int> CreateAsync(ComplaintCreateDto resource, CancellationToken token = default)
     {
         var user = await userService.GetCurrentUserAsync().ConfigureAwait(false);
-        var complaint = await CreateComplaintFromDtoAsync(resource, user?.Id, token).ConfigureAwait(false);
+        var complaint = await CreateComplaintFromDtoAsync(resource, user, token).ConfigureAwait(false);
         await complaintRepository.InsertAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
 
         await AddTransitionAsync(complaint, TransitionType.New, user, token).ConfigureAwait(false);
@@ -133,14 +124,10 @@ public sealed class ComplaintService(
             token).ConfigureAwait(false);
 
     internal async Task<Complaint> CreateComplaintFromDtoAsync(
-        ComplaintCreateDto resource, string? currentUserId, CancellationToken token)
+        ComplaintCreateDto resource, ApplicationUser? currentUser, CancellationToken token)
     {
-        var complaint = complaintManager.Create(currentUserId);
+        var complaint = complaintManager.Create(currentUser);
         await FillInComplaintDetailsAsync(complaint, resource, token).ConfigureAwait(false);
-
-        // Auditing data
-        if (!string.IsNullOrEmpty(currentUserId))
-            complaint.EnteredBy = await userService.GetUserAsync(currentUserId).ConfigureAwait(false);
 
         // Properties: Assignment
         complaint.CurrentOffice = await officeRepository.GetAsync(resource.CurrentOfficeId!.Value, token)
@@ -151,7 +138,7 @@ public sealed class ComplaintService(
         complaint.CurrentOwner = await userService.FindUserAsync(resource.CurrentOwnerId).ConfigureAwait(false);
         complaint.CurrentOwnerAssignedDate = DateTimeOffset.Now;
 
-        if (!resource.CurrentOwnerId.Equals(currentUserId)) return complaint;
+        if (resource.CurrentOwnerId == null || !resource.CurrentOwnerId.Equals(currentUser?.Id)) return complaint;
 
         complaint.CurrentOwnerAcceptedDate = DateTimeOffset.Now;
         complaint.Status = ComplaintStatus.UnderInvestigation;
@@ -198,17 +185,6 @@ public sealed class ComplaintService(
         complaint.SourceSecondaryPhoneNumber = resource.SourceSecondaryPhoneNumber;
         complaint.SourceTertiaryPhoneNumber = resource.SourceTertiaryPhoneNumber;
         complaint.SourceEmail = resource.SourceEmail;
-    }
-
-    public Task SaveAttachmentAsync(IFormFile file, CancellationToken token = default)
-    {
-#pragma warning disable S125
-        // var fileName = file.FileName.Trim();
-        // var fileExtension = Path.GetExtension(fileName);
-        // var fileId = Guid.NewGuid();
-        // var saveFileName = string.Concat(fileId.ToString(), fileExtension);
-#pragma warning restore S125
-        throw new NotImplementedException();
     }
 
     public async Task DeleteAsync(int complaintId, CancellationToken token = default)

@@ -47,10 +47,6 @@ public sealed class LocalComplaintRepository(
         return complaint;
     }
 
-    public Task<Attachment?> FindAttachmentAsync(Expression<Func<Attachment, bool>> predicate,
-        CancellationToken token = default) =>
-        attachmentRepository.FindAsync(predicate, token);
-
     public Task InsertTransitionAsync(ComplaintTransition transition, bool autoSave = true,
         CancellationToken token = default) =>
         transitionRepository.InsertAsync(transition, autoSave, token);

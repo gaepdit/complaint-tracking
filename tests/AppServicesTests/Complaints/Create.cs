@@ -17,7 +17,7 @@ public class Create
     {
         // Arrange
         var complaintManagerMock = Substitute.For<IComplaintManager>();
-        complaintManagerMock.Create(Arg.Any<string?>())
+        complaintManagerMock.Create(Arg.Any<ApplicationUser?>())
             .Returns(new Complaint(0));
 
         var userServiceMock = Substitute.For<IUserService>();

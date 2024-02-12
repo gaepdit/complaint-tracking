@@ -37,4 +37,5 @@ public static class DisplayTemplate
     public const string StringOrNone = nameof(StringOrNone);
     public const string StringOrNotEntered = nameof(StringOrNotEntered);
     public const string TruncateText = nameof(TruncateText);
+    public const string ValidationSummaryConditional = nameof(ValidationSummaryConditional);
 }

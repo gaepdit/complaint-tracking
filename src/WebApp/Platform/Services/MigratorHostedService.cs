@@ -15,10 +15,10 @@ public class MigratorHostedService(IServiceProvider serviceProvider, IConfigurat
     {
         using var scope = serviceProvider.CreateScope();
 
-        if (ApplicationSettings.DevSettings.UseDevSettings) await SeedFileStoreAsync(scope, cancellationToken);
+        if (AppSettings.DevSettings.UseDevSettings) await SeedFileStoreAsync(scope, cancellationToken);
 
         // If using in-memory data store, no further action required.
-        if (ApplicationSettings.DevSettings.UseInMemoryData) return;
+        if (AppSettings.DevSettings.UseInMemoryData) return;
 
         var migrationConnectionString = configuration.GetConnectionString("MigrationConnection");
         var migrationOptions = new DbContextOptionsBuilder<AppDbContext>()
@@ -27,7 +27,7 @@ public class MigratorHostedService(IServiceProvider serviceProvider, IConfigurat
 
         await using var migrationContext = new AppDbContext(migrationOptions);
 
-        if (ApplicationSettings.DevSettings.UseEfMigrations)
+        if (AppSettings.DevSettings.UseEfMigrations)
         {
             // Run any EF database migrations if used.
             await migrationContext.Database.MigrateAsync(cancellationToken);

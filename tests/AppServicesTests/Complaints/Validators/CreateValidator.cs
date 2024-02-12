@@ -19,12 +19,10 @@ public class CreateValidator
 
         var result = await validator.TestValidateAsync(model);
 
-        using (new AssertionScope())
-        {
-            result.ShouldNotHaveValidationErrorFor(e => e.ReceivedById);
-            result.ShouldNotHaveValidationErrorFor(e => e.ComplaintNature);
-            result.ShouldNotHaveValidationErrorFor(e => e.CurrentOfficeId);
-        }
+        using var scope = new AssertionScope();
+        result.ShouldNotHaveValidationErrorFor(e => e.ReceivedById);
+        result.ShouldNotHaveValidationErrorFor(e => e.ComplaintNature);
+        result.ShouldNotHaveValidationErrorFor(e => e.CurrentOfficeId);
     }
 
     [Test]
@@ -35,14 +33,12 @@ public class CreateValidator
 
         var result = await validator.TestValidateAsync(model);
 
-        using (new AssertionScope())
-        {
-            result.ShouldHaveValidationErrorFor(e => e.ReceivedById)
-                .WithErrorMessage("'Received By Id' must not be empty.");
-            result.ShouldHaveValidationErrorFor(e => e.ComplaintNature)
-                .WithErrorMessage("'Complaint Nature' must not be empty.");
-            result.ShouldHaveValidationErrorFor(e => e.CurrentOfficeId)
-                .WithErrorMessage("'Current Office Id' must not be empty.");
-        }
+        using var scope = new AssertionScope();
+        result.ShouldHaveValidationErrorFor(e => e.ReceivedById)
+            .WithErrorMessage("'Received By Id' must not be empty.");
+        result.ShouldHaveValidationErrorFor(e => e.ComplaintNature)
+            .WithErrorMessage("'Complaint Nature' must not be empty.");
+        result.ShouldHaveValidationErrorFor(e => e.CurrentOfficeId)
+            .WithErrorMessage("'Current Office Id' must not be empty.");
     }
 }

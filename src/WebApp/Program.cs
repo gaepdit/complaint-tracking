@@ -1,8 +1,5 @@
-using Cts.AppServices.Attachments;
 using Cts.AppServices.ErrorLogging;
 using Cts.AppServices.RegisterServices;
-using Cts.Domain.Entities.Attachments;
-using Cts.WebApp.Platform.Constants;
 using Cts.WebApp.Platform.ErrorLogging;
 using Cts.WebApp.Platform.SecurityHeaders;
 using Cts.WebApp.Platform.Services;
@@ -47,7 +44,7 @@ if (!builder.Environment.IsDevelopment())
     builder.Services.AddHsts(opts => opts.MaxAge = TimeSpan.FromMinutes(300));
 
 // Configure application monitoring.
-if (!string.IsNullOrEmpty(ApplicationSettings.RaygunSettings.ApiKey))
+if (!string.IsNullOrEmpty(AppSettings.RaygunSettings.ApiKey))
 {
     builder.Services.AddTransient<IErrorLogger, ErrorLogger>();
     builder.Services.AddRaygun(builder.Configuration,
@@ -59,10 +56,6 @@ if (!string.IsNullOrEmpty(ApplicationSettings.RaygunSettings.ApiKey))
 builder.Services.AddAutoMapperProfiles();
 builder.Services.AddAppServices();
 builder.Services.AddValidators();
-builder.Services.AddTransient<IAttachmentFileService, AttachmentFileService>(provider =>
-    new AttachmentFileService(FilePaths.AttachmentsFolder, FilePaths.ThumbnailsFolder, GlobalConstants.ThumbnailSize,
-        provider.GetService<IFileService>()!, provider.GetService<IAttachmentManager>()!,
-        provider.GetService<IErrorLogger>()!));
 
 // Add data stores.
 builder.Services.AddDataPersistence(builder.Configuration);
@@ -98,13 +91,13 @@ if (app.Environment.IsDevelopment()) app.UseDeveloperExceptionPage(); // Develop
 else app.UseExceptionHandler("/Error"); // Production or Staging
 
 // Configure security HTTP headers
-if (!app.Environment.IsDevelopment() || ApplicationSettings.DevSettings.UseSecurityHeadersInDev)
+if (!app.Environment.IsDevelopment() || AppSettings.DevSettings.UseSecurityHeadersInDev)
 {
     app.UseHsts();
     app.UseSecurityHeaders(policyCollection => policyCollection.AddSecurityHeaderPolicies());
 }
 
-if (!string.IsNullOrEmpty(ApplicationSettings.RaygunSettings.ApiKey)) app.UseRaygun();
+if (!string.IsNullOrEmpty(AppSettings.RaygunSettings.ApiKey)) app.UseRaygun();
 
 // Configure the application pipeline.
 app.UseStatusCodePagesWithReExecute("/Error/{0}");

@@ -4,23 +4,29 @@ namespace Cts.AppServices.Attachments;
 
 public static class FileTypes
 {
-    public static bool FileUploadAllowed(string fileName) =>
-        Path.GetExtension(fileName).ToLower() is ".csv" or ".doc" or ".docx" or ".gif" or ".htm" or ".html" or ".jpeg"
-            or ".jpg" or ".pdf" or ".png" or ".ppt" or ".pptx" or ".rtf" or ".svg" or ".txt" or ".xls" or ".xlsx";
+    internal static readonly IEnumerable<string> AllowedFileTypes =
+    [
+        ".csv", ".docx", ".gif", ".htm", ".html", ".jpeg", ".jpg", ".markdown", ".md", ".pdf", ".png", ".pptx", ".rtf",
+        ".svg", ".txt", ".xlsx",
+    ];
 
-    public static bool FileNameImpliesImage(string fileName) => 
-        FileExtensionImpliesImage(Path.GetExtension(fileName));
+    private static readonly IEnumerable<string> ImageFileTypes = [".gif", ".jpeg", ".jpg", ".png"];
 
-    public static bool FileExtensionImpliesImage(string extension) =>
-        extension.ToLower() is ".bmp" or ".gif" or ".jpeg" or ".jpg" or ".png";
+    internal static readonly IEnumerable<string> TextFileTypes =
+        [".csv", ".htm", ".html", ".markdown", ".md", ".svg", ".txt"];
+
+    public static string FileTypesAcceptString { get; } = string.Join(",", AllowedFileTypes);
+
+    internal static bool FileNameImpliesImage(string fileName) =>
+        ImageFileTypes.Contains(Path.GetExtension(fileName).ToLowerInvariant());
 
     public static string GetContentType(string extension) =>
-        FileContentTypes.GetValueOrDefault(extension.ToLower(), "application/octet-stream");
+        FileContentTypes.GetValueOrDefault(extension.ToLowerInvariant(), "application/octet-stream");
 
     [SuppressMessage("ReSharper", "StringLiteralTypo")]
+    // This list contains file types that are no longer allowed but may exist for previous uploads. 
     private static readonly Dictionary<string, string> FileContentTypes = new()
     {
-        { ".bmp", "image/bmp" },
         { ".csv", "text/csv" },
         { ".doc", "application/msword" },
         { ".docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document" },
