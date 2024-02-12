@@ -7,16 +7,12 @@ namespace Cts.AppServices.Attachments;
 internal static class AttachmentFilters
 {
     public static Expression<Func<Attachment, bool>> IdPredicate(Guid id) =>
-        PredicateBuilder.True<Attachment>().WithId(id);
+        PredicateBuilder.True<Attachment>().WithId(id).ExcludeDeleted();
 
     public static Expression<Func<Attachment, bool>> PublicIdPredicate(Guid id) =>
-        PredicateBuilder.True<Attachment>().WithId(id).IsPublic();
+        IdPredicate(id).ComplaintIsClosed();
 
-    private static Expression<Func<Attachment, bool>> IsPublic(
+    private static Expression<Func<Attachment, bool>> ComplaintIsClosed(
         this Expression<Func<Attachment, bool>> predicate) =>
-        predicate.ExcludeDeleted().ComplaintIsPublic();
-
-    private static Expression<Func<Attachment, bool>> ComplaintIsPublic(
-        this Expression<Func<Attachment, bool>> predicate) =>
-        predicate.And(attachment => attachment.Complaint.ComplaintClosed && !attachment.Complaint.IsDeleted);
+        predicate.And(attachment => attachment.Complaint.ComplaintClosed);
 }

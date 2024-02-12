@@ -44,14 +44,25 @@ public class AttachmentService(
         return ms.ToArray();
     }
 
-    public async Task DeleteAttachmentFileAsync(string fileId, bool isImage,
-        IAttachmentService.AttachmentServiceConfig config)
+    public async Task DeleteAttachmentAsync(AttachmentViewDto attachmentView,
+        IAttachmentService.AttachmentServiceConfig config, CancellationToken token = default)
     {
-        // TODO: Delete Attachment entity also.
         Config = config;
-        if (string.IsNullOrEmpty(fileId)) return;
-        await fileService.DeleteFileAsync(fileId, ExpandPath(fileId)).ConfigureAwait(false);
-        if (isImage) await fileService.DeleteFileAsync(fileId, ExpandPath(fileId, true)).ConfigureAwait(false);
+
+        var attachment = await attachmentRepository.GetAsync(attachmentView.Id, token).ConfigureAwait(false);
+        attachment.SetDeleted((await userService.GetCurrentUserAsync().ConfigureAwait(false))?.Id);
+        await attachmentRepository.UpdateAsync(attachment, token: token).ConfigureAwait(false);
+
+        // FUTURE: Cancellation token should be removed from the `DeleteFileAsync` method.
+#pragma warning disable CA2016
+        // ReSharper disable once MethodSupportsCancellation
+        await fileService.DeleteFileAsync(attachmentView.FileId, ExpandPath(attachmentView.FileId))
+            .ConfigureAwait(false);
+        if (attachmentView.IsImage)
+            // ReSharper disable once MethodSupportsCancellation
+            await fileService.DeleteFileAsync(attachmentView.FileId, ExpandPath(attachmentView.FileId, thumbnail: true))
+                .ConfigureAwait(false);
+#pragma warning restore CA2016
     }
 
     public async Task SaveAttachmentsAsync(AttachmentsCreateDto resource,

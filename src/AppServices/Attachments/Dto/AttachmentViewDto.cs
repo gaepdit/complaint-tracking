@@ -8,6 +8,10 @@ namespace Cts.AppServices.Attachments.Dto;
 public record AttachmentViewDto
 {
     public Guid Id { get; init; }
+
+    [JsonIgnore]
+    public int ComplaintId { get; [UsedImplicitly] init; }
+
     public string FileName { get; init; } = string.Empty;
 
     [JsonIgnore]
@@ -21,7 +25,7 @@ public record AttachmentViewDto
 
     public string SizeDescription => FileSize.ToFileSizeString(Size);
 
-    [Display(Name = "Deleted By")]
+    [Display(Name = "Uploaded By")]
     public StaffViewDto? UploadedBy { get; init; }
 
     public DateTimeOffset UploadedDate { get; init; }

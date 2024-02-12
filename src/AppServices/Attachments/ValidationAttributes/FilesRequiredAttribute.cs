@@ -7,7 +7,7 @@ namespace Cts.AppServices.Attachments.ValidationAttributes;
 /// Validation attribute to limit the number of files that can be uploaded at a time.
 /// </summary>
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter)]
-public class FilesRequiredAttribute() : ValidationAttribute
+public class FilesRequiredAttribute : ValidationAttribute
 {
     public override bool IsValid(object? value) =>
         value is not List<IFormFile> formFiles || formFiles.Count > 0;

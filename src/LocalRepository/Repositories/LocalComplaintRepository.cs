@@ -29,7 +29,8 @@ public sealed class LocalComplaintRepository(
         if (complaint is null) return null;
 
         complaint.Attachments = (await attachmentRepository
-                .GetListAsync(attachment => attachment.Complaint.Id == complaint.Id, token).ConfigureAwait(false))
+                .GetListAsync(attachment => attachment.Complaint.Id == complaint.Id && !attachment.IsDeleted, token)
+                .ConfigureAwait(false))
             .OrderByDescending(attachment => attachment.UploadedDate)
             .ToList();
 

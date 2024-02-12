@@ -45,10 +45,10 @@ Users in the Staff role can:
 Users in the Manager role have all the capabilities of the Staff role. Plus they can:
 
 * Manage open Complaints currently assigned to Users in the same Office, including:
-  * Edit.
-  * Reassign.
-  * Edit attachments.
-  * Edit, delete, and restore Complaint Actions.
+    * Edit.
+    * Reassign.
+    * Edit attachments.
+    * Edit, delete, and restore Complaint Actions.
 * Approve & close Complaints that have been submitted for review.
 * View reports for all Users within the same Office.
 
@@ -62,7 +62,8 @@ Users in the User Account Admin role can:
 
 Users in the Attachments Editor role can:
 
-* Edit attachments for all Complaints, including closed Complaints. (Normally, attachments can only be edited for open complaints the user is already able to edit.)
+* Edit attachments for all Complaints, including closed Complaints. (Normally, attachments can only be edited for open
+  complaints the user is already able to edit.)
 
 ### Site Maintenance
 
@@ -73,7 +74,8 @@ Users in the Site Maintenance role can:
 
 ### Division Manager
 
-Users in the Division Manager role have all the capabilities of the Staff, Manager, User Account Admin, Attachments Editor, and Site Maintenance roles. Plus they can:
+Users in the Division Manager role have all the capabilities of the Staff, Manager, User Account Admin, Attachments
+Editor, and Site Maintenance roles. Plus they can:
 
 * Assign CTS roles, including the Division Manager role.
 * Edit all Complaints and Complaint Actions.

@@ -10,7 +10,8 @@ public interface IAttachmentService
     Task<byte[]> GetAttachmentFileAsync(string fileId, bool getThumbnail, AttachmentServiceConfig config,
         CancellationToken token = default);
 
-    Task DeleteAttachmentFileAsync(string fileId, bool isImage, AttachmentServiceConfig config);
+    Task DeleteAttachmentAsync(AttachmentViewDto attachmentView, AttachmentServiceConfig config,
+        CancellationToken token = default);
 
     Task SaveAttachmentsAsync(AttachmentsCreateDto resource, AttachmentServiceConfig config,
         CancellationToken token = default);
