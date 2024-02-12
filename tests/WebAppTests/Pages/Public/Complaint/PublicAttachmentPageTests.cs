@@ -15,8 +15,8 @@ public class PublicAttachmentPageTests
         var attachment = new AttachmentViewDto
         {
             Id = guid,
-            FileName = TextData.ValidFileName,
-            FileExtension = TextData.ValidFileExtension,
+            FileName = TextData.ValidPdfFileName,
+            FileExtension = TextData.ValidPdfFileExtension,
         };
 
         var attachmentService = Substitute.For<IAttachmentService>();
@@ -63,8 +63,8 @@ public class PublicAttachmentPageTests
         var attachment = new AttachmentViewDto
         {
             Id = guid,
-            FileName = TextData.ValidFileName,
-            FileExtension = TextData.ValidFileExtension,
+            FileName = TextData.ValidPdfFileName,
+            FileExtension = TextData.ValidPdfFileExtension,
         };
 
         var attachmentService = Substitute.For<IAttachmentService>();
@@ -89,8 +89,8 @@ public class PublicAttachmentPageTests
         var attachment = new AttachmentViewDto
         {
             Id = guid,
-            FileName = TextData.ValidFileName,
-            FileExtension = TextData.ValidFileExtension,
+            FileName = TextData.ValidPdfFileName,
+            FileExtension = TextData.ValidPdfFileExtension,
         };
 
         var attachmentService = Substitute.For<IAttachmentService>();

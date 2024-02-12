@@ -9,7 +9,7 @@ public record AttachmentsCreateDto(int ComplaintId)
     [Required(ErrorMessage = "No files were selected.")]
     [AllowedFileTypes]
     [NoEmptyFiles]
+    [FilesRequired]
     [MaxNumberOfFiles(10)]
-    [MinNumberOfFiles(1)]
     public List<IFormFile> FormFiles { get; init; } = [];
 }

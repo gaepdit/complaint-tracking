@@ -9,7 +9,7 @@ using System.Text;
 
 namespace AppServicesTests;
 
-public static class AppServiceHelpers
+internal static class AppServiceHelpers
 {
     public static byte[] TestData => Encoding.UTF8.GetBytes(TextData.ShortName);
     public static Stream TestStream => new MemoryStream(TestData);

@@ -58,7 +58,7 @@ public class SaveAttachmentTests
         // Arrange
         var formFile = Substitute.For<IFormFile>();
         formFile.Length.Returns(1);
-        formFile.FileName.Returns(TextData.ValidFileName);
+        formFile.FileName.Returns(TextData.ValidPdfFileName);
         var dto = new AttachmentsCreateDto(1) { FormFiles = [formFile] };
 
         var complaintRepository = Substitute.For<IComplaintRepository>();
@@ -71,8 +71,8 @@ public class SaveAttachmentTests
         var attachment = new Attachment(Guid.NewGuid())
         {
             Complaint = new Complaint(1),
-            FileName = TextData.ValidFileName,
-            FileExtension = TextData.ValidFileExtension,
+            FileName = TextData.ValidPdfFileName,
+            FileExtension = TextData.ValidPdfFileExtension,
             Size = 1,
         };
 

@@ -17,6 +17,5 @@ public class NoEmptyFilesAttribute : ValidationAttribute
             _ => true,
         };
 
-    public override string FormatErrorMessage(string name) =>
-        "Empty file selected.";
+    public override string FormatErrorMessage(string name) => "Empty file selected.";
 }

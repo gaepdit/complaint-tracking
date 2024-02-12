@@ -1,4 +1,3 @@
-using Cts.AppServices.Attachments;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -32,24 +31,4 @@ public static class ValidationHelper
 
         if (!validationResult.IsValid) validationResult.AddToModelState(modelState, parameterName);
     }
-    //
-    // // ReSharper disable once ConvertIfStatementToSwitchStatement
-    // public static void ValidateUploadedFiles(this List<IFormFile> formFiles, ModelStateDictionary modelState)
-    // {
-    //     // Validate number of files.
-    //     if (formFiles.Count == 0)
-    //         modelState.AddModelError(string.Empty, "No files were selected.");
-    //     else if (formFiles.Count > 10)
-    //         modelState.AddModelError(string.Empty,
-    //             "No more than ten files may be uploaded at a time.");
-    //
-    //     if (formFiles.Exists(file => file.Length == 0))
-    //         modelState.AddModelError(string.Empty, "Empty file selected.");
-    //
-    //     // Validate file types based first on file extension and second on file signature.
-    //     if (formFiles.Exists(file => !FileTypes.FileUploadAllowed(file.FileName)))
-    //         modelState.AddModelError(string.Empty, "Invalid file type selected.");
-    //     else if (formFiles.Exists(file => !FileSignatureValidation.IsFileSignatureValid(file)))
-    //         modelState.AddModelError(string.Empty, "Invalid file type selected.");
-    // }
 }

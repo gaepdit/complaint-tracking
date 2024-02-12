@@ -12,8 +12,10 @@ public static class TextData
     public const string NonExistentName = "zzz";
     public const string ValidEmail = "test@example.net";
     public const string ValidUrl = "https://example.net";
-    public const string ValidFileName = "abc.pdf";
-    public const string ValidFileExtension = ".pdf";
+    public const string ValidPdfFileName = "abc.pdf";
+    public const string ValidPdfFileExtension = ".pdf";
+    public const string ValidTextFileName = "abc.txt";
+    public const string ValidTextFileExtension = ".txt";
     public const string ValidImageFileName = "abc.png";
     public const string ValidImageFileExtension = ".png";
     public const string InValidFileName = "abc.zip";

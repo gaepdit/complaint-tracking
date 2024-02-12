@@ -10,12 +10,9 @@ public class AttachmentFileHandlerTests
     [Test]
     public async Task OnGet_IdIsNull_ReturnsNotFound()
     {
-        // Arrange
-        var pageModel = new PublicComplaints.AttachmentModel();
-
         // Act
-        var result = await pageModel.GetAttachmentFile(Substitute.For<IAttachmentService>(),
-            id: null, TextData.ShortName, thumbnail: false);
+        var result = await new PublicComplaints.AttachmentModel().GetAttachmentFile(
+            attachmentService: Substitute.For<IAttachmentService>(), id: null, TextData.ShortName, thumbnail: false);
 
         // Assert
         result.Should().BeOfType<NotFoundResult>();
@@ -31,8 +28,8 @@ public class AttachmentFileHandlerTests
         var attachment = new AttachmentViewDto
         {
             Id = guid,
-            FileName = TextData.ValidFileName,
-            FileExtension = TextData.ValidFileExtension,
+            FileName = TextData.ValidPdfFileName,
+            FileExtension = TextData.ValidPdfFileExtension,
         };
 
         var attachmentService = Substitute.For<IAttachmentService>();
@@ -41,10 +38,9 @@ public class AttachmentFileHandlerTests
                 Arg.Any<IAttachmentService.AttachmentServiceConfig>())
             .Returns(fileBytes);
 
-        var pageModel = new PublicComplaints.AttachmentModel();
-
         // Act
-        var result = await pageModel.GetAttachmentFile(attachmentService, guid, attachment.FileName, thumbnail: false);
+        var result = await new PublicComplaints.AttachmentModel().GetAttachmentFile(attachmentService, guid,
+            attachment.FileName, thumbnail: false);
 
         // Assert
         using var scope = new AssertionScope();
@@ -62,10 +58,9 @@ public class AttachmentFileHandlerTests
         var attachmentService = Substitute.For<IAttachmentService>();
         attachmentService.FindPublicAttachmentAsync(guid).Returns((AttachmentViewDto?)null);
 
-        var pageModel = new PublicComplaints.AttachmentModel();
-
         // Act
-        var result = await pageModel.GetAttachmentFile(attachmentService, guid, TextData.ShortName, thumbnail: false);
+        var result = await new PublicComplaints.AttachmentModel().GetAttachmentFile(attachmentService, guid,
+            TextData.ShortName, thumbnail: false);
 
         // Assert
         result.Should().BeOfType<NotFoundObjectResult>();
@@ -79,18 +74,16 @@ public class AttachmentFileHandlerTests
         var attachment = new AttachmentViewDto
         {
             Id = guid,
-            FileName = TextData.ValidFileName,
-            FileExtension = TextData.ValidFileExtension,
+            FileName = TextData.ValidPdfFileName,
+            FileExtension = TextData.ValidPdfFileExtension,
         };
 
         var attachmentService = Substitute.For<IAttachmentService>();
         attachmentService.FindPublicAttachmentAsync(guid).Returns(attachment);
 
-        var pageModel = new PublicComplaints.AttachmentModel();
-
         // Act
-        var result =
-            await pageModel.GetAttachmentFile(attachmentService, guid, TextData.NonExistentName, thumbnail: false);
+        var result = await new PublicComplaints.AttachmentModel().GetAttachmentFile(attachmentService, guid,
+            TextData.NonExistentName, thumbnail: false);
 
         // Act
         using var scope = new AssertionScope();
@@ -106,8 +99,8 @@ public class AttachmentFileHandlerTests
         var attachment = new AttachmentViewDto
         {
             Id = guid,
-            FileName = TextData.ValidFileName,
-            FileExtension = TextData.ValidFileExtension,
+            FileName = TextData.ValidPdfFileName,
+            FileExtension = TextData.ValidPdfFileExtension,
         };
 
         var attachmentService = Substitute.For<IAttachmentService>();
@@ -115,10 +108,9 @@ public class AttachmentFileHandlerTests
         attachmentService.GetAttachmentFileAsync(Arg.Any<string>(), Arg.Any<bool>(),
             Arg.Any<IAttachmentService.AttachmentServiceConfig>()).Returns([]);
 
-        var pageModel = new PublicComplaints.AttachmentModel();
-
         // Act
-        var result = await pageModel.GetAttachmentFile(attachmentService, guid, attachment.FileName, thumbnail: false);
+        var result = await new PublicComplaints.AttachmentModel().GetAttachmentFile(attachmentService, guid,
+            attachment.FileName, thumbnail: false);
 
         // Assert
         result.Should().BeOfType<NotFoundObjectResult>();
@@ -140,10 +132,9 @@ public class AttachmentFileHandlerTests
         attachmentService.GetAttachmentFileAsync(Arg.Any<string>(), Arg.Any<bool>(),
             Arg.Any<IAttachmentService.AttachmentServiceConfig>()).Returns([]);
 
-        var pageModel = new PublicComplaints.AttachmentModel();
-
         // Act
-        var result = await pageModel.GetAttachmentFile(attachmentService, guid, attachment.FileName, thumbnail: true);
+        var result = await new PublicComplaints.AttachmentModel().GetAttachmentFile(attachmentService, guid,
+            attachment.FileName, thumbnail: true);
 
         // Assert
         result.Should().BeOfType<LocalRedirectResult>();

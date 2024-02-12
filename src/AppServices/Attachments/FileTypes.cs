@@ -4,7 +4,7 @@ namespace Cts.AppServices.Attachments;
 
 public static class FileTypes
 {
-    public static readonly IEnumerable<string> AllowedFileTypes =
+    internal static readonly IEnumerable<string> AllowedFileTypes =
     [
         ".csv", ".docx", ".gif", ".htm", ".html", ".jpeg", ".jpg", ".markdown", ".md", ".pdf", ".png", ".pptx", ".rtf",
         ".svg", ".txt", ".xlsx",
@@ -12,13 +12,12 @@ public static class FileTypes
 
     private static readonly IEnumerable<string> ImageFileTypes = [".gif", ".jpeg", ".jpg", ".png"];
 
-    public static readonly IEnumerable<string> TextFileTypes =
+    internal static readonly IEnumerable<string> TextFileTypes =
         [".csv", ".htm", ".html", ".markdown", ".md", ".svg", ".txt"];
 
     public static string FileTypesAcceptString { get; } = string.Join(",", AllowedFileTypes);
 
-
-    public static bool FileNameImpliesImage(string fileName) =>
+    internal static bool FileNameImpliesImage(string fileName) =>
         ImageFileTypes.Contains(Path.GetExtension(fileName).ToLowerInvariant());
 
     public static string GetContentType(string extension) =>
