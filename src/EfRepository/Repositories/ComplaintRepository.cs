@@ -15,23 +15,29 @@ public sealed class ComplaintRepository(AppDbContext context)
 
     public async Task<Complaint?> FindIncludeAllAsync(Expression<Func<Complaint, bool>> predicate,
         bool includeDeletedActions = false, CancellationToken token = default) =>
-        await ComplaintIncludeAllQueryable(includeDeletedActions).SingleOrDefaultAsync(predicate, token)
-            .ConfigureAwait(false);
+        await ComplaintIncludeAllQueryable(includeDeletedActions)
+            .SingleOrDefaultAsync(predicate, token).ConfigureAwait(false);
 
-    private IIncludableQueryable<Complaint, IOrderedEnumerable<ComplaintTransition>> ComplaintIncludeAllQueryable(
+    private IQueryable<Complaint> ComplaintIncludeAllQueryable(
         bool includeDeletedActions) =>
         Context.Set<Complaint>()
+            .Include(complaint => complaint.DeletedBy)
             .Include(complaint => complaint.Attachments
                 .Where(attachment => !attachment.IsDeleted)
                 .OrderByDescending(attachment => attachment.UploadedDate)
+                .ThenBy(attachment => attachment.Id)
             )
             .Include(complaint => complaint.ComplaintActions
                 .Where(action => !action.IsDeleted || includeDeletedActions)
                 .OrderByDescending(action => action.ActionDate)
                 .ThenByDescending(action => action.EnteredDate)
-            )
+                .ThenBy(action => action.Id)
+            ).ThenInclude(action => action.DeletedBy)
             .Include(complaint => complaint.ComplaintTransitions
-                .OrderBy(transition => transition.CommittedDate));
+                .OrderBy(transition => transition.CommittedDate)
+                .ThenBy(transition => transition.Id)
+            )
+            .AsSplitQuery();
 
     public async Task InsertTransitionAsync(ComplaintTransition transition, bool autoSave = true,
         CancellationToken token = default)

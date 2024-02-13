@@ -100,6 +100,7 @@ internal static class ComplaintData
             ReviewComments = TextData.Phrase,
             ComplaintClosed = true,
             ComplaintClosedDate = DateTimeOffset.Now.AddDays(-1),
+            DeleteComments = TextData.Paragraph,
         },
         new(6)
         {

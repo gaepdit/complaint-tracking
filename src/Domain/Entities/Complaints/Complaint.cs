@@ -109,6 +109,9 @@ public class Complaint : AuditableSoftDeleteEntity<int>
     // Properties: Actions
     public List<ComplaintAction> ComplaintActions { get; set; } = new();
 
+    // Properties: Attachments
+    public List<Attachment> Attachments { get; set; } = new();
+
     // Properties: Review/Closure
 
     public ApplicationUser? ReviewedBy { get; set; }
@@ -123,11 +126,6 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     public ApplicationUser? DeletedBy { get; set; }
     public string? DeleteComments { get; set; }
-
-    // Properties: Attachments
-    public List<Attachment> Attachments { get; set; } = new();
-
-    // Methods
 }
 
 // Enums

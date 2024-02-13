@@ -41,8 +41,7 @@ public class AutoMapperProfile : Profile
             .ForMember(dto => dto.CurrentUserOfficeId, expression => expression.Ignore());
 
         CreateMap<ComplaintAction, ComplaintActionPublicViewDto>();
-        CreateMap<ComplaintAction, ComplaintActionViewDto>()
-            .ForMember(dto => dto.DeletedBy, expression => expression.Ignore());
+        CreateMap<ComplaintAction, ComplaintActionViewDto>();
         CreateMap<ComplaintAction, ComplaintActionUpdateDto>();
 
         CreateMap<ComplaintTransition, ComplaintTransitionViewDto>();

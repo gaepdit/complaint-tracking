@@ -52,21 +52,7 @@ public sealed class ComplaintService(
     {
         var complaint = await complaintRepository.FindIncludeAllAsync(id, includeDeletedActions, token)
             .ConfigureAwait(false);
-        if (complaint is null) return null;
-        var complaintView = mapper.Map<ComplaintViewDto>(complaint);
-
-        if (complaint is { IsDeleted: true, DeletedById: not null })
-            complaintView.DeletedBy = mapper.Map<StaffViewDto>(await userService.FindUserAsync(complaint.DeletedById)
-                .ConfigureAwait(false));
-
-        foreach (var action in complaintView.ComplaintActions
-                     .Where(action => action is { IsDeleted: true, DeletedById: not null }))
-        {
-            action.DeletedBy = mapper.Map<StaffViewDto>(await userService.FindUserAsync(action.DeletedById!)
-                .ConfigureAwait(false));
-        }
-
-        return complaintView;
+        return complaint is null ? null : mapper.Map<ComplaintViewDto>(complaint);
     }
 
     public async Task<ComplaintUpdateDto?> FindForUpdateAsync(int id, CancellationToken token = default) =>

@@ -10,6 +10,7 @@ using Cts.EfRepository.Repositories;
 using Cts.LocalRepository.Repositories;
 using Cts.WebApp.Platform.Settings;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Cts.WebApp.Platform.Services;
 
@@ -39,7 +40,12 @@ public static class DataPersistence
             }
             else
             {
-                services.AddDbContext<AppDbContext>(opts => opts.UseSqlServer(connectionString));
+                services.AddDbContext<AppDbContext>(opts =>
+                {
+                    opts.UseSqlServer(connectionString);
+                    opts.ConfigureWarnings(builder =>
+                        builder.Throw(RelationalEventId.MultipleCollectionIncludeWarning));
+                });
             }
 
             services.AddScoped<IActionTypeRepository, ActionTypeRepository>();
