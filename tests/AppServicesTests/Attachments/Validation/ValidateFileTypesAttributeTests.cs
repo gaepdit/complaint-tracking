@@ -6,8 +6,8 @@ using System.Text;
 namespace AppServicesTests.Attachments.Validation;
 
 [TestFixture]
-[TestOf(typeof(AllowedFileTypesAttribute))]
-public class AllowedFileTypesAttributeTests
+[TestOf(typeof(ValidateFileTypesAttribute))]
+public class ValidateFileTypesAttributeTests
 {
     // Valid files
 
@@ -37,7 +37,7 @@ public class AllowedFileTypesAttributeTests
     public void AllowedFileTypesAttribute_ValidTextFile_ReturnsValid()
     {
         // Act
-        var result = new AllowedFileTypesAttribute().IsValid(TextFormFile);
+        var result = new ValidateFileTypesAttribute().IsValid(TextFormFile);
 
         // Assert
         result.Should().BeTrue();
@@ -47,7 +47,7 @@ public class AllowedFileTypesAttributeTests
     public void AllowedFileTypesAttribute_ValidTextFileCollection_ReturnsValid()
     {
         // Act
-        var result = new AllowedFileTypesAttribute().IsValid(new List<IFormFile> { TextFormFile });
+        var result = new ValidateFileTypesAttribute().IsValid(new List<IFormFile> { TextFormFile });
 
         // Assert
         result.Should().BeTrue();
@@ -57,7 +57,7 @@ public class AllowedFileTypesAttributeTests
     public void AllowedFileTypesAttribute_ValidPdfFile_ReturnsValid()
     {
         // Act
-        var result = new AllowedFileTypesAttribute().IsValid(PdfFormFile);
+        var result = new ValidateFileTypesAttribute().IsValid(PdfFormFile);
 
         // Assert
         result.Should().BeTrue();
@@ -67,7 +67,7 @@ public class AllowedFileTypesAttributeTests
     public void AllowedFileTypesAttribute_ValidPdfFileCollection_ReturnsValid()
     {
         // Act
-        var result = new AllowedFileTypesAttribute().IsValid(new List<IFormFile> { PdfFormFile });
+        var result = new ValidateFileTypesAttribute().IsValid(new List<IFormFile> { PdfFormFile });
 
         // Assert
         result.Should().BeTrue();
@@ -77,7 +77,7 @@ public class AllowedFileTypesAttributeTests
     public void AllowedFileTypesAttribute_InvalidFileExtension_ReturnsInvalid()
     {
         // Act
-        var result = new AllowedFileTypesAttribute().IsValid(InvalidExtensionFormFile);
+        var result = new ValidateFileTypesAttribute().IsValid(InvalidExtensionFormFile);
 
         // Assert
         result.Should().BeFalse();
@@ -87,7 +87,7 @@ public class AllowedFileTypesAttributeTests
     public void AllowedFileTypesAttribute_InvalidFileExtensionCollection_ReturnsInvalid()
     {
         // Act
-        var result = new AllowedFileTypesAttribute().IsValid(new List<IFormFile> { InvalidExtensionFormFile });
+        var result = new ValidateFileTypesAttribute().IsValid(new List<IFormFile> { InvalidExtensionFormFile });
 
         // Assert
         result.Should().BeFalse();
@@ -97,7 +97,7 @@ public class AllowedFileTypesAttributeTests
     public void AllowedFileTypesAttribute_InvalidFileSignature_ReturnsInvalid()
     {
         // Act
-        var result = new AllowedFileTypesAttribute().IsValid(ZipFormFile);
+        var result = new ValidateFileTypesAttribute().IsValid(ZipFormFile);
 
         // Assert
         result.Should().BeFalse();
@@ -107,7 +107,7 @@ public class AllowedFileTypesAttributeTests
     public void AllowedFileTypesAttribute_InvalidFileSignatureCollection_ReturnsInvalid()
     {
         // Act
-        var result = new AllowedFileTypesAttribute().IsValid(new List<IFormFile> { ZipFormFile });
+        var result = new ValidateFileTypesAttribute().IsValid(new List<IFormFile> { ZipFormFile });
 
         // Assert
         result.Should().BeFalse();

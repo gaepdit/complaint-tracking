@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Http;
 namespace AppServicesTests.Attachments.Validation;
 
 [TestFixture]
-[TestOf(typeof(NoEmptyFilesAttribute))]
-public class NoEmptyFilesAttributeTests
+[TestOf(typeof(FilesNotEmptyAttribute))]
+public class FilesNotEmptyAttributeTests
 {
     private static readonly IFormFile EmptyFormFile =
         new FormFile(Stream.Null, 0, 0, TextData.ValidName, TextData.ValidPdfFileName);
@@ -30,7 +30,7 @@ public class NoEmptyFilesAttributeTests
     public void NoEmptyFilesAttribute_NonEmptyFile_ReturnsValid()
     {
         // Act
-        var result = new NoEmptyFilesAttribute().IsValid(NonEmptyFormFile);
+        var result = new FilesNotEmptyAttribute().IsValid(NonEmptyFormFile);
 
         // Assert
         result.Should().BeTrue();
@@ -40,7 +40,7 @@ public class NoEmptyFilesAttributeTests
     public void NoEmptyFilesAttribute_NonEmptyFileCollection_ReturnsValid()
     {
         // Act
-        var result = new NoEmptyFilesAttribute().IsValid(NonEmptyFormFiles);
+        var result = new FilesNotEmptyAttribute().IsValid(NonEmptyFormFiles);
 
         // Assert
         result.Should().BeTrue();
@@ -50,7 +50,7 @@ public class NoEmptyFilesAttributeTests
     public void NoEmptyFilesAttribute_EmptyFile_ReturnsInvalid()
     {
         // Act
-        var result = new NoEmptyFilesAttribute().IsValid(EmptyFormFile);
+        var result = new FilesNotEmptyAttribute().IsValid(EmptyFormFile);
 
         // Assert
         result.Should().BeFalse();
@@ -60,7 +60,7 @@ public class NoEmptyFilesAttributeTests
     public void NoEmptyFilesAttribute_EmptyFileCollection_ReturnsInvalid()
     {
         // Act
-        var result = new NoEmptyFilesAttribute().IsValid(EmptyFormFiles);
+        var result = new FilesNotEmptyAttribute().IsValid(EmptyFormFiles);
 
         // Assert
         result.Should().BeFalse();

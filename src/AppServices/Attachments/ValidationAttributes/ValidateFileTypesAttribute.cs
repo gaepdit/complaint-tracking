@@ -7,7 +7,7 @@ namespace Cts.AppServices.Attachments.ValidationAttributes;
 /// Validation attribute to limit the file types that can be selected for file uploads.
 /// </summary>
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter)]
-public class AllowedFileTypesAttribute : ValidationAttribute
+public class ValidateFileTypesAttribute : ValidationAttribute
 {
     public override bool IsValid(object? value) =>
         value switch

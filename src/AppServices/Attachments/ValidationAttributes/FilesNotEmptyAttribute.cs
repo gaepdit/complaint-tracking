@@ -7,7 +7,7 @@ namespace Cts.AppServices.Attachments.ValidationAttributes;
 /// Validation attribute to require that file uploads are not empty.
 /// </summary>
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter)]
-public class NoEmptyFilesAttribute : ValidationAttribute
+public class FilesNotEmptyAttribute : ValidationAttribute
 {
     public override bool IsValid(object? value) =>
         value switch
