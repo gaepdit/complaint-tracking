@@ -13,7 +13,8 @@ public static class StaffFilters
             .FilterByEmail(spec.Email)
             .FilterByOffice(spec.Office)
             .FilterByActiveStatus(spec.Status)
-            .OrderByIf(spec.Sort.GetDescription());
+            .OrderByIf(spec.Sort.GetDescription())
+            .ThenBy(e => e.Id);
 
     private static IQueryable<ApplicationUser> FilterByName(
         this IQueryable<ApplicationUser> query, string? name) =>

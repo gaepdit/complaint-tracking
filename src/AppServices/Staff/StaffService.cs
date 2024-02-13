@@ -30,13 +30,13 @@ public sealed class StaffService(
         return mapper.Map<StaffViewDto?>(user);
     }
 
-    public async Task<List<StaffViewDto>> GetListAsync(StaffSearchDto spec)
+    public async Task<IReadOnlyList<StaffViewDto>> GetListAsync(StaffSearchDto spec)
     {
         var users = string.IsNullOrEmpty(spec.Role)
             ? userManager.Users.ApplyFilter(spec)
             : (await userManager.GetUsersInRoleAsync(spec.Role).ConfigureAwait(false)).AsQueryable().ApplyFilter(spec);
 
-        return mapper.Map<List<StaffViewDto>>(users);
+        return mapper.Map<IReadOnlyList<StaffViewDto>>(users);
     }
 
     public async Task<IPaginatedResult<StaffSearchResultDto>> SearchAsync(StaffSearchDto spec, PaginatedRequest paging)
@@ -45,7 +45,7 @@ public sealed class StaffService(
             ? userManager.Users.ApplyFilter(spec)
             : (await userManager.GetUsersInRoleAsync(spec.Role).ConfigureAwait(false)).AsQueryable().ApplyFilter(spec);
         var list = users.Skip(paging.Skip).Take(paging.Take);
-        var listMapped = mapper.Map<List<StaffSearchResultDto>>(list);
+        var listMapped = mapper.Map<IReadOnlyList<StaffSearchResultDto>>(list);
 
         return new PaginatedResult<StaffSearchResultDto>(listMapped, users.Count(), paging);
     }
@@ -55,7 +55,7 @@ public sealed class StaffService(
         var status = includeInactive ? SearchStaffStatus.All : SearchStaffStatus.Active;
         var spec = new StaffSearchDto(SortBy.NameAsc, null, null, null, null, status);
         var users = userManager.Users.ApplyFilter(spec);
-        return Task.FromResult(mapper.Map<List<StaffViewDto>>(users)
+        return Task.FromResult(mapper.Map<IReadOnlyList<StaffViewDto>>(users)
                 .Select(e => new ListItem<string>(e.Id, e.SortableNameWithOffice))
                 .ToList()
             as IReadOnlyList<ListItem<string>>);
@@ -68,8 +68,9 @@ public sealed class StaffService(
         return await userManager.GetRolesAsync(user).ConfigureAwait(false);
     }
 
-    public async Task<IList<AppRole>> GetAppRolesAsync(string id) =>
-        AppRole.RolesAsAppRoles(await GetRolesAsync(id).ConfigureAwait(false)).OrderBy(r => r.DisplayName).ToList();
+    public async Task<IReadOnlyList<AppRole>> GetAppRolesAsync(string id) =>
+        AppRole.RolesAsAppRoles(await GetRolesAsync(id).ConfigureAwait(false))
+            .OrderBy(r => r.DisplayName).ToList();
 
     public async Task<bool> HasAppRoleAsync(string id, AppRole role)
     {
@@ -110,7 +111,9 @@ public sealed class StaffService(
             ?? throw new EntityNotFoundException<ApplicationUser>(id);
 
         user.Phone = resource.Phone;
-        user.Office = resource.OfficeId is null ? null : await officeRepository.GetAsync(resource.OfficeId.Value).ConfigureAwait(false);
+        user.Office = resource.OfficeId is null
+            ? null
+            : await officeRepository.GetAsync(resource.OfficeId.Value).ConfigureAwait(false);
         user.Active = resource.Active;
 
         return await userManager.UpdateAsync(user).ConfigureAwait(false);

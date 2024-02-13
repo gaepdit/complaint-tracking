@@ -32,17 +32,21 @@ public sealed class LocalComplaintRepository(
                 .GetListAsync(attachment => attachment.Complaint.Id == complaint.Id && !attachment.IsDeleted, token)
                 .ConfigureAwait(false))
             .OrderByDescending(attachment => attachment.UploadedDate)
+            .ThenBy(attachment => attachment.FileName)
+            .ThenBy(attachment => attachment.Id)
             .ToList();
 
         complaint.ComplaintActions = (await actionRepository
                 .GetListAsync(action => action.Complaint.Id == complaint.Id &&
                     (!action.IsDeleted || includeDeletedActions), token).ConfigureAwait(false))
-            .OrderByDescending(action => action.ActionDate).ThenByDescending(action => action.EnteredDate)
+            .OrderByDescending(action => action.ActionDate)
+            .ThenByDescending(action => action.EnteredDate)
+            .ThenBy(action => action.Id)
             .ToList();
 
         complaint.ComplaintTransitions = (await transitionRepository
                 .GetListAsync(transition => transition.Complaint.Id == complaint.Id, token).ConfigureAwait(false))
-            .OrderBy(transition => transition.CommittedDate)
+            .OrderBy(transition => transition.CommittedDate).ThenBy(transition => transition.Id)
             .ToList();
 
         return complaint;

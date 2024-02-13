@@ -38,7 +38,7 @@ public sealed class ComplaintService(
         var count = await complaintRepository.CountAsync(predicate, token).ConfigureAwait(false);
 
         var list = count > 0
-            ? mapper.Map<List<ComplaintSearchResultDto>>(await complaintRepository
+            ? mapper.Map<IReadOnlyList<ComplaintSearchResultDto>>(await complaintRepository
                 .GetPagedListAsync(predicate, paging, token).ConfigureAwait(false))
             : [];
 
@@ -69,7 +69,7 @@ public sealed class ComplaintService(
         var count = await complaintRepository.CountAsync(predicate, token).ConfigureAwait(false);
 
         var list = count > 0
-            ? mapper.Map<List<ComplaintSearchResultDto>>(
+            ? mapper.Map<IReadOnlyList<ComplaintSearchResultDto>>(
                 await complaintRepository.GetPagedListAsync(predicate, paging, token).ConfigureAwait(false))
             : [];
 

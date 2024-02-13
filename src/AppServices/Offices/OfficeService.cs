@@ -41,7 +41,7 @@ public sealed class OfficeService(
     public async Task<IReadOnlyList<OfficeWithAssignorDto>> GetListIncludeAssignorAsync(
         CancellationToken token = default)
     {
-        var list = (await repository.GetListIncludeAssignorAsync(token).ConfigureAwait(false)).OrderBy(office => office.Name).ToList();
+        var list = await repository.GetListIncludeAssignorAsync(token).ConfigureAwait(false);
         return _mapper.Map<IReadOnlyList<OfficeWithAssignorDto>>(list);
     }
 
