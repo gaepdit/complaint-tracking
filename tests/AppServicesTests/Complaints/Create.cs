@@ -1,4 +1,5 @@
-﻿using Cts.AppServices.Complaints;
+﻿using Cts.AppServices.Attachments;
+using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.Dto;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Complaints;
@@ -32,12 +33,12 @@ public class Create
 
         var appService = new ComplaintService(Substitute.For<IComplaintRepository>(), complaintManagerMock,
             Substitute.For<IConcernRepository>(), officeRepoMock, Substitute.For<IComplaintTransitionManager>(),
-            AppServicesTestsSetup.Mapper!, userServiceMock);
+            Substitute.For<IAttachmentService>(), AppServicesTestsSetup.Mapper!, userServiceMock);
 
         var item = new ComplaintCreateDto { CurrentOfficeId = Guid.Empty };
 
         // Act
-        var result = await appService.CreateAsync(item);
+        var result = await appService.CreateAsync(item, AppServiceHelpers.AttachmentServiceConfig);
 
         // Assert
         result.Should().Be(0);
@@ -62,7 +63,7 @@ public class Create
 
         var appService = new ComplaintService(Substitute.For<IComplaintRepository>(), complaintManagerMock,
             Substitute.For<IConcernRepository>(), officeRepoMock, Substitute.For<IComplaintTransitionManager>(),
-            AppServicesTestsSetup.Mapper!, userServiceMock);
+            Substitute.For<IAttachmentService>(), AppServicesTestsSetup.Mapper!, userServiceMock);
 
         var item = new ComplaintCreateDto
         {

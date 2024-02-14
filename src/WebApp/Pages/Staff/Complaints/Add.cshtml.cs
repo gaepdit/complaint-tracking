@@ -7,6 +7,7 @@ using Cts.AppServices.Staff;
 using Cts.Domain.Data;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
+using Cts.WebApp.Platform.Settings;
 using FluentValidation;
 using GaEpd.AppLibrary.ListItems;
 using Microsoft.AspNetCore.Authorization;
@@ -26,7 +27,7 @@ public class AddModel(
     : PageModel
 {
     [BindProperty]
-    public ComplaintCreateDto Item { get; set; } = default!;
+    public ComplaintCreateDto NewComplaint { get; set; } = default!;
 
     public SelectList ConcernsSelectList { get; private set; } = default!;
     public SelectList OfficesSelectList { get; private set; } = default!;
@@ -39,21 +40,21 @@ public class AddModel(
     public async Task OnGetAsync()
     {
         var user = await staffService.GetCurrentUserAsync();
-        Item = new ComplaintCreateDto(user.Id, user.Office?.Id);
+        NewComplaint = new ComplaintCreateDto(user.Id, user.Office?.Id);
         await PopulateSelectListsAsync(user.Office?.Id);
     }
 
     public async Task<IActionResult> OnPostAsync()
     {
-        await validator.ApplyValidationAsync(Item, ModelState);
+        await validator.ApplyValidationAsync(NewComplaint, ModelState);
 
         if (!ModelState.IsValid)
         {
-            await PopulateSelectListsAsync(Item.CurrentOfficeId);
+            await PopulateSelectListsAsync(NewComplaint.CurrentOfficeId);
             return Page();
         }
 
-        var id = await complaintService.CreateAsync(Item);
+        var id = await complaintService.CreateAsync(NewComplaint, AppSettings.AttachmentServiceConfig);
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "Complaint successfully created.");
         return RedirectToPage("Details", new { id });
     }

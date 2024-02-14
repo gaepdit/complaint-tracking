@@ -1,4 +1,5 @@
-﻿using Cts.AppServices.Complaints;
+﻿using Cts.AppServices.Attachments;
+using Cts.AppServices.Complaints;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.ComplaintTransitions;
@@ -23,7 +24,7 @@ public class FindPublic
 
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
-            Substitute.For<IComplaintTransitionManager>(),
+            Substitute.For<IComplaintTransitionManager>(), Substitute.For<IAttachmentService>(),
             AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
 
         // Act
@@ -42,7 +43,7 @@ public class FindPublic
             .Returns((Complaint?)null);
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
-            Substitute.For<IComplaintTransitionManager>(),
+            Substitute.For<IComplaintTransitionManager>(), Substitute.For<IAttachmentService>(),
             AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
 
         // Act

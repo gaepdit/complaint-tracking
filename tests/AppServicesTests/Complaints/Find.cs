@@ -1,4 +1,5 @@
-﻿using Cts.AppServices.Complaints;
+﻿using Cts.AppServices.Attachments;
+using Cts.AppServices.Complaints;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.ComplaintTransitions;
@@ -21,7 +22,7 @@ public class Find
 
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
-            Substitute.For<IComplaintTransitionManager>(),
+            Substitute.For<IComplaintTransitionManager>(), Substitute.For<IAttachmentService>(),
             AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
 
         // Act
@@ -44,7 +45,7 @@ public class Find
 
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
-            Substitute.For<IComplaintTransitionManager>(),
+            Substitute.For<IComplaintTransitionManager>(), Substitute.For<IAttachmentService>(),
             AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
 
         // Act
@@ -62,7 +63,7 @@ public class Find
             .Returns((Complaint?)null);
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
-            Substitute.For<IComplaintTransitionManager>(),
+            Substitute.For<IComplaintTransitionManager>(), Substitute.For<IAttachmentService>(),
             AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
 
         var result = await appService.FindAsync(0);

@@ -347,7 +347,7 @@
 
 @if (Model.ComplaintView.Attachments is { Count: > 0 })
 {
-    <table class="table table-hover align-middle" aria-label="File attachments">
+    <table class="table table-hover table-borderless align-middle" aria-label="File attachments">
         <thead>
         <tr>
             <th scope="col">File</th>
@@ -402,7 +402,7 @@ else
                 new { ValidatingSection = nameof(DetailsModel.OnPostUploadFilesAsync) })
             <div class="row row-cols-sm-auto g-3 align-items-center mb-3 mt-2">
                 <div class="col-12">
-                    <input class="form-control" type="file" asp-for="NewAttachments.FormFiles" multiple accept="@FileTypes.FileTypesAcceptString">
+                    <input class="form-control" type="file" asp-for="NewAttachments.Files" multiple accept="@FileTypes.FileTypesAcceptString">
                 </div>
                 <div class="col-12">
                     <button type="submit" class="btn btn-primary">Upload selected files</button>

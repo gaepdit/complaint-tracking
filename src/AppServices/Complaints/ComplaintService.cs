@@ -1,4 +1,5 @@
 using AutoMapper;
+using Cts.AppServices.Attachments;
 using Cts.AppServices.Complaints.Dto;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Complaints;
@@ -16,6 +17,7 @@ public sealed class ComplaintService(
     IConcernRepository concernRepository,
     IOfficeRepository officeRepository,
     IComplaintTransitionManager transitionManager,
+    IAttachmentService attachmentService,
     IMapper mapper,
     IUserService userService)
     : IComplaintService
@@ -76,7 +78,8 @@ public sealed class ComplaintService(
         return new PaginatedResult<ComplaintSearchResultDto>(list, count, paging);
     }
 
-    public async Task<int> CreateAsync(ComplaintCreateDto resource, CancellationToken token = default)
+    public async Task<int> CreateAsync(ComplaintCreateDto resource, IAttachmentService.AttachmentServiceConfig config,
+        CancellationToken token = default)
     {
         var user = await userService.GetCurrentUserAsync().ConfigureAwait(false);
         var complaint = await CreateComplaintFromDtoAsync(resource, user, token).ConfigureAwait(false);
@@ -91,6 +94,11 @@ public sealed class ComplaintService(
             await AddTransitionAsync(complaint, TransitionType.Accepted, user, token).ConfigureAwait(false);
 
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
+
+        if (resource.Files is { Count: > 0 })
+            await attachmentService.SaveAttachmentsAsync(complaint.Id, resource.Files, config, token)
+                .ConfigureAwait(false);
+
         return complaint.Id;
     }
 

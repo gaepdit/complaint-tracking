@@ -11,5 +11,5 @@ public record AttachmentsCreateDto(int ComplaintId)
     [FilesNotEmpty]
     [FilesRequired]
     [MaxNumberOfFiles(10)]
-    public List<IFormFile> FormFiles { get; init; } = [];
+    public List<IFormFile> Files { get; init; } = [];
 }

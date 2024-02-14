@@ -59,7 +59,7 @@ public class SaveAttachmentTests
         var formFile = Substitute.For<IFormFile>();
         formFile.Length.Returns(1);
         formFile.FileName.Returns(TextData.ValidPdfFileName);
-        var dto = new AttachmentsCreateDto(1) { FormFiles = [formFile] };
+        var dto = new AttachmentsCreateDto(1) { Files = [formFile] };
 
         var complaintRepository = Substitute.For<IComplaintRepository>();
         complaintRepository.GetAsync(1, Arg.Any<CancellationToken>())
@@ -101,7 +101,7 @@ public class SaveAttachmentTests
         // Arrange
         var formFile = Substitute.For<IFormFile>();
         formFile.Length.Returns(0);
-        var dto = new AttachmentsCreateDto(1) { FormFiles = [formFile] };
+        var dto = new AttachmentsCreateDto(1) { Files = [formFile] };
 
         var complaintRepository = Substitute.For<IComplaintRepository>();
         complaintRepository.GetAsync(1, Arg.Any<CancellationToken>())
@@ -123,7 +123,8 @@ public class SaveAttachmentTests
 
         // Assert
         attachmentManager.ReceivedCalls().Should().BeEmpty();
-        attachmentRepository.ReceivedCalls().Should().BeEmpty();
+        await attachmentRepository.DidNotReceiveWithAnyArgs()
+            .InsertAsync(Arg.Any<Attachment>(), Arg.Any<bool>(), Arg.Any<CancellationToken>());
     }
 
     [Test]
@@ -133,7 +134,7 @@ public class SaveAttachmentTests
         var formFile = Substitute.For<IFormFile>();
         formFile.Length.Returns(1);
         formFile.FileName.Returns(string.Empty);
-        var dto = new AttachmentsCreateDto(1) { FormFiles = [formFile] };
+        var dto = new AttachmentsCreateDto(1) { Files = [formFile] };
 
         var complaintRepository = Substitute.For<IComplaintRepository>();
         complaintRepository.GetAsync(1, Arg.Any<CancellationToken>())
@@ -155,6 +156,7 @@ public class SaveAttachmentTests
 
         // Assert
         attachmentManager.ReceivedCalls().Should().BeEmpty();
-        attachmentRepository.ReceivedCalls().Should().BeEmpty();
+        await attachmentRepository.DidNotReceiveWithAnyArgs()
+            .InsertAsync(Arg.Any<Attachment>(), Arg.Any<bool>(), Arg.Any<CancellationToken>());
     }
 }

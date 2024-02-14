@@ -104,13 +104,13 @@ public class Complaint : AuditableSoftDeleteEntity<int>
     public DateTimeOffset? CurrentOwnerAcceptedDate { get; set; }
 
     // Properties: Transitions
-    public List<ComplaintTransition> ComplaintTransitions { get; set; } = new();
+    public List<ComplaintTransition> ComplaintTransitions { get; set; } = [];
 
     // Properties: Actions
-    public List<ComplaintAction> ComplaintActions { get; set; } = new();
+    public List<ComplaintAction> ComplaintActions { get; set; } = [];
 
     // Properties: Attachments
-    public List<Attachment> Attachments { get; set; } = new();
+    public List<Attachment> Attachments { get; set; } = [];
 
     // Properties: Review/Closure
 

@@ -77,21 +77,30 @@ public class AttachmentService(
 #pragma warning restore CA2016
     }
 
-    public async Task SaveAttachmentsAsync(AttachmentsCreateDto resource,
+
+    public Task SaveAttachmentsAsync(AttachmentsCreateDto resource, IAttachmentService.AttachmentServiceConfig config,
+        CancellationToken token = default) =>
+        SaveAttachmentsAsync(resource.ComplaintId, resource.Files, config, token);
+
+    public async Task SaveAttachmentsAsync(int complaintId, List<IFormFile> files,
         IAttachmentService.AttachmentServiceConfig config, CancellationToken token = default)
     {
+        if (files.Count == 0) return;
+
         Config = config;
-        var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
+        var complaint = await complaintRepository.GetAsync(complaintId, token).ConfigureAwait(false);
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
 
-        foreach (var formFile in resource.FormFiles)
+        foreach (var formFile in files)
         {
             if (formFile.Length == 0 || string.IsNullOrWhiteSpace(formFile.FileName)) continue;
 
             var attachment = attachmentManager.Create(formFile, complaint, currentUser);
             attachment.IsImage = await SaveFileAsync(formFile, attachment.FileId).ConfigureAwait(false);
-            await attachmentRepository.InsertAsync(attachment, token: token).ConfigureAwait(false);
+            await attachmentRepository.InsertAsync(attachment, autoSave: false, token: token).ConfigureAwait(false);
         }
+
+        await attachmentRepository.SaveChangesAsync(token).ConfigureAwait(false);
     }
 
     private string ExpandPath(string fileId, bool thumbnail = false) =>

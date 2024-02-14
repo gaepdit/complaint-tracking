@@ -1,4 +1,5 @@
-﻿using Cts.AppServices.Complaints.Dto;
+﻿using Cts.AppServices.Attachments;
+using Cts.AppServices.Complaints.Dto;
 using GaEpd.AppLibrary.Pagination;
 
 namespace Cts.AppServices.Complaints;
@@ -27,7 +28,8 @@ public interface IComplaintService : IDisposable, IAsyncDisposable
 
     // Staff write methods
 
-    Task<int> CreateAsync(ComplaintCreateDto resource, CancellationToken token = default);
+    Task<int> CreateAsync(ComplaintCreateDto resource, IAttachmentService.AttachmentServiceConfig config,
+        CancellationToken token = default);
 
     Task UpdateAsync(int id, ComplaintUpdateDto resource, CancellationToken token = default);
 

@@ -1,4 +1,5 @@
-﻿using Cts.AppServices.Complaints;
+﻿using Cts.AppServices.Attachments;
+using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.Dto;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Complaints;
@@ -28,7 +29,7 @@ public class Search
             .Returns(count);
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
-            Substitute.For<IComplaintTransitionManager>(),
+            Substitute.For<IComplaintTransitionManager>(), Substitute.For<IAttachmentService>(),
             AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
 
         var result = await appService.SearchAsync(Substitute.For<ComplaintSearchDto>(),
@@ -54,7 +55,7 @@ public class Search
             .Returns(count);
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
-            Substitute.For<IComplaintTransitionManager>(),
+            Substitute.For<IComplaintTransitionManager>(), Substitute.For<IAttachmentService>(),
             AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
 
         var result = await appService.SearchAsync(Substitute.For<ComplaintSearchDto>(),

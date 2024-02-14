@@ -1,5 +1,6 @@
 ﻿using Cts.AppServices.Attachments.Dto;
 using Cts.AppServices.Complaints.Dto;
+using Microsoft.AspNetCore.Http;
 
 namespace Cts.AppServices.Attachments;
 
@@ -18,6 +19,9 @@ public interface IAttachmentService
         CancellationToken token = default);
 
     Task SaveAttachmentsAsync(AttachmentsCreateDto resource, AttachmentServiceConfig config,
+        CancellationToken token = default);
+
+    Task SaveAttachmentsAsync(int complaintId, List<IFormFile> files, AttachmentServiceConfig config,
         CancellationToken token = default);
 
     // Configuration
