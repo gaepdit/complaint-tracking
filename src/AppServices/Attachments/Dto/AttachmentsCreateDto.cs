@@ -10,6 +10,6 @@ public record AttachmentsCreateDto(int ComplaintId)
     [ValidateFileTypes]
     [FilesNotEmpty]
     [FilesRequired]
-    [MaxNumberOfFiles(10)]
+    [MaxNumberOfFiles(IAttachmentService.MaxSimultaneousUploads)]
     public List<IFormFile> Files { get; init; } = [];
 }

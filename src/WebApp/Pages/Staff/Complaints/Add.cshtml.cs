@@ -54,9 +54,26 @@ public class AddModel(
             return Page();
         }
 
-        var id = await complaintService.CreateAsync(NewComplaint, AppSettings.AttachmentServiceConfig);
-        TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "Complaint successfully created.");
-        return RedirectToPage("Details", new { id });
+        var result = await complaintService.CreateAsync(NewComplaint, AppSettings.AttachmentServiceConfig);
+
+        if (result.HasWarnings)
+        {
+            TempData.SetDisplayMessage(DisplayMessage.AlertContext.Warning,
+                "Complaint successfully created. No files were attached because of the following errors: " +
+                result.WarningsDisplay);
+        }
+        else
+        {
+            var successMessage = result.NumberOfAttachments switch
+            {
+                0 => "Complaint successfully created.",
+                1 => "Complaint successfully created and one file attached.",
+                _ => $"Complaint successfully created and {result.NumberOfAttachments} files attached.",
+            };
+            TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, successMessage);
+        }
+
+        return RedirectToPage("Details", new { id = result.ComplaintId });
     }
 
     private async Task PopulateSelectListsAsync(Guid? currentOfficeId)

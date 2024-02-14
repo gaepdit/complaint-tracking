@@ -12,8 +12,8 @@ public interface IComplaintService : IDisposable, IAsyncDisposable
 
     Task<bool> PublicExistsAsync(int id, CancellationToken token = default);
 
-    Task<IPaginatedResult<ComplaintSearchResultDto>> PublicSearchAsync(
-        ComplaintPublicSearchDto spec, PaginatedRequest paging, CancellationToken token = default);
+    Task<IPaginatedResult<ComplaintSearchResultDto>> PublicSearchAsync(ComplaintPublicSearchDto spec,
+        PaginatedRequest paging, CancellationToken token = default);
 
     // Staff read methods
 
@@ -23,13 +23,13 @@ public interface IComplaintService : IDisposable, IAsyncDisposable
 
     Task<bool> ExistsAsync(int id, CancellationToken token = default);
 
-    Task<IPaginatedResult<ComplaintSearchResultDto>> SearchAsync(
-        ComplaintSearchDto spec, PaginatedRequest paging, CancellationToken token = default);
+    Task<IPaginatedResult<ComplaintSearchResultDto>> SearchAsync(ComplaintSearchDto spec, PaginatedRequest paging,
+        CancellationToken token = default);
 
     // Staff write methods
 
-    Task<int> CreateAsync(ComplaintCreateDto resource, IAttachmentService.AttachmentServiceConfig config,
-        CancellationToken token = default);
+    Task<ComplaintCreateResult> CreateAsync(ComplaintCreateDto resource,
+        IAttachmentService.AttachmentServiceConfig config, CancellationToken token = default);
 
     Task UpdateAsync(int id, ComplaintUpdateDto resource, CancellationToken token = default);
 

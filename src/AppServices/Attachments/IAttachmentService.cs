@@ -6,6 +6,8 @@ namespace Cts.AppServices.Attachments;
 
 public interface IAttachmentService
 {
+    public const int MaxSimultaneousUploads = 10;
+
     // Attachment DTOs
     Task<AttachmentViewDto?> FindAttachmentAsync(Guid id, CancellationToken token = default);
     Task<AttachmentViewDto?> FindPublicAttachmentAsync(Guid id, CancellationToken token = default);
@@ -18,10 +20,10 @@ public interface IAttachmentService
     Task DeleteAttachmentAsync(AttachmentViewDto attachmentView, AttachmentServiceConfig config,
         CancellationToken token = default);
 
-    Task SaveAttachmentsAsync(AttachmentsCreateDto resource, AttachmentServiceConfig config,
+    Task<int> SaveAttachmentsAsync(AttachmentsCreateDto resource, AttachmentServiceConfig config,
         CancellationToken token = default);
 
-    Task SaveAttachmentsAsync(int complaintId, List<IFormFile> files, AttachmentServiceConfig config,
+    Task<int> SaveAttachmentsAsync(int complaintId, List<IFormFile> files, AttachmentServiceConfig config,
         CancellationToken token = default);
 
     // Configuration

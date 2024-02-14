@@ -12,10 +12,10 @@ public class FilesNotEmptyAttribute : ValidationAttribute
     public override bool IsValid(object? value) =>
         value switch
         {
-            IFormFile file => file.Length > 0,
-            List<IFormFile> formFiles => formFiles.TrueForAll(file => file.Length > 0),
+            IFormFile file => file.FileIsNotEmpty(),
+            List<IFormFile> formFiles => formFiles.TrueForAll(ValidateFiles.FileIsNotEmpty),
             _ => true,
         };
 
-    public override string FormatErrorMessage(string name) => "Empty file selected.";
+    public override string FormatErrorMessage(string name) => ValidateFiles.EmptyFileErrorMessage;
 }

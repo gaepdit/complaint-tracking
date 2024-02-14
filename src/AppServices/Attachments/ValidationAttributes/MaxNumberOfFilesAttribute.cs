@@ -10,8 +10,7 @@ namespace Cts.AppServices.Attachments.ValidationAttributes;
 public class MaxNumberOfFilesAttribute(int maxNumberOfFiles) : ValidationAttribute
 {
     public override bool IsValid(object? value) =>
-        value is not List<IFormFile> formFiles || formFiles.Count <= maxNumberOfFiles;
+        value is not List<IFormFile> formFiles || formFiles.WithinMaxNumberOfFiles(maxNumberOfFiles);
 
-    public override string FormatErrorMessage(string name) =>
-        $"No more than {maxNumberOfFiles} files may be uploaded at a time.";
+    public override string FormatErrorMessage(string name) => ValidateFiles.TooManyFilesErrorMessage(maxNumberOfFiles);
 }

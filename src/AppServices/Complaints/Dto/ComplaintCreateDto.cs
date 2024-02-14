@@ -128,11 +128,8 @@ public record ComplaintCreateDto : IComplaintDtoDetails
     [Display(Name = "Source address")]
     public IncompleteAddress SourceAddress { get; init; } = new();
 
-    // Attachment
+    // Attachments
 
-    [ValidateFileTypes]
-    [FilesNotEmpty]
-    [MaxNumberOfFiles(10)]
     public List<IFormFile>? Files { get; init; } = [];
 
     // Assignment
