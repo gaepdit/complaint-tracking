@@ -1,5 +1,7 @@
+using Cts.AppServices.Attachments.ValidationAttributes;
 using Cts.AppServices.Utilities;
 using Cts.Domain.ValueObjects;
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
 namespace Cts.AppServices.Complaints.Dto;
@@ -125,6 +127,10 @@ public record ComplaintCreateDto : IComplaintDtoDetails
 
     [Display(Name = "Source address")]
     public IncompleteAddress SourceAddress { get; init; } = new();
+
+    // Attachments
+
+    public List<IFormFile>? Files { get; init; } = [];
 
     // Assignment
 

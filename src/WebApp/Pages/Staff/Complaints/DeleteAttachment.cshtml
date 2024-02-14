@@ -4,7 +4,7 @@
 @model DeleteAttachmentModel
 
 @{
-    ViewData["Title"] = $"Delete Attachment from Complaint ID {Model.AttachmentView.ComplaintId}";
+    ViewData["Title"] = $"Delete Attachment from Complaint ID {Model.ComplaintId}";
     ViewData["NoAnchors"] = "True";
 }
 
@@ -18,7 +18,7 @@
     </p>
 
     <div class="container small">
-        <div class="h4">@Html.DisplayFor(m => m.AttachmentView)</div>
+        <div class="h4">@Html.DisplayFor(model => model.AttachmentView)</div>
         <p>
             @Model.AttachmentView.SizeDescription. Uploaded by @Html.DisplayFor(model => model.AttachmentView.UploadedBy, DisplayTemplate.NameOrNotEntered) on @Html.DisplayFor(model => model.AttachmentView.UploadedDate, DisplayTemplate.ShortDateTime).
         </p>
@@ -27,8 +27,8 @@
     <form method="post">
         <div class="mt-3 mb-1">
             <button type="submit" class="btn btn-danger col-5 col-sm-3 col-lg-2 me-2">Delete</button>
-            <a asp-page="Details" asp-route-id="@Model.AttachmentView.ComplaintId.ToString()" asp-fragment="attachments" class="btn btn-outline-secondary">Cancel</a>
+            <a asp-page="Details" asp-route-id="@Model.ComplaintId.ToString()" asp-fragment="attachments" class="btn btn-outline-secondary">Cancel</a>
         </div>
-        <input asp-for="AttachmentItemId" type="hidden" />
+        <input asp-for="AttachmentId" type="hidden" />
     </form>
 </div>

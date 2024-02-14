@@ -1,4 +1,5 @@
-﻿using Cts.AppServices.Complaints;
+﻿using Cts.AppServices.Attachments;
+using Cts.AppServices.Complaints;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.ComplaintTransitions;
@@ -17,7 +18,7 @@ public class Exists
             .Returns(true);
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
-            Substitute.For<IComplaintTransitionManager>(),
+            Substitute.For<IComplaintTransitionManager>(), Substitute.For<IAttachmentService>(),
             AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
 
         var result = await appService.ExistsAsync(0);
@@ -33,7 +34,7 @@ public class Exists
             .Returns(false);
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
-            Substitute.For<IComplaintTransitionManager>(),
+            Substitute.For<IComplaintTransitionManager>(), Substitute.For<IAttachmentService>(),
             AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
 
         var result = await appService.ExistsAsync(0);

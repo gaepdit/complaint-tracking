@@ -1,4 +1,5 @@
-﻿using Cts.AppServices.Complaints;
+﻿using Cts.AppServices.Attachments;
+using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.Dto;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Complaints;
@@ -13,12 +14,13 @@ namespace AppServicesTests.Complaints;
 public class Create
 {
     [Test]
-    public async Task OnSuccessfulInsert_ReturnsId()
+    public async Task OnSuccessfulInsert_ReturnsSuccessfully()
     {
         // Arrange
+        const int id = 99;
         var complaintManagerMock = Substitute.For<IComplaintManager>();
         complaintManagerMock.Create(Arg.Any<ApplicationUser?>())
-            .Returns(new Complaint(0));
+            .Returns(new Complaint(id));
 
         var userServiceMock = Substitute.For<IUserService>();
         userServiceMock.GetCurrentUserAsync()
@@ -32,15 +34,17 @@ public class Create
 
         var appService = new ComplaintService(Substitute.For<IComplaintRepository>(), complaintManagerMock,
             Substitute.For<IConcernRepository>(), officeRepoMock, Substitute.For<IComplaintTransitionManager>(),
-            AppServicesTestsSetup.Mapper!, userServiceMock);
+            Substitute.For<IAttachmentService>(), AppServicesTestsSetup.Mapper!, userServiceMock);
 
         var item = new ComplaintCreateDto { CurrentOfficeId = Guid.Empty };
 
         // Act
-        var result = await appService.CreateAsync(item);
+        var result = await appService.CreateAsync(item, AppServiceHelpers.AttachmentServiceConfig);
 
         // Assert
-        result.Should().Be(0);
+        using var scope = new AssertionScope();
+        result.HasWarnings.Should().BeFalse();
+        result.ComplaintId.Should().Be(id);
     }
 
     [Test]
@@ -62,7 +66,7 @@ public class Create
 
         var appService = new ComplaintService(Substitute.For<IComplaintRepository>(), complaintManagerMock,
             Substitute.For<IConcernRepository>(), officeRepoMock, Substitute.For<IComplaintTransitionManager>(),
-            AppServicesTestsSetup.Mapper!, userServiceMock);
+            Substitute.For<IAttachmentService>(), AppServicesTestsSetup.Mapper!, userServiceMock);
 
         var item = new ComplaintCreateDto
         {

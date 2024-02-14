@@ -13,7 +13,7 @@ public class DetailsModel : PageModel
 {
     public StaffViewDto DisplayStaff { get; private set; } = default!;
     public string? OfficeName => DisplayStaff.Office?.Name;
-    public IList<AppRole> Roles { get; private set; } = default!;
+    public IReadOnlyList<AppRole> Roles { get; private set; } = default!;
     public bool IsUserAdministrator { get; private set; }
 
     public async Task<IActionResult> OnGetAsync(

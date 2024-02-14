@@ -1,5 +1,6 @@
 using AutoMapper;
 using Cts.AppServices.Attachments.Dto;
+using Cts.AppServices.Complaints.Dto;
 using Cts.AppServices.ErrorLogging;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Attachments;
@@ -30,6 +31,17 @@ public class AttachmentService(
     public async Task<AttachmentViewDto?> FindPublicAttachmentAsync(Guid id, CancellationToken token = default) =>
         mapper.Map<AttachmentViewDto>(await attachmentRepository
             .FindAsync(AttachmentFilters.PublicIdPredicate(id), token).ConfigureAwait(false));
+
+    public async Task<ComplaintViewDto?> FindComplaintForAttachmentAsync(Guid attachmentId,
+        CancellationToken token = default)
+    {
+        var attachment = await attachmentRepository.FindAsync(AttachmentFilters.IdPredicate(attachmentId), token)
+            .ConfigureAwait(false);
+        return attachment == null
+            ? null
+            : mapper.Map<ComplaintViewDto>(await complaintRepository
+                .FindAsync(complaint => complaint.Attachments.Contains(attachment), token).ConfigureAwait(false));
+    }
 
     public async Task<byte[]> GetAttachmentFileAsync(string fileId, bool getThumbnail,
         IAttachmentService.AttachmentServiceConfig config, CancellationToken token = default)
@@ -65,21 +77,32 @@ public class AttachmentService(
 #pragma warning restore CA2016
     }
 
-    public async Task SaveAttachmentsAsync(AttachmentsCreateDto resource,
+
+    public Task<int> SaveAttachmentsAsync(AttachmentsCreateDto resource,
+        IAttachmentService.AttachmentServiceConfig config,
+        CancellationToken token = default) =>
+        SaveAttachmentsAsync(resource.ComplaintId, resource.Files, config, token);
+
+    public async Task<int> SaveAttachmentsAsync(int complaintId, List<IFormFile> files,
         IAttachmentService.AttachmentServiceConfig config, CancellationToken token = default)
     {
+        if (files.Count == 0) return 0;
+
         Config = config;
-        var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
+        var complaint = await complaintRepository.GetAsync(complaintId, token).ConfigureAwait(false);
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
+        var i = 0;
 
-        foreach (var formFile in resource.FormFiles)
+        foreach (var formFile in files.Where(formFile => formFile is { Length: > 0, FileName: not "" }))
         {
-            if (formFile.Length == 0 || string.IsNullOrWhiteSpace(formFile.FileName)) continue;
-
             var attachment = attachmentManager.Create(formFile, complaint, currentUser);
             attachment.IsImage = await SaveFileAsync(formFile, attachment.FileId).ConfigureAwait(false);
-            await attachmentRepository.InsertAsync(attachment, token: token).ConfigureAwait(false);
+            await attachmentRepository.InsertAsync(attachment, autoSave: false, token: token).ConfigureAwait(false);
+            i++;
         }
+
+        await attachmentRepository.SaveChangesAsync(token).ConfigureAwait(false);
+        return i;
     }
 
     private string ExpandPath(string fileId, bool thumbnail = false) =>

@@ -1,25 +1,41 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System.ComponentModel.DataAnnotations;
 
 namespace Cts.AppServices.Attachments.ValidationAttributes;
 
-/// <summary>
-/// Validation attribute to limit the file types that can be selected for file uploads.
-/// </summary>
-[AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter)]
-public class AllowedFileTypesAttribute : ValidationAttribute
+public static class ValidateFiles
 {
-    public override bool IsValid(object? value) =>
-        value switch
-        {
-            IFormFile file => IsFileSignatureValid(file),
-            List<IFormFile> formFiles => formFiles.TrueForAll(IsFileSignatureValid),
-            _ => true,
-        };
+    public static ValidateFilesResult Validate(this List<IFormFile> formFiles,int maxNumberOfFiles)
+    {
+        var messages = new List<string>();
 
-    public override string FormatErrorMessage(string name) => "Invalid file type selected.";
+        // FilesNotEmpty
+        if (!formFiles.TrueForAll(FileIsNotEmpty)) 
+            messages.Add(EmptyFileErrorMessage);
 
-    private static bool IsFileSignatureValid(IFormFile file)
+        // ValidateFileTypes
+        if (!formFiles.WithinMaxNumberOfFiles(maxNumberOfFiles)) 
+            messages.Add(TooManyFilesErrorMessage(maxNumberOfFiles));
+        
+        // ValidateFileTypes
+        if (!formFiles.TrueForAll(IsFileSignatureValid)) 
+            messages.Add(InvalidFileTypeErrorMessage);
+        
+        return messages.Count == 0 ? ValidateFilesResult.Valid : ValidateFilesResult.Invalid(messages);
+    }
+
+    // FilesNotEmpty
+    public static bool FileIsNotEmpty(this IFormFile formFile) => formFile.Length > 0;
+    public const string EmptyFileErrorMessage = "Empty file selected.";
+
+    // MaxNumberOfFiles
+    public static bool WithinMaxNumberOfFiles(this List<IFormFile> formFiles, int maxNumberOfFiles) => 
+        formFiles.Count <= maxNumberOfFiles;
+    public static string TooManyFilesErrorMessage(int maxNumberOfFiles) =>
+        $"No more than {maxNumberOfFiles} files may be uploaded at a time.";
+
+    // ValidateFileTypes
+    public const string InvalidFileTypeErrorMessage = "Invalid file type selected.";
+    public static bool IsFileSignatureValid(this IFormFile file)
     {
         var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
         if (!FileTypes.AllowedFileTypes.Contains(ext)) return false;

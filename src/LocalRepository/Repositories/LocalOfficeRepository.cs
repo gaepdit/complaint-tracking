@@ -12,13 +12,16 @@ public sealed class LocalOfficeRepository() : NamedEntityRepository<Office>(Offi
     public Task<List<ApplicationUser>> GetStaffMembersListAsync(Guid id, bool includeInactive,
         CancellationToken token = default) =>
         Task.FromResult(Staff.Users
-            .Where(e => e.Office != null && e.Office.Id == id)
-            .Where(e => includeInactive || e.Active)
-            .OrderBy(e => e.FamilyName).ThenBy(e => e.GivenName).ToList());
+            .Where(user => user.Office != null && user.Office.Id == id)
+            .Where(user => includeInactive || user.Active)
+            .OrderBy(user => user.FamilyName).ThenBy(user => user.GivenName).ThenBy(user => user.Id)
+            .ToList());
 
     public Task<Office?> FindIncludeAssignorAsync(Guid id, CancellationToken token = default) =>
         FindAsync(id, token);
 
-    public Task<IReadOnlyCollection<Office>> GetListIncludeAssignorAsync(CancellationToken token = default) =>
-        GetListAsync(token);
+    public async Task<IReadOnlyCollection<Office>> GetListIncludeAssignorAsync(CancellationToken token = default) =>
+        (await GetListAsync(token).ConfigureAwait(false))
+        .OrderBy(office => office.Name).ThenBy(office => office.Id)
+        .ToList();
 }

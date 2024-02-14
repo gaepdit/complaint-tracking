@@ -9,9 +9,6 @@ public record AttachmentViewDto
 {
     public Guid Id { get; init; }
 
-    [JsonIgnore]
-    public int ComplaintId { get; [UsedImplicitly] init; }
-
     public string FileName { get; init; } = string.Empty;
 
     [JsonIgnore]

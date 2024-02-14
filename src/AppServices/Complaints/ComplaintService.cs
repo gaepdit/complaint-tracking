@@ -1,6 +1,7 @@
 using AutoMapper;
+using Cts.AppServices.Attachments;
+using Cts.AppServices.Attachments.ValidationAttributes;
 using Cts.AppServices.Complaints.Dto;
-using Cts.AppServices.Staff.Dto;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.ComplaintTransitions;
@@ -17,6 +18,7 @@ public sealed class ComplaintService(
     IConcernRepository concernRepository,
     IOfficeRepository officeRepository,
     IComplaintTransitionManager transitionManager,
+    IAttachmentService attachmentService,
     IMapper mapper,
     IUserService userService)
     : IComplaintService
@@ -39,7 +41,7 @@ public sealed class ComplaintService(
         var count = await complaintRepository.CountAsync(predicate, token).ConfigureAwait(false);
 
         var list = count > 0
-            ? mapper.Map<List<ComplaintSearchResultDto>>(await complaintRepository
+            ? mapper.Map<IReadOnlyList<ComplaintSearchResultDto>>(await complaintRepository
                 .GetPagedListAsync(predicate, paging, token).ConfigureAwait(false))
             : [];
 
@@ -70,29 +72,39 @@ public sealed class ComplaintService(
         var count = await complaintRepository.CountAsync(predicate, token).ConfigureAwait(false);
 
         var list = count > 0
-            ? mapper.Map<List<ComplaintSearchResultDto>>(
-                await complaintRepository.GetPagedListAsync(predicate, paging, token).ConfigureAwait(false))
+            ? mapper.Map<IReadOnlyList<ComplaintSearchResultDto>>(await complaintRepository
+                .GetPagedListAsync(predicate, paging, token).ConfigureAwait(false))
             : [];
 
         return new PaginatedResult<ComplaintSearchResultDto>(list, count, paging);
     }
 
-    public async Task<int> CreateAsync(ComplaintCreateDto resource, CancellationToken token = default)
+    public async Task<ComplaintCreateResult> CreateAsync(ComplaintCreateDto resource,
+        IAttachmentService.AttachmentServiceConfig config, CancellationToken token = default)
     {
         var user = await userService.GetCurrentUserAsync().ConfigureAwait(false);
         var complaint = await CreateComplaintFromDtoAsync(resource, user, token).ConfigureAwait(false);
         await complaintRepository.InsertAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
-
         await AddTransitionAsync(complaint, TransitionType.New, user, token).ConfigureAwait(false);
 
         if (resource.CurrentOwnerId is not null)
+        {
             await AddTransitionAsync(complaint, TransitionType.Assigned, user, token).ConfigureAwait(false);
-
-        if (resource.CurrentOwnerId is not null && complaint.CurrentOwner == user)
-            await AddTransitionAsync(complaint, TransitionType.Accepted, user, token).ConfigureAwait(false);
+            if (complaint.CurrentOwner == user)
+                await AddTransitionAsync(complaint, TransitionType.Accepted, user, token).ConfigureAwait(false);
+        }
 
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
-        return complaint.Id;
+
+        if (resource.Files is null || resource.Files.Count == 0) return ComplaintCreateResult.Success(complaint.Id);
+
+        var validateFilesResult = resource.Files.Validate(IAttachmentService.MaxSimultaneousUploads);
+        if (!validateFilesResult.IsValid)
+            return ComplaintCreateResult.Success(complaint.Id, validateFilesResult.ValidationErrors);
+
+        var attachmentCount = await attachmentService.SaveAttachmentsAsync(complaint.Id, resource.Files, config, token)
+            .ConfigureAwait(false);
+        return ComplaintCreateResult.Success(complaint.Id, attachmentCount);
     }
 
     public async Task UpdateAsync(int id, ComplaintUpdateDto resource, CancellationToken token = default)
@@ -106,8 +118,7 @@ public sealed class ComplaintService(
     private async Task AddTransitionAsync(
         Complaint complaint, TransitionType type, ApplicationUser? user, CancellationToken token) =>
         await complaintRepository.InsertTransitionAsync(transitionManager.Create(complaint, type, user, user?.Id),
-            autoSave: false,
-            token).ConfigureAwait(false);
+            autoSave: false, token).ConfigureAwait(false);
 
     internal async Task<Complaint> CreateComplaintFromDtoAsync(
         ComplaintCreateDto resource, ApplicationUser? currentUser, CancellationToken token)

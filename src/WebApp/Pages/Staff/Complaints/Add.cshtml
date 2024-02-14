@@ -1,6 +1,8 @@
 ﻿@page
+@using Cts.AppServices.Attachments
 @using Cts.Domain.ValueObjects
 @using Cts.WebApp.Pages.Shared.EditorTemplates
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model AddModel
 @{
     ViewData["Title"] = "Add A New Complaint";
@@ -11,17 +13,17 @@
 <h1>@ViewData["Title"]</h1>
 
 <div class="p-3 border border-primary-subtle rounded-3 bg-light-subtle">
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
 
         <h2>Received</h2>
         <div class="row mb-3">
             <div class="col-md input-group mb-3">
-                @Html.EditorFor(e => e.Item.ReceivedDate, EditorTemplate.InputDateOnly)
-                @Html.EditorFor(e => e.Item.ReceivedTime, EditorTemplate.InputTimeOnly)
+                @Html.EditorFor(e => e.NewComplaint.ReceivedDate, EditorTemplate.InputDateOnly)
+                @Html.EditorFor(e => e.NewComplaint.ReceivedTime, EditorTemplate.InputTimeOnly)
             </div>
             <div class="col-md mb-3">
-                @Html.EditorFor(e => e.Item.ReceivedById, EditorTemplate.Select, new { Items = Model.AllActiveStaffSelectList })
+                @Html.EditorFor(e => e.NewComplaint.ReceivedById, EditorTemplate.Select, new { Items = Model.AllActiveStaffSelectList })
             </div>
         </div>
 
@@ -30,16 +32,16 @@
             <div class="col-md-6">
                 <h3 class="h5">Description</h3>
                 <div class="mb-3">
-                    @Html.EditorFor(e => e.Item.ComplaintNature, EditorTemplate.Textarea, new { Rows = 5 })
+                    @Html.EditorFor(e => e.NewComplaint.ComplaintNature, EditorTemplate.Textarea, new { Rows = 5 })
                 </div>
             </div>
             <div class="col-md-6">
                 <h3 class="h5">Environmental areas of concern</h3>
                 <div class="mb-3">
-                    @Html.EditorFor(e => e.Item.PrimaryConcernId, EditorTemplate.Select, new { Items = Model.ConcernsSelectList })
+                    @Html.EditorFor(e => e.NewComplaint.PrimaryConcernId, EditorTemplate.Select, new { Items = Model.ConcernsSelectList })
                 </div>
                 <div class="mb-3">
-                    @Html.EditorFor(e => e.Item.SecondaryConcernId, EditorTemplate.SelectOptional, new { Items = Model.ConcernsSelectList })
+                    @Html.EditorFor(e => e.NewComplaint.SecondaryConcernId, EditorTemplate.SelectOptional, new { Items = Model.ConcernsSelectList })
                 </div>
             </div>
         </div>
@@ -47,57 +49,57 @@
         <h2>Caller</h2>
         <div class="row">
             <div class="col-md-6 mb-3">
-                @Html.EditorFor(e => e.Item.CallerName, EditorTemplate.Input)
+                @Html.EditorFor(e => e.NewComplaint.CallerName, EditorTemplate.Input)
             </div>
             <div class="col-md-6 mb-3">
-                @Html.EditorFor(e => e.Item.CallerRepresents, EditorTemplate.Input)
+                @Html.EditorFor(e => e.NewComplaint.CallerRepresents, EditorTemplate.Input)
             </div>
         </div>
 
         <div class="row mb-3">
             <div class="col-md-6">
                 <div class="mb-3">
-                    @Html.EditorFor(e => e.Item.CallerEmail, EditorTemplate.Input)
+                    @Html.EditorFor(e => e.NewComplaint.CallerEmail, EditorTemplate.Input)
                 </div>
                 <div class="input-group mb-3">
                     <div class="form-floating">
-                        <input asp-for="Item.CallerPhoneNumber!.Number" class="form-control" />
-                        <label asp-for="Item.CallerPhoneNumber" class="form-label"></label>
-                        <span asp-validation-for="Item.CallerPhoneNumber" class="invalid-feedback"></span>
+                        <input asp-for="NewComplaint.CallerPhoneNumber!.Number" class="form-control" />
+                        <label asp-for="NewComplaint.CallerPhoneNumber" class="form-label"></label>
+                        <span asp-validation-for="NewComplaint.CallerPhoneNumber" class="invalid-feedback"></span>
                     </div>
-                    @Html.EditorFor(e => e.Item.CallerPhoneNumber!.Type, EditorTemplate.SelectOptional, new { Items = phoneTypesSelectList })
+                    @Html.EditorFor(e => e.NewComplaint.CallerPhoneNumber!.Type, EditorTemplate.SelectOptional, new { Items = phoneTypesSelectList })
                 </div>
                 <div class="input-group mb-3">
                     <div class="form-floating">
-                        <input asp-for="Item.CallerSecondaryPhoneNumber!.Number" class="form-control" />
-                        <label asp-for="Item.CallerSecondaryPhoneNumber" class="form-label"></label>
-                        <span asp-validation-for="Item.CallerSecondaryPhoneNumber" class="invalid-feedback"></span>
+                        <input asp-for="NewComplaint.CallerSecondaryPhoneNumber!.Number" class="form-control" />
+                        <label asp-for="NewComplaint.CallerSecondaryPhoneNumber" class="form-label"></label>
+                        <span asp-validation-for="NewComplaint.CallerSecondaryPhoneNumber" class="invalid-feedback"></span>
                     </div>
-                    @Html.EditorFor(e => e.Item.CallerSecondaryPhoneNumber!.Type, EditorTemplate.SelectOptional, new { Items = phoneTypesSelectList })
+                    @Html.EditorFor(e => e.NewComplaint.CallerSecondaryPhoneNumber!.Type, EditorTemplate.SelectOptional, new { Items = phoneTypesSelectList })
                 </div>
                 <div class="input-group mb-3">
                     <div class="form-floating">
-                        <input asp-for="Item.CallerTertiaryPhoneNumber!.Number" class="form-control" />
-                        <label asp-for="Item.CallerTertiaryPhoneNumber" class="form-label"></label>
-                        <span asp-validation-for="Item.CallerTertiaryPhoneNumber" class="invalid-feedback"></span>
+                        <input asp-for="NewComplaint.CallerTertiaryPhoneNumber!.Number" class="form-control" />
+                        <label asp-for="NewComplaint.CallerTertiaryPhoneNumber" class="form-label"></label>
+                        <span asp-validation-for="NewComplaint.CallerTertiaryPhoneNumber" class="invalid-feedback"></span>
                     </div>
-                    @Html.EditorFor(e => e.Item.CallerTertiaryPhoneNumber!.Type, EditorTemplate.SelectOptional, new { Items = phoneTypesSelectList })
+                    @Html.EditorFor(e => e.NewComplaint.CallerTertiaryPhoneNumber!.Type, EditorTemplate.SelectOptional, new { Items = phoneTypesSelectList })
                 </div>
             </div>
 
             <div class="col-md-6">
                 <div class="mb-3">
-                    @Html.EditorFor(e => e.Item.CallerAddress.Street, EditorTemplate.Input)
+                    @Html.EditorFor(e => e.NewComplaint.CallerAddress.Street, EditorTemplate.Input)
                 </div>
                 <div class="mb-3">
-                    @Html.EditorFor(e => e.Item.CallerAddress.Street2, EditorTemplate.Input)
+                    @Html.EditorFor(e => e.NewComplaint.CallerAddress.Street2, EditorTemplate.Input)
                 </div>
                 <div class="mb-3">
-                    @Html.EditorFor(e => e.Item.CallerAddress.City, EditorTemplate.Input)
+                    @Html.EditorFor(e => e.NewComplaint.CallerAddress.City, EditorTemplate.Input)
                 </div>
                 <div class="input-group mb-3">
-                    @Html.EditorFor(e => e.Item.CallerAddress.State, EditorTemplate.SelectOptional, new { Items = Model.StatesSelectList })
-                    @Html.EditorFor(e => e.Item.CallerAddress.PostalCode, EditorTemplate.Input)
+                    @Html.EditorFor(e => e.NewComplaint.CallerAddress.State, EditorTemplate.SelectOptional, new { Items = Model.StatesSelectList })
+                    @Html.EditorFor(e => e.NewComplaint.CallerAddress.PostalCode, EditorTemplate.Input)
                 </div>
             </div>
         </div>
@@ -106,111 +108,111 @@
         <div class="row mb-3">
             <div class="col-md-6">
                 <div class="mb-3">
-                    @Html.EditorFor(e => e.Item.ComplaintLocation, EditorTemplate.Textarea, new { Rows = 5 })
+                    @Html.EditorFor(e => e.NewComplaint.ComplaintLocation, EditorTemplate.Textarea, new { Rows = 5 })
                 </div>
                 <div class="mb-3">
-                    @Html.EditorFor(e => e.Item.ComplaintDirections, EditorTemplate.Textarea, new { Rows = 5 })
+                    @Html.EditorFor(e => e.NewComplaint.ComplaintDirections, EditorTemplate.Textarea, new { Rows = 5 })
                 </div>
             </div>
 
             <div class="col-md-6">
                 <div class="mb-3">
-                    @Html.EditorFor(e => e.Item.ComplaintCity, EditorTemplate.Input)
+                    @Html.EditorFor(e => e.NewComplaint.ComplaintCity, EditorTemplate.Input)
                 </div>
                 <div class="mb-3">
-                    @Html.EditorFor(e => e.Item.ComplaintCounty, EditorTemplate.SelectOptional, new { Items = Model.CountiesSelectList })
+                    @Html.EditorFor(e => e.NewComplaint.ComplaintCounty, EditorTemplate.SelectOptional, new { Items = Model.CountiesSelectList })
                 </div>
             </div>
         </div>
 
         <h2>Source</h2>
         <div class="row mb-3">
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    @Html.EditorFor(e => e.Item.SourceFacilityName, EditorTemplate.Input)
-                </div>
-                <div class="col-md-6 mb-3">
-                    @Html.EditorFor(e => e.Item.SourceFacilityIdNumber, EditorTemplate.Input)
-                </div>
+            <div class="col-md-6 mb-3">
+                @Html.EditorFor(e => e.NewComplaint.SourceFacilityName, EditorTemplate.Input)
+            </div>
+            <div class="col-md-6 mb-3">
+                @Html.EditorFor(e => e.NewComplaint.SourceFacilityIdNumber, EditorTemplate.Input)
             </div>
         </div>
 
         <h2>Source Contact</h2>
+        <div class="mb-3">
+            <button id="copy-caller-info" type="button" class="btn btn-outline-info">Copy contact/address from Caller</button>
+        </div>
         <div class="row mb-3">
-            <div class="mb-3">
-                <button id="copy-caller-info" type="button" class="btn btn-outline-info">Copy contact/address from Caller</button>
-            </div>
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <div class="mb-3">
-                        @Html.EditorFor(e => e.Item.SourceContactName, EditorTemplate.Input)
-                    </div>
-                    <div class="form-floating mb-3">
-                        @Html.EditorFor(e => e.Item.SourceEmail, EditorTemplate.Input)
-                    </div>
-                    <div class="input-group mb-3">
-                        <div class="form-floating">
-                            <input asp-for="Item.SourcePhoneNumber!.Number" class="form-control" />
-                            <label asp-for="Item.SourcePhoneNumber" class="form-label"></label>
-                            <span asp-validation-for="Item.SourcePhoneNumber" class="invalid-feedback"></span>
-                        </div>
-                        @Html.EditorFor(e => e.Item.SourcePhoneNumber!.Type, EditorTemplate.SelectOptional, new { Items = phoneTypesSelectList })
-                    </div>
-                    <div class="input-group mb-3">
-                        <div class="form-floating">
-                            <input asp-for="Item.SourceSecondaryPhoneNumber!.Number" class="form-control" />
-                            <label asp-for="Item.SourceSecondaryPhoneNumber" class="form-label"></label>
-                            <span asp-validation-for="Item.SourceSecondaryPhoneNumber" class="invalid-feedback"></span>
-                        </div>
-                        @Html.EditorFor(e => e.Item.SourceSecondaryPhoneNumber!.Type, EditorTemplate.SelectOptional, new { Items = phoneTypesSelectList })
-                    </div>
-                    <div class="input-group mb-3">
-                        <div class="form-floating">
-                            <input asp-for="Item.SourceTertiaryPhoneNumber!.Number" class="form-control" />
-                            <label asp-for="Item.SourceTertiaryPhoneNumber" class="form-label"></label>
-                            <span asp-validation-for="Item.SourceTertiaryPhoneNumber" class="invalid-feedback"></span>
-                        </div>
-                        @Html.EditorFor(e => e.Item.SourceTertiaryPhoneNumber!.Type, EditorTemplate.SelectOptional, new { Items = phoneTypesSelectList })
-                    </div>
+            <div class="col-md-6 mb-3">
+                <div class="mb-3">
+                    @Html.EditorFor(e => e.NewComplaint.SourceContactName, EditorTemplate.Input)
                 </div>
+                <div class="form-floating mb-3">
+                    @Html.EditorFor(e => e.NewComplaint.SourceEmail, EditorTemplate.Input)
+                </div>
+                <div class="input-group mb-3">
+                    <div class="form-floating">
+                        <input asp-for="NewComplaint.SourcePhoneNumber!.Number" class="form-control" />
+                        <label asp-for="NewComplaint.SourcePhoneNumber" class="form-label"></label>
+                        <span asp-validation-for="NewComplaint.SourcePhoneNumber" class="invalid-feedback"></span>
+                    </div>
+                    @Html.EditorFor(e => e.NewComplaint.SourcePhoneNumber!.Type, EditorTemplate.SelectOptional, new { Items = phoneTypesSelectList })
+                </div>
+                <div class="input-group mb-3">
+                    <div class="form-floating">
+                        <input asp-for="NewComplaint.SourceSecondaryPhoneNumber!.Number" class="form-control" />
+                        <label asp-for="NewComplaint.SourceSecondaryPhoneNumber" class="form-label"></label>
+                        <span asp-validation-for="NewComplaint.SourceSecondaryPhoneNumber" class="invalid-feedback"></span>
+                    </div>
+                    @Html.EditorFor(e => e.NewComplaint.SourceSecondaryPhoneNumber!.Type, EditorTemplate.SelectOptional, new { Items = phoneTypesSelectList })
+                </div>
+                <div class="input-group mb-3">
+                    <div class="form-floating">
+                        <input asp-for="NewComplaint.SourceTertiaryPhoneNumber!.Number" class="form-control" />
+                        <label asp-for="NewComplaint.SourceTertiaryPhoneNumber" class="form-label"></label>
+                        <span asp-validation-for="NewComplaint.SourceTertiaryPhoneNumber" class="invalid-feedback"></span>
+                    </div>
+                    @Html.EditorFor(e => e.NewComplaint.SourceTertiaryPhoneNumber!.Type, EditorTemplate.SelectOptional, new { Items = phoneTypesSelectList })
+                </div>
+            </div>
 
-                <div class="col-md-6 mb-3">
-                    <div class="mb-3">
-                        @Html.EditorFor(e => e.Item.SourceAddress.Street, EditorTemplate.Input)
-                    </div>
-                    <div class="mb-3">
-                        @Html.EditorFor(e => e.Item.SourceAddress.Street2, EditorTemplate.Input)
-                    </div>
-                    <div class="mb-3">
-                        @Html.EditorFor(e => e.Item.SourceAddress.City, EditorTemplate.Input)
-                    </div>
-                    <div class="input-group mb-3">
-                        @Html.EditorFor(e => e.Item.SourceAddress.State, EditorTemplate.SelectOptional, new { Items = Model.StatesSelectList })
-                        @Html.EditorFor(e => e.Item.SourceAddress.PostalCode, EditorTemplate.Input)
-                    </div>
+            <div class="col-md-6 mb-3">
+                <div class="mb-3">
+                    @Html.EditorFor(e => e.NewComplaint.SourceAddress.Street, EditorTemplate.Input)
+                </div>
+                <div class="mb-3">
+                    @Html.EditorFor(e => e.NewComplaint.SourceAddress.Street2, EditorTemplate.Input)
+                </div>
+                <div class="mb-3">
+                    @Html.EditorFor(e => e.NewComplaint.SourceAddress.City, EditorTemplate.Input)
+                </div>
+                <div class="input-group mb-3">
+                    @Html.EditorFor(e => e.NewComplaint.SourceAddress.State, EditorTemplate.SelectOptional, new { Items = Model.StatesSelectList })
+                    @Html.EditorFor(e => e.NewComplaint.SourceAddress.PostalCode, EditorTemplate.Input)
                 </div>
             </div>
         </div>
 
         <h2>Attachments</h2>
-        <div class="mb-4">
+        <div class="mb-3">
             <p>Selected files will be uploaded when Complaint is saved.</p>
-            @* TODO *@
-            <p>
-                <em>
-                    Supported file types are images, documents, and spreadsheets.<br />
-                    All files must comply with <a href="#" target="_blank">EPD’s complaint attachments policy (<abbr>PDF</abbr>)</a>.
-                </em>
-            </p>
+            <div class="row">
+                <div class="col-md-6">
+                    <input class="form-control form-control-lg mb-3" type="file" asp-for="NewComplaint.Files" multiple accept="@FileTypes.FileTypesAcceptString">
+                </div>
+            </div>
+            <div class="row">
+                <p class="col-md-6">
+                    Up to ten files may be uploaded at a time. Supported file types are images, documents, and spreadsheets.
+                    All files must comply with the <a href="~/static/Complaint-Attachments-Policy.pdf" target="_blank">EPD Complaint Attachments Policy (<abbr>PDF</abbr>)</a>.
+                </p>
+            </div>
         </div>
 
         <h2>Assignment</h2>
         <div class="row mb-3">
             <div class="col-md mb-3">
-                @Html.EditorFor(e => e.Item.CurrentOfficeId, EditorTemplate.Select, new { Items = Model.OfficesSelectList })
+                @Html.EditorFor(e => e.NewComplaint.CurrentOfficeId, EditorTemplate.Select, new { Items = Model.OfficesSelectList })
             </div>
             <div class="col-md mb-3">
-                @Html.EditorFor(e => e.Item.CurrentOwnerId, EditorTemplate.Select, new { Items = Model.ActiveStaffInOfficeSelectList })
+                @Html.EditorFor(e => e.NewComplaint.CurrentOwnerId, EditorTemplate.Select, new { Items = Model.ActiveStaffInOfficeSelectList })
             </div>
         </div>
 
