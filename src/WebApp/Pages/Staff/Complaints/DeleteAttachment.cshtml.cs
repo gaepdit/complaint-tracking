@@ -12,16 +12,14 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Cts.WebApp.Pages.Staff.Complaints;
 
-public class DeleteAttachmentModel(
-    IAttachmentService attachmentService,
-    IComplaintService complaintService,
-    IAuthorizationService authorizationService)
+public class DeleteAttachmentModel(IAttachmentService attachmentService, IAuthorizationService authorizationService)
     : PageModel
 {
     [BindProperty]
-    public Guid AttachmentItemId { get; set; }
+    public Guid AttachmentId { get; set; }
 
     public AttachmentViewDto AttachmentView { get; private set; } = default!;
+    public int ComplaintId { get; set; }
 
     public async Task<IActionResult> OnGetAsync(Guid? attachmentId)
     {
@@ -30,13 +28,14 @@ public class DeleteAttachmentModel(
         var attachmentView = await attachmentService.FindAttachmentAsync(attachmentId.Value);
         if (attachmentView is null) return NotFound();
 
-        var complaintView = await complaintService.FindAsync(attachmentView.ComplaintId);
+        var complaintView = await attachmentService.FindComplaintForAttachmentAsync(attachmentId.Value);
         if (complaintView is null) return NotFound();
 
         if (!await UserCanDeleteAttachmentAsync(complaintView)) return Forbid();
 
         AttachmentView = attachmentView;
-        AttachmentItemId = attachmentId.Value;
+        AttachmentId = attachmentId.Value;
+        ComplaintId = complaintView.Id;
         return Page();
     }
 
@@ -44,10 +43,10 @@ public class DeleteAttachmentModel(
     {
         if (!ModelState.IsValid) return BadRequest();
 
-        var originalAttachment = await attachmentService.FindAttachmentAsync(AttachmentItemId, token);
+        var originalAttachment = await attachmentService.FindAttachmentAsync(AttachmentId, token);
         if (originalAttachment is null) return BadRequest();
 
-        var complaintView = await complaintService.FindAsync(originalAttachment.ComplaintId, token: token);
+        var complaintView = await attachmentService.FindComplaintForAttachmentAsync(AttachmentId, token);
         if (complaintView is null || !await UserCanDeleteAttachmentAsync(complaintView)) return BadRequest();
 
         await attachmentService.DeleteAttachmentAsync(originalAttachment, AppSettings.AttachmentServiceConfig, token);

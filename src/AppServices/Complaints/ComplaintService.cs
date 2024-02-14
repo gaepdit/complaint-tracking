@@ -1,6 +1,5 @@
 using AutoMapper;
 using Cts.AppServices.Complaints.Dto;
-using Cts.AppServices.Staff.Dto;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.ComplaintTransitions;

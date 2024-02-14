@@ -8,6 +8,7 @@ using Cts.Domain.Entities.EmailLogs;
 using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Cts.EfRepository.Contexts;
@@ -34,9 +35,14 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
 
         // Some properties should always be included.
         // See https://learn.microsoft.com/en-us/ef/core/querying/related-data/eager#model-configuration-for-auto-including-navigations
+        
+        // Users
         builder.Entity<ApplicationUser>().Navigation(e => e.Office).AutoInclude();
+
+        // Attachments
         builder.Entity<Attachment>().Navigation(e => e.UploadedBy).AutoInclude();
 
+        // Complaints
         var complaint = builder.Entity<Complaint>();
         complaint.Navigation(e => e.PrimaryConcern).AutoInclude();
         complaint.Navigation(e => e.SecondaryConcern).AutoInclude();
@@ -47,10 +53,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
         complaint.Navigation(e => e.ReviewedBy).AutoInclude();
         complaint.Navigation(e => e.DeletedBy).AutoInclude();
 
+        // Complaint Action
         var action = builder.Entity<ComplaintAction>();
         action.Navigation(e => e.ActionType).AutoInclude();
         action.Navigation(e => e.EnteredBy).AutoInclude();
 
+        // Complaint Transition
         var transition = builder.Entity<ComplaintTransition>();
         transition.Navigation(e => e.CommittedByUser).AutoInclude();
         transition.Navigation(e => e.TransferredFromOffice).AutoInclude();

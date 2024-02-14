@@ -1,5 +1,6 @@
 using AutoMapper;
 using Cts.AppServices.Attachments.Dto;
+using Cts.AppServices.Complaints.Dto;
 using Cts.AppServices.ErrorLogging;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Attachments;
@@ -30,6 +31,17 @@ public class AttachmentService(
     public async Task<AttachmentViewDto?> FindPublicAttachmentAsync(Guid id, CancellationToken token = default) =>
         mapper.Map<AttachmentViewDto>(await attachmentRepository
             .FindAsync(AttachmentFilters.PublicIdPredicate(id), token).ConfigureAwait(false));
+
+    public async Task<ComplaintViewDto?> FindComplaintForAttachmentAsync(Guid attachmentId,
+        CancellationToken token = default)
+    {
+        var attachment = await attachmentRepository.FindAsync(AttachmentFilters.IdPredicate(attachmentId), token)
+            .ConfigureAwait(false);
+        return attachment == null
+            ? null
+            : mapper.Map<ComplaintViewDto>(await complaintRepository
+                .FindAsync(complaint => complaint.Attachments.Contains(attachment), token).ConfigureAwait(false));
+    }
 
     public async Task<byte[]> GetAttachmentFileAsync(string fileId, bool getThumbnail,
         IAttachmentService.AttachmentServiceConfig config, CancellationToken token = default)
