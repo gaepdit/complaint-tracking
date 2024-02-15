@@ -150,7 +150,7 @@ public enum ComplaintStatus
     [Display(Name = "Review Pending")] ReviewPending = 2,
 
     /// <summary>
-    ///  Represents a complaint that has been approved by a reviewer.
+    ///  Represents a complaint that has been approved/closed by a reviewer.
     /// </summary>
     [Display(Name = "Approved/Closed")] Closed = 3,
 

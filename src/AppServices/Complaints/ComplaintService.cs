@@ -138,6 +138,31 @@ public sealed class ComplaintService(
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
     }
 
+    public async Task AssignAsync(ComplaintAssignDto resource, CancellationToken token = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task CloseAsync(ComplaintClosureDto resource, CancellationToken token = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task ReopenAsync(ComplaintClosureDto resource, CancellationToken token = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task RequestReviewAsync(ComplaintRequestReviewDto resource, CancellationToken token = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task ReturnAsync(ComplaintAssignDto resource, CancellationToken token = default)
+    {
+        throw new NotImplementedException();
+    }
+
     // Management complaint write methods
 
     public async Task DeleteAsync(int complaintId, CancellationToken token = default)
