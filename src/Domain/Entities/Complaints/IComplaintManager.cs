@@ -1,4 +1,4 @@
-﻿using Cts.Domain.Entities.ActionTypes;
+using Cts.Domain.Entities.ActionTypes;
 using Cts.Domain.Entities.ComplaintActions;
 using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Identity;
@@ -29,6 +29,8 @@ public interface IComplaintManager
     /// <param name="complaint">The complaint the Transition is associated with.</param>
     /// <param name="type">The <see cref="TransitionType"/> of Transition to create.</param>
     /// <param name="user">The <see cref="ApplicationUser"/> committing the Transition.</param>
+    /// <param name="comment">A comment for the Transition.</param>
     /// <returns>The Complaint Transition that was created.</returns>
-    ComplaintTransition CreateTransition(Complaint complaint, TransitionType type, ApplicationUser? user);
+    ComplaintTransition CreateTransition(Complaint complaint, TransitionType type, ApplicationUser? user,
+        string? comment);
 }

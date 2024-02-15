@@ -180,13 +180,15 @@ public sealed class ComplaintService(
     }
 
     // Internal methods
-    private async Task AddTransitionAsync(
-        Complaint complaint, TransitionType type, ApplicationUser? user, CancellationToken token) =>
-        await complaintRepository.InsertTransitionAsync(complaintManager.CreateTransition(complaint, type, user),
-            autoSave: false, token).ConfigureAwait(false);
+    private async Task AddTransitionAsync(Complaint complaint, TransitionType type, ApplicationUser? user,
+        CancellationToken token, string? comment = null) =>
+        await complaintRepository
+            .InsertTransitionAsync(complaintManager.CreateTransition(complaint, type, user, comment), autoSave: false,
+                token)
+            .ConfigureAwait(false);
 
-    internal async Task<Complaint> CreateComplaintFromDtoAsync(
-        ComplaintCreateDto resource, ApplicationUser? currentUser, CancellationToken token)
+    internal async Task<Complaint> CreateComplaintFromDtoAsync(ComplaintCreateDto resource,
+        ApplicationUser? currentUser, CancellationToken token)
     {
         var complaint = complaintManager.Create(currentUser);
         await MapComplaintDetailsAsync(complaint, resource, token).ConfigureAwait(false);

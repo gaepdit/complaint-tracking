@@ -1,4 +1,4 @@
-﻿using Cts.Domain.Entities.ActionTypes;
+using Cts.Domain.Entities.ActionTypes;
 using Cts.Domain.Entities.ComplaintActions;
 using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Identity;
@@ -21,10 +21,12 @@ public class ComplaintManager(IComplaintRepository repository) : IComplaintManag
         return action;
     }
 
-    public ComplaintTransition CreateTransition(Complaint complaint, TransitionType type, ApplicationUser? user)
+    public ComplaintTransition CreateTransition(Complaint complaint, TransitionType type, ApplicationUser? user,
+        string? comment)
     {
         var item = new ComplaintTransition(Guid.NewGuid(), complaint, type, user);
         item.SetCreator(user?.Id);
+        item.Comment = comment;
 
         switch (type)
         {
