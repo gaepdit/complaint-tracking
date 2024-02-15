@@ -8,7 +8,6 @@ using Cts.Domain.Entities.EmailLogs;
 using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Cts.EfRepository.Contexts;

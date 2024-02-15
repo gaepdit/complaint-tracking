@@ -1,6 +1,5 @@
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.ComplaintTransitions;
-using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 
 namespace Cts.EfRepository.Repositories;

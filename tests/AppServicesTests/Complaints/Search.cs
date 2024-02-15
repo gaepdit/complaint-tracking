@@ -32,8 +32,7 @@ public class Search
             Substitute.For<IComplaintTransitionManager>(), Substitute.For<IAttachmentService>(),
             AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
 
-        var result = await appService.SearchAsync(Substitute.For<ComplaintSearchDto>(),
-            paging, CancellationToken.None);
+        var result = await appService.SearchAsync(new ComplaintSearchDto(), paging, CancellationToken.None);
 
         using var scope = new AssertionScope();
         result.Items.Should().BeEquivalentTo(itemList);
@@ -58,8 +57,7 @@ public class Search
             Substitute.For<IComplaintTransitionManager>(), Substitute.For<IAttachmentService>(),
             AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
 
-        var result = await appService.SearchAsync(Substitute.For<ComplaintSearchDto>(),
-            paging, CancellationToken.None);
+        var result = await appService.SearchAsync(new ComplaintSearchDto(), paging, CancellationToken.None);
 
         using var scope = new AssertionScope();
         result.Items.Should().BeEmpty();

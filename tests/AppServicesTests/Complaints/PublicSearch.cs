@@ -36,8 +36,7 @@ public class PublicSearch
             AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
 
         // Act
-        var result = await appService.PublicSearchAsync(Substitute.For<ComplaintPublicSearchDto>(),
-            paging, CancellationToken.None);
+        var result = await appService.PublicSearchAsync(new ComplaintPublicSearchDto(), paging, CancellationToken.None);
 
         // Assert
         using var scope = new AssertionScope();
@@ -66,8 +65,7 @@ public class PublicSearch
             AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
 
         // Act
-        var result = await appService.PublicSearchAsync(Substitute.For<ComplaintPublicSearchDto>(),
-            paging, CancellationToken.None);
+        var result = await appService.PublicSearchAsync(new ComplaintPublicSearchDto(), paging, CancellationToken.None);
 
         // Assert
         using var scope = new AssertionScope();

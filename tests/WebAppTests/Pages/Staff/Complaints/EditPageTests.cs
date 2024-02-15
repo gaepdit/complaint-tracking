@@ -43,8 +43,8 @@ public class EditPageTests
         complaintService.FindForUpdateAsync(complaintId).Returns(dto);
 
         var authorization = Substitute.For<IAuthorizationService>();
-        authorization.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), Arg.Any<ComplaintUpdateDto>(),
-                Arg.Any<IAuthorizationRequirement[]>())
+        authorization.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), Arg.Any<object?>(),
+                Arg.Any<IEnumerable<IAuthorizationRequirement>>())
             .Returns(AuthorizationResult.Success());
 
         var page = new EditModel(complaintService, _staffService, _concernService,
@@ -73,9 +73,8 @@ public class EditPageTests
             TempData = WebAppTestsSetup.PageTempData(),
         };
         _complaintService.FindForUpdateAsync(page.Id).Returns(page.Item);
-        authorization.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(),
-                Arg.Any<ComplaintUpdateDto>(),
-                Arg.Any<IAuthorizationRequirement[]>())
+        authorization.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), Arg.Any<object?>(),
+                Arg.Any<IEnumerable<IAuthorizationRequirement>>())
             .Returns(AuthorizationResult.Success());
         validator.ValidateAsync(Arg.Any<ComplaintUpdateDto>()).Returns(new ValidationResult());
 
@@ -116,8 +115,8 @@ public class EditPageTests
         var page = new EditModel(_complaintService, _staffService, _concernService, validator, authorization)
             { Id = 3 };
         _complaintService.FindForUpdateAsync(page.Id).Returns(new ComplaintUpdateDto());
-        authorization.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), Arg.Any<ComplaintUpdateDto>(),
-                Arg.Any<IAuthorizationRequirement[]>())
+        authorization.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), Arg.Any<object?>(),
+                Arg.Any<IEnumerable<IAuthorizationRequirement>>())
             .Returns(AuthorizationResult.Failed());
         validator.ValidateAsync(Arg.Any<ComplaintUpdateDto>()).Returns(new ValidationResult());
 
@@ -138,8 +137,8 @@ public class EditPageTests
             { Id = 4 };
         page.ModelState.AddModelError("test", "test error");
         _complaintService.FindForUpdateAsync(page.Id).Returns(new ComplaintUpdateDto());
-        authorization.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), Arg.Any<ComplaintUpdateDto>(),
-                Arg.Any<IAuthorizationRequirement[]>())
+        authorization.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), Arg.Any<object?>(),
+                Arg.Any<IEnumerable<IAuthorizationRequirement>>())
             .Returns(AuthorizationResult.Success());
         validator.ValidateAsync(Arg.Any<ComplaintUpdateDto>()).Returns(new ValidationResult());
 
