@@ -27,7 +27,7 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     // Properties: Status & meta-data
 
-    public ComplaintStatus Status { get; set; } = ComplaintStatus.New;
+    public ComplaintStatus Status { get; internal set; } = ComplaintStatus.New;
 
     public DateTimeOffset EnteredDate { get; init; } = DateTimeOffset.Now;
 
@@ -94,14 +94,14 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     // Properties: Assignment/History
 
-    public Office CurrentOffice { get; set; } = default!;
+    public Office CurrentOffice { get; internal set; } = default!;
 
-    public ApplicationUser? CurrentOwner { get; set; }
+    public ApplicationUser? CurrentOwner { get; internal set; }
 
-    public DateTimeOffset? CurrentOwnerAssignedDate { get; set; }
+    public DateTimeOffset? CurrentOwnerAssignedDate { get; internal set; }
 
 
-    public DateTimeOffset? CurrentOwnerAcceptedDate { get; set; }
+    public DateTimeOffset? CurrentOwnerAcceptedDate { get; internal set; }
 
     // Properties: Transitions
     public List<ComplaintTransition> ComplaintTransitions { get; set; } = [];
@@ -114,13 +114,13 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     // Properties: Review/Closure
 
-    public ApplicationUser? ReviewedBy { get; set; }
+    public ApplicationUser? ReviewedBy { get; internal set; }
 
-    public string? ReviewComments { get; set; }
+    public string? ReviewComments { get; internal set; }
 
-    public bool ComplaintClosed { get; set; }
+    public bool ComplaintClosed { get; internal set; }
 
-    public DateTimeOffset? ComplaintClosedDate { get; set; }
+    public DateTimeOffset? ComplaintClosedDate { get; internal set; }
 
     // Properties: Deletion
 

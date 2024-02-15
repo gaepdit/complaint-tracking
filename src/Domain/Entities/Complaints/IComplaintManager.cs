@@ -1,6 +1,7 @@
 using Cts.Domain.Entities.ActionTypes;
 using Cts.Domain.Entities.ComplaintActions;
 using Cts.Domain.Entities.ComplaintTransitions;
+using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
 
 namespace Cts.Domain.Entities.Complaints;
@@ -12,7 +13,7 @@ public interface IComplaintManager
     /// </summary>
     /// <param name="user">The user creating the entity.</param>
     /// <returns>The Complaint that was created.</returns>
-    public Complaint Create(ApplicationUser? user);
+    Complaint Create(ApplicationUser? user);
 
     /// <summary>
     /// Creates a new <see cref="ComplaintAction"/>.
@@ -22,6 +23,14 @@ public interface IComplaintManager
     /// <param name="user">The user creating the entity.</param>
     /// <returns>The Complaint ActionItem that was created.</returns>
     ComplaintAction CreateAction(Complaint complaint, ActionType actionType, ApplicationUser? user);
+
+    // Transitions
+
+    void Accept(Complaint complaint, ApplicationUser? user);
+
+    void Assign(Complaint complaint, Office office, ApplicationUser? owner, string? comment, ApplicationUser? user);
+
+    void Close(Complaint complaint, string? comment, ApplicationUser? user);
 
     /// <summary>
     /// Creates a new <see cref="ComplaintTransition"/>.

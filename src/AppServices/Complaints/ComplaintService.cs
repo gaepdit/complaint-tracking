@@ -87,27 +87,21 @@ public sealed class ComplaintService(
     public async Task<ComplaintCreateResult> CreateAsync(ComplaintCreateDto resource,
         IAttachmentService.AttachmentServiceConfig config, CancellationToken token = default)
     {
-        var user = await userService.GetCurrentUserAsync().ConfigureAwait(false);
-        var complaint = await CreateComplaintFromDtoAsync(resource, user, token).ConfigureAwait(false);
+        var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
+        var complaint = await CreateComplaintFromDtoAsync(resource, currentUser, token).ConfigureAwait(false);
         await complaintRepository.InsertAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
-        await AddTransitionAsync(complaint, TransitionType.New, user, token).ConfigureAwait(false);
-
+        await AddTransitionAsync(complaint, TransitionType.New, currentUser, token).ConfigureAwait(false);
         if (resource.CurrentOwnerId is not null)
-        {
-            await AddTransitionAsync(complaint, TransitionType.Assigned, user, token).ConfigureAwait(false);
-
-            if (complaint.CurrentOwner == user)
-                await AddTransitionAsync(complaint, TransitionType.Accepted, user, token).ConfigureAwait(false);
-        }
+            await AddAssignmentTransitionsAsync(complaint, currentUser, token).ConfigureAwait(false);
 
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
 
-        if (resource.Files is null || resource.Files.Count == 0) return ComplaintCreateResult.Success(complaint.Id);
-
+        // Process attachments
+        if (resource.Files is null || resource.Files.Count == 0)
+            return ComplaintCreateResult.Success(complaint.Id);
         var validateFilesResult = resource.Files.Validate(IAttachmentService.MaxSimultaneousUploads);
         if (!validateFilesResult.IsValid)
             return ComplaintCreateResult.Success(complaint.Id, validateFilesResult.ValidationErrors);
-
         var attachmentCount = await attachmentService.SaveAttachmentsAsync(complaint.Id, resource.Files, config, token)
             .ConfigureAwait(false);
         return ComplaintCreateResult.Success(complaint.Id, attachmentCount);
@@ -128,11 +122,7 @@ public sealed class ComplaintService(
         var complaint = await complaintRepository.GetAsync(id, token).ConfigureAwait(false);
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
 
-        // Update complaint properties
-        complaint.SetUpdater(currentUser?.Id);
-        complaint.Status = ComplaintStatus.UnderInvestigation;
-        complaint.CurrentOwnerAcceptedDate = DateTimeOffset.Now;
-
+        complaintManager.Accept(complaint, currentUser);
         await complaintRepository.UpdateAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
         await AddTransitionAsync(complaint, TransitionType.Accepted, currentUser, token).ConfigureAwait(false);
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
@@ -140,12 +130,30 @@ public sealed class ComplaintService(
 
     public async Task AssignAsync(ComplaintAssignDto resource, CancellationToken token = default)
     {
-        throw new NotImplementedException();
+        var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
+        var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
+        var office = await officeRepository.GetAsync(resource.OfficeId!.Value, token).ConfigureAwait(false);
+        var owner = resource.OwnerId is not null
+            ? await userService.FindUserAsync(resource.OwnerId).ConfigureAwait(false)
+            : null;
+
+        complaintManager.Assign(complaint, office, owner, resource.Comment, currentUser);
+        await complaintRepository.UpdateAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
+
+        if (resource.OwnerId is not null)
+            await AddAssignmentTransitionsAsync(complaint, currentUser, token).ConfigureAwait(false);
+        await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
     }
 
     public async Task CloseAsync(ComplaintClosureDto resource, CancellationToken token = default)
     {
-        throw new NotImplementedException();
+        var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
+        var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
+
+        complaintManager.Close(complaint, resource.Comment, currentUser);
+        await complaintRepository.UpdateAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
+        await AddTransitionAsync(complaint, TransitionType.Closed, currentUser, token).ConfigureAwait(false);
+        await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
     }
 
     public async Task ReopenAsync(ComplaintClosureDto resource, CancellationToken token = default)
@@ -179,7 +187,7 @@ public sealed class ComplaintService(
         await complaintRepository.UpdateAsync(complaint, token: token).ConfigureAwait(false);
     }
 
-    // Internal methods
+    // Private methods
     private async Task AddTransitionAsync(Complaint complaint, TransitionType type, ApplicationUser? user,
         CancellationToken token, string? comment = null) =>
         await complaintRepository
@@ -187,26 +195,25 @@ public sealed class ComplaintService(
                 token)
             .ConfigureAwait(false);
 
+    private async Task AddAssignmentTransitionsAsync(Complaint complaint, ApplicationUser? currentUser,
+        CancellationToken token)
+    {
+        await AddTransitionAsync(complaint, TransitionType.Assigned, currentUser, token).ConfigureAwait(false);
+        if (complaint.CurrentOwner != null && complaint.CurrentOwner == currentUser)
+            await AddTransitionAsync(complaint, TransitionType.Accepted, currentUser, token).ConfigureAwait(false);
+    }
+
     internal async Task<Complaint> CreateComplaintFromDtoAsync(ComplaintCreateDto resource,
         ApplicationUser? currentUser, CancellationToken token)
     {
         var complaint = complaintManager.Create(currentUser);
         await MapComplaintDetailsAsync(complaint, resource, token).ConfigureAwait(false);
 
-        // Properties: Assignment
-        complaint.CurrentOffice = await officeRepository.GetAsync(resource.CurrentOfficeId!.Value, token)
-            .ConfigureAwait(false);
-
-        if (resource.CurrentOwnerId == null) return complaint;
-
-        complaint.CurrentOwner = await userService.FindUserAsync(resource.CurrentOwnerId).ConfigureAwait(false);
-        complaint.CurrentOwnerAssignedDate = DateTimeOffset.Now;
-
-        if (resource.CurrentOwnerId == null || !resource.CurrentOwnerId.Equals(currentUser?.Id)) return complaint;
-
-        complaint.CurrentOwnerAcceptedDate = DateTimeOffset.Now;
-        complaint.Status = ComplaintStatus.UnderInvestigation;
-
+        var office = await officeRepository.GetAsync(resource.CurrentOfficeId!.Value, token).ConfigureAwait(false);
+        var owner = resource.CurrentOwnerId is not null
+            ? await userService.FindUserAsync(resource.CurrentOwnerId).ConfigureAwait(false)
+            : null;
+        complaintManager.Assign(complaint, office, owner, comment: null, currentUser);
         return complaint;
     }
 
