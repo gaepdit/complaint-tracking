@@ -26,15 +26,24 @@ public interface IComplaintService : IDisposable, IAsyncDisposable
     Task<IPaginatedResult<ComplaintSearchResultDto>> SearchAsync(ComplaintSearchDto spec, PaginatedRequest paging,
         CancellationToken token = default);
 
-    // Staff write methods
+    // Staff complaint write methods
 
     Task<ComplaintCreateResult> CreateAsync(ComplaintCreateDto resource,
         IAttachmentService.AttachmentServiceConfig config, CancellationToken token = default);
 
     Task UpdateAsync(int id, ComplaintUpdateDto resource, CancellationToken token = default);
 
+    // Complaint transitions
 
-    // Management write methods
+    Task AcceptAsync(int id, CancellationToken token = default);
+    // Task ApproveAsync(int id, CancellationToken token = default);
+    // Task AssignAsync(int id, CancellationToken token = default);
+    // Task ReopenAsync(int id, CancellationToken token = default);
+    // Task RequestReviewAsync(int id, CancellationToken token = default);
+    // Task ReturnAsync(int id, CancellationToken token = default);
+
+    // Management complaint write methods
+
     Task DeleteAsync(int complaintId, CancellationToken token = default);
     Task RestoreAsync(int complaintId, CancellationToken token = default);
 }

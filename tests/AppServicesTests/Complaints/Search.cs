@@ -29,8 +29,7 @@ public class Search
             .Returns(count);
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
-            Substitute.For<IComplaintTransitionManager>(), Substitute.For<IAttachmentService>(),
-            AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
+            Substitute.For<IAttachmentService>(), AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
 
         var result = await appService.SearchAsync(new ComplaintSearchDto(), paging, CancellationToken.None);
 
@@ -54,8 +53,7 @@ public class Search
             .Returns(count);
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
-            Substitute.For<IComplaintTransitionManager>(), Substitute.For<IAttachmentService>(),
-            AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
+            Substitute.For<IAttachmentService>(), AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
 
         var result = await appService.SearchAsync(new ComplaintSearchDto(), paging, CancellationToken.None);
 

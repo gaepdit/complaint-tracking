@@ -17,7 +17,7 @@ public class DetailsPagePostNewActionTests
         var result = await page.OnPostNewActionAsync(null, dto, CancellationToken.None);
 
         // Assert
-        result.Should().BeOfType<RedirectToPageResult>();
+        result.Should().BeOfType<BadRequestResult>();
     }
 
     [Test]

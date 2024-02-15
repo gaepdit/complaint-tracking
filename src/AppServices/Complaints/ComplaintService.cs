@@ -17,12 +17,13 @@ public sealed class ComplaintService(
     IComplaintManager complaintManager,
     IConcernRepository concernRepository,
     IOfficeRepository officeRepository,
-    IComplaintTransitionManager transitionManager,
     IAttachmentService attachmentService,
     IMapper mapper,
     IUserService userService)
     : IComplaintService
 {
+    // Public read methods
+
     public async Task<ComplaintPublicViewDto?> FindPublicAsync(int id, CancellationToken token = default)
     {
         var complaint = await complaintRepository
@@ -48,6 +49,7 @@ public sealed class ComplaintService(
         return new PaginatedResult<ComplaintSearchResultDto>(list, count, paging);
     }
 
+    // Staff read methods
 
     public async Task<ComplaintViewDto?> FindAsync(int id, bool includeDeletedActions = false,
         CancellationToken token = default)
@@ -79,6 +81,8 @@ public sealed class ComplaintService(
         return new PaginatedResult<ComplaintSearchResultDto>(list, count, paging);
     }
 
+    // Staff complaint write methods
+
     public async Task<ComplaintCreateResult> CreateAsync(ComplaintCreateDto resource,
         IAttachmentService.AttachmentServiceConfig config, CancellationToken token = default)
     {
@@ -90,6 +94,7 @@ public sealed class ComplaintService(
         if (resource.CurrentOwnerId is not null)
         {
             await AddTransitionAsync(complaint, TransitionType.Assigned, user, token).ConfigureAwait(false);
+
             if (complaint.CurrentOwner == user)
                 await AddTransitionAsync(complaint, TransitionType.Accepted, user, token).ConfigureAwait(false);
         }
@@ -111,20 +116,54 @@ public sealed class ComplaintService(
     {
         var complaint = await complaintRepository.GetAsync(id, token).ConfigureAwait(false);
         complaint.SetUpdater((await userService.GetCurrentUserAsync().ConfigureAwait(false))?.Id);
-        await FillInComplaintDetailsAsync(complaint, resource, token).ConfigureAwait(false);
+        await MapComplaintDetailsAsync(complaint, resource, token).ConfigureAwait(false);
         await complaintRepository.UpdateAsync(complaint, token: token).ConfigureAwait(false);
     }
 
+    // Complaint transitions
+
+    public async Task AcceptAsync(int id, CancellationToken token = default)
+    {
+        var complaint = await complaintRepository.GetAsync(id, token).ConfigureAwait(false);
+        var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
+
+        // Update complaint properties
+        complaint.SetUpdater(currentUser?.Id);
+        complaint.Status = ComplaintStatus.UnderInvestigation;
+        complaint.CurrentOwnerAcceptedDate = DateTimeOffset.Now;
+
+        await complaintRepository.UpdateAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
+        await AddTransitionAsync(complaint, TransitionType.Accepted, currentUser, token).ConfigureAwait(false);
+        await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
+    }
+
+    // Management complaint write methods
+
+    public async Task DeleteAsync(int complaintId, CancellationToken token = default)
+    {
+        var complaint = await complaintRepository.GetAsync(complaintId, token).ConfigureAwait(false);
+        complaint.SetDeleted((await userService.GetCurrentUserAsync().ConfigureAwait(false))?.Id);
+        await complaintRepository.UpdateAsync(complaint, token: token).ConfigureAwait(false);
+    }
+
+    public async Task RestoreAsync(int complaintId, CancellationToken token = default)
+    {
+        var complaint = await complaintRepository.GetAsync(complaintId, token).ConfigureAwait(false);
+        complaint.SetNotDeleted();
+        await complaintRepository.UpdateAsync(complaint, token: token).ConfigureAwait(false);
+    }
+
+    // Internal methods
     private async Task AddTransitionAsync(
         Complaint complaint, TransitionType type, ApplicationUser? user, CancellationToken token) =>
-        await complaintRepository.InsertTransitionAsync(transitionManager.Create(complaint, type, user, user?.Id),
+        await complaintRepository.InsertTransitionAsync(complaintManager.CreateTransition(complaint, type, user),
             autoSave: false, token).ConfigureAwait(false);
 
     internal async Task<Complaint> CreateComplaintFromDtoAsync(
         ComplaintCreateDto resource, ApplicationUser? currentUser, CancellationToken token)
     {
         var complaint = complaintManager.Create(currentUser);
-        await FillInComplaintDetailsAsync(complaint, resource, token).ConfigureAwait(false);
+        await MapComplaintDetailsAsync(complaint, resource, token).ConfigureAwait(false);
 
         // Properties: Assignment
         complaint.CurrentOffice = await officeRepository.GetAsync(resource.CurrentOfficeId!.Value, token)
@@ -143,7 +182,7 @@ public sealed class ComplaintService(
         return complaint;
     }
 
-    private async Task FillInComplaintDetailsAsync(Complaint complaint, IComplaintDtoDetails resource,
+    private async Task MapComplaintDetailsAsync(Complaint complaint, IComplaintDtoDetails resource,
         CancellationToken token)
     {
         // Properties: Meta-data
@@ -184,19 +223,7 @@ public sealed class ComplaintService(
         complaint.SourceEmail = resource.SourceEmail;
     }
 
-    public async Task DeleteAsync(int complaintId, CancellationToken token = default)
-    {
-        var complaint = await complaintRepository.GetAsync(complaintId, token).ConfigureAwait(false);
-        complaint.SetDeleted((await userService.GetCurrentUserAsync().ConfigureAwait(false))?.Id);
-        await complaintRepository.UpdateAsync(complaint, token: token).ConfigureAwait(false);
-    }
-
-    public async Task RestoreAsync(int complaintId, CancellationToken token = default)
-    {
-        var complaint = await complaintRepository.GetAsync(complaintId, token).ConfigureAwait(false);
-        complaint.SetNotDeleted();
-        await complaintRepository.UpdateAsync(complaint, token: token).ConfigureAwait(false);
-    }
+    #region IDisposable,  IAsyncDisposable
 
     public void Dispose()
     {
@@ -211,4 +238,6 @@ public sealed class ComplaintService(
         await concernRepository.DisposeAsync().ConfigureAwait(false);
         await officeRepository.DisposeAsync().ConfigureAwait(false);
     }
+
+    #endregion
 }

@@ -65,13 +65,30 @@ public class DetailsModel(
     }
 
     /// <summary>
+    /// OnPostAccept is used for the current user to accept the Complaint.
+    /// </summary>
+    public async Task<IActionResult> OnPostAcceptAsync(int? id, CancellationToken token)
+    {
+        if (id is null) return BadRequest();
+
+        var complaintView = await complaintService.FindAsync(id.Value, includeDeletedActions: true, token);
+        if (complaintView is null || complaintView.IsDeleted) return BadRequest();
+        
+        await SetPermissionsAsync(complaintView);
+        if (!UserCan[ComplaintOperation.Accept]) return BadRequest();
+
+        await complaintService.AcceptAsync(id.Value, token);
+        TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "Complaint accepted.");
+        return RedirectToPage("Details", routeValues: new { id });
+    }
+
+    /// <summary>
     /// PostNewAction is used to add a new Action for this Complaint.
     /// </summary>
     public async Task<IActionResult> OnPostNewActionAsync(int? id, ComplaintActionCreateDto newAction,
         CancellationToken token)
     {
-        if (id is null) return RedirectToPage("../Index");
-        if (newAction.ComplaintId != id) return BadRequest();
+        if (id is null || newAction.ComplaintId != id) return BadRequest();
 
         var complaintView = await complaintService.FindAsync(id.Value, includeDeletedActions: true, token);
         if (complaintView is null || complaintView.IsDeleted) return BadRequest();
@@ -101,8 +118,7 @@ public class DetailsModel(
     public async Task<IActionResult> OnPostUploadFilesAsync(int? id, AttachmentsCreateDto newAttachments,
         CancellationToken token)
     {
-        if (id is null) return RedirectToPage("../Index");
-        if (newAttachments.ComplaintId != id) return BadRequest();
+        if (id is null || newAttachments.ComplaintId != id) return BadRequest();
 
         var complaintView = await complaintService.FindAsync(id.Value, true, token);
         if (complaintView is null || complaintView.IsDeleted) return BadRequest();

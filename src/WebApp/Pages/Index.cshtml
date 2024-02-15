@@ -45,7 +45,7 @@ else
                         <a asp-page="/Public/Complaints/Index" asp-route-id="3">Another closed complaint</a>
                     </li>
                     <li>
-                        <a asp-page="/Public/Complaints/Index" asp-route-id="4">Non-existent complaint ID (404)</a>
+                        <a asp-page="/Public/Complaints/Index" asp-route-id="0">Non-existent complaint ID (404)</a>
                     </li>
                     <li>
                         <a asp-page="/Public/Complaints/Index" asp-route-id="5">Deleted complaint (404)</a>
@@ -69,13 +69,16 @@ else
                         <a asp-page="/Staff/Complaints/Details" asp-route-id="2">Open complaint</a>
                     </li>
                     <li>
-                        <a asp-page="/Staff/Complaints/Details" asp-route-id="7">Open complaint under investigation</a>
+                        <a asp-page="/Staff/Complaints/Details" asp-route-id="7">Open complaint: under investigation</a>
+                    </li>
+                    <li>
+                        <a asp-page="/Staff/Complaints/Details" asp-route-id="4">Open complaint: ready to accept</a>
                     </li>
                     <li>
                         <a asp-page="/Staff/Complaints/Details" asp-route-id="3">Another closed complaint</a>
                     </li>
                     <li>
-                        <a asp-page="/Staff/Complaints/Details" asp-route-id="4">Non-existent complaint ID (404)</a>
+                        <a asp-page="/Staff/Complaints/Details" asp-route-id="0">Non-existent complaint ID (404)</a>
                     </li>
                     <li>
                         <a asp-page="/Staff/Complaints/Details" asp-route-id="5">Deleted complaint</a>

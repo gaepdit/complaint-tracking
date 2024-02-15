@@ -10,7 +10,7 @@
     var alertClass = Model.ComplaintView.ComplaintClosed ? "alert-secondary" : "alert-info";
 }
 
-@* TODO: Remove when complaint actions have all been implemented: *@
+@* TODO: Remove when complaint transitions have all been implemented: *@
 @* ReSharper disable Mvc.ActionNotResolved *@
 
 <div class="container-full">
@@ -86,9 +86,8 @@
 <div class="d-print-none mb-2">
     @if (Model.UserCan[ComplaintOperation.Accept])
     {
-        <form asp-action="Accept">
-            <button id="AcceptSubmitButton" type="submit" class="btn btn-primary me-2">Accept</button>
-            @Html.HiddenFor(model => model.ComplaintView.Id)
+        <form asp-page-handler="Accept" class="d-inline-block">
+            <button type="submit" class="btn btn-primary me-2">Accept</button>
         </form>
     }
     @if (Model.UserCan[ComplaintOperation.Review])

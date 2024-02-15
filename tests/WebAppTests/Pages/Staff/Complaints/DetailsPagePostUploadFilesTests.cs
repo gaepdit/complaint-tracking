@@ -17,7 +17,7 @@ public class DetailsPagePostUploadFilesTests
         var result = await page.OnPostUploadFilesAsync(null, dto, CancellationToken.None);
 
         // Assert
-        result.Should().BeOfType<RedirectToPageResult>();
+        result.Should().BeOfType<BadRequestResult>();
     }
 
     [Test]
