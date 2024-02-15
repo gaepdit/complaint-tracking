@@ -40,10 +40,10 @@ public static class DataPersistence
             }
             else
             {
-                services.AddDbContext<AppDbContext>(opts =>
+                services.AddDbContext<AppDbContext>(dbContextOpts =>
                 {
-                    opts.UseSqlServer(connectionString);
-                    opts.ConfigureWarnings(builder =>
+                    dbContextOpts.UseSqlServer(connectionString, sqlServerOpts => sqlServerOpts.EnableRetryOnFailure());
+                    dbContextOpts.ConfigureWarnings(builder =>
                         builder.Throw(RelationalEventId.MultipleCollectionIncludeWarning));
                 });
             }
