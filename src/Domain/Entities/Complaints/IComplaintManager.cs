@@ -32,6 +32,8 @@ public interface IComplaintManager
 
     void Close(Complaint complaint, string? comment, ApplicationUser? user);
 
+    void Reopen(Complaint complaint, ApplicationUser? user);
+
     /// <summary>
     /// Creates a new <see cref="ComplaintTransition"/>.
     /// </summary>

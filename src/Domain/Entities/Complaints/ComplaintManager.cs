@@ -67,6 +67,15 @@ public class ComplaintManager(IComplaintRepository repository) : IComplaintManag
         complaint.ReviewComments = comment;
     }
 
+    public void Reopen(Complaint complaint, ApplicationUser? user)
+    {
+        complaint.SetUpdater(user?.Id);
+        complaint.Status = ComplaintStatus.UnderInvestigation;
+        complaint.ComplaintClosed = false;
+        complaint.ComplaintClosedDate = null;
+        complaint.ReviewedBy = null;
+    }
+
     public ComplaintTransition CreateTransition(Complaint complaint, TransitionType type, ApplicationUser? user,
         string? comment)
     {
@@ -81,6 +90,7 @@ public class ComplaintManager(IComplaintRepository repository) : IComplaintManag
                 break;
 
             case TransitionType.Assigned:
+            case TransitionType.Reopened:
                 item.TransferredToUser = complaint.CurrentOwner;
                 item.TransferredToOffice = complaint.CurrentOffice;
                 break;
@@ -93,13 +103,6 @@ public class ComplaintManager(IComplaintRepository repository) : IComplaintManag
                 // TODO
                 break;
 
-            case TransitionType.Closed:
-                // No additional data.
-                break;
-
-            case TransitionType.Reopened:
-                // TODO
-                break;
 
             case TransitionType.Deleted:
                 // TODO
@@ -109,6 +112,7 @@ public class ComplaintManager(IComplaintRepository repository) : IComplaintManag
                 // TODO
                 break;
 
+            case TransitionType.Closed:
             case TransitionType.Accepted:
                 // No additional data.
                 break;

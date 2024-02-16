@@ -158,7 +158,13 @@ public sealed class ComplaintService(
 
     public async Task ReopenAsync(ComplaintClosureDto resource, CancellationToken token = default)
     {
-        throw new NotImplementedException();
+        var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
+        var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
+
+        complaintManager.Reopen(complaint, currentUser);
+        await complaintRepository.UpdateAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
+        await AddTransitionAsync(complaint, TransitionType.Reopened, currentUser, token).ConfigureAwait(false);
+        await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
     }
 
     public async Task RequestReviewAsync(ComplaintRequestReviewDto resource, CancellationToken token = default)
