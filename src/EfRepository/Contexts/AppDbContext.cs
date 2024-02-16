@@ -60,8 +60,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
         // Complaint Transition
         var transition = builder.Entity<ComplaintTransition>();
         transition.Navigation(e => e.CommittedByUser).AutoInclude();
-        transition.Navigation(e => e.TransferredFromOffice).AutoInclude();
-        transition.Navigation(e => e.TransferredFromUser).AutoInclude();
         transition.Navigation(e => e.TransferredToOffice).AutoInclude();
         transition.Navigation(e => e.TransferredToUser).AutoInclude();
 

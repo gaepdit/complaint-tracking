@@ -23,7 +23,6 @@ internal static class ComplaintTransitionData
             UserData.GetUsers.ElementAt(1))
         {
             CommittedDate = DateTimeOffset.Now.AddDays(-10),
-            TransferredFromOffice = OfficeData.GetOffices.ElementAt(0),
             TransferredToOffice = OfficeData.GetOffices.ElementAt(0),
             TransferredToUser = UserData.GetUsers.ElementAt(2),
         },
@@ -33,8 +32,6 @@ internal static class ComplaintTransitionData
             UserData.GetUsers.ElementAt(2))
         {
             CommittedDate = DateTimeOffset.Now.AddDays(-9),
-            TransferredFromOffice = OfficeData.GetOffices.ElementAt(0),
-            TransferredFromUser = UserData.GetUsers.ElementAt(2),
             TransferredToOffice = OfficeData.GetOffices.ElementAt(0),
             TransferredToUser = UserData.GetUsers.ElementAt(1),
         },
@@ -51,8 +48,6 @@ internal static class ComplaintTransitionData
             UserData.GetUsers.ElementAt(1))
         {
             CommittedDate = DateTimeOffset.Now.AddDays(-7),
-            TransferredFromOffice = OfficeData.GetOffices.ElementAt(0),
-            TransferredFromUser = UserData.GetUsers.ElementAt(1),
             TransferredToOffice = OfficeData.GetOffices.ElementAt(0),
             TransferredToUser = UserData.GetUsers.ElementAt(2),
         },
@@ -62,8 +57,6 @@ internal static class ComplaintTransitionData
             UserData.GetUsers.ElementAt(2))
         {
             CommittedDate = DateTimeOffset.Now.AddDays(-6),
-            TransferredFromOffice = OfficeData.GetOffices.ElementAt(0),
-            TransferredFromUser = UserData.GetUsers.ElementAt(2),
             TransferredToOffice = OfficeData.GetOffices.ElementAt(0),
             TransferredToUser = UserData.GetUsers.ElementAt(1),
         },
@@ -80,8 +73,6 @@ internal static class ComplaintTransitionData
             UserData.GetUsers.ElementAt(1))
         {
             CommittedDate = DateTimeOffset.Now.AddDays(-4),
-            TransferredFromOffice = OfficeData.GetOffices.ElementAt(0),
-            TransferredFromUser = UserData.GetUsers.ElementAt(1),
             TransferredToOffice = OfficeData.GetOffices.ElementAt(0),
             TransferredToUser = UserData.GetUsers.ElementAt(2),
         },

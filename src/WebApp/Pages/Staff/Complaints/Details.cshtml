@@ -373,7 +373,7 @@
                 @if (Model.UserCan[ComplaintOperation.EditAttachments])
                 {
                     <td>
-                        <a asp-page="DeleteAttachment" asp-route-attachmentId="@attachment.Id.ToString()" class="btn btn-sm btn-outline-danger" >Delete</a>
+                        <a asp-page="DeleteAttachment" asp-route-attachmentId="@attachment.Id.ToString()" class="btn btn-sm btn-outline-danger">Delete</a>
                     </td>
                 }
             </tr>
@@ -442,10 +442,9 @@ else
             <thead>
             <tr>
                 <th scope="col">Action&nbsp;Date</th>
-                <th scope="col">Committed&nbsp;By</th>
                 <th scope="col">Action</th>
-                <th scope="col">From</th>
-                <th scope="col">To</th>
+                <th scope="col">Committed&nbsp;By</th>
+                <th scope="col">Transferred&nbsp;To</th>
                 <th scope="col">Comment</th>
             </tr>
             </thead>
@@ -454,14 +453,14 @@ else
             {
                 <tr>
                     <td>@Html.DisplayFor(_ => item.CommittedDate, DisplayTemplate.ShortDateTimeNoBreak)</td>
-                    <td>@Html.DisplayFor(_ => item.CommittedByUser, DisplayTemplate.NameOrNotEntered)</td>
                     <td>@item.TransitionType.GetDisplayName()</td>
-                    <td>
-                        @Html.DisplayFor(_ => item.TransferredFromUser, DisplayTemplate.NameOrBlank)
-                        @Html.DisplayFor(_ => item.TransferredFromOffice, DisplayTemplate.NameOrBlank)
-                    </td>
+                    <td>@Html.DisplayFor(_ => item.CommittedByUser, DisplayTemplate.NameOrNotEntered)</td>
                     <td>
                         @Html.DisplayFor(_ => item.TransferredToUser, DisplayTemplate.NameOrBlank)
+                        @if (item is { TransferredToUser: not null, TransferredToOffice: not null })
+                        {
+                            <br />
+                        }
                         @Html.DisplayFor(_ => item.TransferredToOffice, DisplayTemplate.NameOrBlank)
                     </td>
                     <td class="text-break text-pre-line">@Html.DisplayFor(_ => item.Comment)</td>

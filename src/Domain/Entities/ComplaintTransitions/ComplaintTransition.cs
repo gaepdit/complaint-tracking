@@ -24,19 +24,10 @@ public class ComplaintTransition : AuditableEntity
     // Properties
 
     public Complaint Complaint { get; private init; } = default!;
-
     public TransitionType TransitionType { get; private init; }
-
     public DateTimeOffset CommittedDate { get; init; } = DateTimeOffset.Now;
-
     public ApplicationUser? CommittedByUser { get; private init; }
-
-    public ApplicationUser? TransferredFromUser { get; set; }
-
-    public Office? TransferredFromOffice { get; set; }
-
     public ApplicationUser? TransferredToUser { get; set; }
-
     public Office? TransferredToOffice { get; set; }
 
     [StringLength(4000)]
