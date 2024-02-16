@@ -1,0 +1,45 @@
+﻿@page "{id:int?}"
+@using Cts.WebApp.Pages.Shared.DisplayTemplates
+@using Cts.WebApp.Pages.Shared.EditorTemplates
+@using GaEpd.AppLibrary.Extensions
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model ApproveModel
+
+@{
+    ViewData["Title"] = $"Approve and Close Complaint ID {Model.ComplaintClosure.ComplaintId}";
+    ViewData["NoAnchors"] = "True";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="p-3 border rounded-3">
+    <div class="container small">
+        <dl class="row">
+            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(m => m.ComplaintView.Status)</dt>
+            <dd class="col-md-8 col-lg-9">@Model.ComplaintView.Status.GetDisplayName()</dd>
+            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(m => m.ComplaintView.CurrentOfficeName)</dt>
+            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(m => m.ComplaintView.CurrentOfficeName)</dd>
+            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(m => m.ComplaintView.CurrentOwner)</dt>
+            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(m => m.ComplaintView.CurrentOwner, DisplayTemplate.FullStaffView)</dd>
+            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(m => m.ComplaintView.PrimaryConcernName)</dt>
+            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(m => m.ComplaintView.PrimaryConcernName)</dd>
+            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(m => m.ComplaintView.SecondaryConcernName)</dt>
+            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(m => m.ComplaintView.SecondaryConcernName)</dd>
+            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(m => m.ComplaintView.ComplaintCounty)</dt>
+            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(m => m.ComplaintView.ComplaintCounty)</dd>
+            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(m => m.ComplaintView.ComplaintNature)</dt>
+            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(m => m.ComplaintView.ComplaintNature, DisplayTemplate.TruncateText)</dd>
+        </dl>
+    </div>
+
+    <form method="post">
+        <div class="mb-3">
+            @Html.EditorFor(e => e.ComplaintClosure.Comment, EditorTemplate.Textarea, new { Rows = 3 })
+        </div>
+        <div class="mt-3 mb-1">
+            <button type="submit" class="btn btn-primary col-5 col-sm-3 col-lg-2 me-2">Approve</button>
+            <a asp-page="Details" asp-route-id="@Model.ComplaintClosure.ComplaintId.ToString()" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+        <input asp-for="ComplaintClosure.ComplaintId" type="hidden" />
+    </form>
+</div>

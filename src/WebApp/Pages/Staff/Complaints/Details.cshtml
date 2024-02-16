@@ -91,24 +91,24 @@
     }
     @if (Model.UserCan[ComplaintOperation.Review])
     {
-        <a asp-action="Approve" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Close Complaint (approved)</a>
-        <a asp-action="Return" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Return to staff (not approved)</a>
+        <a asp-page="Approve" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Close Complaint (approved)</a>
+        <a asp-page="Return" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Return to staff (not approved)</a>
     }
     @if (Model.UserCan[ComplaintOperation.Assign])
     {
-        <a asp-action="Assign" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Assign</a>
+        <a asp-page="Assign" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Assign</a>
     }
     @if (Model.UserCan[ComplaintOperation.RequestReview])
     {
-        <a asp-action="RequestReview" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Submit for review</a>
+        <a asp-page="RequestReview" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Submit for review</a>
     }
     @if (Model.UserCan[ComplaintOperation.Reassign])
     {
-        <a asp-action="Assign" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Transfer/reassign</a>
+        <a asp-page="Assign" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Transfer/reassign</a>
     }
     @if (Model.UserCan[ComplaintOperation.Reopen])
     {
-        <a asp-action="Reopen" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Reopen</a>
+        <a asp-page="Reopen" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Reopen</a>
     }
 </div>
 
