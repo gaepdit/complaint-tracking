@@ -186,30 +186,39 @@ public sealed class ComplaintService(
         await complaintRepository.UpdateAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
         await AddTransitionAsync(complaint, TransitionType.ReturnedByReviewer, currentUser, token)
             .ConfigureAwait(false);
-        if (complaint.CurrentOwner != null && 
+        if (complaint.CurrentOwner != null &&
             complaint.CurrentOwner != previousOwner &&
             complaint.CurrentOwner == currentUser)
             await AddTransitionAsync(complaint, TransitionType.Accepted, currentUser, token).ConfigureAwait(false);
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
     }
 
-    // Management complaint write methods
-
-    public async Task DeleteAsync(int complaintId, CancellationToken token = default)
+    public async Task DeleteAsync(ComplaintClosureDto resource, CancellationToken token = default)
     {
-        var complaint = await complaintRepository.GetAsync(complaintId, token).ConfigureAwait(false);
-        complaint.SetDeleted((await userService.GetCurrentUserAsync().ConfigureAwait(false))?.Id);
-        await complaintRepository.UpdateAsync(complaint, token: token).ConfigureAwait(false);
+        var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
+        var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
+
+        complaintManager.Delete(complaint, resource.Comment, currentUser);
+        await complaintRepository.UpdateAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
+        await AddTransitionAsync(complaint, TransitionType.Deleted, currentUser, token, resource.Comment)
+            .ConfigureAwait(false);
+        await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
     }
 
-    public async Task RestoreAsync(int complaintId, CancellationToken token = default)
+    public async Task RestoreAsync(ComplaintClosureDto resource, CancellationToken token = default)
     {
-        var complaint = await complaintRepository.GetAsync(complaintId, token).ConfigureAwait(false);
-        complaint.SetNotDeleted();
-        await complaintRepository.UpdateAsync(complaint, token: token).ConfigureAwait(false);
+        var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
+        var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
+
+        complaintManager.Restore(complaint, currentUser);
+        await complaintRepository.UpdateAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
+        await AddTransitionAsync(complaint, TransitionType.Restored, currentUser, token, resource.Comment)
+            .ConfigureAwait(false);
+        await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
     }
 
     // Private methods
+
     private async Task AddTransitionAsync(Complaint complaint, TransitionType type, ApplicationUser? user,
         CancellationToken token, string? comment = null) =>
         await complaintRepository

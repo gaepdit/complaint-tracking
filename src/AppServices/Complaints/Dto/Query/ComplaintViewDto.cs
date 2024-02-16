@@ -1,4 +1,4 @@
-using Cts.AppServices.Attachments.Dto;
+﻿using Cts.AppServices.Attachments.Dto;
 using Cts.AppServices.ComplaintActions.Dto;
 using Cts.AppServices.Offices;
 using Cts.AppServices.Staff.Dto;
@@ -144,7 +144,7 @@ public record ComplaintViewDto
     public bool IsDeleted { get; init; }
 
     [Display(Name = "Deleted By")]
-    public StaffViewDto? DeletedBy { get; set; }
+    public StaffViewDto? DeletedBy { get; init; }
 
     [Display(Name = "Date Deleted")]
     public DateTimeOffset? DeletedAt { get; init; }

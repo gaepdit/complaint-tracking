@@ -1,4 +1,4 @@
-﻿using Cts.Domain.Entities.ActionTypes;
+using Cts.Domain.Entities.ActionTypes;
 using Cts.Domain.Entities.ComplaintActions;
 using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Entities.Offices;
@@ -75,6 +75,21 @@ public interface IComplaintManager
     /// <param name="complaint">The Complaint for which a review was requested.</param>
     /// <param name="user">The user committing the change.</param>
     void Return(Complaint complaint, ApplicationUser? user);
+
+    /// <summary>
+    /// Updates the properties of a <see cref="Complaint"/> to indicate that it was deleted.
+    /// </summary>
+    /// <param name="complaint">The Complaint which was deleted.</param>
+    /// <param name="comment">A comment entered by the user committing the change.</param>
+    /// <param name="user">The user committing the change.</param>
+    void Delete(Complaint complaint, string? comment, ApplicationUser? user);
+
+    /// <summary>
+    /// Updates the properties of a deleted <see cref="Complaint"/> to indicate that it was restored.
+    /// </summary>
+    /// <param name="complaint">The Complaint which was restored.</param>
+    /// <param name="user">The user committing the change.</param>
+    void Restore(Complaint complaint, ApplicationUser? user);
 
     /// <summary>
     /// Creates a new <see cref="ComplaintTransition"/>.

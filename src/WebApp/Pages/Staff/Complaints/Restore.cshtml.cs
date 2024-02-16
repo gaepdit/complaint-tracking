@@ -13,7 +13,7 @@ public class RestoreModel(IComplaintService complaintService, IAuthorizationServ
     : PageModel
 {
     [BindProperty]
-    public int ComplaintId { get; set; }
+    public ComplaintClosureDto ComplaintClosure { get; set; } = default!;
 
     public ComplaintViewDto ComplaintView { get; private set; } = default!;
 
@@ -30,11 +30,11 @@ public class RestoreModel(IComplaintService complaintService, IAuthorizationServ
         {
             TempData.SetDisplayMessage(DisplayMessage.AlertContext.Warning,
                 "Complaint cannot be restored because it is not deleted.");
-            return RedirectToPage("Details", routeValues: new { id = ComplaintId });
+            return RedirectToPage("Details", routeValues: new { id });
         }
 
+        ComplaintClosure = new ComplaintClosureDto(id.Value);
         ComplaintView = complaintView;
-        ComplaintId = id.Value;
         return Page();
     }
 
@@ -42,13 +42,13 @@ public class RestoreModel(IComplaintService complaintService, IAuthorizationServ
     {
         if (!ModelState.IsValid) return BadRequest();
 
-        var complaintView = await complaintService.FindAsync(ComplaintId);
+        var complaintView = await complaintService.FindAsync(ComplaintClosure.ComplaintId);
         if (complaintView is null || !complaintView.IsDeleted || !await UserCanManageDeletionsAsync(complaintView))
             return BadRequest();
 
-        await complaintService.RestoreAsync(ComplaintId);
+        await complaintService.RestoreAsync(ComplaintClosure);
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "Complaint successfully restored.");
-        return RedirectToPage("Details", new { id = ComplaintId });
+        return RedirectToPage("Details", new { id = ComplaintClosure.ComplaintId });
     }
 
     private async Task<bool> UserCanManageDeletionsAsync(ComplaintViewDto item) =>

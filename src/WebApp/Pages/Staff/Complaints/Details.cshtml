@@ -61,7 +61,6 @@
         This Complaint was assigned to you on @Html.DisplayFor(model => model.ComplaintView.CurrentOwnerAssignedDate, DisplayTemplate.LongDateTimeOrNotEntered).
         @if (Model.ComplaintView.CurrentOwnerAcceptedDate != null)
         {
-            <br />
             @:You accepted it on @Html.DisplayFor(model => model.ComplaintView.CurrentOwnerAcceptedDate, DisplayTemplate.LongDateTimeOrNotEntered).
         }
     </div>

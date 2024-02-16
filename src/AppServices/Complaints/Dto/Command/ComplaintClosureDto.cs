@@ -1,7 +1,7 @@
 ﻿namespace Cts.AppServices.Complaints;
 
-// Used for approving/closing and reopening complaints.
+// Used for closing, reopening, deleting, and restoring complaints.
 public record ComplaintClosureDto(int ComplaintId)
 {
-    public string Comment { get; init; } = string.Empty;
+    public string? Comment { get; init; } = string.Empty;
 }

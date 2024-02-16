@@ -13,7 +13,7 @@ public class DeleteModel(IComplaintService complaintService, IAuthorizationServi
     : PageModel
 {
     [BindProperty]
-    public int ComplaintId { get; set; }
+    public ComplaintClosureDto ComplaintClosure { get; set; } = default!;
 
     public ComplaintViewDto ComplaintView { get; private set; } = default!;
 
@@ -30,11 +30,11 @@ public class DeleteModel(IComplaintService complaintService, IAuthorizationServi
         {
             TempData.SetDisplayMessage(DisplayMessage.AlertContext.Warning,
                 "Complaint cannot be deleted because it is already deleted.");
-            return RedirectToPage("Details", routeValues: new { id = ComplaintId });
+            return RedirectToPage("Details", routeValues: new { id });
         }
 
+        ComplaintClosure = new ComplaintClosureDto(id.Value);
         ComplaintView = complaintView;
-        ComplaintId = id.Value;
         return Page();
     }
 
@@ -42,13 +42,13 @@ public class DeleteModel(IComplaintService complaintService, IAuthorizationServi
     {
         if (!ModelState.IsValid) return BadRequest();
 
-        var complaintView = await complaintService.FindAsync(ComplaintId);
+        var complaintView = await complaintService.FindAsync(ComplaintClosure.ComplaintId);
         if (complaintView is null || complaintView.IsDeleted || !await UserCanManageDeletionsAsync(complaintView))
             return BadRequest();
 
-        await complaintService.DeleteAsync(ComplaintId);
+        await complaintService.DeleteAsync(ComplaintClosure);
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "Complaint successfully deleted.");
-        return RedirectToPage("Details", new { id = ComplaintId });
+        return RedirectToPage("Details", new { id = ComplaintClosure.ComplaintId });
     }
 
     private async Task<bool> UserCanManageDeletionsAsync(ComplaintViewDto item) =>

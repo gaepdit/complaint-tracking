@@ -1,4 +1,4 @@
-﻿using Cts.Domain.Entities.ActionTypes;
+using Cts.Domain.Entities.ActionTypes;
 using Cts.Domain.Entities.ComplaintActions;
 using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Entities.Offices;
@@ -91,41 +91,47 @@ public class ComplaintManager(IComplaintRepository repository) : IComplaintManag
         complaint.ReviewComments = null;
     }
 
+    public void Delete(Complaint complaint, string? comment, ApplicationUser? user)
+    {
+        complaint.SetDeleted(user?.Id);
+        complaint.DeleteComments = comment;
+    }
+
+    public void Restore(Complaint complaint, ApplicationUser? user)
+    {
+        complaint.SetNotDeleted();
+        complaint.DeleteComments = null;
+    }
+
     public ComplaintTransition CreateTransition(Complaint complaint, TransitionType type, ApplicationUser? user,
         string? comment)
     {
-        var item = new ComplaintTransition(Guid.NewGuid(), complaint, type, user);
-        item.SetCreator(user?.Id);
-        item.Comment = comment;
+        var transition = new ComplaintTransition(Guid.NewGuid(), complaint, type, user);
+        transition.SetCreator(user?.Id);
+        transition.Comment = comment;
 
         switch (type)
         {
             case TransitionType.New:
-                item.TransferredToOffice = complaint.CurrentOffice;
+                transition.TransferredToOffice = complaint.CurrentOffice;
                 break;
 
             case TransitionType.Assigned:
             case TransitionType.Reopened:
             case TransitionType.ReturnedByReviewer:
-                item.TransferredToUser = complaint.CurrentOwner;
-                item.TransferredToOffice = complaint.CurrentOffice;
+                transition.TransferredToUser = complaint.CurrentOwner;
+                transition.TransferredToOffice = complaint.CurrentOffice;
                 break;
 
             case TransitionType.SubmittedForReview:
-                item.TransferredToUser = complaint.ReviewedBy;
-                item.TransferredToOffice = complaint.CurrentOffice;
+                transition.TransferredToUser = complaint.ReviewedBy;
+                transition.TransferredToOffice = complaint.CurrentOffice;
                 break;
 
-            case TransitionType.Deleted:
-                // TODO
-                break;
-
-            case TransitionType.Restored:
-                // TODO
-                break;
-
-            case TransitionType.Closed:
             case TransitionType.Accepted:
+            case TransitionType.Closed:
+            case TransitionType.Deleted:
+            case TransitionType.Restored:
                 // No additional data changed.
                 break;
 
@@ -133,6 +139,6 @@ public class ComplaintManager(IComplaintRepository repository) : IComplaintManag
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }
 
-        return item;
+        return transition;
     }
 }
