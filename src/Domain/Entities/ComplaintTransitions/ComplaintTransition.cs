@@ -25,13 +25,13 @@ public class ComplaintTransition : AuditableEntity
 
     public Complaint Complaint { get; private init; } = default!;
     public TransitionType TransitionType { get; private init; }
-    public DateTimeOffset CommittedDate { get; init; } = DateTimeOffset.Now;
+    public DateTimeOffset CommittedDate { get; internal init; } = DateTimeOffset.Now;
     public ApplicationUser? CommittedByUser { get; private init; }
-    public ApplicationUser? TransferredToUser { get; set; }
-    public Office? TransferredToOffice { get; set; }
+    public ApplicationUser? TransferredToUser { get; internal set; }
+    public Office? TransferredToOffice { get; internal set; }
 
     [StringLength(4000)]
-    public string? Comment { get; set; }
+    public string? Comment { get; internal set; }
 }
 
 [JsonConverter(typeof(JsonStringEnumConverter))]

@@ -1,4 +1,4 @@
-using Cts.Domain.Entities.ActionTypes;
+﻿using Cts.Domain.Entities.ActionTypes;
 using Cts.Domain.Entities.ComplaintActions;
 using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Entities.Offices;
@@ -76,6 +76,21 @@ public class ComplaintManager(IComplaintRepository repository) : IComplaintManag
         complaint.ReviewedBy = null;
     }
 
+    public void RequestReview(Complaint complaint, ApplicationUser reviewer, ApplicationUser? user)
+    {
+        complaint.SetUpdater(user?.Id);
+        complaint.Status = ComplaintStatus.ReviewPending;
+        complaint.ReviewedBy = reviewer;
+    }
+
+    public void Return(Complaint complaint, ApplicationUser? user)
+    {
+        complaint.SetUpdater(user?.Id);
+        complaint.Status = ComplaintStatus.UnderInvestigation;
+        complaint.ReviewedBy = null;
+        complaint.ReviewComments = null;
+    }
+
     public ComplaintTransition CreateTransition(Complaint complaint, TransitionType type, ApplicationUser? user,
         string? comment)
     {
@@ -91,18 +106,15 @@ public class ComplaintManager(IComplaintRepository repository) : IComplaintManag
 
             case TransitionType.Assigned:
             case TransitionType.Reopened:
+            case TransitionType.ReturnedByReviewer:
                 item.TransferredToUser = complaint.CurrentOwner;
                 item.TransferredToOffice = complaint.CurrentOffice;
                 break;
 
             case TransitionType.SubmittedForReview:
-                // TODO
+                item.TransferredToUser = complaint.ReviewedBy;
+                item.TransferredToOffice = complaint.CurrentOffice;
                 break;
-
-            case TransitionType.ReturnedByReviewer:
-                // TODO
-                break;
-
 
             case TransitionType.Deleted:
                 // TODO
@@ -114,7 +126,7 @@ public class ComplaintManager(IComplaintRepository repository) : IComplaintManag
 
             case TransitionType.Closed:
             case TransitionType.Accepted:
-                // No additional data.
+                // No additional data changed.
                 break;
 
             default:

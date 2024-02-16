@@ -165,12 +165,32 @@ public sealed class ComplaintService(
 
     public async Task RequestReviewAsync(ComplaintRequestReviewDto resource, CancellationToken token = default)
     {
-        throw new NotImplementedException();
+        var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
+        var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
+        var reviewer = await userService.FindUserAsync(resource.ReviewerId!).ConfigureAwait(false);
+
+        complaintManager.RequestReview(complaint, reviewer!, currentUser);
+        await complaintRepository.UpdateAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
+        await AddTransitionAsync(complaint, TransitionType.SubmittedForReview, currentUser, token)
+            .ConfigureAwait(false);
+        await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
     }
 
     public async Task ReturnAsync(ComplaintAssignDto resource, CancellationToken token = default)
     {
-        throw new NotImplementedException();
+        var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
+        var previousOwner = complaint.CurrentOwner;
+        var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
+
+        complaintManager.Return(complaint, currentUser);
+        await complaintRepository.UpdateAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
+        await AddTransitionAsync(complaint, TransitionType.ReturnedByReviewer, currentUser, token)
+            .ConfigureAwait(false);
+        if (complaint.CurrentOwner != null && 
+            complaint.CurrentOwner != previousOwner &&
+            complaint.CurrentOwner == currentUser)
+            await AddTransitionAsync(complaint, TransitionType.Accepted, currentUser, token).ConfigureAwait(false);
+        await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
     }
 
     // Management complaint write methods

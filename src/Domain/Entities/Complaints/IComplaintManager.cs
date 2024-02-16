@@ -1,4 +1,4 @@
-using Cts.Domain.Entities.ActionTypes;
+﻿using Cts.Domain.Entities.ActionTypes;
 using Cts.Domain.Entities.ComplaintActions;
 using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Entities.Offices;
@@ -26,13 +26,55 @@ public interface IComplaintManager
 
     // Transitions
 
+    /// <summary>
+    /// Updates the properties of a <see cref="Complaint"/> to indicate that it was accepted by the
+    /// assigned <see cref="ApplicationUser"/>. 
+    /// </summary>
+    /// <param name="complaint">The Complaint that was accepted.</param>
+    /// <param name="user">The user committing the change.</param>
     void Accept(Complaint complaint, ApplicationUser? user);
 
+    /// <summary>
+    /// Updates the properties of a <see cref="Complaint"/> to indicate that it was assigned or reassigned to
+    /// another <see cref="Office"/> or <see cref="ApplicationUser"/>. 
+    /// </summary>
+    /// <param name="complaint">The Complaint that was assigned.</param>
+    /// <param name="office">The Office the Complaint was assigned to.</param>
+    /// <param name="owner">The User the Complaint was assigned to.</param>
+    /// <param name="comment">A comment entered by the user committing the change.</param>
+    /// <param name="user">The user committing the change.</param>
     void Assign(Complaint complaint, Office office, ApplicationUser? owner, string? comment, ApplicationUser? user);
 
+    /// <summary>
+    /// Updates the properties of a <see cref="Complaint"/> to indicate that it was reviewed and approved/closed.
+    /// </summary>
+    /// <param name="complaint">The Complaint that was closed.</param>
+    /// <param name="comment">A comment entered by the user committing the change.</param>
+    /// <param name="user">The user committing the change.</param>
     void Close(Complaint complaint, string? comment, ApplicationUser? user);
 
+    /// <summary>
+    /// Updates the properties of a closed <see cref="Complaint"/> to indicate that it was reopened.
+    /// </summary>
+    /// <param name="complaint">The Complaint that was reopened.</param>
+    /// <param name="user">The user committing the change.</param>
     void Reopen(Complaint complaint, ApplicationUser? user);
+
+    /// <summary>
+    /// Updates the properties of a closed <see cref="Complaint"/> to indicate that a review was requested.
+    /// </summary>
+    /// <param name="complaint">The Complaint for which a review was requested.</param>
+    /// <param name="reviewer">The <see cref="ApplicationUser"/> from whom a review was requested.</param>
+    /// <param name="user">The user committing the change.</param>
+    void RequestReview(Complaint complaint, ApplicationUser reviewer, ApplicationUser? user);
+
+    /// <summary>
+    /// Updates the properties of a <see cref="Complaint"/> to indicate that it was reviewed and returned to
+    /// the <see cref="ApplicationUser"/> requesting the review.
+    /// </summary>
+    /// <param name="complaint">The Complaint for which a review was requested.</param>
+    /// <param name="user">The user committing the change.</param>
+    void Return(Complaint complaint, ApplicationUser? user);
 
     /// <summary>
     /// Creates a new <see cref="ComplaintTransition"/>.
