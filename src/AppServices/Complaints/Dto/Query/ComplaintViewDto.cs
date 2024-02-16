@@ -1,4 +1,4 @@
-﻿using Cts.AppServices.Attachments.Dto;
+using Cts.AppServices.Attachments.Dto;
 using Cts.AppServices.ComplaintActions.Dto;
 using Cts.AppServices.Offices;
 using Cts.AppServices.Staff.Dto;
@@ -155,13 +155,13 @@ public record ComplaintViewDto
     // === Lists ===
 
     [UsedImplicitly]
-    public List<ComplaintActionViewDto> ComplaintActions { get; init; } = [];
+    public List<ComplaintActionViewDto> ComplaintActions { get; } = [];
 
     [UsedImplicitly]
-    public List<AttachmentViewDto> Attachments { get; init; } = [];
+    public List<AttachmentViewDto> Attachments { get; } = [];
 
     [UsedImplicitly]
-    public List<ComplaintTransitionViewDto> ComplaintTransitions { get; init; } = [];
+    public List<ComplaintTransitionViewDto> ComplaintTransitions { get; } = [];
 
     // === Calculated properties ===
 

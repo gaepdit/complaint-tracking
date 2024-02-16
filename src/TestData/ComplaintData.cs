@@ -167,8 +167,8 @@ internal static class ComplaintData
 
             foreach (var complaint in _complaints)
             {
-                complaint.ComplaintActions = ComplaintActionData.GetComplaintActions
-                    .Where(e => e.Complaint.Id == complaint.Id).ToList();
+                complaint.ComplaintActions.AddRange(ComplaintActionData.GetComplaintActions
+                    .Where(e => e.Complaint.Id == complaint.Id));
             }
 
             return _complaints;

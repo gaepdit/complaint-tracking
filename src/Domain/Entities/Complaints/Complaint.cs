@@ -100,17 +100,16 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     public DateTimeOffset? CurrentOwnerAssignedDate { get; internal set; }
 
-
     public DateTimeOffset? CurrentOwnerAcceptedDate { get; internal set; }
 
     // Properties: Transitions
-    public List<ComplaintTransition> ComplaintTransitions { get; set; } = [];
+    public List<ComplaintTransition> ComplaintTransitions { get; } = [];
 
     // Properties: Actions
-    public List<ComplaintAction> ComplaintActions { get; set; } = [];
+    public List<ComplaintAction> ComplaintActions { get; } = [];
 
     // Properties: Attachments
-    public List<Attachment> Attachments { get; set; } = [];
+    public List<Attachment> Attachments { get; } = [];
 
     // Properties: Review/Closure
 

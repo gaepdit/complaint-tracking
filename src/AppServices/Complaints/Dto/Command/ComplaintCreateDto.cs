@@ -129,7 +129,7 @@ public record ComplaintCreateDto : IComplaintCommandDto
 
     // Attachments
 
-    public List<IFormFile>? Files { get; init; } = [];
+    public List<IFormFile>? Files { get; } = [];
 
     // Assignment
 
