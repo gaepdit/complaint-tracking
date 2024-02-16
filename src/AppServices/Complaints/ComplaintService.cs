@@ -91,9 +91,7 @@ public sealed class ComplaintService(
         var complaint = await CreateComplaintFromDtoAsync(resource, currentUser, token).ConfigureAwait(false);
         await complaintRepository.InsertAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
         await AddTransitionAsync(complaint, TransitionType.New, currentUser, token).ConfigureAwait(false);
-        if (resource.CurrentOwnerId is not null)
-            await AddAssignmentTransitionsAsync(complaint, currentUser, token).ConfigureAwait(false);
-
+        await AddAssignmentTransitionsAsync(complaint, currentUser, token).ConfigureAwait(false);
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
 
         // Process attachments
@@ -139,9 +137,7 @@ public sealed class ComplaintService(
 
         complaintManager.Assign(complaint, office, owner, resource.Comment, currentUser);
         await complaintRepository.UpdateAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
-
-        if (resource.OwnerId is not null)
-            await AddAssignmentTransitionsAsync(complaint, currentUser, token).ConfigureAwait(false);
+        await AddAssignmentTransitionsAsync(complaint, currentUser, token).ConfigureAwait(false);
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
     }
 
