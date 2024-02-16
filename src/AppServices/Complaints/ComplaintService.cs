@@ -135,7 +135,7 @@ public sealed class ComplaintService(
             ? await userService.FindUserAsync(resource.OwnerId).ConfigureAwait(false)
             : null;
 
-        complaintManager.Assign(complaint, office, owner, resource.Comment, currentUser);
+        complaintManager.Assign(complaint, office, owner, currentUser);
         await complaintRepository.UpdateAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
         await AddAssignmentTransitionsAsync(complaint, currentUser, token).ConfigureAwait(false);
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
@@ -148,7 +148,8 @@ public sealed class ComplaintService(
 
         complaintManager.Close(complaint, resource.Comment, currentUser);
         await complaintRepository.UpdateAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
-        await AddTransitionAsync(complaint, TransitionType.Closed, currentUser, token).ConfigureAwait(false);
+        await AddTransitionAsync(complaint, TransitionType.Closed, currentUser, token, resource.Comment)
+            .ConfigureAwait(false);
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
     }
 
@@ -159,7 +160,8 @@ public sealed class ComplaintService(
 
         complaintManager.Reopen(complaint, currentUser);
         await complaintRepository.UpdateAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
-        await AddTransitionAsync(complaint, TransitionType.Reopened, currentUser, token).ConfigureAwait(false);
+        await AddTransitionAsync(complaint, TransitionType.Reopened, currentUser, token, resource.Comment)
+            .ConfigureAwait(false);
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
     }
 
@@ -171,7 +173,7 @@ public sealed class ComplaintService(
 
         complaintManager.RequestReview(complaint, reviewer!, currentUser);
         await complaintRepository.UpdateAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
-        await AddTransitionAsync(complaint, TransitionType.SubmittedForReview, currentUser, token)
+        await AddTransitionAsync(complaint, TransitionType.SubmittedForReview, currentUser, token, resource.Comment)
             .ConfigureAwait(false);
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
     }
@@ -184,7 +186,7 @@ public sealed class ComplaintService(
 
         complaintManager.Return(complaint, currentUser);
         await complaintRepository.UpdateAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
-        await AddTransitionAsync(complaint, TransitionType.ReturnedByReviewer, currentUser, token)
+        await AddTransitionAsync(complaint, TransitionType.ReturnedByReviewer, currentUser, token, resource.Comment)
             .ConfigureAwait(false);
         if (complaint.CurrentOwner != null &&
             complaint.CurrentOwner != previousOwner &&
@@ -244,7 +246,7 @@ public sealed class ComplaintService(
         var owner = resource.CurrentOwnerId is not null
             ? await userService.FindUserAsync(resource.CurrentOwnerId).ConfigureAwait(false)
             : null;
-        complaintManager.Assign(complaint, office, owner, comment: null, currentUser);
+        complaintManager.Assign(complaint, office, owner, currentUser);
         return complaint;
     }
 

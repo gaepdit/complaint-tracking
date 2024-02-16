@@ -1,4 +1,4 @@
-using Cts.Domain.Entities.ActionTypes;
+﻿using Cts.Domain.Entities.ActionTypes;
 using Cts.Domain.Entities.ComplaintActions;
 using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Entities.Offices;
@@ -33,8 +33,7 @@ public class ComplaintManager(IComplaintRepository repository) : IComplaintManag
         complaint.CurrentOwnerAcceptedDate = DateTimeOffset.Now;
     }
 
-    public void Assign(Complaint complaint, Office office, ApplicationUser? owner, string? comment,
-        ApplicationUser? user)
+    public void Assign(Complaint complaint, Office office, ApplicationUser? owner, ApplicationUser? user)
     {
         complaint.SetUpdater(user?.Id);
         complaint.CurrentOffice = office;

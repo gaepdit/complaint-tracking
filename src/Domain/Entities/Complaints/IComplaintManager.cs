@@ -1,4 +1,4 @@
-using Cts.Domain.Entities.ActionTypes;
+﻿using Cts.Domain.Entities.ActionTypes;
 using Cts.Domain.Entities.ComplaintActions;
 using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Entities.Offices;
@@ -41,9 +41,8 @@ public interface IComplaintManager
     /// <param name="complaint">The Complaint that was assigned.</param>
     /// <param name="office">The Office the Complaint was assigned to.</param>
     /// <param name="owner">The User the Complaint was assigned to.</param>
-    /// <param name="comment">A comment entered by the user committing the change.</param>
     /// <param name="user">The user committing the change.</param>
-    void Assign(Complaint complaint, Office office, ApplicationUser? owner, string? comment, ApplicationUser? user);
+    void Assign(Complaint complaint, Office office, ApplicationUser? owner, ApplicationUser? user);
 
     /// <summary>
     /// Updates the properties of a <see cref="Complaint"/> to indicate that it was reviewed and approved/closed.
