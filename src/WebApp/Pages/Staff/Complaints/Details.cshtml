@@ -362,7 +362,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(_ => attachment, new { AsLink = true })
+                    @Html.DisplayFor(_ => attachment, DisplayTemplate.AttachmentView, new { AsLink = true })
                 </td>
                 <td>@Html.DisplayFor(_ => attachment.Size, DisplayTemplate.FileSize)</td>
                 <td>

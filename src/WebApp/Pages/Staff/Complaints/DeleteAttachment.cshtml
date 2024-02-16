@@ -18,7 +18,7 @@
     </p>
 
     <div class="container small">
-        <div class="h4">@Html.DisplayFor(model => model.AttachmentView)</div>
+        <div class="h4">@Html.DisplayFor(model => model.AttachmentView, DisplayTemplate.AttachmentView)</div>
         <p>
             @Model.AttachmentView.SizeDescription. Uploaded by @Html.DisplayFor(model => model.AttachmentView.UploadedBy, DisplayTemplate.NameOrNotEntered) on @Html.DisplayFor(model => model.AttachmentView.UploadedDate, DisplayTemplate.ShortDateTime).
         </p>

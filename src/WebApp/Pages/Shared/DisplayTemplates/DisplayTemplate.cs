@@ -7,8 +7,10 @@ namespace Cts.WebApp.Pages.Shared.DisplayTemplates;
 /// </summary>
 public static class DisplayTemplate
 {
+    public const string AttachmentView = nameof(AttachmentView);
     public const string BoolActive = nameof(BoolActive);
     public const string BoolClosed = nameof(BoolClosed);
+    public const string ComplaintViewSmallTable = nameof(ComplaintViewSmallTable);
     public const string County = nameof(County);
     public const string DateOnly = nameof(DateOnly);
     public const string DateOnlyOrBlank = nameof(DateOnlyOrBlank);

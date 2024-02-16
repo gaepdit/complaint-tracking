@@ -1,7 +1,6 @@
 ﻿@page "{id:int?}"
 @using Cts.WebApp.Pages.Shared.DisplayTemplates
 @using Cts.WebApp.Pages.Shared.EditorTemplates
-@using GaEpd.AppLibrary.Extensions
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model DeleteModel
 
@@ -19,24 +18,7 @@
         Are you sure you want to delete this Complaint?
     </p>
 
-    <div class="container small">
-        <dl class="row">
-            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(m => m.ComplaintView.Status)</dt>
-            <dd class="col-md-8 col-lg-9">@Model.ComplaintView.Status.GetDisplayName()</dd>
-            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(m => m.ComplaintView.CurrentOfficeName)</dt>
-            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(m => m.ComplaintView.CurrentOfficeName)</dd>
-            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(m => m.ComplaintView.CurrentOwner)</dt>
-            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(m => m.ComplaintView.CurrentOwner, DisplayTemplate.FullStaffView)</dd>
-            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(m => m.ComplaintView.PrimaryConcernName)</dt>
-            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(m => m.ComplaintView.PrimaryConcernName)</dd>
-            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(m => m.ComplaintView.SecondaryConcernName)</dt>
-            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(m => m.ComplaintView.SecondaryConcernName)</dd>
-            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(m => m.ComplaintView.ComplaintCounty)</dt>
-            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(m => m.ComplaintView.ComplaintCounty)</dd>
-            <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(m => m.ComplaintView.ComplaintNature)</dt>
-            <dd class="col-md-8 col-lg-9">@Html.DisplayFor(m => m.ComplaintView.ComplaintNature, DisplayTemplate.TruncateText)</dd>
-        </dl>
-    </div>
+    @Html.DisplayFor(m => m.ComplaintView, DisplayTemplate.ComplaintViewSmallTable)
 
     <form method="post">
         <div class="mb-3">
