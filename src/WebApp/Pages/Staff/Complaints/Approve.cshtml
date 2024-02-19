@@ -1,5 +1,4 @@
 ﻿@page "{id:int?}"
-@using Cts.WebApp.Pages.Shared.DisplayTemplates
 @using Cts.WebApp.Pages.Shared.EditorTemplates
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model ApproveModel
@@ -12,7 +11,7 @@
 <h1>@ViewData["Title"]</h1>
 
 <div class="p-3 border rounded-3">
-    @Html.DisplayFor(model => model.ComplaintView, DisplayTemplate.ComplaintViewSmallTable)
+    <partial name="Shared/_ComplaintSummaryPartial" model="Model.ComplaintView"/>
 
     <form method="post">
         <div class="mb-3">
