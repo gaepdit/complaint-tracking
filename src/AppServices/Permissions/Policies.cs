@@ -16,7 +16,7 @@ namespace Cts.AppServices.Permissions;
 //
 //    public async Task<IActionResult> OnGetAsync([FromServices] IAuthorizationService authorizationService)
 //    {
-//        var isStaff = (await authorizationService.AuthorizeAsync(User, Policies.StaffUserPolicy())).Succeeded;
+//        var isStaff = (await authorizationService.AuthorizeAsync(User, Policies.StaffUser)).Succeeded;
 //    }
 //
 #pragma warning restore S125

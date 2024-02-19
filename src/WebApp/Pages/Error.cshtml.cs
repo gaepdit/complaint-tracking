@@ -1,3 +1,4 @@
+using Cts.AppServices.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,12 +10,15 @@ namespace Cts.WebApp.Pages;
 [IgnoreAntiforgeryToken]
 #pragma warning restore S4502
 [AllowAnonymous]
-public class ErrorModel(ILogger<ErrorModel> logger) : PageModel
+public class ErrorModel(ILogger<ErrorModel> logger, IAuthorizationService authorizationService) : PageModel
 {
     public int? Status { get; private set; }
+    public bool ActiveUser { get; private set; }
 
-    public void OnGet(int? statusCode)
+    public async Task OnGet(int? statusCode)
     {
+        ActiveUser = (await authorizationService.AuthorizeAsync(User, nameof(Policies.ActiveUser))).Succeeded;
+
         switch (statusCode)
         {
             case null:
@@ -31,5 +35,9 @@ public class ErrorModel(ILogger<ErrorModel> logger) : PageModel
         Status = statusCode;
     }
 
-    public void OnPost() => logger.LogError("Error page shown from Post method");
+    public async Task OnPost()
+    {
+        ActiveUser = (await authorizationService.AuthorizeAsync(User, nameof(Policies.ActiveUser))).Succeeded;
+        logger.LogError("Error page shown from Post method");
+    }
 }

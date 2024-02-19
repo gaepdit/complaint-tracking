@@ -1,7 +1,4 @@
 ﻿@page "{statusCode:int?}"
-@inject IAuthorizationService AuthorizationService
-@using Microsoft.AspNetCore.Authorization
-@using Cts.AppServices.Permissions
 @model ErrorModel
 @switch (Model.Status)
 {
@@ -21,7 +18,7 @@
     }
 }
 
-@if ((await AuthorizationService.AuthorizeAsync(User, nameof(Policies.ActiveUser))).Succeeded)
+@if (Model.ActiveUser)
 {
     <p>
         If you need assistance related to this error, please
