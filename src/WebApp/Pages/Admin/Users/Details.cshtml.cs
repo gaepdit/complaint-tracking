@@ -27,7 +27,7 @@ public class DetailsModel : PageModel
 
         DisplayStaff = staff;
         Roles = await staffService.GetAppRolesAsync(DisplayStaff.Id);
-        IsUserAdministrator = (await authorization.AuthorizeAsync(User, nameof(Policies.UserAdministrator))).Succeeded;
+        IsUserAdministrator = (await authorization.AuthorizeAsync(User, Policies.UserAdministrator)).Succeeded;
 
         return Page();
     }

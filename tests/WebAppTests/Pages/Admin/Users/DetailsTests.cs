@@ -23,7 +23,8 @@ public class DetailsTests
         serviceMock.FindAsync(Arg.Any<string>()).Returns(staffView);
         serviceMock.GetAppRolesAsync(Arg.Any<string>()).Returns(new List<AppRole>());
         var authorizationMock = Substitute.For<IAuthorizationService>();
-        authorizationMock.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), Arg.Is((string?)null), Arg.Any<string>())
+        authorizationMock.AuthorizeAsync(user: Arg.Any<ClaimsPrincipal>(), resource: Arg.Any<object?>(),
+                requirements: Arg.Any<IEnumerable<IAuthorizationRequirement>>())
             .Returns(AuthorizationResult.Success());
         var pageModel = new DetailsModel { TempData = WebAppTestsSetup.PageTempData() };
 

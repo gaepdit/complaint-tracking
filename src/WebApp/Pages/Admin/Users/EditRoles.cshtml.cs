@@ -31,8 +31,7 @@ public class EditRolesModel(IStaffService staffService, IAuthorizationService au
 
         DisplayStaff = staff;
         UserId = id;
-        CanEditDivisionManager =
-            (await authorization.AuthorizeAsync(User, nameof(Policies.DivisionManager))).Succeeded;
+        CanEditDivisionManager = (await authorization.AuthorizeAsync(User, Policies.DivisionManager)).Succeeded;
 
         await PopulateRoleSettingsAsync();
         return Page();
@@ -40,8 +39,7 @@ public class EditRolesModel(IStaffService staffService, IAuthorizationService au
 
     public async Task<IActionResult> OnPostAsync()
     {
-        CanEditDivisionManager =
-            (await authorization.AuthorizeAsync(User, nameof(Policies.DivisionManager))).Succeeded;
+        CanEditDivisionManager = (await authorization.AuthorizeAsync(User, Policies.DivisionManager)).Succeeded;
 
         var roleDictionary = CanEditDivisionManager
             ? RoleSettings.ToDictionary(r => r.Name, r => r.IsSelected)
