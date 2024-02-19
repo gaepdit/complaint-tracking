@@ -1,5 +1,6 @@
-﻿@page
+@page
 @using Cts.AppServices.Attachments
+@using Cts.AppServices.Complaints.Dto
 @using Cts.Domain.ValueObjects
 @using Cts.WebApp.Pages.Shared.EditorTemplates
 @using Cts.WebApp.Platform.Constants
@@ -247,5 +248,5 @@
     <script src="~/js/copyContactInfo.js"></script>
     <script src="~/lib/axios/axios.min.js"></script>
     <script src="~/js/staffSelect.js"></script>
-    <script>setUpStaffDropdown("Item_CurrentOfficeId","Item_CurrentOwnerId",true,"@TextConstants.SelectTextDefaultAssignor");</script>
+    <script>setUpStaffDropdown("@nameof(Model.NewComplaint)_@nameof(ComplaintCreateDto.CurrentOfficeId)","@nameof(Model.NewComplaint)_@nameof(ComplaintCreateDto.CurrentOwnerId)",true,"@TextConstants.SelectTextDefaultAssignor");</script>
 }
