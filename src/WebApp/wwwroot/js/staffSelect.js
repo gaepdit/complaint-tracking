@@ -1,21 +1,18 @@
 ﻿// Populate the associate dropdown when an office selection is made.
-function setUpStaffDropdown(officeElementId, staffElementId, forAssignment) {
+    function setUpStaffDropdown(officeElementId, staffElementId, forAssignment, placeholder) {
     let apiPath;
-    let staffPlaceholder;
 
     if (forAssignment === true) {
         apiPath = "staff-for-assignment";
-        staffPlaceholder = "[Default Assignor]";
     } else {
         apiPath = "all-staff";
-        staffPlaceholder = "(any)";
     }
 
     const officeSelect = document.getElementById(officeElementId);
 
     officeSelect.addEventListener("change", () => {
         const staffSelect = document.getElementById(staffElementId);
-        staffSelect.innerHTML = `<option value="">${staffPlaceholder}</option>`;
+        staffSelect.innerHTML = `<option value="">${placeholder}</option>`;
         staffSelect.disabled = true;
         if (officeSelect.value === '') return;
 
