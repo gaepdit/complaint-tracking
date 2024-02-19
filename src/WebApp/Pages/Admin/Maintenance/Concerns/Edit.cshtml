@@ -13,7 +13,7 @@
 <div class="p-3 border rounded-3 bg-light-subtle">
     <form method="post">
         <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
-        <div class="mb-3">
+        <div class="col-md-8 mb-3">
             <div class="form-floating">
                 <input asp-for="Item.Name" class="form-control" />
                 <label asp-for="Item.Name" class="form-label"></label>
@@ -26,8 +26,8 @@
         </div>
         <div class="mt-3 mb-1">
             <input asp-for="OriginalName" type="hidden" />
-            <button type="submit" class="btn btn-primary col-sm-3 me-2">Save Changes</button>
-            <a asp-page="Index" class="btn btn-outline-secondary col-md-2">Cancel</a>
+            <button type="submit" class="btn btn-primary me-2">Save Changes</button>
+            <a asp-page="Index" class="btn btn-outline-secondary">Cancel</a>
         </div>
         <div class="text-danger-emphasis mt-3">* denotes a required field</div>
     </form>

@@ -24,7 +24,7 @@ public abstract class MaintenanceItemService<TEntity, TViewDto, TUpdateDto>(
 
     public async Task<IReadOnlyList<TViewDto>> GetListAsync(CancellationToken token = default)
     {
-        var list = (await repository.GetListAsync(token).ConfigureAwait(false)).Order()
+        var list = (await repository.GetListAsync(token).ConfigureAwait(false))
             .OrderBy(entity => entity.Name).ThenBy(entity => entity.Id).ToList();
         return mapper.Map<IReadOnlyList<TViewDto>>(list);
     }
