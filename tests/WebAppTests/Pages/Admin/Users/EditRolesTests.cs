@@ -20,8 +20,8 @@ public class EditRolesTests
         Active = true,
     };
 
-    private static readonly List<EditRolesModel.RoleSetting> RoleSettingsTest = new()
-    {
+    private static readonly List<EditRolesModel.RoleSetting> RoleSettingsTest =
+    [
         new EditRolesModel.RoleSetting
         {
             Name = TextData.ValidName,
@@ -29,7 +29,7 @@ public class EditRolesTests
             Description = TextData.ValidName,
             IsSelected = true,
         },
-    };
+    ];
 
     [Test]
     public async Task OnGet_PopulatesThePageModel()
@@ -49,7 +49,8 @@ public class EditRolesTests
         staffServiceMock.GetRolesAsync(Arg.Any<string>())
             .Returns(new List<string> { RoleName.SiteMaintenance });
         var authorizationMock = Substitute.For<IAuthorizationService>();
-        authorizationMock.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), Arg.Is((string?)null), Arg.Any<string>())
+        authorizationMock.AuthorizeAsync(user: Arg.Any<ClaimsPrincipal>(), resource: Arg.Any<object?>(),
+                requirements: Arg.Any<IEnumerable<IAuthorizationRequirement>>())
             .Returns(AuthorizationResult.Success());
         var pageModel = new EditRolesModel(staffServiceMock, authorizationMock)
             { TempData = WebAppTestsSetup.PageTempData() };
@@ -104,7 +105,8 @@ public class EditRolesTests
         staffServiceMock.GetRolesAsync(Arg.Any<string>())
             .Returns(new List<string> { RoleName.SiteMaintenance });
         var authorizationMock = Substitute.For<IAuthorizationService>();
-        authorizationMock.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), Arg.Is((string?)null), Arg.Any<string>())
+        authorizationMock.AuthorizeAsync(user: Arg.Any<ClaimsPrincipal>(), resource: Arg.Any<object?>(),
+                requirements: Arg.Any<IEnumerable<IAuthorizationRequirement>>())
             .Returns(AuthorizationResult.Success());
         var page = new EditRolesModel(staffServiceMock, authorizationMock)
         {
@@ -132,7 +134,8 @@ public class EditRolesTests
         staffServiceMock.FindAsync(Arg.Any<string>())
             .Returns((StaffViewDto?)null);
         var authorizationMock = Substitute.For<IAuthorizationService>();
-        authorizationMock.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), Arg.Is((string?)null), Arg.Any<string>())
+        authorizationMock.AuthorizeAsync(user: Arg.Any<ClaimsPrincipal>(), resource: Arg.Any<object?>(),
+                requirements: Arg.Any<IEnumerable<IAuthorizationRequirement>>())
             .Returns(AuthorizationResult.Success());
         var page = new EditRolesModel(staffServiceMock, authorizationMock)
         {
@@ -158,7 +161,8 @@ public class EditRolesTests
         staffServiceMock.GetRolesAsync(Arg.Any<string>())
             .Returns(new List<string> { RoleName.SiteMaintenance });
         var authorizationMock = Substitute.For<IAuthorizationService>();
-        authorizationMock.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), Arg.Is((string?)null), Arg.Any<string>())
+        authorizationMock.AuthorizeAsync(user: Arg.Any<ClaimsPrincipal>(), resource: Arg.Any<object?>(),
+                requirements: Arg.Any<IEnumerable<IAuthorizationRequirement>>())
             .Returns(AuthorizationResult.Success());
         var page = new EditRolesModel(staffServiceMock, authorizationMock)
         {

@@ -5,8 +5,8 @@ namespace WebAppTests.Pages.Admin.Maintenance.ActionTypes;
 
 public class IndexTests
 {
-    private static readonly List<ActionTypeViewDto> ListTest = new()
-        { new ActionTypeViewDto(Guid.Empty, TextData.ValidName, true) };
+    private static readonly List<ActionTypeViewDto> ListTest =
+        [new ActionTypeViewDto(Guid.Empty, TextData.ValidName, true)];
 
     [Test]
     public async Task OnGet_ReturnsWithList()
@@ -14,7 +14,8 @@ public class IndexTests
         var serviceMock = Substitute.For<IActionTypeService>();
         serviceMock.GetListAsync(CancellationToken.None).Returns(ListTest);
         var authorizationMock = Substitute.For<IAuthorizationService>();
-        authorizationMock.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), Arg.Is((string?)null), Arg.Any<string>())
+        authorizationMock.AuthorizeAsync(user: Arg.Any<ClaimsPrincipal>(), resource: Arg.Any<object?>(),
+                requirements: Arg.Any<IEnumerable<IAuthorizationRequirement>>())
             .Returns(AuthorizationResult.Success());
         var page = new IndexModel
         {

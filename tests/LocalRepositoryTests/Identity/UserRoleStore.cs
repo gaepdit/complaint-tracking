@@ -98,7 +98,7 @@ public class UserRoleStore
 
         using var scope = new AssertionScope();
         result.Should().HaveCount(1);
-        result[0].Should().BeEquivalentTo(_store.UserStore.First(),
+        result[0].Should().BeEquivalentTo(store.UserStore.First(),
             options => options.Excluding(e => e.Office));
     }
 

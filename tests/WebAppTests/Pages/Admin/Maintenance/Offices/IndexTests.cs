@@ -14,7 +14,8 @@ public class IndexTests
         var serviceMock = Substitute.For<IOfficeService>();
         serviceMock.GetListIncludeAssignorAsync(Arg.Any<CancellationToken>()).Returns(ListTest);
         var authorizationMock = Substitute.For<IAuthorizationService>();
-        authorizationMock.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), Arg.Is((string?)null), Arg.Any<string>())
+        authorizationMock.AuthorizeAsync(user: Arg.Any<ClaimsPrincipal>(), resource: Arg.Any<object?>(),
+                requirements: Arg.Any<IEnumerable<IAuthorizationRequirement>>())
             .Returns(AuthorizationResult.Success());
         var page = new IndexModel { TempData = WebAppTestsSetup.PageTempData() };
 
