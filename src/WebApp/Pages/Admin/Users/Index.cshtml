@@ -114,7 +114,7 @@
                         }
                     </td>
                     <td>@item.Email</td>
-                    <td>@Html.DisplayFor(m => item.OfficeName, DisplayTemplate.StringOrNone)</td>
+                    <td>@Html.DisplayFor(m => item.OfficeName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })</td>
                     <td>@Html.DisplayFor(m => item.Active, DisplayTemplate.BoolActive)</td>
                     <td>
                         <a asp-page="Details" asp-route-id="@item.Id" class="btn btn-outline-info btn-sm">View</a>

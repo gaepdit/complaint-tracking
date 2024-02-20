@@ -19,19 +19,19 @@
         <p>Data received from work account (for diagnostic purposes):</p>
         <dl class="row">
             <dt class="col-sm-3">@Html.DisplayNameFor(_ => Model.DisplayFailedUser.Email)</dt>
-            <dd class="col-sm-9">@Html.DisplayFor(_ => Model.DisplayFailedUser.Email, DisplayTemplate.StringOrNone)</dd>
+            <dd class="col-sm-9">@Html.DisplayFor(_ => Model.DisplayFailedUser.Email, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })</dd>
 
             <dt class="col-sm-3">@Html.DisplayNameFor(_ => Model.DisplayFailedUser.UserName)</dt>
-            <dd class="col-sm-9">@Html.DisplayFor(_ => Model.DisplayFailedUser.UserName, DisplayTemplate.StringOrNone)</dd>
+            <dd class="col-sm-9">@Html.DisplayFor(_ => Model.DisplayFailedUser.UserName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })</dd>
 
             <dt class="col-sm-3">@Html.DisplayNameFor(_ => Model.DisplayFailedUser.FamilyName)</dt>
-            <dd class="col-sm-9">@Html.DisplayFor(_ => Model.DisplayFailedUser.FamilyName, DisplayTemplate.StringOrNone)</dd>
+            <dd class="col-sm-9">@Html.DisplayFor(_ => Model.DisplayFailedUser.FamilyName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })</dd>
 
             <dt class="col-sm-3">@Html.DisplayNameFor(_ => Model.DisplayFailedUser.GivenName)</dt>
-            <dd class="col-sm-9">@Html.DisplayFor(_ => Model.DisplayFailedUser.GivenName, DisplayTemplate.StringOrNone)</dd>
+            <dd class="col-sm-9">@Html.DisplayFor(_ => Model.DisplayFailedUser.GivenName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })</dd>
 
             <dt class="col-sm-3">@Html.DisplayNameFor(_ => Model.DisplayFailedUser.AzureAdObjectId)</dt>
-            <dd class="col-sm-9">@Html.DisplayFor(_ => Model.DisplayFailedUser.AzureAdObjectId, DisplayTemplate.StringOrNone)</dd>
+            <dd class="col-sm-9">@Html.DisplayFor(_ => Model.DisplayFailedUser.AzureAdObjectId, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })</dd>
         </dl>
     </div>
 }

@@ -126,7 +126,7 @@
         }
 
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.CurrentOffice)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.CurrentOfficeName, DisplayTemplate.StringOrNotEntered)</dd>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.CurrentOfficeName, DisplayTemplate.StringOrPlaceholder)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.CurrentOwner)</dt>
         <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.CurrentOwner, DisplayTemplate.NameOrNotEntered)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.ReceivedDate)</dt>
@@ -140,14 +140,14 @@
 
 <h2 class="h3">Nature of Complaint</h2>
 
-<p class="container text-break text-pre-line">@Html.DisplayFor(_ => Model.ComplaintView.ComplaintNature, DisplayTemplate.StringOrNotEntered)</p>
+<p class="container text-break text-pre-line">@Html.DisplayFor(_ => Model.ComplaintView.ComplaintNature, DisplayTemplate.StringOrPlaceholder)</p>
 
 <div class="container">
     <dl class="row">
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.PrimaryConcernName)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.PrimaryConcernName, DisplayTemplate.StringOrNotEntered)</dd>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.PrimaryConcernName, DisplayTemplate.StringOrPlaceholder)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.SecondaryConcernName)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.SecondaryConcernName, DisplayTemplate.StringOrNotEntered)</dd>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.SecondaryConcernName, DisplayTemplate.StringOrPlaceholder)</dd>
     </dl>
 </div>
 
@@ -156,9 +156,9 @@
 <div class="container">
     <dl class="row">
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.CallerName)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.CallerName, DisplayTemplate.StringOrNotEntered)</dd>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.CallerName, DisplayTemplate.StringOrPlaceholder)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.CallerRepresents)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.CallerRepresents, DisplayTemplate.StringOrNotEntered)</dd>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.CallerRepresents, DisplayTemplate.StringOrPlaceholder)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.CallerAddress)</dt>
         <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.CallerAddress)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.CallerPhoneNumber)</dt>
@@ -168,7 +168,7 @@
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.CallerTertiaryPhoneNumber)</dt>
         <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.CallerTertiaryPhoneNumber)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.CallerEmail)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.CallerEmail, DisplayTemplate.StringOrNotEntered)</dd>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.CallerEmail, DisplayTemplate.StringOrPlaceholder)</dd>
     </dl>
 </div>
 
@@ -177,11 +177,11 @@
 <div class="container">
     <dl class="row">
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.ComplaintLocation)</dt>
-        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(model => model.ComplaintView.ComplaintLocation, DisplayTemplate.StringOrNotEntered)</dd>
+        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(model => model.ComplaintView.ComplaintLocation, DisplayTemplate.StringOrPlaceholder)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.ComplaintDirections)</dt>
-        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(model => model.ComplaintView.ComplaintDirections, DisplayTemplate.StringOrNotEntered)</dd>
+        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(model => model.ComplaintView.ComplaintDirections, DisplayTemplate.StringOrPlaceholder)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.ComplaintCity)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.ComplaintCity, DisplayTemplate.StringOrNotEntered)</dd>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.ComplaintCity, DisplayTemplate.StringOrPlaceholder)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.ComplaintCounty)</dt>
         <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.ComplaintCounty, DisplayTemplate.County)</dd>
     </dl>
@@ -192,9 +192,9 @@
 <div class="container">
     <dl class="row">
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.SourceFacilityName)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.SourceFacilityName, DisplayTemplate.StringOrNotEntered)</dd>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.SourceFacilityName, DisplayTemplate.StringOrPlaceholder)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.SourceFacilityIdNumber)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.SourceFacilityIdNumber, DisplayTemplate.StringOrNotEntered)</dd>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.SourceFacilityIdNumber, DisplayTemplate.StringOrPlaceholder)</dd>
     </dl>
 </div>
 
@@ -203,7 +203,7 @@
 <div class="container">
     <dl class="row">
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.SourceContactName)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.SourceContactName, DisplayTemplate.StringOrNotEntered)</dd>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.SourceContactName, DisplayTemplate.StringOrPlaceholder)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.SourceAddress)</dt>
         <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.SourceAddress)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.SourcePhoneNumber)</dt>
@@ -213,7 +213,7 @@
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.SourceTertiaryPhoneNumber)</dt>
         <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.SourceTertiaryPhoneNumber)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.SourceEmail)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.SourceEmail, DisplayTemplate.StringOrNotEntered)</dd>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.SourceEmail, DisplayTemplate.StringOrPlaceholder)</dd>
     </dl>
 </div>
 
@@ -305,7 +305,7 @@
                     </div>
 
                     <div class="card-body ">
-                        <div class="text-break text-pre-line">@Html.DisplayFor(_ => action.Comments, DisplayTemplate.StringOrNone)</div>
+                        <div class="text-break text-pre-line">@Html.DisplayFor(_ => action.Comments, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })</div>
                     </div>
                     @if (action.EnteredBy is not null || action.EnteredDate is not null)
                     {

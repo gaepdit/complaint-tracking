@@ -34,8 +34,7 @@ public static class DisplayTemplate
     public const string ShortDateTimeNoBreak = nameof(ShortDateTimeNoBreak);
     public const string ShortDateTimeOrBlank = nameof(ShortDateTimeOrBlank);
     public const string SortArrow = nameof(SortArrow);
-    public const string StringOrNone = nameof(StringOrNone);
-    public const string StringOrNotEntered = nameof(StringOrNotEntered);
+    public const string StringOrPlaceholder = nameof(StringOrPlaceholder);
     public const string TruncateText = nameof(TruncateText);
     public const string ValidationSummaryConditional = nameof(ValidationSummaryConditional);
 }

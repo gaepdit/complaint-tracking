@@ -177,20 +177,20 @@
                         <td class="text-nowrap">@Html.DisplayFor(m => item.ReceivedDate, DisplayTemplate.ShortDate)</td>
                         <td>
                             <ul>
-                                <li>@Html.DisplayFor(m => item.SourceFacilityName, DisplayTemplate.StringOrNotEntered)</li>
+                                <li>@Html.DisplayFor(m => item.SourceFacilityName, DisplayTemplate.StringOrPlaceholder)</li>
                                 @if (item.ComplaintCounty != null)
                                 {
                                     <li>@item.ComplaintCounty County</li>
                                 }
                             </ul>
                         </td>
-                        <td>@Html.DisplayFor(m => item.CurrentOfficeName, DisplayTemplate.StringOrNotEntered)</td>
+                        <td>@Html.DisplayFor(m => item.CurrentOfficeName, DisplayTemplate.StringOrPlaceholder)</td>
                         <td>
                             <ol type="I">
-                                <li>@Html.DisplayFor(m => item.PrimaryConcernName, DisplayTemplate.StringOrNotEntered)</li>
+                                <li>@Html.DisplayFor(m => item.PrimaryConcernName, DisplayTemplate.StringOrPlaceholder)</li>
                                 @if (item.SecondaryConcernName is not null)
                                 {
-                                    <li>@Html.DisplayFor(m => item.SecondaryConcernName, DisplayTemplate.StringOrNotEntered)</li>
+                                    <li>@Html.DisplayFor(m => item.SecondaryConcernName, DisplayTemplate.StringOrPlaceholder)</li>
                                 }
                             </ol>
                         </td>
