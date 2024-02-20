@@ -209,14 +209,16 @@
 
         <h2>Attachments</h2>
         <div class="mb-3">
-            <p>Selected files will be uploaded when Complaint is saved.</p>
             <div class="row">
-                <div class="col-md-6">
+                <p class="col-md-9 col-lg-6">Selected files will be uploaded when Complaint is saved.</p>
+            </div>
+            <div class="row">
+                <div class="col-md-9 col-lg-6">
                     <input class="form-control form-control-lg mb-3" type="file" asp-for="NewComplaint.Files" multiple accept="@FileTypes.FileTypesAcceptString">
                 </div>
             </div>
             <div class="row">
-                <p class="col-md-6">
+                <p class="col-md-9 col-lg-6">
                     Up to ten files may be uploaded at a time. Supported file types are images, documents, and spreadsheets.
                     All files must comply with the <a href="~/static/Complaint-Attachments-Policy.pdf" target="_blank">EPD Complaint Attachments Policy (<abbr>PDF</abbr>)</a>.
                 </p>

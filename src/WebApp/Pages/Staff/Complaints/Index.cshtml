@@ -39,7 +39,7 @@
                     }
                 </div>
                 <div class="row">
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md mb-3">
                         <label asp-for="Spec.ReceivedFrom" class="form-label px-2 mb-0">Date Complaint Received</label>
                         <div class="input-group">
                             <div class="form-floating">
@@ -52,7 +52,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md mb-3">
                         <label asp-for="Spec.ClosedFrom" class="form-label px-2 mb-0">Date Complaint Closed</label>
                         <div class="input-group">
                             <div class="form-floating">
@@ -79,13 +79,13 @@
 
                 <h2 class="h4">Caller</h2>
                 <div class="row">
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md mb-3">
                         <div class="form-floating">
                             <input asp-for="Spec.CallerName" name="@nameof(Model.Spec.CallerName)" class="form-control" />
                             <label asp-for="Spec.CallerName" class="form-label"></label>
                         </div>
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md mb-3">
                         <div class="form-floating">
                             <input asp-for="Spec.Represents" name="@nameof(Model.Spec.Represents)" class="form-control" />
                             <label asp-for="Spec.Represents" class="form-label"></label>
@@ -104,13 +104,13 @@
                             (A word or phrase to search for. This will search within the <em>nature,</em> <em>location,</em> and <em>description</em> fields.)
                         </small>
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md mb-3">
                         <div class="form-floating">
                             <input asp-for="Spec.ComplaintCity" name="@nameof(Model.Spec.ComplaintCity)" class="form-control" />
                             <label asp-for="Spec.ComplaintCity" class="form-label"></label>
                         </div>
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md mb-3">
                         <div class="form-floating">
                             <select asp-for="Spec.County" name="@nameof(Model.Spec.County)" asp-items="Model.CountiesSelectList" class="form-select">
                                 <option value="">@TextConstants.SelectTextAny</option>
@@ -136,13 +136,13 @@
                             <label asp-for="Spec.Source" class="form-label"></label>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md">
                         <div class="form-floating">
                             <input asp-for="Spec.FacilityIdNumber" name="@nameof(Model.Spec.FacilityIdNumber)" class="form-control mb-3" />
                             <label asp-for="Spec.FacilityIdNumber" class="form-label"></label>
                         </div>
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md mb-3">
                         <div class="form-floating">
                             <input asp-for="Spec.Contact" name="@nameof(Model.Spec.Contact)" class="form-control" />
                             <label asp-for="Spec.Contact" class="form-label"></label>
@@ -182,7 +182,7 @@
 
                 <h2 class="h4">Assignment</h2>
                 <div class="row">
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md mb-3">
                         <div class="form-floating">
                             <select asp-for="Spec.Office" name="@nameof(Model.Spec.Office)" asp-items="Model.OfficesSelectList" class="form-select">
                                 <option value="">@TextConstants.SelectTextAny</option>
@@ -190,7 +190,7 @@
                             <label asp-for="Spec.Office" class="form-label"></label>
                         </div>
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md mb-3">
                         <div class="form-floating">
                             <select asp-for="Spec.Assigned" name="@nameof(Model.Spec.Assigned)" asp-items="Model.AssignedToSelectList" class="form-select"
                                     aria-describedby="StaffHelpBlock" disabled="@(!Model.AssignedToSelectList.Any())">
@@ -203,8 +203,8 @@
                 </div>
 
                 <div class="mt-3 mb-1">
-                    <button id="SearchButton" type="submit" class="btn btn-primary col-sm-3 me-2">Search</button>
-                    <a asp-page="Index" class="btn btn-outline-secondary col-sm-3 col-md-2">Clear Form</a>
+                    <button id="SearchButton" type="submit" class="btn btn-lg btn-primary col-4 me-2">Search</button>
+                    <a asp-page="Index" class="btn btn-lg btn-outline-secondary col-4 col-md-3">Clear Form</a>
                 </div>
             </form>
         </div>
