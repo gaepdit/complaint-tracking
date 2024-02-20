@@ -17,11 +17,12 @@
         <h2 class="h3">Received</h2>
         <div class="row mb-3">
             <div class="col-md input-group mb-3">
-                @Html.EditorFor(e => e.Item.ReceivedDate, EditorTemplate.InputDateOnly)
-                @Html.EditorFor(e => e.Item.ReceivedTime, EditorTemplate.InputTimeOnly)
+                @Html.EditorFor(model => model.Item.ReceivedDate, EditorTemplate.InputDateOnly)
+                @Html.EditorFor(model => model.Item.ReceivedTime, EditorTemplate.InputTimeOnly)
             </div>
             <div class="col-md mb-3">
-                @Html.EditorFor(e => e.Item.ReceivedById, EditorTemplate.Select, new { Items = Model.AllActiveStaffSelectList })
+                @Html.EditorFor(model => model.Item.ReceivedById, EditorTemplate.Select,
+                    additionalViewData: new { Items = Model.AllActiveStaffSelectList })
             </div>
         </div>
 
@@ -30,16 +31,19 @@
             <div class="col-md-6">
                 <h3 class="h5">Description</h3>
                 <div class="mb-3">
-                    @Html.EditorFor(e => e.Item.ComplaintNature, EditorTemplate.Textarea, new { Rows = 5 })
+                    @Html.EditorFor(model => model.Item.ComplaintNature, EditorTemplate.Textarea,
+                        additionalViewData: new { Rows = 5 })
                 </div>
             </div>
             <div class="col-md-6">
                 <h3 class="h5">Environmental areas of concern</h3>
                 <div class="mb-3">
-                    @Html.EditorFor(e => e.Item.PrimaryConcernId, EditorTemplate.Select, new { Items = Model.ConcernsSelectList })
+                    @Html.EditorFor(model => model.Item.PrimaryConcernId, EditorTemplate.Select,
+                        additionalViewData: new { Items = Model.ConcernsSelectList })
                 </div>
                 <div class="mb-3">
-                    @Html.EditorFor(e => e.Item.SecondaryConcernId, EditorTemplate.SelectOptional, new { Items = Model.ConcernsSelectList })
+                    @Html.EditorFor(model => model.Item.SecondaryConcernId, EditorTemplate.Select,
+                        additionalViewData: new { Items = Model.ConcernsSelectList, Placeholder = string.Empty })
                 </div>
             </div>
         </div>
@@ -47,17 +51,17 @@
         <h2 class="h3">Caller</h2>
         <div class="row">
             <div class="col-md-6 mb-3">
-                @Html.EditorFor(e => e.Item.CallerName, EditorTemplate.Input)
+                @Html.EditorFor(model => model.Item.CallerName, EditorTemplate.Input)
             </div>
             <div class="col-md-6 mb-3">
-                @Html.EditorFor(e => e.Item.CallerRepresents, EditorTemplate.Input)
+                @Html.EditorFor(model => model.Item.CallerRepresents, EditorTemplate.Input)
             </div>
         </div>
 
         <div class="row mb-3">
             <div class="col-md-6">
                 <div class="mb-3">
-                    @Html.EditorFor(e => e.Item.CallerEmail, EditorTemplate.Input)
+                    @Html.EditorFor(model => model.Item.CallerEmail, EditorTemplate.Input)
                 </div>
                 <div class="input-group mb-3">
                     <div class="form-floating">
@@ -65,7 +69,8 @@
                         <label asp-for="Item.CallerPhoneNumber" class="form-label"></label>
                         <span asp-validation-for="Item.CallerPhoneNumber" class="invalid-feedback"></span>
                     </div>
-                    @Html.EditorFor(e => e.Item.CallerPhoneNumber!.Type, EditorTemplate.SelectOptional, new { Items = phoneTypesSelectList })
+                    @Html.EditorFor(model => model.Item.CallerPhoneNumber!.Type, EditorTemplate.Select,
+                        additionalViewData: new { Items = phoneTypesSelectList, Placeholder = string.Empty })
                 </div>
                 <div class="input-group mb-3">
                     <div class="form-floating">
@@ -73,7 +78,8 @@
                         <label asp-for="Item.CallerSecondaryPhoneNumber" class="form-label"></label>
                         <span asp-validation-for="Item.CallerSecondaryPhoneNumber" class="invalid-feedback"></span>
                     </div>
-                    @Html.EditorFor(e => e.Item.CallerSecondaryPhoneNumber!.Type, EditorTemplate.SelectOptional, new { Items = phoneTypesSelectList })
+                    @Html.EditorFor(model => model.Item.CallerSecondaryPhoneNumber!.Type, EditorTemplate.Select,
+                        additionalViewData: new { Items = phoneTypesSelectList, Placeholder = string.Empty })
                 </div>
                 <div class="input-group mb-3">
                     <div class="form-floating">
@@ -81,23 +87,25 @@
                         <label asp-for="Item.CallerTertiaryPhoneNumber" class="form-label"></label>
                         <span asp-validation-for="Item.CallerTertiaryPhoneNumber" class="invalid-feedback"></span>
                     </div>
-                    @Html.EditorFor(e => e.Item.CallerTertiaryPhoneNumber!.Type, EditorTemplate.SelectOptional, new { Items = phoneTypesSelectList })
+                    @Html.EditorFor(model => model.Item.CallerTertiaryPhoneNumber!.Type, EditorTemplate.Select,
+                        additionalViewData: new { Items = phoneTypesSelectList, Placeholder = string.Empty })
                 </div>
             </div>
 
             <div class="col-md-6">
                 <div class="mb-3">
-                    @Html.EditorFor(e => e.Item.CallerAddress.Street, EditorTemplate.Input)
+                    @Html.EditorFor(model => model.Item.CallerAddress.Street, EditorTemplate.Input)
                 </div>
                 <div class="mb-3">
-                    @Html.EditorFor(e => e.Item.CallerAddress.Street2, EditorTemplate.Input)
+                    @Html.EditorFor(model => model.Item.CallerAddress.Street2, EditorTemplate.Input)
                 </div>
                 <div class="mb-3">
-                    @Html.EditorFor(e => e.Item.CallerAddress.City, EditorTemplate.Input)
+                    @Html.EditorFor(model => model.Item.CallerAddress.City, EditorTemplate.Input)
                 </div>
                 <div class="input-group mb-3">
-                    @Html.EditorFor(e => e.Item.CallerAddress.State, EditorTemplate.SelectOptional, new { Items = Model.StatesSelectList })
-                    @Html.EditorFor(e => e.Item.CallerAddress.PostalCode, EditorTemplate.Input)
+                    @Html.EditorFor(model => model.Item.CallerAddress.State, EditorTemplate.Select,
+                        additionalViewData: new { Items = Model.StatesSelectList, Placeholder = string.Empty })
+                    @Html.EditorFor(model => model.Item.CallerAddress.PostalCode, EditorTemplate.Input)
                 </div>
             </div>
         </div>
@@ -106,19 +114,22 @@
         <div class="row mb-3">
             <div class="col-md-6">
                 <div class="mb-3">
-                    @Html.EditorFor(e => e.Item.ComplaintLocation, EditorTemplate.Textarea, new { Rows = 5 })
+                    @Html.EditorFor(model => model.Item.ComplaintLocation, EditorTemplate.Textarea,
+                        additionalViewData: new { Rows = 5 })
                 </div>
                 <div class="mb-3">
-                    @Html.EditorFor(e => e.Item.ComplaintDirections, EditorTemplate.Textarea, new { Rows = 5 })
+                    @Html.EditorFor(model => model.Item.ComplaintDirections, EditorTemplate.Textarea,
+                        additionalViewData: new { Rows = 5 })
                 </div>
             </div>
 
             <div class="col-md-6">
                 <div class="mb-3">
-                    @Html.EditorFor(e => e.Item.ComplaintCity, EditorTemplate.Input)
+                    @Html.EditorFor(model => model.Item.ComplaintCity, EditorTemplate.Input)
                 </div>
                 <div class="mb-3">
-                    @Html.EditorFor(e => e.Item.ComplaintCounty, EditorTemplate.SelectOptional, new { Items = Model.CountiesSelectList })
+                    @Html.EditorFor(model => model.Item.ComplaintCounty, EditorTemplate.Select,
+                        additionalViewData: new { Items = Model.CountiesSelectList, Placeholder = string.Empty })
                 </div>
             </div>
         </div>
@@ -127,10 +138,10 @@
         <div class="row mb-3">
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    @Html.EditorFor(e => e.Item.SourceFacilityName, EditorTemplate.Input)
+                    @Html.EditorFor(model => model.Item.SourceFacilityName, EditorTemplate.Input)
                 </div>
                 <div class="col-md-6 mb-3">
-                    @Html.EditorFor(e => e.Item.SourceFacilityIdNumber, EditorTemplate.Input)
+                    @Html.EditorFor(model => model.Item.SourceFacilityIdNumber, EditorTemplate.Input)
                 </div>
             </div>
         </div>
@@ -143,10 +154,10 @@
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <div class="mb-3">
-                        @Html.EditorFor(e => e.Item.SourceContactName, EditorTemplate.Input)
+                        @Html.EditorFor(model => model.Item.SourceContactName, EditorTemplate.Input)
                     </div>
                     <div class="form-floating mb-3">
-                        @Html.EditorFor(e => e.Item.SourceEmail, EditorTemplate.Input)
+                        @Html.EditorFor(model => model.Item.SourceEmail, EditorTemplate.Input)
                     </div>
                     <div class="input-group mb-3">
                         <div class="form-floating">
@@ -154,7 +165,8 @@
                             <label asp-for="Item.SourcePhoneNumber" class="form-label"></label>
                             <span asp-validation-for="Item.SourcePhoneNumber" class="invalid-feedback"></span>
                         </div>
-                        @Html.EditorFor(e => e.Item.SourcePhoneNumber!.Type, EditorTemplate.SelectOptional, new { Items = phoneTypesSelectList })
+                        @Html.EditorFor(model => model.Item.SourcePhoneNumber!.Type, EditorTemplate.Select,
+                            additionalViewData: new { Items = phoneTypesSelectList, Placeholder = string.Empty })
                     </div>
                     <div class="input-group mb-3">
                         <div class="form-floating">
@@ -162,7 +174,8 @@
                             <label asp-for="Item.SourceSecondaryPhoneNumber" class="form-label"></label>
                             <span asp-validation-for="Item.SourceSecondaryPhoneNumber" class="invalid-feedback"></span>
                         </div>
-                        @Html.EditorFor(e => e.Item.SourceSecondaryPhoneNumber!.Type, EditorTemplate.SelectOptional, new { Items = phoneTypesSelectList })
+                        @Html.EditorFor(model => model.Item.SourceSecondaryPhoneNumber!.Type, EditorTemplate.Select,
+                            additionalViewData: new { Items = phoneTypesSelectList, Placeholder = string.Empty })
                     </div>
                     <div class="input-group mb-3">
                         <div class="form-floating">
@@ -170,23 +183,25 @@
                             <label asp-for="Item.SourceTertiaryPhoneNumber" class="form-label"></label>
                             <span asp-validation-for="Item.SourceTertiaryPhoneNumber" class="invalid-feedback"></span>
                         </div>
-                        @Html.EditorFor(e => e.Item.SourceTertiaryPhoneNumber!.Type, EditorTemplate.SelectOptional, new { Items = phoneTypesSelectList })
+                        @Html.EditorFor(model => model.Item.SourceTertiaryPhoneNumber!.Type, EditorTemplate.Select,
+                            additionalViewData: new { Items = phoneTypesSelectList, Placeholder = string.Empty })
                     </div>
                 </div>
 
                 <div class="col-md-6 mb-3">
                     <div class="mb-3">
-                        @Html.EditorFor(e => e.Item.SourceAddress.Street, EditorTemplate.Input)
+                        @Html.EditorFor(model => model.Item.SourceAddress.Street, EditorTemplate.Input)
                     </div>
                     <div class="mb-3">
-                        @Html.EditorFor(e => e.Item.SourceAddress.Street2, EditorTemplate.Input)
+                        @Html.EditorFor(model => model.Item.SourceAddress.Street2, EditorTemplate.Input)
                     </div>
                     <div class="mb-3">
-                        @Html.EditorFor(e => e.Item.SourceAddress.City, EditorTemplate.Input)
+                        @Html.EditorFor(model => model.Item.SourceAddress.City, EditorTemplate.Input)
                     </div>
                     <div class="input-group mb-3">
-                        @Html.EditorFor(e => e.Item.SourceAddress.State, EditorTemplate.SelectOptional, new { Items = Model.StatesSelectList })
-                        @Html.EditorFor(e => e.Item.SourceAddress.PostalCode, EditorTemplate.Input)
+                        @Html.EditorFor(model => model.Item.SourceAddress.State, EditorTemplate.Select,
+                            additionalViewData: new { Items = Model.StatesSelectList, Placeholder = string.Empty })
+                        @Html.EditorFor(model => model.Item.SourceAddress.PostalCode, EditorTemplate.Input)
                     </div>
                 </div>
             </div>

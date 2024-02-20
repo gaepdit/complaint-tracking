@@ -2,11 +2,12 @@
 @model object?
 @{
     var items = (IEnumerable<SelectListItem>)ViewData["Items"]!;
+    var placeholder = ViewData.ContainsKey("Placeholder") ? (string)ViewData["Placeholder"]! : TextConstants.SelectTextRequired;
 }
 
 <div class="form-floating">
     <select asp-for="@__model" asp-items="items" class="form-select">
-        <option value="">@TextConstants.SelectTextRequired</option>
+        <option value="">@placeholder</option>
     </select>
     <label asp-for="@__model" class="form-label"></label>
     <span asp-validation-for="@__model" class="invalid-feedback"></span>
