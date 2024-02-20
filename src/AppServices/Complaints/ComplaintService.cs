@@ -1,7 +1,8 @@
 using AutoMapper;
 using Cts.AppServices.Attachments;
 using Cts.AppServices.Attachments.ValidationAttributes;
-using Cts.AppServices.Complaints.Dto;
+using Cts.AppServices.Complaints.Dto.Command;
+using Cts.AppServices.Complaints.Dto.Query;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.ComplaintTransitions;
@@ -182,7 +183,7 @@ public sealed class ComplaintService(
         return complaint;
     }
 
-    private async Task MapComplaintDetailsAsync(Complaint complaint, IComplaintDtoDetails resource,
+    private async Task MapComplaintDetailsAsync(Complaint complaint, IComplaintCommandDto resource,
         CancellationToken token)
     {
         // Properties: Meta-data

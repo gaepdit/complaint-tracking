@@ -3,9 +3,9 @@ using Cts.Domain.ValueObjects;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
-namespace Cts.AppServices.Complaints.Dto;
+namespace Cts.AppServices.Complaints.Dto.Command;
 
-public record ComplaintCreateDto : IComplaintDtoDetails
+public record ComplaintCreateDto : IComplaintCommandDto
 {
     // Constructors
 

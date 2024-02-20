@@ -1,5 +1,5 @@
 ﻿using Cts.AppServices.Attachments.Dto;
-using Cts.AppServices.Complaints.Dto;
+using Cts.AppServices.Complaints.Dto.Query;
 using Microsoft.AspNetCore.Http;
 
 namespace Cts.AppServices.Attachments;

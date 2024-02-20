@@ -1,6 +1,6 @@
 using AutoMapper;
 using Cts.AppServices.Attachments.Dto;
-using Cts.AppServices.Complaints.Dto;
+using Cts.AppServices.Complaints.Dto.Query;
 using Cts.AppServices.ErrorLogging;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Attachments;

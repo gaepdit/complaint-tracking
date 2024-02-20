@@ -1,5 +1,6 @@
 ﻿using Cts.AppServices.Attachments;
-using Cts.AppServices.Complaints.Dto;
+using Cts.AppServices.Complaints.Dto.Command;
+using Cts.AppServices.Complaints.Dto.Query;
 using GaEpd.AppLibrary.Pagination;
 
 namespace Cts.AppServices.Complaints;

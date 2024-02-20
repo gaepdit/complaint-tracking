@@ -1,8 +1,8 @@
 ﻿using Cts.Domain.ValueObjects;
 
-namespace Cts.AppServices.Complaints.Dto;
+namespace Cts.AppServices.Complaints.Dto.Command;
 
-public interface IComplaintDtoDetails
+public interface IComplaintCommandDto
 {
     // Meta-data
     DateOnly ReceivedDate { get; }

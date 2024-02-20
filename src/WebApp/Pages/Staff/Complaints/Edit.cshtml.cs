@@ -1,5 +1,5 @@
 ﻿using Cts.AppServices.Complaints;
-using Cts.AppServices.Complaints.Dto;
+using Cts.AppServices.Complaints.Dto.Command;
 using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Concerns;
 using Cts.AppServices.Permissions;

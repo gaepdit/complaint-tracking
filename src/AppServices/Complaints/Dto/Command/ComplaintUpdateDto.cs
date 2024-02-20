@@ -2,9 +2,9 @@ using Cts.Domain.Entities.Complaints;
 using Cts.Domain.ValueObjects;
 using System.ComponentModel.DataAnnotations;
 
-namespace Cts.AppServices.Complaints.Dto;
+namespace Cts.AppServices.Complaints.Dto.Command;
 
-public record ComplaintUpdateDto : IComplaintDtoDetails
+public record ComplaintUpdateDto : IComplaintCommandDto
 {
     // Authorization handler assist properties
     public bool ComplaintClosed { get; init; }

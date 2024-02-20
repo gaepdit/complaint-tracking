@@ -4,7 +4,7 @@ using Cts.AppServices.Attachments.Dto;
 using Cts.AppServices.ComplaintActions;
 using Cts.AppServices.ComplaintActions.Dto;
 using Cts.AppServices.Complaints;
-using Cts.AppServices.Complaints.Dto;
+using Cts.AppServices.Complaints.Dto.Query;
 using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Permissions;
 using Cts.AppServices.Staff;

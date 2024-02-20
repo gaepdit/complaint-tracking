@@ -1,5 +1,5 @@
 ﻿using Cts.AppServices.Complaints;
-using Cts.AppServices.Complaints.Dto;
+using Cts.AppServices.Complaints.Dto.Query;
 using Cts.AppServices.Complaints.Permissions;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;

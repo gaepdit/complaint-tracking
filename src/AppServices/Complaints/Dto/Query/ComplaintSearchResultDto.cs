@@ -1,7 +1,7 @@
 ﻿using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Entities.Complaints;
 
-namespace Cts.AppServices.Complaints.Dto;
+namespace Cts.AppServices.Complaints.Dto.Query;
 
 public record ComplaintSearchResultDto
 {

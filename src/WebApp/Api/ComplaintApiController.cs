@@ -1,5 +1,5 @@
 ﻿using Cts.AppServices.Complaints;
-using Cts.AppServices.Complaints.Dto;
+using Cts.AppServices.Complaints.Dto.Query;
 using GaEpd.AppLibrary.Pagination;
 using Microsoft.AspNetCore.Mvc;
 
