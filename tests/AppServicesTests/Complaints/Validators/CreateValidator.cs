@@ -13,7 +13,7 @@ public class CreateValidator
         {
             ReceivedById = Guid.NewGuid().ToString(),
             ComplaintNature = Guid.NewGuid().ToString(),
-            CurrentOfficeId = Guid.NewGuid(),
+            OfficeId = Guid.NewGuid(),
         };
         var validator = new ComplaintCreateValidator();
 
@@ -22,7 +22,7 @@ public class CreateValidator
         using var scope = new AssertionScope();
         result.ShouldNotHaveValidationErrorFor(e => e.ReceivedById);
         result.ShouldNotHaveValidationErrorFor(e => e.ComplaintNature);
-        result.ShouldNotHaveValidationErrorFor(e => e.CurrentOfficeId);
+        result.ShouldNotHaveValidationErrorFor(e => e.OfficeId);
     }
 
     [Test]
@@ -38,7 +38,7 @@ public class CreateValidator
             .WithErrorMessage("'Received By Id' must not be empty.");
         result.ShouldHaveValidationErrorFor(e => e.ComplaintNature)
             .WithErrorMessage("'Complaint Nature' must not be empty.");
-        result.ShouldHaveValidationErrorFor(e => e.CurrentOfficeId)
-            .WithErrorMessage("'Current Office Id' must not be empty.");
+        result.ShouldHaveValidationErrorFor(e => e.OfficeId)
+            .WithErrorMessage("'Office Id' must not be empty.");
     }
 }

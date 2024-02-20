@@ -50,7 +50,7 @@ public class AddModel(
 
         if (!ModelState.IsValid)
         {
-            await PopulateSelectListsAsync(NewComplaint.CurrentOfficeId);
+            await PopulateSelectListsAsync(NewComplaint.OfficeId);
             return Page();
         }
 

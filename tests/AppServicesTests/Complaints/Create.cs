@@ -35,7 +35,7 @@ public class Create
             Substitute.For<IConcernRepository>(), officeRepoMock, Substitute.For<IAttachmentService>(),
             AppServicesTestsSetup.Mapper!, userServiceMock);
 
-        var item = new ComplaintCreateDto { CurrentOfficeId = Guid.Empty };
+        var item = new ComplaintCreateDto { OfficeId = Guid.Empty };
 
         // Act
         var result = await appService.CreateAsync(item, AppServiceHelpers.AttachmentServiceConfig);
@@ -71,7 +71,7 @@ public class Create
         {
             ReceivedDate = new DateOnly(2000, 1, 1),
             ReceivedTime = new TimeOnly(1, 15, 0),
-            CurrentOfficeId = office.Id,
+            OfficeId = office.Id,
         };
 
         var expected = new DateTime(2000, 1, 1, 1, 15, 0, DateTimeKind.Local);

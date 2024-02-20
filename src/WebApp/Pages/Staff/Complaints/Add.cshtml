@@ -228,11 +228,11 @@
         <h2>Assignment</h2>
         <div class="row mb-3">
             <div class="col-md mb-3">
-                @Html.EditorFor(model => model.NewComplaint.CurrentOfficeId, EditorTemplate.Select,
+                @Html.EditorFor(model => model.NewComplaint.OfficeId, EditorTemplate.Select,
                     additionalViewData: new { Items = Model.OfficesSelectList })
             </div>
             <div class="col-md mb-3">
-                @Html.EditorFor(model => model.NewComplaint.CurrentOwnerId, EditorTemplate.Select,
+                @Html.EditorFor(model => model.NewComplaint.OwnerId, EditorTemplate.Select,
                     additionalViewData: new { Items = Model.ActiveStaffInOfficeSelectList, Placeholder = TextConstants.SelectTextDefaultAssignor })
             </div>
         </div>
@@ -250,5 +250,11 @@
     <script src="~/js/copyContactInfo.js"></script>
     <script src="~/lib/axios/axios.min.js"></script>
     <script src="~/js/staffSelect.js"></script>
-    <script>setUpStaffDropdown("@nameof(Model.NewComplaint)_@nameof(ComplaintCreateDto.CurrentOfficeId)","@nameof(Model.NewComplaint)_@nameof(ComplaintCreateDto.CurrentOwnerId)",true,"@TextConstants.SelectTextDefaultAssignor");</script>
+    <script>
+    setUpStaffDropdown(
+        "@nameof(Model.NewComplaint)_@nameof(ComplaintCreateDto.OfficeId)",
+        "@nameof(Model.NewComplaint)_@nameof(ComplaintCreateDto.OwnerId)",
+        true,
+        "@TextConstants.SelectTextDefaultAssignor");
+    </script>
 }

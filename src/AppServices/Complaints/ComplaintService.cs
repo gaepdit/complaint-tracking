@@ -242,9 +242,9 @@ public sealed class ComplaintService(
         var complaint = complaintManager.Create(currentUser);
         await MapComplaintDetailsAsync(complaint, resource, token).ConfigureAwait(false);
 
-        var office = await officeRepository.GetAsync(resource.CurrentOfficeId!.Value, token).ConfigureAwait(false);
-        var owner = resource.CurrentOwnerId is not null
-            ? await userService.FindUserAsync(resource.CurrentOwnerId).ConfigureAwait(false)
+        var office = await officeRepository.GetAsync(resource.OfficeId!.Value, token).ConfigureAwait(false);
+        var owner = resource.OwnerId is not null
+            ? await userService.FindUserAsync(resource.OwnerId).ConfigureAwait(false)
             : null;
         complaintManager.Assign(complaint, office, owner, currentUser);
         return complaint;

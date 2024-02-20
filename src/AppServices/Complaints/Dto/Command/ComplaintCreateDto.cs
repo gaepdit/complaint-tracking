@@ -12,10 +12,10 @@ public record ComplaintCreateDto : IComplaintCommandDto
     [UsedImplicitly]
     public ComplaintCreateDto() { }
 
-    public ComplaintCreateDto(string? receivedById, Guid? currentOfficeId)
+    public ComplaintCreateDto(string? receivedById, Guid? officeId)
     {
         ReceivedById = receivedById;
-        CurrentOfficeId = currentOfficeId;
+        OfficeId = officeId;
     }
 
     // Meta-data
@@ -135,8 +135,8 @@ public record ComplaintCreateDto : IComplaintCommandDto
 
     [Required]
     [Display(Name = "Assigned office")]
-    public Guid? CurrentOfficeId { get; init; }
+    public Guid? OfficeId { get; init; }
 
     [Display(Name = "Assigned associate")]
-    public string? CurrentOwnerId { get; init; }
+    public string? OwnerId { get; init; }
 }
