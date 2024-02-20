@@ -14,7 +14,7 @@ public record ComplaintSearchDto
     public SearchComplaintStatus? Status { get; init; }
 
     [Display(Name = "Deletion Status")]
-    public SearchDeleteStatus? DeletedStatus { get; init; }
+    public SearchDeleteStatus? DeletedStatus { get; set; }
 
     [Display(Name = "From")]
     [DataType(DataType.Date)]
@@ -72,7 +72,7 @@ public record ComplaintSearchDto
     public string? FacilityIdNumber { get; set; }
 
     [Display(Name = "Source Contact")]
-    public string? Contact { get; set; }
+    public string? Contact { get; init; }
 
     [Display(Name = "Street Address")]
     public string? Street { get; set; }

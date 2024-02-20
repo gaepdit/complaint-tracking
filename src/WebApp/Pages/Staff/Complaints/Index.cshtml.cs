@@ -22,11 +22,13 @@ public class IndexModel(
     IComplaintService complaints,
     IStaffService staff,
     IConcernService concerns,
-    IOfficeService offices)
+    IOfficeService offices,
+    IAuthorizationService authorization)
     : PageModel
 {
     public ComplaintSearchDto Spec { get; set; } = default!;
     public bool ShowResults { get; private set; }
+    public bool CanViewDeletedComplaints { get; private set; }
     public IPaginatedResult<ComplaintSearchResultDto> SearchResults { get; private set; } = default!;
     public string SortByName => Spec.Sort.ToString();
     public PaginationNavModel PaginationNav => new(SearchResults, Spec.AsRouteValues());
@@ -39,16 +41,21 @@ public class IndexModel(
     public SelectList CountiesSelectList => new(Data.Counties);
     public SelectList StatesSelectList => new(Data.States);
 
-    public Task OnGetAsync()
+    public async Task OnGetAsync()
     {
         Spec = new ComplaintSearchDto();
-        return PopulateSelectListsAsync();
+        CanViewDeletedComplaints =
+            (await authorization.AuthorizeAsync(User, nameof(Policies.DivisionManager))).Succeeded;
+        await PopulateSelectListsAsync();
     }
 
     public async Task<IActionResult> OnGetSearchAsync(ComplaintSearchDto spec, [FromQuery] int p = 1)
     {
         spec.TrimAll();
         var paging = new PaginatedRequest(p, GlobalConstants.PageSize, spec.Sort.GetDescription());
+        CanViewDeletedComplaints =
+            (await authorization.AuthorizeAsync(User, nameof(Policies.DivisionManager))).Succeeded;
+        if (!CanViewDeletedComplaints) spec.DeletedStatus = null;
 
         Spec = spec;
         ShowResults = true;

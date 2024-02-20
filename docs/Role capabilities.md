@@ -80,7 +80,8 @@ Editor, and Site Maintenance roles. Plus they can:
 * Assign CTS roles, including the Division Manager role.
 * Edit all Complaints and Complaint Actions.
 * Reopen Complaints that have been closed.
-* Delete and restore all Complaints and Complaint Actions.
+* Delete and restore all Complaints.
+* Delete and restore all Complaint Actions.
 * View reports for all Users.
 
 ### Data Export
