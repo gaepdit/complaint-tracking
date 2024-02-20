@@ -27,7 +27,7 @@ internal class ComplaintViewPermissionsHandler : AuthorizationHandler<ComplaintO
                 IsOpen() && !ReviewPending() && !Accepted() && IsCurrentOwner(),
 
             nameof(ComplaintOperation.Assign) =>
-                !ReviewPending() && NoCurrentOwner() && IsCurrentManagerOrAssignor(),
+                IsOpen() && !ReviewPending() && NoCurrentOwner() && IsCurrentManagerOrAssignor(),
 
             nameof(ComplaintOperation.EditActions) =>
                 IsOpen() && !MustAccept() && IsCurrentOwnerOrManager(),
