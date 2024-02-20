@@ -126,8 +126,13 @@ public sealed class ComplaintService(
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
     }
 
-    public async Task AssignAsync(ComplaintAssignDto resource, CancellationToken token = default)
+    public async Task<bool> AssignAsync(ComplaintAssignDto resource, ComplaintViewDto currentComplaint,
+        CancellationToken token = default)
     {
+        if (resource.OfficeId == currentComplaint.CurrentOffice?.Id &&
+            resource.OwnerId == currentComplaint.CurrentOwner?.Id) 
+            return false;
+
         var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
         var office = await officeRepository.GetAsync(resource.OfficeId!.Value, token).ConfigureAwait(false);
@@ -137,8 +142,9 @@ public sealed class ComplaintService(
 
         complaintManager.Assign(complaint, office, owner, currentUser);
         await complaintRepository.UpdateAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
-        await AddAssignmentTransitionsAsync(complaint, currentUser, token).ConfigureAwait(false);
+        await AddAssignmentTransitionsAsync(complaint, currentUser, token, resource.Comment).ConfigureAwait(false);
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
+        return true;
     }
 
     public async Task CloseAsync(ComplaintClosureDto resource, CancellationToken token = default)
@@ -229,11 +235,12 @@ public sealed class ComplaintService(
             .ConfigureAwait(false);
 
     private async Task AddAssignmentTransitionsAsync(Complaint complaint, ApplicationUser? currentUser,
-        CancellationToken token)
+        CancellationToken token, string? comment = null)
     {
-        await AddTransitionAsync(complaint, TransitionType.Assigned, currentUser, token).ConfigureAwait(false);
+        await AddTransitionAsync(complaint, TransitionType.Assigned, currentUser, token, comment).ConfigureAwait(false);
         if (complaint.CurrentOwner != null && complaint.CurrentOwner == currentUser)
-            await AddTransitionAsync(complaint, TransitionType.Accepted, currentUser, token).ConfigureAwait(false);
+            await AddTransitionAsync(complaint, TransitionType.Accepted, currentUser, token, comment)
+                .ConfigureAwait(false);
     }
 
     internal async Task<Complaint> CreateComplaintFromDtoAsync(ComplaintCreateDto resource,

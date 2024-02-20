@@ -11,5 +11,5 @@ public record ComplaintAssignDto(int ComplaintId)
     [Display(Name = "Assigned associate")]
     public string? OwnerId { get; init; }
 
-    public string Comment { get; init; } = string.Empty;
+    public string? Comment { get; init; }
 }
