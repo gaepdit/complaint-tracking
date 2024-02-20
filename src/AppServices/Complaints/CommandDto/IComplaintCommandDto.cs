@@ -1,6 +1,6 @@
 ﻿using Cts.Domain.ValueObjects;
 
-namespace Cts.AppServices.Complaints.Dto.Command;
+namespace Cts.AppServices.Complaints.CommandDto;
 
 public interface IComplaintCommandDto
 {

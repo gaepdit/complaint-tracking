@@ -6,7 +6,7 @@ using Cts.Domain.Entities.Complaints;
 using Cts.Domain.ValueObjects;
 using System.ComponentModel.DataAnnotations;
 
-namespace Cts.AppServices.Complaints.Dto.Query;
+namespace Cts.AppServices.Complaints.QueryDto;
 
 public record ComplaintViewDto
 {

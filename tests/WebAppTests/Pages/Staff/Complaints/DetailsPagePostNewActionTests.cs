@@ -1,6 +1,6 @@
 using Cts.AppServices.ComplaintActions.Dto;
 using Cts.AppServices.Complaints;
-using Cts.AppServices.Complaints.Dto.Query;
+using Cts.AppServices.Complaints.QueryDto;
 
 namespace WebAppTests.Pages.Staff.Complaints;
 

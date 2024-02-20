@@ -1,5 +1,5 @@
 ﻿using Cts.AppServices.Complaints;
-using Cts.AppServices.Complaints.Dto.Command;
+using Cts.AppServices.Complaints.CommandDto;
 using Cts.AppServices.Concerns;
 using Cts.AppServices.Staff;
 using Cts.WebApp.Pages.Staff.Complaints;

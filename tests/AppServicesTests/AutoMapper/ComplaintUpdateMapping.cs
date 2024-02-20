@@ -1,4 +1,4 @@
-using Cts.AppServices.Complaints.Dto.Command;
+using Cts.AppServices.Complaints.CommandDto;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;

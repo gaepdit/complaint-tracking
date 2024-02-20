@@ -1,6 +1,7 @@
 ﻿using Cts.AppServices.Complaints;
-using Cts.AppServices.Complaints.Dto.Query;
+using Cts.AppServices.Complaints.CommandDto;
 using Cts.AppServices.Complaints.Permissions;
+using Cts.AppServices.Complaints.QueryDto;
 using Cts.AppServices.Offices;
 using Cts.AppServices.Staff;
 using Cts.WebApp.Models;

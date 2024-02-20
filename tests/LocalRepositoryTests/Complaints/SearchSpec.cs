@@ -1,5 +1,5 @@
 ﻿using Cts.AppServices.Complaints;
-using Cts.AppServices.Complaints.Dto.Query;
+using Cts.AppServices.Complaints.QueryDto;
 using Cts.Domain.Entities.Attachments;
 using Cts.Domain.Entities.ComplaintActions;
 using Cts.Domain.Entities.ComplaintTransitions;

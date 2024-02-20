@@ -1,8 +1,8 @@
 using AutoMapper;
 using Cts.AppServices.Attachments;
 using Cts.AppServices.Attachments.ValidationAttributes;
-using Cts.AppServices.Complaints.Dto.Command;
-using Cts.AppServices.Complaints.Dto.Query;
+using Cts.AppServices.Complaints.CommandDto;
+using Cts.AppServices.Complaints.QueryDto;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.ComplaintTransitions;

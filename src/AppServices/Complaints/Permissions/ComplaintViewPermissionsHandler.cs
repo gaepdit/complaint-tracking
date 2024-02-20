@@ -1,4 +1,4 @@
-using Cts.AppServices.Complaints.Dto.Query;
+using Cts.AppServices.Complaints.QueryDto;
 using Cts.AppServices.Permissions.Helpers;
 using Cts.Domain;
 using Cts.Domain.Entities.Complaints;

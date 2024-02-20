@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Cts.AppServices.Complaints;
+namespace Cts.AppServices.Complaints.CommandDto;
 
 public record ComplaintRequestReviewDto(int ComplaintId)
 {

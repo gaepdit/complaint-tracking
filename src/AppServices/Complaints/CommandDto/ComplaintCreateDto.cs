@@ -1,21 +1,22 @@
-using Cts.Domain.Entities.Complaints;
+using Cts.AppServices.Utilities;
 using Cts.Domain.ValueObjects;
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
-namespace Cts.AppServices.Complaints.Dto.Command;
+namespace Cts.AppServices.Complaints.CommandDto;
 
-public record ComplaintUpdateDto : IComplaintCommandDto
+public record ComplaintCreateDto : IComplaintCommandDto
 {
-    // Authorization handler assist properties
-    public bool ComplaintClosed { get; init; }
-    public bool IsDeleted { get; init; }
-    public string? CurrentOwnerId { get; init; }
-    public Guid? CurrentOfficeId { get; init; }
-    public Guid CurrentUserOfficeId { get; set; }
-    public string? EnteredById { get; init; }
-    public DateTimeOffset EnteredDate { get; init; }
-    public DateTimeOffset? CurrentOwnerAcceptedDate { get; init; }
-    public ComplaintStatus Status { get; init; }
+    // Constructors
+
+    [UsedImplicitly]
+    public ComplaintCreateDto() { }
+
+    public ComplaintCreateDto(string? receivedById, Guid? officeId)
+    {
+        ReceivedById = receivedById;
+        OfficeId = officeId;
+    }
 
     // Meta-data
 
@@ -23,12 +24,12 @@ public record ComplaintUpdateDto : IComplaintCommandDto
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = "{0:O}", ApplyFormatInEditMode = true)]
     [Display(Name = "Date received")]
-    public DateOnly ReceivedDate { get; init; }
+    public DateOnly ReceivedDate { get; init; } = DateOnly.FromDateTime(DateTime.Today);
 
     [Required]
     [DataType(DataType.Time)]
     [Display(Name = "Time received")]
-    public TimeOnly ReceivedTime { get; init; }
+    public TimeOnly ReceivedTime { get; init; } = DateTime.Now.TimeRoundedToQuarterHour();
 
     [Required]
     [Display(Name = "Received by")]
@@ -113,7 +114,7 @@ public record ComplaintUpdateDto : IComplaintCommandDto
     public string? SourceEmail { get; init; }
 
     [Display(Name = "Primary phone")]
-    public PhoneNumber? SourcePhoneNumber { get; init; }
+    public PhoneNumber? SourcePhoneNumber { get; init; } 
 
     [Display(Name = "Secondary phone")]
     public PhoneNumber? SourceSecondaryPhoneNumber { get; init; }
@@ -125,4 +126,17 @@ public record ComplaintUpdateDto : IComplaintCommandDto
 
     [Display(Name = "Source address")]
     public IncompleteAddress SourceAddress { get; init; } = new();
+
+    // Attachments
+
+    public List<IFormFile>? Files { get; } = [];
+
+    // Assignment
+
+    [Required]
+    [Display(Name = "Assigned office")]
+    public Guid? OfficeId { get; init; }
+
+    [Display(Name = "Assigned associate")]
+    public string? OwnerId { get; init; }
 }

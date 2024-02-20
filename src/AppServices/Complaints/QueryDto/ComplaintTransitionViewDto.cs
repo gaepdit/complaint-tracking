@@ -2,7 +2,7 @@
 using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Entities.ComplaintTransitions;
 
-namespace Cts.AppServices.Complaints.Dto.Query;
+namespace Cts.AppServices.Complaints.QueryDto;
 
 public record ComplaintTransitionViewDto
 {

@@ -1,7 +1,7 @@
 ﻿using Cts.AppServices.Attachments;
 using Cts.AppServices.Attachments.Dto;
-using Cts.AppServices.Complaints.Dto.Query;
 using Cts.AppServices.Complaints.Permissions;
+using Cts.AppServices.Complaints.QueryDto;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using Cts.WebApp.Platform.Settings;

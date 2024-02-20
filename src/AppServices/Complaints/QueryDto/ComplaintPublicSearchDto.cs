@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Cts.AppServices.Complaints.Dto.Query;
+namespace Cts.AppServices.Complaints.QueryDto;
 
 public record ComplaintPublicSearchDto
 {
