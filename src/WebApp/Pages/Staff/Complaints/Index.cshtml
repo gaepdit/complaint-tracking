@@ -18,7 +18,7 @@
             <form method="get" asp-page-handler="Search" asp-fragment="SearchResults">
                 <h2 class="h4">Status</h2>
                 <div class="row">
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md mb-3">
                         <div class="form-floating">
                             <select asp-for="Spec.Status" name="@nameof(Model.Spec.Status)" asp-items="Html.GetEnumSelectList<SearchComplaintStatus>()" class="form-select">
                                 <option value="">@TextConstants.SelectTextAny</option>
@@ -26,14 +26,17 @@
                             <label asp-for="Spec.Status" class="form-label"></label>
                         </div>
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <div class="form-floating">
-                            <select asp-for="Spec.DeletedStatus" name="@nameof(Model.Spec.DeletedStatus)" asp-items="Html.GetEnumSelectList<SearchDeleteStatus>()" class="form-select">
-                                <option value="">Not Deleted</option>
-                            </select>
-                            <label asp-for="Spec.DeletedStatus" class="form-label"></label>
+                    @if (Model.CanViewDeletedComplaints)
+                    {
+                        <div class="col-md mb-3">
+                            <div class="form-floating">
+                                <select asp-for="Spec.DeletedStatus" name="@nameof(Model.Spec.DeletedStatus)" asp-items="Html.GetEnumSelectList<SearchDeleteStatus>()" class="form-select">
+                                    <option value="">Not Deleted</option>
+                                </select>
+                                <label asp-for="Spec.DeletedStatus" class="form-label"></label>
+                            </div>
                         </div>
-                    </div>
+                    }
                 </div>
                 <div class="row">
                     <div class="col-md-6 mb-3">
