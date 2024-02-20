@@ -39,25 +39,28 @@ The solution contains the following projects:
 * **AppServices** — A class library containing the services used by an application to interact with the domain.
 * **LocalRepository** — A class library implementing the repositories and data stores using static in-memory test data (for local development).
 * **EfRepository** — A class library implementing the repositories and data stores using Entity Framework and a database (as specified by the configured connection string).
-* **WebApp** — The front end web application.
-
-There are also corresponding unit test projects for each, plus a **TestData** project containing test data for development and testing.
-
-### Project organization
-
-The solution contains the following projects:
-
-* **Domain** — A class library containing the data models, business logic, and repository interfaces.
-* **AppServices** — A class library containing the services used by an application to interact with the domain.
-* **LocalRepository** — A class library implementing the repositories and data stores using static in-memory test data (for local development).
-* **EfRepository** — A class library implementing the repositories and data stores using Entity Framework and a database (as specified by the configured connection string).
 * **WebApp** — The front end web application and/or API.
 
 There are also corresponding unit test projects for each, plus a **TestData** project containing test data for development and testing.
 
 ### Development settings
 
-The following settings configure the data stores and authentication for development purposes. To change these settings, add an "appsettings.Development.json" file in the root of the "WebApp" folder with a `DevSettings` section and a top-level setting named `UseDevSettings`.
+The following settings configure the data stores and authentication for development purposes. To change these settings, add an "appsettings.Development.json" file in the root of the "WebApp" folder with a `DevSettings` section and a top-level setting named `UseDevSettings`. Here's a sample "appsettings.Development.json" file to start out:
+
+```json
+{
+  "DevSettings": {
+    "UseDevSettings": true,
+    "UseInMemoryData": true,
+    "UseEfMigrations": false,
+    "UseAzureAd": false,
+    "LocalUserIsAuthenticated": true,
+    "LocalUserIsStaff": true,
+    "LocalUserIsAdmin": true,
+    "UseSecurityHeadersInDev": false
+  }
+}
+```
 
 - *UseDevSettings* — Indicates whether the Dev settings should be applied.
 - *UseInMemoryData*

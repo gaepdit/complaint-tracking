@@ -44,13 +44,10 @@ if (!builder.Environment.IsDevelopment())
     builder.Services.AddHsts(opts => opts.MaxAge = TimeSpan.FromMinutes(300));
 
 // Configure application monitoring.
-if (!string.IsNullOrEmpty(AppSettings.RaygunSettings.ApiKey))
-{
-    builder.Services.AddTransient<IErrorLogger, ErrorLogger>();
-    builder.Services.AddRaygun(builder.Configuration,
-        new RaygunMiddlewareSettings { ClientProvider = new RaygunClientProvider() });
-    builder.Services.AddHttpContextAccessor(); // needed by RaygunScriptPartial
-}
+builder.Services.AddTransient<IErrorLogger, ErrorLogger>();
+builder.Services.AddRaygun(builder.Configuration,
+    new RaygunMiddlewareSettings { ClientProvider = new RaygunClientProvider() });
+builder.Services.AddHttpContextAccessor(); // needed by RaygunScriptPartial
 
 // Add app services.
 builder.Services.AddAutoMapperProfiles();
