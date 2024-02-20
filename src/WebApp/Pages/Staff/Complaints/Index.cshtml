@@ -291,9 +291,9 @@
                             </ul>
                         </td>
                         <td>
-                            @Html.DisplayFor(m => item.AssignedOwnerName, DisplayTemplate.StringOrPlaceholder)
+                            @Html.DisplayFor(m => item.AssignedOwnerName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "[Unassigned]" })
                             <br />
-                            @Html.DisplayFor(m => item.CurrentOfficeName, DisplayTemplate.StringOrPlaceholder)
+                            @Html.DisplayFor(m => item.CurrentOfficeName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "[No office assigned]" })
                         </td>
                         <td>
                             <ol type="I">

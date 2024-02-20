@@ -45,7 +45,7 @@
             <dl class="row">
                 <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.DeletedBy)</dt>
                 <dd class="col-sm-8 col-lg-9">
-                    @Html.DisplayFor(model => model.ComplaintView.DeletedBy, DisplayTemplate.NameOrNotEntered)
+                    @Html.DisplayFor(model => model.ComplaintView.DeletedBy, DisplayTemplate.NameOrPlaceholder)
                     on @Html.DisplayFor(model => model.ComplaintView.DeletedAt, DisplayTemplate.LongDateTimeOrNotEntered)
                 </dd>
                 <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.DeleteComments)</dt>
@@ -118,7 +118,7 @@
         {
             <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.ReviewedBy)</dt>
             <dd class="col-sm-8 col-lg-9">
-                @Html.DisplayFor(model => model.ComplaintView.ReviewedBy, DisplayTemplate.NameOrNotEntered)
+                @Html.DisplayFor(model => model.ComplaintView.ReviewedBy, DisplayTemplate.NameOrPlaceholder)
                 on @Html.DisplayFor(model => model.ComplaintView.ComplaintClosedDate, DisplayTemplate.LongDateTimeOrNotEntered)
             </dd>
             <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.ReviewComments)</dt>
@@ -126,9 +126,9 @@
         }
 
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.CurrentOffice)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.CurrentOfficeName, DisplayTemplate.StringOrPlaceholder)</dd>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.CurrentOfficeName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "[Unassigned]" })</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.CurrentOwner)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.CurrentOwner, DisplayTemplate.NameOrNotEntered)</dd>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.ComplaintView.CurrentOwner, DisplayTemplate.NameOrPlaceholder, new { Placeholder = "[Unassigned]" })</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.ReceivedDate)</dt>
         <dd class="col-sm-8 col-lg-9">
             @Html.DisplayFor(model => model.ComplaintView.ReceivedDate, DisplayTemplate.LongDateTime)
@@ -366,7 +366,7 @@
                 </td>
                 <td>@Html.DisplayFor(_ => attachment.Size, DisplayTemplate.FileSize)</td>
                 <td>
-                    @Html.DisplayFor(_ => attachment.UploadedBy, DisplayTemplate.NameOrNotEntered) <br />
+                    @Html.DisplayFor(_ => attachment.UploadedBy, DisplayTemplate.NameOrPlaceholder) <br />
                     @Html.DisplayFor(_ => attachment.UploadedDate, DisplayTemplate.ShortDateTime)
                 </td>
                 @if (Model.UserCan[ComplaintOperation.EditAttachments])
@@ -422,12 +422,12 @@ else
     <dl class="row small">
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.ReceivedBy)</dt>
         <dd class="col-sm-8 col-lg-9">
-            @Html.DisplayFor(model => model.ComplaintView.ReceivedBy, DisplayTemplate.NameOrNotEntered)
+            @Html.DisplayFor(model => model.ComplaintView.ReceivedBy, DisplayTemplate.NameOrPlaceholder)
             on @Html.DisplayFor(model => model.ComplaintView.ReceivedDate, DisplayTemplate.LongDateTime)
         </dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.EnteredBy)</dt>
         <dd class="col-sm-8 col-lg-9">
-            @Html.DisplayFor(model => model.ComplaintView.EnteredBy, DisplayTemplate.NameOrNotEntered)
+            @Html.DisplayFor(model => model.ComplaintView.EnteredBy, DisplayTemplate.NameOrPlaceholder)
             on @Html.DisplayFor(model => model.ComplaintView.EnteredDate, DisplayTemplate.LongDateTime)
         </dd>
     </dl>
@@ -453,7 +453,7 @@ else
                 <tr>
                     <td>@Html.DisplayFor(_ => item.CommittedDate, DisplayTemplate.ShortDateTimeNoBreak)</td>
                     <td>@item.TransitionType.GetDisplayName()</td>
-                    <td>@Html.DisplayFor(_ => item.CommittedByUser, DisplayTemplate.NameOrNotEntered)</td>
+                    <td>@Html.DisplayFor(_ => item.CommittedByUser, DisplayTemplate.NameOrPlaceholder)</td>
                     <td>
                         @Html.DisplayFor(_ => item.TransferredToUser, DisplayTemplate.NameOrBlank)
                         @if (item is { TransferredToUser: not null, TransferredToOffice: not null })

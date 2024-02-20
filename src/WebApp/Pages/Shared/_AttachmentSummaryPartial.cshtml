@@ -18,7 +18,7 @@
         }
     </div>
     <p>
-        @Model.SizeDescription. Uploaded by @Html.DisplayFor(dto => dto.UploadedBy, DisplayTemplate.NameOrNotEntered)
+        @Model.SizeDescription. Uploaded by @Html.DisplayFor(dto => dto.UploadedBy, DisplayTemplate.NameOrPlaceholder)
         on @Html.DisplayFor(dto => dto.UploadedDate, DisplayTemplate.ShortDateTime).
     </p>
 </div>
