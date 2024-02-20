@@ -13,6 +13,7 @@ public interface IStaffService : IDisposable, IAsyncDisposable
     Task<IReadOnlyList<StaffViewDto>> GetListAsync(StaffSearchDto spec);
     Task<IPaginatedResult<StaffSearchResultDto>> SearchAsync(StaffSearchDto spec, PaginatedRequest paging);
     Task<IReadOnlyList<ListItem<string>>> GetAsListItemsAsync(bool includeInactive = false);
+    Task<IReadOnlyList<ListItem<string>>> GetUsersInRoleAsListItemsAsync(AppRole role, Guid officeId);
     Task<IList<string>> GetRolesAsync(string id);
     Task<IReadOnlyList<AppRole>> GetAppRolesAsync(string id);
     Task<bool> HasAppRoleAsync(string id, AppRole role);

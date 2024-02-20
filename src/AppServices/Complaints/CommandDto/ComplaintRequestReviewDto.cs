@@ -8,5 +8,5 @@ public record ComplaintRequestReviewDto(int ComplaintId)
     [Display(Name = "Request review from")]
     public string? ReviewerId { get; init; }
 
-    public string Comment { get; init; } = string.Empty;
+    public string? Comment { get; init; } = string.Empty;
 }

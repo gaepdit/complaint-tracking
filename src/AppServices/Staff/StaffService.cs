@@ -61,6 +61,13 @@ public sealed class StaffService(
             as IReadOnlyList<ListItem<string>>);
     }
 
+    public async Task<IReadOnlyList<ListItem<string>>> GetUsersInRoleAsListItemsAsync(AppRole role, Guid officeId) =>
+        (await userManager.GetUsersInRoleAsync(role.Name).ConfigureAwait(false))
+        .AsQueryable()
+        .ApplyFilter(new StaffSearchDto(SortBy.NameAsc, null, null, role.Name, officeId, SearchStaffStatus.Active))
+        .Select(user => new ListItem<string>(user.Id, user.SortableFullName))
+        .ToList();
+
     public async Task<IList<string>> GetRolesAsync(string id)
     {
         var user = await userManager.FindByIdAsync(id).ConfigureAwait(false);
