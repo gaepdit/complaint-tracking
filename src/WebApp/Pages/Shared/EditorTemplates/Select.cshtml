@@ -1,8 +1,8 @@
-﻿@using Cts.WebApp.Platform.Constants
+﻿@using Cts.WebApp.Platform.PageModelHelpers
 @model object?
 @{
     var items = (IEnumerable<SelectListItem>)ViewData["Items"]!;
-    var placeholder = ViewData.ContainsKey("Placeholder") ? (string)ViewData["Placeholder"]! : TextConstants.SelectTextRequired;
+    var placeholder = ViewData.ContainsKey("Placeholder") ? (string)ViewData["Placeholder"]! : SelectOptions.SelectTextRequired;
 }
 
 <div class="form-floating">

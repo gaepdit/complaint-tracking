@@ -3,7 +3,7 @@
 @using Cts.AppServices.Complaints.Dto.Command
 @using Cts.Domain.ValueObjects
 @using Cts.WebApp.Pages.Shared.EditorTemplates
-@using Cts.WebApp.Platform.Constants
+@using Cts.WebApp.Platform.PageModelHelpers
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model AddModel
 @{
@@ -233,7 +233,7 @@
             </div>
             <div class="col-md mb-3">
                 @Html.EditorFor(model => model.NewComplaint.OwnerId, EditorTemplate.Select,
-                    additionalViewData: new { Items = Model.ActiveStaffInOfficeSelectList, Placeholder = TextConstants.SelectTextDefaultAssignor })
+                    additionalViewData: new { Items = Model.ActiveStaffInOfficeSelectList, Placeholder = SelectOptions.SelectTextDefaultAssignor })
             </div>
         </div>
 
@@ -255,6 +255,6 @@
         "@nameof(Model.NewComplaint)_@nameof(ComplaintCreateDto.OfficeId)",
         "@nameof(Model.NewComplaint)_@nameof(ComplaintCreateDto.OwnerId)",
         true,
-        "@TextConstants.SelectTextDefaultAssignor");
+        "@SelectOptions.SelectTextDefaultAssignor");
     </script>
 }
