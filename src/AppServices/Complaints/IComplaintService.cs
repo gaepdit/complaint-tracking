@@ -37,12 +37,12 @@ public interface IComplaintService : IDisposable, IAsyncDisposable
     // Complaint transitions
 
     Task AcceptAsync(int id, CancellationToken token = default);
-    Task<bool> AssignAsync(ComplaintAssignDto resource, ComplaintViewDto currentComplaint,
+    Task<bool> AssignAsync(ComplaintAssignmentDto resource, ComplaintViewDto currentComplaint,
         CancellationToken token = default);
     Task CloseAsync(ComplaintClosureDto resource, CancellationToken token = default);
     Task ReopenAsync(ComplaintClosureDto resource, CancellationToken token = default);
     Task RequestReviewAsync(ComplaintRequestReviewDto resource, CancellationToken token = default);
-    Task ReturnAsync(ComplaintAssignDto resource, CancellationToken token = default);
+    Task ReturnAsync(ComplaintAssignmentDto resource, CancellationToken token = default);
     Task DeleteAsync(ComplaintClosureDto resource, CancellationToken token = default);
     Task RestoreAsync(ComplaintClosureDto resource, CancellationToken token = default);
 }

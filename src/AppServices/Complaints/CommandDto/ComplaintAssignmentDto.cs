@@ -2,7 +2,7 @@
 
 namespace Cts.AppServices.Complaints.CommandDto;
 
-public record ComplaintAssignDto(int ComplaintId)
+public record ComplaintAssignmentDto(int ComplaintId)
 {
     [Required]
     [Display(Name = "Assigned office")]

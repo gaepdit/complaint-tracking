@@ -1,4 +1,4 @@
-﻿using Cts.AppServices.Complaints;
+using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.CommandDto;
 using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Complaints.QueryDto;
@@ -22,11 +22,11 @@ public class AssignModel(
 ) : PageModel
 {
     [BindProperty]
-    public ComplaintAssignDto ComplaintAssign { get; set; } = default!;
+    public ComplaintAssignmentDto ComplaintAssignment { get; set; } = default!;
 
     public ComplaintViewDto ComplaintView { get; private set; } = default!;
     public SelectList OfficesSelectList { get; private set; } = default!;
-    public SelectList ActiveStaffInOfficeSelectList { get; private set; } = default!;
+    public SelectList StaffSelectList { get; private set; } = default!;
 
     public async Task<IActionResult> OnGetAsync(int? id)
     {
@@ -38,7 +38,7 @@ public class AssignModel(
         if (!await UserCanAssignAsync(complaintView)) return Forbid();
 
         var userOfficeId = (await staffService.GetCurrentUserAsync()).Office?.Id;
-        ComplaintAssign = new ComplaintAssignDto(id.Value)
+        ComplaintAssignment = new ComplaintAssignmentDto(id.Value)
         {
             OfficeId = complaintView.CurrentOffice?.Id ?? userOfficeId,
             OwnerId = complaintView.CurrentOwner?.Id,
@@ -50,7 +50,7 @@ public class AssignModel(
 
     public async Task<IActionResult> OnPostAsync()
     {
-        var complaintView = await complaintService.FindAsync(ComplaintAssign.ComplaintId);
+        var complaintView = await complaintService.FindAsync(ComplaintAssignment.ComplaintId);
         if (complaintView is null || !await UserCanAssignAsync(complaintView))
             return BadRequest();
 
@@ -62,7 +62,7 @@ public class AssignModel(
             return Page();
         }
 
-        if (await complaintService.AssignAsync(ComplaintAssign, complaintView))
+        if (await complaintService.AssignAsync(ComplaintAssignment, complaintView))
         {
             TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "The Complaint has been assigned.");
         }
@@ -71,7 +71,7 @@ public class AssignModel(
             TempData.SetDisplayMessage(DisplayMessage.AlertContext.Info, "The Complaint assignment has not changed.");
         }
 
-        return RedirectToPage("Details", new { id = ComplaintAssign.ComplaintId });
+        return RedirectToPage("Details", new { id = ComplaintAssignment.ComplaintId });
     }
 
     private async Task<bool> UserCanAssignAsync(ComplaintViewDto complaintView) =>
@@ -79,9 +79,9 @@ public class AssignModel(
             ? (await authorizationService.AuthorizeAsync(User, complaintView, ComplaintOperation.Assign)).Succeeded
             : (await authorizationService.AuthorizeAsync(User, complaintView, ComplaintOperation.Reassign)).Succeeded;
 
-    private async Task PopulateSelectListsAsync(Guid? currentOfficeId)
+    private async Task PopulateSelectListsAsync(Guid? officeId)
     {
         OfficesSelectList = (await officeService.GetAsListItemsAsync()).ToSelectList();
-        ActiveStaffInOfficeSelectList = (await officeService.GetStaffAsListItemsAsync(currentOfficeId)).ToSelectList();
+        StaffSelectList = (await officeService.GetStaffAsListItemsAsync(officeId)).ToSelectList();
     }
 }

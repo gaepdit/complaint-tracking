@@ -126,7 +126,7 @@ public sealed class ComplaintService(
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
     }
 
-    public async Task<bool> AssignAsync(ComplaintAssignDto resource, ComplaintViewDto currentComplaint,
+    public async Task<bool> AssignAsync(ComplaintAssignmentDto resource, ComplaintViewDto currentComplaint,
         CancellationToken token = default)
     {
         if (resource.OfficeId == currentComplaint.CurrentOffice?.Id &&
@@ -184,7 +184,7 @@ public sealed class ComplaintService(
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
     }
 
-    public async Task ReturnAsync(ComplaintAssignDto resource, CancellationToken token = default)
+    public async Task ReturnAsync(ComplaintAssignmentDto resource, CancellationToken token = default)
     {
         var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
         var previousOwner = complaint.CurrentOwner;
