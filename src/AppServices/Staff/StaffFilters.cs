@@ -16,7 +16,7 @@ public static class StaffFilters
             .OrderByIf(spec.Sort.GetDescription())
             .ThenBy(user => user.Id);
 
-#pragma warning disable CA1862: Use the 'StringComparison' method overloads to perform case-insensitive string comparisons
+#pragma warning disable CA1862 // Use the 'StringComparison' method overloads to perform case-insensitive string comparisons
     // The 'StringComparison' method overload is incompatible with Entity Framework.
     private static IQueryable<ApplicationUser> FilterByName(
         this IQueryable<ApplicationUser> query, string? name) =>
