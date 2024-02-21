@@ -15,7 +15,6 @@
       "applicationUrl": "https://localhost:7245;http://localhost:5212",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation",
         "CORECLR_ENABLE_PROFILING": "1",
         "CORECLR_PROFILER": "{e2338988-38cc-48cd-a6b6-b441c31f34f1}",
         "CORECLR_PROFILER_PATH_32": "C:\\Program Files (x86)\\Raygun\\RaygunProfiler\\latest\\x86\\RaygunProfilerr.dll",
