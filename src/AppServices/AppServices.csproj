@@ -9,7 +9,6 @@
 
     <ItemGroup>
         <PackageReference Include="AutoMapper" />
-        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
         <PackageReference Include="FluentValidation.AspNetCore" />
         <PackageReference Include="GaEpd.FileService" />
         <PackageReference Include="JetBrains.Annotations" />
