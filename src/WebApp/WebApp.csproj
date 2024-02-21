@@ -10,7 +10,6 @@
 
     <ItemGroup>
         <PackageReference Include="LigerShark.WebOptimizer.Core" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
         <PackageReference Include="Microsoft.Identity.Web" />

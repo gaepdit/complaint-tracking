@@ -1,16 +1,31 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Cts.AppServices.ErrorLogging;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Cts.WebApp.Pages.Dev;
 
 // Future: Remove this page once testing of error handling is complete.
 [AllowAnonymous]
-public class ThrowError : PageModel
+public class ThrowErrorModel(IErrorLogger errorLogger) : PageModel
 {
-    [SuppressMessage("Major Code Smell", "S112:General exceptions should never be thrown")]
-    public void OnGet()
+    public string ShortCode { get; private set; } = string.Empty;
+
+    public async Task OnGetAsync()
     {
-        throw new Exception("Test exception");
+        try
+        {
+            throw new TestException("Test handled exception");
+        }
+        catch (Exception ex)
+        {
+            ShortCode = await errorLogger.LogErrorAsync(ex);
+        }
     }
+
+    public void OnGetUnhandled()
+    {
+        throw new TestException("Test unhandled exception");
+    }
+
+    public class TestException(string message) : Exception(message);
 }
