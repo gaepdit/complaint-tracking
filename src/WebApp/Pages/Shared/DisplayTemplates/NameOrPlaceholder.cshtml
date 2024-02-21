@@ -1,0 +1,12 @@
+﻿@model GaEpd.AppLibrary.Domain.Entities.INamedEntity?
+@{
+    var placeholder = ViewData.ContainsKey("Placeholder") ? (string)ViewData["Placeholder"]! : "[Not entered]";
+}
+@if (Model is null || string.IsNullOrEmpty(Model.Name))
+{
+    <span class="text-body-secondary">@placeholder</span>
+}
+else
+{
+    @Model.Name
+}

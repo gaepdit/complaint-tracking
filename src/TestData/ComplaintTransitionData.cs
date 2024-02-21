@@ -23,19 +23,15 @@ internal static class ComplaintTransitionData
             UserData.GetUsers.ElementAt(1))
         {
             CommittedDate = DateTimeOffset.Now.AddDays(-10),
-            TransferredFromOffice = OfficeData.GetOffices.ElementAt(0),
             TransferredToOffice = OfficeData.GetOffices.ElementAt(0),
             TransferredToUser = UserData.GetUsers.ElementAt(2),
         },
-
         new(new Guid("40000000-0000-0000-0000-000000000003"),
             ComplaintData.GetComplaints.ElementAt(0),
             TransitionType.Assigned,
             UserData.GetUsers.ElementAt(2))
         {
             CommittedDate = DateTimeOffset.Now.AddDays(-9),
-            TransferredFromOffice = OfficeData.GetOffices.ElementAt(0),
-            TransferredFromUser = UserData.GetUsers.ElementAt(2),
             TransferredToOffice = OfficeData.GetOffices.ElementAt(0),
             TransferredToUser = UserData.GetUsers.ElementAt(1),
         },
@@ -52,8 +48,6 @@ internal static class ComplaintTransitionData
             UserData.GetUsers.ElementAt(1))
         {
             CommittedDate = DateTimeOffset.Now.AddDays(-7),
-            TransferredFromOffice = OfficeData.GetOffices.ElementAt(0),
-            TransferredFromUser = UserData.GetUsers.ElementAt(1),
             TransferredToOffice = OfficeData.GetOffices.ElementAt(0),
             TransferredToUser = UserData.GetUsers.ElementAt(2),
         },
@@ -63,8 +57,6 @@ internal static class ComplaintTransitionData
             UserData.GetUsers.ElementAt(2))
         {
             CommittedDate = DateTimeOffset.Now.AddDays(-6),
-            TransferredFromOffice = OfficeData.GetOffices.ElementAt(0),
-            TransferredFromUser = UserData.GetUsers.ElementAt(2),
             TransferredToOffice = OfficeData.GetOffices.ElementAt(0),
             TransferredToUser = UserData.GetUsers.ElementAt(1),
         },
@@ -81,8 +73,6 @@ internal static class ComplaintTransitionData
             UserData.GetUsers.ElementAt(1))
         {
             CommittedDate = DateTimeOffset.Now.AddDays(-4),
-            TransferredFromOffice = OfficeData.GetOffices.ElementAt(0),
-            TransferredFromUser = UserData.GetUsers.ElementAt(1),
             TransferredToOffice = OfficeData.GetOffices.ElementAt(0),
             TransferredToUser = UserData.GetUsers.ElementAt(2),
         },
@@ -93,6 +83,22 @@ internal static class ComplaintTransitionData
         {
             CommittedDate = DateTimeOffset.Now.AddDays(-3),
             Comment = TextData.Paragraph,
+        },
+        new(new Guid("40000000-0000-0000-0000-000000000010"),
+            ComplaintData.GetComplaints.ElementAt(7),
+            TransitionType.New,
+            UserData.GetUsers.ElementAt(0))
+        {
+            CommittedDate = DateTimeOffset.Now.AddDays(-1),
+        },
+        new(new Guid("40000000-0000-0000-0000-000000000011"),
+            ComplaintData.GetComplaints.ElementAt(7),
+            TransitionType.Assigned,
+            UserData.GetUsers.ElementAt(0))
+        {
+            CommittedDate = DateTimeOffset.Now.AddDays(-1),
+            TransferredToOffice = OfficeData.GetOffices.ElementAt(1),
+            TransferredToUser = UserData.GetUsers.ElementAt(1),
         },
     };
 

@@ -1,7 +1,7 @@
 @page "{handler?}"
-@using Cts.AppServices.Complaints.Dto
+@using Cts.AppServices.Complaints.QueryDto
 @using Cts.WebApp.Pages.Shared.DisplayTemplates
-@using Cts.WebApp.Platform.Constants
+@using Cts.WebApp.Platform.PageModelHelpers
 @model IndexModel
 @{
     ViewData["Title"] = "Complaint Search";
@@ -21,7 +21,7 @@
                     <div class="col-md mb-3">
                         <div class="form-floating">
                             <select asp-for="Spec.Status" name="@nameof(Model.Spec.Status)" asp-items="Html.GetEnumSelectList<SearchComplaintStatus>()" class="form-select">
-                                <option value="">@TextConstants.SelectTextAny</option>
+                                <option value="">@SelectOptions.SelectTextAny</option>
                             </select>
                             <label asp-for="Spec.Status" class="form-label"></label>
                         </div>
@@ -70,7 +70,7 @@
                     <div class="mb-3">
                         <div class="form-floating">
                             <select asp-for="Spec.ReceivedBy" name="@nameof(Model.Spec.ReceivedBy)" asp-items="Model.ReceivedBySelectList" class="form-select">
-                                <option value="">@TextConstants.SelectTextAny</option>
+                                <option value="">@SelectOptions.SelectTextAny</option>
                             </select>
                             <label asp-for="Spec.ReceivedBy" class="form-label"></label>
                         </div>
@@ -113,7 +113,7 @@
                     <div class="col-md mb-3">
                         <div class="form-floating">
                             <select asp-for="Spec.County" name="@nameof(Model.Spec.County)" asp-items="Model.CountiesSelectList" class="form-select">
-                                <option value="">@TextConstants.SelectTextAny</option>
+                                <option value="">@SelectOptions.SelectTextAny</option>
                             </select>
                             <label asp-for="Spec.County" class="form-label"></label>
                         </div>
@@ -121,7 +121,7 @@
                     <div class="mb-3">
                         <div class="form-floating">
                             <select asp-for="Spec.Concern" name="@nameof(Model.Spec.Concern)" asp-items="Model.ConcernsSelectList" class="form-select">
-                                <option value="">@TextConstants.SelectTextAny</option>
+                                <option value="">@SelectOptions.SelectTextAny</option>
                             </select>
                             <label asp-for="Spec.Concern" class="form-label"></label>
                         </div>
@@ -167,7 +167,7 @@
                     <div class="col-sm-8 mb-3">
                         <div class="form-floating">
                             <select asp-for="Spec.State" name="@nameof(Model.Spec.State)" asp-items="Model.StatesSelectList" class="form-select">
-                                <option value="">@TextConstants.SelectTextAny</option>
+                                <option value="">@SelectOptions.SelectTextAny</option>
                             </select>
                             <label asp-for="Spec.State" class="form-label"></label>
                         </div>
@@ -185,7 +185,7 @@
                     <div class="col-md mb-3">
                         <div class="form-floating">
                             <select asp-for="Spec.Office" name="@nameof(Model.Spec.Office)" asp-items="Model.OfficesSelectList" class="form-select">
-                                <option value="">@TextConstants.SelectTextAny</option>
+                                <option value="">@SelectOptions.SelectTextAny</option>
                             </select>
                             <label asp-for="Spec.Office" class="form-label"></label>
                         </div>
@@ -194,7 +194,7 @@
                         <div class="form-floating">
                             <select asp-for="Spec.Assigned" name="@nameof(Model.Spec.Assigned)" asp-items="Model.AssignedToSelectList" class="form-select"
                                     aria-describedby="StaffHelpBlock" disabled="@(!Model.AssignedToSelectList.Any())">
-                                <option value="">@TextConstants.SelectTextAny</option>
+                                <option value="">@SelectOptions.SelectTextAny</option>
                             </select>
                             <label asp-for="Spec.Assigned" class="form-label"></label>
                         </div>
@@ -278,7 +278,7 @@
                             }
                         </td>
                         <td>
-                            @Html.DisplayFor(m => item.SourceFacilityName, DisplayTemplate.StringOrNotEntered)
+                            @Html.DisplayFor(m => item.SourceFacilityName, DisplayTemplate.StringOrPlaceholder)
                             <ul>
                                 @if (item.SourceFacilityIdNumber != null)
                                 {
@@ -291,16 +291,16 @@
                             </ul>
                         </td>
                         <td>
-                            @Html.DisplayFor(m => item.AssignedOwnerName, DisplayTemplate.StringOrNotEntered)
+                            @Html.DisplayFor(m => item.AssignedOwnerName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "[Unassigned]" })
                             <br />
-                            @Html.DisplayFor(m => item.CurrentOfficeName, DisplayTemplate.StringOrNotEntered)
+                            @Html.DisplayFor(m => item.CurrentOfficeName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "[No office assigned]" })
                         </td>
                         <td>
                             <ol type="I">
-                                <li>@Html.DisplayFor(m => item.PrimaryConcernName, DisplayTemplate.StringOrNotEntered)</li>
+                                <li>@Html.DisplayFor(m => item.PrimaryConcernName, DisplayTemplate.StringOrPlaceholder)</li>
                                 @if (item.SecondaryConcernName is not null)
                                 {
-                                    <li>@Html.DisplayFor(m => item.SecondaryConcernName, DisplayTemplate.StringOrNotEntered)</li>
+                                    <li>@Html.DisplayFor(m => item.SecondaryConcernName, DisplayTemplate.StringOrPlaceholder)</li>
                                 }
                             </ol>
                         </td>
@@ -318,5 +318,11 @@
     <script src="~/js/formSearch.js"></script>
     <script src="~/lib/axios/axios.min.js"></script>
     <script src="~/js/staffSelect.js"></script>
-    <script>setUpStaffDropdown("@nameof(Model.Spec)_@nameof(ComplaintSearchDto.Office)","@nameof(Model.Spec)_@nameof(ComplaintSearchDto.Assigned)",false,"@TextConstants.SelectTextAny");</script>
+    <script>
+    setUpStaffDropdown(
+        "@nameof(Model.Spec)_@nameof(ComplaintSearchDto.Office)",
+        "@nameof(Model.Spec)_@nameof(ComplaintSearchDto.Assigned)",
+        false,
+        "@SelectOptions.SelectTextAny");
+    </script>
 }

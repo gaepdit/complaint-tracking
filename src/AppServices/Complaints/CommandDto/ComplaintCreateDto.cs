@@ -1,22 +1,21 @@
-using Cts.AppServices.Attachments.ValidationAttributes;
 using Cts.AppServices.Utilities;
 using Cts.Domain.ValueObjects;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
-namespace Cts.AppServices.Complaints.Dto;
+namespace Cts.AppServices.Complaints.CommandDto;
 
-public record ComplaintCreateDto : IComplaintDtoDetails
+public record ComplaintCreateDto : IComplaintCommandDto
 {
     // Constructors
 
     [UsedImplicitly]
     public ComplaintCreateDto() { }
 
-    public ComplaintCreateDto(string? receivedById, Guid? currentOfficeId)
+    public ComplaintCreateDto(string? receivedById, Guid? officeId)
     {
         ReceivedById = receivedById;
-        CurrentOfficeId = currentOfficeId;
+        OfficeId = officeId;
     }
 
     // Meta-data
@@ -130,14 +129,14 @@ public record ComplaintCreateDto : IComplaintDtoDetails
 
     // Attachments
 
-    public List<IFormFile>? Files { get; init; } = [];
+    public List<IFormFile>? Files { get; } = [];
 
     // Assignment
 
     [Required]
     [Display(Name = "Assigned office")]
-    public Guid? CurrentOfficeId { get; init; }
+    public Guid? OfficeId { get; init; }
 
     [Display(Name = "Assigned associate")]
-    public string? CurrentOwnerId { get; init; }
+    public string? OwnerId { get; init; }
 }

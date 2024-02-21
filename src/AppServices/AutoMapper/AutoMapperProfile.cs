@@ -2,7 +2,8 @@
 using Cts.AppServices.ActionTypes;
 using Cts.AppServices.Attachments.Dto;
 using Cts.AppServices.ComplaintActions.Dto;
-using Cts.AppServices.Complaints.Dto;
+using Cts.AppServices.Complaints.CommandDto;
+using Cts.AppServices.Complaints.QueryDto;
 using Cts.AppServices.Concerns;
 using Cts.AppServices.Offices;
 using Cts.AppServices.Staff.Dto;

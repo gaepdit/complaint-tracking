@@ -16,10 +16,10 @@
     <dd class="col-sm-9">@Model.DisplayStaff.Email</dd>
 
     <dt class="col-sm-3">Phone</dt>
-    <dd class="col-sm-9">@Html.DisplayFor(m => m.DisplayStaff.Phone, DisplayTemplate.StringOrNone)</dd>
+    <dd class="col-sm-9">@Html.DisplayFor(m => m.DisplayStaff.Phone, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })</dd>
 
     <dt class="col-sm-3">Office</dt>
-    <dd class="col-sm-9">@Html.DisplayFor(m => m.OfficeName, DisplayTemplate.StringOrNone)</dd>
+    <dd class="col-sm-9">@Html.DisplayFor(m => m.OfficeName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })</dd>
 </dl>
 
 <div class="p-3 border rounded-3 bg-light-subtle mb-3">

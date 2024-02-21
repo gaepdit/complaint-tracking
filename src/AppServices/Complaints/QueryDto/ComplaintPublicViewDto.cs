@@ -5,7 +5,7 @@ using Cts.Domain.Entities.Complaints;
 using Cts.Domain.ValueObjects;
 using System.ComponentModel.DataAnnotations;
 
-namespace Cts.AppServices.Complaints.Dto;
+namespace Cts.AppServices.Complaints.QueryDto;
 
 public record ComplaintPublicViewDto
 {
@@ -89,10 +89,12 @@ public record ComplaintPublicViewDto
     // Properties: Actions
 
     [Display(Name = "Actions")]
-    public List<ComplaintActionPublicViewDto> ComplaintActions { get; init; } = [];
+    [UsedImplicitly]
+    public List<ComplaintActionPublicViewDto> ComplaintActions { get; } = [];
 
     // Properties: Attachments
 
     [Display(Name = "Attachments")]
-    public List<AttachmentViewDto> Attachments { get; init; } = [];
+    [UsedImplicitly]
+    public List<AttachmentViewDto> Attachments { get; } = [];
 }

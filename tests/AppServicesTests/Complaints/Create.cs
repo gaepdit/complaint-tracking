@@ -1,9 +1,8 @@
 ﻿using Cts.AppServices.Attachments;
 using Cts.AppServices.Complaints;
-using Cts.AppServices.Complaints.Dto;
+using Cts.AppServices.Complaints.CommandDto;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Complaints;
-using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
@@ -33,10 +32,10 @@ public class Create
             .Returns(new Office(Guid.NewGuid(), TextData.ValidName));
 
         var appService = new ComplaintService(Substitute.For<IComplaintRepository>(), complaintManagerMock,
-            Substitute.For<IConcernRepository>(), officeRepoMock, Substitute.For<IComplaintTransitionManager>(),
-            Substitute.For<IAttachmentService>(), AppServicesTestsSetup.Mapper!, userServiceMock);
+            Substitute.For<IConcernRepository>(), officeRepoMock, Substitute.For<IAttachmentService>(),
+            AppServicesTestsSetup.Mapper!, userServiceMock);
 
-        var item = new ComplaintCreateDto { CurrentOfficeId = Guid.Empty };
+        var item = new ComplaintCreateDto { OfficeId = Guid.Empty };
 
         // Act
         var result = await appService.CreateAsync(item, AppServiceHelpers.AttachmentServiceConfig);
@@ -65,14 +64,14 @@ public class Create
             .Returns(office);
 
         var appService = new ComplaintService(Substitute.For<IComplaintRepository>(), complaintManagerMock,
-            Substitute.For<IConcernRepository>(), officeRepoMock, Substitute.For<IComplaintTransitionManager>(),
-            Substitute.For<IAttachmentService>(), AppServicesTestsSetup.Mapper!, userServiceMock);
+            Substitute.For<IConcernRepository>(), officeRepoMock, Substitute.For<IAttachmentService>(),
+            AppServicesTestsSetup.Mapper!, userServiceMock);
 
         var item = new ComplaintCreateDto
         {
             ReceivedDate = new DateOnly(2000, 1, 1),
             ReceivedTime = new TimeOnly(1, 15, 0),
-            CurrentOfficeId = office.Id,
+            OfficeId = office.Id,
         };
 
         var expected = new DateTime(2000, 1, 1, 1, 15, 0, DateTimeKind.Local);

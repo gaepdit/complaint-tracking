@@ -31,20 +31,20 @@
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ComplaintClosedDate)</dt>
         <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.Item.ComplaintClosedDate, DisplayTemplate.LongDateTimeOrNotEntered)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ReviewComments)</dt>
-        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(_ => Model.Item.ReviewComments, DisplayTemplate.StringOrNotEntered)</dd>
+        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(_ => Model.Item.ReviewComments, DisplayTemplate.StringOrPlaceholder)</dd>
     </dl>
 </div>
 
 <h2>Nature of Complaint</h2>
 
-<p class="container text-break text-pre-line">@Html.DisplayFor(_ => Model.Item.ComplaintNature, DisplayTemplate.StringOrNotEntered)</p>
+<p class="container text-break text-pre-line">@Html.DisplayFor(_ => Model.Item.ComplaintNature, DisplayTemplate.StringOrPlaceholder)</p>
 
 <div class="container">
     <dl class="row">
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.PrimaryConcernName)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.PrimaryConcernName, DisplayTemplate.StringOrNotEntered)</dd>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.PrimaryConcernName, DisplayTemplate.StringOrPlaceholder)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.SecondaryConcernName)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SecondaryConcernName, DisplayTemplate.StringOrNotEntered)</dd>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SecondaryConcernName, DisplayTemplate.StringOrPlaceholder)</dd>
     </dl>
 </div>
 
@@ -53,9 +53,9 @@
 <div class="container">
     <dl class="row">
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ComplaintLocation)</dt>
-        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(_ => Model.Item.ComplaintLocation, DisplayTemplate.StringOrNotEntered)</dd>
+        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(_ => Model.Item.ComplaintLocation, DisplayTemplate.StringOrPlaceholder)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ComplaintCity)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.ComplaintCity, DisplayTemplate.StringOrNotEntered)</dd>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.ComplaintCity, DisplayTemplate.StringOrPlaceholder)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ComplaintCounty)</dt>
         <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.ComplaintCounty, DisplayTemplate.County)</dd>
     </dl>
@@ -66,9 +66,9 @@
 <div class="container">
     <dl class="row">
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.SourceFacilityName)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SourceFacilityName, DisplayTemplate.StringOrNotEntered)</dd>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SourceFacilityName, DisplayTemplate.StringOrPlaceholder)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.SourceFacilityIdNumber)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SourceFacilityIdNumber, DisplayTemplate.StringOrNotEntered)</dd>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SourceFacilityIdNumber, DisplayTemplate.StringOrPlaceholder)</dd>
     </dl>
 </div>
 
@@ -77,7 +77,7 @@
 <div class="container">
     <dl class="row">
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.SourceContactName)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SourceContactName, DisplayTemplate.StringOrNotEntered)</dd>
+        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SourceContactName, DisplayTemplate.StringOrPlaceholder)</dd>
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.SourceAddress)</dt>
         <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SourceAddress)</dd>
     </dl>
@@ -105,7 +105,7 @@
                         </h4>
                     </div>
                     <div class="card-body ">
-                        <div class="text-break text-pre-line">@Html.DisplayFor(_ => action.Comments, DisplayTemplate.StringOrNone)</div>
+                        <div class="text-break text-pre-line">@Html.DisplayFor(_ => action.Comments, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })</div>
                     </div>
                 </div>
             </div>

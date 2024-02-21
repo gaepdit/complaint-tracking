@@ -1,4 +1,4 @@
-using Cts.AppServices.Complaints.Dto;
+using Cts.AppServices.Complaints.QueryDto;
 using Cts.AppServices.Permissions.Helpers;
 using Cts.Domain;
 using Cts.Domain.Entities.Complaints;
@@ -27,7 +27,7 @@ internal class ComplaintViewPermissionsHandler : AuthorizationHandler<ComplaintO
                 IsOpen() && !ReviewPending() && !Accepted() && IsCurrentOwner(),
 
             nameof(ComplaintOperation.Assign) =>
-                !ReviewPending() && NoCurrentOwner() && IsCurrentManagerOrAssignor(),
+                IsOpen() && !ReviewPending() && NoCurrentOwner() && IsCurrentManagerOrAssignor(),
 
             nameof(ComplaintOperation.EditActions) =>
                 IsOpen() && !MustAccept() && IsCurrentOwnerOrManager(),

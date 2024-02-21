@@ -1,6 +1,6 @@
-﻿namespace Cts.WebApp.Platform.Constants;
+﻿namespace Cts.WebApp.Platform.PageModelHelpers;
 
-internal static class TextConstants
+internal static class SelectOptions
 {
     public const string SelectAll = "All";
     public const string SelectNotDeleted = "Not Deleted";
@@ -8,4 +8,5 @@ internal static class TextConstants
     public const string SelectTextRequired = "[Select …]";
     public const string SelectTextRequiredType = "[Select Type …]";
     public const string SelectTextDefaultAssignor = "[Default Assignor]";
+    public const string SelectTextReviewer = "[Select Reviewer …]";
 }

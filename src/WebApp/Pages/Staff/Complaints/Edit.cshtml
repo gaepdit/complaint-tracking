@@ -22,7 +22,7 @@
             </div>
             <div class="col-md mb-3">
                 @Html.EditorFor(model => model.Item.ReceivedById, EditorTemplate.Select,
-                    additionalViewData: new { Items = Model.AllActiveStaffSelectList })
+                    additionalViewData: new { Items = Model.StaffSelectList })
             </div>
         </div>
 

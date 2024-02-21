@@ -6,7 +6,7 @@ using Cts.Domain.Entities.Complaints;
 using Cts.Domain.ValueObjects;
 using System.ComponentModel.DataAnnotations;
 
-namespace Cts.AppServices.Complaints.Dto;
+namespace Cts.AppServices.Complaints.QueryDto;
 
 public record ComplaintViewDto
 {
@@ -144,7 +144,7 @@ public record ComplaintViewDto
     public bool IsDeleted { get; init; }
 
     [Display(Name = "Deleted By")]
-    public StaffViewDto? DeletedBy { get; set; }
+    public StaffViewDto? DeletedBy { get; init; }
 
     [Display(Name = "Date Deleted")]
     public DateTimeOffset? DeletedAt { get; init; }
@@ -155,13 +155,13 @@ public record ComplaintViewDto
     // === Lists ===
 
     [UsedImplicitly]
-    public List<ComplaintActionViewDto> ComplaintActions { get; init; } = [];
+    public List<ComplaintActionViewDto> ComplaintActions { get; } = [];
 
     [UsedImplicitly]
-    public List<AttachmentViewDto> Attachments { get; init; } = [];
+    public List<AttachmentViewDto> Attachments { get; } = [];
 
     [UsedImplicitly]
-    public List<ComplaintTransitionViewDto> ComplaintTransitions { get; init; } = [];
+    public List<ComplaintTransitionViewDto> ComplaintTransitions { get; } = [];
 
     // === Calculated properties ===
 

@@ -61,7 +61,7 @@ else
                     {
                         @:👉 
                     }
-                    @Html.DisplayFor(m => item.Name, DisplayTemplate.StringOrNone)
+                    @Html.DisplayFor(m => item.Name, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })
                 </td>
                 <td>@Html.DisplayFor(m => item.Active, DisplayTemplate.BoolActive)</td>
                 @if (Model.IsSiteMaintainer)

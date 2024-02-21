@@ -1,5 +1,5 @@
 ﻿using Cts.AppServices.Complaints;
-using Cts.AppServices.Complaints.Dto;
+using Cts.AppServices.Complaints.CommandDto;
 using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Concerns;
 using Cts.AppServices.Permissions;
@@ -32,7 +32,7 @@ public class EditModel(
     public ComplaintUpdateDto Item { get; set; } = default!;
 
     public SelectList ConcernsSelectList { get; private set; } = default!;
-    public SelectList AllActiveStaffSelectList { get; private set; } = default!;
+    public SelectList StaffSelectList { get; private set; } = default!;
     public SelectList StatesSelectList => new(Data.States);
     public SelectList CountiesSelectList => new(Data.Counties);
 
@@ -71,7 +71,7 @@ public class EditModel(
     private async Task PopulateSelectListsAsync()
     {
         ConcernsSelectList = (await concernService.GetAsListItemsAsync()).ToSelectList();
-        AllActiveStaffSelectList = (await staffService.GetAsListItemsAsync()).ToSelectList();
+        StaffSelectList = (await staffService.GetAsListItemsAsync()).ToSelectList();
     }
 
     private async Task<bool> UserCanEditAsync(ComplaintUpdateDto item) =>

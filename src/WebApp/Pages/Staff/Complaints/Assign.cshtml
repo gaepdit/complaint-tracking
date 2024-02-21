@@ -1,0 +1,51 @@
+﻿@page "{id:int?}"
+@using Cts.AppServices.Complaints.CommandDto
+@using Cts.WebApp.Pages.Shared.EditorTemplates
+@using Cts.WebApp.Platform.PageModelHelpers
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model AssignModel
+
+@{
+    ViewData["Title"] = $"Assignment for Complaint ID {Model.ComplaintAssignment.ComplaintId}";
+    ViewData["NoAnchors"] = "True";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="p-3 border rounded-3">
+    <partial name="Shared/_ComplaintSummaryPartial" model="Model.ComplaintView" />
+
+    <form method="post">
+        <div asp-validation-summary="All" class="alert alert-danger" role="alert"></div>
+        <div class="row">
+            <div class="col-md mb-3">
+                @Html.EditorFor(model => model.ComplaintAssignment.OfficeId, EditorTemplate.Select, new { Items = Model.OfficesSelectList })
+            </div>
+            <div class="col-md mb-3">
+                @Html.EditorFor(model => model.ComplaintAssignment.OwnerId, EditorTemplate.Select,
+                    additionalViewData: new { Items = Model.StaffSelectList, Placeholder = SelectOptions.SelectTextDefaultAssignor })
+            </div>
+        </div>
+        <div class="mb-3">
+            @Html.EditorFor(model => model.ComplaintAssignment.Comment, EditorTemplate.Textarea, new { Rows = 3 })
+        </div>
+        <div class="mt-3 mb-1">
+            <button type="submit" class="btn btn-primary col-5 col-sm-3 col-lg-2 me-2">Assign</button>
+            <a asp-page="Details" asp-route-id="@Model.ComplaintAssignment.ComplaintId.ToString()" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+        <input asp-for="ComplaintAssignment.ComplaintId" type="hidden" />
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/lib/axios/axios.min.js"></script>
+    <script src="~/js/staffSelect.js"></script>
+    <script>
+    setUpStaffDropdown(
+        "@nameof(Model.ComplaintAssignment)_@nameof(ComplaintAssignmentDto.OfficeId)",
+        "@nameof(Model.ComplaintAssignment)_@nameof(ComplaintAssignmentDto.OwnerId)",
+        true,
+        "@SelectOptions.SelectTextDefaultAssignor");
+    </script>
+}

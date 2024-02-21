@@ -1,0 +1,22 @@
+﻿@using Cts.WebApp.Pages.Shared.DisplayTemplates
+@using GaEpd.AppLibrary.Extensions
+@model Cts.AppServices.Complaints.QueryDto.ComplaintViewDto
+
+<div class="container small">
+    <dl class="row">
+        <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(dto => dto.Status)</dt>
+        <dd class="col-md-8 col-lg-9">@Model.Status.GetDisplayName()</dd>
+        <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(dto => dto.CurrentOfficeName)</dt>
+        <dd class="col-md-8 col-lg-9">@Html.DisplayFor(dto => dto.CurrentOfficeName, DisplayTemplate.StringOrPlaceholder)</dd>
+        <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(dto => dto.CurrentOwner)</dt>
+        <dd class="col-md-8 col-lg-9">@Html.DisplayFor(dto => dto.CurrentOwner, DisplayTemplate.FullStaffView)</dd>
+        <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(dto => dto.PrimaryConcernName)</dt>
+        <dd class="col-md-8 col-lg-9">@Html.DisplayFor(dto => dto.PrimaryConcernName, DisplayTemplate.StringOrPlaceholder)</dd>
+        <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(dto => dto.SecondaryConcernName)</dt>
+        <dd class="col-md-8 col-lg-9">@Html.DisplayFor(dto => dto.SecondaryConcernName, DisplayTemplate.StringOrPlaceholder)</dd>
+        <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(dto => dto.ComplaintCounty)</dt>
+        <dd class="col-md-8 col-lg-9">@Html.DisplayFor(dto => dto.ComplaintCounty, DisplayTemplate.StringOrPlaceholder)</dd>
+        <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(dto => dto.ComplaintNature)</dt>
+        <dd class="col-md-8 col-lg-9">@Html.DisplayFor(dto => dto.ComplaintNature, DisplayTemplate.TruncateText)</dd>
+    </dl>
+</div>

@@ -1,4 +1,4 @@
-using Cts.AppServices.Complaints.Dto;
+using Cts.AppServices.Complaints.CommandDto;
 using FluentValidation;
 
 namespace Cts.AppServices.Complaints.Validators;
@@ -9,6 +9,6 @@ public class ComplaintCreateValidator : AbstractValidator<ComplaintCreateDto>
     {
         RuleFor(dto => dto.ReceivedById).NotEmpty();
         RuleFor(dto => dto.ComplaintNature).NotEmpty();
-        RuleFor(dto => dto.CurrentOfficeId).NotEmpty();
+        RuleFor(dto => dto.OfficeId).NotEmpty();
     }
 }

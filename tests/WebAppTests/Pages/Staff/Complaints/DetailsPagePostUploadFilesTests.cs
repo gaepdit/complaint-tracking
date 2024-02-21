@@ -1,6 +1,6 @@
 using Cts.AppServices.Attachments.Dto;
 using Cts.AppServices.Complaints;
-using Cts.AppServices.Complaints.Dto;
+using Cts.AppServices.Complaints.QueryDto;
 
 namespace WebAppTests.Pages.Staff.Complaints;
 
@@ -17,7 +17,7 @@ public class DetailsPagePostUploadFilesTests
         var result = await page.OnPostUploadFilesAsync(null, dto, CancellationToken.None);
 
         // Assert
-        result.Should().BeOfType<RedirectToPageResult>();
+        result.Should().BeOfType<BadRequestResult>();
     }
 
     [Test]

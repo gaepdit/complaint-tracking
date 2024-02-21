@@ -1,5 +1,5 @@
 using Cts.AppServices.Complaints;
-using Cts.AppServices.Complaints.Dto;
+using Cts.AppServices.Complaints.CommandDto;
 using Cts.AppServices.Concerns;
 using Cts.AppServices.Offices;
 using Cts.AppServices.Permissions;
@@ -50,7 +50,7 @@ public class AddModel(
 
         if (!ModelState.IsValid)
         {
-            await PopulateSelectListsAsync(NewComplaint.CurrentOfficeId);
+            await PopulateSelectListsAsync(NewComplaint.OfficeId);
             return Page();
         }
 

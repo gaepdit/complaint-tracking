@@ -48,7 +48,7 @@ public class ApplicationUser : IdentityUser, IEntity<string>
     public string? AzureAdObjectId { get; set; }
 
     // Display properties
-    private string SortableFullName =>
+    public string SortableFullName =>
         string.Join(", ", new[] { FamilyName, GivenName }.Where(s => !string.IsNullOrEmpty(s)));
 
     public string SortableNameWithInactive

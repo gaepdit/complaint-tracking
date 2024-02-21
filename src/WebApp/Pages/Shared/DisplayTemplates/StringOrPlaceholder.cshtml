@@ -1,0 +1,12 @@
+﻿@model string?
+@{
+    var placeholder = ViewData.ContainsKey("Placeholder") ? (string)ViewData["Placeholder"]! : "[Not entered]";
+}
+@if (string.IsNullOrEmpty(Model))
+{
+    <span class="text-body-secondary">@placeholder</span>
+}
+else
+{
+    @Model
+}

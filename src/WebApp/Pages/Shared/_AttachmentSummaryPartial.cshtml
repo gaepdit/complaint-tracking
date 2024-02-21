@@ -1,0 +1,24 @@
+﻿@using Cts.WebApp.Pages.Shared.DisplayTemplates
+@using Cts.WebApp.Platform.Constants
+@model Cts.AppServices.Attachments.Dto.AttachmentViewDto
+
+<div class="container small">
+    <div class="h4">
+        @if (Model.IsImage)
+        {
+            <img src="~/Staff/Complaints/Attachment/@Model.Id.ToString()/@Uri.EscapeDataString(Model.FileName)?thumbnail=true"
+                 class="img-thumbnail rounded me-2" alt="Image "
+                 width="@GlobalConstants.ThumbnailSize.ToString()" height="@GlobalConstants.ThumbnailSize.ToString()" />
+            @Model.FileName
+        }
+        else
+        {
+            @Html.DisplayFor(dto => dto.FileExtension, DisplayTemplate.FileTypeIcon)
+            @Model.FileName
+        }
+    </div>
+    <p>
+        @Model.SizeDescription. Uploaded by @Html.DisplayFor(dto => dto.UploadedBy, DisplayTemplate.NameOrPlaceholder)
+        on @Html.DisplayFor(dto => dto.UploadedDate, DisplayTemplate.ShortDateTime).
+    </p>
+</div>

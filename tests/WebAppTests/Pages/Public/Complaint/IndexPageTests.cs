@@ -1,5 +1,5 @@
 using Cts.AppServices.Complaints;
-using Cts.AppServices.Complaints.Dto;
+using Cts.AppServices.Complaints.QueryDto;
 using Cts.WebApp.Pages.Public.Complaints;
 
 namespace WebAppTests.Pages.Public.Complaint;

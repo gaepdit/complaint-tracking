@@ -1,5 +1,5 @@
 ﻿using Cts.AppServices.Complaints;
-using Cts.AppServices.Complaints.Dto;
+using Cts.AppServices.Complaints.QueryDto;
 using Cts.AppServices.Concerns;
 using Cts.Domain.Data;
 using Cts.WebApp.Models;

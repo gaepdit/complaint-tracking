@@ -1,4 +1,4 @@
-﻿using Cts.AppServices.Complaints.Dto;
+﻿using Cts.AppServices.Complaints.CommandDto;
 using FluentValidation;
 
 namespace Cts.AppServices.Complaints.Validators;

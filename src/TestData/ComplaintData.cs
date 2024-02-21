@@ -8,7 +8,7 @@ internal static class ComplaintData
 {
     private static IEnumerable<Complaint> ComplaintSeedItems => new List<Complaint>
     {
-        new(1)
+        new(1) // 0
         {
             ComplaintNature = "Closed complaint",
             Status = ComplaintStatus.Closed,
@@ -43,7 +43,7 @@ internal static class ComplaintData
             CallerTertiaryPhoneNumber = ValueObjectData.AlternatePhoneNumber,
             CallerEmail = TextData.ValidEmail,
         },
-        new(2)
+        new(2) // 1
         {
             ComplaintNature = "New complaint entered less than an hour ago",
             Status = ComplaintStatus.New,
@@ -55,7 +55,7 @@ internal static class ComplaintData
             CurrentOffice = OfficeData.GetOffices.ElementAt(1),
             SourceFacilityName = "new with minimal data.",
         },
-        new(3)
+        new(3) // 2
         {
             ComplaintNature = "PublicSearchSpec complaint nature reference",
             Status = ComplaintStatus.Closed,
@@ -79,7 +79,7 @@ internal static class ComplaintData
             ComplaintClosedDate = DateTimeOffset.Now.AddDays(-10),
             CallerPhoneNumber = ValueObjectData.AlternatePhoneNumber,
         },
-        new(5)
+        new(5) // 3
         {
             ComplaintNature = "Deleted complaint",
             Status = ComplaintStatus.Closed,
@@ -102,7 +102,7 @@ internal static class ComplaintData
             ComplaintClosedDate = DateTimeOffset.Now.AddDays(-1),
             DeleteComments = TextData.Paragraph,
         },
-        new(6)
+        new(6) // 4
         {
             ComplaintNature = "Open complaint assigned to user.",
             Status = ComplaintStatus.New,
@@ -114,7 +114,7 @@ internal static class ComplaintData
             CurrentOwner = UserData.GetUsers.ElementAt(1),
             CurrentOwnerAssignedDate = DateTimeOffset.Now.AddDays(-4),
         },
-        new(7)
+        new(7) // 5
         {
             ComplaintNature = "Complaint accepted by user and under investigation.",
             Status = ComplaintStatus.UnderInvestigation,
@@ -127,7 +127,7 @@ internal static class ComplaintData
             CurrentOwnerAssignedDate = DateTimeOffset.Now.AddDays(-4),
             CurrentOwnerAcceptedDate = DateTimeOffset.Now.AddDays(-3),
         },
-        new(8)
+        new(8) // 6
         {
             ComplaintNature = "New complaint entered more than an hour ago.",
             Status = ComplaintStatus.New,
@@ -137,6 +137,20 @@ internal static class ComplaintData
             ReceivedBy = UserData.GetUsers.ElementAt(1),
             PrimaryConcern = ConcernData.GetConcerns.ElementAt(2),
             CurrentOffice = OfficeData.GetOffices.ElementAt(1),
+        },
+        new(4) // 7
+        {
+            ComplaintNature = "Ready to accept",
+            Status = ComplaintStatus.New,
+            EnteredBy = UserData.GetUsers.ElementAt(0),
+            EnteredDate = DateTimeOffset.Now.AddDays(-1),
+            ReceivedDate = DateTimeOffset.Now.AddDays(-1),
+            ReceivedBy = UserData.GetUsers.ElementAt(0),
+            PrimaryConcern = ConcernData.GetConcerns.ElementAt(2),
+            CurrentOffice = OfficeData.GetOffices.ElementAt(1),
+            CurrentOwner = UserData.GetUsers.ElementAt(1),
+            CurrentOwnerAssignedDate = DateTimeOffset.Now.AddDays(-1),
+            SourceFacilityName = "Assigned to staff user (General).",
         },
     };
 
@@ -153,8 +167,8 @@ internal static class ComplaintData
 
             foreach (var complaint in _complaints)
             {
-                complaint.ComplaintActions = ComplaintActionData.GetComplaintActions
-                    .Where(e => e.Complaint.Id == complaint.Id).ToList();
+                complaint.ComplaintActions.AddRange(ComplaintActionData.GetComplaintActions
+                    .Where(e => e.Complaint.Id == complaint.Id));
             }
 
             return _complaints;
