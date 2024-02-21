@@ -89,6 +89,7 @@ public sealed class ComplaintService(
     {
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
         var complaint = await CreateComplaintFromDtoAsync(resource, currentUser, token).ConfigureAwait(false);
+
         await complaintRepository.InsertAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
         await AddTransitionAsync(complaint, TransitionType.New, currentUser, token).ConfigureAwait(false);
         await AddAssignmentTransitionsAsync(complaint, currentUser, token).ConfigureAwait(false);
@@ -130,7 +131,7 @@ public sealed class ComplaintService(
         CancellationToken token = default)
     {
         if (resource.OfficeId == currentComplaint.CurrentOffice?.Id &&
-            resource.OwnerId == currentComplaint.CurrentOwner?.Id) 
+            resource.OwnerId == currentComplaint.CurrentOwner?.Id)
             return false;
 
         var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
@@ -255,9 +256,7 @@ public sealed class ComplaintService(
         await MapComplaintDetailsAsync(complaint, resource, token).ConfigureAwait(false);
 
         var office = await officeRepository.GetAsync(resource.OfficeId!.Value, token).ConfigureAwait(false);
-        var owner = resource.OwnerId is not null
-            ? await userService.FindUserAsync(resource.OwnerId).ConfigureAwait(false)
-            : null;
+        var owner = await userService.FindUserAsync(resource.OwnerId ?? "").ConfigureAwait(false);
         complaintManager.Assign(complaint, office, owner, currentUser);
         return complaint;
     }
@@ -286,11 +285,10 @@ public sealed class ComplaintService(
         complaint.ComplaintCounty = resource.ComplaintCounty;
         complaint.PrimaryConcern = await concernRepository.GetAsync(resource.PrimaryConcernId, token)
             .ConfigureAwait(false);
-        if (resource.SecondaryConcernId is not null)
-        {
-            complaint.SecondaryConcern = await concernRepository.FindAsync(resource.SecondaryConcernId.Value, token)
-                .ConfigureAwait(false);
-        }
+        complaint.SecondaryConcern =
+            resource.SecondaryConcernId == null || resource.SecondaryConcernId == resource.PrimaryConcernId
+                ? null
+                : await concernRepository.GetAsync(resource.SecondaryConcernId.Value, token).ConfigureAwait(false);
 
         // Properties: Source
         complaint.SourceFacilityIdNumber = resource.SourceFacilityIdNumber;
