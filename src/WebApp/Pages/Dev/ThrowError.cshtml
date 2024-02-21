@@ -1,4 +1,11 @@
 ﻿@page
-@model ThrowError
+@model ThrowErrorModel
+@{
+    ViewData["Title"] = "Error Test 2";
+}
+<h1 class="text-danger-emphasis">@ViewData["Title"]</h1>
 
-<h1>Throw Error</h1>
+@if (!string.IsNullOrEmpty(Model.ShortCode))
+{
+    <p>Error code: @Model.ShortCode</p>
+}
