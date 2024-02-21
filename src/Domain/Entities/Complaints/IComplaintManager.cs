@@ -72,8 +72,10 @@ public interface IComplaintManager
     /// the <see cref="ApplicationUser"/> requesting the review.
     /// </summary>
     /// <param name="complaint">The Complaint for which a review was requested.</param>
+    /// <param name="office">The Office the Complaint was returned to.</param>
+    /// <param name="owner">The User the Complaint was returned to.</param>
     /// <param name="user">The user committing the change.</param>
-    void Return(Complaint complaint, ApplicationUser? user);
+    void Return(Complaint complaint, Office office, ApplicationUser? owner, ApplicationUser? user);
 
     /// <summary>
     /// Updates the properties of a <see cref="Complaint"/> to indicate that it was deleted.

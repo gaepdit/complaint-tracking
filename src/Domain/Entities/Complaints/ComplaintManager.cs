@@ -38,14 +38,9 @@ public class ComplaintManager(IComplaintRepository repository) : IComplaintManag
         complaint.SetUpdater(user?.Id);
         complaint.CurrentOffice = office;
         complaint.CurrentOwner = owner;
-        if (owner is null)
-        {
-            complaint.CurrentOwnerAssignedDate = null;
-            return;
-        }
+        complaint.CurrentOwnerAssignedDate = owner == null ? null : DateTimeOffset.Now;
 
-        complaint.CurrentOwnerAssignedDate = DateTimeOffset.Now;
-        if (owner == user)
+        if (owner != null && owner == user)
         {
             complaint.CurrentOwnerAcceptedDate = DateTimeOffset.Now;
             complaint.Status = ComplaintStatus.UnderInvestigation;
@@ -82,12 +77,16 @@ public class ComplaintManager(IComplaintRepository repository) : IComplaintManag
         complaint.ReviewedBy = reviewer;
     }
 
-    public void Return(Complaint complaint, ApplicationUser? user)
+    public void Return(Complaint complaint, Office office, ApplicationUser? owner, ApplicationUser? user)
     {
         complaint.SetUpdater(user?.Id);
         complaint.Status = ComplaintStatus.UnderInvestigation;
         complaint.ReviewedBy = null;
         complaint.ReviewComments = null;
+        complaint.CurrentOffice = office;
+        complaint.CurrentOwner = owner;
+        complaint.CurrentOwnerAssignedDate = owner == null ? null : DateTimeOffset.Now;
+        complaint.CurrentOwnerAcceptedDate = owner != null && owner == user ? DateTimeOffset.Now : null;
     }
 
     public void Delete(Complaint complaint, string? comment, ApplicationUser? user)

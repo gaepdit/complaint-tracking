@@ -186,11 +186,16 @@ public sealed class ComplaintService(
 
     public async Task ReturnAsync(ComplaintAssignmentDto resource, CancellationToken token = default)
     {
-        var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
-        var previousOwner = complaint.CurrentOwner;
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
 
-        complaintManager.Return(complaint, currentUser);
+        var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
+        var previousOwner = complaint.CurrentOwner;
+        var newOffice = await officeRepository.GetAsync(resource.OfficeId!.Value, token).ConfigureAwait(false);
+        var newOwner = resource.OwnerId is not null
+            ? await userService.FindUserAsync(resource.OwnerId).ConfigureAwait(false)
+            : null;
+
+        complaintManager.Return(complaint, newOffice, newOwner, currentUser);
         await complaintRepository.UpdateAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
         await AddTransitionAsync(complaint, TransitionType.ReturnedByReviewer, currentUser, token, resource.Comment)
             .ConfigureAwait(false);

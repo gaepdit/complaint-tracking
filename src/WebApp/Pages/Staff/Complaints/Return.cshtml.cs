@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Cts.WebApp.Pages.Staff.Complaints;
 
-public class AssignModel(
+public class ReturnModel(
     IComplaintService complaintService,
     IAuthorizationService authorizationService,
     IOfficeService officeService,
@@ -35,7 +35,7 @@ public class AssignModel(
         var complaintView = await complaintService.FindAsync(id.Value);
         if (complaintView is null) return NotFound();
 
-        if (!await UserCanAssignAsync(complaintView)) return Forbid();
+        if (!await UserCanReviewAsync(complaintView)) return Forbid();
 
         var userOfficeId = (await staffService.GetCurrentUserAsync()).Office?.Id;
         ComplaintAssignment = new ComplaintAssignmentDto(id.Value)
@@ -51,7 +51,7 @@ public class AssignModel(
     public async Task<IActionResult> OnPostAsync()
     {
         var complaintView = await complaintService.FindAsync(ComplaintAssignment.ComplaintId);
-        if (complaintView is null || !await UserCanAssignAsync(complaintView))
+        if (complaintView is null || !await UserCanReviewAsync(complaintView))
             return BadRequest();
 
         if (!ModelState.IsValid)
@@ -62,26 +62,17 @@ public class AssignModel(
             return Page();
         }
 
-        if (await complaintService.AssignAsync(ComplaintAssignment, complaintView))
-        {
-            TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "The Complaint has been assigned.");
-        }
-        else
-        {
-            TempData.SetDisplayMessage(DisplayMessage.AlertContext.Info, "The Complaint assignment has not changed.");
-        }
-
+        await complaintService.ReturnAsync(ComplaintAssignment);
+        TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "The Complaint has been returned.");
         return RedirectToPage("Details", new { id = ComplaintAssignment.ComplaintId });
     }
 
-    private async Task<bool> UserCanAssignAsync(ComplaintViewDto complaintView) =>
-        complaintView.CurrentOwner is null
-            ? (await authorizationService.AuthorizeAsync(User, complaintView, ComplaintOperation.Assign)).Succeeded
-            : (await authorizationService.AuthorizeAsync(User, complaintView, ComplaintOperation.Reassign)).Succeeded;
+    private async Task<bool> UserCanReviewAsync(ComplaintViewDto complaintView) =>
+        (await authorizationService.AuthorizeAsync(User, complaintView, ComplaintOperation.Review)).Succeeded;
 
-    private async Task PopulateSelectListsAsync(Guid? officeId)
+    private async Task PopulateSelectListsAsync(Guid? currentOfficeId)
     {
         OfficesSelectList = (await officeService.GetAsListItemsAsync()).ToSelectList();
-        StaffSelectList = (await officeService.GetStaffAsListItemsAsync(officeId)).ToSelectList();
+        StaffSelectList = (await officeService.GetStaffAsListItemsAsync(currentOfficeId)).ToSelectList();
     }
 }
