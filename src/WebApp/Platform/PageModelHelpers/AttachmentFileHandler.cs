@@ -1,9 +1,9 @@
 ﻿using Cts.AppServices.Attachments;
+using Cts.WebApp.Pages.Staff.Complaints.Attachment;
 using Cts.WebApp.Platform.Settings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PublicComplaints = Cts.WebApp.Pages.Public.Complaints;
-using StaffComplaints = Cts.WebApp.Pages.Staff.Complaints;
 
 namespace Cts.WebApp.Platform.PageModelHelpers;
 
@@ -13,7 +13,7 @@ internal static class AttachmentFileHandler
         IAttachmentService attachmentService, Guid? id, string? fileName, bool thumbnail) =>
         page.GetAttachmentFile(attachmentService, id, fileName, thumbnail, forPublic: true);
 
-    public static Task<IActionResult> GetAttachmentFile(this StaffComplaints.AttachmentModel page,
+    public static Task<IActionResult> GetAttachmentFile(this AttachmentModel page,
         IAttachmentService attachmentService, Guid? id, string? fileName, bool thumbnail) =>
         page.GetAttachmentFile(attachmentService, id, fileName, thumbnail, forPublic: false);
 

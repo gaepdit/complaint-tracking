@@ -19,7 +19,7 @@
     <form method="post">
         <div class="mt-3 mb-1">
             <button type="submit" class="btn btn-danger col-5 col-sm-3 col-lg-2 me-2">Delete</button>
-            <a asp-page="Details" asp-route-id="@Model.ComplaintId.ToString()" asp-fragment="attachments" class="btn btn-outline-secondary">Cancel</a>
+            <a asp-page="../Details" asp-route-id="@Model.ComplaintId.ToString()" asp-fragment="attachments" class="btn btn-outline-secondary">Cancel</a>
         </div>
         <input asp-for="AttachmentId" type="hidden" />
     </form>

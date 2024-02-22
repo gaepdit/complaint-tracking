@@ -5,7 +5,7 @@
 
 @if (Model.IsImage)
 {
-    <a asp-page="Attachment" asp-route-id="@Model.Id.ToString()" asp-route-fileName="@Model.FileName"
+    <a asp-page="Attachment/Index" asp-route-id="@Model.Id.ToString()" asp-route-fileName="@Model.FileName"
        data-fancybox="attachment" data-caption="@Model.FileName"
        target="_blank" class="text-decoration-hover rounded d-block no-external-link">
         <img src="~/Staff/Complaints/Attachment/@Model.Id.ToString()/@Uri.EscapeDataString(Model.FileName)?thumbnail=true"
@@ -16,7 +16,7 @@
 }
 else
 {
-    <a asp-page="Attachment" asp-route-id="@Model.Id.ToString()" asp-route-fileName="@Model.FileName" target="_blank"
+    <a asp-page="Attachment/Index" asp-route-id="@Model.Id.ToString()" asp-route-fileName="@Model.FileName" target="_blank"
        class="text-decoration-hover rounded d-block p-2 no-external-link">
         @Html.DisplayFor(dto => dto.FileExtension, DisplayTemplate.FileTypeIcon) @Model.FileName
     </a>

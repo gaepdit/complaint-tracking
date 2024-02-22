@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Cts.WebApp.Pages.Staff.Complaints;
+namespace Cts.WebApp.Pages.Staff.Complaints.Attachment;
 
 public class DeleteAttachmentModel(IAttachmentService attachmentService, IAuthorizationService authorizationService)
     : PageModel
@@ -51,7 +51,7 @@ public class DeleteAttachmentModel(IAttachmentService attachmentService, IAuthor
         await attachmentService.DeleteAttachmentAsync(originalAttachment, AppSettings.AttachmentServiceConfig, token);
 
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "Attachment successfully deleted.");
-        return RedirectToPage("Details", pageHandler: null, routeValues: new { complaintView.Id },
+        return RedirectToPage("../Details", pageHandler: null, routeValues: new { complaintView.Id },
             fragment: "attachments");
     }
 
