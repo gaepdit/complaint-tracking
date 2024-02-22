@@ -7,9 +7,21 @@
     ViewData["Title"] = $"Complaint ID {Model.Item.Id.ToString()}";
 }
 
-<h1>
-    @ViewData["Title"] <em class="text-brand">— Public Copy</em>
-</h1>
+<div class="container-full">
+    <div class="row justify-content-between align-items-baseline g-0 my-1">
+        <div class="col">
+            <h1>
+                @ViewData["Title"] <em class="text-info-emphasis">— Public Copy</em>
+            </h1>
+        </div>
+        @if (Model.UserIsActive)
+        {
+            <div class="col-auto d-print-none ms-2">
+                <a asp-page="/Staff/Complaints/Details" asp-route-id="@Model.Item.Id.ToString()" class="link-offset-2">📢 View staff copy</a>
+            </div>
+        }
+    </div>
+</div>
 
 <p>
     <small class="text-body-secondary">Report generated @(DateTime.Now.ToString(DateTimeFormatConstants.LongDateTimeFormat)).</small>
@@ -24,7 +36,7 @@
     </dl>
 </div>
 
-<h2>Status: <em class="text-brand">@Model.Item.Status.GetDisplayName()</em></h2>
+<h2>Status: <em class="text-info-emphasis">@Model.Item.Status.GetDisplayName()</em></h2>
 
 <div class="container">
     <dl class="row">

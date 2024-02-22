@@ -257,7 +257,7 @@ public class PublicSearchSpec
         var spec = new ComplaintPublicSearchDto { PostalCode = _referenceItem.SourceAddress!.PostalCode };
         var predicate = ComplaintFilters.PublicSearchPredicate(spec);
 
-        using var repository = RepositoryHelper.CreateRepositoryHelper().GetComplaintRepository();
+        await using var repository = RepositoryHelper.CreateRepositoryHelper().GetComplaintRepository();
         var results = await repository.GetListAsync(predicate);
 
         var expected = ComplaintData.GetComplaints
