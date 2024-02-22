@@ -28,6 +28,7 @@ public sealed class LocalComplaintRepository(
     {
         if (complaint is null) return null;
 
+        complaint.Attachments.Clear();
         complaint.Attachments.AddRange((await attachmentRepository
                 .GetListAsync(attachment => attachment.Complaint.Id == complaint.Id && !attachment.IsDeleted, token)
                 .ConfigureAwait(false))
@@ -35,6 +36,7 @@ public sealed class LocalComplaintRepository(
             .ThenBy(attachment => attachment.FileName)
             .ThenBy(attachment => attachment.Id));
 
+        complaint.ComplaintActions.Clear();
         complaint.ComplaintActions.AddRange((await actionRepository
                 .GetListAsync(action => action.Complaint.Id == complaint.Id &&
                     (!action.IsDeleted || includeDeletedActions), token).ConfigureAwait(false))
@@ -42,6 +44,7 @@ public sealed class LocalComplaintRepository(
             .ThenByDescending(action => action.EnteredDate)
             .ThenBy(action => action.Id));
 
+        complaint.ComplaintTransitions.Clear();
         complaint.ComplaintTransitions.AddRange((await transitionRepository
                 .GetListAsync(transition => transition.Complaint.Id == complaint.Id, token).ConfigureAwait(false))
             .OrderBy(transition => transition.CommittedDate).ThenBy(transition => transition.Id));
