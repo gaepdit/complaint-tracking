@@ -120,11 +120,13 @@
                     </div>
                     <div class="mb-3">
                         <div class="form-floating">
-                            <select asp-for="Spec.Concern" name="@nameof(Model.Spec.Concern)" asp-items="Model.ConcernsSelectList" class="form-select">
+                            <select asp-for="Spec.Concern" name="@nameof(Model.Spec.Concern)" asp-items="Model.ConcernsSelectList"
+                                    class="form-select" aria-describedby="ConcernHelpBlock">
                                 <option value="">@SelectOptions.SelectTextAny</option>
                             </select>
                             <label asp-for="Spec.Concern" class="form-label"></label>
                         </div>
+                        <small id="ConcernHelpBlock" class="form-text text-body-secondary d-block px-2">Searches both primary and secondary areas of concern.</small>
                     </div>
                 </div>
 
