@@ -71,13 +71,9 @@ public sealed class ComplaintService(
         ComplaintSearchDto spec, PaginatedRequest paging, CancellationToken token = default)
     {
         var predicate = ComplaintFilters.SearchPredicate(spec);
-
         var count = await complaintRepository.CountAsync(predicate, token).ConfigureAwait(false);
-
-        var list = count > 0
-            ? mapper.Map<IReadOnlyList<ComplaintSearchResultDto>>(await complaintRepository
-                .GetPagedListAsync(predicate, paging, token).ConfigureAwait(false))
-            : [];
+        var complaints = await complaintRepository.GetPagedListAsync(predicate, paging, token).ConfigureAwait(false);
+        var list = count > 0 ? mapper.Map<IReadOnlyList<ComplaintSearchResultDto>>(complaints) : [];
 
         return new PaginatedResult<ComplaintSearchResultDto>(list, count, paging);
     }

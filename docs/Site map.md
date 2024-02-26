@@ -21,10 +21,11 @@ These pages are only available to logged-in staff.
 * `/Staff/Complaints` (Complaint search)
 * `/Staff/Complaints/Download` (Export search results)
 
-#### Complaint Details
+#### Complaint Details and Attachments
 
 * `/Staff/Complaints/Details/{id}` (Complaint details with list of Actions and a new Action form)
 * `/Staff/Complaints/Attachment/{attachmentId}/{fileName}` (Attachment download)
+* `/Staff/Complaints/Attachment/Delete/{attachmentId}/{fileName}` (Delete Attachment)
 
 #### Complaint Workflow
 
@@ -40,11 +41,11 @@ These pages are only available to logged-in staff.
 
 ### Complaint Actions
 
-* `/Staff/ComplaintActions` (Search complaint actions)
 * `/Staff/Complaints/Details/{complaintId}#actions` (Embedded form for adding an action)
-* `/Staff/Complaints/EditAction/{actionId}` (Edit action details)
-* `/Staff/Complaints/DeleteAction/{actionId}` (Delete an action)
-* `/Staff/Complaints/RestoreAction/{actionId}` (Restore a deleted action)
+* `/Staff/ComplaintActions` (Search complaint actions)
+* `/Staff/ComplaintActions/Edit/{actionId}` (Edit action details)
+* `/Staff/ComplaintActions/Delete/{actionId}` (Delete an action)
+* `/Staff/ComplaintActions/Restore/{actionId}` (Restore a deleted action)
 
 ## User Account
 

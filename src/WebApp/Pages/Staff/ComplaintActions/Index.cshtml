@@ -1,0 +1,192 @@
+@page "{handler?}"
+@using Cts.AppServices.ComplaintActions
+@using Cts.WebApp.Pages.Shared.DisplayTemplates
+@using Cts.WebApp.Platform.PageModelHelpers
+@model IndexModel
+@{
+    ViewData["Title"] = "Complaint Actions Search";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="p-3 rounded-3 bg-light-subtle border col-lg-9">
+            <div class="text-body-secondary pb-2">
+                <em>All fields are optional.</em>
+            </div>
+            <form method="get" asp-page-handler="Search" asp-fragment="SearchResults">
+                <div class="row">
+                    <div class="col-md mb-3">
+                        <div class="form-floating">
+                            <select asp-for="Spec.ActionType" name="@nameof(Model.Spec.ActionType)" asp-items="Model.ActionTypeSelectList" class="form-select">
+                                <option value="">@SelectOptions.SelectTextAny</option>
+                            </select>
+                            <label asp-for="Spec.ActionType" class="form-label"></label>
+                        </div>
+                    </div>
+                    @if (Model.CanViewDeletedActions)
+                    {
+                        <div class="col-md mb-3">
+                            <div class="form-floating">
+                                <select asp-for="Spec.DeletedStatus" name="@nameof(Model.Spec.DeletedStatus)" asp-items="Html.GetEnumSelectList<SearchDeleteStatus>()"
+                                        class="form-select" aria-describedby="DeletedStatusHelpBlock">
+                                    <option value="">Not Deleted</option>
+                                </select>
+                                <label asp-for="Spec.DeletedStatus" class="form-label"></label>
+                            </div>
+                            <small id="DeletedStatusHelpBlock" class="form-text text-body-secondary d-block px-2">
+                                Displaying deleted actions also allows display of deleted complaints.
+                            </small>
+                        </div>
+                    }
+                </div>
+
+                <div class="row">
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <select asp-for="Spec.EnteredBy" name="@nameof(Model.Spec.EnteredBy)" asp-items="Model.EnteredBySelectList" class="form-select">
+                                <option value="">@SelectOptions.SelectTextAny</option>
+                            </select>
+                            <label asp-for="Spec.EnteredBy" class="form-label"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md mb-3">
+                        <label asp-for="Spec.EnteredFrom" class="form-label px-2 mb-0">Date Action Entered</label>
+                        <div class="input-group">
+                            <div class="form-floating">
+                                <input asp-for="Spec.EnteredFrom" name="@nameof(Model.Spec.EnteredFrom)" class="form-control" />
+                                <label asp-for="Spec.EnteredFrom" class="form-label"></label>
+                            </div>
+                            <div class="form-floating">
+                                <input asp-for="Spec.EnteredTo" name="@nameof(Model.Spec.EnteredTo)" class="form-control" />
+                                <label asp-for="Spec.EnteredTo" class="form-label"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md mb-3">
+                        <div class="form-floating">
+                            <input asp-for="Spec.Investigator" name="@nameof(Model.Spec.Investigator)" class="form-control" />
+                            <label asp-for="Spec.Investigator" class="form-label"></label>
+                        </div>
+                    </div>
+                    <div class="col-md mb-3">
+                        <div class="form-floating">
+                            <input asp-for="Spec.Comments" name="@nameof(Model.Spec.Comments)" class="form-control" />
+                            <label asp-for="Spec.Comments" class="form-label"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="form-floating">
+                        <select asp-for="Spec.Concern" name="@nameof(Model.Spec.Concern)" asp-items="Model.ConcernsSelectList"
+                                class="form-select" aria-describedby="ConcernHelpBlock">
+                            <option value="">@SelectOptions.SelectTextAny</option>
+                        </select>
+                        <label asp-for="Spec.Concern" class="form-label"></label>
+                    </div>
+                    <small id="ConcernHelpBlock" class="form-text text-body-secondary d-block px-2">Searches both primary and secondary areas of concern.</small>
+                </div>
+
+                <div class="mt-3 mb-1">
+                    <button id="SearchButton" type="submit" class="btn btn-lg btn-primary col-4 me-2">Search</button>
+                    <a asp-page="Index" class="btn btn-lg btn-outline-secondary col-4 col-md-3">Clear Form</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@if (Model.ShowResults)
+{
+    <div id="SearchResults" class="mt-4">
+        <h3>Search Results</h3>
+
+        @if (Model.SearchResults.TotalCount == 0)
+        {
+            <p class="lead text-info">No matching results found.</p>
+        }
+        else
+        {
+            <table class="table table-hover" aria-label="Facility search results">
+                <caption class="caption-top">
+                    <partial name="Shared/_PaginationNavAndCount" model="Model.PaginationNav" />
+                </caption>
+
+                <thead>
+                <tr>
+                    <th scope="col" class="text-nowrap">
+                        <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
+                           asp-route-Sort="@(Model.Spec.Sort == SortBy.IdAsc ? nameof(SortBy.IdDesc) : nameof(SortBy.IdAsc))">
+                            Complaint ID @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
+                                             additionalViewData: new { up = nameof(SortBy.IdAsc), down = nameof(SortBy.IdDesc) })
+                        </a>
+                    </th>
+                    <th scope="col" class="text-nowrap">
+                        <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
+                           asp-route-Sort="@(Model.Spec.Sort == SortBy.TypeAsc ? nameof(SortBy.TypeDesc) : nameof(SortBy.TypeAsc))">
+                            Action Type @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
+                                            additionalViewData: new { up = nameof(SortBy.TypeAsc), down = nameof(SortBy.TypeDesc) })
+                        </a>
+                    </th>
+                    <th scope="col" class="text-nowrap">
+                        <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
+                           asp-route-Sort="@(Model.Spec.Sort == SortBy.DateAsc ? nameof(SortBy.DateDesc) : nameof(SortBy.DateAsc))">
+                            Action Date @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
+                                            additionalViewData: new { up = nameof(SortBy.DateAsc), down = nameof(SortBy.DateDesc) })
+                        </a>
+                    </th>
+                    <th scope="col">Investigator</th>
+                    <th scope="col">Entered By</th>
+                    <th scope="col">Comments</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                @foreach (var item in Model.SearchResults.Items)
+                {
+                    <tr class="@(item.IsDeleted ? "table-danger" : item.ComplaintIsDeleted ? "table-warning" : "")">
+                        <th scope="row">
+                            <a asp-page="../Complaints/Details" asp-route-id="@item.ComplaintId.ToString()" class="btn btn-outline-primary btn-sm">@item.ComplaintId.ToString()</a>
+                        </th>
+                        <td>
+                            @if (item.IsDeleted)
+                            {
+                                <strong class="text-nowrap">DELETED ACTION</strong>
+                                <br />
+                            }
+                            @if (item.ComplaintIsDeleted)
+                            {
+                                <strong class="text-nowrap">Deleted Complaint</strong>
+                                <br />
+                            }
+                            @Html.DisplayFor(_ => item.ActionTypeName, DisplayTemplate.StringOrPlaceholder)
+                        </td>
+                        <td class="text-nowrap">@Html.DisplayFor(_ => item.ActionDate, DisplayTemplate.DateOnly)</td>
+                        <td>@Html.DisplayFor(_ => item.Investigator, DisplayTemplate.StringOrPlaceholder)</td>
+                        <td>
+                            @Html.DisplayFor(_ => item.EnteredByName, DisplayTemplate.StringOrPlaceholder)
+                            <br />
+                            @Html.DisplayFor(_ => item.EnteredByOffice, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "" })
+                        </td>
+                        <td>@Html.DisplayFor(_ => item.Comments, DisplayTemplate.TruncateText)</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+
+            <partial name="_PaginationNav" model="Model.PaginationNav" />
+        }
+    </div>
+}
+
+@section Scripts {
+    <script src="~/js/formSearch.js"></script>
+}

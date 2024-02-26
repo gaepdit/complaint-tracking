@@ -4,6 +4,7 @@ using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.ActionTypes;
 using Cts.Domain.Entities.ComplaintActions;
 using Cts.Domain.Entities.Complaints;
+using GaEpd.AppLibrary.Pagination;
 
 namespace Cts.AppServices.ComplaintActions;
 
@@ -41,6 +42,16 @@ public sealed class ComplaintActionService(
         mapper.Map<ComplaintActionUpdateDto>(
             await actionRepository.FindAsync(action => action.Id == id && !action.IsDeleted, token)
                 .ConfigureAwait(false));
+
+    public async Task<IPaginatedResult<ComplaintActionSearchResultDto>> SearchAsync(ComplaintActionSearchDto spec, PaginatedRequest paging, CancellationToken token = default)
+    {
+        var predicate = ComplaintActionFilters.SearchPredicate(spec);
+        var count = await actionRepository.CountAsync(predicate, token).ConfigureAwait(false);
+        var actions = await actionRepository.GetPagedListAsync(predicate, paging, token).ConfigureAwait(false);
+        var list = count > 0 ? mapper.Map<IReadOnlyList<ComplaintActionSearchResultDto>>(actions) : [];
+
+        return new PaginatedResult<ComplaintActionSearchResultDto>(list, count, paging);
+    }
 
     public async Task UpdateAsync(Guid id, ComplaintActionUpdateDto resource, CancellationToken token = default)
     {

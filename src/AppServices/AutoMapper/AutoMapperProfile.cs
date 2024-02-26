@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Cts.AppServices.ActionTypes;
 using Cts.AppServices.Attachments.Dto;
+using Cts.AppServices.ComplaintActions;
 using Cts.AppServices.ComplaintActions.Dto;
 using Cts.AppServices.Complaints.CommandDto;
 using Cts.AppServices.Complaints.QueryDto;
@@ -22,28 +23,29 @@ public class AutoMapperProfile : Profile
 {
     public AutoMapperProfile()
     {
-        CreateMap<ActionType, ActionTypeViewDto>();
         CreateMap<ActionType, ActionTypeUpdateDto>();
+        CreateMap<ActionType, ActionTypeViewDto>();
 
-        CreateMap<ApplicationUser, StaffViewDto>();
         CreateMap<ApplicationUser, StaffSearchResultDto>();
+        CreateMap<ApplicationUser, StaffViewDto>();
 
         CreateMap<Attachment, AttachmentViewDto>();
 
+        CreateMap<Complaint, ComplaintPublicViewDto>();
+        CreateMap<Complaint, ComplaintSearchResultDto>();
         CreateMap<Complaint, ComplaintUpdateDto>()
             .ForMember(dto => dto.ReceivedDate, expression =>
                 expression.MapFrom(complaint => DateOnly.FromDateTime(complaint.ReceivedDate.Date)))
             .ForMember(dto => dto.ReceivedTime, expression =>
                 expression.MapFrom(complaint => TimeOnly.FromTimeSpan(complaint.ReceivedDate.TimeOfDay)))
             .ForMember(dto => dto.CurrentUserOfficeId, expression => expression.Ignore());
-        CreateMap<Complaint, ComplaintPublicViewDto>();
-        CreateMap<Complaint, ComplaintSearchResultDto>();
         CreateMap<Complaint, ComplaintViewDto>()
             .ForMember(dto => dto.CurrentUserOfficeId, expression => expression.Ignore());
 
         CreateMap<ComplaintAction, ComplaintActionPublicViewDto>();
-        CreateMap<ComplaintAction, ComplaintActionViewDto>();
+        CreateMap<ComplaintAction, ComplaintActionSearchResultDto>();
         CreateMap<ComplaintAction, ComplaintActionUpdateDto>();
+        CreateMap<ComplaintAction, ComplaintActionViewDto>();
 
         CreateMap<ComplaintTransition, ComplaintTransitionViewDto>();
 

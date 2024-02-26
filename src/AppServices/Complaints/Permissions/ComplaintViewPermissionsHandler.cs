@@ -41,7 +41,7 @@ internal class ComplaintViewPermissionsHandler : AuthorizationHandler<ComplaintO
                 IsOpen() && !MustAccept() && UserHasEditAccess(),
 
             nameof(ComplaintOperation.ManageDeletedActions) =>
-                IsOpen() && !MustAccept() && IsCurrentManager(),
+                IsOpen() && !MustAccept() && IsCurrentOwnerOrManager(),
 
             nameof(ComplaintOperation.ManageDeletions) =>
                 _user.IsDivisionManager(), // Only the Division Manager can delete or restore complaints.
@@ -62,7 +62,7 @@ internal class ComplaintViewPermissionsHandler : AuthorizationHandler<ComplaintO
                 IsCurrentOwner(),
 
             nameof(ComplaintOperation.ViewDeletedActions) =>
-                IsCurrentManager(),
+                IsCurrentOwnerOrManager(),
 
             _ => throw new ArgumentOutOfRangeException(nameof(requirement)),
         };

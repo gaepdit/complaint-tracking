@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Cts.WebApp.Pages.Staff.Complaints;
+namespace Cts.WebApp.Pages.Staff.ComplaintActions;
 
 public class RestoreActionModel(
     IComplaintActionService actionService,

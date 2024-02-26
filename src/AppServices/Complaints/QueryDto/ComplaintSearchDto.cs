@@ -102,6 +102,7 @@ public record ComplaintSearchDto
         { nameof(ClosedTo), ClosedTo?.ToString("d") },
         { nameof(ReceivedFrom), ReceivedFrom?.ToString("d") },
         { nameof(ReceivedTo), ReceivedTo?.ToString("d") },
+        { nameof(ReceivedBy), ReceivedBy },
         { nameof(CallerName), CallerName },
         { nameof(Represents), Represents },
         { nameof(Description), Description },

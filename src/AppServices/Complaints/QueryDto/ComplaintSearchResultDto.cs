@@ -17,8 +17,8 @@ public record ComplaintSearchResultDto
     public string? PrimaryConcernName { get; init; }
     public string? SecondaryConcernName { get; init; }
     public string? CurrentOfficeName { get; init; }
-    public StaffViewDto? CurrentOwner { get; set; }
+    public StaffViewDto? CurrentOwner { get; init; }
     public string? AssignedOwnerName => CurrentOwner?.SortableFullName;
-    public bool IsDeleted { get; set; }
+    public bool IsDeleted { get; init; }
 
 }

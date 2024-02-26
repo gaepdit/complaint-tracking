@@ -7,14 +7,8 @@ namespace Cts.AppServices.Complaints;
 
 internal static class ComplaintFilters
 {
-    public static Expression<Func<Complaint, bool>> IdPredicate(int id) =>
-        PredicateBuilder.True<Complaint>().WithId(id);
-
     public static Expression<Func<Complaint, bool>> PublicIdPredicate(int id) =>
         PredicateBuilder.True<Complaint>().WithId(id).IsPublic();
-
-    public static Expression<Func<Complaint, bool>> IsPublicPredicate() =>
-        PredicateBuilder.True<Complaint>().IsPublic();
 
     public static Expression<Func<Complaint, bool>> PublicSearchPredicate(ComplaintPublicSearchDto spec) =>
         PredicateBuilder.True<Complaint>()
