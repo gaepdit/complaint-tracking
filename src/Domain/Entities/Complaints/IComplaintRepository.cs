@@ -32,6 +32,18 @@ public interface IComplaintRepository : IRepository<Complaint, int>
     Task<Complaint?> FindIncludeAllAsync(Expression<Func<Complaint, bool>> predicate,
         bool includeDeletedActions = false, CancellationToken token = default);
 
+    /// <summary>
+    /// Returns a read-only collection of <see cref="Complaint"/> matching the conditions of the <paramref name="predicate"/>.
+    /// Each Complaint in the collection includes the most recent <see cref="ComplaintAction"/> for that Complaint.
+    /// Returns an empty collection if there are no matches.
+    /// </summary>
+    /// <param name="predicate">The search conditions.</param>
+    /// <param name="sorting"></param>
+    /// <param name="token"><see cref="T:System.Threading.CancellationToken"/></param>
+    /// <returns>A read-only collection of Complaints with the most recent Action for each.</returns>
+    Task<IReadOnlyCollection<Complaint>> GetListWithMostRecentActionAsync(Expression<Func<Complaint, bool>> predicate,
+        string sorting = "", CancellationToken token = default);
+
     // Transitions
 
     /// <summary>

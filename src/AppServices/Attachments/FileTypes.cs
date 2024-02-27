@@ -23,6 +23,8 @@ public static class FileTypes
     public static string GetContentType(string extension) =>
         FileContentTypes.GetValueOrDefault(extension.ToLowerInvariant(), "application/octet-stream");
 
+    public const string ExcelContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
     [SuppressMessage("ReSharper", "StringLiteralTypo")]
     // This list contains file types that are no longer allowed but may exist for previous uploads. 
     private static readonly Dictionary<string, string> FileContentTypes = new()
@@ -43,7 +45,7 @@ public static class FileTypes
         { ".svg", "image/svg+xml" },
         { ".txt", "text/plain" },
         { ".xls", "application/ms-excel" },
-        { ".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" },
+        { ".xlsx", ExcelContentType },
         { ".zip", "application/zip" },
     };
 }

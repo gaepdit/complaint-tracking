@@ -9,6 +9,7 @@ using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
+using GaEpd.AppLibrary.Extensions;
 using GaEpd.AppLibrary.Pagination;
 
 namespace Cts.AppServices.Complaints;
@@ -67,6 +68,9 @@ public sealed class ComplaintService(
     public async Task<bool> ExistsAsync(int id, CancellationToken token = default) =>
         await complaintRepository.ExistsAsync(id, token).ConfigureAwait(false);
 
+    public async Task<int> CountAsync(ComplaintSearchDto spec, CancellationToken token = default) =>
+        await complaintRepository.CountAsync(ComplaintFilters.SearchPredicate(spec), token).ConfigureAwait(false);
+
     public async Task<IPaginatedResult<ComplaintSearchResultDto>> SearchAsync(
         ComplaintSearchDto spec, PaginatedRequest paging, CancellationToken token = default)
     {
@@ -77,6 +81,13 @@ public sealed class ComplaintService(
 
         return new PaginatedResult<ComplaintSearchResultDto>(list, count, paging);
     }
+
+    public async Task<IReadOnlyList<ComplaintSearchExportDto>> ExportSearchAsync(ComplaintSearchDto spec,
+        CancellationToken token = default) =>
+        (await complaintRepository.GetListWithMostRecentActionAsync(ComplaintFilters.SearchPredicate(spec),
+                sorting: spec.Sort.GetDescription(), token).ConfigureAwait(false))
+        .Select(complaint => new ComplaintSearchExportDto(complaint)).ToList();
+
 
     // Staff complaint write methods
 

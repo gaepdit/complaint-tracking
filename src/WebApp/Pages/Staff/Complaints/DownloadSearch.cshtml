@@ -1,0 +1,35 @@
+@page "{handler?}"
+@model DownloadSearchModel
+@{
+    ViewData["Title"] = "Downloading Search Results";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (Model.ResultsCount == 0)
+{
+    <p>No search results found.</p>
+    <p>
+        <a asp-page="Index" asp-page-handler="Search" asp-all-route-data="Model.Spec.AsRouteValues()"
+           class="btn btn-sm btn-outline-primary">
+            Return to search
+        </a>
+    </p>
+}
+else
+{
+    <p>Your download should start automatically. Depending on the number of search results, it may take some time to generate.</p>
+    <p>
+        If the download fails,
+        <a id="download-link" asp-page-handler="Download" asp-all-route-data="Model.Spec.AsRouteValues()">
+            click here to try again
+        </a>.
+    </p>
+    <p>
+        <a asp-page="Index" asp-page-handler="Search" asp-all-route-data="Model.Spec.AsRouteValues()"
+           asp-fragment="SearchResults" class="btn btn-sm btn-outline-secondary">
+            Return to search results
+        </a>
+    </p>
+    <script>window.location = document.getElementById("download-link").href;</script>
+}

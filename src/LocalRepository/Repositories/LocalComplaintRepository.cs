@@ -3,6 +3,7 @@ using Cts.Domain.Entities.ComplaintActions;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.TestData;
+using GaEpd.AppLibrary.Pagination;
 using System.Linq.Expressions;
 
 namespace Cts.LocalRepository.Repositories;
@@ -22,6 +23,23 @@ public sealed class LocalComplaintRepository(
         bool includeDeletedActions = false, CancellationToken token = default) =>
         await GetComplaintDetailsAsync(await FindAsync(predicate, token).ConfigureAwait(false), includeDeletedActions,
             token).ConfigureAwait(false);
+
+    public Task<IReadOnlyCollection<Complaint>> GetListWithMostRecentActionAsync(
+        Expression<Func<Complaint, bool>> predicate, string sorting = "", CancellationToken token = default)
+    {
+        var complaints = Items.Where(predicate.Compile()).AsQueryable().OrderByIf(sorting);
+
+#pragma warning disable S3267
+        foreach (var complaint in complaints.Where(complaint => complaint.ComplaintActions.Count > 0))
+        {
+            complaint.ComplaintActions.RemoveAll(action => action.IsDeleted);
+            if (complaint.ComplaintActions.Count > 1)
+                complaint.ComplaintActions.RemoveRange(0, complaint.ComplaintActions.Count - 1);
+        }
+#pragma warning restore S3267
+
+        return Task.FromResult(complaints.ToList() as IReadOnlyCollection<Complaint>);
+    }
 
     private async Task<Complaint?> GetComplaintDetailsAsync(Complaint? complaint, bool includeDeletedActions,
         CancellationToken token)
