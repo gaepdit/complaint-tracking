@@ -13,7 +13,7 @@ public class SearchSpec
 
     [SetUp]
     public void SetUp() => _repository = new LocalComplaintRepository(Substitute.For<IAttachmentRepository>(),
-        Substitute.For<IComplaintActionRepository>(), Substitute.For<IComplaintTransitionRepository>());
+        Substitute.For<IActionRepository>(), Substitute.For<IComplaintTransitionRepository>());
 
     [TearDown]
     public void TearDown() => _repository.Dispose();

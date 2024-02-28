@@ -13,7 +13,7 @@ public sealed class ComplaintActionService(
     IUserService userService,
     IComplaintRepository complaintRepository,
     IComplaintManager complaintManager,
-    IComplaintActionRepository actionRepository,
+    IActionRepository actionRepository,
     IActionTypeRepository actionTypeRepository)
     : IComplaintActionService
 {

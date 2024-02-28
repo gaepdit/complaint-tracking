@@ -10,7 +10,7 @@ namespace Cts.LocalRepository.Repositories;
 
 public sealed class LocalComplaintRepository(
     IAttachmentRepository attachmentRepository,
-    IComplaintActionRepository actionRepository,
+    IActionRepository actionRepository,
     IComplaintTransitionRepository transitionRepository)
     : BaseRepository<Complaint, int>(ComplaintData.GetComplaints), IComplaintRepository
 {
