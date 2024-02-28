@@ -1,6 +1,4 @@
 ﻿using Cts.AppServices.ErrorLogging;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Cts.WebApp.Pages.Dev;
 

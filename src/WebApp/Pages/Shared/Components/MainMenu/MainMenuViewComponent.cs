@@ -1,8 +1,5 @@
 ﻿using Cts.AppServices.Permissions;
 using Cts.WebApp.Pages.Account;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 
 namespace Cts.WebApp.Pages.Shared.Components.MainMenu;

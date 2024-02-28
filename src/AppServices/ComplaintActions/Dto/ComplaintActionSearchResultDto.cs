@@ -1,5 +1,4 @@
 ﻿using Cts.AppServices.Staff.Dto;
-using Cts.Domain.Entities.ActionTypes;
 
 namespace Cts.AppServices.ComplaintActions;
 

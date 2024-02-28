@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Cts.AppServices.Permissions;
+﻿using Cts.AppServices.Permissions;
 
 namespace Cts.WebApp.Pages.Admin.Maintenance;
 
