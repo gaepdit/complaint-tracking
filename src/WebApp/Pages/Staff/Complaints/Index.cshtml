@@ -224,7 +224,9 @@
                 @if (Model.SearchResults.TotalCount > 0)
                 {
                     <div class="col-auto d-print-none ms-2">
-                        <a asp-page="DownloadSearch" asp-all-route-data="Model.Spec.AsRouteValues()" class="btn btn-sm btn-outline-primary">Download search results</a>
+                        <a asp-page="DownloadSearch" asp-all-route-data="Model.Spec.AsRouteValues()" class="btn btn-sm btn-outline-secondary">
+                            💾 Download search results
+                        </a>
                     </div>
                 }
             </div>
@@ -245,21 +247,24 @@
                 <tr>
                     <th scope="col" class="text-nowrap">
                         <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                           asp-route-Sort="@(Model.Spec.Sort == SortBy.IdAsc ? nameof(SortBy.IdDesc) : nameof(SortBy.IdAsc))">
+                           asp-route-Sort="@(Model.Spec.Sort == SortBy.IdAsc ? nameof(SortBy.IdDesc) : nameof(SortBy.IdAsc))"
+                           class="link-offset-2">
                             ID @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow,
                                    new { up = nameof(SortBy.IdAsc), down = nameof(SortBy.IdDesc) })
                         </a>
                     </th>
                     <th scope="col" class="text-nowrap">
                         <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                           asp-route-Sort="@(Model.Spec.Sort == SortBy.ReceivedDateAsc ? nameof(SortBy.ReceivedDateDesc) : nameof(SortBy.ReceivedDateAsc))">
+                           asp-route-Sort="@(Model.Spec.Sort == SortBy.ReceivedDateAsc ? nameof(SortBy.ReceivedDateDesc) : nameof(SortBy.ReceivedDateAsc))"
+                           class="link-offset-2">
                             Received @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow,
                                          new { up = nameof(SortBy.ReceivedDateAsc), down = nameof(SortBy.ReceivedDateDesc) })
                         </a>
                     </th>
                     <th scope="col" class="text-nowrap">
                         <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                           asp-route-Sort="@(Model.Spec.Sort == SortBy.StatusAsc ? nameof(SortBy.StatusDesc) : nameof(SortBy.StatusAsc))">
+                           asp-route-Sort="@(Model.Spec.Sort == SortBy.StatusAsc ? nameof(SortBy.StatusDesc) : nameof(SortBy.StatusAsc))"
+                           class="link-offset-2">
                             Status @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow,
                                        new { up = nameof(SortBy.StatusAsc), down = nameof(SortBy.StatusDesc) })
                         </a>

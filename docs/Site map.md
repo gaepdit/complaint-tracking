@@ -19,7 +19,6 @@ These pages are only available to logged-in staff.
 ### Complaints
 
 * `/Staff/Complaints` (Complaint search)
-* `/Staff/Complaints/Download` (Export search results)
 
 #### Complaint Details and Attachments
 
