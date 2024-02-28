@@ -24,12 +24,7 @@ public interface IComplaintService : IDisposable, IAsyncDisposable
 
     Task<bool> ExistsAsync(int id, CancellationToken token = default);
 
-    Task<int> CountAsync(ComplaintSearchDto spec, CancellationToken token = default);
-
     Task<IPaginatedResult<ComplaintSearchResultDto>> SearchAsync(ComplaintSearchDto spec, PaginatedRequest paging,
-        CancellationToken token = default);
-
-    Task<IReadOnlyList<ComplaintSearchExportDto>> ExportSearchAsync(ComplaintSearchDto spec,
         CancellationToken token = default);
 
     // Staff complaint write methods

@@ -2,12 +2,12 @@
 using Cts.Domain.Entities.Complaints;
 using GaEpd.AppLibrary.Extensions;
 
-namespace Cts.AppServices.Complaints.QueryDto;
+namespace Cts.AppServices.DataExport;
 
 [UsedImplicitly(ImplicitUseTargetFlags.Members)]
-public record ComplaintSearchExportDto
+public record ComplaintExportDto
 {
-    public ComplaintSearchExportDto(Complaint complaint)
+    public ComplaintExportDto(Complaint complaint)
     {
         ComplaintId = complaint.Id;
         ReceivedByName = complaint.ReceivedBy.SortableFullName;
