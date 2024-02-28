@@ -4,9 +4,9 @@ using System.Linq.Expressions;
 
 namespace Cts.AppServices.ComplaintActions;
 
-internal static class ComplaintActionFilters
+internal static class ActionFilters
 {
-    public static Expression<Func<ComplaintAction, bool>> SearchPredicate(ComplaintActionSearchDto spec) =>
+    public static Expression<Func<ComplaintAction, bool>> SearchPredicate(ActionSearchDto spec) =>
         PredicateBuilder.True<ComplaintAction>()
             .IsActionType(spec.ActionType)
             .ByComplaintDeletedStatus(spec.DeletedStatus)

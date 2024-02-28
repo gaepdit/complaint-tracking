@@ -42,10 +42,10 @@ public class AutoMapperProfile : Profile
         CreateMap<Complaint, ComplaintViewDto>()
             .ForMember(dto => dto.CurrentUserOfficeId, expression => expression.Ignore());
 
-        CreateMap<ComplaintAction, ComplaintActionPublicViewDto>();
-        CreateMap<ComplaintAction, ComplaintActionSearchResultDto>();
-        CreateMap<ComplaintAction, ComplaintActionUpdateDto>();
-        CreateMap<ComplaintAction, ComplaintActionViewDto>();
+        CreateMap<ComplaintAction, ActionPublicViewDto>();
+        CreateMap<ComplaintAction, ActionSearchResultDto>();
+        CreateMap<ComplaintAction, ActionUpdateDto>();
+        CreateMap<ComplaintAction, ActionViewDto>();
 
         CreateMap<ComplaintTransition, ComplaintTransitionViewDto>();
 

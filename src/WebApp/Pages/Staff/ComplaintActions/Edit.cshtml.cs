@@ -11,7 +11,7 @@ using GaEpd.AppLibrary.ListItems;
 namespace Cts.WebApp.Pages.Staff.ComplaintActions;
 
 public class EditActionModel(
-    IComplaintActionService actionService,
+    IActionService actionService,
     IComplaintService complaintService,
     IActionTypeService actionTypeService,
     IAuthorizationService authorizationService)
@@ -21,7 +21,7 @@ public class EditActionModel(
     public Guid ActionItemId { get; set; }
 
     [BindProperty]
-    public ComplaintActionUpdateDto ActionItemUpdate { get; set; } = default!;
+    public ActionUpdateDto ActionItemUpdate { get; set; } = default!;
 
     [TempData]
     public Guid HighlightId { get; set; }

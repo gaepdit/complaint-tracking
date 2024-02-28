@@ -14,7 +14,7 @@ internal static class PageModelHelpers
 
     public static DetailsModel BuildDetailsPageModel(
         IComplaintService? complaintService = null,
-        IComplaintActionService? actionService = null,
+        IActionService? actionService = null,
         IActionTypeService? actionTypeService = null,
         IAttachmentService? attachmentService = null,
         IAuthorizationService? authorizationService = null)
@@ -23,7 +23,7 @@ internal static class PageModelHelpers
         staffService.GetCurrentUserAsync().Returns(StaffViewTest);
 
         return new DetailsModel(complaintService ?? Substitute.For<IComplaintService>(),
-            actionService ?? Substitute.For<IComplaintActionService>(),
+            actionService ?? Substitute.For<IActionService>(),
             actionTypeService ?? Substitute.For<IActionTypeService>(),
             attachmentService ?? Substitute.For<IAttachmentService>(),
             staffService,

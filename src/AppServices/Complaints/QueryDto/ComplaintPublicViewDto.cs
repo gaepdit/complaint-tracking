@@ -90,7 +90,7 @@ public record ComplaintPublicViewDto
 
     [Display(Name = "Actions")]
     [UsedImplicitly]
-    public List<ComplaintActionPublicViewDto> ComplaintActions { get; } = [];
+    public List<ActionPublicViewDto> ComplaintActions { get; } = [];
 
     // Properties: Attachments
 

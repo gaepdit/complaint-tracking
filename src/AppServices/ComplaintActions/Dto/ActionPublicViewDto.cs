@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Cts.AppServices.ComplaintActions.Dto;
 
-public record ComplaintActionPublicViewDto
+public record ActionPublicViewDto
 {
     public Guid Id { get; [UsedImplicitly] init; }
 

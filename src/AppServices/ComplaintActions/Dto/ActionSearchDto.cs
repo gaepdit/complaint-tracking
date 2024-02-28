@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Cts.AppServices.ComplaintActions;
 
-public record ComplaintActionSearchDto
+public record ActionSearchDto
 {
     // Sorting
 

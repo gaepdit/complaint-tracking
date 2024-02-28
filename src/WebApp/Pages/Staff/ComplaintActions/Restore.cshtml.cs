@@ -9,7 +9,7 @@ using Cts.WebApp.Platform.PageModelHelpers;
 namespace Cts.WebApp.Pages.Staff.ComplaintActions;
 
 public class RestoreActionModel(
-    IComplaintActionService actionService,
+    IActionService actionService,
     IComplaintService complaintService,
     IAuthorizationService authorizationService)
     : PageModel
@@ -20,7 +20,7 @@ public class RestoreActionModel(
     [TempData]
     public Guid HighlightId { get; set; }
 
-    public ComplaintActionViewDto ActionItemView { get; private set; } = default!;
+    public ActionViewDto ActionItemView { get; private set; } = default!;
 
     public async Task<IActionResult> OnGetAsync(Guid? actionId)
     {
