@@ -155,7 +155,7 @@ public record ComplaintViewDto
     // === Lists ===
 
     [UsedImplicitly]
-    public List<ActionViewDto> ComplaintActions { get; } = [];
+    public List<ActionViewDto> Actions { get; } = [];
 
     [UsedImplicitly]
     public List<AttachmentViewDto> Attachments { get; } = [];

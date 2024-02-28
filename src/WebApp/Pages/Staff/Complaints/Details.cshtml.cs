@@ -37,7 +37,7 @@ public class DetailsModel(
     public string? ValidatingSection { get; private set; }
     public SelectList ActionItemTypeSelectList { get; private set; } = default!;
 
-    public bool ViewableComplaintActions => ComplaintView.ComplaintActions.Exists(action =>
+    public bool ViewableActions => ComplaintView.Actions.Exists(action =>
         !action.IsDeleted || UserCan[ComplaintOperation.ViewDeletedActions]);
 
     public async Task<IActionResult> OnGetAsync(int? id)

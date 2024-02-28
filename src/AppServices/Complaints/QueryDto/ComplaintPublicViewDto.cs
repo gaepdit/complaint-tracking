@@ -88,13 +88,11 @@ public record ComplaintPublicViewDto
 
     // Properties: Actions
 
-    [Display(Name = "Actions")]
     [UsedImplicitly]
-    public List<ActionPublicViewDto> ComplaintActions { get; } = [];
+    public List<ActionPublicViewDto> Actions { get; } = [];
 
     // Properties: Attachments
 
-    [Display(Name = "Attachments")]
     [UsedImplicitly]
     public List<AttachmentViewDto> Attachments { get; } = [];
 }
