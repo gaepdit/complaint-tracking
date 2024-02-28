@@ -30,11 +30,11 @@ public sealed class LocalComplaintRepository(
         var complaints = Items.Where(predicate.Compile()).AsQueryable().OrderByIf(sorting);
 
 #pragma warning disable S3267
-        foreach (var complaint in complaints.Where(complaint => complaint.ComplaintActions.Count > 0))
+        foreach (var complaint in complaints.Where(complaint => complaint.Actions.Count > 0))
         {
-            complaint.ComplaintActions.RemoveAll(action => action.IsDeleted);
-            if (complaint.ComplaintActions.Count > 1)
-                complaint.ComplaintActions.RemoveRange(0, complaint.ComplaintActions.Count - 1);
+            complaint.Actions.RemoveAll(action => action.IsDeleted);
+            if (complaint.Actions.Count > 1)
+                complaint.Actions.RemoveRange(0, complaint.Actions.Count - 1);
         }
 #pragma warning restore S3267
 
@@ -54,8 +54,8 @@ public sealed class LocalComplaintRepository(
             .ThenBy(attachment => attachment.FileName)
             .ThenBy(attachment => attachment.Id));
 
-        complaint.ComplaintActions.Clear();
-        complaint.ComplaintActions.AddRange((await actionRepository
+        complaint.Actions.Clear();
+        complaint.Actions.AddRange((await actionRepository
                 .GetListAsync(action => action.Complaint.Id == complaint.Id &&
                     (!action.IsDeleted || includeDeletedActions), token).ConfigureAwait(false))
             .OrderByDescending(action => action.ActionDate)

@@ -21,7 +21,7 @@ public sealed class ComplaintRepository(AppDbContext context)
     public async Task<IReadOnlyCollection<Complaint>> GetListWithMostRecentActionAsync(
         Expression<Func<Complaint, bool>> predicate, string sorting = "", CancellationToken token = default) =>
         await Context.Set<Complaint>().AsNoTracking().Where(predicate).OrderByIf(sorting)
-            .Include(complaint => complaint.ComplaintActions
+            .Include(complaint => complaint.Actions
                 .Where(action => !action.IsDeleted)
                 .OrderByDescending(action => action.ActionDate)
                 .ThenByDescending(action => action.EnteredDate)
@@ -39,7 +39,7 @@ public sealed class ComplaintRepository(AppDbContext context)
                 .OrderByDescending(attachment => attachment.UploadedDate)
                 .ThenBy(attachment => attachment.Id)
             )
-            .Include(complaint => complaint.ComplaintActions
+            .Include(complaint => complaint.Actions
                 .Where(action => !action.IsDeleted || includeDeletedActions)
                 .OrderByDescending(action => action.ActionDate)
                 .ThenByDescending(action => action.EnteredDate)
