@@ -17,6 +17,7 @@ namespace ComplaintTracking.Data
                     ActionType = await context.LookupActionTypes.FirstOrDefaultAsync(e => e.Name == "Initial investigation"),
                     Comments = "Investigation comments.",
                     Investigator = "I. N. Vestigator",
+                    EnteredBy = user,
                 },
                 new ComplaintAction {
                     Complaint = await context.Complaints.FirstOrDefaultAsync(e => e.Deleted),
@@ -24,6 +25,7 @@ namespace ComplaintTracking.Data
                     ActionType = await context.LookupActionTypes.FirstOrDefaultAsync(e => e.Name == "Referred to"),
                     Comments = "Investigation comments.",
                     Investigator = "I. N. Vestigator",
+                    EnteredBy = user,
                 },
                 new ComplaintAction {
                     Complaint = await context.Complaints.FirstOrDefaultAsync(e => e.Status == ComplaintStatus.Closed),
@@ -31,6 +33,7 @@ namespace ComplaintTracking.Data
                     ActionType = await context.LookupActionTypes.FirstOrDefaultAsync(e => e.Name == "Initial investigation"),
                     Comments = "Investigation comments.",
                     Investigator = "I. N. Vestigator",
+                    EnteredBy = user,
                 },
                 new ComplaintAction {
                     Complaint = await context.Complaints.FirstOrDefaultAsync(e => e.Status == ComplaintStatus.Closed),
@@ -38,6 +41,7 @@ namespace ComplaintTracking.Data
                     ActionType = await context.LookupActionTypes.FirstOrDefaultAsync(e => e.Name == "Referred to"),
                     Comments = "Investigation comments.",
                     Investigator = "I. N. Vestigator",
+                    EnteredBy = user,
                 },
                 new ComplaintAction {
                     Complaint = await context.Complaints.FirstOrDefaultAsync(e => e.Status == ComplaintStatus.Closed),
@@ -48,6 +52,7 @@ namespace ComplaintTracking.Data
                     Deleted = true,
                     DeletedBy = user,
                     DateDeleted = DateTime.Parse("Jun 16, 2017"),
+                    EnteredBy = user,
                 },
                 new ComplaintAction {
                     Complaint = await context.Complaints.FirstOrDefaultAsync(e => e.Status == ComplaintStatus.ReviewPending && !e.Deleted ),
@@ -55,6 +60,7 @@ namespace ComplaintTracking.Data
                     ActionType = await context.LookupActionTypes.FirstOrDefaultAsync(e => e.Name == "Initial investigation"),
                     Comments = "Investigation comments.",
                     Investigator = "I. N. Vestigator",
+                    EnteredBy = user,
                 },
                 new ComplaintAction {
                     Complaint = await context.Complaints.FirstOrDefaultAsync(e => e.Status == ComplaintStatus.ReviewPending && !e.Deleted ),
@@ -62,6 +68,7 @@ namespace ComplaintTracking.Data
                     ActionType = await context.LookupActionTypes.FirstOrDefaultAsync(e => e.Name == "Referred to"),
                     Comments = "Investigation comments.",
                     Investigator = "I. N. Vestigator",
+                    EnteredBy = user,
                 },
                 new ComplaintAction {
                     Complaint = await context.Complaints.FirstOrDefaultAsync(e => e.Status == ComplaintStatus.UnderInvestigation),
@@ -69,6 +76,7 @@ namespace ComplaintTracking.Data
                     ActionType = await context.LookupActionTypes.FirstOrDefaultAsync(e => e.Name == "Initial investigation"),
                     Comments = "Investigation comments.",
                     Investigator = "I. N. Vestigator",
+                    EnteredBy = user,
                 },
             };
 
