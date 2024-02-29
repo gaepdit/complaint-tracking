@@ -24,7 +24,12 @@ public interface IComplaintService : IDisposable, IAsyncDisposable
 
     Task<bool> ExistsAsync(int id, CancellationToken token = default);
 
+    Task<int> CountAsync(ComplaintSearchDto spec, CancellationToken token = default);
+
     Task<IPaginatedResult<ComplaintSearchResultDto>> SearchAsync(ComplaintSearchDto spec, PaginatedRequest paging,
+        CancellationToken token = default);
+
+    Task<IReadOnlyList<ComplaintSearchExportDto>> ExportSearchAsync(ComplaintSearchDto spec,
         CancellationToken token = default);
 
     // Staff complaint write methods
@@ -37,8 +42,10 @@ public interface IComplaintService : IDisposable, IAsyncDisposable
     // Complaint transitions
 
     Task AcceptAsync(int id, CancellationToken token = default);
+
     Task<bool> AssignAsync(ComplaintAssignmentDto resource, ComplaintViewDto currentComplaint,
         CancellationToken token = default);
+
     Task CloseAsync(ComplaintClosureDto resource, CancellationToken token = default);
     Task ReopenAsync(ComplaintClosureDto resource, CancellationToken token = default);
     Task RequestReviewAsync(ComplaintRequestReviewDto resource, CancellationToken token = default);
