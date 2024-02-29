@@ -266,7 +266,7 @@ details.card:not([open]) summary.card-header {
 /* Validation summary
 -------------------------------------------------- */
 .validation-summary-valid {
-    display: none;
+    display: none !important;
 }
 
 .validation-summary-errors ul {
