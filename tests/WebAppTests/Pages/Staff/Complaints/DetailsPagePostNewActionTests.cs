@@ -10,7 +10,7 @@ public class DetailsPagePostNewActionTests
     public async Task OnPostAsync_NullId_ReturnsRedirectToPageResult()
     {
         // Arrange
-        var dto = new ComplaintActionCreateDto(1);
+        var dto = new ActionCreateDto(1);
         var page = PageModelHelpers.BuildDetailsPageModel();
 
         // Act
@@ -25,7 +25,7 @@ public class DetailsPagePostNewActionTests
     {
         // Arrange
         const int id = 0;
-        var dto = new ComplaintActionCreateDto(id);
+        var dto = new ActionCreateDto(id);
         var complaintService = Substitute.For<IComplaintService>();
         complaintService.FindAsync(id).Returns((ComplaintViewDto?)null);
         var page = PageModelHelpers.BuildDetailsPageModel(complaintService: complaintService);
@@ -42,7 +42,7 @@ public class DetailsPagePostNewActionTests
     {
         // Arrange
         const int id = 0;
-        var dto = new ComplaintActionCreateDto(id);
+        var dto = new ActionCreateDto(id);
         var complaintService = Substitute.For<IComplaintService>();
         var page = PageModelHelpers.BuildDetailsPageModel(complaintService: complaintService);
 

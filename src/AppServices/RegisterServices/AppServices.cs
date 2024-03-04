@@ -30,7 +30,7 @@ public static class AppServices
         services.AddScoped<IComplaintService, ComplaintService>();
 
         // Complaint Actions
-        services.AddScoped<IComplaintActionService, ComplaintActionService>();
+        services.AddScoped<IActionService, ActionService>();
 
         // Concerns
         services.AddScoped<IConcernManager, ConcernManager>();

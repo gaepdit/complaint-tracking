@@ -97,10 +97,10 @@
 
 <h2>Actions</h2>
 
-@if (Model.Item.ComplaintActions is { Count: > 0 })
+@if (Model.Item.Actions is { Count: > 0 })
 {
     <div class="row row-cols-1 g-3 mb-3">
-        @foreach (var action in Model.Item.ComplaintActions)
+        @foreach (var action in Model.Item.Actions)
         {
             <div class="col">
                 <div class="card">

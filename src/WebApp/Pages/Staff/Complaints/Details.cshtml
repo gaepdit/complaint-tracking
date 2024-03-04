@@ -224,7 +224,7 @@
 
 <h2 class="h3">Actions</h2>
 
-@if (!Model.ViewableComplaintActions)
+@if (!Model.ViewableActions)
 {
     <p>
         <em>None.</em>
@@ -265,10 +265,10 @@
     </div>
 }
 
-@if (Model.ViewableComplaintActions)
+@if (Model.ViewableActions)
 {
     <div class="row row-cols-1 g-3 mb-3">
-        @foreach (var action in Model.ComplaintView.ComplaintActions.Where(action => !action.IsDeleted || Model.UserCan[ComplaintOperation.ViewDeletedActions]))
+        @foreach (var action in Model.ComplaintView.Actions.Where(action => !action.IsDeleted || Model.UserCan[ComplaintOperation.ViewDeletedActions]))
         {
             <div class="col">
                 <div class="card @(action.Id == Model.HighlightId ? "border-success" : "") @(action.IsDeleted ? "bg-secondary-subtle" : "")">

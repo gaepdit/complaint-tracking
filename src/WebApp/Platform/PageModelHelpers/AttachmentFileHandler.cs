@@ -1,8 +1,6 @@
 ﻿using Cts.AppServices.Attachments;
 using Cts.WebApp.Pages.Staff.Complaints.Attachment;
 using Cts.WebApp.Platform.Settings;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using PublicComplaints = Cts.WebApp.Pages.Public.Complaints;
 
 namespace Cts.WebApp.Platform.PageModelHelpers;

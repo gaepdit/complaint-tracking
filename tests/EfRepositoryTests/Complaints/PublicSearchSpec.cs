@@ -35,7 +35,7 @@ public class PublicSearchSpec
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Attachments)
-            .Excluding(e => e.ComplaintActions)
+            .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy.Office)
@@ -62,7 +62,7 @@ public class PublicSearchSpec
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
-            .Excluding(e => e.ComplaintActions)
+            .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy.Office)
@@ -84,7 +84,7 @@ public class PublicSearchSpec
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
-            .Excluding(e => e.ComplaintActions)
+            .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy.Office)
@@ -106,7 +106,7 @@ public class PublicSearchSpec
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
-            .Excluding(e => e.ComplaintActions)
+            .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy.Office)
@@ -128,7 +128,7 @@ public class PublicSearchSpec
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
-            .Excluding(e => e.ComplaintActions)
+            .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy.Office)
@@ -150,7 +150,7 @@ public class PublicSearchSpec
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
-            .Excluding(e => e.ComplaintActions)
+            .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy.Office)
@@ -173,7 +173,7 @@ public class PublicSearchSpec
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
-            .Excluding(e => e.ComplaintActions)
+            .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy.Office)
@@ -197,7 +197,7 @@ public class PublicSearchSpec
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
-            .Excluding(e => e.ComplaintActions)
+            .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy.Office)
@@ -220,7 +220,7 @@ public class PublicSearchSpec
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
-            .Excluding(e => e.ComplaintActions)
+            .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy.Office)
@@ -243,7 +243,7 @@ public class PublicSearchSpec
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
-            .Excluding(e => e.ComplaintActions)
+            .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy.Office)
@@ -267,7 +267,7 @@ public class PublicSearchSpec
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
-            .Excluding(e => e.ComplaintActions)
+            .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy.Office)

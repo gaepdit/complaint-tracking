@@ -8,16 +8,16 @@ using GaEpd.AppLibrary.Pagination;
 
 namespace Cts.AppServices.ComplaintActions;
 
-public sealed class ComplaintActionService(
+public sealed class ActionService(
     IMapper mapper,
     IUserService userService,
     IComplaintRepository complaintRepository,
     IComplaintManager complaintManager,
-    IComplaintActionRepository actionRepository,
+    IActionRepository actionRepository,
     IActionTypeRepository actionTypeRepository)
-    : IComplaintActionService
+    : IActionService
 {
-    public async Task<Guid> CreateAsync(ComplaintActionCreateDto resource, CancellationToken token = default)
+    public async Task<Guid> CreateAsync(ActionCreateDto resource, CancellationToken token = default)
     {
         var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
         var actionItemType = await actionTypeRepository.GetAsync(resource.ActionTypeId!.Value, token)
@@ -34,26 +34,26 @@ public sealed class ComplaintActionService(
         return action.Id;
     }
 
-    public async Task<ComplaintActionViewDto?> FindAsync(Guid id, CancellationToken token = default) =>
-        mapper.Map<ComplaintActionViewDto>(
+    public async Task<ActionViewDto?> FindAsync(Guid id, CancellationToken token = default) =>
+        mapper.Map<ActionViewDto>(
             await actionRepository.FindAsync(id, token).ConfigureAwait(false));
 
-    public async Task<ComplaintActionUpdateDto?> FindForUpdateAsync(Guid id, CancellationToken token = default) =>
-        mapper.Map<ComplaintActionUpdateDto>(
+    public async Task<ActionUpdateDto?> FindForUpdateAsync(Guid id, CancellationToken token = default) =>
+        mapper.Map<ActionUpdateDto>(
             await actionRepository.FindAsync(action => action.Id == id && !action.IsDeleted, token)
                 .ConfigureAwait(false));
 
-    public async Task<IPaginatedResult<ComplaintActionSearchResultDto>> SearchAsync(ComplaintActionSearchDto spec, PaginatedRequest paging, CancellationToken token = default)
+    public async Task<IPaginatedResult<ActionSearchResultDto>> SearchAsync(ActionSearchDto spec, PaginatedRequest paging, CancellationToken token = default)
     {
-        var predicate = ComplaintActionFilters.SearchPredicate(spec);
+        var predicate = ActionFilters.SearchPredicate(spec);
         var count = await actionRepository.CountAsync(predicate, token).ConfigureAwait(false);
         var actions = await actionRepository.GetPagedListAsync(predicate, paging, token).ConfigureAwait(false);
-        var list = count > 0 ? mapper.Map<IReadOnlyList<ComplaintActionSearchResultDto>>(actions) : [];
+        var list = count > 0 ? mapper.Map<IReadOnlyList<ActionSearchResultDto>>(actions) : [];
 
-        return new PaginatedResult<ComplaintActionSearchResultDto>(list, count, paging);
+        return new PaginatedResult<ActionSearchResultDto>(list, count, paging);
     }
 
-    public async Task UpdateAsync(Guid id, ComplaintActionUpdateDto resource, CancellationToken token = default)
+    public async Task UpdateAsync(Guid id, ActionUpdateDto resource, CancellationToken token = default)
     {
         var action = await actionRepository.GetAsync(id, token).ConfigureAwait(false);
         action.SetUpdater((await userService.GetCurrentUserAsync().ConfigureAwait(false))?.Id);

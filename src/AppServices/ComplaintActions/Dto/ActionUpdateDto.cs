@@ -2,13 +2,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Cts.AppServices.ComplaintActions.Dto;
 
-public record ComplaintActionCreateDto(int ComplaintId)
+public record ActionUpdateDto
 {
+    public int ComplaintId { get; init; }
+
     [Required]
     [Display(Name = "Action Date")]
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = "{0:O}", ApplyFormatInEditMode = true)]
-    public DateOnly? ActionDate { get; init; } = DateOnly.FromDateTime(DateTime.Today);
+    public DateOnly? ActionDate { get; init; }
 
     [Required]
     [StringLength(100)]

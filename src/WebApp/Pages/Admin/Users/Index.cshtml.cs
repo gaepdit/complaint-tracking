@@ -8,10 +8,6 @@ using Cts.WebApp.Platform.Constants;
 using GaEpd.AppLibrary.Extensions;
 using GaEpd.AppLibrary.ListItems;
 using GaEpd.AppLibrary.Pagination;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Cts.WebApp.Pages.Admin.Users;
 

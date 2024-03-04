@@ -24,7 +24,7 @@ public static class DataPersistence
             // Uses local static data if no database is built.
             services.AddSingleton<IActionTypeRepository, LocalActionTypeRepository>();
             services.AddSingleton<IAttachmentRepository, LocalAttachmentRepository>();
-            services.AddSingleton<IComplaintActionRepository, LocalComplaintActionRepository>();
+            services.AddSingleton<IActionRepository, LocalActionRepository>();
             services.AddSingleton<IComplaintRepository, LocalComplaintRepository>();
             services.AddSingleton<IComplaintTransitionRepository, LocalComplaintTransitionRepository>();
             services.AddSingleton<IConcernRepository, LocalConcernRepository>();
@@ -50,7 +50,7 @@ public static class DataPersistence
 
             services.AddScoped<IActionTypeRepository, ActionTypeRepository>();
             services.AddScoped<IAttachmentRepository, AttachmentRepository>();
-            services.AddScoped<IComplaintActionRepository, ComplaintActionRepository>();
+            services.AddScoped<IActionRepository, ActionRepository>();
             services.AddScoped<IComplaintRepository, ComplaintRepository>();
             services.AddScoped<IComplaintTransitionRepository, ComplaintTransitionRepository>();
             services.AddScoped<IConcernRepository, ConcernRepository>();

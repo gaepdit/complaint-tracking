@@ -5,14 +5,11 @@ using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Complaints.QueryDto;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Cts.WebApp.Pages.Staff.ComplaintActions;
 
 public class DeleteActionModel(
-    IComplaintActionService actionService,
+    IActionService actionService,
     IComplaintService complaintService,
     IAuthorizationService authorizationService)
     : PageModel
@@ -23,7 +20,7 @@ public class DeleteActionModel(
     [TempData]
     public Guid HighlightId { get; set; }
 
-    public ComplaintActionViewDto ActionItemView { get; private set; } = default!;
+    public ActionViewDto ActionItemView { get; private set; } = default!;
 
     public async Task<IActionResult> OnGetAsync(Guid? actionId)
     {

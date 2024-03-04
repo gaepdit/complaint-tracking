@@ -12,17 +12,13 @@ using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using Cts.WebApp.Platform.Settings;
 using GaEpd.AppLibrary.ListItems;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Cts.WebApp.Pages.Staff.Complaints;
 
 [Authorize(Policy = nameof(Policies.ActiveUser))]
 public class DetailsModel(
     IComplaintService complaintService,
-    IComplaintActionService actionService,
+    IActionService actionService,
     IActionTypeService actionTypeService,
     IAttachmentService attachmentService,
     IStaffService staffService,
@@ -32,7 +28,7 @@ public class DetailsModel(
     public ComplaintViewDto ComplaintView { get; private set; } = default!;
     public Dictionary<IAuthorizationRequirement, bool> UserCan { get; private set; } = new();
 
-    public ComplaintActionCreateDto NewAction { get; set; } = default!;
+    public ActionCreateDto NewAction { get; set; } = default!;
     public AttachmentsCreateDto NewAttachments { get; set; } = default!;
 
     [TempData]
@@ -41,7 +37,7 @@ public class DetailsModel(
     public string? ValidatingSection { get; private set; }
     public SelectList ActionItemTypeSelectList { get; private set; } = default!;
 
-    public bool ViewableComplaintActions => ComplaintView.ComplaintActions.Exists(action =>
+    public bool ViewableActions => ComplaintView.Actions.Exists(action =>
         !action.IsDeleted || UserCan[ComplaintOperation.ViewDeletedActions]);
 
     public async Task<IActionResult> OnGetAsync(int? id)
@@ -58,7 +54,7 @@ public class DetailsModel(
         if (complaintView.IsDeleted && !UserCan[ComplaintOperation.ManageDeletions]) return NotFound();
 
         ComplaintView = complaintView;
-        NewAction = new ComplaintActionCreateDto(complaintView.Id) { Investigator = currentUser.Name };
+        NewAction = new ActionCreateDto(complaintView.Id) { Investigator = currentUser.Name };
         NewAttachments = new AttachmentsCreateDto(complaintView.Id);
         await PopulateSelectListsAsync();
         return Page();
@@ -85,7 +81,7 @@ public class DetailsModel(
     /// <summary>
     /// PostNewAction is used to add a new Action for this Complaint.
     /// </summary>
-    public async Task<IActionResult> OnPostNewActionAsync(int? id, ComplaintActionCreateDto newAction,
+    public async Task<IActionResult> OnPostNewActionAsync(int? id, ActionCreateDto newAction,
         CancellationToken token)
     {
         if (id is null || newAction.ComplaintId != id) return BadRequest();
@@ -133,7 +129,7 @@ public class DetailsModel(
         {
             ValidatingSection = nameof(OnPostUploadFilesAsync);
             ComplaintView = complaintView;
-            NewAction = new ComplaintActionCreateDto(complaintView.Id) { Investigator = currentUser.Name };
+            NewAction = new ActionCreateDto(complaintView.Id) { Investigator = currentUser.Name };
             await PopulateSelectListsAsync();
             return Page();
         }

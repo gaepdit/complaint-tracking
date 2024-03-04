@@ -3,9 +3,6 @@ using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.QueryDto;
 using Cts.AppServices.Permissions;
 using Cts.AppServices.Utilities;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Cts.WebApp.Pages.Staff.Complaints;
 

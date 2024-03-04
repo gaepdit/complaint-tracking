@@ -7,15 +7,11 @@ using Cts.AppServices.Complaints.QueryDto;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using GaEpd.AppLibrary.ListItems;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Cts.WebApp.Pages.Staff.ComplaintActions;
 
 public class EditActionModel(
-    IComplaintActionService actionService,
+    IActionService actionService,
     IComplaintService complaintService,
     IActionTypeService actionTypeService,
     IAuthorizationService authorizationService)
@@ -25,7 +21,7 @@ public class EditActionModel(
     public Guid ActionItemId { get; set; }
 
     [BindProperty]
-    public ComplaintActionUpdateDto ActionItemUpdate { get; set; } = default!;
+    public ActionUpdateDto ActionItemUpdate { get; set; } = default!;
 
     [TempData]
     public Guid HighlightId { get; set; }

@@ -4,9 +4,6 @@ using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Identity;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Cts.WebApp.Pages.Admin.Users;
 

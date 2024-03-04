@@ -1,9 +1,8 @@
 ﻿using Cts.AppServices.Staff.Dto;
-using Cts.Domain.Entities.ActionTypes;
 
 namespace Cts.AppServices.ComplaintActions;
 
-public record ComplaintActionSearchResultDto
+public record ActionSearchResultDto
 {
     public int ComplaintId { get; init; }
     public string ActionTypeName { get; init; } = default!;

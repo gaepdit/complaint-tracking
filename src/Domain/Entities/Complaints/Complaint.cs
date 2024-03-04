@@ -106,7 +106,7 @@ public class Complaint : AuditableSoftDeleteEntity<int>
     public List<ComplaintTransition> ComplaintTransitions { get; } = [];
 
     // Properties: Actions
-    public List<ComplaintAction> ComplaintActions { get; } = [];
+    public List<ComplaintAction> Actions { get; } = [];
 
     // Properties: Attachments
     public List<Attachment> Attachments { get; } = [];

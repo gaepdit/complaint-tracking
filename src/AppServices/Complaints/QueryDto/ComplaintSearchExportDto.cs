@@ -25,7 +25,7 @@ public record ComplaintSearchExportDto
         ComplaintNature = complaint.ComplaintNature;
         Deleted = complaint.IsDeleted ? "Deleted" : "No";
 
-        var action = complaint.ComplaintActions.SingleOrDefault();
+        var action = complaint.Actions.SingleOrDefault();
         ActionDate = action?.ActionDate;
         ActionType = action?.ActionType.Name;
         ActionComments = action?.Comments;
