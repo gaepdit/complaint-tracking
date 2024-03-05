@@ -7,8 +7,6 @@ namespace Cts.Domain.ValueObjects;
 [Owned]
 public record PhoneNumber : ValueObject
 {
-    public int Id { get; init; }
-
     [StringLength(25)]
     [DataType(DataType.PhoneNumber)]
     [Display(Name = "Phone number")]
