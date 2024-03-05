@@ -88,7 +88,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
         // ## The following configurations are Sqlite only. ##
         if (Database.ProviderName != SqliteProvider) return;
 
-#pragma warning disable S125
+#pragma warning disable S125 // Sections of code should not be commented out
         // Sqlite and EF Core are in conflict on how to handle collections of owned types.
         // See: https://stackoverflow.com/a/69826156/212978
         // and: https://learn.microsoft.com/en-us/ef/core/modeling/owned-entities#collections-of-owned-types

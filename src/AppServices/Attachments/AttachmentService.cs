@@ -65,16 +65,13 @@ public class AttachmentService(
         attachment.SetDeleted((await userService.GetCurrentUserAsync().ConfigureAwait(false))?.Id);
         await attachmentRepository.UpdateAsync(attachment, token: token).ConfigureAwait(false);
 
-        // FUTURE: Cancellation token should be removed from the `DeleteFileAsync` method.
-#pragma warning disable CA2016
-        // ReSharper disable once MethodSupportsCancellation
-        await fileService.DeleteFileAsync(attachmentView.FileId, ExpandPath(attachmentView.FileId))
-            .ConfigureAwait(false);
+        // Cancellation token in the `DeleteFileAsync` method is only used by the Azure Blob Storage implementation.
+        await fileService.DeleteFileAsync(attachmentView.FileId, ExpandPath(attachmentView.FileId),
+            token).ConfigureAwait(false);
+
         if (attachmentView.IsImage)
-            // ReSharper disable once MethodSupportsCancellation
-            await fileService.DeleteFileAsync(attachmentView.FileId, ExpandPath(attachmentView.FileId, thumbnail: true))
-                .ConfigureAwait(false);
-#pragma warning restore CA2016
+            await fileService.DeleteFileAsync(attachmentView.FileId, ExpandPath(attachmentView.FileId, thumbnail: true),
+                token).ConfigureAwait(false);
     }
 
 

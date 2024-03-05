@@ -72,8 +72,8 @@ public static class ValidateFiles
         { ".xlsx", ZipSignatures },
     };
 
-#pragma warning disable S125
-    // .doc, .xls, .ppt
+#pragma warning disable S125 // Sections of code should not be commented out
+    // In case MS Office files (.doc, .xls, .ppt) are allowed in the future.
     // private static List<byte[]> MsOfficeSignatures { get; } = [[0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1]];
 #pragma warning restore S125
 }
