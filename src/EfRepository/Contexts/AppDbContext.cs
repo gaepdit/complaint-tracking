@@ -1,3 +1,4 @@
+using Cts.Domain.DataViews.DataArchiveViews;
 using Cts.Domain.Entities.ActionTypes;
 using Cts.Domain.Entities.Attachments;
 using Cts.Domain.Entities.ComplaintActions;
@@ -17,8 +18,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     internal const string SqlServerProvider = "Microsoft.EntityFrameworkCore.SqlServer";
     private const string SqliteProvider = "Microsoft.EntityFrameworkCore.Sqlite";
 
-    // Add domain entities here.
-
+    // Domain entities
     public DbSet<ActionType> ActionTypes => Set<ActionType>();
     public DbSet<Attachment> Attachments => Set<Attachment>();
     public DbSet<Complaint> Complaints => Set<Complaint>();
@@ -28,13 +28,20 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     public DbSet<Office> Offices => Set<Office>();
     public DbSet<EmailLog> EmailLogs => Set<EmailLog>();
 
+    // Database views
+    public DbSet<OpenComplaint> OpenComplaintsView => Set<OpenComplaint>();
+    public DbSet<ClosedComplaint> ClosedComplaintsView => Set<ClosedComplaint>();
+    public DbSet<ClosedComplaintAction> ClosedComplaintActionsView => Set<ClosedComplaintAction>();
+    public DbSet<RecordsCount> RecordsCountView => Set<RecordsCount>();
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
 
+        // === Auto-includes ===
         // Some properties should always be included.
         // See https://learn.microsoft.com/en-us/ef/core/querying/related-data/eager#model-configuration-for-auto-including-navigations
-        
+
         // Users
         builder.Entity<ApplicationUser>().Navigation(e => e.Office).AutoInclude();
 
@@ -42,26 +49,36 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
         builder.Entity<Attachment>().Navigation(e => e.UploadedBy).AutoInclude();
 
         // Complaints
-        var complaint = builder.Entity<Complaint>();
-        complaint.Navigation(e => e.PrimaryConcern).AutoInclude();
-        complaint.Navigation(e => e.SecondaryConcern).AutoInclude();
-        complaint.Navigation(e => e.CurrentOffice).AutoInclude();
-        complaint.Navigation(e => e.EnteredBy).AutoInclude();
-        complaint.Navigation(e => e.ReceivedBy).AutoInclude();
-        complaint.Navigation(e => e.CurrentOwner).AutoInclude();
-        complaint.Navigation(e => e.ReviewedBy).AutoInclude();
-        complaint.Navigation(e => e.DeletedBy).AutoInclude();
+        var complaintEntity = builder.Entity<Complaint>();
+        complaintEntity.Navigation(complaint => complaint.PrimaryConcern).AutoInclude();
+        complaintEntity.Navigation(complaint => complaint.SecondaryConcern).AutoInclude();
+        complaintEntity.Navigation(complaint => complaint.CurrentOffice).AutoInclude();
+        complaintEntity.Navigation(complaint => complaint.EnteredBy).AutoInclude();
+        complaintEntity.Navigation(complaint => complaint.ReceivedBy).AutoInclude();
+        complaintEntity.Navigation(complaint => complaint.CurrentOwner).AutoInclude();
+        complaintEntity.Navigation(complaint => complaint.ReviewedBy).AutoInclude();
+        complaintEntity.Navigation(complaint => complaint.DeletedBy).AutoInclude();
 
         // Complaint Action
-        var action = builder.Entity<ComplaintAction>();
-        action.Navigation(e => e.ActionType).AutoInclude();
-        action.Navigation(e => e.EnteredBy).AutoInclude();
+        var actionEntity = builder.Entity<ComplaintAction>();
+        actionEntity.Navigation(action => action.ActionType).AutoInclude();
+        actionEntity.Navigation(action => action.EnteredBy).AutoInclude();
 
         // Complaint Transition
-        var transition = builder.Entity<ComplaintTransition>();
-        transition.Navigation(e => e.CommittedByUser).AutoInclude();
-        transition.Navigation(e => e.TransferredToOffice).AutoInclude();
-        transition.Navigation(e => e.TransferredToUser).AutoInclude();
+        var transitionEntity = builder.Entity<ComplaintTransition>();
+        transitionEntity.Navigation(transition => transition.CommittedByUser).AutoInclude();
+        transitionEntity.Navigation(transition => transition.TransferredToOffice).AutoInclude();
+        transitionEntity.Navigation(transition => transition.TransferredToUser).AutoInclude();
+
+        // === Database views ===
+        // See https://khalidabuhakmeh.com/how-to-add-a-view-to-an-entity-framework-core-dbcontext
+
+        builder.Entity<OpenComplaint>().HasNoKey().ToView(nameof(OpenComplaintsView));
+        builder.Entity<ClosedComplaint>().HasNoKey().ToView(nameof(ClosedComplaintsView));
+        builder.Entity<ClosedComplaintAction>().HasNoKey().ToView(nameof(ClosedComplaintActionsView));
+        builder.Entity<RecordsCount>().HasNoKey().ToView(nameof(RecordsCountView));
+
+        // === Additional configuration ===
 
 #pragma warning disable S125
         // Let's save enums in the database as strings.

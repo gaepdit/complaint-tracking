@@ -1,6 +1,6 @@
 ﻿using Cts.AppServices.Staff.Dto;
 
-namespace Cts.AppServices.ComplaintActions;
+namespace Cts.AppServices.ComplaintActions.Dto;
 
 public record ActionSearchResultDto
 {

@@ -1,5 +1,6 @@
 @page "{handler?}"
 @using Cts.AppServices.ComplaintActions
+@using Cts.AppServices.ComplaintActions.Dto
 @using Cts.WebApp.Pages.Shared.DisplayTemplates
 @using Cts.WebApp.Platform.PageModelHelpers
 @model IndexModel
@@ -29,8 +30,9 @@
                     {
                         <div class="col-md mb-3">
                             <div class="form-floating">
-                                <select asp-for="Spec.DeletedStatus" name="@nameof(Model.Spec.DeletedStatus)" asp-items="Html.GetEnumSelectList<SearchDeleteStatus>()"
-                                        class="form-select" aria-describedby="DeletedStatusHelpBlock">
+                                <select asp-for="Spec.DeletedStatus" name="@nameof(Model.Spec.DeletedStatus)"
+                                        asp-items="Html.GetEnumSelectList<SearchDeleteStatus>()" class="form-select"
+                                        aria-describedby="DeletedStatusHelpBlock">
                                     <option value="">Not Deleted</option>
                                 </select>
                                 <label asp-for="Spec.DeletedStatus" class="form-label"></label>
@@ -45,7 +47,8 @@
                 <div class="row">
                     <div class="mb-3">
                         <div class="form-floating">
-                            <select asp-for="Spec.EnteredBy" name="@nameof(Model.Spec.EnteredBy)" asp-items="Model.EnteredBySelectList" class="form-select">
+                            <select asp-for="Spec.EnteredBy" name="@nameof(Model.Spec.EnteredBy)"
+                                    asp-items="Model.EnteredBySelectList" class="form-select">
                                 <option value="">@SelectOptions.SelectTextAny</option>
                             </select>
                             <label asp-for="Spec.EnteredBy" class="form-label"></label>
@@ -92,7 +95,9 @@
                         </select>
                         <label asp-for="Spec.Concern" class="form-label"></label>
                     </div>
-                    <small id="ConcernHelpBlock" class="form-text text-body-secondary d-block px-2">Searches both primary and secondary areas of concern.</small>
+                    <small id="ConcernHelpBlock" class="form-text text-body-secondary d-block px-2">
+                        Searches both primary and secondary areas of concern.
+                    </small>
                 </div>
 
                 <div class="mt-3 mb-1">
@@ -124,21 +129,24 @@
                 <tr>
                     <th scope="col" class="text-nowrap">
                         <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                           asp-route-Sort="@(Model.Spec.Sort == SortBy.IdAsc ? nameof(SortBy.IdDesc) : nameof(SortBy.IdAsc))">
+                           asp-route-Sort="@(Model.Spec.Sort == SortBy.IdAsc ? nameof(SortBy.IdDesc) : nameof(SortBy.IdAsc))"
+                           class="link-offset-2">
                             Complaint ID @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
                                              additionalViewData: new { up = nameof(SortBy.IdAsc), down = nameof(SortBy.IdDesc) })
                         </a>
                     </th>
                     <th scope="col" class="text-nowrap">
                         <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                           asp-route-Sort="@(Model.Spec.Sort == SortBy.TypeAsc ? nameof(SortBy.TypeDesc) : nameof(SortBy.TypeAsc))">
+                           asp-route-Sort="@(Model.Spec.Sort == SortBy.TypeAsc ? nameof(SortBy.TypeDesc) : nameof(SortBy.TypeAsc))"
+                           class="link-offset-2">
                             Action Type @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
                                             additionalViewData: new { up = nameof(SortBy.TypeAsc), down = nameof(SortBy.TypeDesc) })
                         </a>
                     </th>
                     <th scope="col" class="text-nowrap">
                         <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                           asp-route-Sort="@(Model.Spec.Sort == SortBy.DateAsc ? nameof(SortBy.DateDesc) : nameof(SortBy.DateAsc))">
+                           asp-route-Sort="@(Model.Spec.Sort == SortBy.DateAsc ? nameof(SortBy.DateDesc) : nameof(SortBy.DateAsc))"
+                           class="link-offset-2">
                             Action Date @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
                                             additionalViewData: new { up = nameof(SortBy.DateAsc), down = nameof(SortBy.DateDesc) })
                         </a>

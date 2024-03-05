@@ -1,3 +1,4 @@
+using Cts.Domain.DataViews;
 using Cts.Domain.Entities.ActionTypes;
 using Cts.Domain.Entities.Attachments;
 using Cts.Domain.Entities.ComplaintActions;
@@ -28,6 +29,7 @@ public static class DataPersistence
             services.AddSingleton<IComplaintRepository, LocalComplaintRepository>();
             services.AddSingleton<IComplaintTransitionRepository, LocalComplaintTransitionRepository>();
             services.AddSingleton<IConcernRepository, LocalConcernRepository>();
+            services.AddSingleton<IDataViewRepository, LocalDataViewRepository>();
             services.AddSingleton<IOfficeRepository, LocalOfficeRepository>();
         }
         else
@@ -54,6 +56,7 @@ public static class DataPersistence
             services.AddScoped<IComplaintRepository, ComplaintRepository>();
             services.AddScoped<IComplaintTransitionRepository, ComplaintTransitionRepository>();
             services.AddScoped<IConcernRepository, ConcernRepository>();
+            services.AddScoped<IDataViewRepository, DataViewRepository>();
             services.AddScoped<IOfficeRepository, OfficeRepository>();
         }
     }

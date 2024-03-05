@@ -15,7 +15,7 @@ internal static class ComplaintActionData
             Investigator = TextData.Word,
             EnteredDate = DateTimeOffset.Now.AddDays(-3),
             EnteredBy = UserData.GetUsers.ElementAt(1),
-            Comments = TextData.Paragraph,
+            Comments = $"Email: {TextData.ValidEmail} & Phone: {TextData.ValidPhoneNumber}",
         },
         new(new Guid("30000000-0000-0000-0000-000000000002"), // 1
             ComplaintData.GetComplaints.ElementAt(0), ActionTypeData.GetActionTypes.ElementAt(1))
