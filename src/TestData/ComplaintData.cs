@@ -45,15 +45,20 @@ internal static class ComplaintData
         },
         new(2) // 1
         {
-            ComplaintNature = "New complaint entered less than an hour ago",
+            ComplaintNature = $"New complaint entered less than an hour ago. Email: {TextData.ValidEmail} & Phone: {TextData.ValidPhoneNumber}",
             Status = ComplaintStatus.New,
             EnteredBy = UserData.GetUsers.ElementAt(1),
             EnteredDate = DateTimeOffset.Now.AddMinutes(30),
             ReceivedDate = DateTimeOffset.Now.AddDays(-1),
             ReceivedBy = UserData.GetUsers.ElementAt(1),
             PrimaryConcern = ConcernData.GetConcerns.ElementAt(2),
+            SecondaryConcern = ConcernData.GetConcerns.ElementAt(3),
             CurrentOffice = OfficeData.GetOffices.ElementAt(1),
             SourceFacilityName = "new with minimal data.",
+            CallerName = TextData.ShortPhrase,
+            CallerRepresents = TextData.AnotherWord,
+            CallerAddress = ValueObjectData.CompleteAddress,
+            ComplaintLocation = $"Email: {TextData.ValidEmail} & Phone: {TextData.ValidPhoneNumber}",
         },
         new(3) // 2
         {

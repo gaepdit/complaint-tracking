@@ -14,6 +14,9 @@ public sealed class LocalComplaintRepository(
     IComplaintTransitionRepository transitionRepository)
     : BaseRepository<Complaint, int>(ComplaintData.GetComplaints), IComplaintRepository
 {
+    // Local repository requires ID to be manually set.
+    public int? GetNextId() => Items.Select(e => e.Id).Max() + 1;
+
     public async Task<Complaint?> FindIncludeAllAsync(int id, bool includeDeletedActions = false,
         CancellationToken token = default) =>
         await GetComplaintDetailsAsync(await FindAsync(id, token).ConfigureAwait(false), includeDeletedActions, token)
@@ -29,7 +32,7 @@ public sealed class LocalComplaintRepository(
     {
         var complaints = Items.Where(predicate.Compile()).AsQueryable().OrderByIf(sorting);
 
-#pragma warning disable S3267
+#pragma warning disable S3267 // Loops should be simplified with "LINQ" expressions
         foreach (var complaint in complaints.Where(complaint => complaint.Actions.Count > 0))
         {
             complaint.Actions.RemoveAll(action => action.IsDeleted);
@@ -73,7 +76,4 @@ public sealed class LocalComplaintRepository(
     public Task InsertTransitionAsync(ComplaintTransition transition, bool autoSave = true,
         CancellationToken token = default) =>
         transitionRepository.InsertAsync(transition, autoSave, token);
-
-    // Local repository requires ID to be manually set.
-    public int? GetNextId() => Items.Select(e => e.Id).Max() + 1;
 }

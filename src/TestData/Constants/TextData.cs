@@ -31,7 +31,7 @@ public static class TextData
     public const string Word = "Cupcake";
     public const string AnotherWord = "Cookie";
     public const string ThirdWord = "Apple";
-    public const string EmojiWord = "🙁+🕶=😎";
+    public const string EmojiWord = "🙁 + 🕶 = 😎";
 
     public const string ShortPhrase = "Chocolate bar cookie";
     public const string AnotherShortPhrase = "Brownie croissant";

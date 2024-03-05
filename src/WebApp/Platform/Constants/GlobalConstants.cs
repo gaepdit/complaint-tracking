@@ -12,4 +12,8 @@ internal static class GlobalConstants
     // Attachment file paths
     public const string AttachmentsFolder = "UserFiles/Attachments";
     public const string ThumbnailsFolder = "UserFiles/Thumbnails";
+
+    // Data export
+    public const string ExportFolder = "DataExport";
+    public const int ExportLifespan = 15; // hours
 }

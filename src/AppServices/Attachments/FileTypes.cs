@@ -24,6 +24,7 @@ public static class FileTypes
         FileContentTypes.GetValueOrDefault(extension.ToLowerInvariant(), "application/octet-stream");
 
     public const string ExcelContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    public const string ZipContentType = "application/zip";
 
     [SuppressMessage("ReSharper", "StringLiteralTypo")]
     // This list contains file types that are no longer allowed but may exist for previous uploads. 
@@ -46,6 +47,6 @@ public static class FileTypes
         { ".txt", "text/plain" },
         { ".xls", "application/ms-excel" },
         { ".xlsx", ExcelContentType },
-        { ".zip", "application/zip" },
+        { ".zip", ZipContentType },
     };
 }

@@ -39,6 +39,7 @@ public static class AppServices
 
         // Data Export
         services.AddScoped<IDataExportService, DataExportService>();
+        services.AddScoped<ISearchResultsExportService, SearchResultsExportService>();
 
         // Offices
         services.AddScoped<IOfficeManager, OfficeManager>();

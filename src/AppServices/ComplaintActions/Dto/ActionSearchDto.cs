@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace Cts.AppServices.ComplaintActions;
+namespace Cts.AppServices.ComplaintActions.Dto;
 
 public record ActionSearchDto
 {

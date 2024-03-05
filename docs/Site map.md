@@ -57,9 +57,11 @@ These pages are only available to logged-in staff.
 
 ### Reports
 
-* `/Admin/Reports` (Management & error reports)
-* `/Admin/Reports/[report type]` (View report)
-* `/Admin/Reports/Export` (Export database archive)
+(Pages must be named "Reporting" because "Reports" is reserved by the ArcGIS application.)
+
+* `/Admin/Reporting` (Management & error reports)
+* `/Admin/Reporting/[report type]` (View report)
+* `/Admin/Reporting/Export` (Export database archive)
 
 ### Site Maintenance
 

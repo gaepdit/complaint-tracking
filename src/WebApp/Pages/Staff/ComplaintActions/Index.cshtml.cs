@@ -1,5 +1,6 @@
 ﻿using Cts.AppServices.ActionTypes;
 using Cts.AppServices.ComplaintActions;
+using Cts.AppServices.ComplaintActions.Dto;
 using Cts.AppServices.Concerns;
 using Cts.AppServices.Permissions;
 using Cts.AppServices.Staff;

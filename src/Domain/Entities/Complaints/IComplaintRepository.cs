@@ -7,6 +7,14 @@ namespace Cts.Domain.Entities.Complaints;
 
 public interface IComplaintRepository : IRepository<Complaint, int>
 {
+    // Complaint ID
+
+    // Will return the next available Complaint ID if the repository requires it for adding new entities (local repository).
+    // Will return null if the repository creates a new ID on insert (Entity Framework).
+    int? GetNextId();
+
+    // Specialized Complaint queries
+
     /// <summary>
     /// Returns the <see cref="Complaint"/> with the given <paramref name="id"/> and includes all additional
     /// properties (<see cref="ComplaintAction"/>, <see cref="Attachment"/>, & <see cref="ComplaintTransition"/>).
@@ -54,10 +62,4 @@ public interface IComplaintRepository : IRepository<Complaint, int>
     /// <param name="token"><see cref="T:System.Threading.CancellationToken"/></param>
     /// <returns><see cref="Task"/></returns>
     Task InsertTransitionAsync(ComplaintTransition transition, bool autoSave = true, CancellationToken token = default);
-
-    // ID
-
-    // Will return the next available ID if the repository requires it for adding new entities (local repository).
-    // Will return null if the repository creates a new ID on insert (Entity Framework).
-    int? GetNextId();
 }

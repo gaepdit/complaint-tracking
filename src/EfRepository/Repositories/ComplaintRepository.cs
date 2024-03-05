@@ -8,6 +8,9 @@ namespace Cts.EfRepository.Repositories;
 public sealed class ComplaintRepository(AppDbContext context)
     : BaseRepository<Complaint, int, AppDbContext>(context), IComplaintRepository
 {
+    // EF will set the ID automatically.
+    public int? GetNextId() => null;
+
     public async Task<Complaint?> FindIncludeAllAsync(int id, bool includeDeletedActions = false,
         CancellationToken token = default) =>
         await ComplaintIncludeAllQueryable(includeDeletedActions)
@@ -57,7 +60,4 @@ public sealed class ComplaintRepository(AppDbContext context)
         await Context.Set<ComplaintTransition>().AddAsync(transition, token).ConfigureAwait(false);
         if (autoSave) await Context.SaveChangesAsync(token).ConfigureAwait(false);
     }
-
-    // EF will set the ID automatically.
-    public int? GetNextId() => null;
 }

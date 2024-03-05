@@ -7,7 +7,9 @@ using Cts.AppServices.Utilities;
 namespace Cts.WebApp.Pages.Staff.Complaints;
 
 [Authorize(Policy = nameof(Policies.ActiveUser))]
-public class DownloadSearchModel(IDataExportService dataExportService, IAuthorizationService authorization) : PageModel
+public class DownloadSearchModel(
+    ISearchResultsExportService searchResultsExportService,
+    IAuthorizationService authorization) : PageModel
 {
     public ComplaintSearchDto Spec { get; private set; } = default!;
     public int ResultsCount { get; private set; }
@@ -18,7 +20,7 @@ public class DownloadSearchModel(IDataExportService dataExportService, IAuthoriz
         spec.TrimAll();
         if (!(await authorization.AuthorizeAsync(User, nameof(Policies.DivisionManager))).Succeeded)
             spec.DeletedStatus = null;
-        ResultsCount = await dataExportService.CountAsync(spec, token);
+        ResultsCount = await searchResultsExportService.CountAsync(spec, token);
         Spec = spec;
         return Page();
     }
@@ -29,8 +31,8 @@ public class DownloadSearchModel(IDataExportService dataExportService, IAuthoriz
         spec.TrimAll();
         if (!(await authorization.AuthorizeAsync(User, nameof(Policies.DivisionManager))).Succeeded)
             spec.DeletedStatus = null;
-        return File((await dataExportService.ExportSearchAsync(spec, token))
-            .AsExcelStream(sheetName: "CTS Search Results", deleteLastColumn: spec.DeletedStatus == null),
+        return File((await searchResultsExportService.ExportSearchResultsAsync(spec, token))
+            .ToExcel(sheetName: "CTS Search Results", deleteLastColumn: spec.DeletedStatus == null),
             FileTypes.ExcelContentType, fileDownloadName: $"cts_search_{DateTime.Now:yyyy-MM-dd--HH-mm-ss}.xlsx");
     }
 }
