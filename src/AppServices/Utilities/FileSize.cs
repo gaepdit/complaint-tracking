@@ -1,25 +1,23 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Cts.AppServices.Utilities;
+﻿namespace Cts.AppServices.Utilities;
 
 public static class FileSize
 {
-    [SuppressMessage("ReSharper", "InconsistentNaming")]
-    private enum FileSizeUnits
+    private static string FileSizeUnits(double power) => power switch
     {
-        [UsedImplicitly] bytes = 0,
-        [UsedImplicitly] KB = 1,
-        [UsedImplicitly] MB = 2,
-        [UsedImplicitly] GB = 3,
-        [UsedImplicitly] TB = 4,
-        [UsedImplicitly] PB = 5,
-        [UsedImplicitly] EB = 6,
-    }
+        0 => "bytes",
+        1 => "KB",
+        2 => "MB",
+        3 => "GB",
+        4 => "TB",
+        5 => "PB",
+        6 => "EB",
+        _ => "units",
+    };
 
     public static string ToFileSizeString(long value)
     {
-        var pow = Math.Min(Math.Floor((value > 0 ? Math.Log(value) : 0) / Math.Log(1024)),
-            Enum.GetNames(typeof(FileSizeUnits)).Length); // Total number of FileSizeUnits available
-        return $"{(value / Math.Pow(1024, pow)).ToString(pow == 0 ? "N0" : "N1")} {(FileSizeUnits)(int)pow}";
+        var power = Math.Min(Math.Floor((value > 0 ? Math.Log(value) : 0) / Math.Log(1024)),
+            7); // Total number of FileSizeUnits available
+        return $"{(value / Math.Pow(1024, power)).ToString(power == 0 ? "N0" : "N1")} {FileSizeUnits((int)power)}";
     }
 }
