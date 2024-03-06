@@ -37,9 +37,11 @@ public record ComplaintCreateDto : IComplaintCommandDto
 
     // Caller
 
+    [StringLength(150)]
     [Display(Name = "Name")]
     public string? CallerName { get; init; }
 
+    [StringLength(150)]
     [Display(Name = "Represents")]
     public string? CallerRepresents { get; init; }
 

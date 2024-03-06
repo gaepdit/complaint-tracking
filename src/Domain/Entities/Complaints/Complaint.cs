@@ -39,8 +39,12 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     // Properties: Caller
 
+    [StringLength(150)]
     public string? CallerName { get; set; }
+
+    [StringLength(150)]
     public string? CallerRepresents { get; set; }
+
     public IncompleteAddress? CallerAddress { get; set; }
 
     public PhoneNumber? CallerPhoneNumber { get; set; }
