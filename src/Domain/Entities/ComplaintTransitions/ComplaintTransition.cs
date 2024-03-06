@@ -30,7 +30,8 @@ public class ComplaintTransition : AuditableEntity
     public ApplicationUser? TransferredToUser { get; internal set; }
     public Office? TransferredToOffice { get; internal set; }
 
-    [StringLength(4000)]
+    [DataType(DataType.MultilineText)]
+    [StringLength(7000)]
     public string? Comment { get; internal set; }
 }
 

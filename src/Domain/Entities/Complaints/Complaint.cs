@@ -115,6 +115,8 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     public ApplicationUser? ReviewedBy { get; internal set; }
 
+    [DataType(DataType.MultilineText)]
+    [StringLength(7000)]
     public string? ReviewComments { get; internal set; }
 
     public bool ComplaintClosed { get; internal set; }
@@ -124,6 +126,9 @@ public class Complaint : AuditableSoftDeleteEntity<int>
     // Properties: Deletion
 
     public ApplicationUser? DeletedBy { get; set; }
+
+    [DataType(DataType.MultilineText)]
+    [StringLength(7000)]
     public string? DeleteComments { get; set; }
 }
 
