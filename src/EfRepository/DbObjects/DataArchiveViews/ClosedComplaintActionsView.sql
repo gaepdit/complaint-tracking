@@ -31,7 +31,7 @@ Notes:
 select a.ComplaintId   as [ComplaintId],
        a.ActionDate    as [ActionDate],
        actionType.Name as [ActionType],
-       dbo.RegexReplace(dbo.RegexReplace(a.Comments, N'\b\d{3}[- .]\d{4}\b', 'xxx-xxxx'),
+       dbo.RegexReplace(dbo.RegexReplace(a.Comments, N'\b\d{3}[- .]\d{4}\b', '[phone number removed]'),
                         N'\b[\w\.-]+@[\w\.-]+\.\w{2,63}\b', '[email@removed.invalid]')
                        as [Comments],
        a.EnteredDate   as [EnteredDate],

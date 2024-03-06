@@ -39,16 +39,16 @@ select c.Id                       as [ComplaintId],
        c.ComplaintCity            as [ComplaintCity],
        c.ComplaintCounty          as [ComplaintCounty],
        c.ComplaintDirections      as [ComplaintDirections],
-       dbo.RegexReplace(dbo.RegexReplace(c.ComplaintLocation, N'\b\d{3}[- .]\d{4}\b', 'xxx-xxxx'),
+       dbo.RegexReplace(dbo.RegexReplace(c.ComplaintLocation, N'\b\d{3}[- .]\d{4}\b', '[phone number removed]'),
                         N'\b[\w\.-]+@[\w\.-]+\.\w{2,63}\b', '[email@removed.invalid]')
                                   as [ComplaintLocation],
        IIF(len(c.ComplaintNature) > 32600,
            concat('[This entry has been truncated because it was longer than 32,600 characters] ',
                   CHAR(13), CHAR(10),
                   left(dbo.RegexReplace(
-                               dbo.RegexReplace(c.ComplaintNature, N'\b\d{3}[- .]\d{4}\b', 'xxx-xxxx'),
+                               dbo.RegexReplace(c.ComplaintNature, N'\b\d{3}[- .]\d{4}\b', '[phone number removed]'),
                                N'\b[\w\.-]+@[\w\.-]+\.\w{2,63}\b', '[email@removed.invalid]'), 32600)),
-           dbo.RegexReplace(dbo.RegexReplace(c.ComplaintNature, N'\b\d{3}[- .]\d{4}\b', 'xxx-xxxx'),
+           dbo.RegexReplace(dbo.RegexReplace(c.ComplaintNature, N'\b\d{3}[- .]\d{4}\b', '[phone number removed]'),
                             N'\b[\w\.-]+@[\w\.-]+\.\w{2,63}\b', '[email@removed.invalid]'))
                                   as [ComplaintNature],
        currentOffice.Name         as [CurrentOffice],
@@ -67,7 +67,7 @@ select c.Id                       as [ComplaintId],
                                   as [ReceivedBy],
        IIF(c.ReviewedById is null, null, concat_ws(', ', reviewedBy.FamilyName, reviewedBy.GivenName))
                                   as [ReviewedBy],
-       dbo.RegexReplace(dbo.RegexReplace(c.ReviewComments, N'\b\d{3}[- .]\d{4}\b', 'xxx-xxxx'),
+       dbo.RegexReplace(dbo.RegexReplace(c.ReviewComments, N'\b\d{3}[- .]\d{4}\b', '[phone number removed]'),
                         N'\b[\w\.-]+@[\w\.-]+\.\w{2,63}\b', '[email@removed.invalid]')
                                   as [ReviewComments],
        c.SourceAddress_City       as [SourceCity],
