@@ -66,14 +66,17 @@ public record ComplaintUpdateDto : IComplaintCommandDto
 
     [Required]
     [DataType(DataType.MultilineText)]
+    [StringLength(15_000)]
     [Display(Name = "Nature of Complaint")]
     public string? ComplaintNature { get; init; }
 
     [DataType(DataType.MultilineText)]
+    [StringLength(2000)]
     [Display(Name = "Location of Complaint")]
     public string? ComplaintLocation { get; init; }
 
     [DataType(DataType.MultilineText)]
+    [StringLength(2600)]
     [Display(Name = "Directions to Complaint")]
     public string? ComplaintDirections { get; init; }
 

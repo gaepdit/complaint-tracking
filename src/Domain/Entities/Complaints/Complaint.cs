@@ -58,10 +58,16 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     // Properties: Complaint details
 
+    [DataType(DataType.MultilineText)]
+    [StringLength(15_000)]
     public string? ComplaintNature { get; set; }
 
+    [DataType(DataType.MultilineText)]
+    [StringLength(2000)]
     public string? ComplaintLocation { get; set; }
 
+    [DataType(DataType.MultilineText)]
+    [StringLength(2600)]
     public string? ComplaintDirections { get; set; }
 
     [StringLength(50)]
