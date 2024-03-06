@@ -16,6 +16,7 @@ internal static class ComplaintData
             ReceivedDate = DateTimeOffset.Now.AddDays(-4),
             ReceivedBy = UserData.GetUsers.ElementAt(0),
             ComplaintLocation = TextData.ShortMultiline,
+            ComplaintDirections = TextData.Paragraph,
             ComplaintCity = TextData.Word,
             ComplaintCounty = TextData.AnotherWord,
             PrimaryConcern = ConcernData.GetConcerns.ElementAt(0),

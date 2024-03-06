@@ -1,4 +1,3 @@
-using Cts.AppServices.Utilities;
 using Cts.Domain.DataViews;
 using Cts.Domain.DataViews.DataArchiveViews;
 using GaEpd.FileService;
@@ -23,7 +22,7 @@ public sealed class DataExportService(
             cache.Set(DataExportCacheKey, exportMeta, exportMeta.FileExpirationDate);
         }
 
-        if (await fileService.FileExistsAsync(exportMeta.FileName, exportFilePath, token).ConfigureAwait(false))
+        if (await fileService.FileExistsAsync(exportMeta!.FileName, exportFilePath, token).ConfigureAwait(false))
             return exportMeta;
 
         _ = DeleteOldExportFilesAsync(exportFilePath, token);

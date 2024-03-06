@@ -39,8 +39,12 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     // Properties: Caller
 
+    [StringLength(150)]
     public string? CallerName { get; set; }
+
+    [StringLength(150)]
     public string? CallerRepresents { get; set; }
+
     public IncompleteAddress? CallerAddress { get; set; }
 
     public PhoneNumber? CallerPhoneNumber { get; set; }
@@ -54,10 +58,13 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     // Properties: Complaint details
 
+    [StringLength(15_000)]
     public string? ComplaintNature { get; set; }
 
+    [StringLength(2000)]
     public string? ComplaintLocation { get; set; }
 
+    [StringLength(2600)]
     public string? ComplaintDirections { get; set; }
 
     [StringLength(50)]
@@ -115,6 +122,7 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     public ApplicationUser? ReviewedBy { get; internal set; }
 
+    [StringLength(7000)]
     public string? ReviewComments { get; internal set; }
 
     public bool ComplaintClosed { get; internal set; }
@@ -124,6 +132,8 @@ public class Complaint : AuditableSoftDeleteEntity<int>
     // Properties: Deletion
 
     public ApplicationUser? DeletedBy { get; set; }
+
+    [StringLength(7000)]
     public string? DeleteComments { get; set; }
 }
 

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Cts.AppServices.Permissions;
 
-#pragma warning disable S125
+#pragma warning disable S125 // Sections of code should not be commented out
 //
 // Two ways to use these policies:
 //
