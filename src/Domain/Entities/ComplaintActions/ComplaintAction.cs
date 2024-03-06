@@ -28,7 +28,6 @@ public class ComplaintAction : AuditableSoftDeleteEntity
     [StringLength(100)]
     public string Investigator { get; set; } = string.Empty;
 
-    [DataType(DataType.MultilineText)]
     [StringLength(10_000)]
     public string Comments { get; set; } = string.Empty;
 
