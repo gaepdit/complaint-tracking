@@ -53,6 +53,7 @@ The following settings configure the data stores and authentication for developm
     "UseDevSettings": true,
     "UseInMemoryData": true,
     "UseEfMigrations": false,
+    "DeleteAndRebuildDatabase": true,
     "UseAzureAd": false,
     "LocalUserIsAuthenticated": true,
     "LocalUserIsStaff": true,
@@ -66,7 +67,8 @@ The following settings configure the data stores and authentication for developm
 - *UseInMemoryData*
     - When `true`, the "LocalRepository" project is used for repositories and data stores. Data is initially seeded from the "TestData" project. 
     - When `false`, the "EfRepository" project is used, and a SQL Server database (as specified by the connection string) is created. <small>(If the connection string is missing, then a temporary EF Core in-memory database provider is used. This option is included for convenience and is not recommended.)</small>
-- *UseEfMigrations* — Uses Entity Framework database migrations when `true`. When `false`, the database is deleted and recreated on each run. (Only applies if *UseInMemoryData* is `false`.) The database is seeded with data from the "TestData" project only when `UseEfMigrations` is `false`. Otherwise, the database is left empty.
+- *UseEfMigrations* — Uses Entity Framework database migrations when `true`. When `false`, the `DeleteAndRebuildDatabase` setting controls how the database is handled. (Only applies if *UseInMemoryData* is `false`.)
+- *DeleteAndRebuildDatabase* — When set to `true`, the database is deleted and recreated on each run. When set to `false`, the database is not modified on each run. (Only applies if `UseInMemoryData` and `UseEfMigrations` are both `false`.) If the database does not exist yet, it will not be created if this is set to `false`. The database is seeded with data from the "TestData" project only when `UseEfMigrations` is `false` and `DeleteAndRebuildDatabase` is `true`. Otherwise, the data in the database is not changed.
 - *UseAzureAd* — If `true`, connects to Azure AD for user authentication. (The app must be registered in the Azure portal, and configuration added to the settings file.) If `false`, authentication is simulated using test user data.
 - *LocalUserIsAuthenticated* — Simulates a successful login with a test account when `true`. Simulates a failed login when `false`. (Only applies if *UseAzureAd* is `false`.)
 - *LocalUserIsStaff* — Adds the Staff and Site Maintenance Roles to the logged in account when `true` or no roles when `false`. (Applies whether *UserAzureAd* is `true` or `false`.)

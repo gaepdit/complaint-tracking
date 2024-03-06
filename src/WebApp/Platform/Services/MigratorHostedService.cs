@@ -38,9 +38,9 @@ public class MigratorHostedService(IServiceProvider serviceProvider, IConfigurat
                 if (!await migrationContext.Roles.AnyAsync(e => e.Name == role, cancellationToken))
                     await roleManager.CreateAsync(new IdentityRole(role));
         }
-        else
+        else if (AppSettings.DevSettings.DeleteAndRebuildDatabase)
         {
-            // Otherwise, delete and re-create the database.
+            // Delete and re-create the database.
             await migrationContext.Database.EnsureDeletedAsync(cancellationToken);
             await migrationContext.Database.EnsureCreatedAsync(cancellationToken);
 
