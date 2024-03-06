@@ -19,5 +19,7 @@ public record ActionCreateDto(int ComplaintId)
     public Guid? ActionTypeId { get; init; }
 
     [Required]
+    [DataType(DataType.MultilineText)]
+    [StringLength(10_000)]
     public string Comments { get; init; } = string.Empty;
 }
