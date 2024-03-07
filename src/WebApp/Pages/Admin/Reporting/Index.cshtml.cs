@@ -1,4 +1,4 @@
-﻿using Cts.AppServices.Offices;
+using Cts.AppServices.Offices;
 using Cts.AppServices.Permissions;
 using Cts.AppServices.Reporting;
 using Cts.AppServices.Staff;
@@ -51,7 +51,7 @@ public class IndexModel(
             Guid.Empty;
 
         if (Office != Guid.Empty)
-            StaffWithComplaints = await reportingService.DaysSinceLastActionAsync(Office.Value, Threshold.Value, token);
+            StaffWithComplaints = await reportingService.DaysSinceLastActionAsync(Office.Value, Threshold.Value);
     }
 
     // Select lists

@@ -22,8 +22,8 @@ public sealed class LocalDataViewRepository : IDataViewRepository
             new RecordsCount("Complaint Actions", 12345, 3),
         ]);
 
-    public Task<List<StaffViewWithComplaints>> DaysSinceLastActionAsync(Guid officeId, int ageThreshold,
-        CancellationToken token) => Task.FromResult(TestData.DataViews.StaffViewWithComplaintsData.GetData());
+    public Task<List<StaffViewWithComplaints>> DaysSinceLastActionAsync(Guid officeId, int threshold) =>
+        Task.FromResult(TestData.DataViews.StaffViewWithComplaintsData.GetData());
 
     void IDisposable.Dispose()
     {

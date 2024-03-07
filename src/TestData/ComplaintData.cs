@@ -125,7 +125,7 @@ internal static class ComplaintData
             ComplaintNature = "Complaint accepted by user and under investigation.",
             Status = ComplaintStatus.UnderInvestigation,
             EnteredBy = UserData.GetUsers.ElementAt(1),
-            ReceivedDate = DateTimeOffset.Now.AddDays(-1),
+            ReceivedDate = DateTimeOffset.Now.AddDays(-5),
             ReceivedBy = UserData.GetUsers.ElementAt(1),
             PrimaryConcern = ConcernData.GetConcerns.ElementAt(2),
             CurrentOffice = OfficeData.GetOffices.ElementAt(1),

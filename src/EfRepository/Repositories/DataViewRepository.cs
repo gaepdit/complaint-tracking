@@ -1,10 +1,14 @@
-﻿using Cts.Domain.DataViews;
+using Cts.Domain.DataViews;
 using Cts.Domain.DataViews.DataArchiveViews;
 using Cts.Domain.DataViews.ReportingViews;
+using Cts.EfRepository.DbConnection;
+using Cts.EfRepository.DbObjects.Reporting;
+using Dapper;
+using System.Data;
 
 namespace Cts.EfRepository.Repositories;
 
-public sealed class DataViewRepository(AppDbContext context) : IDataViewRepository
+public sealed class DataViewRepository(AppDbContext context, IDbConnectionFactory dbConnection) : IDataViewRepository
 {
     public Task<List<OpenComplaint>> OpenComplaintsAsync(CancellationToken token) =>
         context.OpenComplaintsView.ToListAsync(cancellationToken: token);
@@ -18,9 +22,28 @@ public sealed class DataViewRepository(AppDbContext context) : IDataViewReposito
     public Task<List<RecordsCount>> RecordsCountAsync(CancellationToken token) =>
         context.RecordsCountView.OrderBy(recordsCount => recordsCount.Order).ToListAsync(cancellationToken: token);
 
-    public Task<List<StaffViewWithComplaints>> DaysSinceLastActionAsync(Guid officeId, int ageThreshold, CancellationToken token)
+    public async Task<List<StaffViewWithComplaints>> DaysSinceLastActionAsync(Guid officeId, int threshold)
     {
-        throw new NotImplementedException();
+        var staffDictionary = new Dictionary<string, StaffViewWithComplaints>();
+        using var db = dbConnection.Create();
+        _ = await db.QueryAsync<StaffViewWithComplaints, ComplaintView, StaffViewWithComplaints>(
+            sql: ReportingQueries.DaysSinceLastAction, map: MapRecord,
+            param: new { OfficeId = officeId, Threshold = threshold },
+            commandType: CommandType.Text).ConfigureAwait(false);
+
+        return staffDictionary.Values.ToList();
+
+        StaffViewWithComplaints MapRecord(StaffViewWithComplaints staff, ComplaintView complaint)
+        {
+            if (!staffDictionary.TryGetValue(staff.Id, out var staffView))
+            {
+                staffView = staff;
+                staffDictionary.Add(staffView.Id, staffView);
+            }
+
+            staffView.Complaints.Add(complaint);
+            return staffView;
+        }
     }
 
     #region IDisposable,  IAsyncDisposable

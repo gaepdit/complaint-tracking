@@ -12,6 +12,5 @@ public interface IDataViewRepository : IDisposable, IAsyncDisposable
     Task<List<RecordsCount>> RecordsCountAsync(CancellationToken token);
 
     // Reporting
-    Task<List<StaffViewWithComplaints>> DaysSinceLastActionAsync(Guid officeId, int ageThreshold,
-        CancellationToken token);
+    Task<List<StaffViewWithComplaints>> DaysSinceLastActionAsync(Guid officeId, int threshold);
 }

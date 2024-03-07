@@ -19,8 +19,8 @@ public class ComplaintView
     public ComplaintStatus Status { get; init; }
 
     [Display(Name = "Most Recent Action Date")]
-    public DateTimeOffset LastActionDate { get; init; }
+    public DateTimeOffset? LastActionDate { get; init; }
 
     [Display(Name = "Days Since Last Action")]
-    public int DaysSinceLastActionDate { get; init; }
+    public int DaysSinceLastAction { get; init; }
 }

@@ -8,7 +8,7 @@ internal static class StaffViewWithComplaintsData
     public static List<StaffViewWithComplaints> GetData() =>
         UserData.GetUsers.Select(user => new StaffViewWithComplaints
         {
-            StaffId = user.Id,
+            Id = user.Id,
             OfficeId = user.Office?.Id ?? Guid.Empty,
             GivenName = user.GivenName,
             FamilyName = user.FamilyName,
@@ -18,11 +18,11 @@ internal static class StaffViewWithComplaintsData
                 {
                     Id = complaint.Id,
                     Status = complaint.Status,
-                    ReceivedDate = complaint.ReceivedDate,
+                    ReceivedDate = complaint.ReceivedDate.Date,
                     ComplaintCounty = complaint.ComplaintCounty,
                     SourceFacilityName = complaint.SourceFacilityName,
                     LastActionDate = complaint.EnteredDate,
-                    DaysSinceLastActionDate = 1,
+                    DaysSinceLastAction = 1,
                 }).ToList(),
         }).ToList();
 }

@@ -29,6 +29,7 @@ public static class DisplayTemplate
     public const string ProbableUrlOrNotEntered = nameof(ProbableUrlOrNotEntered);
     public const string ShortDate = nameof(ShortDate);
     public const string ShortDateOrBlank = nameof(ShortDateOrBlank);
+    public const string ShortDateOrNone = nameof(ShortDateOrNone);
     public const string ShortDateTime = nameof(ShortDateTime);
     public const string ShortDateTimeNoBreak = nameof(ShortDateTimeNoBreak);
     public const string ShortDateTimeOrBlank = nameof(ShortDateTimeOrBlank);
