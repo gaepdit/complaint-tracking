@@ -13,4 +13,5 @@ public interface IDataViewRepository : IDisposable, IAsyncDisposable
 
     // Reporting
     Task<List<StaffViewWithComplaints>> DaysSinceLastActionAsync(Guid officeId, int threshold);
+    Task<List<ComplaintView>> ComplaintsAssignedToInactiveUsersAsync(Guid officeId);
 }

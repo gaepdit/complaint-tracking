@@ -7,7 +7,7 @@ internal static partial class UserData
 {
     private static IEnumerable<ApplicationUser> UserSeedItems => new List<ApplicationUser>
     {
-        new()
+        new() // 0
         {
             Id = "00000000-0000-0000-0000-000000000001",
             GivenName = "Admin",
@@ -17,7 +17,7 @@ internal static partial class UserData
             Office = OfficeData.GetOffices.ElementAt(0),
             AzureAdObjectId = Guid.NewGuid().ToString(),
         },
-        new()
+        new() // 1
         {
             Id = "00000000-0000-0000-0000-000000000002",
             GivenName = "General",
@@ -26,7 +26,7 @@ internal static partial class UserData
             Office = OfficeData.GetOffices.ElementAt(1),
             AzureAdObjectId = Guid.NewGuid().ToString(),
         },
-        new()
+        new() // 2
         {
             Id = "00000000-0000-0000-0000-000000000003",
             GivenName = "Limited",
@@ -35,7 +35,7 @@ internal static partial class UserData
             Office = OfficeData.GetOffices.ElementAt(0),
             AzureAdObjectId = Guid.NewGuid().ToString(),
         },
-        new()
+        new() // 3
         {
             Id = "00000000-0000-0000-0000-000000000004",
             GivenName = "Inactive",

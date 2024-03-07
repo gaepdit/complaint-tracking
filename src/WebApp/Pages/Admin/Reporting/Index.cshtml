@@ -8,12 +8,11 @@
     ViewData["Title"] = "CTS Reports";
 }
 
-@if (Model.ViewReportsMenu)
+@if (Model.CurrentReport == "Menu")
 {
     <h1>Status Reports</h1>
     <div class="list-group mb-2">
         <a asp-page-handler="DaysSinceLastAction" class="list-group-item list-group-item-action">Days Since Last Action</a>
-        <a asp-page-handler="AllComplaintsReceivedByDate" class="list-group-item list-group-item-action">All Complaints Received By Date</a>
         <a asp-page-handler="ComplaintsByStaff" class="list-group-item list-group-item-action">Complaint Status/Number of Complaints By Staff *</a>
         <a asp-page-handler="ComplaintsByCounty" class="list-group-item list-group-item-action">Complaint Status/Number of Complaints By County *</a>
         <a asp-page-handler="DaysToClosureByOffice" class="list-group-item list-group-item-action">Days to Closure By Office *</a>
@@ -46,13 +45,16 @@ else
     <p class="d-print-none">
         <a asp-page="Index" class="link-offset-2">← CTS Reports</a>
     </p>
-    <h1>Report: @Model.CurrentReportName</h1>
+    <h1 id="table-description">Report: @Model.ReportTitle[Model.CurrentReport]</h1>
 
-    <form asp-page-handler="DaysSinceLastAction" method="get" class="d-print-none">
+    <form asp-page-handler="@Model.CurrentReport" method="get" class="d-print-none">
         <div role="search" class="row g-3 ">
-            <div class="col">
-                @Html.EditorFor(model => model.Threshold, EditorTemplate.SelectNoPlaceholder, additionalViewData: new { Items = Model.AgeThresholdSelectList })
-            </div>
+            @if (Model.ShowThresholdSelect)
+            {
+                <div class="col">
+                    @Html.EditorFor(model => model.Threshold, EditorTemplate.SelectNoPlaceholder, additionalViewData: new { Items = Model.AgeThresholdSelectList })
+                </div>
+            }
             <div class="col">
                 @Html.EditorFor(model => model.Office, EditorTemplate.SelectNoPlaceholder, additionalViewData: new { Items = Model.OfficeSelectList })
             </div>
@@ -62,32 +64,88 @@ else
         </div>
     </form>
 
-    <div class="mt-3">
-        @if (Model.StaffWithComplaints.Count == 0)
-        {
-            <p>
-                <em>No staff found.</em>
-            </p>
-        }
-        else if (!Model.StaffWithComplaints.Any(staff => staff.Complaints.Count > 0))
-        {
-            <p>
-                <em>No staff found with complaints over the threshold.</em>
-            </p>
-        }
-        else
-        {
-            foreach (var staff in Model.StaffWithComplaints.Where(staff => staff.Complaints.Count > 0))
+    @if (Model.ShowStaffWithComplaintsResults)
+    {
+        <div class="mt-3">
+            @if (Model.StaffWithComplaints.Count == 0)
             {
-                <h2 class="mt-4">
-                    <a asp-page="/Staff/Complaints/Index" asp-page-handler="Search" asp-fragment="SearchResults"
-                       asp-route-Office="@staff.OfficeId.ToString()" asp-route-Assigned="@staff.Id">
-                        @staff.SortableFullName
-                    </a>
-                </h2>
+                <p>
+                    <em>No staff found.</em>
+                </p>
+            }
+            else if (!Model.StaffWithComplaints.Any(staff => staff.Complaints.Count > 0))
+            {
+                <p>
+                    <em>No staff found with complaints over the threshold.</em>
+                </p>
+            }
+            else
+            {
+                foreach (var staff in Model.StaffWithComplaints.Where(staff => staff.Complaints.Count > 0))
+                {
+                    <h2 class="mt-4">
+                        <a asp-page="/Staff/Complaints/Index" asp-page-handler="Search" asp-fragment="SearchResults"
+                           asp-route-Office="@staff.OfficeId.ToString()" asp-route-Assigned="@staff.Id">
+                            @staff.SortableFullName
+                        </a>
+                    </h2>
+                    <table class="table table-hover table-borderless" aria-describedby="table-description">
+                        <caption class="caption-top">
+                            <p>Total complaints found: @staff.Complaints.Count.ToString()</p>
+                        </caption>
+                        <thead>
+                        <tr>
+                            <th scope="col">Complaint ID</th>
+                            <th scope="col">Date Received</th>
+                            <th scope="col">County of Complaint</th>
+                            <th scope="col">Source Name</th>
+                            <th scope="col">Status</th>
+                            @if (Model.ShowRecentActionColumns)
+                            {
+                                <th scope="col">Most Recent Action Date</th>
+                                <th scope="col">Days Since Last Action</th>
+                            }
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var complaint in staff.Complaints)
+                        {
+                            <tr>
+                                <th scope="row">
+                                    <a asp-page="/Staff/Complaints/Details" asp-route-id="@complaint.Id.ToString()" class="btn btn-outline-primary btn-sm">@complaint.Id.ToString()</a>
+                                </th>
+                                <td>@Html.DisplayFor(_ => complaint.ReceivedDate, DisplayTemplate.ShortDate)</td>
+                                <td>@Html.DisplayFor(_ => complaint.ComplaintCounty, DisplayTemplate.StringOrPlaceholder)</td>
+                                <td>@Html.DisplayFor(_ => complaint.SourceFacilityName, DisplayTemplate.StringOrPlaceholder)</td>
+                                <td>@complaint.Status.GetDisplayName()</td>
+                                @if (Model.ShowRecentActionColumns)
+                                {
+                                    <td>@Html.DisplayFor(_ => complaint.LastActionDate, DisplayTemplate.ShortDateOrNone)</td>
+                                    <td>@complaint.DaysSinceLastAction.ToString("N0")</td>
+                                }
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                }
+            }
+        </div>
+    }
+
+    @if (Model.ShowComplaintsResults)
+    {
+        <div class="mt-3">
+            @if (Model.Complaints.Count == 0)
+            {
+                <p>
+                    <em>No complaints found.</em>
+                </p>
+            }
+            else
+            {
                 <table class="table table-hover table-borderless" aria-describedby="table-description">
                     <caption class="caption-top">
-                        <p>Total complaints found: @staff.Complaints.Count.ToString()</p>
+                        <p>Total complaints found: @Model.Complaints.Count.ToString()</p>
                     </caption>
                     <thead>
                     <tr>
@@ -96,28 +154,24 @@ else
                         <th scope="col">County of Complaint</th>
                         <th scope="col">Source Name</th>
                         <th scope="col">Status</th>
-                        <th scope="col">Most Recent Action Date</th>
-                        <th scope="col">Days Since Last Action</th>
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach (var complaint in staff.Complaints)
+                    @foreach (var complaint in Model.Complaints)
                     {
                         <tr>
                             <th scope="row">
-                                <a asp-page="./Complaints/Index" asp-route-id="@complaint.Id.ToString()" class="btn btn-outline-primary btn-sm">@complaint.Id.ToString()</a>
+                                <a asp-page="/Staff/Complaints/Details" asp-route-id="@complaint.Id.ToString()" class="btn btn-outline-primary btn-sm">@complaint.Id.ToString()</a>
                             </th>
                             <td>@Html.DisplayFor(_ => complaint.ReceivedDate, DisplayTemplate.ShortDate)</td>
                             <td>@Html.DisplayFor(_ => complaint.ComplaintCounty, DisplayTemplate.StringOrPlaceholder)</td>
                             <td>@Html.DisplayFor(_ => complaint.SourceFacilityName, DisplayTemplate.StringOrPlaceholder)</td>
                             <td>@complaint.Status.GetDisplayName()</td>
-                            <td>@Html.DisplayFor(_ => complaint.LastActionDate, DisplayTemplate.ShortDateOrNone)</td>
-                            <td>@complaint.DaysSinceLastAction.ToString("N0")</td>
                         </tr>
                     }
                     </tbody>
                 </table>
             }
-        }
-    </div>
+        </div>
+    }
 }

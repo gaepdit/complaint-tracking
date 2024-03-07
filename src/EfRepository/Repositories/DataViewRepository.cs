@@ -1,4 +1,4 @@
-using Cts.Domain.DataViews;
+﻿using Cts.Domain.DataViews;
 using Cts.Domain.DataViews.DataArchiveViews;
 using Cts.Domain.DataViews.ReportingViews;
 using Cts.EfRepository.DbConnection;
@@ -45,6 +45,20 @@ public sealed class DataViewRepository(AppDbContext context, IDbConnectionFactor
             return staffView;
         }
     }
+
+    public Task<List<ComplaintView>> ComplaintsAssignedToInactiveUsersAsync(Guid officeId) =>
+        context.Complaints.AsNoTracking()
+            .Where(c => !c.ComplaintClosed && !c.IsDeleted && c.CurrentOffice.Id == officeId &&
+                c.CurrentOwner != null && !c.CurrentOwner.Active)
+            .OrderByDescending(complaint => complaint.ReceivedDate)
+            .Select(complaint => new ComplaintView
+            {
+                Id = complaint.Id,
+                ReceivedDate = complaint.ReceivedDate,
+                Status = complaint.Status,
+                ComplaintCounty = complaint.ComplaintCounty,
+                SourceFacilityName = complaint.SourceFacilityName,
+            }).ToListAsync();
 
     #region IDisposable,  IAsyncDisposable
 
