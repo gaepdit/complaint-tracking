@@ -18,7 +18,7 @@ public class EditModel(IStaffService staffService, IOfficeService officeService,
 
     public StaffViewDto DisplayStaff { get; private set; } = default!;
 
-    public SelectList OfficeItems { get; private set; } = default!;
+    public SelectList OfficeSelectList { get; private set; } = default!;
 
     public async Task<IActionResult> OnGetAsync()
     {
@@ -53,5 +53,5 @@ public class EditModel(IStaffService staffService, IOfficeService officeService,
     }
 
     private async Task PopulateSelectListsAsync() =>
-        OfficeItems = (await officeService.GetAsListItemsAsync()).ToSelectList();
+        OfficeSelectList = (await officeService.GetAsListItemsAsync()).ToSelectList();
 }

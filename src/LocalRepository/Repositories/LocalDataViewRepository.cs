@@ -1,5 +1,6 @@
 ﻿using Cts.Domain.DataViews;
 using Cts.Domain.DataViews.DataArchiveViews;
+using Cts.Domain.DataViews.ReportingViews;
 
 namespace Cts.LocalRepository.Repositories;
 
@@ -20,6 +21,9 @@ public sealed class LocalDataViewRepository : IDataViewRepository
             new RecordsCount("Closed Complaints", 9999, 2),
             new RecordsCount("Complaint Actions", 12345, 3),
         ]);
+
+    public Task<List<StaffViewWithComplaints>> DaysSinceLastActionAsync(Guid officeId, int ageThreshold,
+        CancellationToken token) => Task.FromResult(TestData.DataViews.StaffViewWithComplaintsData.GetData());
 
     void IDisposable.Dispose()
     {

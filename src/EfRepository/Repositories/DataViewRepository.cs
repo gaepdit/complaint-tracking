@@ -1,5 +1,6 @@
 ﻿using Cts.Domain.DataViews;
 using Cts.Domain.DataViews.DataArchiveViews;
+using Cts.Domain.DataViews.ReportingViews;
 
 namespace Cts.EfRepository.Repositories;
 
@@ -16,6 +17,11 @@ public sealed class DataViewRepository(AppDbContext context) : IDataViewReposito
 
     public Task<List<RecordsCount>> RecordsCountAsync(CancellationToken token) =>
         context.RecordsCountView.OrderBy(recordsCount => recordsCount.Order).ToListAsync(cancellationToken: token);
+
+    public Task<List<StaffViewWithComplaints>> DaysSinceLastActionAsync(Guid officeId, int ageThreshold, CancellationToken token)
+    {
+        throw new NotImplementedException();
+    }
 
     #region IDisposable,  IAsyncDisposable
 
