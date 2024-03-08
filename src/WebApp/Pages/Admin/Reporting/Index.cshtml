@@ -1,23 +1,21 @@
 @page "{handler?}"
 @using Cts.WebApp.Pages.Shared.DisplayTemplates
-@using Cts.WebApp.Pages.Shared.EditorTemplates
 @using GaEpd.AppLibrary.Extensions
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model IndexModel
-@{
-    ViewData["Title"] = "CTS Reports";
-}
 
-@if (Model.CurrentReport == "Menu")
+@if (Model.CurrentReport == IndexModel.Menu)
 {
+    ViewData["Title"] = "CTS Reports";
+
     <h1>Status Reports</h1>
     <div class="list-group mb-2">
-        <a asp-page-handler="DaysSinceLastAction" class="list-group-item list-group-item-action">Days Since Last Action</a>
-        <a asp-page-handler="ComplaintsByStaff" class="list-group-item list-group-item-action">Complaint Status/Number of Complaints By Staff *</a>
-        <a asp-page-handler="ComplaintsByCounty" class="list-group-item list-group-item-action">Complaint Status/Number of Complaints By County *</a>
-        <a asp-page-handler="DaysToClosureByOffice" class="list-group-item list-group-item-action">Days to Closure By Office *</a>
-        <a asp-page-handler="DaysToClosureByStaff" class="list-group-item list-group-item-action">Days to Closure By Staff *</a>
-        <a asp-page-handler="DaysToFollowUpByStaff" class="list-group-item list-group-item-action">Days to Follow Up By Staff *</a>
+        <a asp-page-handler="@IndexModel.DaysSinceLastAction" class="list-group-item list-group-item-action">Days Since Last Action</a>
+        <a asp-page-handler="@IndexModel.ComplaintsByStaff" class="list-group-item list-group-item-action">Complaint Status/Number of Complaints By Staff *</a>
+        <a asp-page-handler="@IndexModel.ComplaintsByCounty" class="list-group-item list-group-item-action">Complaint Status/Number of Complaints By County *</a>
+        <a asp-page-handler="@IndexModel.DaysToClosureByOffice" class="list-group-item list-group-item-action">Days to Closure By Office *</a>
+        <a asp-page-handler="@IndexModel.DaysToClosureByStaff" class="list-group-item list-group-item-action">Days to Closure By Staff</a>
+        <a asp-page-handler="@IndexModel.DaysToFollowUpByStaff" class="list-group-item list-group-item-action">Days to Follow Up By Staff *</a>
     </div>
     <p class="mb-4">
         <em>* Report may load slowly.</em>
@@ -25,9 +23,9 @@
 
     <h1>Error Reports</h1>
     <div class="list-group mb-4">
-        <a asp-page-handler="ComplaintsAssignedToInactiveUsers" class="list-group-item list-group-item-action">Open complaints assigned to inactive users</a>
-        <a asp-page-handler="UsersAssignedToInactiveOffices" class="list-group-item list-group-item-action">Active users assigned to inactive offices</a>
-        <a asp-page-handler="UnconfirmedUserAccounts" class="list-group-item list-group-item-action">Active users with unconfirmed accounts</a>
+        <a asp-page-handler="@IndexModel.ComplaintsAssignedToInactiveUsers" class="list-group-item list-group-item-action">Open complaints assigned to inactive users</a>
+        <a asp-page-handler="@IndexModel.UsersAssignedToInactiveOffices" class="list-group-item list-group-item-action">Active users assigned to inactive offices</a>
+        <a asp-page-handler="@IndexModel.UnconfirmedUserAccounts" class="list-group-item list-group-item-action">Active users with unconfirmed accounts</a>
     </div>
 
     @if (Model.CanExportDataArchive)
@@ -40,38 +38,73 @@
 }
 else
 {
+    ViewData["Title"] = $"Report: {Model.ReportTitle[Model.CurrentReport]}";
+
     <p class="d-print-none">
-        <a asp-page="Index" class="link-offset-2">← CTS Reports</a>
+        <a asp-page="Index" class="lead link-offset-2">← CTS Reports</a>
     </p>
     <h1 id="table-description">Report: @Model.ReportTitle[Model.CurrentReport]</h1>
 
     <form asp-page-handler="@Model.CurrentReport" method="get" class="d-print-none">
-        <div role="search" class="row g-3 ">
-            @if (Model.ShowThresholdSelect)
+        <div role="search" class="p-3 rounded-3 bg-light-subtle border col-lg-9">
+            <div class="row g-3 align-items-md-end">
+                @if (Model.ShowThresholdSelect)
+                {
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <select asp-for="Threshold" name="@nameof(Model.Threshold)" asp-items="Model.AgeThresholdSelectList" class="form-select"></select>
+                            <label asp-for="Threshold" class="form-label"></label>
+                        </div>
+                    </div>
+                }
+                @if (Model.ShowDateRange)
+                {
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <div class="form-floating">
+                                <input asp-for="From" name="@nameof(Model.From)" class="form-control" />
+                                <label asp-for="From" class="form-label"></label>
+                            </div>
+                            <div class="form-floating">
+                                <input asp-for="To" name="@nameof(Model.To)" class="form-control" />
+                                <label asp-for="To" class="form-label"></label>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div class="col-md">
+                    <div class="form-floating">
+                        <select asp-for="Office" name="@nameof(Model.Office)" asp-items="Model.OfficeSelectList" class="form-select"></select>
+                        <label asp-for="Office" class="form-label"></label>
+                    </div>
+                </div>
+                <div class="col-md align-self-center">
+                    <button type="submit" class="btn btn-lg btn-outline-primary">View</button>
+                </div>
+            </div>
+            @if (Model.ShowAdminClosed)
             {
-                <div class="col">
-                    @Html.EditorFor(model => model.Threshold, EditorTemplate.SelectNoPlaceholder, additionalViewData: new { Items = Model.AgeThresholdSelectList })
+                <div class="row mt-2">
+                    <div class="col">
+
+                        <input asp-for="IncludeAdminClosed" class="form-check-input" />
+                        <label asp-for="IncludeAdminClosed" class="form-check-label"></label>
+                    </div>
                 </div>
             }
-            <div class="col">
-                @Html.EditorFor(model => model.Office, EditorTemplate.SelectNoPlaceholder, additionalViewData: new { Items = Model.OfficeSelectList })
-            </div>
-            <div class="col align-self-center">
-                <button type="submit" class="btn btn-lg btn-outline-primary">View</button>
-            </div>
         </div>
     </form>
 
-    @if (Model.ShowStaffWithComplaintsResults)
+    @if (Model.ShowStaffList)
     {
         <div class="mt-3">
-            @if (Model.StaffWithComplaints.Count == 0)
+            @if (Model.StaffList.Count == 0)
             {
                 <p>
                     <em>No staff found.</em>
                 </p>
             }
-            else if (!Model.StaffWithComplaints.Any(staff => staff.Complaints.Count > 0))
+            else if (!Model.StaffList.Any(staff => staff.Complaints.Count > 0))
             {
                 <p>
                     <em>No staff found with complaints over the threshold.</em>
@@ -79,7 +112,7 @@ else
             }
             else
             {
-                foreach (var staff in Model.StaffWithComplaints.Where(staff => staff.Complaints.Count > 0))
+                foreach (var staff in Model.StaffList.Where(staff => staff.Complaints.Count > 0))
                 {
                     <h2 class="mt-4">
                         <a asp-page="/Staff/Complaints/Index" asp-page-handler="Search" asp-fragment="SearchResults"
@@ -88,8 +121,14 @@ else
                         </a>
                     </h2>
                     <table class="table table-hover table-borderless" aria-describedby="table-description">
-                        <caption class="caption-top">
-                            <p>Total complaints found: @staff.Complaints.Count.ToString()</p>
+                        <caption class="caption-top px-2">
+                            <div class="row">
+                                <div class="col">Total complaints found: @staff.Complaints.Count.ToString()</div>
+                                @if (Model.ShowDaysToClosure)
+                                {
+                                    <div class="col text-end">Average days to closure: @staff.AverageDaysToClosure.ToString()</div>
+                                }
+                            </div>
                         </caption>
                         <thead>
                         <tr>
@@ -97,11 +136,19 @@ else
                             <th scope="col">Date Received</th>
                             <th scope="col">County of Complaint</th>
                             <th scope="col">Source Name</th>
-                            <th scope="col">Status</th>
-                            @if (Model.ShowRecentActionColumns)
+                            @if (Model.ShowDaysToClosure)
+                            {
+                                <th scope="col">Date Closed</th>
+                                <th scope="col" class="text-end">Days to Closure</th>
+                            }
+                            else
+                            {
+                                <th scope="col">Status</th>
+                            }
+                            @if (Model.ShowRecentAction)
                             {
                                 <th scope="col">Most Recent Action Date</th>
-                                <th scope="col">Days Since Last Action</th>
+                                <th scope="col" class="text-end">Days Since Last Action</th>
                             }
                         </tr>
                         </thead>
@@ -115,11 +162,19 @@ else
                                 <td>@Html.DisplayFor(_ => complaint.ReceivedDate, DisplayTemplate.ShortDate)</td>
                                 <td>@Html.DisplayFor(_ => complaint.ComplaintCounty, DisplayTemplate.StringOrPlaceholder)</td>
                                 <td>@Html.DisplayFor(_ => complaint.SourceFacilityName, DisplayTemplate.StringOrPlaceholder)</td>
-                                <td>@complaint.Status.GetDisplayName()</td>
-                                @if (Model.ShowRecentActionColumns)
+                                @if (Model.ShowDaysToClosure)
+                                {
+                                    <td>@Html.DisplayFor(_ => complaint.ComplaintClosedDate, DisplayTemplate.ShortDateOrBlank)</td>
+                                    <td class="text-end">@complaint.DaysToClosure.ToString()</td>
+                                }
+                                else
+                                {
+                                    <td>@complaint.Status.GetDisplayName()</td>
+                                }
+                                @if (Model.ShowRecentAction)
                                 {
                                     <td>@Html.DisplayFor(_ => complaint.LastActionDate, DisplayTemplate.ShortDateOrNone)</td>
-                                    <td>@complaint.DaysSinceLastAction.ToString("N0")</td>
+                                    <td class="text-end">@complaint.DaysSinceLastAction?.ToString("N0")</td>
                                 }
                             </tr>
                         }
@@ -130,10 +185,10 @@ else
         </div>
     }
 
-    @if (Model.ShowComplaintsResults)
+    @if (Model.ShowComplaintsList)
     {
         <div class="mt-3">
-            @if (Model.Complaints.Count == 0)
+            @if (Model.ComplaintsList.Count == 0)
             {
                 <p>
                     <em>No complaints found.</em>
@@ -142,8 +197,8 @@ else
             else
             {
                 <table class="table table-hover table-borderless" aria-describedby="table-description">
-                    <caption class="caption-top">
-                        <p>Total complaints found: @Model.Complaints.Count.ToString()</p>
+                    <caption class="caption-top px-2">
+                        <p>Total complaints found: @Model.ComplaintsList.Count.ToString()</p>
                     </caption>
                     <thead>
                     <tr>
@@ -155,7 +210,7 @@ else
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach (var complaint in Model.Complaints)
+                    @foreach (var complaint in Model.ComplaintsList)
                     {
                         <tr>
                             <th scope="row">

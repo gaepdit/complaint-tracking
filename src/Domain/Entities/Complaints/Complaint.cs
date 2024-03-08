@@ -27,6 +27,7 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     // Properties: Status & meta-data
 
+    [StringLength(25)]
     public ComplaintStatus Status { get; internal set; } = ComplaintStatus.New;
 
     public DateTimeOffset EnteredDate { get; init; } = DateTimeOffset.Now;

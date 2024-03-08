@@ -14,6 +14,5 @@ public static class EditorTemplate
     public const string InputDisabled = nameof(InputDisabled);
     public const string InputTimeOnly = nameof(InputTimeOnly);
     public const string Select = nameof(Select);
-    public const string SelectNoPlaceholder = nameof(SelectNoPlaceholder);
     public const string Textarea = nameof(Textarea);
 }

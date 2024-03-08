@@ -28,6 +28,9 @@ public sealed class LocalDataViewRepository : IDataViewRepository
     public Task<List<ComplaintView>> ComplaintsAssignedToInactiveUsersAsync(Guid officeId) => 
         throw new NotImplementedException();
 
+    public Task<List<StaffViewWithComplaints>> DaysToClosureByStaffAsync(Guid officeId, DateOnly dateFrom, DateOnly dateTo, bool includeAdminClosed) => 
+        throw new NotImplementedException();
+
     void IDisposable.Dispose()
     {
         // Method intentionally left empty.

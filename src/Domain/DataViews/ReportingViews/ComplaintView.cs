@@ -16,11 +16,19 @@ public class ComplaintView
     [Display(Name = "Date Received")]
     public DateTimeOffset ReceivedDate { get; init; }
 
+    [Display(Name = "Date Closed")]
+    public DateTimeOffset? ComplaintClosedDate { get; init; }
+
     public ComplaintStatus Status { get; init; }
 
     [Display(Name = "Most Recent Action Date")]
     public DateTimeOffset? LastActionDate { get; init; }
 
     [Display(Name = "Days Since Last Action")]
-    public int DaysSinceLastAction { get; init; }
+    public int? DaysSinceLastAction { get; init; }
+
+    // Calculated properties
+
+    [Display(Name = "Days to Closure")]
+    public int? DaysToClosure => ComplaintClosedDate?.Date.Subtract(ReceivedDate.Date).Days;
 }

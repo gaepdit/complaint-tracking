@@ -22,13 +22,46 @@ public sealed class DataViewRepository(AppDbContext context, IDbConnectionFactor
     public Task<List<RecordsCount>> RecordsCountAsync(CancellationToken token) =>
         context.RecordsCountView.OrderBy(recordsCount => recordsCount.Order).ToListAsync(cancellationToken: token);
 
-    public async Task<List<StaffViewWithComplaints>> DaysSinceLastActionAsync(Guid officeId, int threshold)
+    public async Task<List<StaffViewWithComplaints>> DaysSinceLastActionAsync(Guid officeId, int threshold) =>
+        await QueryStaffViewWithComplaintsList(ReportingQueries.DaysSinceLastAction,
+            new { officeId, threshold }).ConfigureAwait(false);
+
+    public Task<List<ComplaintView>> ComplaintsAssignedToInactiveUsersAsync(Guid officeId) =>
+        context.Complaints.AsNoTracking()
+            .Where(c => !c.ComplaintClosed && !c.IsDeleted && c.CurrentOffice.Id == officeId &&
+                c.CurrentOwner != null && !c.CurrentOwner.Active)
+            .OrderByDescending(complaint => complaint.ReceivedDate)
+            .Select(complaint => new ComplaintView
+            {
+                Id = complaint.Id,
+                ReceivedDate = complaint.ReceivedDate,
+                Status = complaint.Status,
+                ComplaintCounty = complaint.ComplaintCounty,
+                SourceFacilityName = complaint.SourceFacilityName,
+            }).ToListAsync();
+
+
+    public async Task<List<StaffViewWithComplaints>> DaysToClosureByStaffAsync(Guid officeId, DateOnly dateFrom,
+        DateOnly dateTo, bool includeAdminClosed)
+    {
+        var midnight = new TimeOnly(0, 0, 0); // Only needed until Dapper supports DateOnly.
+        return await QueryStaffViewWithComplaintsList(ReportingQueries.DaysToClosureByStaff,
+            new
+            {
+                officeId,
+                dateFrom = dateFrom.ToDateTime(midnight),
+                dateTo = dateTo.ToDateTime(midnight),
+                includeAdminClosed,
+            }).ConfigureAwait(false);
+    }
+
+    private async Task<List<StaffViewWithComplaints>> QueryStaffViewWithComplaintsList(string sql, object parameters)
     {
         var staffDictionary = new Dictionary<string, StaffViewWithComplaints>();
+
         using var db = dbConnection.Create();
         _ = await db.QueryAsync<StaffViewWithComplaints, ComplaintView, StaffViewWithComplaints>(
-            sql: ReportingQueries.DaysSinceLastAction, map: MapRecord,
-            param: new { OfficeId = officeId, Threshold = threshold },
+            sql: sql, map: MapRecord, param: parameters,
             commandType: CommandType.Text).ConfigureAwait(false);
 
         return staffDictionary.Values.ToList();
@@ -45,20 +78,6 @@ public sealed class DataViewRepository(AppDbContext context, IDbConnectionFactor
             return staffView;
         }
     }
-
-    public Task<List<ComplaintView>> ComplaintsAssignedToInactiveUsersAsync(Guid officeId) =>
-        context.Complaints.AsNoTracking()
-            .Where(c => !c.ComplaintClosed && !c.IsDeleted && c.CurrentOffice.Id == officeId &&
-                c.CurrentOwner != null && !c.CurrentOwner.Active)
-            .OrderByDescending(complaint => complaint.ReceivedDate)
-            .Select(complaint => new ComplaintView
-            {
-                Id = complaint.Id,
-                ReceivedDate = complaint.ReceivedDate,
-                Status = complaint.Status,
-                ComplaintCounty = complaint.ComplaintCounty,
-                SourceFacilityName = complaint.SourceFacilityName,
-            }).ToListAsync();
 
     #region IDisposable,  IAsyncDisposable
 
