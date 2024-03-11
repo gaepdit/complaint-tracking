@@ -2,9 +2,4 @@
 
 namespace Cts.Domain.DataViews.DataArchiveViews;
 
-public class RecordsCount
-{
-    public string Table { get; init; } = string.Empty;
-    public int Count { get; init; }
-    public int Order { get; init; }
-}
+public record RecordsCount(string Table, int Count, int Order);
