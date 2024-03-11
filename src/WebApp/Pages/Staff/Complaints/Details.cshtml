@@ -7,7 +7,7 @@
 @model DetailsModel
 @{
     ViewData["Title"] = $"Complaint ID {Model.ComplaintView.Id.ToString()}";
-    var calloutClass = Model.ComplaintView.ComplaintClosed ? "" : "bd-callout-info";
+    var calloutClass = Model.ComplaintView.ComplaintClosed ? "" : "callout-info";
 }
 
 <div class="container-full">
@@ -26,7 +26,7 @@
 
 @if (Model.ComplaintView.IsDeleted) // implies `ComplaintOperation.ManageDeletions`
 {
-    <div class="bd-callout bd-callout-danger mb-3">
+    <div class="callout callout-danger mb-3">
         <div class="container-full">
             <div class="row justify-content-between align-items-end g-0 my-1">
                 <div class="col">
@@ -52,7 +52,7 @@
 
 @if (Model.UserCan[ComplaintOperation.ViewAsOwner])
 {
-    <div class="bd-callout @calloutClass">
+    <div class="callout @calloutClass">
         This Complaint was assigned to you on @Html.DisplayFor(model => model.ComplaintView.CurrentOwnerAssignedDate, DisplayTemplate.LongDateTimeOrNotEntered).
         @if (Model.ComplaintView.CurrentOwnerAcceptedDate != null)
         {
@@ -387,7 +387,7 @@ else
     <div class="container bg-light-subtle border border-primary-subtle rounded-1 my-3 py-2 d-print-none">
         @if (Model.ComplaintView.ComplaintClosed)
         {
-            <p class="bd-callout bd-callout-danger">Be careful! This complaint is closed.</p>
+            <p class="callout callout-danger">Be careful! This complaint is closed.</p>
         }
         <h3 class="h5">Upload Attachments</h3>
         <form method="post" asp-page-handler="UploadFiles" asp-fragment="upload-attachments" enctype="multipart/form-data">

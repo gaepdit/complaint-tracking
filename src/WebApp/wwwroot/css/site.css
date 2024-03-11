@@ -215,51 +215,51 @@ footer a[target]::after, a[target].no-external-link::after {
  */
 
 :root,[data-bs-theme="light"] {
-    --bd-callout-link: 10,88,202;
+    --callout-link: 10,88,202;
 }
 
 [data-bs-theme="dark"] {
-    --bd-callout-link: 110,168,254;
+    --callout-link: 110,168,254;
 }
 
-.bd-callout {
-    --bs-link-color-rgb: var(--bd-callout-link);
+.callout {
+    --bs-link-color-rgb: var(--callout-link);
     padding: 1.25rem;
     margin-top: 1.25rem;
     margin-bottom: 1.25rem;
-    color: var(--bd-callout-color, inherit);
-    background-color: var(--bd-callout-bg, var(--bs-gray-200));
-    border-left: 0.25rem solid var(--bd-callout-border, var(--bs-gray-400))
+    color: var(--callout-color, inherit);
+    background-color: var(--callout-bg, var(--bs-gray-200));
+    border-left: 0.25rem solid var(--callout-border, var(--bs-gray-400))
 }
 
-.bd-callout>:last-child {
+.callout>:last-child {
     margin-bottom: 0
 }
 
-.bd-callout+.bd-callout {
+.callout+.callout {
     margin-top: -.25rem
 }
 
-.bd-callout .highlight {
+.callout .highlight {
     background-color: rgba(0,0,0,0.05)
 }
 
-.bd-callout-info {
-    --bd-callout-color: var(--bs-info-text-emphasis);
-    --bd-callout-bg: var(--bs-info-bg-subtle);
-    --bd-callout-border: var(--bs-info-border-subtle)
+.callout-info {
+    --callout-color: var(--bs-info-text-emphasis);
+    --callout-bg: var(--bs-info-bg-subtle);
+    --callout-border: var(--bs-info-border-subtle)
 }
 
-.bd-callout-warning {
-    --bd-callout-color: var(--bs-warning-text-emphasis);
-    --bd-callout-bg: var(--bs-warning-bg-subtle);
-    --bd-callout-border: var(--bs-warning-border-subtle)
+.callout-warning {
+    --callout-color: var(--bs-warning-text-emphasis);
+    --callout-bg: var(--bs-warning-bg-subtle);
+    --callout-border: var(--bs-warning-border-subtle)
 }
 
-.bd-callout-danger {
-    --bd-callout-color: var(--bs-danger-text-emphasis);
-    --bd-callout-bg: var(--bs-danger-bg-subtle);
-    --bd-callout-border: var(--bs-danger-border-subtle)
+.callout-danger {
+    --callout-color: var(--bs-danger-text-emphasis);
+    --callout-bg: var(--bs-danger-bg-subtle);
+    --callout-border: var(--bs-danger-border-subtle)
 }
 
 /* Banner for test site
