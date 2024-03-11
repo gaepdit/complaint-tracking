@@ -119,76 +119,76 @@
         }
         else
         {
-            <table class="table table-hover" aria-label="Facility search results">
-                <caption class="caption-top">
-                    <partial name="Shared/_PaginationNavAndCount" model="Model.PaginationNav" />
-                </caption>
-
-                <thead>
-                <tr>
-                    <th scope="col" class="text-nowrap">
-                        <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                           asp-route-Sort="@(Model.Spec.Sort == SortBy.IdAsc ? nameof(SortBy.IdDesc) : nameof(SortBy.IdAsc))"
-                           class="link-offset-2">
-                            Complaint ID @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
-                                             additionalViewData: new { up = nameof(SortBy.IdAsc), down = nameof(SortBy.IdDesc) })
-                        </a>
-                    </th>
-                    <th scope="col" class="text-nowrap">
-                        <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                           asp-route-Sort="@(Model.Spec.Sort == SortBy.TypeAsc ? nameof(SortBy.TypeDesc) : nameof(SortBy.TypeAsc))"
-                           class="link-offset-2">
-                            Action Type @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
-                                            additionalViewData: new { up = nameof(SortBy.TypeAsc), down = nameof(SortBy.TypeDesc) })
-                        </a>
-                    </th>
-                    <th scope="col" class="text-nowrap">
-                        <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                           asp-route-Sort="@(Model.Spec.Sort == SortBy.DateAsc ? nameof(SortBy.DateDesc) : nameof(SortBy.DateAsc))"
-                           class="link-offset-2">
-                            Action Date @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
-                                            additionalViewData: new { up = nameof(SortBy.DateAsc), down = nameof(SortBy.DateDesc) })
-                        </a>
-                    </th>
-                    <th scope="col">Investigator</th>
-                    <th scope="col">Entered By</th>
-                    <th scope="col">Comments</th>
-                </tr>
-                </thead>
-
-                <tbody>
-                @foreach (var item in Model.SearchResults.Items)
-                {
-                    <tr class="@(item.IsDeleted ? "table-danger" : item.ComplaintIsDeleted ? "table-warning" : "")">
-                        <th scope="row">
-                            <a asp-page="../Complaints/Details" asp-route-id="@item.ComplaintId.ToString()" class="btn btn-outline-primary btn-sm">@item.ComplaintId.ToString()</a>
+            <div class="table-responsive-md">
+                <table class="table table-hover" aria-label="Facility search results">
+                    <caption class="caption-top">
+                        <partial name="Shared/_PaginationNavAndCount" model="Model.PaginationNav" />
+                    </caption>
+                    <thead>
+                    <tr>
+                        <th scope="col" class="text-nowrap">
+                            <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
+                               asp-route-Sort="@(Model.Spec.Sort == SortBy.IdAsc ? nameof(SortBy.IdDesc) : nameof(SortBy.IdAsc))"
+                               class="link-offset-2">
+                                Complaint ID @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
+                                                 additionalViewData: new { up = nameof(SortBy.IdAsc), down = nameof(SortBy.IdDesc) })
+                            </a>
                         </th>
-                        <td>
-                            @if (item.IsDeleted)
-                            {
-                                <strong class="text-nowrap">DELETED ACTION</strong>
-                                <br />
-                            }
-                            @if (item.ComplaintIsDeleted)
-                            {
-                                <strong class="text-nowrap">Deleted Complaint</strong>
-                                <br />
-                            }
-                            @Html.DisplayFor(_ => item.ActionTypeName, DisplayTemplate.StringOrPlaceholder)
-                        </td>
-                        <td class="text-nowrap">@Html.DisplayFor(_ => item.ActionDate, DisplayTemplate.DateOnly)</td>
-                        <td>@Html.DisplayFor(_ => item.Investigator, DisplayTemplate.StringOrPlaceholder)</td>
-                        <td>
-                            @Html.DisplayFor(_ => item.EnteredByName, DisplayTemplate.StringOrPlaceholder)
-                            <br />
-                            @Html.DisplayFor(_ => item.EnteredByOffice, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "" })
-                        </td>
-                        <td>@Html.DisplayFor(_ => item.Comments, DisplayTemplate.TruncateText)</td>
+                        <th scope="col" class="text-nowrap">
+                            <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
+                               asp-route-Sort="@(Model.Spec.Sort == SortBy.TypeAsc ? nameof(SortBy.TypeDesc) : nameof(SortBy.TypeAsc))"
+                               class="link-offset-2">
+                                Action Type @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
+                                                additionalViewData: new { up = nameof(SortBy.TypeAsc), down = nameof(SortBy.TypeDesc) })
+                            </a>
+                        </th>
+                        <th scope="col" class="text-nowrap">
+                            <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
+                               asp-route-Sort="@(Model.Spec.Sort == SortBy.DateAsc ? nameof(SortBy.DateDesc) : nameof(SortBy.DateAsc))"
+                               class="link-offset-2">
+                                Action Date @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
+                                                additionalViewData: new { up = nameof(SortBy.DateAsc), down = nameof(SortBy.DateDesc) })
+                            </a>
+                        </th>
+                        <th scope="col">Investigator</th>
+                        <th scope="col">Entered By</th>
+                        <th scope="col">Comments</th>
                     </tr>
-                }
-                </tbody>
-            </table>
+                    </thead>
 
+                    <tbody>
+                    @foreach (var item in Model.SearchResults.Items)
+                    {
+                        <tr class="@(item.IsDeleted ? "table-danger" : item.ComplaintIsDeleted ? "table-warning" : "")">
+                            <th scope="row">
+                                <a asp-page="../Complaints/Details" asp-route-id="@item.ComplaintId.ToString()" class="btn btn-outline-primary btn-sm">@item.ComplaintId.ToString()</a>
+                            </th>
+                            <td>
+                                @if (item.IsDeleted)
+                                {
+                                    <strong class="text-nowrap">DELETED ACTION</strong>
+                                    <br />
+                                }
+                                @if (item.ComplaintIsDeleted)
+                                {
+                                    <strong class="text-nowrap">Deleted Complaint</strong>
+                                    <br />
+                                }
+                                @Html.DisplayFor(_ => item.ActionTypeName, DisplayTemplate.StringOrPlaceholder)
+                            </td>
+                            <td class="text-nowrap">@Html.DisplayFor(_ => item.ActionDate, DisplayTemplate.DateOnly)</td>
+                            <td>@Html.DisplayFor(_ => item.Investigator, DisplayTemplate.StringOrPlaceholder)</td>
+                            <td>
+                                @Html.DisplayFor(_ => item.EnteredByName, DisplayTemplate.StringOrPlaceholder)
+                                <br />
+                                @Html.DisplayFor(_ => item.EnteredByOffice, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "" })
+                            </td>
+                            <td>@Html.DisplayFor(_ => item.Comments, DisplayTemplate.TruncateText)</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
             <partial name="_PaginationNav" model="Model.PaginationNav" />
         }
     </div>
