@@ -15,7 +15,11 @@ public sealed class LocalDataViewRepository : IDataViewRepository
         throw new NotImplementedException();
 
     public Task<List<RecordsCount>> RecordsCountAsync(CancellationToken token) =>
-        throw new NotImplementedException();
+        Task.FromResult<List<RecordsCount>>([
+            new RecordsCount("Open Complaints", 20, 1),
+            new RecordsCount("Closed Complaints", 9999, 2),
+            new RecordsCount("Complaint Actions", 12345, 3),
+        ]);
 
     void IDisposable.Dispose()
     {

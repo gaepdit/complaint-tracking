@@ -207,6 +207,61 @@ footer a[target]::after, a[target].no-external-link::after {
     content: none;
 }
 
+/* Callouts
+-------------------------------------------------- */
+/*!
+ * Copied from Bootstrap Docs (https://getbootstrap.com/)
+ * Licensed under the Creative Commons Attribution 3.0 Unported License.
+ */
+
+:root,[data-bs-theme="light"] {
+    --callout-link: 10,88,202;
+}
+
+[data-bs-theme="dark"] {
+    --callout-link: 110,168,254;
+}
+
+.callout {
+    --bs-link-color-rgb: var(--callout-link);
+    padding: 1.25rem;
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+    color: var(--callout-color, inherit);
+    background-color: var(--callout-bg, var(--bs-gray-200));
+    border-left: 0.25rem solid var(--callout-border, var(--bs-gray-400))
+}
+
+.callout>:last-child {
+    margin-bottom: 0
+}
+
+.callout+.callout {
+    margin-top: -.25rem
+}
+
+.callout .highlight {
+    background-color: rgba(0,0,0,0.05)
+}
+
+.callout-info {
+    --callout-color: var(--bs-info-text-emphasis);
+    --callout-bg: var(--bs-info-bg-subtle);
+    --callout-border: var(--bs-info-border-subtle)
+}
+
+.callout-warning {
+    --callout-color: var(--bs-warning-text-emphasis);
+    --callout-bg: var(--bs-warning-bg-subtle);
+    --callout-border: var(--bs-warning-border-subtle)
+}
+
+.callout-danger {
+    --callout-color: var(--bs-danger-text-emphasis);
+    --callout-bg: var(--bs-danger-bg-subtle);
+    --callout-border: var(--bs-danger-border-subtle)
+}
+
 /* Banner for test site
 -------------------------------------------------- */
 .banner-test-site {

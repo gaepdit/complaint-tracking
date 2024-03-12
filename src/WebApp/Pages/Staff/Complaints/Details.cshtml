@@ -7,11 +7,7 @@
 @model DetailsModel
 @{
     ViewData["Title"] = $"Complaint ID {Model.ComplaintView.Id.ToString()}";
-    var alertClass = Model.ComplaintView.ComplaintClosed ? "alert-secondary" : "alert-info";
 }
-
-@* TODO: Remove when complaint transitions have all been implemented: *@
-@* ReSharper disable Mvc.ActionNotResolved *@
 
 <div class="container-full">
     <div class="row justify-content-between align-items-baseline g-0 my-1">
@@ -29,11 +25,11 @@
 
 @if (Model.ComplaintView.IsDeleted) // implies `ComplaintOperation.ManageDeletions`
 {
-    <div class="bg-danger-subtle border border-danger-subtle p-2 rounded mb-3">
+    <div class="callout callout-danger mb-3">
         <div class="container-full">
-            <div class="row justify-content-between align-items-start g-0 my-1">
+            <div class="row justify-content-between align-items-end g-0 my-1">
                 <div class="col">
-                    <h2 class="text-danger-emphasis">Complaint Has Been Deleted</h2>
+                    <h4 class="text-danger-emphasis">Complaint Is Deleted</h4>
                 </div>
                 <div class="col-auto d-print-none ms-2">
                     <a asp-page="Restore" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-warning">Restore deleted complaint</a>
@@ -41,33 +37,26 @@
             </div>
         </div>
 
-        <div class="container">
-            <dl class="row">
-                <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.DeletedBy)</dt>
-                <dd class="col-sm-8 col-lg-9">
-                    @Html.DisplayFor(model => model.ComplaintView.DeletedBy, DisplayTemplate.NameOrPlaceholder)
-                    on @Html.DisplayFor(model => model.ComplaintView.DeletedAt, DisplayTemplate.LongDateTimeOrNotEntered)
-                </dd>
-                <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.DeleteComments)</dt>
-                <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Model.ComplaintView.DeleteComments</dd>
-            </dl>
-        </div>
+        <dl class="row mt-2">
+            <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.DeletedBy)</dt>
+            <dd class="col-sm-8 col-lg-9">
+                @Html.DisplayFor(model => model.ComplaintView.DeletedBy, DisplayTemplate.NameOrPlaceholder)
+                on @Html.DisplayFor(model => model.ComplaintView.DeletedAt, DisplayTemplate.LongDateTimeOrNotEntered)
+            </dd>
+            <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.DeleteComments)</dt>
+            <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Model.ComplaintView.DeleteComments</dd>
+        </dl>
     </div>
 }
 
 @if (Model.UserCan[ComplaintOperation.ViewAsOwner])
 {
-    <div class="alert @alertClass d-flex align-items-center" role="alert">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill me-2" viewBox="0 0 16 16">
-            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-        </svg>
-        <div>
+    <div class="callout callout-info">
         This Complaint was assigned to you on @Html.DisplayFor(model => model.ComplaintView.CurrentOwnerAssignedDate, DisplayTemplate.LongDateTimeOrNotEntered).
         @if (Model.ComplaintView.CurrentOwnerAcceptedDate != null)
         {
-            @:You accepted it on @Html.DisplayFor(model => model.ComplaintView.CurrentOwnerAcceptedDate, DisplayTemplate.LongDateTimeOrNotEntered).
+            @:<br />You accepted it on @Html.DisplayFor(model => model.ComplaintView.CurrentOwnerAcceptedDate, DisplayTemplate.LongDateTimeOrNotEntered).
         }
-        </div>
     </div>
 }
 
@@ -397,7 +386,7 @@ else
     <div class="container bg-light-subtle border border-primary-subtle rounded-1 my-3 py-2 d-print-none">
         @if (Model.ComplaintView.ComplaintClosed)
         {
-            <p class="alert alert-warning">Be careful! This complaint has already been closed.</p>
+            <p class="callout callout-danger">Be careful! This complaint is closed.</p>
         }
         <h3 class="h5">Upload Attachments</h3>
         <form method="post" asp-page-handler="UploadFiles" asp-fragment="upload-attachments" enctype="multipart/form-data">
@@ -442,36 +431,38 @@ else
 {
     <details>
         <summary class="h5 text-secondary mb-2">Show full audit history</summary>
-        <table class="table table-sm table-hover small align-top" aria-label="Audit history">
-            <thead>
-            <tr>
-                <th scope="col">Action&nbsp;Date</th>
-                <th scope="col">Action</th>
-                <th scope="col">Committed&nbsp;By</th>
-                <th scope="col">Transferred&nbsp;To</th>
-                <th scope="col">Comment</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach (var item in Model.ComplaintView.ComplaintTransitions)
-            {
+        <div class="table-responsive-md">
+            <table class="table table-sm table-hover small align-top" aria-label="Audit history">
+                <thead>
                 <tr>
-                    <td>@Html.DisplayFor(_ => item.CommittedDate, DisplayTemplate.ShortDateTimeNoBreak)</td>
-                    <td>@item.TransitionType.GetDisplayName()</td>
-                    <td>@Html.DisplayFor(_ => item.CommittedByUser, DisplayTemplate.NameOrPlaceholder)</td>
-                    <td>
-                        @Html.DisplayFor(_ => item.TransferredToUser, DisplayTemplate.NameOrBlank)
-                        @if (item is { TransferredToUser: not null, TransferredToOffice: not null })
-                        {
-                            <br />
-                        }
-                        @Html.DisplayFor(_ => item.TransferredToOffice, DisplayTemplate.NameOrBlank)
-                    </td>
-                    <td class="text-break text-pre-line">@Html.DisplayFor(_ => item.Comment)</td>
+                    <th scope="col">Action&nbsp;Date</th>
+                    <th scope="col">Action</th>
+                    <th scope="col">Committed&nbsp;By</th>
+                    <th scope="col">Transferred&nbsp;To</th>
+                    <th scope="col">Comment</th>
                 </tr>
-            }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                @foreach (var item in Model.ComplaintView.ComplaintTransitions)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(_ => item.CommittedDate, DisplayTemplate.ShortDateTimeNoBreak)</td>
+                        <td>@item.TransitionType.GetDisplayName()</td>
+                        <td>@Html.DisplayFor(_ => item.CommittedByUser, DisplayTemplate.NameOrPlaceholder)</td>
+                        <td>
+                            @Html.DisplayFor(_ => item.TransferredToUser, DisplayTemplate.NameOrBlank)
+                            @if (item is { TransferredToUser: not null, TransferredToOffice: not null })
+                            {
+                                <br />
+                            }
+                            @Html.DisplayFor(_ => item.TransferredToOffice, DisplayTemplate.NameOrBlank)
+                        </td>
+                        <td class="text-break text-pre-line">@Html.DisplayFor(_ => item.Comment)</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
     </details>
 }
 

@@ -65,8 +65,8 @@ else
         @foreach (var record in Model.RecordsCounts)
         {
             <tr>
-                <th>@record.Table</th>
-                <td>@record.Count.ToString(format: "N0")</td>
+                <th scope="row">@record.Table</th>
+                <td class="text-end ps-3">@record.Count.ToString(format: "N0")</td>
             </tr>
         }
         </tbody>
