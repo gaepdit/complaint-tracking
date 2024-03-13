@@ -1,3 +1,7 @@
 {
-    "dotnet-test-explorer.testProjectPath": "**/*Tests.csproj"
+    "dotnet-test-explorer.testProjectPath": "**/*Tests.csproj",
+    "sonarlint.connectedMode.project": {
+        "connectionId": "gaepdit",
+        "projectKey": "gaepdit.complaint-tracking"
+    }
 }
