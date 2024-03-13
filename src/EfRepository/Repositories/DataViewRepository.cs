@@ -1,4 +1,4 @@
-using Cts.Domain.DataViews;
+﻿using Cts.Domain.DataViews;
 using Cts.Domain.DataViews.DataArchiveViews;
 using Cts.Domain.DataViews.ReportingViews;
 using Cts.EfRepository.DbConnection;
@@ -54,6 +54,19 @@ public sealed class DataViewRepository(AppDbContext context, IDbConnectionFactor
                 dateFrom = dateFrom.ToDateTime(midnight),
                 dateTo = dateTo.ToDateTime(midnight),
                 includeAdminClosed,
+            }).ConfigureAwait(false);
+    }
+
+    public async Task<List<StaffViewWithComplaints>> DaysToFollowupByStaffAsync(Guid officeId, DateOnly dateFrom,
+        DateOnly dateTo)
+    {
+        var midnight = new TimeOnly(0, 0, 0); // Only needed until Dapper supports DateOnly.
+        return await QueryStaffViewWithComplaintsList(ReportingQueries.DaysToFollowupByStaff,
+            new
+            {
+                officeId,
+                dateFrom = dateFrom.ToDateTime(midnight),
+                dateTo = dateTo.ToDateTime(midnight),
             }).ConfigureAwait(false);
     }
 

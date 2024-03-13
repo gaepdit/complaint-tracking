@@ -8,12 +8,13 @@ public class ComplaintView
     public string? ComplaintCounty { get; init; }
     public string? SourceFacilityName { get; init; }
     public DateTimeOffset ReceivedDate { get; init; }
-    public DateTimeOffset? ComplaintClosedDate { get; init; }
     public ComplaintStatus Status { get; init; }
-    
+    public DateTimeOffset? ComplaintClosedDate { get; init; }
     public DateTimeOffset? MostRecentActionDate { get; init; }
     public int? DaysSinceMostRecentAction { get; init; }
+    public DateTimeOffset? EarliestActionDate { get; init; }
 
     // Calculated properties
     public int? DaysToClosure => ComplaintClosedDate?.Date.Subtract(ReceivedDate.Date).Days;
+    public int? DaysToFollowup => EarliestActionDate?.Date.Subtract(ReceivedDate.Date).Days;
 }

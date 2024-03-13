@@ -29,6 +29,7 @@ public class IndexModel(
     public bool ShowComplaintsList { get; private set; }
     public bool ShowRecentAction { get; private set; }
     public bool ShowDaysToClosure { get; private set; }
+    public bool ShowDaysToFollowup { get; private set; }
 
     // Form values
     public Guid? Office { get; set; }
@@ -91,12 +92,22 @@ public class IndexModel(
         ShowAdminClosed = true;
         ShowDaysToClosure = true;
         ShowStaffList = true;
-
         IncludeAdminClosed = includeAdminClosed ?? false;
         await PopulateFormDataAsync(office, from, to, token);
 
         StaffList = await reportingService.DaysToClosureByStaffAsync(Office!.Value, From!.Value, To!.Value,
             IncludeAdminClosed);
+    }
+
+    public async Task OnGetDaysToFollowupByStaffAsync([FromQuery] Guid? office, DateOnly? from, DateOnly? to, CancellationToken token)
+    {
+        CurrentReport = DaysToFollowupByStaff;
+        ShowDateRange = true;
+        ShowDaysToFollowup = true;
+        ShowStaffList = true;
+        await PopulateFormDataAsync(office, from, to, token);
+
+        StaffList = await reportingService.DaysToFollowupByStaffAsync(Office!.Value, From!.Value, To!.Value);
     }
 
     // Form control data
@@ -139,7 +150,7 @@ public class IndexModel(
     public const string ComplaintsByCounty = nameof(ComplaintsByCounty);
     public const string DaysToClosureByOffice = nameof(DaysToClosureByOffice);
     public const string DaysToClosureByStaff = nameof(DaysToClosureByStaff);
-    public const string DaysToFollowUpByStaff = nameof(DaysToFollowUpByStaff);
+    public const string DaysToFollowupByStaff = nameof(DaysToFollowupByStaff);
     public const string ComplaintsAssignedToInactiveUsers = nameof(ComplaintsAssignedToInactiveUsers);
     public const string UsersAssignedToInactiveOffices = nameof(UsersAssignedToInactiveOffices);
     public const string UnconfirmedUserAccounts = nameof(UnconfirmedUserAccounts);
@@ -151,7 +162,7 @@ public class IndexModel(
         { ComplaintsByCounty, "" },
         { DaysToClosureByOffice, "" },
         { DaysToClosureByStaff, "Days To Closure By Staff" },
-        { DaysToFollowUpByStaff, "" },
+        { DaysToFollowupByStaff, "Days To Follow-up By Staff" },
         { ComplaintsAssignedToInactiveUsers, "Open complaints assigned to inactive users" },
         { UsersAssignedToInactiveOffices, "" },
         { UnconfirmedUserAccounts, "" },

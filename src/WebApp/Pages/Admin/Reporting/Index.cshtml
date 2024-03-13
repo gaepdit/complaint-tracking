@@ -15,7 +15,7 @@
         <a asp-page-handler="@IndexModel.ComplaintsByCounty" class="list-group-item list-group-item-action">Complaint Status/Number of Complaints By County *</a>
         <a asp-page-handler="@IndexModel.DaysToClosureByOffice" class="list-group-item list-group-item-action">Days to Closure By Office *</a>
         <a asp-page-handler="@IndexModel.DaysToClosureByStaff" class="list-group-item list-group-item-action">Days to Closure By Staff</a>
-        <a asp-page-handler="@IndexModel.DaysToFollowUpByStaff" class="list-group-item list-group-item-action">Days to Follow Up By Staff *</a>
+        <a asp-page-handler="@IndexModel.DaysToFollowupByStaff" class="list-group-item list-group-item-action">Days to Follow-up Action By Staff *</a>
     </div>
     <p class="mb-4">
         <em>* Report may load slowly.</em>
@@ -128,18 +128,27 @@ else
                                 {
                                     <div class="col text-end">Average days to closure: @staff.AverageDaysToClosure.ToString()</div>
                                 }
+                                else if (Model.ShowDaysToFollowup)
+                                {
+                                    <div class="col text-end">Average days to follow-up action: @staff.AverageDaysToFollowup.ToString()</div>
+                                }
                             </div>
                         </caption>
                         <thead>
                         <tr>
                             <th scope="col">Complaint ID</th>
-                            <th scope="col">Date Received</th>
                             <th scope="col">County of Complaint</th>
                             <th scope="col">Source Name</th>
+                            <th scope="col">Date Received</th>
                             @if (Model.ShowDaysToClosure)
                             {
                                 <th scope="col">Date Closed</th>
                                 <th scope="col" class="text-end">Days to Closure</th>
+                            }
+                            else if (Model.ShowDaysToFollowup)
+                            {
+                                <th scope="col">Earliest Action Date</th>
+                                <th scope="col" class="text-end">Days to Follow-up</th>
                             }
                             else
                             {
@@ -159,13 +168,18 @@ else
                                 <th scope="row">
                                     <a asp-page="/Staff/Complaints/Details" asp-route-id="@complaint.Id.ToString()" class="btn btn-outline-primary btn-sm">@complaint.Id.ToString()</a>
                                 </th>
-                                <td>@Html.DisplayFor(_ => complaint.ReceivedDate, DisplayTemplate.ShortDate)</td>
                                 <td>@Html.DisplayFor(_ => complaint.ComplaintCounty, DisplayTemplate.StringOrPlaceholder)</td>
                                 <td>@Html.DisplayFor(_ => complaint.SourceFacilityName, DisplayTemplate.StringOrPlaceholder)</td>
+                                <td>@Html.DisplayFor(_ => complaint.ReceivedDate, DisplayTemplate.ShortDate)</td>
                                 @if (Model.ShowDaysToClosure)
                                 {
                                     <td>@Html.DisplayFor(_ => complaint.ComplaintClosedDate, DisplayTemplate.ShortDateOrBlank)</td>
-                                    <td class="text-end">@complaint.DaysToClosure.ToString()</td>
+                                    <td class="text-end">@complaint.DaysToClosure?.ToString("N0")</td>
+                                }
+                                else if (Model.ShowDaysToFollowup)
+                                {
+                                    <td>@Html.DisplayFor(_ => complaint.EarliestActionDate, DisplayTemplate.ShortDateOrBlank)</td>
+                                    <td class="text-end">@complaint.DaysToFollowup?.ToString("N0")</td>
                                 }
                                 else
                                 {

@@ -57,4 +57,32 @@ public static class ReportingQueries
           and (@includeAdminClosed = convert(bit, 1) or c.Status = 'Closed')
           and convert(date, c.ComplaintClosedDate) between @dateFrom and @dateTo
         """;
+
+    // language=sql
+    public const string DaysToFollowupByStaff =
+        """
+        select c.CurrentOwnerId                    as Id,
+               c.CurrentOfficeId                   as OfficeId,
+               u.GivenName                         as GivenName,
+               u.FamilyName                        as FamilyName,
+               c.Id                                as Id,
+               c.ComplaintCounty                   as ComplaintCounty,
+               c.SourceFacilityName                as SourceFacilityName,
+               convert(date, c.ReceivedDate)       as ReceivedDate,
+               convert(date, a.EarliestActionDate) as EarliestActionDate
+        from Complaints c
+            inner join AspNetUsers u
+            on c.CurrentOwnerId = u.Id
+            inner join (select c1.Id,
+                               convert(date, min(a1.ActionDate)) as EarliestActionDate
+                        from Complaints c1
+                            inner join ComplaintActions a1
+                            on c1.Id = a1.ComplaintId
+                        group by c1.Id) a
+            on c.Id = a.Id
+        where c.IsDeleted = convert(bit, 0)
+          and c.CurrentOwnerId is not null
+          and c.CurrentOfficeId = @officeId
+          and convert(date, a.EarliestActionDate) between @dateFrom and @dateTo
+        """;
 }

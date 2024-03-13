@@ -13,4 +13,5 @@ public class StaffViewWithComplaints
     // Calculated properties
     public string SortableFullName => new[] { FamilyName, GivenName }.ConcatWithSeparator(", ");
     public double? AverageDaysToClosure => Complaints.Average(complaint => complaint.DaysToClosure);
+    public double? AverageDaysToFollowup => Complaints.Average(complaint => complaint.DaysToFollowup);
 }

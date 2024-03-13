@@ -1,6 +1,7 @@
-using Cts.Domain.DataViews;
+﻿using Cts.Domain.DataViews;
 using Cts.Domain.DataViews.DataArchiveViews;
 using Cts.Domain.DataViews.ReportingViews;
+using Cts.TestData.DataViews;
 
 namespace Cts.LocalRepository.Repositories;
 
@@ -27,11 +28,15 @@ public sealed class LocalDataViewRepository : IDataViewRepository
     public Task<List<StaffViewWithComplaints>> DaysSinceMostRecentActionAsync(Guid officeId, int threshold) =>
         Task.FromResult(DataViewsTestData.GetStaffViewWithComplaintsData());
 
-    public Task<List<ComplaintView>> ComplaintsAssignedToInactiveUsersAsync(Guid officeId) => 
-        throw new NotImplementedException();
+    public Task<List<ComplaintView>> ComplaintsAssignedToInactiveUsersAsync(Guid officeId) =>
+        Task.FromResult(DataViewsTestData.GetComplaintViewData());
 
-    public Task<List<StaffViewWithComplaints>> DaysToClosureByStaffAsync(Guid officeId, DateOnly dateFrom, DateOnly dateTo, bool includeAdminClosed) => 
-        throw new NotImplementedException();
+    public Task<List<StaffViewWithComplaints>> DaysToClosureByStaffAsync(Guid officeId, DateOnly dateFrom,
+        DateOnly dateTo, bool includeAdminClosed) =>
+        Task.FromResult(DataViewsTestData.GetStaffViewWithComplaintsData());
+
+    public Task<List<StaffViewWithComplaints>> DaysToFollowupByStaffAsync(Guid officeId, DateOnly dateFrom,
+        DateOnly dateTo) => Task.FromResult(DataViewsTestData.GetStaffViewWithComplaintsData());
 
     void IDisposable.Dispose()
     {

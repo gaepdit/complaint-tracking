@@ -1,4 +1,4 @@
-using Cts.Domain.DataViews.DataArchiveViews;
+﻿using Cts.Domain.DataViews.DataArchiveViews;
 using Cts.Domain.DataViews.ReportingViews;
 
 namespace Cts.Domain.DataViews;
@@ -18,4 +18,6 @@ public interface IDataViewRepository : IDisposable, IAsyncDisposable
 
     Task<List<StaffViewWithComplaints>> DaysToClosureByStaffAsync(Guid officeId, DateOnly dateFrom, DateOnly dateTo,
         bool includeAdminClosed);
+
+    Task<List<StaffViewWithComplaints>> DaysToFollowupByStaffAsync(Guid officeId, DateOnly dateFrom, DateOnly dateTo);
 }
