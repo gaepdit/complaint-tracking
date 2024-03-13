@@ -21,8 +21,8 @@ internal static class StaffViewWithComplaintsData
                     ReceivedDate = complaint.ReceivedDate.Date,
                     ComplaintCounty = complaint.ComplaintCounty,
                     SourceFacilityName = complaint.SourceFacilityName,
-                    LastActionDate = complaint.EnteredDate,
-                    DaysSinceLastAction = 1,
+                    MostRecentActionDate = complaint.EnteredDate,
+                    DaysSinceMostRecentAction = 1,
                 }).ToList(),
         }).ToList();
 }

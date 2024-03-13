@@ -60,17 +60,17 @@ public class IndexModel(
 
     // === Reports ===
 
-    public async Task OnGetDaysSinceLastActionAsync([FromQuery] Guid? office, [FromQuery] int? threshold,
+    public async Task OnGetDaysSinceMostRecentActionAsync([FromQuery] Guid? office, [FromQuery] int? threshold,
         CancellationToken token)
     {
-        CurrentReport = DaysSinceLastAction;
+        CurrentReport = DaysSinceMostRecentAction;
         ShowThresholdSelect = true;
         ShowRecentAction = true;
         ShowStaffList = true;
 
         await PopulateFormDataAsync(office, threshold, token);
 
-        StaffList = await reportingService.DaysSinceLastActionAsync(Office!.Value, Threshold!.Value);
+        StaffList = await reportingService.DaysSinceMostRecentActionAsync(Office!.Value, Threshold!.Value);
     }
 
     public async Task OnGetComplaintsAssignedToInactiveUsersAsync([FromQuery] Guid? office, CancellationToken token)
@@ -134,7 +134,7 @@ public class IndexModel(
 
     // Reports metadata
     public const string Menu = nameof(Menu);
-    public const string DaysSinceLastAction = nameof(DaysSinceLastAction);
+    public const string DaysSinceMostRecentAction = nameof(DaysSinceMostRecentAction);
     public const string ComplaintsByStaff = nameof(ComplaintsByStaff);
     public const string ComplaintsByCounty = nameof(ComplaintsByCounty);
     public const string DaysToClosureByOffice = nameof(DaysToClosureByOffice);
@@ -146,7 +146,7 @@ public class IndexModel(
 
     public Dictionary<string, string> ReportTitle { get; } = new()
     {
-        { DaysSinceLastAction, "Days Since Last Action" },
+        { DaysSinceMostRecentAction, "Days Since Most Recent Action" },
         { ComplaintsByStaff, "" },
         { ComplaintsByCounty, "" },
         { DaysToClosureByOffice, "" },

@@ -1,4 +1,4 @@
-﻿using Cts.Domain.DataViews;
+using Cts.Domain.DataViews;
 using Cts.Domain.DataViews.DataArchiveViews;
 using Cts.Domain.DataViews.ReportingViews;
 using Cts.EfRepository.DbConnection;
@@ -10,6 +10,7 @@ namespace Cts.EfRepository.Repositories;
 
 public sealed class DataViewRepository(AppDbContext context, IDbConnectionFactory dbConnection) : IDataViewRepository
 {
+    // Data archive export
     public Task<List<OpenComplaint>> OpenComplaintsAsync(CancellationToken token) =>
         context.OpenComplaintsView.ToListAsync(cancellationToken: token);
 
@@ -22,8 +23,9 @@ public sealed class DataViewRepository(AppDbContext context, IDbConnectionFactor
     public Task<List<RecordsCount>> RecordsCountAsync(CancellationToken token) =>
         context.RecordsCountView.OrderBy(recordsCount => recordsCount.Order).ToListAsync(cancellationToken: token);
 
-    public async Task<List<StaffViewWithComplaints>> DaysSinceLastActionAsync(Guid officeId, int threshold) =>
-        await QueryStaffViewWithComplaintsList(ReportingQueries.DaysSinceLastAction,
+    // Reporting
+    public async Task<List<StaffViewWithComplaints>> DaysSinceMostRecentActionAsync(Guid officeId, int threshold) =>
+        await QueryStaffViewWithComplaintsList(ReportingQueries.DaysSinceMostRecentAction,
             new { officeId, threshold }).ConfigureAwait(false);
 
     public Task<List<ComplaintView>> ComplaintsAssignedToInactiveUsersAsync(Guid officeId) =>

@@ -10,7 +10,7 @@
 
     <h1>Status Reports</h1>
     <div class="list-group mb-2">
-        <a asp-page-handler="@IndexModel.DaysSinceLastAction" class="list-group-item list-group-item-action">Days Since Last Action</a>
+        <a asp-page-handler="@IndexModel.DaysSinceMostRecentAction" class="list-group-item list-group-item-action">Days Since Most Recent Action</a>
         <a asp-page-handler="@IndexModel.ComplaintsByStaff" class="list-group-item list-group-item-action">Complaint Status/Number of Complaints By Staff *</a>
         <a asp-page-handler="@IndexModel.ComplaintsByCounty" class="list-group-item list-group-item-action">Complaint Status/Number of Complaints By County *</a>
         <a asp-page-handler="@IndexModel.DaysToClosureByOffice" class="list-group-item list-group-item-action">Days to Closure By Office *</a>
@@ -148,7 +148,7 @@ else
                             @if (Model.ShowRecentAction)
                             {
                                 <th scope="col">Most Recent Action Date</th>
-                                <th scope="col" class="text-end">Days Since Last Action</th>
+                                <th scope="col" class="text-end">Days Since Most Recent Action</th>
                             }
                         </tr>
                         </thead>
@@ -173,8 +173,8 @@ else
                                 }
                                 @if (Model.ShowRecentAction)
                                 {
-                                    <td>@Html.DisplayFor(_ => complaint.LastActionDate, DisplayTemplate.ShortDateOrNone)</td>
-                                    <td class="text-end">@complaint.DaysSinceLastAction?.ToString("N0")</td>
+                                    <td>@Html.DisplayFor(_ => complaint.MostRecentActionDate, DisplayTemplate.ShortDateOrNone)</td>
+                                    <td class="text-end">@complaint.DaysSinceMostRecentAction?.ToString("N0")</td>
                                 }
                             </tr>
                         }
