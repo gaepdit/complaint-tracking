@@ -11,15 +11,12 @@
     <h1>Status Reports</h1>
     <div class="list-group mb-2">
         <a asp-page-handler="@IndexModel.DaysSinceMostRecentAction" class="list-group-item list-group-item-action">Days Since Most Recent Action</a>
-        <a asp-page-handler="@IndexModel.ComplaintsByStaff" class="list-group-item list-group-item-action">Complaint Status/Number of Complaints By Staff *</a>
-        <a asp-page-handler="@IndexModel.ComplaintsByCounty" class="list-group-item list-group-item-action">Complaint Status/Number of Complaints By County *</a>
-        <a asp-page-handler="@IndexModel.DaysToClosureByOffice" class="list-group-item list-group-item-action">Days to Closure By Office *</a>
+        <a asp-page-handler="@IndexModel.ComplaintsByStaff" class="list-group-item list-group-item-action">Complaint Status/Number of Complaints By Staff</a>
+        <a asp-page-handler="@IndexModel.ComplaintsByCounty" class="list-group-item list-group-item-action">Complaint Status/Number of Complaints By County</a>
+        <a asp-page-handler="@IndexModel.DaysToClosureByOffice" class="list-group-item list-group-item-action">Days to Closure By Office</a>
         <a asp-page-handler="@IndexModel.DaysToClosureByStaff" class="list-group-item list-group-item-action">Days to Closure By Staff</a>
-        <a asp-page-handler="@IndexModel.DaysToFollowupByStaff" class="list-group-item list-group-item-action">Days to Follow-up Action By Staff *</a>
+        <a asp-page-handler="@IndexModel.DaysToFollowupByStaff" class="list-group-item list-group-item-action">Days to Follow-up Action By Staff</a>
     </div>
-    <p class="mb-4">
-        <em>* Report may load slowly.</em>
-    </p>
 
     <h1>Error Reports</h1>
     <div class="list-group mb-4">

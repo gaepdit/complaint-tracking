@@ -61,6 +61,16 @@ public class IndexModel(
 
     // === Reports ===
 
+    public async Task OnGetComplaintsAssignedToInactiveUsersAsync([FromQuery] Guid? office, CancellationToken token)
+    {
+        CurrentReport = ComplaintsAssignedToInactiveUsers;
+        ShowComplaintsList = true;
+
+        await PopulateFormDataAsync(office, token);
+
+        ComplaintsList = await reportingService.ComplaintsAssignedToInactiveUsersAsync(Office!.Value);
+    }
+
     public async Task OnGetDaysSinceMostRecentActionAsync([FromQuery] Guid? office, [FromQuery] int? threshold,
         CancellationToken token)
     {
@@ -72,16 +82,6 @@ public class IndexModel(
         await PopulateFormDataAsync(office, threshold, token);
 
         StaffList = await reportingService.DaysSinceMostRecentActionAsync(Office!.Value, Threshold!.Value);
-    }
-
-    public async Task OnGetComplaintsAssignedToInactiveUsersAsync([FromQuery] Guid? office, CancellationToken token)
-    {
-        CurrentReport = ComplaintsAssignedToInactiveUsers;
-        ShowComplaintsList = true;
-
-        await PopulateFormDataAsync(office, token);
-
-        ComplaintsList = await reportingService.ComplaintsAssignedToInactiveUsersAsync(Office!.Value);
     }
 
     public async Task OnGetDaysToClosureByStaffAsync([FromQuery] Guid? office, DateOnly? from, DateOnly? to,
@@ -145,26 +145,26 @@ public class IndexModel(
 
     // Reports metadata
     public const string Menu = nameof(Menu);
-    public const string DaysSinceMostRecentAction = nameof(DaysSinceMostRecentAction);
-    public const string ComplaintsByStaff = nameof(ComplaintsByStaff);
+    public const string ComplaintsAssignedToInactiveUsers = nameof(ComplaintsAssignedToInactiveUsers);
     public const string ComplaintsByCounty = nameof(ComplaintsByCounty);
+    public const string ComplaintsByStaff = nameof(ComplaintsByStaff);
+    public const string DaysSinceMostRecentAction = nameof(DaysSinceMostRecentAction);
     public const string DaysToClosureByOffice = nameof(DaysToClosureByOffice);
     public const string DaysToClosureByStaff = nameof(DaysToClosureByStaff);
     public const string DaysToFollowupByStaff = nameof(DaysToFollowupByStaff);
-    public const string ComplaintsAssignedToInactiveUsers = nameof(ComplaintsAssignedToInactiveUsers);
-    public const string UsersAssignedToInactiveOffices = nameof(UsersAssignedToInactiveOffices);
     public const string UnconfirmedUserAccounts = nameof(UnconfirmedUserAccounts);
+    public const string UsersAssignedToInactiveOffices = nameof(UsersAssignedToInactiveOffices);
 
     public Dictionary<string, string> ReportTitle { get; } = new()
     {
-        { DaysSinceMostRecentAction, "Days Since Most Recent Action" },
-        { ComplaintsByStaff, "" },
+        { ComplaintsAssignedToInactiveUsers, "Open complaints assigned to inactive users" },
         { ComplaintsByCounty, "" },
+        { ComplaintsByStaff, "" },
+        { DaysSinceMostRecentAction, "Days Since Most Recent Action" },
         { DaysToClosureByOffice, "" },
         { DaysToClosureByStaff, "Days To Closure By Staff" },
         { DaysToFollowupByStaff, "Days To Follow-up By Staff" },
-        { ComplaintsAssignedToInactiveUsers, "Open complaints assigned to inactive users" },
-        { UsersAssignedToInactiveOffices, "" },
         { UnconfirmedUserAccounts, "" },
+        { UsersAssignedToInactiveOffices, "" },
     };
 }
