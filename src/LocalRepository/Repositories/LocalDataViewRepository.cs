@@ -28,6 +28,9 @@ public sealed class LocalDataViewRepository : IDataViewRepository
     public Task<List<ComplaintReportView>> ComplaintsAssignedToInactiveUsersAsync(Guid officeId) =>
         Task.FromResult(DataViewsTestData.GetComplaintReportData());
 
+    public Task<List<StaffReportView>> ComplaintsByStaffAsync(Guid officeId, DateOnly dateFrom, DateOnly dateTo) => 
+        Task.FromResult(DataViewsTestData.GetStaffReportData());
+
     public Task<List<StaffReportView>> DaysSinceMostRecentActionAsync(Guid officeId, int threshold) =>
         Task.FromResult(DataViewsTestData.GetStaffReportData());
 

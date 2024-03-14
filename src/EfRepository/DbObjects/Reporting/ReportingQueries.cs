@@ -3,6 +3,28 @@
 public static class ReportingQueries
 {
     // language=sql
+    public const string ComplaintsByStaff =
+        """
+        select c.CurrentOwnerId                    as Id,
+               c.CurrentOfficeId                   as OfficeId,
+               u.GivenName                         as GivenName,
+               u.FamilyName                        as FamilyName,
+               c.Id                                as Id,
+               c.ComplaintCounty                   as ComplaintCounty,
+               c.SourceFacilityName                as SourceFacilityName,
+               convert(date, c.ReceivedDate)       as ReceivedDate,
+               c.Status                            as Status
+        from dbo.Complaints c
+            inner join dbo.AspNetUsers u
+            on c.CurrentOwnerId = u.Id
+        where c.IsDeleted = convert(bit, 0)
+          and c.CurrentOwnerId is not null
+          and c.CurrentOfficeId = @officeId
+          and convert(date, c.ReceivedDate) between @dateFrom and @dateTo
+        order by u.FamilyName, u.GivenName, c.ReceivedDate
+        """;
+
+    // language=sql
     public const string DaysSinceMostRecentAction =
         """
         select c.CurrentOwnerId                                as Id,
@@ -33,6 +55,7 @@ public static class ReportingQueries
           and iif(a.MostRecentActionDate is null, datediff(day, c.ReceivedDate, getdate()),
                   datediff(day, a.MostRecentActionDate, getdate())) >= @threshold
           and c.CurrentOfficeId = @officeId
+        order by u.FamilyName, u.GivenName, c.Id
         """;
 
     // language=sql
@@ -68,6 +91,7 @@ public static class ReportingQueries
                c.ComplaintCounty                    as ComplaintCounty,
                c.SourceFacilityName                 as SourceFacilityName,
                convert(date, c.ReceivedDate)        as ReceivedDate,
+               c.Status                             as Status,
                convert(date, c.ComplaintClosedDate) as ComplaintClosedDate
         from dbo.Complaints c
             inner join dbo.AspNetUsers u
@@ -78,6 +102,7 @@ public static class ReportingQueries
           and c.CurrentOfficeId = @officeId
           and (@includeAdminClosed = convert(bit, 1) or c.Status = 'Closed')
           and convert(date, c.ComplaintClosedDate) between @dateFrom and @dateTo
+        order by u.FamilyName, u.GivenName, c.ComplaintClosedDate
         """;
 
     // language=sql
@@ -91,6 +116,7 @@ public static class ReportingQueries
                c.ComplaintCounty                   as ComplaintCounty,
                c.SourceFacilityName                as SourceFacilityName,
                convert(date, c.ReceivedDate)       as ReceivedDate,
+               c.Status                            as Status,
                convert(date, a.EarliestActionDate) as EarliestActionDate
         from dbo.Complaints c
             inner join dbo.AspNetUsers u
@@ -106,5 +132,6 @@ public static class ReportingQueries
           and c.CurrentOwnerId is not null
           and c.CurrentOfficeId = @officeId
           and convert(date, a.EarliestActionDate) between @dateFrom and @dateTo
+        order by u.FamilyName, u.GivenName, c.Id
         """;
 }

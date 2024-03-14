@@ -38,6 +38,19 @@ public sealed class DataViewRepository(AppDbContext context, IDbConnectionFactor
                 SourceFacilityName = complaint.SourceFacilityName,
             }).ToListAsync();
 
+    public async Task<List<StaffReportView>> ComplaintsByStaffAsync(Guid officeId, DateOnly dateFrom, DateOnly dateTo)
+    {
+        var midnight = new TimeOnly(0, 0, 0); // Only needed until Dapper supports DateOnly.
+        return await QueryStaffReportAsync(ReportingQueries.ComplaintsByStaff,
+            new
+            {
+                officeId,
+                dateFrom = dateFrom.ToDateTime(midnight),
+                dateTo = dateTo.ToDateTime(midnight),
+            }).ConfigureAwait(false);
+    }
+
+
     public async Task<List<StaffReportView>> DaysSinceMostRecentActionAsync(Guid officeId, int threshold) =>
         await QueryStaffReportAsync(ReportingQueries.DaysSinceMostRecentAction,
             new { officeId, threshold }).ConfigureAwait(false);

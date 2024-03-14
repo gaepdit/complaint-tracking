@@ -80,6 +80,20 @@ public class IndexModel(
         ComplaintsReport = await reportingService.ComplaintsAssignedToInactiveUsersAsync(Office!.Value);
     }
 
+    public async Task OnGetComplaintsByStaffAsync(Guid? office, DateOnly? from, DateOnly? to,
+        CancellationToken token)
+    {
+        CurrentReport = ComplaintsByStaff;
+        ShowDateRange = true;
+        ShowOfficeSelect = true;
+        ShowStaffReport = true;
+
+        PopulateDateRangeForm(from, to);
+        await PopulateOfficeFormAsync(office, token);
+
+        StaffReport = await reportingService.ComplaintsByStaffAsync(Office!.Value, From!.Value, To!.Value);
+    }
+
     public async Task OnGetDaysSinceMostRecentActionAsync(Guid? office, int? threshold, CancellationToken token)
     {
         CurrentReport = DaysSinceMostRecentAction;
@@ -187,7 +201,7 @@ public class IndexModel(
     {
         { ComplaintsAssignedToInactiveUsers, "Open complaints assigned to inactive users" },
         { ComplaintsByCounty, "" },
-        { ComplaintsByStaff, "" },
+        { ComplaintsByStaff, "All Complaints By Staff" },
         { DaysSinceMostRecentAction, "Days Since Most Recent Action" },
         { DaysToClosureByOffice, "Days To Closure By Office" },
         { DaysToClosureByStaff, "Days To Closure By Staff" },
