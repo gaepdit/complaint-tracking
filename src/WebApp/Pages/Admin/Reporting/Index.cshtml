@@ -101,7 +101,7 @@ else
                     <em>No staff found.</em>
                 </p>
             }
-            else if (!Model.StaffReport.Any(staff => staff.Complaints.Count > 0))
+            else if (!Model.StaffReport.Exists(staff => staff.Complaints.Count > 0))
             {
                 <p>
                     <em>No staff found with complaints over the threshold.</em>
