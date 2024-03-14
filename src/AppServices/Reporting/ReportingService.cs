@@ -5,17 +5,20 @@ namespace Cts.AppServices.Reporting;
 
 public sealed class ReportingService(IDataViewRepository dataViewRepository) : IReportingService
 {
-    public Task<List<StaffViewWithComplaints>> DaysSinceMostRecentActionAsync(Guid officeId, int threshold) =>
-        dataViewRepository.DaysSinceMostRecentActionAsync(officeId, threshold);
-
-    public Task<List<ComplaintView>> ComplaintsAssignedToInactiveUsersAsync(Guid officeId) =>
+    public Task<List<ComplaintReportView>> ComplaintsAssignedToInactiveUsersAsync(Guid officeId) =>
         dataViewRepository.ComplaintsAssignedToInactiveUsersAsync(officeId);
 
-    public Task<List<StaffViewWithComplaints>> DaysToClosureByStaffAsync(Guid officeId, DateOnly dateFrom,
+    public Task<List<StaffReportView>> DaysSinceMostRecentActionAsync(Guid officeId, int threshold) =>
+        dataViewRepository.DaysSinceMostRecentActionAsync(officeId, threshold);
+
+    public Task<List<OfficeReportView>> DaysToClosureByOfficeAsync(DateOnly dateFrom, DateOnly dateTo,
+        bool includeAdminClosed) => dataViewRepository.DaysToClosureByOfficeAsync(dateFrom, dateTo, includeAdminClosed);
+
+    public Task<List<StaffReportView>> DaysToClosureByStaffAsync(Guid officeId, DateOnly dateFrom,
         DateOnly dateTo, bool includeAdminClosed) =>
         dataViewRepository.DaysToClosureByStaffAsync(officeId, dateFrom, dateTo, includeAdminClosed);
 
-    public Task<List<StaffViewWithComplaints>> DaysToFollowupByStaffAsync(Guid office, DateOnly dateFrom,
+    public Task<List<StaffReportView>> DaysToFollowupByStaffAsync(Guid office, DateOnly dateFrom,
         DateOnly dateTo) => dataViewRepository.DaysToFollowupByStaffAsync(office, dateFrom, dateTo);
 
     public void Dispose() => dataViewRepository.Dispose();

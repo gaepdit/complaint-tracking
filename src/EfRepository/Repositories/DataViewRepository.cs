@@ -24,16 +24,12 @@ public sealed class DataViewRepository(AppDbContext context, IDbConnectionFactor
         context.RecordsCountView.OrderBy(recordsCount => recordsCount.Order).ToListAsync(cancellationToken: token);
 
     // Reporting
-    public async Task<List<StaffViewWithComplaints>> DaysSinceMostRecentActionAsync(Guid officeId, int threshold) =>
-        await QueryStaffViewWithComplaintsList(ReportingQueries.DaysSinceMostRecentAction,
-            new { officeId, threshold }).ConfigureAwait(false);
-
-    public Task<List<ComplaintView>> ComplaintsAssignedToInactiveUsersAsync(Guid officeId) =>
+    public Task<List<ComplaintReportView>> ComplaintsAssignedToInactiveUsersAsync(Guid officeId) =>
         context.Complaints.AsNoTracking()
             .Where(c => !c.ComplaintClosed && !c.IsDeleted && c.CurrentOffice.Id == officeId &&
                 c.CurrentOwner != null && !c.CurrentOwner.Active)
             .OrderByDescending(complaint => complaint.ReceivedDate)
-            .Select(complaint => new ComplaintView
+            .Select(complaint => new ComplaintReportView
             {
                 Id = complaint.Id,
                 ReceivedDate = complaint.ReceivedDate,
@@ -42,12 +38,31 @@ public sealed class DataViewRepository(AppDbContext context, IDbConnectionFactor
                 SourceFacilityName = complaint.SourceFacilityName,
             }).ToListAsync();
 
+    public async Task<List<StaffReportView>> DaysSinceMostRecentActionAsync(Guid officeId, int threshold) =>
+        await QueryStaffReportAsync(ReportingQueries.DaysSinceMostRecentAction,
+            new { officeId, threshold }).ConfigureAwait(false);
 
-    public async Task<List<StaffViewWithComplaints>> DaysToClosureByStaffAsync(Guid officeId, DateOnly dateFrom,
+    public async Task<List<OfficeReportView>> DaysToClosureByOfficeAsync(DateOnly dateFrom, DateOnly dateTo,
+        bool includeAdminClosed)
+    {
+        var midnight = new TimeOnly(0, 0, 0); // Only needed until Dapper supports DateOnly.
+        var parameters = new
+        {
+            dateFrom = dateFrom.ToDateTime(midnight),
+            dateTo = dateTo.ToDateTime(midnight),
+            includeAdminClosed,
+        };
+        using var db = dbConnection.Create();
+        return (await db.QueryAsync<OfficeReportView>(
+            sql: ReportingQueries.DaysToClosureByOffice, param: parameters,
+            commandType: CommandType.Text).ConfigureAwait(false)).ToList();
+    }
+
+    public async Task<List<StaffReportView>> DaysToClosureByStaffAsync(Guid officeId, DateOnly dateFrom,
         DateOnly dateTo, bool includeAdminClosed)
     {
         var midnight = new TimeOnly(0, 0, 0); // Only needed until Dapper supports DateOnly.
-        return await QueryStaffViewWithComplaintsList(ReportingQueries.DaysToClosureByStaff,
+        return await QueryStaffReportAsync(ReportingQueries.DaysToClosureByStaff,
             new
             {
                 officeId,
@@ -57,11 +72,11 @@ public sealed class DataViewRepository(AppDbContext context, IDbConnectionFactor
             }).ConfigureAwait(false);
     }
 
-    public async Task<List<StaffViewWithComplaints>> DaysToFollowupByStaffAsync(Guid officeId, DateOnly dateFrom,
+    public async Task<List<StaffReportView>> DaysToFollowupByStaffAsync(Guid officeId, DateOnly dateFrom,
         DateOnly dateTo)
     {
         var midnight = new TimeOnly(0, 0, 0); // Only needed until Dapper supports DateOnly.
-        return await QueryStaffViewWithComplaintsList(ReportingQueries.DaysToFollowupByStaff,
+        return await QueryStaffReportAsync(ReportingQueries.DaysToFollowupByStaff,
             new
             {
                 officeId,
@@ -70,18 +85,18 @@ public sealed class DataViewRepository(AppDbContext context, IDbConnectionFactor
             }).ConfigureAwait(false);
     }
 
-    private async Task<List<StaffViewWithComplaints>> QueryStaffViewWithComplaintsList(string sql, object parameters)
+    private async Task<List<StaffReportView>> QueryStaffReportAsync(string sql, object parameters)
     {
-        var staffDictionary = new Dictionary<string, StaffViewWithComplaints>();
+        var staffDictionary = new Dictionary<string, StaffReportView>();
 
         using var db = dbConnection.Create();
-        _ = await db.QueryAsync<StaffViewWithComplaints, ComplaintView, StaffViewWithComplaints>(
+        _ = await db.QueryAsync<StaffReportView, ComplaintReportView, StaffReportView>(
             sql: sql, map: MapRecord, param: parameters,
             commandType: CommandType.Text).ConfigureAwait(false);
 
         return staffDictionary.Values.ToList();
 
-        StaffViewWithComplaints MapRecord(StaffViewWithComplaints staff, ComplaintView complaint)
+        StaffReportView MapRecord(StaffReportView staff, ComplaintReportView complaint)
         {
             if (!staffDictionary.TryGetValue(staff.Id, out var staffView))
             {

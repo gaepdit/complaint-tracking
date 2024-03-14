@@ -5,8 +5,8 @@ namespace Cts.TestData.DataViews;
 
 internal static class DataViewsTestData
 {
-    public static List<StaffViewWithComplaints> GetStaffViewWithComplaintsData() =>
-        UserData.GetUsers.Select(user => new StaffViewWithComplaints
+    public static List<StaffReportView> GetStaffReportData() =>
+        UserData.GetUsers.Select(user => new StaffReportView
         {
             Id = user.Id,
             OfficeId = user.Office?.Id ?? Guid.Empty,
@@ -14,7 +14,7 @@ internal static class DataViewsTestData
             FamilyName = user.FamilyName,
             Complaints = ComplaintData.GetComplaints
                 .Where(complaint => complaint is { IsDeleted: false, ComplaintClosed: true })
-                .Select(complaint => new ComplaintView
+                .Select(complaint => new ComplaintReportView
                 {
                     Id = complaint.Id,
                     ReceivedDate = complaint.ReceivedDate.Date,
@@ -28,8 +28,8 @@ internal static class DataViewsTestData
                 }).ToList(),
         }).ToList();
 
-    public static List<ComplaintView> GetComplaintViewData() =>
-        ComplaintData.GetComplaints.Select(complaint => new ComplaintView
+    public static List<ComplaintReportView> GetComplaintReportData() =>
+        ComplaintData.GetComplaints.Select(complaint => new ComplaintReportView
         {
             Id = complaint.Id,
             ReceivedDate = complaint.ReceivedDate,
@@ -40,5 +40,13 @@ internal static class DataViewsTestData
             ComplaintClosedDate = complaint.ComplaintClosedDate,
             DaysSinceMostRecentAction = DateTimeOffset.Now.Date.Subtract(complaint.EnteredDate.Date).Days,
             EarliestActionDate = DateTimeOffset.Now.AddDays(-4),
+        }).ToList();
+
+    public static List<OfficeReportView> GetOfficeReportData() =>
+        OfficeData.GetOffices.Select(office => new OfficeReportView
+        {
+            OfficeId = office.Id,
+            TotalComplaintsCount = 55,
+            AverageDaysToClosure = 12.3,
         }).ToList();
 }

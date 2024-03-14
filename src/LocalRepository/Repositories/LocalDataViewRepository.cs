@@ -25,18 +25,20 @@ public sealed class LocalDataViewRepository : IDataViewRepository
         ]);
 
     // Reporting
-    public Task<List<StaffViewWithComplaints>> DaysSinceMostRecentActionAsync(Guid officeId, int threshold) =>
-        Task.FromResult(DataViewsTestData.GetStaffViewWithComplaintsData());
+    public Task<List<ComplaintReportView>> ComplaintsAssignedToInactiveUsersAsync(Guid officeId) =>
+        Task.FromResult(DataViewsTestData.GetComplaintReportData());
 
-    public Task<List<ComplaintView>> ComplaintsAssignedToInactiveUsersAsync(Guid officeId) =>
-        Task.FromResult(DataViewsTestData.GetComplaintViewData());
+    public Task<List<StaffReportView>> DaysSinceMostRecentActionAsync(Guid officeId, int threshold) =>
+        Task.FromResult(DataViewsTestData.GetStaffReportData());
 
-    public Task<List<StaffViewWithComplaints>> DaysToClosureByStaffAsync(Guid officeId, DateOnly dateFrom,
-        DateOnly dateTo, bool includeAdminClosed) =>
-        Task.FromResult(DataViewsTestData.GetStaffViewWithComplaintsData());
+    public Task<List<OfficeReportView>> DaysToClosureByOfficeAsync(DateOnly dateFrom, DateOnly dateTo,
+        bool includeAdminClosed) => Task.FromResult(DataViewsTestData.GetOfficeReportData());
 
-    public Task<List<StaffViewWithComplaints>> DaysToFollowupByStaffAsync(Guid officeId, DateOnly dateFrom,
-        DateOnly dateTo) => Task.FromResult(DataViewsTestData.GetStaffViewWithComplaintsData());
+    public Task<List<StaffReportView>> DaysToClosureByStaffAsync(Guid officeId, DateOnly dateFrom,
+        DateOnly dateTo, bool includeAdminClosed) => Task.FromResult(DataViewsTestData.GetStaffReportData());
+
+    public Task<List<StaffReportView>> DaysToFollowupByStaffAsync(Guid officeId, DateOnly dateFrom,
+        DateOnly dateTo) => Task.FromResult(DataViewsTestData.GetStaffReportData());
 
     void IDisposable.Dispose()
     {

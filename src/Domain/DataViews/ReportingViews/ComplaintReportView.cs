@@ -2,7 +2,7 @@ using Cts.Domain.Entities.Complaints;
 
 namespace Cts.Domain.DataViews.ReportingViews;
 
-public class ComplaintView
+public class ComplaintReportView
 {
     public int Id { get; init; }
     public string? ComplaintCounty { get; init; }

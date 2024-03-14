@@ -17,13 +17,13 @@ public static class ReportingQueries
                a.MostRecentActionDate                          as MostRecentActionDate,
                iif(a.MostRecentActionDate is null, datediff(day, c.ReceivedDate, getdate()),
                    datediff(day, a.MostRecentActionDate, getdate())) as DaysSinceMostRecentAction
-        from Complaints c
-            inner join AspNetUsers u
+        from dbo.Complaints c
+            inner join dbo.AspNetUsers u
             on c.CurrentOwnerId = u.Id
             inner join (select c.Id,
                                convert(date, max(a.ActionDate)) as MostRecentActionDate
-                        from Complaints c
-                            left join ComplaintActions a
+                        from dbo.Complaints c
+                            left join dbo.ComplaintActions a
                             on c.Id = a.ComplaintId
                         group by c.Id) a
             on c.Id = a.Id
@@ -33,6 +33,28 @@ public static class ReportingQueries
           and iif(a.MostRecentActionDate is null, datediff(day, c.ReceivedDate, getdate()),
                   datediff(day, a.MostRecentActionDate, getdate())) >= @threshold
           and c.CurrentOfficeId = @officeId
+        """;
+
+    // language=sql
+    public const string DaysToClosureByOffice =
+        """
+        select c.CurrentOfficeId as OfficeId,
+               o.Name            as OfficeName,
+               count(*)          as TotalComplaintsCount,
+               sum(datediff(d, c.ReceivedDate, c.ComplaintClosedDate))
+                                 as TotalDaysToClosure,
+               avg(convert(decimal, datediff(d, c.ReceivedDate, c.ComplaintClosedDate)))
+                                 as AverageDaysToClosure
+        from dbo.Complaints c
+            inner join dbo.Offices o
+            on o.Id = c.CurrentOfficeId
+        where c.ComplaintClosed = convert(bit, 1)
+          and c.ComplaintClosedDate is not null
+          and c.IsDeleted = convert(bit, 0)
+          and (@includeAdminClosed = convert(bit, 1) or c.Status = 'Closed')
+          and convert(date, c.ComplaintClosedDate) between @dateFrom and @dateTo
+        group by c.CurrentOfficeId, o.Name
+        order by o.Name
         """;
 
     // language=sql
@@ -47,8 +69,8 @@ public static class ReportingQueries
                c.SourceFacilityName                 as SourceFacilityName,
                convert(date, c.ReceivedDate)        as ReceivedDate,
                convert(date, c.ComplaintClosedDate) as ComplaintClosedDate
-        from Complaints c
-            inner join AspNetUsers u
+        from dbo.Complaints c
+            inner join dbo.AspNetUsers u
             on c.CurrentOwnerId = u.Id
         where c.IsDeleted = convert(bit, 0)
           and c.ComplaintClosed = convert(bit, 1)
@@ -70,13 +92,13 @@ public static class ReportingQueries
                c.SourceFacilityName                as SourceFacilityName,
                convert(date, c.ReceivedDate)       as ReceivedDate,
                convert(date, a.EarliestActionDate) as EarliestActionDate
-        from Complaints c
-            inner join AspNetUsers u
+        from dbo.Complaints c
+            inner join dbo.AspNetUsers u
             on c.CurrentOwnerId = u.Id
             inner join (select c1.Id,
                                convert(date, min(a1.ActionDate)) as EarliestActionDate
-                        from Complaints c1
-                            inner join ComplaintActions a1
+                        from dbo.Complaints c1
+                            inner join dbo.ComplaintActions a1
                             on c1.Id = a1.ComplaintId
                         group by c1.Id) a
             on c.Id = a.Id

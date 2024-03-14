@@ -2,13 +2,13 @@
 
 namespace Cts.Domain.DataViews.ReportingViews;
 
-public class StaffViewWithComplaints
+public class StaffReportView
 {
     public string Id { get; init; } = string.Empty;
     public Guid OfficeId { get; init; }
     public string GivenName { get; init; } = string.Empty;
     public string FamilyName { get; init; } = string.Empty;
-    public List<ComplaintView> Complaints { get; init; } = [];
+    public List<ComplaintReportView> Complaints { get; init; } = [];
 
     // Calculated properties
     public string SortableFullName => new[] { FamilyName, GivenName }.ConcatWithSeparator(", ");

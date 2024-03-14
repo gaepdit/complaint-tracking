@@ -22,11 +22,10 @@ public class IndexModel(
     // Form display properties
     public bool ShowThresholdSelect { get; private set; }
     public bool ShowDateRange { get; private set; }
+    public bool ShowOfficeSelect { get; private set; }
     public bool ShowAdminClosed { get; private set; }
 
-    // Results display properties
-    public bool ShowStaffList { get; private set; }
-    public bool ShowComplaintsList { get; private set; }
+    // Table column display properties
     public bool ShowRecentAction { get; private set; }
     public bool ShowDaysToClosure { get; private set; }
     public bool ShowDaysToFollowup { get; private set; }
@@ -49,8 +48,17 @@ public class IndexModel(
     public bool IncludeAdminClosed { get; set; }
 
     // Results data
-    public List<StaffViewWithComplaints> StaffList { get; private set; } = [];
-    public List<ComplaintView> ComplaintsList { get; private set; } = [];
+    public bool ShowStaffReport { get; private set; }
+    public List<StaffReportView> StaffReport { get; private set; } = [];
+    public bool ShowComplaintsReport { get; private set; }
+    public List<ComplaintReportView> ComplaintsReport { get; private set; } = [];
+    public bool ShowOfficeReport { get; private set; }
+    public List<OfficeReportView> OfficeReport { get; private set; } = [];
+    public int? OfficeReportsTotalComplaints => OfficeReport.Sum(view => view.TotalComplaintsCount);
+
+    public double? OfficeReportsTotalAvgDaysToClosure => OfficeReportsTotalComplaints == null
+        ? null
+        : OfficeReport.Sum(view => view.TotalDaysToClosure) / (double)OfficeReportsTotalComplaints;
 
     // Menu page
     public async Task OnGetAsync()
@@ -61,53 +69,76 @@ public class IndexModel(
 
     // === Reports ===
 
-    public async Task OnGetComplaintsAssignedToInactiveUsersAsync([FromQuery] Guid? office, CancellationToken token)
+    public async Task OnGetComplaintsAssignedToInactiveUsersAsync(Guid? office, CancellationToken token)
     {
         CurrentReport = ComplaintsAssignedToInactiveUsers;
-        ShowComplaintsList = true;
+        ShowOfficeSelect = true;
+        ShowComplaintsReport = true;
 
-        await PopulateFormDataAsync(office, token);
+        await PopulateOfficeFormAsync(office, token);
 
-        ComplaintsList = await reportingService.ComplaintsAssignedToInactiveUsersAsync(Office!.Value);
+        ComplaintsReport = await reportingService.ComplaintsAssignedToInactiveUsersAsync(Office!.Value);
     }
 
-    public async Task OnGetDaysSinceMostRecentActionAsync([FromQuery] Guid? office, [FromQuery] int? threshold,
-        CancellationToken token)
+    public async Task OnGetDaysSinceMostRecentActionAsync(Guid? office, int? threshold, CancellationToken token)
     {
         CurrentReport = DaysSinceMostRecentAction;
         ShowThresholdSelect = true;
+        ShowOfficeSelect = true;
         ShowRecentAction = true;
-        ShowStaffList = true;
+        ShowStaffReport = true;
 
-        await PopulateFormDataAsync(office, threshold, token);
+        PopulateThresholdForm(threshold);
+        await PopulateOfficeFormAsync(office, token);
 
-        StaffList = await reportingService.DaysSinceMostRecentActionAsync(Office!.Value, Threshold!.Value);
+        StaffReport = await reportingService.DaysSinceMostRecentActionAsync(Office!.Value, Threshold!.Value);
     }
 
-    public async Task OnGetDaysToClosureByStaffAsync([FromQuery] Guid? office, DateOnly? from, DateOnly? to,
+    public async Task OnGetDaysToClosureByOfficeAsync(DateOnly? from, DateOnly? to, bool? includeAdminClosed,
+        CancellationToken token)
+    {
+        CurrentReport = DaysToClosureByOffice;
+        ShowDateRange = true;
+        ShowAdminClosed = true;
+        ShowOfficeReport = true;
+
+        PopulateAdminClosedForm(includeAdminClosed);
+        PopulateDateRangeForm(from, to);
+
+        OfficeReport = await reportingService.DaysToClosureByOfficeAsync(From!.Value, To!.Value, IncludeAdminClosed);
+    }
+
+    public async Task OnGetDaysToClosureByStaffAsync(Guid? office, DateOnly? from, DateOnly? to,
         bool? includeAdminClosed, CancellationToken token)
     {
         CurrentReport = DaysToClosureByStaff;
         ShowDateRange = true;
+        ShowOfficeSelect = true;
         ShowAdminClosed = true;
         ShowDaysToClosure = true;
-        ShowStaffList = true;
-        IncludeAdminClosed = includeAdminClosed ?? false;
-        await PopulateFormDataAsync(office, from, to, token);
+        ShowStaffReport = true;
 
-        StaffList = await reportingService.DaysToClosureByStaffAsync(Office!.Value, From!.Value, To!.Value,
+        PopulateAdminClosedForm(includeAdminClosed);
+        PopulateDateRangeForm(from, to);
+        await PopulateOfficeFormAsync(office, token);
+
+        StaffReport = await reportingService.DaysToClosureByStaffAsync(Office!.Value, From!.Value, To!.Value,
             IncludeAdminClosed);
     }
 
-    public async Task OnGetDaysToFollowupByStaffAsync([FromQuery] Guid? office, DateOnly? from, DateOnly? to, CancellationToken token)
+    public async Task OnGetDaysToFollowupByStaffAsync(Guid? office, DateOnly? from, DateOnly? to,
+        CancellationToken token)
     {
         CurrentReport = DaysToFollowupByStaff;
         ShowDateRange = true;
+        ShowOfficeSelect = true;
         ShowDaysToFollowup = true;
-        ShowStaffList = true;
-        await PopulateFormDataAsync(office, from, to, token);
+        ShowStaffReport = true;
 
-        StaffList = await reportingService.DaysToFollowupByStaffAsync(Office!.Value, From!.Value, To!.Value);
+        PopulateDateRangeForm(from, to);
+        await PopulateOfficeFormAsync(office, token);
+
+        StaffReport = await reportingService.DaysToFollowupByStaffAsync(Office!.Value, From!.Value, To!.Value);
     }
 
     // Form control data
@@ -119,7 +150,7 @@ public class IndexModel(
         new { Value = "60", Text = "60 days" }, new { Value = "90", Text = "90 days" },
     }, dataValueField: "Value", dataTextField: "Text");
 
-    private async Task PopulateFormDataAsync(Guid? office, CancellationToken token)
+    private async Task PopulateOfficeFormAsync(Guid? office, CancellationToken token)
     {
         OfficeSelectList = (await officeService.GetAsListItemsAsync(token: token)).ToSelectList();
         Office = office ??
@@ -128,19 +159,16 @@ public class IndexModel(
             Guid.Empty;
     }
 
-    private Task PopulateFormDataAsync(Guid? office, int? threshold, CancellationToken token)
-    {
-        Threshold = threshold ?? 30;
-        return PopulateFormDataAsync(office, token);
-    }
+    private void PopulateThresholdForm(int? threshold) => Threshold = threshold ?? 30;
 
-    private Task PopulateFormDataAsync(Guid? office, DateOnly? dateFrom, DateOnly? dateTo, CancellationToken token)
+    private void PopulateAdminClosedForm(bool? includeAdminClosed) => IncludeAdminClosed = includeAdminClosed ?? false;
+
+    private void PopulateDateRangeForm(DateOnly? dateFrom, DateOnly? dateTo)
     {
         var now = DateTime.Now;
         var currentMonth = new DateOnly(now.Year, now.Month, day: 1);
         From = dateFrom ?? currentMonth.AddMonths(-1);
         To = dateTo ?? currentMonth.AddDays(-1);
-        return PopulateFormDataAsync(office, token);
     }
 
     // Reports metadata
@@ -161,7 +189,7 @@ public class IndexModel(
         { ComplaintsByCounty, "" },
         { ComplaintsByStaff, "" },
         { DaysSinceMostRecentAction, "Days Since Most Recent Action" },
-        { DaysToClosureByOffice, "" },
+        { DaysToClosureByOffice, "Days To Closure By Office" },
         { DaysToClosureByStaff, "Days To Closure By Staff" },
         { DaysToFollowupByStaff, "Days To Follow-up By Staff" },
         { UnconfirmedUserAccounts, "" },

@@ -12,12 +12,15 @@ public interface IDataViewRepository : IDisposable, IAsyncDisposable
     Task<List<RecordsCount>> RecordsCountAsync(CancellationToken token);
 
     // Reporting
-    Task<List<StaffViewWithComplaints>> DaysSinceMostRecentActionAsync(Guid officeId, int threshold);
+    Task<List<ComplaintReportView>> ComplaintsAssignedToInactiveUsersAsync(Guid officeId);
 
-    Task<List<ComplaintView>> ComplaintsAssignedToInactiveUsersAsync(Guid officeId);
+    Task<List<StaffReportView>> DaysSinceMostRecentActionAsync(Guid officeId, int threshold);
 
-    Task<List<StaffViewWithComplaints>> DaysToClosureByStaffAsync(Guid officeId, DateOnly dateFrom, DateOnly dateTo,
+    Task<List<OfficeReportView>> DaysToClosureByOfficeAsync(DateOnly dateFrom, DateOnly dateTo,
         bool includeAdminClosed);
 
-    Task<List<StaffViewWithComplaints>> DaysToFollowupByStaffAsync(Guid officeId, DateOnly dateFrom, DateOnly dateTo);
+    Task<List<StaffReportView>> DaysToClosureByStaffAsync(Guid officeId, DateOnly dateFrom, DateOnly dateTo,
+        bool includeAdminClosed);
+
+    Task<List<StaffReportView>> DaysToFollowupByStaffAsync(Guid officeId, DateOnly dateFrom, DateOnly dateTo);
 }

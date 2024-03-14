@@ -4,12 +4,14 @@ namespace Cts.AppServices.Reporting;
 
 public interface IReportingService : IDisposable, IAsyncDisposable
 {
-    Task<List<StaffViewWithComplaints>> DaysSinceMostRecentActionAsync(Guid officeId, int threshold);
+    Task<List<ComplaintReportView>> ComplaintsAssignedToInactiveUsersAsync(Guid officeId);
+    Task<List<StaffReportView>> DaysSinceMostRecentActionAsync(Guid officeId, int threshold);
 
-    Task<List<ComplaintView>> ComplaintsAssignedToInactiveUsersAsync(Guid officeId);
-
-    Task<List<StaffViewWithComplaints>> DaysToClosureByStaffAsync(Guid officeId, DateOnly dateFrom, DateOnly dateTo,
+    Task<List<OfficeReportView>> DaysToClosureByOfficeAsync(DateOnly dateFrom, DateOnly dateTo,
         bool includeAdminClosed);
 
-    Task<List<StaffViewWithComplaints>> DaysToFollowupByStaffAsync(Guid office, DateOnly dateFrom, DateOnly dateTo);
+    Task<List<StaffReportView>> DaysToClosureByStaffAsync(Guid officeId, DateOnly dateFrom, DateOnly dateTo,
+        bool includeAdminClosed);
+
+    Task<List<StaffReportView>> DaysToFollowupByStaffAsync(Guid office, DateOnly dateFrom, DateOnly dateTo);
 }
