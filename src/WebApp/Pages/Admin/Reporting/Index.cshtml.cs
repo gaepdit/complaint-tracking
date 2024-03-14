@@ -188,25 +188,19 @@ public class IndexModel(
     // Reports metadata
     public const string Menu = nameof(Menu);
     public const string ComplaintsAssignedToInactiveUsers = nameof(ComplaintsAssignedToInactiveUsers);
-    public const string ComplaintsByCounty = nameof(ComplaintsByCounty);
     public const string ComplaintsByStaff = nameof(ComplaintsByStaff);
     public const string DaysSinceMostRecentAction = nameof(DaysSinceMostRecentAction);
     public const string DaysToClosureByOffice = nameof(DaysToClosureByOffice);
     public const string DaysToClosureByStaff = nameof(DaysToClosureByStaff);
     public const string DaysToFollowupByStaff = nameof(DaysToFollowupByStaff);
-    public const string UnconfirmedUserAccounts = nameof(UnconfirmedUserAccounts);
-    public const string UsersAssignedToInactiveOffices = nameof(UsersAssignedToInactiveOffices);
 
     public Dictionary<string, string> ReportTitle { get; } = new()
     {
         { ComplaintsAssignedToInactiveUsers, "Open complaints assigned to inactive users" },
-        { ComplaintsByCounty, "" },
         { ComplaintsByStaff, "All Complaints By Staff" },
         { DaysSinceMostRecentAction, "Days Since Most Recent Action" },
         { DaysToClosureByOffice, "Days To Closure By Office" },
         { DaysToClosureByStaff, "Days To Closure By Staff" },
         { DaysToFollowupByStaff, "Days To Follow-up By Staff" },
-        { UnconfirmedUserAccounts, "" },
-        { UsersAssignedToInactiveOffices, "" },
     };
 }
