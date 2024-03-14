@@ -43,6 +43,19 @@ public class SearchSpec
     }
 
     [Test]
+    public async Task NotAcceptedSpec_ReturnsFilteredList()
+    {
+        var spec = new ComplaintSearchDto { Status = SearchComplaintStatus.NotAccepted };
+        var predicate = ComplaintFilters.SearchPredicate(spec);
+
+        var results = await _repository.GetListAsync(predicate);
+
+        var expected = _repository.Items.Where(e => e is
+            { IsDeleted: false, ComplaintClosed: false, CurrentOwner: not null, CurrentOwnerAcceptedDate: null });
+        results.Should().BeEquivalentTo(expected);
+    }
+
+    [Test]
     public async Task DeletedSpec_ReturnsFilteredList()
     {
         var spec = new ComplaintSearchDto { DeletedStatus = SearchDeleteStatus.Deleted };

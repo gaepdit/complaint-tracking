@@ -51,25 +51,31 @@ internal static class ComplaintFilters
         predicate.IsClosed().ExcludeDeleted();
 
     private static Expression<Func<Complaint, bool>> IsClosed(this Expression<Func<Complaint, bool>> predicate) =>
-        predicate.And(e => e.ComplaintClosed);
+        predicate.And(e => e.ComplaintClosed); // Comprises both "Closed" and "AdministrativelyClosed" statuses.
+
+    private static Expression<Func<Complaint, bool>> IsOpen(this Expression<Func<Complaint, bool>> predicate) =>
+        predicate.And(e => !e.ComplaintClosed);
 
     private static Expression<Func<Complaint, bool>> ByStatus(this Expression<Func<Complaint, bool>> predicate,
         SearchComplaintStatus? input) => input switch
     {
+        SearchComplaintStatus.AllOpen =>
+            predicate.IsOpen(),
+        SearchComplaintStatus.AllClosed =>
+            predicate.IsClosed(),
+        SearchComplaintStatus.New =>
+            predicate.And(complaint => complaint.Status == ComplaintStatus.New),
+        SearchComplaintStatus.UnderInvestigation =>
+            predicate.And(complaint => complaint.Status == ComplaintStatus.UnderInvestigation),
+        SearchComplaintStatus.ReviewPending =>
+            predicate.And(complaint => complaint.Status == ComplaintStatus.ReviewPending),
+        SearchComplaintStatus.NotAccepted =>
+            predicate.IsOpen().And(complaint =>
+                complaint.CurrentOwner != null && complaint.CurrentOwnerAcceptedDate == null),
         SearchComplaintStatus.Closed =>
             predicate.And(e => e.Status == ComplaintStatus.Closed),
         SearchComplaintStatus.AdministrativelyClosed =>
             predicate.And(e => e.Status == ComplaintStatus.AdministrativelyClosed),
-        SearchComplaintStatus.AllClosed =>
-            predicate.And(e => e.ComplaintClosed),
-        SearchComplaintStatus.New =>
-            predicate.And(e => e.Status == ComplaintStatus.New),
-        SearchComplaintStatus.ReviewPending =>
-            predicate.And(e => e.Status == ComplaintStatus.ReviewPending),
-        SearchComplaintStatus.UnderInvestigation =>
-            predicate.And(e => e.Status == ComplaintStatus.UnderInvestigation),
-        SearchComplaintStatus.AllOpen =>
-            predicate.And(e => !e.ComplaintClosed),
         _ => predicate,
     };
 
