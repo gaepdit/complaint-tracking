@@ -24,19 +24,8 @@ public sealed class DataViewRepository(AppDbContext context, IDbConnectionFactor
         context.RecordsCountView.OrderBy(recordsCount => recordsCount.Order).ToListAsync(cancellationToken: token);
 
     // Reporting
-    public Task<List<ComplaintReportView>> ComplaintsAssignedToInactiveUsersAsync(Guid officeId) =>
-        context.Complaints.AsNoTracking()
-            .Where(c => !c.ComplaintClosed && !c.IsDeleted && c.CurrentOffice.Id == officeId &&
-                c.CurrentOwner != null && !c.CurrentOwner.Active)
-            .OrderByDescending(complaint => complaint.ReceivedDate)
-            .Select(complaint => new ComplaintReportView
-            {
-                Id = complaint.Id,
-                ReceivedDate = complaint.ReceivedDate,
-                Status = complaint.Status,
-                ComplaintCounty = complaint.ComplaintCounty,
-                SourceFacilityName = complaint.SourceFacilityName,
-            }).ToListAsync();
+    public async Task<List<StaffReportView>> ComplaintsAssignedToInactiveUsersAsync() =>
+        await QueryStaffReportAsync(ReportingQueries.ComplaintsAssignedToInactiveUsers, null).ConfigureAwait(false);
 
     public async Task<List<StaffReportView>> ComplaintsByStaffAsync(Guid officeId, DateOnly dateFrom, DateOnly dateTo)
     {
@@ -98,7 +87,7 @@ public sealed class DataViewRepository(AppDbContext context, IDbConnectionFactor
             }).ConfigureAwait(false);
     }
 
-    private async Task<List<StaffReportView>> QueryStaffReportAsync(string sql, object parameters)
+    private async Task<List<StaffReportView>> QueryStaffReportAsync(string sql, object? parameters)
     {
         var staffDictionary = new Dictionary<string, StaffReportView>();
 

@@ -5,8 +5,8 @@ namespace Cts.AppServices.Reporting;
 
 public sealed class ReportingService(IDataViewRepository dataViewRepository) : IReportingService
 {
-    public Task<List<ComplaintReportView>> ComplaintsAssignedToInactiveUsersAsync(Guid officeId) =>
-        dataViewRepository.ComplaintsAssignedToInactiveUsersAsync(officeId);
+    public Task<List<StaffReportView>> ComplaintsAssignedToInactiveUsersAsync() =>
+        dataViewRepository.ComplaintsAssignedToInactiveUsersAsync();
 
     public Task<List<StaffReportView>> ComplaintsByStaffAsync(Guid officeId, DateOnly dateFrom, DateOnly dateTo) => 
         dataViewRepository.ComplaintsByStaffAsync(officeId, dateFrom, dateTo);

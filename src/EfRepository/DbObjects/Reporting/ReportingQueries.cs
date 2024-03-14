@@ -25,6 +25,28 @@ public static class ReportingQueries
         """;
 
     // language=sql
+    public const string ComplaintsAssignedToInactiveUsers =
+        """
+        select c.CurrentOwnerId              as Id,
+               c.CurrentOfficeId             as OfficeId,
+               u.GivenName                   as GivenName,
+               u.FamilyName                  as FamilyName,
+               c.Id                          as Id,
+               c.ComplaintCounty             as ComplaintCounty,
+               c.SourceFacilityName          as SourceFacilityName,
+               convert(date, c.ReceivedDate) as ReceivedDate,
+               c.Status                      as Status
+        from dbo.Complaints c
+            inner join dbo.AspNetUsers u
+            on c.CurrentOwnerId = u.Id
+        where c.IsDeleted = convert(bit, 0)
+          and c.ComplaintClosed = convert(bit, 0)
+          and c.CurrentOwnerId is not null
+          and u.Active = convert(bit, 0)
+        order by u.FamilyName, u.GivenName, c.Id
+        """;
+
+    // language=sql
     public const string DaysSinceMostRecentAction =
         """
         select c.CurrentOwnerId                                as Id,

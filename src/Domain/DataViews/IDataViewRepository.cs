@@ -12,7 +12,7 @@ public interface IDataViewRepository : IDisposable, IAsyncDisposable
     Task<List<RecordsCount>> RecordsCountAsync(CancellationToken token);
 
     // Reporting
-    Task<List<ComplaintReportView>> ComplaintsAssignedToInactiveUsersAsync(Guid officeId);
+    Task<List<StaffReportView>> ComplaintsAssignedToInactiveUsersAsync();
     Task<List<StaffReportView>> ComplaintsByStaffAsync(Guid officeId, DateOnly dateFrom, DateOnly dateTo);
     Task<List<StaffReportView>> DaysSinceMostRecentActionAsync(Guid officeId, int threshold);
 

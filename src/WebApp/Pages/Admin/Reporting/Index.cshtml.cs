@@ -20,6 +20,7 @@ public class IndexModel(
     public bool CanExportDataArchive { get; private set; }
 
     // Form display properties
+    public bool ShowForm { get; private set; } = true;
     public bool ShowThresholdSelect { get; private set; }
     public bool ShowDateRange { get; private set; }
     public bool ShowOfficeSelect { get; private set; }
@@ -50,8 +51,7 @@ public class IndexModel(
     // Results data
     public bool ShowStaffReport { get; private set; }
     public List<StaffReportView> StaffReport { get; private set; } = [];
-    public bool ShowComplaintsReport { get; private set; }
-    public List<ComplaintReportView> ComplaintsReport { get; private set; } = [];
+
     public bool ShowOfficeReport { get; private set; }
     public List<OfficeReportView> OfficeReport { get; private set; } = [];
     public int? OfficeReportsTotalComplaints => OfficeReport.Sum(view => view.TotalComplaintsCount);
@@ -69,15 +69,13 @@ public class IndexModel(
 
     // === Reports ===
 
-    public async Task OnGetComplaintsAssignedToInactiveUsersAsync(Guid? office, CancellationToken token)
+    public async Task OnGetComplaintsAssignedToInactiveUsersAsync()
     {
         CurrentReport = ComplaintsAssignedToInactiveUsers;
-        ShowOfficeSelect = true;
-        ShowComplaintsReport = true;
+        ShowForm = false;
+        ShowStaffReport = true;
 
-        await PopulateOfficeFormAsync(office, token);
-
-        ComplaintsReport = await reportingService.ComplaintsAssignedToInactiveUsersAsync(Office!.Value);
+        StaffReport = await reportingService.ComplaintsAssignedToInactiveUsersAsync();
     }
 
     public async Task OnGetComplaintsByStaffAsync(Guid? office, DateOnly? from, DateOnly? to,
