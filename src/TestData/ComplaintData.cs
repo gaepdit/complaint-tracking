@@ -125,7 +125,7 @@ internal static class ComplaintData
             ComplaintNature = "Complaint accepted by user and under investigation.",
             Status = ComplaintStatus.UnderInvestigation,
             EnteredBy = UserData.GetUsers.ElementAt(1),
-            ReceivedDate = DateTimeOffset.Now.AddDays(-1),
+            ReceivedDate = DateTimeOffset.Now.AddDays(-5),
             ReceivedBy = UserData.GetUsers.ElementAt(1),
             PrimaryConcern = ConcernData.GetConcerns.ElementAt(2),
             CurrentOffice = OfficeData.GetOffices.ElementAt(1),
@@ -157,6 +157,18 @@ internal static class ComplaintData
             CurrentOwner = UserData.GetUsers.ElementAt(1),
             CurrentOwnerAssignedDate = DateTimeOffset.Now.AddDays(-1),
             SourceFacilityName = "Assigned to staff user (General).",
+        },
+        new(9) // 8
+        {
+            ComplaintNature = "Open complaint assigned to inactive user.",
+            Status = ComplaintStatus.New,
+            EnteredBy = UserData.GetUsers.ElementAt(3),
+            ReceivedDate = DateTimeOffset.Now.AddDays(-1),
+            ReceivedBy = UserData.GetUsers.ElementAt(1),
+            PrimaryConcern = ConcernData.GetConcerns.ElementAt(2),
+            CurrentOffice = OfficeData.GetOffices.ElementAt(0),
+            CurrentOwner = UserData.GetUsers.ElementAt(3),
+            CurrentOwnerAssignedDate = DateTimeOffset.Now.AddDays(-4),
         },
     };
 

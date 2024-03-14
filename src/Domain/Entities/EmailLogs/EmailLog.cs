@@ -1,3 +1,6 @@
+// ReSharper disable EntityFramework.ModelValidation.UnlimitedStringLength
+// FUTURE: Remove the above line once email has been implemented.
+
 namespace Cts.Domain.Entities.EmailLogs;
 
 public class EmailLog : Entity<Guid>

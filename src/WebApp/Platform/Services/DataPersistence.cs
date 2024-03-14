@@ -7,6 +7,7 @@ using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
 using Cts.EfRepository.Contexts;
+using Cts.EfRepository.DbConnection;
 using Cts.EfRepository.Repositories;
 using Cts.LocalRepository.Repositories;
 using Cts.WebApp.Platform.Settings;
@@ -22,7 +23,7 @@ public static class DataPersistence
         // When configured, use in-memory data; otherwise use a SQL Server database.
         if (AppSettings.DevSettings.UseInMemoryData)
         {
-            // Uses local static data if no database is built.
+            // Uses in-memory data.
             services.AddSingleton<IActionTypeRepository, LocalActionTypeRepository>();
             services.AddSingleton<IAttachmentRepository, LocalAttachmentRepository>();
             services.AddSingleton<IActionRepository, LocalActionRepository>();
@@ -34,22 +35,30 @@ public static class DataPersistence
         }
         else
         {
+            // Uses a database connection.
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
             if (string.IsNullOrEmpty(connectionString))
             {
-                services.AddDbContext<AppDbContext>(opts => opts.UseInMemoryDatabase("TEMP_DB"));
+                // In-memory database (not recommended)
+                services.AddDbContext<AppDbContext>(builder => builder.UseInMemoryDatabase("TEMP_DB"));
             }
             else
             {
+                // Entity Framework context
                 services.AddDbContext<AppDbContext>(dbContextOpts =>
                 {
                     dbContextOpts.UseSqlServer(connectionString, sqlServerOpts => sqlServerOpts.EnableRetryOnFailure());
                     dbContextOpts.ConfigureWarnings(builder =>
                         builder.Throw(RelationalEventId.MultipleCollectionIncludeWarning));
                 });
+
+                // Dapper DB connection
+                services.AddTransient<IDbConnectionFactory, DbConnectionFactory>(_ =>
+                    new DbConnectionFactory(connectionString));
             }
 
+            // Repositories
             services.AddScoped<IActionTypeRepository, ActionTypeRepository>();
             services.AddScoped<IAttachmentRepository, AttachmentRepository>();
             services.AddScoped<IActionRepository, ActionRepository>();

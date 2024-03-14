@@ -107,7 +107,8 @@
     background-color: var(--bs-secondary-bg-subtle) !important;
 }
 
-/* Accessibility fix for "warning" button on medium/light background */
+/* Accessibility fix for "warning" button on medium/light background
+-------------------------------------------------------------------- */
 html:not([data-bs-theme="dark"]) .btn-outline-warning {
     --bs-btn-color: #b98b00;
     --bs-btn-border-color: #b98b00;
@@ -205,6 +206,12 @@ a[target]::after {
 /* Suppress external link icon */
 footer a[target]::after, a[target].no-external-link::after {
     content: none;
+}
+
+/* Fix conflicting table border classes
+-------------------------------------------------- */
+.table-borderless .table-group-divider {
+    border-top-width: calc(var(--bs-border-width) * 2);
 }
 
 /* Callouts

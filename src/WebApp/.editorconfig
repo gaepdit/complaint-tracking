@@ -1,0 +1,4 @@
+﻿[*.{cs,vb}]
+
+# See https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1826#exclude-firstordefault-and-lastordefault-methods
+dotnet_code_quality.CA1826.exclude_ordefault_methods = true

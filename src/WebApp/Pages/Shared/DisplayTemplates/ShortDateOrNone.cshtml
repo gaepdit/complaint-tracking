@@ -1,0 +1,9 @@
+@model DateTimeOffset?
+@if (Model is null)
+{
+    <span class="text-body-secondary fst-italic">None</span>
+}
+else
+{
+    @Model.Value.ToString(Platform.Constants.DateTimeFormatConstants.ShortDateFormat)
+}

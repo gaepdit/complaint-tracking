@@ -36,7 +36,7 @@ public class EditTests
         result.Should().BeOfType<PageResult>();
         pageModel.DisplayStaff.Should().Be(StaffViewTest);
         pageModel.UpdateStaff.Should().BeEquivalentTo(StaffViewTest.AsUpdateDto());
-        pageModel.OfficeItems.Should().BeEmpty();
+        pageModel.OfficeSelectList.Should().BeEmpty();
     }
 
     [Test]

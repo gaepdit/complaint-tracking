@@ -5,6 +5,7 @@ using Cts.AppServices.Complaints;
 using Cts.AppServices.Concerns;
 using Cts.AppServices.DataExport;
 using Cts.AppServices.Offices;
+using Cts.AppServices.Reporting;
 using Cts.Domain.Entities.ActionTypes;
 using Cts.Domain.Entities.Attachments;
 using Cts.Domain.Entities.Complaints;
@@ -37,12 +38,15 @@ public static class AppServices
         services.AddScoped<IConcernManager, ConcernManager>();
         services.AddScoped<IConcernService, ConcernService>();
 
-        // Data Export
-        services.AddScoped<IDataExportService, DataExportService>();
-        services.AddScoped<ISearchResultsExportService, SearchResultsExportService>();
-
         // Offices
         services.AddScoped<IOfficeManager, OfficeManager>();
         services.AddScoped<IOfficeService, OfficeService>();
+
+        // Reporting
+        services.AddScoped<IReportingService, ReportingService>();
+
+        // Data Export
+        services.AddScoped<IDataExportService, DataExportService>();
+        services.AddScoped<ISearchResultsExportService, SearchResultsExportService>();
     }
 }
