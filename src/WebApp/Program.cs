@@ -72,7 +72,7 @@ builder.Services.AddSwaggerGen(c =>
         Contact = new OpenApiContact
         {
             Name = "Complaint Tracking System Support",
-            Email = builder.Configuration["SupportEmail"],
+            Email = AppSettings.SupportSettings.TechnicalSupportEmail,
         },
     });
 });

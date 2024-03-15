@@ -12,7 +12,7 @@ public class ErrorModel(ILogger<ErrorModel> logger, IAuthorizationService author
     public int? Status { get; private set; }
     public bool ActiveUser { get; private set; }
 
-    public async Task OnGet(int? statusCode)
+    public async Task OnGetAsync(int? statusCode)
     {
         ActiveUser = (await authorizationService.AuthorizeAsync(User, nameof(Policies.ActiveUser))).Succeeded;
 
