@@ -14,7 +14,7 @@ public class ExportModel(IDataExportService dataExportService, IFileService file
     public bool Downloading { get; private set; }
     public List<RecordsCount> RecordsCounts { get; private set; } = [];
 
-    public async Task OnGet(CancellationToken token = default) =>
+    public async Task OnGetAsync(CancellationToken token = default) =>
         RecordsCounts.AddRange(await dataExportService.RecordsCountAsync(token));
 
     public IActionResult OnGetDownloading() => RedirectToPage("Export");
