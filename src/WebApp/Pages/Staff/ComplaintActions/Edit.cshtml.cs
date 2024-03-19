@@ -68,7 +68,7 @@ public class EditActionModel(
 
         HighlightId = ActionItemId;
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "Complaint Action successfully updated.");
-        return RedirectToPage("Details", pageHandler: null, routeValues: new { complaintView.Id },
+        return RedirectToPage("../Complaints/Details", pageHandler: null, routeValues: new { complaintView.Id },
             fragment: HighlightId.ToString());
     }
 

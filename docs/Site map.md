@@ -1,20 +1,20 @@
 # Site Map
 
-* `/` (Home page with links to public inquiry and employee access portals)
+* `/` Home page with public search form and [menu bar](Menu%20bar.md) allowing access to staff pages.
 
 ## Public Pages
 
 These pages are available to the public.
 
-* `/Public` (Public complaint search)
-* `/Public/Complaints/{id}` (Public complaint detail view with list of Actions)
-* `/Public/Complaints/Attachment/{attachmentId}/{fileName}` (Public complaint attachment download)
+* `/` (Public complaint search)
+* `/Complaint/{id}` (Public complaint detail view with list of Actions)
+* `/Complaint/Attachment/{attachmentId}/{fileName}` (Public complaint attachment)
 
 ## Staff Pages
 
 These pages are only available to logged-in staff.
 
-* `/Staff` (Home page/staff dashboard)
+* `/Staff` (Staff dashboard)
 
 ### Complaints
 
@@ -24,7 +24,7 @@ These pages are only available to logged-in staff.
 
 * `/Staff/Complaints/Details/{id}` (Complaint details with list of Actions and a new Action form)
 * `/Staff/Complaints/Attachment/{attachmentId}/{fileName}` (Attachment download)
-* `/Staff/Complaints/Attachment/Delete/{attachmentId}/{fileName}` (Delete Attachment)
+* `/Staff/Complaints/Attachment/Delete/{attachmentId}` (Delete Attachment)
 
 #### Complaint Workflow
 
@@ -48,8 +48,8 @@ These pages are only available to logged-in staff.
 
 ## User Account
 
-* `/Account/Login` (Work account login form)
 * `/Account` (View profile)
+* `/Account/Login` (Work account login form)
 * `/Account/Edit` (Edit contact info)
 * `/Account/Support` (Help/support page)
 
@@ -81,32 +81,3 @@ comprise Action Types, Areas of Concern, and Offices.
 * `/Admin/Users/Details/{id}` (View user profile)
 * `/Admin/Users/Edit/{id}` (Edit contact info)
 * `/Admin/Users/EditRoles/{id}` (Edit roles)
-
-# Menu Bar
-
-## Public
-
-Shown when user is not logged in.
-
-* {Logo} (`~/`)
-* Search (`~/Public`)
-* Sign In (`~/Account/Login`)
-
-## Staff
-
-Shown when staff is logged in.
-
-* {Logo} (`~/Staff`)
-* New Complaint (`~/Staff/Complaints/Add`)
-* Complaint Search (`~/Staff/Complaints`)
-* Action Search (`~/Staff/ComplaintActions`)
-* More (Drop-down)
-    * Reports (`~/Admin/Reports`)
-    * CTS Users (`~/Admin/Users`)
-    * Site Maintenance (`~/Admin/Maintenance`)
-    * Public Portal (`~/Public`)
-* Account (Drop-down)
-    * You profile (`~/Account`)
-    * Support (`~/Account/Support`)
-    * Sign out (*form*)
-* Theme toggle

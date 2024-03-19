@@ -38,7 +38,7 @@ public class DeleteActionModel(
         {
             TempData.SetDisplayMessage(DisplayMessage.AlertContext.Warning,
                 "Complaint Action cannot be deleted because it is already deleted.");
-            return RedirectToPage("Details", routeValues: new { complaintView.Id });
+            return RedirectToPage("../Complaints/Details", routeValues: new { complaintView.Id });
         }
 
         ActionItemView = actionItem;
@@ -60,7 +60,7 @@ public class DeleteActionModel(
         await actionService.DeleteAsync(ActionItemId);
         HighlightId = ActionItemId;
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "Complaint Action successfully deleted.");
-        return RedirectToPage("Details", pageHandler: null, routeValues: new { complaintView.Id },
+        return RedirectToPage("../Complaints/Details", pageHandler: null, routeValues: new { complaintView.Id },
             fragment: HighlightId.ToString());
     }
 

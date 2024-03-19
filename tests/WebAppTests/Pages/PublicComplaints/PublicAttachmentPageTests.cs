@@ -1,6 +1,6 @@
 using Cts.AppServices.Attachments;
 using Cts.AppServices.Attachments.Dto;
-using Cts.WebApp.Pages.Public.Complaints;
+using Cts.WebApp.Pages;
 
 namespace WebAppTests.Pages.PublicComplaints;
 

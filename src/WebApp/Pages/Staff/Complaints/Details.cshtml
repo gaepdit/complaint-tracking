@@ -17,7 +17,7 @@
         @if (Model.ComplaintView.IsPublic)
         {
             <div class="col-auto d-print-none ms-2">
-                <a asp-page="/Public/Complaints/Index" asp-route-id="@Model.ComplaintView.Id.ToString()" class="link-offset-2">📢 View public copy</a>
+                <a asp-page="/Complaint" asp-route-id="@Model.ComplaintView.Id.ToString()" class="link-offset-2">📢 View public copy</a>
             </div>
         }
     </div>
@@ -285,12 +285,12 @@
                                     <div class="col-auto d-print-none ms-2">
                                         @if (!action.IsDeleted)
                                         {
-                                            <a asp-page="ComplaintActions/Edit" asp-route-actionId="@action.Id.ToString()" class="btn btn-sm btn-outline-primary">Edit</a>
-                                            <a asp-page="ComplaintActions/Delete" asp-route-actionId="@action.Id.ToString()" class="btn btn-sm btn-outline-danger ms-1">Delete</a>
+                                            <a asp-page="../ComplaintActions/Edit" asp-route-actionId="@action.Id.ToString()" class="btn btn-sm btn-outline-primary">Edit</a>
+                                            <a asp-page="../ComplaintActions/Delete" asp-route-actionId="@action.Id.ToString()" class="btn btn-sm btn-outline-danger ms-1">Delete</a>
                                         }
                                         else if (Model.UserCan[ComplaintOperation.ManageDeletedActions])
                                         {
-                                            <a asp-page="ComplaintActions/Restore" asp-route-actionId="@action.Id.ToString()" class="btn btn-sm btn-outline-warning ms-1">Restore</a>
+                                            <a asp-page="../ComplaintActions/Restore" asp-route-actionId="@action.Id.ToString()" class="btn btn-sm btn-outline-warning ms-1">Restore</a>
                                         }
                                     </div>
                                 }

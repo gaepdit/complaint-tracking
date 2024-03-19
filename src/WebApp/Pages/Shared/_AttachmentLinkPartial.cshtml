@@ -2,21 +2,22 @@
 @using Cts.WebApp.Platform.Constants
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Cts.AppServices.Attachments.Dto.AttachmentViewDto
-
+@{
+    var imgPath = Model.IsForPublic ? "Attachment" : "../Attachment";
+    var pagePath = Model.IsForPublic ? "Attachment" : "Attachment/Index";
+}
 @if (Model.IsImage)
 {
-    <a asp-page="Attachment/Index" asp-route-id="@Model.Id.ToString()" asp-route-fileName="@Model.FileName"
-       data-fancybox="attachment" data-caption="@Model.FileName"
-       target="_blank" class="text-decoration-hover rounded d-block no-external-link">
-        <img src="~/Staff/Complaints/Attachment/@Model.Id.ToString()/@Uri.EscapeDataString(Model.FileName)?thumbnail=true"
-             class="img-thumbnail rounded me-2" alt="Image "
-             width="@GlobalConstants.ThumbnailSize.ToString()" height="@GlobalConstants.ThumbnailSize.ToString()" />
+    <a asp-page="@pagePath" asp-route-id="@Model.Id.ToString()" asp-route-fileName="@Model.FileName" target="_blank"
+       class="text-decoration-hover rounded d-block no-external-link" data-fancybox="attachment" data-caption="@Model.FileName">
+        <img src="@imgPath/@Model.Id.ToString()/@Uri.EscapeDataString(Model.FileName)?thumbnail=true" class="img-thumbnail rounded me-2"
+             width="@GlobalConstants.ThumbnailSize.ToString()" height="@GlobalConstants.ThumbnailSize.ToString()" alt="" />
         @Model.FileName
     </a>
 }
 else
 {
-    <a asp-page="Attachment/Index" asp-route-id="@Model.Id.ToString()" asp-route-fileName="@Model.FileName" target="_blank"
+    <a asp-page="@pagePath" asp-route-id="@Model.Id.ToString()" asp-route-fileName="@Model.FileName" target="_blank"
        class="text-decoration-hover rounded d-block p-2 no-external-link">
         @Html.DisplayFor(dto => dto.FileExtension, DisplayTemplate.FileTypeIcon) @Model.FileName
     </a>

@@ -1,7 +1,7 @@
 ﻿using Cts.AppServices.Attachments;
 using Cts.WebApp.Platform.PageModelHelpers;
 
-namespace Cts.WebApp.Pages.Public.Complaints;
+namespace Cts.WebApp.Pages;
 
 [AllowAnonymous]
 public class AttachmentModel : PageModel

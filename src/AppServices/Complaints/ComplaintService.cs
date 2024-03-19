@@ -19,6 +19,7 @@ public sealed class ComplaintService(
     IConcernRepository concernRepository,
     IOfficeRepository officeRepository,
     IAttachmentService attachmentService,
+    // ReSharper disable once SuggestBaseTypeForParameterInConstructor
     IMapper mapper,
     IUserService userService)
     : IComplaintService

@@ -1,6 +1,6 @@
 ﻿using Cts.AppServices.Attachments;
 using Cts.AppServices.Attachments.Dto;
-using PublicComplaints = Cts.WebApp.Pages.Public.Complaints;
+using PublicComplaint = Cts.WebApp.Pages;
 
 namespace WebAppTests.Platform;
 
@@ -11,7 +11,7 @@ public class AttachmentFileHandlerTests
     public async Task OnGet_IdIsNull_ReturnsNotFound()
     {
         // Act
-        var result = await new PublicComplaints.AttachmentModel().GetAttachmentFile(
+        var result = await new PublicComplaint.AttachmentModel().GetAttachmentFile(
             attachmentService: Substitute.For<IAttachmentService>(), id: null, TextData.ShortName, thumbnail: false);
 
         // Assert
@@ -39,7 +39,7 @@ public class AttachmentFileHandlerTests
             .Returns(fileBytes);
 
         // Act
-        var result = await new PublicComplaints.AttachmentModel().GetAttachmentFile(attachmentService, guid,
+        var result = await new PublicComplaint.AttachmentModel().GetAttachmentFile(attachmentService, guid,
             attachment.FileName, thumbnail: false);
 
         // Assert
@@ -59,7 +59,7 @@ public class AttachmentFileHandlerTests
         attachmentService.FindPublicAttachmentAsync(guid).Returns((AttachmentViewDto?)null);
 
         // Act
-        var result = await new PublicComplaints.AttachmentModel().GetAttachmentFile(attachmentService, guid,
+        var result = await new PublicComplaint.AttachmentModel().GetAttachmentFile(attachmentService, guid,
             TextData.ShortName, thumbnail: false);
 
         // Assert
@@ -82,7 +82,7 @@ public class AttachmentFileHandlerTests
         attachmentService.FindPublicAttachmentAsync(guid).Returns(attachment);
 
         // Act
-        var result = await new PublicComplaints.AttachmentModel().GetAttachmentFile(attachmentService, guid,
+        var result = await new PublicComplaint.AttachmentModel().GetAttachmentFile(attachmentService, guid,
             TextData.NonExistentName, thumbnail: false);
 
         // Act
@@ -109,7 +109,7 @@ public class AttachmentFileHandlerTests
             Arg.Any<IAttachmentService.AttachmentServiceConfig>()).Returns([]);
 
         // Act
-        var result = await new PublicComplaints.AttachmentModel().GetAttachmentFile(attachmentService, guid,
+        var result = await new PublicComplaint.AttachmentModel().GetAttachmentFile(attachmentService, guid,
             attachment.FileName, thumbnail: false);
 
         // Assert
@@ -133,7 +133,7 @@ public class AttachmentFileHandlerTests
             Arg.Any<IAttachmentService.AttachmentServiceConfig>()).Returns([]);
 
         // Act
-        var result = await new PublicComplaints.AttachmentModel().GetAttachmentFile(attachmentService, guid,
+        var result = await new PublicComplaint.AttachmentModel().GetAttachmentFile(attachmentService, guid,
             attachment.FileName, thumbnail: true);
 
         // Assert
