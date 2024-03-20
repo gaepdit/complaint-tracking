@@ -27,6 +27,9 @@ public interface IComplaintService : IDisposable, IAsyncDisposable
     Task<IPaginatedResult<ComplaintSearchResultDto>> SearchAsync(ComplaintSearchDto spec, PaginatedRequest paging,
         CancellationToken token = default);
 
+    Task<IReadOnlyList<ComplaintSearchResultDto>> GetNewComplaintsForUserAsync(string? userId, CancellationToken token = default);
+    Task<IReadOnlyList<ComplaintSearchResultDto>> GetOpenComplaintsForUserAsync(string? userId, CancellationToken token = default);
+
     // Staff complaint write methods
 
     Task<ComplaintCreateResult> CreateAsync(ComplaintCreateDto resource,

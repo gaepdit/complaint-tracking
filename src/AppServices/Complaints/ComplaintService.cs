@@ -79,6 +79,26 @@ public sealed class ComplaintService(
         return new PaginatedResult<ComplaintSearchResultDto>(list, count, paging);
     }
 
+    public async Task<IReadOnlyList<ComplaintSearchResultDto>> GetNewComplaintsForUserAsync(string? userId,
+        CancellationToken token = default)
+    {
+        var spec = new ComplaintSearchDto { Status = SearchComplaintStatus.NotAccepted, Assigned = userId };
+        var predicate = ComplaintFilters.SearchPredicate(spec);
+        var complaints = await complaintRepository.GetListAsync(predicate, token).ConfigureAwait(false);
+        return mapper.Map<IReadOnlyList<ComplaintSearchResultDto>>(
+            complaints.OrderByDescending(complaint => complaint.ReceivedDate));
+    }
+
+    public async Task<IReadOnlyList<ComplaintSearchResultDto>> GetOpenComplaintsForUserAsync(string? userId,
+        CancellationToken token = default)
+    {
+        var spec = new ComplaintSearchDto { Status = SearchComplaintStatus.AllOpen, Assigned = userId };
+        var predicate = ComplaintFilters.SearchPredicate(spec);
+        var complaints = await complaintRepository.GetListAsync(predicate, token).ConfigureAwait(false);
+        return mapper.Map<IReadOnlyList<ComplaintSearchResultDto>>(
+            complaints.OrderByDescending(complaint => complaint.ReceivedDate));
+    }
+
     // Staff complaint write methods
 
     public async Task<ComplaintCreateResult> CreateAsync(ComplaintCreateDto resource,

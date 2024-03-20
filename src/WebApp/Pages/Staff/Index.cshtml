@@ -1,4 +1,5 @@
 ﻿@page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model IndexModel
 @{
     ViewData["Title"] = "Staff Dashboard";
@@ -6,13 +7,45 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<div class="card mt-4">
-    <div class="card-header">
-        <h2 class="h5">Open Work</h2>
+@if (Model.IsStaff)
+{
+    <div class="container">
+        <div class="row">
+            <div class="p-3 rounded-3 bg-light-subtle border mt-3 col-lg-9">
+                <h2 class="h3 mb-3">Find by Complaint ID</h2>
+                <form method="post" class="row row-cols-sm-auto align-items-center" role="search">
+                    <div class="col-12">
+                        <label class="visually-hidden" asp-for="FindId">Complaint ID</label>
+                        <div class="input-group input-group-lg">
+                            <input asp-for="FindId" class="form-control" type="search" placeholder="Complaint ID" aria-label="Search" />
+                            <button class="btn btn-primary" type="submit">View</button>
+                        </div>
+                    </div>
+                    <span asp-validation-for="FindId" class="text-danger-emphasis"></span>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="card-body">
-        <p>
-            <em>None.</em>
-        </p>
+
+    <div class="card mt-4">
+        <div class="card-header">
+            <h2 id="my-new-complaints" class="h5">My New Complaints</h2>
+        </div>
+        <div class="card-body">
+            <partial name="Shared/_DashboardComplaintListPartial" model="Model.MyNewComplaints" />
+        </div>
     </div>
-</div>
+
+    <div class="card mt-4">
+        <div class="card-header">
+            <h2 id="my-open-complaints" class="h5">My Open Complaints</h2>
+        </div>
+        <div class="card-body">
+            <partial name="Shared/_DashboardComplaintListPartial" model="Model.MyOpenComplaints" />
+        </div>
+    </div>
+}
+else
+{
+    <p>See your manager to discuss CTS access.</p>
+}
