@@ -9,8 +9,10 @@ namespace Cts.AppServices.ServiceBase;
 
 #pragma warning disable S2436 // Types and methods should not have too many generic parameters
 public abstract class MaintenanceItemService<TEntity, TViewDto, TUpdateDto>(
+    // ReSharper disable once SuggestBaseTypeForParameterInConstructor
     INamedEntityRepository<TEntity> repository,
     INamedEntityManager<TEntity> manager,
+    // ReSharper disable once SuggestBaseTypeForParameterInConstructor
     IMapper mapper,
     IUserService userService)
     : IMaintenanceItemService<TViewDto, TUpdateDto>

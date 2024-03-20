@@ -2,7 +2,7 @@
 @using Cts.WebApp.Pages.Shared.DisplayTemplates
 @using Cts.WebApp.Platform.Constants
 @using GaEpd.AppLibrary.Extensions
-@model IndexModel
+@model ComplaintModel
 @{
     ViewData["Title"] = $"Complaint ID {Model.Item.Id.ToString()}";
 }
@@ -150,23 +150,10 @@ else
         <tbody>
         @foreach (var attachment in Model.Item.Attachments)
         {
+            attachment.IsForPublic = true;
             <tr>
                 <td>
-                    @if (attachment.IsImage)
-                    {
-                        <a asp-page="Attachment" asp-route-id="@attachment.Id.ToString()" asp-route-fileName="@attachment.FileName" target="_blank"
-                           class="text-decoration-hover rounded d-block no-external-link" data-fancybox="attachment" data-caption="@attachment.FileName">
-                            <img src="Attachment/@attachment.Id.ToString()/@Uri.EscapeDataString(attachment.FileName)?thumbnail=true" class="img-thumbnail rounded me-2" alt="" />
-                            @attachment.FileName
-                        </a>
-                    }
-                    else
-                    {
-                        <a asp-page="Attachment" asp-route-id="@attachment.Id.ToString()" asp-route-fileName="@attachment.FileName" target="_blank"
-                           class="text-decoration-hover rounded d-block p-2 no-external-link">
-                            @Html.DisplayFor(_ => attachment.FileExtension, DisplayTemplate.FileTypeIcon) @attachment.FileName
-                        </a>
-                    }
+                    <partial name="Shared/_AttachmentLinkPartial" model="attachment" />
                 </td>
                 <td>@Html.DisplayFor(_ => attachment.Size, DisplayTemplate.FileSize)</td>
                 <td>@Html.DisplayFor(_ => attachment.UploadedDate, DisplayTemplate.ShortDate)</td>

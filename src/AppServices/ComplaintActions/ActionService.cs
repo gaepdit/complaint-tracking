@@ -9,6 +9,7 @@ using GaEpd.AppLibrary.Pagination;
 namespace Cts.AppServices.ComplaintActions;
 
 public sealed class ActionService(
+    // ReSharper disable once SuggestBaseTypeForParameterInConstructor
     IMapper mapper,
     IUserService userService,
     IComplaintRepository complaintRepository,

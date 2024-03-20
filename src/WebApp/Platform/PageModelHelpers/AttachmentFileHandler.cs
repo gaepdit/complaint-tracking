@@ -1,17 +1,17 @@
 ﻿using Cts.AppServices.Attachments;
-using Cts.WebApp.Pages.Staff.Complaints.Attachment;
 using Cts.WebApp.Platform.Settings;
-using PublicComplaints = Cts.WebApp.Pages.Public.Complaints;
+using PublicComplaint = Cts.WebApp.Pages;
+using StaffComplaint = Cts.WebApp.Pages.Staff.Complaints.Attachment;
 
 namespace Cts.WebApp.Platform.PageModelHelpers;
 
 internal static class AttachmentFileHandler
 {
-    public static Task<IActionResult> GetAttachmentFile(this PublicComplaints.AttachmentModel page,
+    public static Task<IActionResult> GetAttachmentFile(this PublicComplaint.AttachmentModel page,
         IAttachmentService attachmentService, Guid? id, string? fileName, bool thumbnail) =>
         page.GetAttachmentFile(attachmentService, id, fileName, thumbnail, forPublic: true);
 
-    public static Task<IActionResult> GetAttachmentFile(this AttachmentModel page,
+    public static Task<IActionResult> GetAttachmentFile(this StaffComplaint.AttachmentModel page,
         IAttachmentService attachmentService, Guid? id, string? fileName, bool thumbnail) =>
         page.GetAttachmentFile(attachmentService, id, fileName, thumbnail, forPublic: false);
 

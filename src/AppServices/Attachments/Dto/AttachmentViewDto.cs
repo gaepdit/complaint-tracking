@@ -28,4 +28,5 @@ public record AttachmentViewDto
     public DateTimeOffset UploadedDate { get; init; }
 
     public bool IsImage { get; init; }
+    public bool IsForPublic { get; set; }
 }

@@ -18,6 +18,7 @@ public class AttachmentService(
     IAttachmentRepository attachmentRepository,
     IComplaintRepository complaintRepository,
     IUserService userService,
+    // ReSharper disable once SuggestBaseTypeForParameterInConstructor
     IMapper mapper,
     IErrorLogger errorLogger)
     : IAttachmentService

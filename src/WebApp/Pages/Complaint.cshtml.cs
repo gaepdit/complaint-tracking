@@ -2,10 +2,10 @@
 using Cts.AppServices.Complaints.QueryDto;
 using Cts.AppServices.Permissions;
 
-namespace Cts.WebApp.Pages.Public.Complaints;
+namespace Cts.WebApp.Pages;
 
 [AllowAnonymous]
-public class IndexModel([FromServices] IComplaintService service, [FromServices] IAuthorizationService authorization)
+public class ComplaintModel([FromServices] IComplaintService service, [FromServices] IAuthorizationService authorization)
     : PageModel
 {
     public ComplaintPublicViewDto Item { get; private set; } = default!;

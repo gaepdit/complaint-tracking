@@ -38,7 +38,7 @@ public class RestoreActionModel(
         {
             TempData.SetDisplayMessage(DisplayMessage.AlertContext.Warning,
                 "Complaint Action cannot be restored because it is not deleted.");
-            return RedirectToPage("Details", routeValues: new { complaintView.Id });
+            return RedirectToPage("../Complaints/Details", routeValues: new { complaintView.Id });
         }
 
         ActionItemView = actionItem;
@@ -60,7 +60,7 @@ public class RestoreActionModel(
         await actionService.RestoreAsync(ActionItemId);
         HighlightId = ActionItemId;
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "Complaint Action successfully restored.");
-        return RedirectToPage("Details", pageHandler: null, routeValues: new { complaintView.Id },
+        return RedirectToPage("../Complaints/Details", pageHandler: null, routeValues: new { complaintView.Id },
             fragment: HighlightId.ToString());
     }
 

@@ -28,7 +28,8 @@ public class AutoMapperProfile : Profile
         CreateMap<ApplicationUser, StaffSearchResultDto>();
         CreateMap<ApplicationUser, StaffViewDto>();
 
-        CreateMap<Attachment, AttachmentViewDto>();
+        CreateMap<Attachment, AttachmentViewDto>()
+            .ForMember(dto => dto.IsForPublic, expression => expression.Ignore());
 
         CreateMap<Complaint, ComplaintPublicViewDto>();
         CreateMap<Complaint, ComplaintSearchResultDto>();

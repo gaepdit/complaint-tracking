@@ -8,7 +8,7 @@ using Cts.WebApp.Platform.Settings;
 
 namespace Cts.WebApp.Pages.Staff.Complaints.Attachment;
 
-public class DeleteAttachmentModel(IAttachmentService attachmentService, IAuthorizationService authorizationService)
+public class AttachmentDeleteModel(IAttachmentService attachmentService, IAuthorizationService authorizationService)
     : PageModel
 {
     [BindProperty]

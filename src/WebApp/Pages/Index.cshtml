@@ -1,56 +1,236 @@
-﻿@page
+﻿@page "{handler?}"
+@using Cts.AppServices.Complaints.QueryDto
+@using Cts.WebApp.Pages.Shared.DisplayTemplates
+@using Cts.WebApp.Platform.PageModelHelpers
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Public Complaint Search";
 }
 
-@if (!Model.ShowDashboard)
-{
-    <h1>Home Page</h1>
-    <p>See your manager to request access to the application.</p>
-}
-else
-{
-    <h1>Dashboard</h1>
+<h1>@ViewData["Title"]</h1>
 
-    <div class="card mt-4">
-        <div class="card-header">
-            <h2 class="h5">Open Work</h2>
+<div class="row">
+    <div class="col-lg-9">
+        <p>Use this form to search and review publicly available complaint information.</p>
+        <p class="callout">
+            The Complaint Tracking System Public Inquiry Portal includes information for all complaints received by the Georgia
+            Environmental Protection Division (EPD) from third parties after January&nbsp;1,&nbsp;1998, for which EPD’s investigation of
+            the complaint has concluded.
+        </p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="p-3 rounded-3 bg-light-subtle border mt-3 mb-5 col-lg-9">
+            <h2 class="h3 mb-3">Find by Complaint ID</h2>
+            <form method="post" class="row row-cols-sm-auto align-items-center" role="search">
+                <div class="col-12">
+                    <label class="visually-hidden" asp-for="FindId">Complaint ID</label>
+                    <div class="input-group input-group-lg">
+                        <input asp-for="FindId" class="form-control" type="search" placeholder="Complaint ID" aria-label="Search" />
+                        <button class="btn btn-primary" type="submit">View</button>
+                    </div>
+                </div>
+                <span asp-validation-for="FindId" class="text-danger-emphasis"></span>
+            </form>
         </div>
-        <div class="card-body">
-            <p>
-                <em>None.</em>
-            </p>
+    </div>
+</div>
+
+<h2>Search by Complaint Details</h2>
+<div class="container">
+    <div class="row">
+        <div class="p-3 rounded-3 bg-light-subtle border col-lg-9">
+            <div class="text-body-secondary pb-2">
+                <em>All fields are optional.</em>
+            </div>
+            <form method="get" asp-page-handler="Search" asp-fragment="SearchResults">
+                <h3 class="h4">Complaint Details</h3>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Spec.DateFrom" class="form-label px-2 mb-0">Date Complaint Received</label>
+                        <div class="input-group">
+                            <div class="form-floating">
+                                <input asp-for="Spec.DateFrom" name="@nameof(Model.Spec.DateFrom)" class="form-control" />
+                                <label asp-for="Spec.DateFrom" class="form-label"></label>
+                            </div>
+                            <div class="form-floating">
+                                <input asp-for="Spec.DateTo" name="@nameof(Model.Spec.DateTo)" class="form-control" />
+                                <label asp-for="Spec.DateTo" class="form-label"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="form-floating">
+                            <input asp-for="Spec.SourceName" name="@nameof(Model.Spec.SourceName)" class="form-control" aria-describedby="SourceNameHelpBlock" />
+                            <label asp-for="Spec.SourceName" class="form-label"></label>
+                        </div>
+                        <small id="SourceNameHelpBlock" class="form-text text-body-secondary d-block px-2">(The entity associated with the incident.)</small>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="form-floating">
+                            <select asp-for="Spec.Concern" name="@nameof(Model.Spec.Concern)" asp-items="Model.ConcernsSelectList" class="form-select">
+                                <option value="">@SelectOptions.SelectTextAny</option>
+                            </select>
+                            <label asp-for="Spec.Concern" class="form-label"></label>
+                        </div>
+                    </div>
+                    <div class="col mb-3">
+                        <div class="form-floating">
+                            <input asp-for="Spec.Description" name="@nameof(Model.Spec.Description)" class="form-control" aria-describedby="DescriptionHelpBlock" />
+                            <label asp-for="Spec.Description" class="form-label"></label>
+                        </div>
+                        <small id="DescriptionHelpBlock" class="form-text text-body-secondary d-block px-2">(A word or phrase to search for.)</small>
+                    </div>
+                </div>
+
+                <h3 class="h4">Location</h3>
+                <div class="row">
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <select asp-for="Spec.County" name="@nameof(Model.Spec.County)" asp-items="Model.CountiesSelectList" class="form-select">
+                                <option value="">@SelectOptions.SelectTextAny</option>
+                            </select>
+                            <label asp-for="Spec.County" class="form-label"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3">
+                        <div class="row">
+                            <div class="mb-3">
+                                <div class="form-floating">
+                                    <input asp-for="Spec.Street" name="@nameof(Model.Spec.Street)" class="form-control" />
+                                    <label asp-for="Spec.Street" class="form-label"></label>
+                                </div>
+                            </div>
+                            <div class="col-sm-8 mb-3">
+                                <div class="form-floating">
+                                    <select asp-for="Spec.State" name="@nameof(Model.Spec.State)" asp-items="Model.StatesSelectList" class="form-select">
+                                        <option value="">@SelectOptions.SelectTextAny</option>
+                                    </select>
+                                    <label asp-for="Spec.State" class="form-label"></label>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 mb-3">
+                                <div class="form-floating">
+                                    <input asp-for="Spec.PostalCode" name="@nameof(Model.Spec.PostalCode)" class="form-control" />
+                                    <label asp-for="Spec.PostalCode" class="form-label"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-3 mb-1">
+                    <button id="SearchButton" type="submit" class="btn btn-primary col-sm-3 me-2">Search</button>
+                    <a asp-page="Index" class="btn btn-outline-secondary col-sm-3 col-md-2">Clear Form</a>
+                </div>
+            </form>
         </div>
+    </div>
+</div>
+
+@if (Model.ShowResults)
+{
+    <div id="SearchResults" class="mt-4">
+        <h3>Search Results</h3>
+
+        @if (Model.SearchResults.TotalCount == 0)
+        {
+            <p class="lead text-info">No matching results found.</p>
+        }
+        else
+        {
+            <div class="table-responsive-sm">
+                <table class="table table-hover" aria-label="Facility search results">
+                    <caption class="caption-top">
+                        <partial name="Shared/_PaginationNavAndCount" model="Model.PaginationNav" />
+                    </caption>
+                    <thead>
+                    <tr>
+                        <th scope="col" class="text-nowrap">
+                            <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
+                               asp-route-Sort="@(Model.Spec.Sort == SortBy.IdAsc ? nameof(SortBy.IdDesc) : nameof(SortBy.IdAsc))">
+                                ID @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow,
+                                       new { up = nameof(SortBy.IdAsc), down = nameof(SortBy.IdDesc) })
+                            </a>
+                        </th>
+                        <th scope="col" class="text-nowrap">
+                            <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
+                               asp-route-Sort="@(Model.Spec.Sort == SortBy.ReceivedDateAsc ? nameof(SortBy.ReceivedDateDesc) : nameof(SortBy.ReceivedDateAsc))">
+                                Date Received @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow,
+                                                  new { up = nameof(SortBy.ReceivedDateAsc), down = nameof(SortBy.ReceivedDateDesc) })
+                            </a>
+                        </th>
+                        <th scope="col">Source/Location</th>
+                        <th scope="col">EPD Office Assigned</th>
+                        <th scope="col">Areas of Concern</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    @foreach (var item in Model.SearchResults.Items)
+                    {
+                        <tr>
+                            <th scope="row">
+                                <a asp-page="./Complaint" asp-route-id="@item.Id.ToString()" class="btn btn-outline-primary btn-sm">@item.Id.ToString()</a>
+                            </th>
+                            <td class="text-nowrap">@Html.DisplayFor(m => item.ReceivedDate, DisplayTemplate.ShortDate)</td>
+                            <td>
+                                <ul>
+                                    <li>@Html.DisplayFor(m => item.SourceFacilityName, DisplayTemplate.StringOrPlaceholder)</li>
+                                    @if (item.ComplaintCounty != null)
+                                    {
+                                        <li>@item.ComplaintCounty County</li>
+                                    }
+                                </ul>
+                            </td>
+                            <td>@Html.DisplayFor(m => item.CurrentOfficeName, DisplayTemplate.StringOrPlaceholder)</td>
+                            <td>
+                                <ol type="I">
+                                    <li>@Html.DisplayFor(m => item.PrimaryConcernName, DisplayTemplate.StringOrPlaceholder)</li>
+                                    @if (item.SecondaryConcernName is not null)
+                                    {
+                                        <li>@Html.DisplayFor(m => item.SecondaryConcernName, DisplayTemplate.StringOrPlaceholder)</li>
+                                    }
+                                </ol>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+            <partial name="_PaginationNav" model="Model.PaginationNav" />
+        }
     </div>
 }
 
-<div class="card mt-4">
-    <div class="card-header">
-        <h2 class="h5">Some helpful development links</h2>
+<div class="card mt-4 border-info shadow">
+    <div class="card-header text-bg-info">
+        <h2 class="h5">Some helpful temporary development links</h2>
     </div>
     <div class="card-body">
         <h3>Public pages</h3>
         <ul>
             <li>
-                <a asp-page="/Public/Index">Public complaint search</a>
-                <ul>
-                    <li>
-                        <a asp-page="/Public/Complaints/Index" asp-route-id="1">Closed complaint</a>
-                    </li>
-                    <li>
-                        <a asp-page="/Public/Complaints/Index" asp-route-id="2">Open complaint (404)</a>
-                    </li>
-                    <li>
-                        <a asp-page="/Public/Complaints/Index" asp-route-id="3">Another closed complaint</a>
-                    </li>
-                    <li>
-                        <a asp-page="/Public/Complaints/Index" asp-route-id="0">Non-existent complaint ID (404)</a>
-                    </li>
-                    <li>
-                        <a asp-page="/Public/Complaints/Index" asp-route-id="5">Deleted complaint (404)</a>
-                    </li>
-                </ul>
+                <a asp-page="/Complaint" asp-route-id="1">Closed complaint</a>
+            </li>
+            <li>
+                <a asp-page="/Complaint" asp-route-id="2">Open complaint (404)</a>
+            </li>
+            <li>
+                <a asp-page="/Complaint" asp-route-id="3">Another closed complaint</a>
+            </li>
+            <li>
+                <a asp-page="/Complaint" asp-route-id="0">Non-existent complaint ID (404)</a>
+            </li>
+            <li>
+                <a asp-page="/Complaint" asp-route-id="5">Deleted complaint (404)</a>
             </li>
             <li>
                 <a href="api-docs/">API docs</a>
@@ -86,7 +266,7 @@ else
                 </ul>
             </li>
             <li>
-                <a asp-page="/Staff/ComplaintActions/Index">Complaint Actions search</a>
+                <a asp-page="/Staff/ComplaintActions/Index">Complaint Action search</a>
             </li>
             <li>
                 <a asp-page="/Staff/Complaints/Add">Add new complaint</a>
@@ -106,3 +286,7 @@ else
         </ul>
     </div>
 </div>
+
+@section Scripts {
+    <script src="~/js/formSearch.js"></script>
+}

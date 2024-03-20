@@ -3,10 +3,23 @@
 <header role="banner">
     <nav id="main-nav" class="navbar nav-underline navbar-expand-sm text-bg-brand bg-gradient border-bottom shadow-sm mb-3 d-print-none">
         <div class="container">
-            <a asp-page="/Index" title="Complaint Tracking System">
-                <img src="~/images/epd-icon.svg" alt="Georgia EPD" class="img-logo me-2" />
-            </a>
-            <a class="navbar-brand nav-link me-0 pe-1" asp-page="/Index" title="Complaint Tracking System">CTS</a>
+            @if (Model.IsLoggedInUser)
+            {
+                <a asp-page="/Staff/Index" title="Dashboard">
+                    <img src="~/images/epd-icon.svg" alt="Georgia EPD" class="img-logo pe-2" />
+                </a>
+                <a class="navbar-brand nav-link me-2" asp-page="/Staff/Index" title="Dashboard">
+                    <span class="d-none d-sm-inline">CTS</span>
+                    <span class="d-inline d-sm-none">Complaint Tracking System</span>
+                </a>
+            }
+            else
+            {
+                <a asp-page="/Index" title="Complaint Tracking System">
+                    <img src="~/images/epd-icon.svg" alt="Georgia EPD" class="img-logo pe-2" />
+                </a>
+                <a class="navbar-brand nav-link me-2" asp-page="/Index">Complaint Tracking System</a>
+            }
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav-content"
                     aria-controls="main-nav-content" aria-haspopup="menu" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span> <span class="align-middle">Menu</span>
@@ -14,45 +27,49 @@
 
             <div class="navbar-collapse collapse d-sm-inline-flex" id="main-nav-content">
                 <ul class="navbar-nav flex-grow-1">
-                    @if (Model.IsStaff)
+                    @if (Model.IsStaffUser)
                     {
                         <li class="nav-item">
-                            <a class="nav-link" asp-page="/Staff/Complaints/Index">Complaints</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-page="/Staff/ComplaintActions/Index">Actions</a>
-                        </li>
-                    }
-                    else
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link" asp-page="/Public/Index">Search</a>
+                            <a class="nav-link" asp-page="/Staff/Complaints/Index" title="Complaint Search">Complaint Search</a>
                         </li>
                     }
                 </ul>
 
-                @if (Model.IsActive)
-                {
-                    <ul class="navbar-nav">
+                <ul class="navbar-nav flex-grow-0">
+                    @if (Model.IsStaffUser)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Staff/Complaints/Add" title="Add New Complaint">&#x2795; <span class="d-inline d-sm-none">Add</span> New <span class="d-inline d-sm-none">Complaint</span></a>
+                        </li>
+                    }
+                    @if (Model.IsActiveUser)
+                    {
                         <li class="nav-item dropdown">
                             <button class="nav-link dropdown-toggle" id="moreDropdownMenuLink" type="button"
                                     data-bs-toggle="dropdown" aria-haspopup="menu" aria-expanded="false" title="View menu of additional options">
                                 More
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreDropdownMenuLink">
+                                <li class="nav-item">
+                                    <a class="dropdown-item" asp-page="/Staff/ComplaintActions/Index">Complaint Action Search</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-page="/Admin/Reporting/Index">CTS Reports</a>
+                                </li>
                                 <li>
                                     <a class="dropdown-item" asp-page="/Admin/Users/Index">CTS Users</a>
                                 </li>
                                 <li>
                                     <a class="dropdown-item" asp-page="/Admin/Maintenance/Index">Site Maintenance</a>
                                 </li>
+                                <li>
+                                    <a class="dropdown-item" asp-page="/Index">Public Search</a>
+                                </li>
                             </ul>
                         </li>
-                    </ul>
-                }
+                    }
 
-                <ul class="navbar-nav">
-                    @if (Model.IsLoggedIn)
+                    @if (Model.IsLoggedInUser)
                     {
                         <li class="nav-item dropdown">
                             <button class="nav-link dropdown-toggle" id="accountDropdownMenuLink" type="button"
@@ -74,10 +91,10 @@
                             </ul>
                         </li>
                     }
-                    else if (!Model.HideSignin)
+                    else if (!Model.IsLoginPage)
                     {
                         <li class="nav-item">
-                            <a class="nav-link" asp-page="/Account/Login">Sign in</a>
+                            <a class="nav-link text-body-secondary" asp-page="/Account/Login">Agency&nbsp;Login</a>
                         </li>
                     }
                     <!-- Dropdown selector for color mode -->

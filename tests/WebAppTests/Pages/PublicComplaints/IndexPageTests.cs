@@ -1,6 +1,6 @@
 using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.QueryDto;
-using Cts.WebApp.Pages.Public.Complaints;
+using Cts.WebApp.Pages;
 
 namespace WebAppTests.Pages.PublicComplaints;
 
@@ -21,7 +21,7 @@ public class IndexPageTests
                 requirements: Arg.Any<IEnumerable<IAuthorizationRequirement>>())
             .Returns(AuthorizationResult.Failed());
 
-        var pageModel = new IndexModel(serviceMock, authorizationMock);
+        var pageModel = new ComplaintModel(serviceMock, authorizationMock);
 
         // Act
         var result = await pageModel.OnGetAsync(1);
@@ -44,7 +44,7 @@ public class IndexPageTests
                 requirements: Arg.Any<IEnumerable<IAuthorizationRequirement>>())
             .Returns(AuthorizationResult.Failed());
 
-        var pageModel = new IndexModel(serviceMock, authorizationMock);
+        var pageModel = new ComplaintModel(serviceMock, authorizationMock);
 
         // Act
         var result = await pageModel.OnGetAsync(null);
@@ -66,7 +66,7 @@ public class IndexPageTests
                 requirements: Arg.Any<IEnumerable<IAuthorizationRequirement>>())
             .Returns(AuthorizationResult.Failed());
 
-        var pageModel = new IndexModel(serviceMock, authorizationMock);
+        var pageModel = new ComplaintModel(serviceMock, authorizationMock);
 
         // Act
         var result = await pageModel.OnGetAsync(0);
