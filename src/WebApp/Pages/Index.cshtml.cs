@@ -51,7 +51,7 @@ public class IndexModel(IComplaintService complaints, IConcernService concerns) 
         }
 
         if (!ModelState.IsValid) return Page();
-        return RedirectToPage("Complaints/Index", new { id = FindId });
+        return RedirectToPage("Complaint", new { id = FindId });
     }
 
     public async Task<IActionResult> OnGetSearchAsync(ComplaintPublicSearchDto spec, [FromQuery] int p = 1)
