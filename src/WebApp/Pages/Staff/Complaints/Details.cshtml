@@ -29,23 +29,19 @@
         <div class="container-full">
             <div class="row justify-content-between align-items-end g-0 my-1">
                 <div class="col">
-                    <h4 class="text-danger-emphasis">Complaint Is Deleted</h4>
+                    <h4 class="text-danger-emphasis">Deleted Complaint</h4>
                 </div>
                 <div class="col-auto d-print-none ms-2">
                     <a asp-page="Restore" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-warning">Restore deleted complaint</a>
                 </div>
             </div>
         </div>
-
-        <dl class="row mt-2">
-            <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.DeletedBy)</dt>
-            <dd class="col-sm-8 col-lg-9">
-                @Html.DisplayFor(model => model.ComplaintView.DeletedBy, DisplayTemplate.NameOrPlaceholder)
-                on @Html.DisplayFor(model => model.ComplaintView.DeletedAt, DisplayTemplate.LongDateTimeOrNotEntered)
-            </dd>
-            <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.ComplaintView.DeleteComments)</dt>
-            <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Model.ComplaintView.DeleteComments</dd>
-        </dl>
+        <p>
+            Deleted by @Html.DisplayFor(model => model.ComplaintView.DeletedBy, DisplayTemplate.NameOrPlaceholder)
+            on @Html.DisplayFor(model => model.ComplaintView.DeletedAt, DisplayTemplate.LongDateTimeOrNotEntered)
+        </p>
+        <h5>Comments</h5>
+        <p class="text-break text-pre-line">@Html.DisplayFor(model=>model.ComplaintView.DeleteComments, DisplayTemplate.StringOrPlaceholder)</p>
     </div>
 }
 

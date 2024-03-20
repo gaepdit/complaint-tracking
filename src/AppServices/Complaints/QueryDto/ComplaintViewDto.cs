@@ -149,7 +149,7 @@ public record ComplaintViewDto
     [Display(Name = "Date Deleted")]
     public DateTimeOffset? DeletedAt { get; init; }
 
-    [Display(Name = "Deletion Comments")]
+    [Display(Name = "Comments")]
     public string? DeleteComments { get; init; }
 
     // === Lists ===

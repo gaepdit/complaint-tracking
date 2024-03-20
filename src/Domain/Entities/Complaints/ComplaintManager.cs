@@ -93,6 +93,7 @@ public class ComplaintManager(IComplaintRepository repository) : IComplaintManag
     {
         complaint.SetDeleted(user?.Id);
         complaint.DeleteComments = comment;
+        complaint.DeletedBy = user;
     }
 
     public void Restore(Complaint complaint, ApplicationUser? user)
