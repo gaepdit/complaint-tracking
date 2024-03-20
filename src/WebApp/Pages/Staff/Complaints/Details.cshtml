@@ -226,20 +226,20 @@
                 new { ValidatingSection = nameof(DetailsModel.OnPostNewActionAsync) })
             <div class="row">
                 <div class="col-md-4 mb-3">
-                    @Html.EditorFor(e => e.NewAction.ActionDate, EditorTemplate.InputDateOnlyNullable)
+                    @Html.EditorFor(model => model.NewAction.ActionDate, EditorTemplate.InputDateOnlyNullable)
                 </div>
                 <div class="col-md-8 mb-3">
-                    @Html.EditorFor(e => e.NewAction.Investigator, EditorTemplate.Input)
+                    @Html.EditorFor(model => model.NewAction.Investigator, EditorTemplate.Input)
                 </div>
             </div>
             <div class="row">
                 <div class="mb-3">
-                    @Html.EditorFor(e => e.NewAction.ActionTypeId, EditorTemplate.Select, new { Items = Model.ActionItemTypeSelectList })
+                    @Html.EditorFor(model => model.NewAction.ActionTypeId, EditorTemplate.Select, new { Items = Model.ActionItemTypeSelectList })
                 </div>
             </div>
             <div class="row">
                 <div class="mb-3">
-                    @Html.EditorFor(e => e.NewAction.Comments, EditorTemplate.Textarea, new { Rows = 3 })
+                    @Html.EditorFor(model => model.NewAction.Comments, EditorTemplate.Textarea, new { Rows = 3 })
                 </div>
             </div>
 

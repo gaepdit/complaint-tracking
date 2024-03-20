@@ -63,9 +63,9 @@ builder.Services.AddHostedService<MigratorHostedService>();
 
 // Add API documentation.
 builder.Services.AddMvcCore().AddApiExplorer();
-builder.Services.AddSwaggerGen(c =>
+builder.Services.AddSwaggerGen(options =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo
+    options.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
         Title = "Complaint Tracking System API",
@@ -106,12 +106,12 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // Configure API documentation.
-app.UseSwagger(c => { c.RouteTemplate = "api-docs/{documentName}/openapi.json"; });
-app.UseSwaggerUI(c =>
+app.UseSwagger(options => { options.RouteTemplate = "api-docs/{documentName}/openapi.json"; });
+app.UseSwaggerUI(options =>
 {
-    c.SwaggerEndpoint("v1/openapi.json", "Complaint Tracking System API v1");
-    c.RoutePrefix = "api-docs";
-    c.DocumentTitle = "Complaint Tracking System API";
+    options.SwaggerEndpoint("v1/openapi.json", "Complaint Tracking System API v1");
+    options.RoutePrefix = "api-docs";
+    options.DocumentTitle = "Complaint Tracking System API";
 });
 
 // Map endpoints.

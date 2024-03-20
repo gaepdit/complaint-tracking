@@ -35,7 +35,7 @@ public class MigratorHostedService(IServiceProvider serviceProvider, IConfigurat
             // Initialize any new roles. (No other data is seeded when running EF migrations.)
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             foreach (var role in AppRole.AllRoles.Keys)
-                if (!await migrationContext.Roles.AnyAsync(e => e.Name == role, cancellationToken))
+                if (!await migrationContext.Roles.AnyAsync(identityRole => identityRole.Name == role, cancellationToken))
                     await roleManager.CreateAsync(new IdentityRole(role));
         }
         else if (AppSettings.DevSettings.DeleteAndRebuildDatabase)

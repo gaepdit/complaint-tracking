@@ -21,20 +21,20 @@
         </div>
         <div class="row">
             <div class="col-md-4 mb-3">
-                @Html.EditorFor(e => e.ActionItemUpdate.ActionDate, EditorTemplate.InputDateOnlyNullable)
+                @Html.EditorFor(model => model.ActionItemUpdate.ActionDate, EditorTemplate.InputDateOnlyNullable)
             </div>
             <div class="col-md-8 mb-3">
-                @Html.EditorFor(e => e.ActionItemUpdate.Investigator, EditorTemplate.Input)
+                @Html.EditorFor(model => model.ActionItemUpdate.Investigator, EditorTemplate.Input)
             </div>
         </div>
         <div class="row">
             <div class="mb-3">
-                @Html.EditorFor(e => e.ActionItemUpdate.ActionTypeId, EditorTemplate.Select, new { Items = Model.ActionItemTypeSelectList })
+                @Html.EditorFor(model => model.ActionItemUpdate.ActionTypeId, EditorTemplate.Select, new { Items = Model.ActionItemTypeSelectList })
             </div>
         </div>
         <div class="row">
             <div class="mb-3">
-                @Html.EditorFor(e => e.ActionItemUpdate.Comments, EditorTemplate.Textarea, new { Rows = 3 })
+                @Html.EditorFor(model => model.ActionItemUpdate.Comments, EditorTemplate.Textarea, new { Rows = 3 })
             </div>
         </div>
 

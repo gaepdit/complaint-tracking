@@ -39,7 +39,7 @@ public class IndexModel(IOfficeService officeService, IStaffService staffService
     {
         OfficesSelectList = (await officeService.GetAsListItemsAsync(includeInactive: true)).ToSelectList();
         RolesSelectList = AppRole.AllRoles
-            .Select(r => new ListItem<string>(r.Key, r.Value.DisplayName))
+            .Select(pair => new ListItem<string>(pair.Key, pair.Value.DisplayName))
             .ToSelectList();
     }
 }

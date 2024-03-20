@@ -81,17 +81,17 @@
                 <th scope="col">
                     <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
                        asp-route-Sort="@(Model.Spec.Sort == SortBy.NameAsc ? nameof(SortBy.NameDesc) : nameof(SortBy.NameAsc))">
-                        @Html.DisplayNameFor(m => m.Spec.Name)
-                        @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow, 
+                        @Html.DisplayNameFor(model => model.Spec.Name)
+                        @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow, 
                             new { up = nameof(SortBy.NameAsc), down = nameof(SortBy.NameDesc) })
                     </a>
                 </th>
-                <th scope="col">@Html.DisplayNameFor(m => m.Spec.Email)</th>
+                <th scope="col">@Html.DisplayNameFor(model => model.Spec.Email)</th>
                 <th scope="col">
                     <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
                        asp-route-Sort="@(Model.Spec.Sort == SortBy.OfficeAsc ? nameof(SortBy.OfficeDesc) : nameof(SortBy.OfficeAsc))">
-                        @Html.DisplayNameFor(m => m.Spec.Office)
-                        @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow, 
+                        @Html.DisplayNameFor(model => model.Spec.Office)
+                        @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow, 
                             new { up = nameof(SortBy.OfficeAsc), down = nameof(SortBy.OfficeDesc) })
                     </a>
                 </th>
@@ -114,8 +114,8 @@
                         }
                     </td>
                     <td>@item.Email</td>
-                    <td>@Html.DisplayFor(m => item.OfficeName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })</td>
-                    <td>@Html.DisplayFor(m => item.Active, DisplayTemplate.BoolActive)</td>
+                    <td>@Html.DisplayFor(_ => item.OfficeName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })</td>
+                    <td>@Html.DisplayFor(_ => item.Active, DisplayTemplate.BoolActive)</td>
                     <td>
                         <a asp-page="Details" asp-route-id="@item.Id" class="btn btn-outline-info btn-sm">View</a>
                     </td>

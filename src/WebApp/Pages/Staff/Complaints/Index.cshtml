@@ -249,7 +249,7 @@
                             <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
                                asp-route-Sort="@(Model.Spec.Sort == SortBy.IdAsc ? nameof(SortBy.IdDesc) : nameof(SortBy.IdAsc))"
                                class="link-offset-2">
-                                ID @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow,
+                                ID @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
                                        new { up = nameof(SortBy.IdAsc), down = nameof(SortBy.IdDesc) })
                             </a>
                         </th>
@@ -257,7 +257,7 @@
                             <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
                                asp-route-Sort="@(Model.Spec.Sort == SortBy.ReceivedDateAsc ? nameof(SortBy.ReceivedDateDesc) : nameof(SortBy.ReceivedDateAsc))"
                                class="link-offset-2">
-                                Received @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow,
+                                Received @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
                                              new { up = nameof(SortBy.ReceivedDateAsc), down = nameof(SortBy.ReceivedDateDesc) })
                             </a>
                         </th>
@@ -265,7 +265,7 @@
                             <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
                                asp-route-Sort="@(Model.Spec.Sort == SortBy.StatusAsc ? nameof(SortBy.StatusDesc) : nameof(SortBy.StatusAsc))"
                                class="link-offset-2">
-                                Status @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow,
+                                Status @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
                                            new { up = nameof(SortBy.StatusAsc), down = nameof(SortBy.StatusDesc) })
                             </a>
                         </th>
@@ -282,22 +282,22 @@
                             <th scope="row">
                                 <a asp-page="Details" asp-route-id="@item.Id.ToString()" class="btn btn-outline-primary btn-sm">@item.Id.ToString()</a>
                             </th>
-                            <td class="text-nowrap">@Html.DisplayFor(m => item.ReceivedDate, DisplayTemplate.ShortDate)</td>
+                            <td class="text-nowrap">@Html.DisplayFor(_ => item.ReceivedDate, DisplayTemplate.ShortDate)</td>
                             <td>
                                 @if (item.IsDeleted)
                                 {
                                     <strong>DELETED</strong>
                                     <br />
                                 }
-                                @Html.DisplayFor(m => item.Status)
+                                @Html.DisplayFor(_ => item.Status)
                                 @if (item is { ComplaintClosed: true, ComplaintClosedDate: not null })
                                 {
                                     <br />
-                                    @:on @Html.DisplayFor(m => item.ComplaintClosedDate, DisplayTemplate.ShortDate)
+                                    @:on @Html.DisplayFor(_ => item.ComplaintClosedDate, DisplayTemplate.ShortDate)
                                 }
                             </td>
                             <td>
-                                @Html.DisplayFor(m => item.SourceFacilityName, DisplayTemplate.StringOrPlaceholder)
+                                @Html.DisplayFor(_ => item.SourceFacilityName, DisplayTemplate.StringOrPlaceholder)
                                 <ul>
                                     @if (item.SourceFacilityIdNumber != null)
                                     {
@@ -305,21 +305,21 @@
                                     }
                                     @if (item.ComplaintCounty != null)
                                     {
-                                        <li>@Html.DisplayFor(m => item.ComplaintCounty, DisplayTemplate.County)</li>
+                                        <li>@Html.DisplayFor(_ => item.ComplaintCounty, DisplayTemplate.County)</li>
                                     }
                                 </ul>
                             </td>
                             <td>
-                                @Html.DisplayFor(m => item.AssignedOwnerName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "[Unassigned]" })
+                                @Html.DisplayFor(_ => item.AssignedOwnerName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "[Unassigned]" })
                                 <br />
-                                @Html.DisplayFor(m => item.CurrentOfficeName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "[No office assigned]" })
+                                @Html.DisplayFor(_ => item.CurrentOfficeName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "[No office assigned]" })
                             </td>
                             <td>
                                 <ol type="I">
-                                    <li>@Html.DisplayFor(m => item.PrimaryConcernName, DisplayTemplate.StringOrPlaceholder)</li>
+                                    <li>@Html.DisplayFor(_ => item.PrimaryConcernName, DisplayTemplate.StringOrPlaceholder)</li>
                                     @if (item.SecondaryConcernName is not null)
                                     {
-                                        <li>@Html.DisplayFor(m => item.SecondaryConcernName, DisplayTemplate.StringOrPlaceholder)</li>
+                                        <li>@Html.DisplayFor(_ => item.SecondaryConcernName, DisplayTemplate.StringOrPlaceholder)</li>
                                     }
                                 </ol>
                             </td>

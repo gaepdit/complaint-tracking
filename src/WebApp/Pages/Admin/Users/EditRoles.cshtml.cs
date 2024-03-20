@@ -39,9 +39,9 @@ public class EditRolesModel(IStaffService staffService, IAuthorizationService au
         CanEditDivisionManager = (await authorization.AuthorizeAsync(User, Policies.DivisionManager)).Succeeded;
 
         var roleDictionary = CanEditDivisionManager
-            ? RoleSettings.ToDictionary(r => r.Name, r => r.IsSelected)
-            : RoleSettings.Where(e => e.Name != RoleName.DivisionManager)
-                .ToDictionary(r => r.Name, r => r.IsSelected);
+            ? RoleSettings.ToDictionary(roleSetting => roleSetting.Name, roleSetting => roleSetting.IsSelected)
+            : RoleSettings.Where(roleSetting => roleSetting.Name != RoleName.DivisionManager)
+                .ToDictionary(roleSetting => roleSetting.Name, roleSetting => roleSetting.IsSelected);
 
         var result = await staffService.UpdateRolesAsync(UserId, roleDictionary);
 
@@ -66,12 +66,12 @@ public class EditRolesModel(IStaffService staffService, IAuthorizationService au
     {
         var roles = await staffService.GetRolesAsync(DisplayStaff.Id);
 
-        RoleSettings.AddRange(AppRole.AllRoles.Select(r => new RoleSetting
+        RoleSettings.AddRange(AppRole.AllRoles.Select(pair => new RoleSetting
         {
-            Name = r.Key,
-            DisplayName = r.Value.DisplayName,
-            Description = r.Value.Description,
-            IsSelected = roles.Contains(r.Key),
+            Name = pair.Key,
+            DisplayName = pair.Value.DisplayName,
+            Description = pair.Value.Description,
+            IsSelected = roles.Contains(pair.Key),
         }));
     }
 

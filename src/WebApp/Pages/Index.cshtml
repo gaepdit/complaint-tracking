@@ -156,14 +156,14 @@
                         <th scope="col" class="text-nowrap">
                             <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
                                asp-route-Sort="@(Model.Spec.Sort == SortBy.IdAsc ? nameof(SortBy.IdDesc) : nameof(SortBy.IdAsc))">
-                                ID @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow,
+                                ID @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
                                        new { up = nameof(SortBy.IdAsc), down = nameof(SortBy.IdDesc) })
                             </a>
                         </th>
                         <th scope="col" class="text-nowrap">
                             <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
                                asp-route-Sort="@(Model.Spec.Sort == SortBy.ReceivedDateAsc ? nameof(SortBy.ReceivedDateDesc) : nameof(SortBy.ReceivedDateAsc))">
-                                Date Received @Html.DisplayFor(m => m.SortByName, DisplayTemplate.SortArrow,
+                                Date Received @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
                                                   new { up = nameof(SortBy.ReceivedDateAsc), down = nameof(SortBy.ReceivedDateDesc) })
                             </a>
                         </th>
@@ -180,23 +180,23 @@
                             <th scope="row">
                                 <a asp-page="./Complaint" asp-route-id="@item.Id.ToString()" class="btn btn-outline-primary btn-sm">@item.Id.ToString()</a>
                             </th>
-                            <td class="text-nowrap">@Html.DisplayFor(m => item.ReceivedDate, DisplayTemplate.ShortDate)</td>
+                            <td class="text-nowrap">@Html.DisplayFor(_ => item.ReceivedDate, DisplayTemplate.ShortDate)</td>
                             <td>
                                 <ul>
-                                    <li>@Html.DisplayFor(m => item.SourceFacilityName, DisplayTemplate.StringOrPlaceholder)</li>
+                                    <li>@Html.DisplayFor(_ => item.SourceFacilityName, DisplayTemplate.StringOrPlaceholder)</li>
                                     @if (item.ComplaintCounty != null)
                                     {
                                         <li>@item.ComplaintCounty County</li>
                                     }
                                 </ul>
                             </td>
-                            <td>@Html.DisplayFor(m => item.CurrentOfficeName, DisplayTemplate.StringOrPlaceholder)</td>
+                            <td>@Html.DisplayFor(_ => item.CurrentOfficeName, DisplayTemplate.StringOrPlaceholder)</td>
                             <td>
                                 <ol type="I">
-                                    <li>@Html.DisplayFor(m => item.PrimaryConcernName, DisplayTemplate.StringOrPlaceholder)</li>
+                                    <li>@Html.DisplayFor(_ => item.PrimaryConcernName, DisplayTemplate.StringOrPlaceholder)</li>
                                     @if (item.SecondaryConcernName is not null)
                                     {
-                                        <li>@Html.DisplayFor(m => item.SecondaryConcernName, DisplayTemplate.StringOrPlaceholder)</li>
+                                        <li>@Html.DisplayFor(_ => item.SecondaryConcernName, DisplayTemplate.StringOrPlaceholder)</li>
                                     }
                                 </ol>
                             </td>

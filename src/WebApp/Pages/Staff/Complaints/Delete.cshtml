@@ -21,7 +21,7 @@
 
     <form method="post">
         <div class="mb-3">
-            @Html.EditorFor(e => e.ComplaintClosure.Comment, EditorTemplate.Textarea, new { Rows = 3 })
+            @Html.EditorFor(model => model.ComplaintClosure.Comment, EditorTemplate.Textarea, new { Rows = 3 })
         </div>
         <div class="mt-3 mb-1">
             <button type="submit" class="btn btn-danger col-5 col-sm-3 col-lg-2 me-2">Delete</button>
