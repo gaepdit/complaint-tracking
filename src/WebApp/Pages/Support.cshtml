@@ -5,7 +5,7 @@
     ViewData["Title"] = "Support";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1>Complaint Tracking System @ViewData["Title"]</h1>
 
 <p>
     For general support and policy questions, contact
@@ -29,12 +29,12 @@
     <p>For technical support, contact <a href="@AppSettings.SupportSettings.TechnicalSupportSite" target="_blank" rel="noopener">EPD IT support</a>.</p>
 }
 
-<div class="bg-body-secondary p-3 rounded">
+<div class="callout">
     <small>
-        The CTS was developed by Georgia EPD-IT.
+        The CTS was developed by Georgia EPD-IT.<br/>
         @if (Model.Version is not null)
         {
-            @:Current version: <em>@Model.Version</em>.
+            @:Current version: <em>@Model.Version</em>.<br/>
         }
         Source code available on
         <a href="https://github.com/gaepdit/complaint-tracking" target="_blank" rel="noopener" class="text-decoration-hover link-offset-2">GitHub</a>.

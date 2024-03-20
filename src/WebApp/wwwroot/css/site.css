@@ -200,7 +200,7 @@ html:not([data-bs-theme="dark"]) .bg-dark-subtle .text-danger-emphasis {
 /* External links
 -------------------------------------------------- */
 a[target]::after {
-    content: ' \1f5d7';
+    content: '\00a0\1f5d7';
 }
 
 /* Suppress external link icon */
