@@ -4,24 +4,29 @@
 
 Shown when user is not logged in.
 
-* {Logo} Title (`~/`)
-* Sign In (`~/Account/Login`)
+* {Logo} Title (`/`)
+
+---
+
+* Agency Login (`/Account/Login`)
 
 ## Staff
 
 Shown when staff is logged in.
 
-* {Logo} (`~/Staff`)
-* New Complaint (`~/Staff/Complaints/Add`)
-* Complaint Search (`~/Staff/Complaints`)
-* Action Search (`~/Staff/ComplaintActions`)
+* {Logo} Title (`/Staff`)
+* Complaint Search (`/Staff/Complaints`)
+
+---
+
+* New Complaint (`/Staff/Complaints/Add`)
 * More (Drop-down)
-    * Reports (`~/Admin/Reports`)
-    * CTS Users (`~/Admin/Users`)
-    * Site Maintenance (`~/Admin/Maintenance`)
-    * Public Portal (`~/Public`)
+    * Complaint Action Search (`/Staff/ComplaintActions`)
+    * Reports (`/Admin/Reporting`)
+    * CTS Users (`/Admin/Users`)
+    * Site Maintenance (`/Admin/Maintenance`)
+    * Public Search (`/`)
 * Account (Drop-down)
-    * You profile (`~/Account`)
-    * Support (`~/Account/Support`)
+    * Your profile (`/Account`)
     * Sign out (*form*)
 * Theme toggle

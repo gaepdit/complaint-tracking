@@ -315,9 +315,11 @@ details.card:not([open]) summary.card-header {
 /* Bootstrap Icons
 -------------------------------------------------- */
 .bi {
-    width: 1em;
-    height: 1em;
+    width: 1.1em;
+    height: 1.1em;
     fill: currentColor;
+    vertical-align: text-bottom;
+    overflow: visible !important;
 }
 
 /* Fix for Bootstrap textarea with "floating" label

@@ -9,17 +9,17 @@ public class MainMenuViewComponent(IAuthorizationService authorization) : ViewCo
     public async Task<IViewComponentResult> InvokeAsync(PageModel model) =>
         View("Default", new MenuParams
         {
-            HideSignin = model is LoginModel,
-            IsActive = (await authorization.AuthorizeAsync((ClaimsPrincipal)User, Policies.ActiveUser)).Succeeded,
-            IsLoggedIn = (await authorization.AuthorizeAsync((ClaimsPrincipal)User, Policies.LoggedInUser)).Succeeded,
-            IsStaff = (await authorization.AuthorizeAsync((ClaimsPrincipal)User, Policies.StaffUser)).Succeeded,
+            IsLoginPage = model is LoginModel,
+            IsActiveUser = (await authorization.AuthorizeAsync((ClaimsPrincipal)User, Policies.ActiveUser)).Succeeded,
+            IsLoggedInUser = (await authorization.AuthorizeAsync((ClaimsPrincipal)User, Policies.LoggedInUser)).Succeeded,
+            IsStaffUser = (await authorization.AuthorizeAsync((ClaimsPrincipal)User, Policies.StaffUser)).Succeeded,
         });
 
     public record MenuParams
     {
-        public bool HideSignin { get; init; }
-        public bool IsActive { get; init; }
-        public bool IsLoggedIn { get; init; }
-        public bool IsStaff { get; init; }
+        public bool IsLoginPage { get; init; }
+        public bool IsActiveUser { get; init; }
+        public bool IsLoggedInUser { get; init; }
+        public bool IsStaffUser { get; init; }
     }
 }

@@ -32,18 +32,22 @@
 <footer class="footer pt-3">
     <div class="bg-body-tertiary py-2 border-bottom d-print-none">
         <div class="container">
-            <a href="#top" class="text-decoration-hover link-offset-2-hover">↑ Return to top</a>
+            <a href="#top" class="btn">↑ Return to top</a>
         </div>
     </div>
     <div class="bg-body-secondary pt-2 pb-3">
         <div class="container">
             <small>
-                Complaint Tracking System | <a asp-page="Support">Support</a><br />
-                &copy; @DateTime.Now.Year.ToString() State of Georgia
+                Complaint Tracking System
                 <span class="d-print-none">
-                    | <a href="https://georgia.gov/accessibility" target="_blank" rel="noopener">Accessibility</a>
-                    | <a href="https://gadnr.org/ada" target="_blank" rel="noopener">DNR Accessibility Notice</a>
-                    | <a href="https://georgia.gov/privacysecurity" target="_blank" rel="noopener">Privacy/Security</a>
+                    | <a asp-page="/Support" class="text-decoration-hover link-offset-2">CTS Support</a>
+                    | <a href="https://epd.georgia.gov/" target="_blank" rel="noopener" class="text-decoration-hover link-offset-2">Environmental Protection Division</a>
+                </span>
+                <br />&copy; @DateTime.Now.Year.ToString() State of Georgia
+                <span class="d-print-none">
+                    | <a href="https://georgia.gov/accessibility" target="_blank" rel="noopener" class="text-decoration-hover link-offset-2">Accessibility</a>
+                    | <a href="https://gadnr.org/ada" target="_blank" rel="noopener" class="text-decoration-hover link-offset-2">DNR Accessibility Notice</a>
+                    | <a href="https://georgia.gov/privacysecurity" target="_blank" rel="noopener" class="text-decoration-hover link-offset-2">Privacy/Security</a>
                 </span>
             </small>
         </div>
