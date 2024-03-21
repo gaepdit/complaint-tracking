@@ -3,7 +3,7 @@
 namespace Cts.WebApp.Pages.Admin.Maintenance;
 
 [Authorize(Policy = nameof(Policies.ActiveUser))]
-public class IndexModel : PageModel
+public class MaintenanceIndexModel : PageModel
 {
     public void OnGet()
     {

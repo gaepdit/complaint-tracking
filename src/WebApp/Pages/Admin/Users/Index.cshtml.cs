@@ -12,7 +12,7 @@ using GaEpd.AppLibrary.Pagination;
 namespace Cts.WebApp.Pages.Admin.Users;
 
 [Authorize(Policy = nameof(Policies.ActiveUser))]
-public class IndexModel(IOfficeService officeService, IStaffService staffService) : PageModel
+public class UsersIndexModel(IOfficeService officeService, IStaffService staffService) : PageModel
 {
     public StaffSearchDto Spec { get; set; } = default!;
     public bool ShowResults { get; private set; }

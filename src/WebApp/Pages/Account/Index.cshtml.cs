@@ -6,7 +6,7 @@ using Cts.Domain.Identity;
 namespace Cts.WebApp.Pages.Account;
 
 [Authorize(Policy = nameof(Policies.LoggedInUser))]
-public class IndexModel : PageModel
+public class AccountIndexModel : PageModel
 {
     public StaffViewDto DisplayStaff { get; private set; } = default!;
     public string? OfficeName => DisplayStaff.Office?.Name;

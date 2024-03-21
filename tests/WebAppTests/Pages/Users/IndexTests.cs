@@ -23,7 +23,7 @@ public class IndexTests
         var staffServiceMock = Substitute.For<IStaffService>();
         staffServiceMock.SearchAsync(Arg.Any<StaffSearchDto>(), Arg.Any<PaginatedRequest>()).Returns(output);
 
-        var page = new IndexModel(officeServiceMock, staffServiceMock)
+        var page = new UsersIndexModel(officeServiceMock, staffServiceMock)
             { TempData = WebAppTestsSetup.PageTempData() };
 
         // Act
@@ -45,7 +45,7 @@ public class IndexTests
         officeServiceMock.GetAsListItemsAsync(Arg.Any<bool>(), Arg.Any<CancellationToken>())
             .Returns(new List<ListItem>());
         var staffServiceMock = Substitute.For<IStaffService>();
-        var page = new IndexModel(officeServiceMock, staffServiceMock)
+        var page = new UsersIndexModel(officeServiceMock, staffServiceMock)
             { TempData = WebAppTestsSetup.PageTempData() };
         page.ModelState.AddModelError("Error", "Sample error description");
 

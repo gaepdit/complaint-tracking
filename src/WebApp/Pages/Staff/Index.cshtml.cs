@@ -1,4 +1,4 @@
-﻿using Cts.AppServices.Complaints;
+using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.QueryDto;
 using Cts.AppServices.Permissions;
 using Cts.AppServices.Staff;
@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Cts.WebApp.Pages.Staff;
 
-public class IndexModel(
+public class DashboardIndexModel(
     IComplaintService complaints,
     IStaffService staffService,
     IAuthorizationService authorization) : PageModel
