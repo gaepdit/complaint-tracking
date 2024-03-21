@@ -10,6 +10,7 @@ using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
 using GaEpd.AppLibrary.Pagination;
+using System.Linq.Expressions;
 
 namespace Cts.AppServices.Complaints;
 
@@ -36,20 +37,9 @@ public sealed class ComplaintService(
     public Task<bool> PublicExistsAsync(int id, CancellationToken token = default) =>
         complaintRepository.ExistsAsync(ComplaintFilters.PublicIdPredicate(id), token);
 
-    public async Task<IPaginatedResult<ComplaintSearchResultDto>> PublicSearchAsync(
-        ComplaintPublicSearchDto spec, PaginatedRequest paging, CancellationToken token = default)
-    {
-        var predicate = ComplaintFilters.PublicSearchPredicate(spec);
-
-        var count = await complaintRepository.CountAsync(predicate, token).ConfigureAwait(false);
-
-        var list = count > 0
-            ? mapper.Map<IReadOnlyList<ComplaintSearchResultDto>>(await complaintRepository
-                .GetPagedListAsync(predicate, paging, token).ConfigureAwait(false))
-            : [];
-
-        return new PaginatedResult<ComplaintSearchResultDto>(list, count, paging);
-    }
+    public Task<IPaginatedResult<ComplaintSearchResultDto>> PublicSearchAsync(
+        ComplaintPublicSearchDto spec, PaginatedRequest paging, CancellationToken token = default) =>
+        PerformPagedSearchAsync(paging, ComplaintFilters.PublicSearchPredicate(spec), token);
 
     // Staff read methods
 
@@ -68,15 +58,64 @@ public sealed class ComplaintService(
     public async Task<bool> ExistsAsync(int id, CancellationToken token = default) =>
         await complaintRepository.ExistsAsync(id, token).ConfigureAwait(false);
 
-    public async Task<IPaginatedResult<ComplaintSearchResultDto>> SearchAsync(
-        ComplaintSearchDto spec, PaginatedRequest paging, CancellationToken token = default)
-    {
-        var predicate = ComplaintFilters.SearchPredicate(spec);
-        var count = await complaintRepository.CountAsync(predicate, token).ConfigureAwait(false);
-        var complaints = await complaintRepository.GetPagedListAsync(predicate, paging, token).ConfigureAwait(false);
-        var list = count > 0 ? mapper.Map<IReadOnlyList<ComplaintSearchResultDto>>(complaints) : [];
+    public Task<IPaginatedResult<ComplaintSearchResultDto>> SearchAsync(
+        ComplaintSearchDto spec, PaginatedRequest paging, CancellationToken token = default) =>
+        PerformPagedSearchAsync(paging, ComplaintFilters.SearchPredicate(spec), token);
 
-        return new PaginatedResult<ComplaintSearchResultDto>(list, count, paging);
+    // Private search methods
+
+    private async Task<IPaginatedResult<ComplaintSearchResultDto>> PerformPagedSearchAsync(PaginatedRequest paging,
+        Expression<Func<Complaint, bool>> predicate, CancellationToken token)
+    {
+        var count = await complaintRepository.CountAsync(predicate, token).ConfigureAwait(false);
+        var items = count > 0
+            ? mapper.Map<IEnumerable<ComplaintSearchResultDto>>(await complaintRepository
+                .GetPagedListAsync(predicate, paging, token).ConfigureAwait(false))
+            : [];
+        return new PaginatedResult<ComplaintSearchResultDto>(items, count, paging);
+    }
+
+    private async Task<IReadOnlyCollection<ComplaintSearchResultDto>> PerformSearchAsync(ComplaintSearchDto spec,
+        CancellationToken token) =>
+        mapper.Map<IReadOnlyCollection<ComplaintSearchResultDto>>((await complaintRepository
+                .GetListAsync(ComplaintFilters.SearchPredicate(spec), token).ConfigureAwait(false))
+            .OrderByDescending(complaint => complaint.ReceivedDate));
+
+    // Dashboard methods
+
+    public Task<IReadOnlyCollection<ComplaintSearchResultDto>> GetNewComplaintsForUserAsync(string userId,
+        CancellationToken token = default)
+    {
+        var spec = new ComplaintSearchDto { Status = SearchComplaintStatus.NotAccepted, Assigned = userId };
+        return PerformSearchAsync(spec, token);
+    }
+
+    public Task<IReadOnlyCollection<ComplaintSearchResultDto>> GetOpenComplaintsForUserAsync(string userId,
+        CancellationToken token = default)
+    {
+        var spec = new ComplaintSearchDto { Status = SearchComplaintStatus.AllOpen, Assigned = userId };
+        return PerformSearchAsync(spec, token);
+    }
+
+    public Task<IReadOnlyCollection<ComplaintSearchResultDto>> GetReviewPendingComplaintsForUserAsync(string userId,
+        CancellationToken token = default)
+    {
+        var spec = new ComplaintSearchDto { Status = SearchComplaintStatus.ReviewPending, Reviewer = userId };
+        return PerformSearchAsync(spec, token);
+    }
+
+    public Task<IReadOnlyCollection<ComplaintSearchResultDto>> GetUnacceptedComplaintsForOfficeAsync(Guid officeId,
+        CancellationToken token = default)
+    {
+        var spec = new ComplaintSearchDto { Status = SearchComplaintStatus.NotAccepted, Office = officeId };
+        return PerformSearchAsync(spec, token);
+    }
+
+    public Task<IReadOnlyCollection<ComplaintSearchResultDto>> GetUnassignedComplaintsForOfficeAsync(Guid officeId,
+        CancellationToken token = default)
+    {
+        var spec = new ComplaintSearchDto { Status = SearchComplaintStatus.NotAssigned, Office = officeId };
+        return PerformSearchAsync(spec, token);
     }
 
     // Staff complaint write methods
@@ -228,7 +267,7 @@ public sealed class ComplaintService(
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
     }
 
-    // Private methods
+    // Private complaint write methods
 
     private async Task AddTransitionAsync(Complaint complaint, TransitionType type, ApplicationUser? user,
         CancellationToken token, string? comment = null) =>

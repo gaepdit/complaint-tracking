@@ -41,7 +41,7 @@ public class OfficeApiController(IOfficeService officeService, IStaffService sta
         if (user is null || !user.Active) return Unauthorized();
 
         if (user.Office?.Id == id // user is in this office
-            || await officeService.UserIsAssignorAsync(id, user.Id) // user is assignor for this office
+            || await officeService.UserIsAssignorForOfficeAsync(id, user.Id) // user is assignor for this office
             || await staffService.HasAppRoleAsync(user.Id, AppRole.DivisionManagerRole)) // user is Division Manager
         {
             return Json(await officeService.GetStaffAsListItemsAsync(id));

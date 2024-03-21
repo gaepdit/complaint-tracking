@@ -12,5 +12,8 @@ public interface IOfficeService : IMaintenanceItemService<OfficeViewDto, OfficeU
     Task<IReadOnlyList<ListItem<string>>> GetStaffAsListItemsAsync(Guid? id, bool includeInactive = false,
         CancellationToken token = default);
 
-    Task<bool> UserIsAssignorAsync(Guid id, string userId, CancellationToken token = default);
+    Task<bool> UserIsAssignorForOfficeAsync(Guid id, string userId, CancellationToken token = default);
+
+    Task<IReadOnlyCollection<OfficeViewDto>> GetOfficesForAssignorAsync(string userId, Guid? ignoreOffice,
+        CancellationToken token = default);
 }

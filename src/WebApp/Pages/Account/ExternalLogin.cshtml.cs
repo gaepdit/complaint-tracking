@@ -25,7 +25,7 @@ public class ExternalLoginModel(
     public string? ReturnUrl { get; private set; }
 
     // Don't call this page directly
-    public IActionResult OnGet() => RedirectToPage("./Login");
+    public RedirectToPageResult OnGet() => RedirectToPage("./Login");
 
     // This Post method is called from the Login page
     public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
@@ -117,7 +117,7 @@ public class ExternalLoginModel(
     }
 
     // Redirect to Login page with error message.
-    private IActionResult RedirectToLoginPageWithError(string message)
+    private RedirectToPageResult RedirectToLoginPageWithError(string message)
     {
         logger.LogWarning("External login error: {Message}", message);
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Danger, message);
@@ -206,7 +206,7 @@ public class ExternalLoginModel(
     }
 
     // Add error info and return this Page.
-    private IActionResult FailedLogin(IdentityResult result, ApplicationUser user)
+    private PageResult FailedLogin(IdentityResult result, ApplicationUser user)
     {
         DisplayFailedUser = user;
         foreach (var error in result.Errors) ModelState.AddModelError(string.Empty, error.Description);
@@ -215,7 +215,7 @@ public class ExternalLoginModel(
 
     private IActionResult LocalRedirectOrHome()
     {
-        if (ReturnUrl is null) return RedirectToPage("/Index");
+        if (ReturnUrl is null) return RedirectToPage("/Staff/Index");
         return LocalRedirect(ReturnUrl);
     }
 }

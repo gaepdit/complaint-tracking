@@ -23,8 +23,6 @@ public static class UserRequirements
 
     internal static bool IsStaff(this IPrincipal user) => user.IsInRole(RoleName.Staff) || user.IsManager();
 
-    internal static bool IsStaffOrMaintainer(this IPrincipal user) => user.IsStaff() || user.IsSiteMaintainer();
-
     internal static bool IsUserAdmin(this IPrincipal user) =>
         user.IsInRole(RoleName.UserAdmin) || user.IsDivisionManager();
 }

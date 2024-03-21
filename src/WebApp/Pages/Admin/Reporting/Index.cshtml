@@ -2,20 +2,20 @@
 @using Cts.WebApp.Pages.Shared.DisplayTemplates
 @using GaEpd.AppLibrary.Extensions
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@model IndexModel
+@model ReportingIndexModel
 
-@if (Model.CurrentReport == IndexModel.Menu)
+@if (Model.CurrentReport == ReportingIndexModel.Menu)
 {
     ViewData["Title"] = "CTS Reports";
 
     <h1>Status Reports</h1>
     <div class="list-group mb-4">
-        <a asp-page-handler="@IndexModel.DaysSinceMostRecentAction" class="list-group-item list-group-item-action">Days Since Most Recent Action</a>
-        <a asp-page-handler="@IndexModel.ComplaintsByStaff" class="list-group-item list-group-item-action">Complaint Status/Number of Complaints By Staff</a>
-        <a asp-page-handler="@IndexModel.DaysToClosureByOffice" class="list-group-item list-group-item-action">Days to Closure By Office</a>
-        <a asp-page-handler="@IndexModel.DaysToClosureByStaff" class="list-group-item list-group-item-action">Days to Closure By Staff</a>
-        <a asp-page-handler="@IndexModel.DaysToFollowupByStaff" class="list-group-item list-group-item-action">Days to Follow-up Action By Staff</a>
-        <a asp-page-handler="@IndexModel.ComplaintsAssignedToInactiveUsers" class="list-group-item list-group-item-action">Open complaints assigned to inactive users</a>
+        <a asp-page-handler="@ReportingIndexModel.DaysSinceMostRecentAction" class="list-group-item list-group-item-action">Days Since Most Recent Action</a>
+        <a asp-page-handler="@ReportingIndexModel.ComplaintsByStaff" class="list-group-item list-group-item-action">Complaint Status/Number of Complaints By Staff</a>
+        <a asp-page-handler="@ReportingIndexModel.DaysToClosureByOffice" class="list-group-item list-group-item-action">Days to Closure By Office</a>
+        <a asp-page-handler="@ReportingIndexModel.DaysToClosureByStaff" class="list-group-item list-group-item-action">Days to Closure By Staff</a>
+        <a asp-page-handler="@ReportingIndexModel.DaysToFollowupByStaff" class="list-group-item list-group-item-action">Days to Follow-up Action By Staff</a>
+        <a asp-page-handler="@ReportingIndexModel.ComplaintsAssignedToInactiveUsers" class="list-group-item list-group-item-action">Open complaints assigned to inactive users</a>
     </div>
 
     @if (Model.CanExportDataArchive)
