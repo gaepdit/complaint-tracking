@@ -91,7 +91,10 @@ public record ComplaintSearchDto
 
     [Display(Name = "Assigned associate")]
     public string? Assigned { get; init; }
-
+    
+    // Additional search terms used on Dashboard; these should not be added to UI route values.
+    public string? Reviewer { get; init; }
+    
     // UI Routing
     public IDictionary<string, string?> AsRouteValues() => new Dictionary<string, string?>
     {

@@ -1,4 +1,4 @@
-@page
+﻿@page
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model DashboardIndexModel
 @{
@@ -27,23 +27,25 @@
         </div>
     </div>
 
-    <div class="card mt-4">
-        <div class="card-header">
-            <h2 id="my-new-complaints" class="h5">My New Complaints</h2>
-        </div>
-        <div class="card-body">
-            <partial name="Shared/_DashboardComplaintListPartial" model="Model.MyNewComplaints" />
-        </div>
-    </div>
+    <partial name="Shared/_DashboardCardPartial" model="Model.MyNewComplaints" />
+    <partial name="Shared/_DashboardCardPartial" model="Model.MyOpenComplaints" />
 
-    <div class="card mt-4">
-        <div class="card-header">
-            <h2 id="my-open-complaints" class="h5">My Open Complaints</h2>
-        </div>
-        <div class="card-body">
-            <partial name="Shared/_DashboardComplaintListPartial" model="Model.MyOpenComplaints" />
-        </div>
-    </div>
+    @if (Model.IsManager)
+    {
+        <h2 class="mt-4">Management Dashboard</h2>
+        <partial name="Shared/_DashboardCardPartial" model="Model.MgrReviewPending" />
+        <partial name="Shared/_DashboardCardPartial" model="Model.MgrUnassignedComplaints" />
+        <partial name="Shared/_DashboardCardPartial" model="Model.MgrUnacceptedComplaints" />
+    }
+
+    @if (Model.IsAssignor)
+    {
+        <h2 class="mt-4">Assignor Dashboard</h2>
+        foreach (var card in Model.AssignorUnassignedComplaints)
+        {
+            <partial name="Shared/_DashboardCardPartial" model="card" />
+        }
+    }
 }
 else
 {

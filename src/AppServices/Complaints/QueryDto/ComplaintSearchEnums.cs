@@ -27,6 +27,7 @@ public enum SearchComplaintStatus
     [Display(Name = "Under Investigation")] UnderInvestigation = 3,
     [Display(Name = "Review Pending")] ReviewPending = 4,
     [Display(Name = "Assigned But Not Accepted")] NotAccepted = 7,
+    [Display(Name = "Not Assigned")] NotAssigned = 8,
     [Display(Name = "Approved/Closed")] Closed = 5,
     [Display(Name = "Administratively Closed")] AdministrativelyClosed = 6,
 }

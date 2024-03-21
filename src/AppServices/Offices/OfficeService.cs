@@ -53,8 +53,11 @@ public sealed class OfficeService(
 
     public async Task<Guid> CreateAsync(OfficeCreateDto resource, CancellationToken token = default)
     {
-        var office = await manager.CreateAsync(resource.Name, (await _userService.GetCurrentUserAsync().ConfigureAwait(false))?.Id, token).ConfigureAwait(false);
-        if (resource.AssignorId != null) office.Assignor = await _userService.FindUserAsync(resource.AssignorId).ConfigureAwait(false);
+        var office = await manager
+            .CreateAsync(resource.Name, (await _userService.GetCurrentUserAsync().ConfigureAwait(false))?.Id, token)
+            .ConfigureAwait(false);
+        if (resource.AssignorId != null)
+            office.Assignor = await _userService.FindUserAsync(resource.AssignorId).ConfigureAwait(false);
         await repository.InsertAsync(office, token: token).ConfigureAwait(false);
         return office.Id;
     }
@@ -64,12 +67,17 @@ public sealed class OfficeService(
         id is null
             ? Array.Empty<ListItem<string>>()
             : (await repository.GetStaffMembersListAsync(id.Value, includeInactive, token).ConfigureAwait(false))
-            .Select(e => new ListItem<string>(e.Id, e.SortableNameWithInactive))
-            .ToList();
+            .Select(user => new ListItem<string>(user.Id, user.SortableNameWithInactive)).ToList();
 
-    public async Task<bool> UserIsAssignorAsync(Guid id, string userId, CancellationToken token = default)
+    public async Task<bool> UserIsAssignorForOfficeAsync(Guid id, string userId, CancellationToken token = default)
     {
         var office = await repository.FindIncludeAssignorAsync(id, token).ConfigureAwait(false);
         return office is { Active: true } && office.Assignor?.Id == userId;
     }
+
+    public async Task<IReadOnlyCollection<OfficeViewDto>> GetOfficesForAssignorAsync(string userId, Guid? ignoreOffice,
+        CancellationToken token = default) =>
+        _mapper.Map<IReadOnlyCollection<OfficeViewDto>>(await repository
+            .GetListAsync(office => office.Id != ignoreOffice &&
+                office.Assignor != null && office.Assignor.Id == userId, token).ConfigureAwait(false));
 }

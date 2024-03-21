@@ -1,0 +1,60 @@
+﻿@using Cts.WebApp.Pages.Shared.DisplayTemplates
+@model Cts.WebApp.Pages.Staff.DashboardIndexModel.DashboardCard
+
+<div class="card mt-4">
+    <div class="card-header">
+        <h2 id="@Model.CardId" class="h5">@Model.Title</h2>
+    </div>
+    <div class="card-body">
+
+        @if (Model.Complaints.Count == 0)
+        {
+            <p>
+                <em>None.</em>
+            </p>
+        }
+        else
+        {
+            <div class="table-responsive-md">
+                <table class="table table-borderless table-hover" aria-describedby="@Model.CardId">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Received</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Source/Location</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var complaint in Model.Complaints)
+                    {
+                        <tr>
+                            <th scope="row">
+                                <a asp-page="Complaints/Details" asp-route-id="@complaint.Id.ToString()" class="btn btn-outline-primary btn-sm">@complaint.Id.ToString()</a>
+                            </th>
+                            <td class="text-nowrap">@Html.DisplayFor(_ => complaint.ReceivedDate, DisplayTemplate.ShortDate)</td>
+                            <td>@Html.DisplayFor(_ => complaint.Status)</td>
+                            <td>
+                                @Html.DisplayFor(_ => complaint.SourceFacilityName, DisplayTemplate.StringOrPlaceholder)
+                                @if (complaint.SourceFacilityIdNumber != null || complaint.ComplaintCounty != null)
+                                {
+                                    <ul>
+                                        @if (complaint.SourceFacilityIdNumber != null)
+                                        {
+                                            <li>ID: @complaint.SourceFacilityIdNumber</li>
+                                        }
+                                        @if (complaint.ComplaintCounty != null)
+                                        {
+                                            <li>@Html.DisplayFor(_ => complaint.ComplaintCounty, DisplayTemplate.County)</li>
+                                        }
+                                    </ul>
+                                }
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

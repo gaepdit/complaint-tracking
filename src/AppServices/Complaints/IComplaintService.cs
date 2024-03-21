@@ -27,8 +27,22 @@ public interface IComplaintService : IDisposable, IAsyncDisposable
     Task<IPaginatedResult<ComplaintSearchResultDto>> SearchAsync(ComplaintSearchDto spec, PaginatedRequest paging,
         CancellationToken token = default);
 
-    Task<IReadOnlyList<ComplaintSearchResultDto>> GetNewComplaintsForUserAsync(string? userId, CancellationToken token = default);
-    Task<IReadOnlyList<ComplaintSearchResultDto>> GetOpenComplaintsForUserAsync(string? userId, CancellationToken token = default);
+    // Staff Dashboard
+    Task<IReadOnlyCollection<ComplaintSearchResultDto>> GetNewComplaintsForUserAsync(string userId,
+        CancellationToken token = default);
+
+    Task<IReadOnlyCollection<ComplaintSearchResultDto>> GetOpenComplaintsForUserAsync(string userId,
+        CancellationToken token = default);
+
+    // Manager Dashboard
+    Task<IReadOnlyCollection<ComplaintSearchResultDto>> GetReviewPendingComplaintsForUserAsync(string userId,
+        CancellationToken token = default);
+
+    Task<IReadOnlyCollection<ComplaintSearchResultDto>> GetUnacceptedComplaintsForOfficeAsync(Guid officeId,
+        CancellationToken token = default);
+
+    Task<IReadOnlyCollection<ComplaintSearchResultDto>> GetUnassignedComplaintsForOfficeAsync(Guid officeId,
+        CancellationToken token = default);
 
     // Staff complaint write methods
 
