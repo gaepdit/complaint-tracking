@@ -93,6 +93,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
         // See: https://stackoverflow.com/a/69826156/212978
         // and: https://learn.microsoft.com/en-us/ef/core/modeling/owned-entities#collections-of-owned-types
         // builder.Entity<EntityWithOwnedTypeCollection>().OwnsMany(e => e.OwnedTypeCollection, b => b.HasKey("Id"));
+        // === UNUSED because CTS does not have any entities with collections of owned types.
 #pragma warning restore S125
 
         // "Handling DateTimeOffset in SQLite with Entity Framework Core"
