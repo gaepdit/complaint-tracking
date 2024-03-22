@@ -1,7 +1,7 @@
 ﻿using Cts.AppServices.Attachments;
 using Cts.WebApp.Platform.Settings;
 using PublicComplaint = Cts.WebApp.Pages;
-using StaffComplaint = Cts.WebApp.Pages.Staff.Complaints.Attachment;
+using StaffComplaint = Cts.WebApp.Pages.Staff.Complaints;
 
 namespace Cts.WebApp.Platform.PageModelHelpers;
 
