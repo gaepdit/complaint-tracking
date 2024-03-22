@@ -1,8 +1,8 @@
 ﻿using Cts.WebApp.Platform.Settings;
 
-namespace Cts.WebApp.Platform.Services;
+namespace Cts.WebApp.Platform.AppConfiguration;
 
-public static class AppConfiguration
+public static class BindingsConfiguration
 {
     public static void BindSettings(WebApplicationBuilder builder)
     {

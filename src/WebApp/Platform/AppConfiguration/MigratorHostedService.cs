@@ -7,7 +7,7 @@ using GaEpd.FileService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace Cts.WebApp.Platform.Services;
+namespace Cts.WebApp.Platform.AppConfiguration;
 
 public class MigratorHostedService(IServiceProvider serviceProvider, IConfiguration configuration) : IHostedService
 {

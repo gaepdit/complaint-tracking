@@ -14,7 +14,7 @@ using Cts.WebApp.Platform.Settings;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace Cts.WebApp.Platform.Services;
+namespace Cts.WebApp.Platform.AppConfiguration;
 
 public static class DataPersistence
 {

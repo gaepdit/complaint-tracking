@@ -6,7 +6,7 @@ using Cts.LocalRepository.Identity;
 using Cts.WebApp.Platform.Settings;
 using Microsoft.AspNetCore.Identity;
 
-namespace Cts.WebApp.Platform.Services;
+namespace Cts.WebApp.Platform.AppConfiguration;
 
 public static class IdentityStores
 {
