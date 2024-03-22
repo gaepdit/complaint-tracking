@@ -8,17 +8,14 @@
                 <a asp-page="/Staff/Index" title="Dashboard">
                     <img src="~/images/epd-icon.svg" alt="Georgia EPD" class="img-logo pe-2" />
                 </a>
-                <a class="navbar-brand nav-link me-2" asp-page="/Staff/Index" title="Dashboard">
-                    <span class="d-none d-sm-inline">CTS</span>
-                    <span class="d-inline d-sm-none">Complaint Tracking System</span>
-                </a>
+                <a asp-page="/Staff/Index" title="Dashboard" class="navbar-brand me-2 d-inline d-sm-none">Complaint Tracking System</a>
             }
             else
             {
                 <a asp-page="/Index" title="Complaint Tracking System">
                     <img src="~/images/epd-icon.svg" alt="Georgia EPD" class="img-logo pe-2" />
                 </a>
-                <a class="navbar-brand nav-link me-2" asp-page="/Index">Complaint Tracking System</a>
+                <a class="navbar-brand nav-link me-2" asp-page="/Index" title="Complaint Tracking System">Complaint Tracking System</a>
             }
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav-content"
                     aria-controls="main-nav-content" aria-haspopup="menu" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,10 +24,18 @@
 
             <div class="navbar-collapse collapse d-sm-inline-flex" id="main-nav-content">
                 <ul class="navbar-nav flex-grow-1">
+                    @if (Model.IsLoggedInUser)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Staff/Index" title="Dashboard">Dashboard</a>
+                        </li>
+                    }
                     @if (Model.IsStaffUser)
                     {
                         <li class="nav-item">
-                            <a class="nav-link" asp-page="/Staff/Complaints/Index" title="Complaint Search">Complaint Search</a>
+                            <a class="nav-link" asp-page="/Staff/Complaints/Index" title="Complaint Search">
+                                <span class="d-inline d-sm-none d-md-inline">Complaint</span> Search
+                            </a>
                         </li>
                     }
                 </ul>
@@ -39,7 +44,7 @@
                     @if (Model.IsStaffUser)
                     {
                         <li class="nav-item">
-                            <a class="nav-link" asp-page="/Staff/Complaints/Add" title="Add New Complaint">&#x2795; <span class="d-inline d-sm-none">Add</span> New <span class="d-inline d-sm-none">Complaint</span></a>
+                            <a class="nav-link" asp-page="/Staff/Complaints/Add" title="Add New Complaint">&#x2795;&nbsp;<span class="d-inline d-sm-none">Add&nbsp;</span>New <span class="d-inline d-sm-none d-lg-inline">Complaint</span></a>
                         </li>
                     }
                     @if (Model.IsActiveUser)
