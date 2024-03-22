@@ -1,3 +1,4 @@
+using Cts.AppServices.Complaints.QueryDto;
 using Cts.AppServices.Offices;
 using Cts.AppServices.Permissions;
 using Cts.AppServices.Reporting;
@@ -60,6 +61,12 @@ public class ReportingIndexModel(
         ? null
         : OfficeReport.Sum(view => view.TotalDaysToClosure) / (double)OfficeReportsTotalComplaints;
 
+    // Results linking
+    public SearchComplaintStatus? LinkStatus { get; private set; }
+    public bool LinkReceivedDate { get; private set; }
+    public bool LinkClosedDate { get; private set; }
+    public bool LinkToActionsSearch { get; private set; }
+    
     // Menu page
     public async Task OnGetAsync()
     {
@@ -74,14 +81,15 @@ public class ReportingIndexModel(
         CurrentReport = ComplaintsAssignedToInactiveUsers;
         ShowForm = false;
         ShowStaffReport = true;
-
+        
+        LinkStatus = SearchComplaintStatus.AllOpen;
         StaffReport = await reportingService.ComplaintsAssignedToInactiveUsersAsync();
     }
 
     public async Task OnGetComplaintsByStaffAsync(Guid? office, DateOnly? from, DateOnly? to,
         CancellationToken token)
     {
-        CurrentReport = ComplaintsByStaff;
+        CurrentReport = ComplaintsReceived;
         ShowDateRange = true;
         ShowOfficeSelect = true;
         ShowStaffReport = true;
@@ -89,6 +97,7 @@ public class ReportingIndexModel(
         PopulateDateRangeForm(from, to);
         await PopulateOfficeFormAsync(office, token);
 
+        LinkReceivedDate = true;
         StaffReport = await reportingService.ComplaintsByStaffAsync(Office!.Value, From!.Value, To!.Value);
     }
 
@@ -103,6 +112,7 @@ public class ReportingIndexModel(
         PopulateThresholdForm(threshold);
         await PopulateOfficeFormAsync(office, token);
 
+        LinkStatus = SearchComplaintStatus.AllOpen;
         StaffReport = await reportingService.DaysSinceMostRecentActionAsync(Office!.Value, Threshold!.Value);
     }
 
@@ -113,10 +123,11 @@ public class ReportingIndexModel(
         ShowDateRange = true;
         ShowAdminClosed = true;
         ShowOfficeReport = true;
-
+        
         PopulateAdminClosedForm(includeAdminClosed);
         PopulateDateRangeForm(from, to);
 
+        LinkStatus = IncludeAdminClosed ? SearchComplaintStatus.AllClosed : SearchComplaintStatus.Closed;
         OfficeReport = await reportingService.DaysToClosureByOfficeAsync(From!.Value, To!.Value, IncludeAdminClosed);
     }
 
@@ -134,6 +145,7 @@ public class ReportingIndexModel(
         PopulateDateRangeForm(from, to);
         await PopulateOfficeFormAsync(office, token);
 
+        LinkClosedDate = true;
         StaffReport = await reportingService.DaysToClosureByStaffAsync(Office!.Value, From!.Value, To!.Value,
             IncludeAdminClosed);
     }
@@ -146,10 +158,11 @@ public class ReportingIndexModel(
         ShowOfficeSelect = true;
         ShowDaysToFollowup = true;
         ShowStaffReport = true;
-
+        
         PopulateDateRangeForm(from, to);
         await PopulateOfficeFormAsync(office, token);
 
+        LinkToActionsSearch = true;
         StaffReport = await reportingService.DaysToFollowupByStaffAsync(Office!.Value, From!.Value, To!.Value);
     }
 
@@ -186,7 +199,7 @@ public class ReportingIndexModel(
     // Reports metadata
     public const string Menu = nameof(Menu);
     public const string ComplaintsAssignedToInactiveUsers = nameof(ComplaintsAssignedToInactiveUsers);
-    public const string ComplaintsByStaff = nameof(ComplaintsByStaff);
+    public const string ComplaintsReceived = nameof(ComplaintsReceived);
     public const string DaysSinceMostRecentAction = nameof(DaysSinceMostRecentAction);
     public const string DaysToClosureByOffice = nameof(DaysToClosureByOffice);
     public const string DaysToClosureByStaff = nameof(DaysToClosureByStaff);
@@ -194,11 +207,11 @@ public class ReportingIndexModel(
 
     public Dictionary<string, string> ReportTitle { get; } = new()
     {
-        { ComplaintsAssignedToInactiveUsers, "Open complaints assigned to inactive users" },
-        { ComplaintsByStaff, "All Complaints By Staff" },
+        { ComplaintsAssignedToInactiveUsers, "Open Complaints Assigned To Inactive Users" },
+        { ComplaintsReceived, "Complaints Received" },
         { DaysSinceMostRecentAction, "Days Since Most Recent Action" },
         { DaysToClosureByOffice, "Days To Closure By Office" },
         { DaysToClosureByStaff, "Days To Closure By Staff" },
-        { DaysToFollowupByStaff, "Days To Follow-up By Staff" },
+        { DaysToFollowupByStaff, "Days To Follow-up Action By Staff" },
     };
 }

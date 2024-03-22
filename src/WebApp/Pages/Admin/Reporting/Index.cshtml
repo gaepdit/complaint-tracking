@@ -1,7 +1,6 @@
 @page "{handler?}"
 @using Cts.WebApp.Pages.Shared.DisplayTemplates
 @using GaEpd.AppLibrary.Extensions
-@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model ReportingIndexModel
 
 @if (Model.CurrentReport == ReportingIndexModel.Menu)
@@ -10,12 +9,12 @@
 
     <h1>Status Reports</h1>
     <div class="list-group mb-4">
-        <a asp-page-handler="@ReportingIndexModel.DaysSinceMostRecentAction" class="list-group-item list-group-item-action">Days Since Most Recent Action</a>
-        <a asp-page-handler="@ReportingIndexModel.ComplaintsByStaff" class="list-group-item list-group-item-action">Complaint Status/Number of Complaints By Staff</a>
-        <a asp-page-handler="@ReportingIndexModel.DaysToClosureByOffice" class="list-group-item list-group-item-action">Days to Closure By Office</a>
-        <a asp-page-handler="@ReportingIndexModel.DaysToClosureByStaff" class="list-group-item list-group-item-action">Days to Closure By Staff</a>
-        <a asp-page-handler="@ReportingIndexModel.DaysToFollowupByStaff" class="list-group-item list-group-item-action">Days to Follow-up Action By Staff</a>
-        <a asp-page-handler="@ReportingIndexModel.ComplaintsAssignedToInactiveUsers" class="list-group-item list-group-item-action">Open complaints assigned to inactive users</a>
+        <a asp-page-handler="@ReportingIndexModel.DaysSinceMostRecentAction" class="list-group-item list-group-item-action">@Model.ReportTitle[ReportingIndexModel.DaysSinceMostRecentAction]</a>
+        <a asp-page-handler="@ReportingIndexModel.ComplaintsReceived" class="list-group-item list-group-item-action">@Model.ReportTitle[ReportingIndexModel.ComplaintsReceived]</a>
+        <a asp-page-handler="@ReportingIndexModel.DaysToClosureByOffice" class="list-group-item list-group-item-action">@Model.ReportTitle[ReportingIndexModel.DaysToClosureByOffice]</a>
+        <a asp-page-handler="@ReportingIndexModel.DaysToClosureByStaff" class="list-group-item list-group-item-action">@Model.ReportTitle[ReportingIndexModel.DaysToClosureByStaff]</a>
+        <a asp-page-handler="@ReportingIndexModel.DaysToFollowupByStaff" class="list-group-item list-group-item-action">@Model.ReportTitle[ReportingIndexModel.DaysToFollowupByStaff]</a>
+        <a asp-page-handler="@ReportingIndexModel.ComplaintsAssignedToInactiveUsers" class="list-group-item list-group-item-action">@Model.ReportTitle[ReportingIndexModel.ComplaintsAssignedToInactiveUsers]</a>
     </div>
 
     @if (Model.CanExportDataArchive)
@@ -111,11 +110,26 @@ else
             {
                 foreach (var staff in Model.StaffReport.Where(staff => staff.Complaints.Count > 0))
                 {
-                    <h2 class="mt-4">
-                        <a asp-page="/Staff/Complaints/Index" asp-page-handler="Search" asp-fragment="SearchResults"
-                           asp-route-Office="@staff.OfficeId.ToString()" asp-route-Assigned="@staff.Id">
-                            @staff.SortableFullName
-                        </a>
+                    <h2 class="h4 mt-4">
+                        @if (Model.LinkToActionsSearch)
+                        {
+                            <a asp-page="/Staff/ComplaintActions/Index" asp-page-handler="Search" asp-fragment="SearchResults"
+                               asp-route-EnteredBy="@staff.Id" asp-route-EnteredFrom="@Model.From.ToString()" asp-route-EnteredTo="@Model.To.ToString()">
+                                @staff.SortableFullName
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-page="/Staff/Complaints/Index" asp-page-handler="Search" asp-fragment="SearchResults"
+                               asp-route-Office="@staff.OfficeId.ToString()" asp-route-Assigned="@staff.Id"
+                               asp-route-ReceivedFrom="@(Model.LinkReceivedDate ? Model.From.ToString() : "")"
+                               asp-route-ReceivedTo="@(Model.LinkReceivedDate ? Model.To.ToString() : "")"
+                               asp-route-ClosedFrom="@(Model.LinkClosedDate ? Model.From.ToString() : "")"
+                               asp-route-ClosedTo="@(Model.LinkClosedDate ? Model.To.ToString() : "")"
+                               asp-route-Status="@Model.LinkStatus?.ToString("D")">
+                                @staff.SortableFullName
+                            </a>
+                        }
                     </h2>
                     <div class="table-responsive-md">
                         <table class="table table-hover table-borderless" aria-describedby="table-description">
@@ -213,7 +227,13 @@ else
                     @foreach (var office in Model.OfficeReport)
                     {
                         <tr>
-                            <th scope="row">@office.OfficeName</th>
+                            <th scope="row">
+                                <a asp-page="/Staff/Complaints/Index" asp-page-handler="Search" asp-fragment="SearchResults"
+                                   asp-route-Office="@office.OfficeId.ToString()" asp-route-Status="@Model.LinkStatus?.ToString("D")"
+                                   asp-route-ClosedFrom="@Model.From.ToString()" asp-route-ClosedTo="@Model.To.ToString()">
+                                    @office.OfficeName
+                                </a>
+                            </th>
                             <td class="text-end">@office.TotalComplaintsCount?.ToString("N0")</td>
                             <td class="text-end">@office.AverageDaysToClosure?.ToString("N1")</td>
                         </tr>
