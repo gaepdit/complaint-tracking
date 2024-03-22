@@ -99,6 +99,7 @@ if (!string.IsNullOrEmpty(AppSettings.RaygunSettings.ApiKey)) app.UseRaygun();
 app.UseStatusCodePagesWithReExecute("/Error/{0}")
     .UseHttpsRedirection()
     .UseWebOptimizer()
+    .UseUrlRedirection()
     .UseStaticFiles()
     .UseRouting()
     .UseAuthentication()
