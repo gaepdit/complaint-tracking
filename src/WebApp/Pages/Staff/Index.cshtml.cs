@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Cts.WebApp.Pages.Staff;
 
+[Authorize(Policy = nameof(Policies.ActiveUser))]
 public class DashboardIndexModel(
     IComplaintService complaintService,
     IStaffService staffService,
@@ -33,7 +34,9 @@ public class DashboardIndexModel(
     public bool IsAssignor => AssignorUnassignedComplaints.Count > 0;
     public List<DashboardCard> AssignorUnassignedComplaints { get; private set; } = [];
 
-    public async Task OnGetAsync(CancellationToken token)
+    public Task<PageResult> OnGetAsync(CancellationToken token) => BuildDashboardAsync(token);
+
+    public async Task<PageResult> BuildDashboardAsync(CancellationToken token)
     {
         var user = await staffService.GetCurrentUserAsync();
         var officeName = user.Office?.Name;
@@ -63,16 +66,17 @@ public class DashboardIndexModel(
         var assignorOfficeList = (await officeService.GetOfficesForAssignorAsync(user.Id, ignoreOffice: null, token))
             .Where(office => office.Id != officeId).ToList();
 
-        if (assignorOfficeList.Count > 0)
+        if (assignorOfficeList.Count == 0) return Page();
+
+        foreach (var office in assignorOfficeList)
         {
-            foreach (var office in assignorOfficeList)
-            {
-                var unassigned = await complaintService.GetUnassignedComplaintsForOfficeAsync(office.Id, token);
-                if (unassigned.Count > 0)
-                    AssignorUnassignedComplaints.Add(new DashboardCard($"Unassigned Complaints in {office.Name}")
-                        { Complaints = unassigned });
-            }
+            var unassigned = await complaintService.GetUnassignedComplaintsForOfficeAsync(office.Id, token);
+            if (unassigned.Count > 0)
+                AssignorUnassignedComplaints.Add(new DashboardCard($"Unassigned Complaints in {office.Name}")
+                    { Complaints = unassigned });
         }
+
+        return Page();
     }
 
     public record DashboardCard(string Title)
@@ -81,20 +85,17 @@ public class DashboardIndexModel(
         public string CardId => Title.ToLowerInvariant().Replace(oldChar: ' ', newChar: '-');
     }
 
-    public async Task<IActionResult> OnPostAsync()
+    public async Task<IActionResult> OnPostAsync(CancellationToken token)
     {
-        if (!ModelState.IsValid) return Page();
+        if (!ModelState.IsValid) return await BuildDashboardAsync(token);
 
         if (!int.TryParse(FindId, out var idInt))
-        {
             ModelState.AddModelError(nameof(FindId), "Complaint ID must be a number.");
-        }
-        else if (!await complaintService.ExistsAsync(idInt))
-        {
+        else if (!await complaintService.ExistsAsync(idInt, token))
             ModelState.AddModelError(nameof(FindId), "The Complaint ID entered does not exist.");
-        }
 
-        if (!ModelState.IsValid) return Page();
-        return RedirectToPage("Complaints/Details", new { id = FindId });
+        return ModelState.IsValid
+            ? RedirectToPage("Complaints/Details", routeValues: new { id = FindId })
+            : await BuildDashboardAsync(token);
     }
 }
