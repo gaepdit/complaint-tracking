@@ -1,6 +1,6 @@
 ﻿using Cts.WebApp.Platform.Settings;
 
-namespace Cts.WebApp.Platform.SecurityHeaders;
+namespace Cts.WebApp.Platform.AppConfiguration;
 
 internal static class SecurityHeaders
 {

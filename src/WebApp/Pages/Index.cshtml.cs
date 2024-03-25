@@ -40,18 +40,13 @@ public class IndexModel(IComplaintService complaints, IConcernService concerns) 
         if (!ModelState.IsValid) return Page();
 
         if (!int.TryParse(FindId, out var idInt))
-        {
             ModelState.AddModelError(nameof(FindId), "Complaint ID must be a number.");
-        }
         else if (!await complaints.PublicExistsAsync(idInt))
-        {
             ModelState.AddModelError(nameof(FindId),
                 "The Complaint ID entered does not exist or is not publicly available. " +
-                "(Complaints are only made available on this site after EPD’s investigation has concluded.) ");
-        }
+                "(Complaints are only made available on this site after EPD’s investigation has concluded.)");
 
-        if (!ModelState.IsValid) return Page();
-        return RedirectToPage("Complaint", new { id = FindId });
+        return ModelState.IsValid ? RedirectToPage("Complaint", routeValues: new { id = FindId }) : Page();
     }
 
     public async Task<IActionResult> OnGetSearchAsync(ComplaintPublicSearchDto spec, [FromQuery] int p = 1)

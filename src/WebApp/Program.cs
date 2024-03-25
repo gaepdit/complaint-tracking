@@ -1,8 +1,7 @@
 using Cts.AppServices.ErrorLogging;
 using Cts.AppServices.RegisterServices;
+using Cts.WebApp.Platform.AppConfiguration;
 using Cts.WebApp.Platform.ErrorLogging;
-using Cts.WebApp.Platform.SecurityHeaders;
-using Cts.WebApp.Platform.Services;
 using Cts.WebApp.Platform.Settings;
 using GaEpd.FileService;
 using Microsoft.AspNetCore.Authentication;
@@ -18,14 +17,14 @@ var builder = WebApplication.CreateBuilder(args);
 AppDomain.CurrentDomain.SetData("REGEX_DEFAULT_MATCH_TIMEOUT", TimeSpan.FromMilliseconds(100));
 
 // Bind application settings.
-AppConfiguration.BindSettings(builder);
+BindingsConfiguration.BindSettings(builder);
 
 // Configure Identity.
 builder.Services.AddIdentityStores();
 
 // Configure Authentication.
 builder.Services.AddAuthenticationServices(builder.Configuration);
-builder.Services.AddTransient<IClaimsTransformation, ClaimsTransformation>();
+builder.Services.AddTransient<IClaimsTransformation, AddActiveUserClaimToPrincipal>();
 
 // Persist data protection keys.
 var keysFolder = Path.Combine(builder.Configuration["PersistedFilesBasePath"] ?? "", "DataProtectionKeys");
@@ -97,22 +96,23 @@ if (!app.Environment.IsDevelopment() || AppSettings.DevSettings.UseSecurityHeade
 if (!string.IsNullOrEmpty(AppSettings.RaygunSettings.ApiKey)) app.UseRaygun();
 
 // Configure the application pipeline.
-app.UseStatusCodePagesWithReExecute("/Error/{0}");
-app.UseHttpsRedirection();
-app.UseWebOptimizer();
-app.UseStaticFiles();
-app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization();
+app.UseStatusCodePagesWithReExecute("/Error/{0}")
+    .UseHttpsRedirection()
+    .UseWebOptimizer()
+    .UseUrlRedirection()
+    .UseStaticFiles()
+    .UseRouting()
+    .UseAuthentication()
+    .UseAuthorization();
 
 // Configure API documentation.
-app.UseSwagger(options => { options.RouteTemplate = "api-docs/{documentName}/openapi.json"; });
-app.UseSwaggerUI(options =>
-{
-    options.SwaggerEndpoint("v1/openapi.json", "Complaint Tracking System API v1");
-    options.RoutePrefix = "api-docs";
-    options.DocumentTitle = "Complaint Tracking System API";
-});
+app.UseSwagger(options => { options.RouteTemplate = "api-docs/{documentName}/openapi.json"; })
+    .UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("v1/openapi.json", "Complaint Tracking System API v1");
+        options.RoutePrefix = "api-docs";
+        options.DocumentTitle = "Complaint Tracking System API";
+    });
 
 // Map endpoints.
 app.MapRazorPages();

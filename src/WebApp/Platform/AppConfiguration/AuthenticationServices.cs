@@ -1,7 +1,7 @@
 ﻿using Cts.WebApp.Platform.Settings;
 using Microsoft.Identity.Web;
 
-namespace Cts.WebApp.Platform.Services;
+namespace Cts.WebApp.Platform.AppConfiguration;
 
 public static class AuthenticationServices
 {

@@ -2,7 +2,7 @@
 using Cts.AppServices.Permissions;
 using Cts.WebApp.Platform.PageModelHelpers;
 
-namespace Cts.WebApp.Pages.Staff.Complaints.Attachment;
+namespace Cts.WebApp.Pages.Staff.Complaints;
 
 [Authorize(Policy = nameof(Policies.ActiveUser))]
 public class AttachmentModel : PageModel

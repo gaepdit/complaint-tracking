@@ -1,49 +1,41 @@
 # Site URL Redirects
 
-This document defines incomplete URLs or routes from the old version of the application that should be redirected
-according to the [Site Map](Site%20map.md).
+This document defines routes from the old version of the application that should be redirected according to
+the [Site Map](Site%20map.md). Also included are partial/incomplete URLs.
+
+Rules are approximately ordered from the most frequently matched rule to the least frequently matched rule.
 
 ## Public pages
 
-| Redirect                            | To                                     |
-|-------------------------------------|----------------------------------------|
-| `/Public`                           | `/Index`                               |
-| `/Public/ComplaintDetails/{id}`     | `/Complaint/{id}`                      |
-| `/Public/Attachment/{attachmentId}` | `/Complaint/Attachment/{attachmentId}` |
-| `/Complaint`                        | `/Index`                               |
+| Redirect                                       | To                                     |
+|------------------------------------------------|----------------------------------------|
+| `/Public`                                      | `/`                                    |
+| `/Public/ComplaintDetails/{id}`                | `/Complaint/{id}`                      |
+| `/Public/Attachment/{attachmentId}[/filename]` | `/Complaint/Attachment/{attachmentId}` |
+| `/Complaint`                                   | `/`                                    |
+| `/Complaint/Attachment`                        | `/`                                    |
 
 ## Staff complaint pages
 
-| Redirect                                | To                                 |
-|-----------------------------------------|------------------------------------|
-| `/Complaints`                           | `/Staff/Index`                     |
-| `/Complaints/Details/{id}`              | `/Staff/Complaints/{id}`           |
-| `/Complaints/Attachment/{attachmentId}` | `/Staff/Attachment/{attachmentId}` |
-| `/Staff/Complaints`                     | `/Staff/Index`                     |
+| Redirect                                           | To                                            |
+|----------------------------------------------------|-----------------------------------------------|
+| `/Complaints`                                      | `/Staff/Complaints`                           |
+| `/Complaints/Details/{id}`                         | `/Staff/Complaints/Details/{id}`              |
+| `/Complaints/Actions/{id}`                         | `/Staff/Complaints/Details/{id}`              |
+| `/Complaints/Attachment/{attachmentId}[/filename]` | `/Staff/Complaints/Attachment/{attachmentId}` |
+| `/Staff/Complaints/Details`                        | `/Staff/Complaints`                           |
+| `/Staff/Complaints/Attachment`                     | `/Staff/Complaints`                           |
+| `/Admin`                                           | `/Staff`                                      |
 
 ## Complaint Actions
 
-| Redirect                   | To                               |
-|----------------------------|----------------------------------|
-| `/ComplaintActions`        | `/Staff/ComplaintActions/Index`  |
-| `/Complaints/Actions/{id}` | `/Staff/Complaints/{id}#actions` |
+| Redirect            | To                        |
+|---------------------|---------------------------|
+| `/ComplaintActions` | `/Staff/ComplaintActions` |
 
-## Users
+## Reporting
 
-| Redirect              | To                          |
-|-----------------------|-----------------------------|
-| `/Users`              | `/Admin/Users/Index`        |
-| `/Users/Details/{id}` | `/Admin/Users/Details/{id}` |
-
-## Site Maintenance
-
-| Redirect                          | To                                        |
-|-----------------------------------|-------------------------------------------|
-| `/Maintenance`                    | `/Admin/Maintenance`                      |
-| `/[maintenance option]`           | `/Admin/Maintenance/[maintenance option]` |
-| `/[maintenance option]/Details/*` | `/Admin/Maintenance/[maintenance option]` |
-| `/Reports`                        | `/Admin/Reporting` *                      |
-| `/Reports/[report type]`          | `/Admin/Reporting/[report type]` *        |
-| `/Export`                         | `/Admin/Reporting/Export`                 |
-
-* If possible, given implementation of ArcGIS.
+| Redirect   | To                        |
+|------------|---------------------------|
+| `/Reports` | `/Admin/Reporting`        |
+| `/Export`  | `/Admin/Reporting/Export` |

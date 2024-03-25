@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 
-namespace Cts.WebApp.Platform.Services;
+namespace Cts.WebApp.Platform.AppConfiguration;
 
-public class ClaimsTransformation(UserManager<ApplicationUser> userManager) : IClaimsTransformation
+public class AddActiveUserClaimToPrincipal(UserManager<ApplicationUser> userManager) : IClaimsTransformation
 {
     public async Task<ClaimsPrincipal> TransformAsync(ClaimsPrincipal principal)
     {
