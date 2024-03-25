@@ -23,17 +23,12 @@ namespace Cts.AppServices.Permissions;
 
 public static class Policies
 {
-    // Default policy builders
-    private static AuthorizationPolicyBuilder AuthenticatedUserPolicyBuilder =>
-        new AuthorizationPolicyBuilder().RequireAuthenticatedUser();
-
+    // Default policy builder
     private static AuthorizationPolicyBuilder ActiveUserPolicyBuilder =>
-        AuthenticatedUserPolicyBuilder.AddRequirements(new ActiveUserRequirement());
+        new AuthorizationPolicyBuilder().RequireAuthenticatedUser().AddRequirements(new ActiveUserRequirement());
 
     // Basic policies
     public static AuthorizationPolicy ActiveUser => ActiveUserPolicyBuilder.Build();
-
-    public static AuthorizationPolicy LoggedInUser => AuthenticatedUserPolicyBuilder.Build();
 
     // Role-based policies
     public static AuthorizationPolicy DataExporter =>

@@ -9,15 +9,17 @@
 
 ## User
 
-All *Users* with work accounts who are logged into the application can:
+All active *Users* with work accounts who are logged into the application can:
 
-* Search for and view all info for all Complaints, excluding deleted Complaints and deleted Complaint Actions.
+* Search for and view all info for all Complaints and Complaint Actions, excluding deleted Complaints and Actions.
 * Search for and view CTS Users.
 * View the list of EPD Offices and Assignors.
 * View the lists of Complaint Action Types and Areas of Concern.
-* View list of roles and capabilities.
-* View reports for themselves.
+* View the list of roles and capabilities.
 * Edit account info for themselves, including changing assigned Office.
+
+Note: Users who still have current work accounts can be marked "Inactive" by a user account administrator. Inactive
+users are not able to sign in to the application.
 
 ## Office Assignor
 
@@ -39,6 +41,7 @@ Users in the *Staff* role can:
 * Delete/restore Complaint Actions for Complaints assigned to them.
 * Transfer (reassign) their Complaints to other Users within the same Office or to the Assignor of another Office.
 * Edit Attachments for open Complaints assigned to them.
+* View CTS status reports
 
 ### Manager
 

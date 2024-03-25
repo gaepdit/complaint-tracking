@@ -13,7 +13,6 @@ public static class AuthorizationPolicies
             .AddPolicy(nameof(Policies.ActiveUser), Policies.ActiveUser)
             .AddPolicy(nameof(Policies.DataExporter), Policies.DataExporter)
             .AddPolicy(nameof(Policies.DivisionManager), Policies.DivisionManager)
-            .AddPolicy(nameof(Policies.LoggedInUser), Policies.LoggedInUser)
             .AddPolicy(nameof(Policies.SiteMaintainer), Policies.SiteMaintainer)
             .AddPolicy(nameof(Policies.StaffUser), Policies.StaffUser)
             .AddPolicy(nameof(Policies.UserAdministrator), Policies.UserAdministrator);

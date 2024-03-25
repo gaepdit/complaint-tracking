@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Cts.WebApp.Pages.Admin.Reporting;
 
-[Authorize(Policy = nameof(Policies.ActiveUser))]
+[Authorize(Policy = nameof(Policies.StaffUser))]
 public class ReportingIndexModel(
     IReportingService reportingService,
     IOfficeService officeService,
