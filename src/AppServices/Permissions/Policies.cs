@@ -48,4 +48,9 @@ public static class Policies
 
     public static AuthorizationPolicy UserAdministrator =>
         ActiveUserPolicyBuilder.AddRequirements(new UserAdminRequirement()).Build();
+    
+    // Resource-based policies
+    public static AuthorizationPolicy OfficeAssignment =>
+        ActiveUserPolicyBuilder.AddRequirements(new OfficeAssignmentRequirement()).Build();
+    
 }

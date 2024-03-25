@@ -1,15 +1,17 @@
 using Cts.AppServices.Offices;
-using Cts.AppServices.Staff;
+using Cts.AppServices.Permissions;
+using Cts.AppServices.Permissions.Requirements;
 using Cts.AppServices.UserServices;
-using Cts.Domain.Identity;
 
 namespace Cts.WebApp.Api;
 
 [ApiController]
 [Route("api/offices")]
 [Produces("application/json")]
-public class OfficeApiController(IOfficeService officeService, IStaffService staffService, IUserService userService)
-    : Controller
+public class OfficeApiController(
+    IOfficeService officeService,
+    IUserService userService,
+    IAuthorizationService authorization) : Controller
 {
     [HttpGet]
     public async Task<IReadOnlyList<OfficeWithAssignorDto>> ListOfficesAsync() =>
@@ -27,26 +29,21 @@ public class OfficeApiController(IOfficeService officeService, IStaffService sta
         Json(await officeService.GetStaffAsListItemsAsync(id));
 
     [HttpGet("{id:guid}/all-staff")]
-    public async Task<IActionResult> GetAllStaffAsync([FromRoute] Guid id)
-    {
-        var user = await userService.GetCurrentUserAsync();
-        if (user is null || !user.Active) return Unauthorized();
-        return Json(await officeService.GetStaffAsListItemsAsync(id, includeInactive: true));
-    }
+    public async Task<IActionResult> GetAllStaffAsync([FromRoute] Guid id) =>
+        (await authorization.AuthorizeAsync(User, Policies.ActiveUser).ConfigureAwait(false)).Succeeded
+            ? Json(await officeService.GetStaffAsListItemsAsync(id, includeInactive: true))
+            : Unauthorized();
 
     [HttpGet("{id:guid}/staff-for-assignment")]
     public async Task<IActionResult> GetStaffForAssignmentAsync([FromRoute] Guid id)
     {
-        var user = await userService.GetCurrentUserAsync();
-        if (user is null || !user.Active) return Unauthorized();
+        if (!(await authorization.AuthorizeAsync(User, Policies.ActiveUser).ConfigureAwait(false)).Succeeded)
+            return Unauthorized();
 
-        if (user.Office?.Id == id // user is in this office
-            || await officeService.UserIsAssignorForOfficeAsync(id, user.Id) // user is assignor for this office
-            || await staffService.HasAppRoleAsync(user.Id, AppRole.DivisionManagerRole)) // user is Division Manager
-        {
-            return Json(await officeService.GetStaffAsListItemsAsync(id));
-        }
+        var resource = new OfficeAndUser(await officeService.FindAsync(id), await userService.GetCurrentUserAsync());
 
-        return Json(null);
+        return (await authorization.AuthorizeAsync(User, resource, new OfficeAssignmentRequirement())).Succeeded
+            ? Json(await officeService.GetStaffAsListItemsAsync(id))
+            : Json(null);
     }
 }

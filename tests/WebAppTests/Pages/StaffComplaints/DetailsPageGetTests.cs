@@ -16,16 +16,16 @@ public class DetailsPageGetTests
         complaintServiceMock.FindAsync(Arg.Any<int>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
             .Returns(ItemTest);
 
-        var authorizationServiceMock = Substitute.For<IAuthorizationService>();
-        authorizationServiceMock.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), Arg.Any<object?>(),
+        var authorizationMock = Substitute.For<IAuthorizationService>();
+        authorizationMock.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), Arg.Any<object?>(),
                 Arg.Is<IAuthorizationRequirement[]>(x => x.Contains(ComplaintOperation.ManageDeletions)))
             .Returns(AuthorizationResult.Success());
-        authorizationServiceMock.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), Arg.Any<object?>(),
+        authorizationMock.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), Arg.Any<object?>(),
                 Arg.Is<IAuthorizationRequirement[]>(x => !x.Contains(ComplaintOperation.ManageDeletions)))
             .Returns(AuthorizationResult.Failed());
 
         var page = PageModelHelpers.BuildDetailsPageModel(complaintService: complaintServiceMock,
-            authorizationService: authorizationServiceMock);
+            authorizationService: authorizationMock);
         page.TempData = WebAppTestsSetup.PageTempData();
         page.PageContext = WebAppTestsSetup.PageContextWithUser();
 
@@ -53,15 +53,15 @@ public class DetailsPageGetTests
     {
         // Arrange
         const int id = 0;
-        
+
         var complaintService = Substitute.For<IComplaintService>();
         complaintService.FindAsync(id).Returns((ComplaintViewDto?)null);
-        
+
         var page = PageModelHelpers.BuildDetailsPageModel(complaintService: complaintService);
 
         // Act
         var result = await page.OnGetAsync(id);
-        
+
         // Assert
         result.Should().BeOfType<NotFoundResult>();
     }
