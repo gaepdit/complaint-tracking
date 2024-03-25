@@ -36,9 +36,6 @@ public static class Policies
     public static AuthorizationPolicy LoggedInUser => AuthenticatedUserPolicyBuilder.Build();
 
     // Role-based policies
-    public static AuthorizationPolicy AttachmentsEditor =>
-        ActiveUserPolicyBuilder.AddRequirements(new AttachmentsEditorRequirement()).Build();
-
     public static AuthorizationPolicy DataExporter =>
         ActiveUserPolicyBuilder.AddRequirements(new DataExporterRequirement()).Build();
 
