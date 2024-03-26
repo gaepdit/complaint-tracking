@@ -13,8 +13,7 @@ public class RoleBasedPolicy
 
     [SetUp]
     public void SetUp() => _authorization = AuthorizationServiceBuilder.BuildAuthorizationService(collection =>
-        collection.AddAuthorization(options =>
-            options.AddPolicy(nameof(Policies.SiteMaintainer), Policies.SiteMaintainer)));
+        collection.AddAuthorizationBuilder().AddPolicy(nameof(Policies.SiteMaintainer), Policies.SiteMaintainer));
 
     [Test]
     public async Task WhenAuthenticatedAndActiveAndDivisionManager_Succeeds()

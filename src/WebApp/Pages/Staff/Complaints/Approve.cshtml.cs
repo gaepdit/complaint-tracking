@@ -2,12 +2,14 @@
 using Cts.AppServices.Complaints.CommandDto;
 using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Complaints.QueryDto;
+using Cts.AppServices.Permissions;
 using Cts.AppServices.Permissions.Helpers;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 
 namespace Cts.WebApp.Pages.Staff.Complaints;
 
+[Authorize(Policy = nameof(Policies.Manager))]
 public class ApproveModel(IComplaintService complaintService, IAuthorizationService authorization)
     : PageModel
 {

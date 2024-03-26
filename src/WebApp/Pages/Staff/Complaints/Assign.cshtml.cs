@@ -3,6 +3,7 @@ using Cts.AppServices.Complaints.CommandDto;
 using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Complaints.QueryDto;
 using Cts.AppServices.Offices;
+using Cts.AppServices.Permissions;
 using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.Staff;
 using Cts.WebApp.Models;
@@ -11,6 +12,7 @@ using GaEpd.AppLibrary.ListItems;
 
 namespace Cts.WebApp.Pages.Staff.Complaints;
 
+[Authorize(Policy = nameof(Policies.ActiveUser))]
 public class AssignModel(
     IComplaintService complaintService,
     IAuthorizationService authorization,

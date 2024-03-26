@@ -2,14 +2,15 @@
 using Cts.AppServices.Complaints.CommandDto;
 using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Complaints.QueryDto;
+using Cts.AppServices.Permissions;
 using Cts.AppServices.Permissions.Helpers;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 
 namespace Cts.WebApp.Pages.Staff.Complaints;
 
-public class ReopenModel(IComplaintService complaintService, IAuthorizationService authorization)
-    : PageModel
+[Authorize(Policy = nameof(Policies.DivisionManager))]
+public class ReopenModel(IComplaintService complaintService, IAuthorizationService authorization) : PageModel
 {
     [BindProperty]
     public ComplaintClosureDto ComplaintClosure { get; set; } = default!;

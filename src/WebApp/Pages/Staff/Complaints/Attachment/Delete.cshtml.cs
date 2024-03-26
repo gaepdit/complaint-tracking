@@ -2,6 +2,7 @@
 using Cts.AppServices.Attachments.Dto;
 using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Complaints.QueryDto;
+using Cts.AppServices.Permissions;
 using Cts.AppServices.Permissions.Helpers;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
@@ -9,6 +10,7 @@ using Cts.WebApp.Platform.Settings;
 
 namespace Cts.WebApp.Pages.Staff.Complaints.Attachment;
 
+[Authorize(Policy = nameof(Policies.ActiveUser))]
 public class AttachmentDeleteModel(IAttachmentService attachmentService, IAuthorizationService authorization)
     : PageModel
 {
