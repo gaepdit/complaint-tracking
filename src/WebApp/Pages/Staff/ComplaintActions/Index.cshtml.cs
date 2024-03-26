@@ -32,7 +32,7 @@ public class IndexModel(
     public SelectList ActionTypeSelectList { get; private set; } = default!;
     public SelectList EnteredBySelectList { get; private set; } = default!;
     public SelectList ConcernsSelectList { get; private set; } = default!;
-    
+
     public async Task OnGetAsync()
     {
         Spec = new ActionSearchDto();
@@ -42,22 +42,18 @@ public class IndexModel(
 
     public async Task<IActionResult> OnGetSearchAsync(ActionSearchDto spec, [FromQuery] int p = 1)
     {
-        spec.TrimAll();
-        var paging = new PaginatedRequest(p, GlobalConstants.PageSize, spec.Sort.GetDescription());
+        Spec = spec.TrimAll();
         CanViewDeletedActions = await authorization.Succeeded(User, Policies.DivisionManager);
-        if (!CanViewDeletedActions) spec.DeletedStatus = null;
-
-        Spec = spec;
-        ShowResults = true;
-
         await PopulateSelectListsAsync();
-        SearchResults = await actionService.SearchAsync(spec, paging);
+        var paging = new PaginatedRequest(p, GlobalConstants.PageSize, Spec.Sort.GetDescription());
+        SearchResults = await actionService.SearchAsync(Spec, paging);
+        ShowResults = true;
         return Page();
     }
 
     private async Task PopulateSelectListsAsync()
     {
-        ActionTypeSelectList= (await actionTypeService.GetAsListItemsAsync(includeInactive: true)).ToSelectList();
+        ActionTypeSelectList = (await actionTypeService.GetAsListItemsAsync(includeInactive: true)).ToSelectList();
         EnteredBySelectList = (await staffService.GetAsListItemsAsync(includeInactive: true)).ToSelectList();
         ConcernsSelectList = (await concernService.GetAsListItemsAsync(includeInactive: true)).ToSelectList();
     }

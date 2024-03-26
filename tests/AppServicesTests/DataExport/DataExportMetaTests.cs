@@ -1,6 +1,6 @@
 ﻿using Cts.AppServices.DataExport;
 
-namespace AppServicesTests.Offices;
+namespace AppServicesTests.DataExport;
 
 public class DataExportMetaTests
 {

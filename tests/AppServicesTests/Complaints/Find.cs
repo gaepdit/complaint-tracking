@@ -4,6 +4,7 @@ using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AppServicesTests.Complaints;
 
@@ -21,7 +22,8 @@ public class Find
 
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
-            Substitute.For<IAttachmentService>(), AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
+            Substitute.For<IAttachmentService>(), AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>(),
+            Substitute.For<IAuthorizationService>());
 
         // Act
         var result = await appService.FindAsync(item.Id);
@@ -43,7 +45,8 @@ public class Find
 
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
-            Substitute.For<IAttachmentService>(), AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
+            Substitute.For<IAttachmentService>(), AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>(),
+            Substitute.For<IAuthorizationService>());
 
         // Act
         var result = await appService.FindAsync(item.Id);
@@ -60,7 +63,8 @@ public class Find
             .Returns((Complaint?)null);
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
-            Substitute.For<IAttachmentService>(), AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
+            Substitute.For<IAttachmentService>(), AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>(),
+            Substitute.For<IAuthorizationService>());
 
         var result = await appService.FindAsync(0);
 

@@ -65,11 +65,11 @@ public record ActionSearchDto
         { nameof(Concern), Concern?.ToString() },
     };
 
-    public void TrimAll()
+    public ActionSearchDto TrimAll() => this with
     {
-        Investigator = Investigator?.Trim();
-        Comments = Comments?.Trim();
-    }
+        Investigator = Investigator?.Trim(),
+        Comments = Comments?.Trim(),
+    };
 }
 
 [JsonConverter(typeof(JsonStringEnumConverter))]

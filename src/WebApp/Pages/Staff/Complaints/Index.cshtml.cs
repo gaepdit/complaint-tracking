@@ -47,16 +47,12 @@ public class IndexModel(
 
     public async Task<IActionResult> OnGetSearchAsync(ComplaintSearchDto spec, [FromQuery] int p = 1)
     {
-        spec.TrimAll();
-        var paging = new PaginatedRequest(p, GlobalConstants.PageSize, spec.Sort.GetDescription());
+        Spec = spec.TrimAll();
         CanViewDeletedComplaints = await authorization.Succeeded(User, Policies.DivisionManager);
-        if (!CanViewDeletedComplaints) spec.DeletedStatus = null;
-
-        Spec = spec;
-        ShowResults = true;
-
         await PopulateSelectListsAsync();
-        SearchResults = await complaints.SearchAsync(spec, paging);
+        var paging = new PaginatedRequest(p, GlobalConstants.PageSize, Spec.Sort.GetDescription());
+        SearchResults = await complaints.SearchAsync(Spec, paging);
+        ShowResults = true;
         return Page();
     }
 
