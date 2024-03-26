@@ -1,9 +1,9 @@
 ﻿using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.CommandDto;
-using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Concerns;
 using Cts.AppServices.Permissions;
 using Cts.AppServices.Permissions.Helpers;
+using Cts.AppServices.Permissions.Requirements;
 using Cts.AppServices.Staff;
 using Cts.Domain.Data;
 using Cts.WebApp.Models;
@@ -72,5 +72,5 @@ public class EditModel(
     }
 
     private Task<bool> UserCanEditAsync(ComplaintUpdateDto item) =>
-        authorization.Succeeded(User, item, ComplaintOperation.EditDetails);
+        authorization.Succeeded(User, item, new ComplaintUpdateRequirement());
 }

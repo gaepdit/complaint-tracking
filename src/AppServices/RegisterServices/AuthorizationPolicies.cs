@@ -25,6 +25,5 @@ public static class AuthorizationPolicies
         // var canAssign = await authorization.Succeeded(User, complaintView, ComplaintOperation.Assign);
 
         services.AddSingleton<IAuthorizationHandler, ComplaintViewPermissionsHandler>();
-        services.AddSingleton<IAuthorizationHandler, ComplaintUpdatePermissionsHandler>();
     }
 }

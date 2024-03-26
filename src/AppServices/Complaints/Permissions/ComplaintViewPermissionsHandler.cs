@@ -72,20 +72,13 @@ internal class ComplaintViewPermissionsHandler : AuthorizationHandler<ComplaintO
     }
 
     private bool UserHasEditAccess() => _user.IsDivisionManager() || IsCurrentOwnerOrManager() || IsRecentReporter();
-
     private bool MustAccept() => IsCurrentOwner() && !Accepted() && !ReviewPending();
-
     private bool Accepted() => _resource is not { CurrentOwnerAcceptedDate: null };
-
     private bool IsOpen() => _resource is { ComplaintClosed: false, IsDeleted: false };
-
     private bool IsClosed() => _resource is { ComplaintClosed: true, IsDeleted: false };
     private bool IsNotDeleted() => !_resource.IsDeleted;
-
     private bool ReviewPending() => _resource is { Status: ComplaintStatus.ReviewPending };
-
     private bool NoCurrentOwner() => _resource is { CurrentOwner: null };
-
     private bool HasCurrentOwner() => _resource is { CurrentOwner: not null };
 
     // Managers can edit within their office.
@@ -95,12 +88,10 @@ internal class ComplaintViewPermissionsHandler : AuthorizationHandler<ComplaintO
 
     // Users can edit their own.
     private bool IsCurrentOwner() => _user.IsStaff() && _resource.CurrentOwner?.Id == _user.GetUserIdValue();
-
     private bool IsCurrentOwnerOrManager() => IsCurrentOwner() || IsCurrentManager();
 
     // Assignors can reassign within their office.
     private bool IsCurrentAssignor() => _resource.CurrentOffice?.Assignor?.Id == _user.GetUserIdValue();
-
     private bool IsCurrentManagerOrAssignor() => IsCurrentManager() || IsCurrentAssignor();
 
     // Original reporter can edit for a limited duration.
