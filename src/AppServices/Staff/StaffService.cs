@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Cts.AppServices.Permissions;
 using Cts.AppServices.Staff.Dto;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Offices;
@@ -6,6 +7,7 @@ using Cts.Domain.Identity;
 using GaEpd.AppLibrary.Domain.Repositories;
 using GaEpd.AppLibrary.ListItems;
 using GaEpd.AppLibrary.Pagination;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
 namespace Cts.AppServices.Staff;
@@ -15,7 +17,8 @@ public sealed class StaffService(
     UserManager<ApplicationUser> userManager,
     // ReSharper disable once SuggestBaseTypeForParameterInConstructor
     IMapper mapper,
-    IOfficeRepository officeRepository)
+    IOfficeRepository officeRepository,
+    IAuthorizationService authorizationService)
     : IStaffService
 {
     public async Task<StaffViewDto> GetCurrentUserAsync()
@@ -89,10 +92,21 @@ public sealed class StaffService(
 
     public async Task<IdentityResult> UpdateRolesAsync(string id, Dictionary<string, bool> roles)
     {
+        var principal = userService.GetCurrentPrincipal()!;
+        var userAdministrator =
+            (await authorizationService.AuthorizeAsync(principal, Policies.UserAdministrator).ConfigureAwait(false))
+            .Succeeded;
+        if (!userAdministrator) throw new InsufficientPermissionsException(nameof(Policies.UserAdministrator));
+
+        var includeDivisionManager =
+            (await authorizationService.AuthorizeAsync(principal, Policies.DivisionManager).ConfigureAwait(false))
+            .Succeeded;
+        var filteredRoles = includeDivisionManager ? roles : roles.Where(pair => pair.Key != RoleName.DivisionManager);
+
         var user = await userManager.FindByIdAsync(id).ConfigureAwait(false)
             ?? throw new EntityNotFoundException<ApplicationUser>(id);
 
-        foreach (var (role, value) in roles)
+        foreach (var (role, value) in filteredRoles)
         {
             var result = await UpdateUserRoleAsync(user, role, value).ConfigureAwait(false);
             if (result != IdentityResult.Success) return result;
@@ -115,6 +129,12 @@ public sealed class StaffService(
 
     public async Task<IdentityResult> UpdateAsync(string id, StaffUpdateDto resource)
     {
+        var principal = userService.GetCurrentPrincipal()!;
+        var userAdministrator =
+            (await authorizationService.AuthorizeAsync(principal, Policies.UserAdministrator).ConfigureAwait(false))
+            .Succeeded;
+        if (!userAdministrator) throw new InsufficientPermissionsException(nameof(Policies.UserAdministrator));
+
         var user = await userManager.FindByIdAsync(id).ConfigureAwait(false)
             ?? throw new EntityNotFoundException<ApplicationUser>(id);
 

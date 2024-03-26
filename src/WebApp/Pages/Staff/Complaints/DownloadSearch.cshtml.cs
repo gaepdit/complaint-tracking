@@ -30,8 +30,9 @@ public class DownloadSearchModel(
         spec.TrimAll();
         if (!(await authorization.AuthorizeAsync(User, nameof(Policies.DivisionManager))).Succeeded)
             spec.DeletedStatus = null;
-        return File((await searchResultsExportService.ExportSearchResultsAsync(spec, token))
-            .ToExcel(sheetName: "CTS Search Results", deleteLastColumn: spec.DeletedStatus == null),
-            FileTypes.ExcelContentType, fileDownloadName: $"cts_search_{DateTime.Now:yyyy-MM-dd--HH-mm-ss}.xlsx");
+        var excel = (await searchResultsExportService.ExportSearchResultsAsync(spec, token))
+            .ToExcel(sheetName: "CTS Search Results", deleteLastColumn: spec.DeletedStatus == null);
+        var fileDownloadName = $"cts_search_{DateTime.Now:yyyy-MM-dd--HH-mm-ss}.xlsx";
+        return File(excel, FileTypes.ExcelContentType, fileDownloadName: fileDownloadName);
     }
 }

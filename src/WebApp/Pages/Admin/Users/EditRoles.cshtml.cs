@@ -14,7 +14,7 @@ public class EditRolesModel(IStaffService staffService, IAuthorizationService au
     public string UserId { get; set; } = string.Empty;
 
     [BindProperty]
-    public List<RoleSetting> RoleSettings { get; set; } = new();
+    public List<RoleSetting> RoleSettings { get; set; } = [];
 
     public StaffViewDto DisplayStaff { get; private set; } = default!;
     public string? OfficeName => DisplayStaff.Office?.Name;
@@ -36,14 +36,8 @@ public class EditRolesModel(IStaffService staffService, IAuthorizationService au
 
     public async Task<IActionResult> OnPostAsync()
     {
-        CanEditDivisionManager = (await authorization.AuthorizeAsync(User, Policies.DivisionManager)).Succeeded;
-
-        var roleDictionary = CanEditDivisionManager
-            ? RoleSettings.ToDictionary(roleSetting => roleSetting.Name, roleSetting => roleSetting.IsSelected)
-            : RoleSettings.Where(roleSetting => roleSetting.Name != RoleName.DivisionManager)
-                .ToDictionary(roleSetting => roleSetting.Name, roleSetting => roleSetting.IsSelected);
-
-        var result = await staffService.UpdateRolesAsync(UserId, roleDictionary);
+        var rolesDictionary = RoleSettings.ToDictionary(setting => setting.Name, setting => setting.IsSelected);
+        var result = await staffService.UpdateRolesAsync(UserId, rolesDictionary);
 
         if (result.Succeeded)
         {
