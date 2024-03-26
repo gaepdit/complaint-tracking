@@ -1,5 +1,6 @@
 using Cts.AppServices.Offices;
 using Cts.AppServices.Permissions;
+using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.Permissions.Requirements;
 using Cts.AppServices.UserServices;
 
@@ -30,19 +31,18 @@ public class OfficeApiController(
 
     [HttpGet("{id:guid}/all-staff")]
     public async Task<IActionResult> GetAllStaffAsync([FromRoute] Guid id) =>
-        (await authorization.AuthorizeAsync(User, Policies.ActiveUser).ConfigureAwait(false)).Succeeded
+        await authorization.Succeeded(User, Policies.ActiveUser)
             ? Json(await officeService.GetStaffAsListItemsAsync(id, includeInactive: true))
             : Unauthorized();
 
     [HttpGet("{id:guid}/staff-for-assignment")]
     public async Task<IActionResult> GetStaffForAssignmentAsync([FromRoute] Guid id)
     {
-        if (!(await authorization.AuthorizeAsync(User, Policies.ActiveUser).ConfigureAwait(false)).Succeeded)
-            return Unauthorized();
+        if (!await authorization.Succeeded(User, Policies.ActiveUser)) return Unauthorized();
 
         var resource = new OfficeAndUser(await officeService.FindAsync(id), await userService.GetCurrentUserAsync());
 
-        return (await authorization.AuthorizeAsync(User, resource, new OfficeAssignmentRequirement())).Succeeded
+        return await authorization.Succeeded(User, resource, new OfficeAssignmentRequirement())
             ? Json(await officeService.GetStaffAsListItemsAsync(id))
             : Json(null);
     }

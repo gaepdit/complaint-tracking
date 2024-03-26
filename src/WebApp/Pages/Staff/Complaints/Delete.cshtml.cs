@@ -2,12 +2,13 @@
 using Cts.AppServices.Complaints.CommandDto;
 using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Complaints.QueryDto;
+using Cts.AppServices.Permissions.Helpers;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 
 namespace Cts.WebApp.Pages.Staff.Complaints;
 
-public class DeleteModel(IComplaintService complaintService, IAuthorizationService authorizationService)
+public class DeleteModel(IComplaintService complaintService, IAuthorizationService authorization)
     : PageModel
 {
     [BindProperty]
@@ -49,6 +50,6 @@ public class DeleteModel(IComplaintService complaintService, IAuthorizationServi
         return RedirectToPage("Details", new { id = ComplaintClosure.ComplaintId });
     }
 
-    private async Task<bool> UserCanManageDeletionsAsync(ComplaintViewDto item) =>
-        (await authorizationService.AuthorizeAsync(User, item, ComplaintOperation.ManageDeletions)).Succeeded;
+    private Task<bool> UserCanManageDeletionsAsync(ComplaintViewDto item) =>
+        authorization.Succeeded(User, item, ComplaintOperation.ManageDeletions);
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Cts.AppServices.Permissions;
+using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.Staff.Dto;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Offices;
@@ -18,7 +19,7 @@ public sealed class StaffService(
     // ReSharper disable once SuggestBaseTypeForParameterInConstructor
     IMapper mapper,
     IOfficeRepository officeRepository,
-    IAuthorizationService authorizationService)
+    IAuthorizationService authorization)
     : IStaffService
 {
     public async Task<StaffViewDto> GetCurrentUserAsync()
@@ -93,15 +94,12 @@ public sealed class StaffService(
     public async Task<IdentityResult> UpdateRolesAsync(string id, Dictionary<string, bool> roles)
     {
         var principal = userService.GetCurrentPrincipal()!;
-        var userAdministrator =
-            (await authorizationService.AuthorizeAsync(principal, Policies.UserAdministrator).ConfigureAwait(false))
-            .Succeeded;
-        if (!userAdministrator) throw new InsufficientPermissionsException(nameof(Policies.UserAdministrator));
+        if (!await authorization.Succeeded(principal, Policies.UserAdministrator).ConfigureAwait(false))
+            throw new InsufficientPermissionsException(nameof(Policies.UserAdministrator));
 
-        var includeDivisionManager =
-            (await authorizationService.AuthorizeAsync(principal, Policies.DivisionManager).ConfigureAwait(false))
-            .Succeeded;
-        var filteredRoles = includeDivisionManager ? roles : roles.Where(pair => pair.Key != RoleName.DivisionManager);
+        var filteredRoles = await authorization.Succeeded(principal, Policies.DivisionManager).ConfigureAwait(false)
+            ? roles
+            : roles.Where(pair => pair.Key != RoleName.DivisionManager);
 
         var user = await userManager.FindByIdAsync(id).ConfigureAwait(false)
             ?? throw new EntityNotFoundException<ApplicationUser>(id);
@@ -130,10 +128,8 @@ public sealed class StaffService(
     public async Task<IdentityResult> UpdateAsync(string id, StaffUpdateDto resource)
     {
         var principal = userService.GetCurrentPrincipal()!;
-        var userAdministrator =
-            (await authorizationService.AuthorizeAsync(principal, Policies.UserAdministrator).ConfigureAwait(false))
-            .Succeeded;
-        if (!userAdministrator) throw new InsufficientPermissionsException(nameof(Policies.UserAdministrator));
+        if (await authorization.Succeeded(principal, Policies.UserAdministrator).ConfigureAwait(false))
+            throw new InsufficientPermissionsException(nameof(Policies.UserAdministrator));
 
         var user = await userManager.FindByIdAsync(id).ConfigureAwait(false)
             ?? throw new EntityNotFoundException<ApplicationUser>(id);

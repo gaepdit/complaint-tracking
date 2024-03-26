@@ -2,6 +2,7 @@
 using Cts.AppServices.Complaints.QueryDto;
 using Cts.AppServices.DataExport;
 using Cts.AppServices.Permissions;
+using Cts.AppServices.Permissions.Helpers;
 
 namespace Cts.WebApp.Pages.Staff.Complaints;
 
@@ -17,7 +18,7 @@ public class DownloadSearchModel(
     {
         if (spec is null) return BadRequest();
         spec.TrimAll();
-        if (!(await authorization.AuthorizeAsync(User, nameof(Policies.DivisionManager))).Succeeded)
+        if (!await authorization.Succeeded(User, Policies.DivisionManager))
             spec.DeletedStatus = null;
         ResultsCount = await searchResultsExportService.CountAsync(spec, token);
         Spec = spec;
@@ -28,7 +29,7 @@ public class DownloadSearchModel(
     {
         if (spec is null) return BadRequest();
         spec.TrimAll();
-        if (!(await authorization.AuthorizeAsync(User, nameof(Policies.DivisionManager))).Succeeded)
+        if (!await authorization.Succeeded(User, Policies.DivisionManager))
             spec.DeletedStatus = null;
         var excel = (await searchResultsExportService.ExportSearchResultsAsync(spec, token))
             .ToExcel(sheetName: "CTS Search Results", deleteLastColumn: spec.DeletedStatus == null);

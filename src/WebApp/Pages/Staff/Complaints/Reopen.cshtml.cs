@@ -2,12 +2,13 @@
 using Cts.AppServices.Complaints.CommandDto;
 using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Complaints.QueryDto;
+using Cts.AppServices.Permissions.Helpers;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 
 namespace Cts.WebApp.Pages.Staff.Complaints;
 
-public class ReopenModel(IComplaintService complaintService, IAuthorizationService authorizationService)
+public class ReopenModel(IComplaintService complaintService, IAuthorizationService authorization)
     : PageModel
 {
     [BindProperty]
@@ -42,6 +43,6 @@ public class ReopenModel(IComplaintService complaintService, IAuthorizationServi
         return RedirectToPage("Details", new { id = ComplaintClosure.ComplaintId });
     }
 
-    private async Task<bool> UserCanReviewAsync(ComplaintViewDto item) =>
-        (await authorizationService.AuthorizeAsync(User, item, ComplaintOperation.Reopen)).Succeeded;
+    private Task<bool> UserCanReviewAsync(ComplaintViewDto item) =>
+        authorization.Succeeded(User, item, ComplaintOperation.Reopen);
 }

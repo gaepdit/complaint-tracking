@@ -3,6 +3,7 @@ using Cts.AppServices.Complaints.CommandDto;
 using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Concerns;
 using Cts.AppServices.Permissions;
+using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.Staff;
 using Cts.Domain.Data;
 using Cts.WebApp.Models;
@@ -70,6 +71,6 @@ public class EditModel(
         StaffSelectList = (await staffService.GetAsListItemsAsync()).ToSelectList();
     }
 
-    private async Task<bool> UserCanEditAsync(ComplaintUpdateDto item) =>
-        (await authorization.AuthorizeAsync(User, item, ComplaintOperation.EditDetails)).Succeeded;
+    private Task<bool> UserCanEditAsync(ComplaintUpdateDto item) =>
+        authorization.Succeeded(User, item, ComplaintOperation.EditDetails);
 }

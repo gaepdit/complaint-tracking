@@ -3,6 +3,7 @@ using Cts.AppServices.Complaints.QueryDto;
 using Cts.AppServices.Concerns;
 using Cts.AppServices.Offices;
 using Cts.AppServices.Permissions;
+using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.Staff;
 using Cts.Domain.Data;
 using Cts.WebApp.Models;
@@ -40,8 +41,7 @@ public class IndexModel(
     public async Task OnGetAsync()
     {
         Spec = new ComplaintSearchDto();
-        CanViewDeletedComplaints =
-            (await authorization.AuthorizeAsync(User, nameof(Policies.DivisionManager))).Succeeded;
+        CanViewDeletedComplaints = await authorization.Succeeded(User, Policies.DivisionManager);
         await PopulateSelectListsAsync();
     }
 
@@ -49,8 +49,7 @@ public class IndexModel(
     {
         spec.TrimAll();
         var paging = new PaginatedRequest(p, GlobalConstants.PageSize, spec.Sort.GetDescription());
-        CanViewDeletedComplaints =
-            (await authorization.AuthorizeAsync(User, nameof(Policies.DivisionManager))).Succeeded;
+        CanViewDeletedComplaints = await authorization.Succeeded(User, Policies.DivisionManager);
         if (!CanViewDeletedComplaints) spec.DeletedStatus = null;
 
         Spec = spec;

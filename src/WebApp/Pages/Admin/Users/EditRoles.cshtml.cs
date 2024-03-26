@@ -1,4 +1,5 @@
 using Cts.AppServices.Permissions;
+using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.Staff;
 using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Identity;
@@ -28,7 +29,7 @@ public class EditRolesModel(IStaffService staffService, IAuthorizationService au
 
         DisplayStaff = staff;
         UserId = id;
-        CanEditDivisionManager = (await authorization.AuthorizeAsync(User, Policies.DivisionManager)).Succeeded;
+        CanEditDivisionManager = await authorization.Succeeded(User, Policies.DivisionManager);
 
         await PopulateRoleSettingsAsync();
         return Page();

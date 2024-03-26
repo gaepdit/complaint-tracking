@@ -7,6 +7,7 @@ using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Complaints.QueryDto;
 using Cts.AppServices.Permissions;
+using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.Staff;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
@@ -69,7 +70,7 @@ public class DetailsModel(
 
         var complaintView = await complaintService.FindAsync(id.Value, includeDeletedActions: true, token);
         if (complaintView is null || complaintView.IsDeleted) return BadRequest();
-        
+
         await SetPermissionsAsync(complaintView);
         if (!UserCan[ComplaintOperation.Accept]) return BadRequest();
 
@@ -144,6 +145,6 @@ public class DetailsModel(
     private async Task SetPermissionsAsync(ComplaintViewDto item)
     {
         foreach (var operation in ComplaintOperation.AllOperations)
-            UserCan[operation] = (await authorization.AuthorizeAsync(User, item, operation)).Succeeded;
+            UserCan[operation] = await authorization.Succeeded(User, item, operation);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Cts.AppServices.Permissions;
+using Cts.AppServices.Permissions.Helpers;
 using Cts.WebApp.Pages.Account;
-using System.Security.Claims;
 
 namespace Cts.WebApp.Pages.Shared.Components.MainMenu;
 
@@ -10,8 +10,8 @@ public class MainMenuViewComponent(IAuthorizationService authorization) : ViewCo
         View("Default", new MenuParams
         {
             IsLoginPage = model is LoginModel,
-            IsActiveUser = (await authorization.AuthorizeAsync((ClaimsPrincipal)User, Policies.ActiveUser)).Succeeded,
-            IsStaffUser = (await authorization.AuthorizeAsync((ClaimsPrincipal)User, Policies.StaffUser)).Succeeded,
+            IsActiveUser = await authorization.Succeeded(User, Policies.ActiveUser),
+            IsStaffUser = await authorization.Succeeded(User, Policies.StaffUser),
         });
 
     public record MenuParams

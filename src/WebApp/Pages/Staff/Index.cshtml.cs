@@ -2,6 +2,7 @@
 using Cts.AppServices.Complaints.QueryDto;
 using Cts.AppServices.Offices;
 using Cts.AppServices.Permissions;
+using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.Staff;
 using System.ComponentModel.DataAnnotations;
 
@@ -42,7 +43,7 @@ public class DashboardIndexModel(
         var officeName = user.Office?.Name;
         var officeId = user.Office?.Id ?? Guid.Empty;
 
-        IsStaff = (await authorization.AuthorizeAsync(User, Policies.StaffUser)).Succeeded;
+        IsStaff = await authorization.Succeeded(User, Policies.StaffUser);
         if (IsStaff)
         {
             MyNewComplaints = new DashboardCard("My new complaints")
@@ -51,7 +52,7 @@ public class DashboardIndexModel(
                 { Complaints = await complaintService.GetOpenComplaintsForUserAsync(user.Id, token) };
         }
 
-        IsManager = (await authorization.AuthorizeAsync(User, Policies.Manager)).Succeeded;
+        IsManager = await authorization.Succeeded(User, Policies.Manager);
         if (IsManager)
         {
             MgrReviewPending = new DashboardCard("My complaints to review")
