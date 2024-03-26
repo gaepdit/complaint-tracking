@@ -1,6 +1,6 @@
 ﻿using Cts.AppServices.ActionTypes;
 using Cts.AppServices.Attachments;
-using Cts.AppServices.Attachments.Dto;
+using Cts.AppServices.Attachments.ValidationAttributes;
 using Cts.AppServices.ComplaintActions;
 using Cts.AppServices.ComplaintActions.Dto;
 using Cts.AppServices.Complaints;
@@ -13,6 +13,7 @@ using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using Cts.WebApp.Platform.Settings;
 using GaEpd.AppLibrary.ListItems;
+using System.ComponentModel.DataAnnotations;
 
 namespace Cts.WebApp.Pages.Staff.Complaints;
 
@@ -30,7 +31,13 @@ public class DetailsModel(
     public Dictionary<IAuthorizationRequirement, bool> UserCan { get; private set; } = new();
 
     public ActionCreateDto NewAction { get; set; } = default!;
-    public AttachmentsCreateDto NewAttachments { get; set; } = default!;
+
+    [Required(ErrorMessage = "No files were selected.")]
+    [ValidateFileTypes]
+    [FilesNotEmpty]
+    [FilesRequired]
+    [MaxNumberOfFiles(IAttachmentService.MaxSimultaneousUploads)]
+    public List<IFormFile> Files { get; } = [];
 
     [TempData]
     public Guid HighlightId { get; set; }
@@ -56,7 +63,6 @@ public class DetailsModel(
 
         ComplaintView = complaintView;
         NewAction = new ActionCreateDto(complaintView.Id) { Investigator = currentUser.Name };
-        NewAttachments = new AttachmentsCreateDto(complaintView.Id);
         await PopulateSelectListsAsync();
         return Page();
     }
@@ -99,7 +105,6 @@ public class DetailsModel(
         {
             ValidatingSection = nameof(OnPostNewActionAsync);
             ComplaintView = complaintView;
-            NewAttachments = new AttachmentsCreateDto(complaintView.Id);
             await PopulateSelectListsAsync();
             return Page();
         }
@@ -112,12 +117,12 @@ public class DetailsModel(
     /// <summary>
     /// PostUploadFiles is used to add attachment files to this Complaint.
     /// </summary>
-    public async Task<IActionResult> OnPostUploadFilesAsync(int? id, AttachmentsCreateDto newAttachments,
+    public async Task<IActionResult> OnPostUploadFilesAsync(int? id, List<IFormFile> files,
         CancellationToken token)
     {
-        if (id is null || newAttachments.ComplaintId != id) return BadRequest();
+        if (id is null) return BadRequest();
 
-        var complaintView = await complaintService.FindAsync(id.Value, true, token);
+        var complaintView = await complaintService.FindAsync(id.Value, includeDeletedActions: true, token);
         if (complaintView is null || complaintView.IsDeleted) return BadRequest();
 
         var currentUser = await staffService.GetCurrentUserAsync();
@@ -135,7 +140,7 @@ public class DetailsModel(
             return Page();
         }
 
-        await attachmentService.SaveAttachmentsAsync(newAttachments, AppSettings.AttachmentServiceConfig, token);
+        await attachmentService.SaveAttachmentsAsync(id.Value, files, AppSettings.AttachmentServiceConfig, token);
         return RedirectToPage("Details", pageHandler: null, routeValues: new { id }, fragment: "attachments");
     }
 

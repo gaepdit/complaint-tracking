@@ -20,9 +20,6 @@ public interface IAttachmentService
     Task DeleteAttachmentAsync(AttachmentViewDto attachmentView, AttachmentServiceConfig config,
         CancellationToken token = default);
 
-    Task<int> SaveAttachmentsAsync(AttachmentsCreateDto resource, AttachmentServiceConfig config,
-        CancellationToken token = default);
-
     Task<int> SaveAttachmentsAsync(int complaintId, List<IFormFile> files, AttachmentServiceConfig config,
         CancellationToken token = default);
 

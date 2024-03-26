@@ -17,6 +17,7 @@ using System.Linq.Expressions;
 
 namespace Cts.AppServices.Complaints;
 
+#pragma warning disable S107
 public sealed class ComplaintService(
     IComplaintRepository complaintRepository,
     IComplaintManager complaintManager,
@@ -28,6 +29,7 @@ public sealed class ComplaintService(
     IUserService userService,
     IAuthorizationService authorization)
     : IComplaintService
+#pragma warning restore S107
 {
     // Public read methods
 

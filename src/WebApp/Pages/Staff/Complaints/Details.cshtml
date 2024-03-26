@@ -397,13 +397,12 @@ else
                 new { ValidatingSection = nameof(DetailsModel.OnPostUploadFilesAsync) })
             <div class="row row-cols-sm-auto g-3 align-items-center mb-3 mt-2">
                 <div class="col-12">
-                    <input class="form-control" type="file" asp-for="NewAttachments.Files" multiple accept="@FileTypes.FileTypesAcceptString">
+                    <input class="form-control" type="file" asp-for="Files" multiple accept="@FileTypes.FileTypesAcceptString">
                 </div>
                 <div class="col-12">
                     <button type="submit" class="btn btn-primary">Upload selected files</button>
                 </div>
             </div>
-            <input asp-for="NewAttachments.ComplaintId" type="hidden" />
         </form>
         <p>
             Up to ten files may be uploaded at a time. Supported file types are images, documents, and spreadsheets.
