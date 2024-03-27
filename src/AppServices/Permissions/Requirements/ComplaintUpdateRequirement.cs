@@ -1,5 +1,4 @@
 ﻿using Cts.AppServices.Complaints.CommandDto;
-using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Permissions.Helpers;
 using Cts.Domain;
 using Cts.Domain.Entities.Complaints;
@@ -22,20 +21,26 @@ public class ComplaintUpdateRequirement :
         _user = context.User;
         _resource = resource;
 
-        if (IsOpen() && !MustAccept() && UserCanEdit())
+        if (IsOpen() && UserHasEditAccess() && !UserMustAccept())
             context.Succeed(requirement);
 
         return Task.FromResult(0);
     }
 
+    private bool UserHasEditAccess() => IsCurrentOwner() || IsCurrentManager() || IsRecentReporter();
+    private bool UserMustAccept() => IsCurrentOwner() && IsNotAccepted() && NoReviewPending();
+
+    // Resource properties
     private bool IsOpen() => _resource is { ComplaintClosed: false, IsDeleted: false };
-    private bool MustAccept() => IsCurrentOwner() && !Accepted() && !ReviewPending();
-    private bool Accepted() => _resource is not { CurrentOwnerAcceptedDate: null };
-    private bool ReviewPending() => _resource is { Status: ComplaintStatus.ReviewPending };
+    private bool IsNotAccepted() => _resource is { CurrentOwnerAcceptedDate: null };
+    private bool NoReviewPending() => _resource is not { Status: ComplaintStatus.ReviewPending };
+
+    // User status
     private bool IsCurrentOwner() => _resource.CurrentOwnerId == _user.GetUserIdValue();
-    private bool UserCanEdit() => _user.IsDivisionManager() || IsCurrentOwnerOrManager() || IsRecentReporter();
-    private bool IsCurrentOwnerOrManager() => IsCurrentOwner() || IsCurrentManager();
-    private bool IsCurrentManager() => _user.IsManager() && _resource.CurrentOfficeId == _resource.CurrentUserOfficeId;
+
+    private bool IsCurrentManager() =>
+        _user.IsManager() && _resource.CurrentOfficeId == _resource.CurrentUserOfficeId ||
+        _user.IsDivisionManager();
 
     private bool IsRecentReporter() =>
         _resource.EnteredById == _user.GetUserIdValue() &&
