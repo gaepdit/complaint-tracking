@@ -1,4 +1,5 @@
 ﻿using Cts.AppServices.Permissions;
+using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.Staff;
 using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Identity;
@@ -24,7 +25,7 @@ public class DetailsModel : PageModel
 
         DisplayStaff = staff;
         Roles = await staffService.GetAppRolesAsync(DisplayStaff.Id);
-        IsUserAdministrator = (await authorization.AuthorizeAsync(User, Policies.UserAdministrator)).Succeeded;
+        IsUserAdministrator = await authorization.Succeeded(User, Policies.UserAdministrator);
 
         return Page();
     }

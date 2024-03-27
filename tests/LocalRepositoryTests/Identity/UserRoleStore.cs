@@ -94,7 +94,7 @@ public class UserRoleStore
     public async Task GetUsersInRole_IfSome_ReturnsListOfUsers()
     {
         using var store = new LocalUserStore();
-        var result = await store.GetUsersInRoleAsync(RoleName.UserAdmin, CancellationToken.None);
+        var result = await store.GetUsersInRoleAsync(RoleName.DivisionManager, CancellationToken.None);
 
         using var scope = new AssertionScope();
         result.Should().HaveCount(1);

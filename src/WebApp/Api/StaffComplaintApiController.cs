@@ -1,10 +1,11 @@
 ﻿using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.QueryDto;
+using Cts.AppServices.Permissions;
 using GaEpd.AppLibrary.Pagination;
 
 namespace Cts.WebApp.Api;
 
-[Authorize]
+[Authorize(Policy = nameof(Policies.ActiveUser))]
 [ApiController]
 [Route("api/staff/complaints")]
 [Produces("application/json")]

@@ -1,8 +1,5 @@
 using Cts.AppServices.Offices;
-using Cts.AppServices.Staff;
-using Cts.AppServices.Staff.Dto;
 using Cts.AppServices.UserServices;
-using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
 using Cts.WebApp.Api;
 using Microsoft.AspNetCore.Http;
@@ -18,83 +15,39 @@ public class OfficeApiTests
     [Test]
     public async Task ListOffices_ReturnsListOfOffices()
     {
+        // Arrange
         List<OfficeWithAssignorDto> officeList = [new OfficeWithAssignorDto(Guid.Empty, TextData.ValidName, true)];
+
         var officeServiceMock = Substitute.For<IOfficeService>();
         officeServiceMock.GetListIncludeAssignorAsync(CancellationToken.None).Returns(officeList);
-        var staffServiceMock = Substitute.For<IStaffService>();
-        var userServiceMock = Substitute.For<IUserService>();
-        var apiController = new OfficeApiController(officeServiceMock, staffServiceMock, userServiceMock);
 
+        var apiController = new OfficeApiController(officeServiceMock, Substitute.For<IUserService>(),
+            Substitute.For<IAuthorizationService>());
+
+        // Act
         var result = await apiController.ListOfficesAsync();
 
+        // Assert
         result.Should().BeEquivalentTo(officeList);
     }
 
     [Test]
-    public async Task GetStaffForAssignment_GivenUserIsInOffice_ReturnsWithList()
+    public async Task GetStaffForAssignment_GivenUserIsAuthorized_ReturnsWithList()
     {
         // Arrange
         var officeMock = Substitute.For<IOfficeService>();
         officeMock.GetStaffAsListItemsAsync(Arg.Any<Guid?>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
             .Returns(ListItems);
-
-        var staffMock = Substitute.For<IStaffService>();
-        staffMock.GetCurrentUserAsync().Returns(new StaffViewDto
-            { Active = true, Office = new OfficeViewDto(Guid.Empty, TextData.ValidName, true) });
-
-        var userMock = Substitute.For<IUserService>();
-        userMock.GetCurrentUserAsync()
-            .Returns(new ApplicationUser { Office = new Office(Guid.Empty, TextData.ValidName) });
-
-        var controller = new OfficeApiController(officeMock, staffMock, userMock);
-
-        // Act
-        var response = await controller.GetStaffForAssignmentAsync(Guid.Empty);
-
-        // Assert
-        ((JsonResult)response).Value.Should().BeEquivalentTo(ListItems);
-    }
-
-    [Test]
-    public async Task GetStaffForAssignment_GivenUserIsAssignor_ReturnsWithList()
-    {
-        // Arrange
-        var officeMock = Substitute.For<IOfficeService>();
-        officeMock.GetStaffAsListItemsAsync(Arg.Any<Guid?>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
-            .Returns(ListItems);
-        officeMock.UserIsAssignorForOfficeAsync(Arg.Any<Guid>(), Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(true);
-
-        var staffMock = Substitute.For<IStaffService>();
-        staffMock.GetCurrentUserAsync().Returns(new StaffViewDto { Active = true });
 
         var userMock = Substitute.For<IUserService>();
         userMock.GetCurrentUserAsync().Returns(new ApplicationUser());
 
-        var controller = new OfficeApiController(officeMock, staffMock, userMock);
+        var authorizationMock = Substitute.For<IAuthorizationService>();
+        authorizationMock.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), resource: Arg.Any<object?>(),
+                requirements: Arg.Any<IEnumerable<IAuthorizationRequirement>>())
+            .Returns(AuthorizationResult.Success());
 
-        // Act
-        var response = await controller.GetStaffForAssignmentAsync(Guid.Empty);
-
-        // Assert
-        ((JsonResult)response).Value.Should().BeEquivalentTo(ListItems);
-    }
-
-    [Test]
-    public async Task GetStaffForAssignment_GivenUserIsDivisionManager_ReturnsWithList()
-    {
-        // Arrange
-        var officeMock = Substitute.For<IOfficeService>();
-        officeMock.GetStaffAsListItemsAsync(Arg.Any<Guid?>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
-            .Returns(ListItems);
-
-        var staffMock = Substitute.For<IStaffService>();
-        staffMock.GetCurrentUserAsync().Returns(new StaffViewDto { Active = true });
-        staffMock.HasAppRoleAsync(Arg.Any<string>(), Arg.Any<AppRole>()).Returns(true);
-
-        var userMock = Substitute.For<IUserService>();
-        userMock.GetCurrentUserAsync().Returns(new ApplicationUser());
-
-        var controller = new OfficeApiController(officeMock, staffMock, userMock);
+        var controller = new OfficeApiController(officeMock, userMock, authorizationMock);
 
         // Act
         var response = await controller.GetStaffForAssignmentAsync(Guid.Empty);
@@ -107,30 +60,13 @@ public class OfficeApiTests
     public async Task GetStaffForAssignment_GivenNoAuthenticatedUser_ReturnsUnauthorized()
     {
         // Arrange
-        var userMock = Substitute.For<IUserService>();
-        userMock.GetCurrentUserAsync().Returns((ApplicationUser?)null);
+        var authorizationMock = Substitute.For<IAuthorizationService>();
+        authorizationMock.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), resource: Arg.Any<object?>(),
+                requirements: Arg.Any<IEnumerable<IAuthorizationRequirement>>())
+            .Returns(AuthorizationResult.Failed());
 
-        var controller =
-            new OfficeApiController(Substitute.For<IOfficeService>(), Substitute.For<IStaffService>(), userMock);
-
-        // Act
-        var response = await controller.GetStaffForAssignmentAsync(Guid.Empty);
-
-        // Assert
-        using var scope = new AssertionScope();
-        response.Should().BeOfType<UnauthorizedResult>();
-        ((UnauthorizedResult)response).StatusCode.Should().Be(StatusCodes.Status401Unauthorized);
-    }
-
-    [Test]
-    public async Task GetStaffForAssignment_GivenUserIsInactive_ReturnsForbidden()
-    {
-        // Arrange
-        var userMock = Substitute.For<IUserService>();
-        userMock.GetCurrentUserAsync().Returns(new ApplicationUser { Active = false });
-
-        var controller =
-            new OfficeApiController(Substitute.For<IOfficeService>(), Substitute.For<IStaffService>(), userMock);
+        var controller = new OfficeApiController(Substitute.For<IOfficeService>(), Substitute.For<IUserService>(),
+            authorizationMock);
 
         // Act
         var response = await controller.GetStaffForAssignmentAsync(Guid.Empty);
@@ -148,16 +84,23 @@ public class OfficeApiTests
         var officeMock = Substitute.For<IOfficeService>();
         officeMock.GetStaffAsListItemsAsync(Arg.Any<Guid?>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
             .Returns(ListItems);
-        officeMock.UserIsAssignorForOfficeAsync(Arg.Any<Guid>(), Arg.Any<string>(), Arg.Any<CancellationToken>()).Returns(false);
-
-        var staffMock = Substitute.For<IStaffService>();
-        staffMock.GetCurrentUserAsync().Returns(new StaffViewDto { Active = true });
-        staffMock.HasAppRoleAsync(Arg.Any<string>(), Arg.Any<AppRole>()).Returns(false);
+        officeMock.UserIsAssignorForOfficeAsync(Arg.Any<Guid>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(false);
 
         var userMock = Substitute.For<IUserService>();
         userMock.GetCurrentUserAsync().Returns(new ApplicationUser());
 
-        var controller = new OfficeApiController(Substitute.For<IOfficeService>(), staffMock, userMock);
+        var authorizationMock = Substitute.For<IAuthorizationService>();
+        // This returns success for line 40: User is active user.
+        authorizationMock.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), resource: Arg.Is<object?>(x => x == null),
+                requirements: Arg.Any<IEnumerable<IAuthorizationRequirement>>())
+            .Returns(AuthorizationResult.Success());
+        // This returns failure for line 45: User does not meet OfficeAssignmentRequirement.
+        authorizationMock.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), resource: Arg.Is<object?>(x => x != null),
+                requirements: Arg.Any<IEnumerable<IAuthorizationRequirement>>())
+            .Returns(AuthorizationResult.Failed());
+
+        var controller = new OfficeApiController(Substitute.For<IOfficeService>(), userMock, authorizationMock);
 
         // Act
         var response = await controller.GetStaffForAssignmentAsync(Guid.Empty);

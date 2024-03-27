@@ -1,5 +1,6 @@
 ﻿using Cts.AppServices.Concerns;
 using Cts.AppServices.Permissions;
+using Cts.AppServices.Permissions.Helpers;
 
 namespace Cts.WebApp.Pages.Admin.Maintenance.Concerns;
 
@@ -18,6 +19,6 @@ public class IndexModel : PageModel
         [FromServices] IAuthorizationService authorization)
     {
         Items = await service.GetListAsync();
-        IsSiteMaintainer = (await authorization.AuthorizeAsync(User, Policies.SiteMaintainer)).Succeeded;
+        IsSiteMaintainer = await authorization.Succeeded(User, Policies.SiteMaintainer);
     }
 }

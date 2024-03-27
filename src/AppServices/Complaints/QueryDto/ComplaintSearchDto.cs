@@ -91,10 +91,10 @@ public record ComplaintSearchDto
 
     [Display(Name = "Assigned associate")]
     public string? Assigned { get; init; }
-    
+
     // Additional search terms used on Dashboard; these should not be added to UI route values.
     public string? Reviewer { get; init; }
-    
+
     // UI Routing
     public IDictionary<string, string?> AsRouteValues() => new Dictionary<string, string?>
     {
@@ -123,16 +123,16 @@ public record ComplaintSearchDto
         { nameof(Assigned), Assigned },
     };
 
-    public void TrimAll()
+    public ComplaintSearchDto TrimAll() => this with
     {
-        CallerName = CallerName?.Trim();
-        Represents = Represents?.Trim();
-        Description = Description?.Trim();
-        ComplaintCity = ComplaintCity?.Trim();
-        Source = Source?.Trim();
-        FacilityIdNumber = FacilityIdNumber?.Trim();
-        Street = Street?.Trim();
-        City = City?.Trim();
-        PostalCode = PostalCode?.Trim();
-    }
+        CallerName = CallerName?.Trim(),
+        Represents = Represents?.Trim(),
+        Description = Description?.Trim(),
+        ComplaintCity = ComplaintCity?.Trim(),
+        Source = Source?.Trim(),
+        FacilityIdNumber = FacilityIdNumber?.Trim(),
+        Street = Street?.Trim(),
+        City = City?.Trim(),
+        PostalCode = PostalCode?.Trim(),
+    };
 }

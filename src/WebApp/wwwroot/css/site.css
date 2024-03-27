@@ -328,6 +328,18 @@ details.card:not([open]) summary.card-header {
     height: auto;
 }
 
+/* Checkbox cursors and disabled labels
+-------------------------------------------------- */
+[type="checkbox"], label:has([type="checkbox"]) {
+    cursor: pointer;
+}
+
+/* Use disabled attribute in addition to :disabled pseudo-class. See https://github.com/twbs/bootstrap/issues/28247 */
+label:has([disabled]), label:has(:disabled) {
+    cursor: default;
+    opacity: .7;
+}
+
 /* Validation summary
 -------------------------------------------------- */
 .validation-summary-valid {

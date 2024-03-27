@@ -70,13 +70,13 @@ public record ComplaintPublicSearchDto
         { nameof(PostalCode), PostalCode },
     };
 
-    public void TrimAll()
+    public ComplaintPublicSearchDto TrimAll() => this with
     {
-        Description = Description?.Trim();
-        SourceName = SourceName?.Trim();
-        County = County?.Trim();
-        Street = Street?.Trim();
-        City = City?.Trim();
-        PostalCode = PostalCode?.Trim();
-    }
+        Description = Description?.Trim(),
+        SourceName = SourceName?.Trim(),
+        County = County?.Trim(),
+        Street = Street?.Trim(),
+        City = City?.Trim(),
+        PostalCode = PostalCode?.Trim(),
+    };
 }

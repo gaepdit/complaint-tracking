@@ -1,16 +1,17 @@
 ﻿using Cts.AppServices.Permissions;
+using Cts.AppServices.Permissions.Helpers;
 
 namespace Cts.WebApp.Pages;
 
 [AllowAnonymous]
-public class SupportModel(IAuthorizationService authorizationService) : PageModel
+public class SupportModel(IAuthorizationService authorization) : PageModel
 {
     public bool ActiveUser { get; private set; }
     public string? Version { get; private set; }
 
     public async Task OnGetAsync()
     {
-        ActiveUser = (await authorizationService.AuthorizeAsync(User, nameof(Policies.ActiveUser))).Succeeded;
+        ActiveUser = await authorization.Succeeded(User, Policies.ActiveUser);
         Version = GetType().Assembly.GetName().Version?.ToString(fieldCount: 3);
     }
 }

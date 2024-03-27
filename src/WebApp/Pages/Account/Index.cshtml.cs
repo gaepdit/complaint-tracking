@@ -5,7 +5,7 @@ using Cts.Domain.Identity;
 
 namespace Cts.WebApp.Pages.Account;
 
-[Authorize(Policy = nameof(Policies.LoggedInUser))]
+[Authorize(Policy = nameof(Policies.ActiveUser))]
 public class AccountIndexModel : PageModel
 {
     public StaffViewDto DisplayStaff { get; private set; } = default!;

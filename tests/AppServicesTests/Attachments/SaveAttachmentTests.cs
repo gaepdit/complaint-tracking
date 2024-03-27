@@ -1,5 +1,4 @@
 ﻿using Cts.AppServices.Attachments;
-using Cts.AppServices.Attachments.Dto;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Attachments;
 using Cts.Domain.Entities.Complaints;
@@ -56,23 +55,22 @@ public class SaveAttachmentTests
     public async Task Save_ValidFormFile_TakesCorrectAction()
     {
         // Arrange
+        const int complaintId = 1;
+
         var formFile = Substitute.For<IFormFile>();
         formFile.Length.Returns(1);
         formFile.FileName.Returns(TextData.ValidPdfFileName);
 
-        var dto = new AttachmentsCreateDto(1);
-        dto.Files.Add(formFile);
-
         var complaintRepository = Substitute.For<IComplaintRepository>();
-        complaintRepository.GetAsync(1, Arg.Any<CancellationToken>())
-            .Returns(new Complaint(1));
+        complaintRepository.GetAsync(complaintId, Arg.Any<CancellationToken>())
+            .Returns(new Complaint(complaintId));
 
         var userService = Substitute.For<IUserService>();
         userService.GetCurrentUserAsync().Returns((ApplicationUser?)null);
 
         var attachment = new Attachment(Guid.NewGuid())
         {
-            Complaint = new Complaint(1),
+            Complaint = new Complaint(complaintId),
             FileName = TextData.ValidPdfFileName,
             FileExtension = TextData.ValidPdfFileExtension,
             Size = 1,
@@ -89,7 +87,7 @@ public class SaveAttachmentTests
             userService: userService);
 
         // Act
-        await attachmentService.SaveAttachmentsAsync(dto, AppServiceHelpers.AttachmentServiceConfig);
+        await attachmentService.SaveAttachmentsAsync(complaintId, [formFile], AppServiceHelpers.AttachmentServiceConfig);
 
         // Assert
         attachmentManager.Received().Create(Arg.Any<IFormFile>(), Arg.Any<Complaint>(), Arg.Any<ApplicationUser?>());
@@ -101,15 +99,14 @@ public class SaveAttachmentTests
     public async Task Save_EmptyFormFile_TakesNoAction()
     {
         // Arrange
+        const int complaintId = 1;
+
         var formFile = Substitute.For<IFormFile>();
         formFile.Length.Returns(0);
 
-        var dto = new AttachmentsCreateDto(1);
-        dto.Files.Add(formFile);
-
         var complaintRepository = Substitute.For<IComplaintRepository>();
-        complaintRepository.GetAsync(1, Arg.Any<CancellationToken>())
-            .Returns(new Complaint(1));
+        complaintRepository.GetAsync(complaintId, Arg.Any<CancellationToken>())
+            .Returns(new Complaint(complaintId));
 
         var userService = Substitute.For<IUserService>();
         userService.GetCurrentUserAsync().Returns((ApplicationUser?)null);
@@ -123,7 +120,7 @@ public class SaveAttachmentTests
             userService: userService);
 
         // Act
-        await attachmentService.SaveAttachmentsAsync(dto, AppServiceHelpers.AttachmentServiceConfig);
+        await attachmentService.SaveAttachmentsAsync(complaintId, [formFile], AppServiceHelpers.AttachmentServiceConfig);
 
         // Assert
         attachmentManager.ReceivedCalls().Should().BeEmpty();
@@ -135,16 +132,15 @@ public class SaveAttachmentTests
     public async Task Save_BlankFileName_TakesNoAction()
     {
         // Arrange
+        const int complaintId = 1;
+
         var formFile = Substitute.For<IFormFile>();
         formFile.Length.Returns(1);
         formFile.FileName.Returns(string.Empty);
 
-        var dto = new AttachmentsCreateDto(1);
-        dto.Files.Add(formFile);
-
         var complaintRepository = Substitute.For<IComplaintRepository>();
-        complaintRepository.GetAsync(1, Arg.Any<CancellationToken>())
-            .Returns(new Complaint(1));
+        complaintRepository.GetAsync(complaintId, Arg.Any<CancellationToken>())
+            .Returns(new Complaint(complaintId));
 
         var userService = Substitute.For<IUserService>();
         userService.GetCurrentUserAsync().Returns((ApplicationUser?)null);
@@ -158,7 +154,7 @@ public class SaveAttachmentTests
             userService: userService);
 
         // Act
-        await attachmentService.SaveAttachmentsAsync(dto, AppServiceHelpers.AttachmentServiceConfig);
+        await attachmentService.SaveAttachmentsAsync(complaintId,[formFile], AppServiceHelpers.AttachmentServiceConfig);
 
         // Assert
         attachmentManager.ReceivedCalls().Should().BeEmpty();

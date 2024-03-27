@@ -40,12 +40,17 @@ public sealed class LocalUserStore :
         {
             new()
             {
+                RoleId = Roles.Single(e => e.Name == RoleName.Staff).Id,
+                UserId = staffUserId,
+            },
+            new()
+            {
                 RoleId = Roles.Single(e => e.Name == RoleName.SiteMaintenance).Id,
                 UserId = staffUserId,
             },
             new()
             {
-                RoleId = Roles.Single(e => e.Name == RoleName.Staff).Id,
+                RoleId = Roles.Single(e => e.Name == RoleName.UserAdmin).Id,
                 UserId = staffUserId,
             },
         });

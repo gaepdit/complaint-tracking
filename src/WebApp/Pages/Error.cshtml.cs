@@ -1,4 +1,5 @@
 using Cts.AppServices.Permissions;
+using Cts.AppServices.Permissions.Helpers;
 
 namespace Cts.WebApp.Pages;
 
@@ -7,14 +8,14 @@ namespace Cts.WebApp.Pages;
 [IgnoreAntiforgeryToken]
 #pragma warning restore S4502
 [AllowAnonymous]
-public class ErrorModel(ILogger<ErrorModel> logger, IAuthorizationService authorizationService) : PageModel
+public class ErrorModel(ILogger<ErrorModel> logger, IAuthorizationService authorization) : PageModel
 {
     public int? Status { get; private set; }
     public bool ActiveUser { get; private set; }
 
     public async Task OnGetAsync(int? statusCode)
     {
-        ActiveUser = (await authorizationService.AuthorizeAsync(User, nameof(Policies.ActiveUser))).Succeeded;
+        ActiveUser = await authorization.Succeeded(User, Policies.ActiveUser);
 
         switch (statusCode)
         {
@@ -34,7 +35,7 @@ public class ErrorModel(ILogger<ErrorModel> logger, IAuthorizationService author
 
     public async Task OnPost()
     {
-        ActiveUser = (await authorizationService.AuthorizeAsync(User, nameof(Policies.ActiveUser))).Succeeded;
+        ActiveUser = await authorization.Succeeded(User, Policies.ActiveUser);
         logger.LogError("Error page shown from Post method");
     }
 }

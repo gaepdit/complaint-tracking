@@ -3,6 +3,8 @@ using Cts.AppServices.Complaints.CommandDto;
 using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Complaints.QueryDto;
 using Cts.AppServices.Offices;
+using Cts.AppServices.Permissions;
+using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.Staff;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
@@ -10,9 +12,10 @@ using GaEpd.AppLibrary.ListItems;
 
 namespace Cts.WebApp.Pages.Staff.Complaints;
 
+[Authorize(Policy = nameof(Policies.ActiveUser))]
 public class AssignModel(
     IComplaintService complaintService,
-    IAuthorizationService authorizationService,
+    IAuthorizationService authorization,
     IOfficeService officeService,
     IStaffService staffService
 ) : PageModel
@@ -70,10 +73,10 @@ public class AssignModel(
         return RedirectToPage("Details", new { id = ComplaintAssignment.ComplaintId });
     }
 
-    private async Task<bool> UserCanAssignAsync(ComplaintViewDto complaintView) =>
+    private Task<bool> UserCanAssignAsync(ComplaintViewDto complaintView) =>
         complaintView.CurrentOwner is null
-            ? (await authorizationService.AuthorizeAsync(User, complaintView, ComplaintOperation.Assign)).Succeeded
-            : (await authorizationService.AuthorizeAsync(User, complaintView, ComplaintOperation.Reassign)).Succeeded;
+            ? authorization.Succeeded(User, complaintView, ComplaintOperation.Assign)
+            : authorization.Succeeded(User, complaintView, ComplaintOperation.Reassign);
 
     private async Task PopulateSelectListsAsync(Guid? officeId)
     {

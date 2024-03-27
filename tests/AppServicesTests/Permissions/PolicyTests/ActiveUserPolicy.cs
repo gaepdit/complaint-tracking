@@ -1,4 +1,5 @@
 ﻿using Cts.AppServices.Permissions;
+using Cts.AppServices.Permissions.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using System.Security.Claims;
@@ -7,12 +8,12 @@ namespace AppServicesTests.Permissions.PolicyTests;
 
 public class ActiveUserPolicy
 {
-    private IAuthorizationService _authorizationService = null!;
+    private IAuthorizationService _authorization = null!;
 
     [SetUp]
-    public void SetUp() => _authorizationService = AuthorizationServiceBuilder.BuildAuthorizationService(collection =>
-        collection.AddAuthorization(options =>
-            options.AddPolicy(nameof(Policies.ActiveUser), Policies.ActiveUser)));
+    public void SetUp() => _authorization = AuthorizationServiceBuilder.BuildAuthorizationService(collection =>
+        collection.AddAuthorizationBuilder()
+            .AddPolicy(nameof(Policies.ActiveUser), Policies.ActiveUser));
 
     [Test]
     public async Task WhenActiveAndAuthenticated_Succeeds()
@@ -20,7 +21,7 @@ public class ActiveUserPolicy
         var user = new ClaimsPrincipal(new ClaimsIdentity(
             new Claim[] { new(nameof(Policies.ActiveUser), true.ToString()), },
             "Basic"));
-        var result = (await _authorizationService.AuthorizeAsync(user, Policies.ActiveUser)).Succeeded;
+        var result = await _authorization.Succeeded(user, Policies.ActiveUser);
         result.Should().BeTrue();
     }
 
@@ -28,7 +29,7 @@ public class ActiveUserPolicy
     public async Task WhenNotActive_DoesNotSucceed()
     {
         var user = new ClaimsPrincipal(new ClaimsIdentity("Basic"));
-        var result = (await _authorizationService.AuthorizeAsync(user, Policies.ActiveUser)).Succeeded;
+        var result = await _authorization.Succeeded(user, Policies.ActiveUser);
         result.Should().BeFalse();
     }
 
@@ -37,7 +38,7 @@ public class ActiveUserPolicy
     {
         var user = new ClaimsPrincipal(new ClaimsIdentity(
             new Claim[] { new(nameof(Policies.ActiveUser), true.ToString()), }));
-        var result = (await _authorizationService.AuthorizeAsync(user, Policies.ActiveUser)).Succeeded;
+        var result = await _authorization.Succeeded(user, Policies.ActiveUser);
         result.Should().BeFalse();
     }
 
@@ -45,7 +46,7 @@ public class ActiveUserPolicy
     public async Task WhenNeitherActiveNorAuthenticated_DoesNotSucceed()
     {
         var user = new ClaimsPrincipal(new ClaimsIdentity());
-        var result = (await _authorizationService.AuthorizeAsync(user, Policies.ActiveUser)).Succeeded;
+        var result = await _authorization.Succeeded(user, Policies.ActiveUser);
         result.Should().BeFalse();
     }
 }
