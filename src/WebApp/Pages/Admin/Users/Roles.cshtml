@@ -1,59 +1,137 @@
 ﻿@page
 @model RolesModel
 @{
-    ViewData["Title"] = "Users, Roles, and Capabilities";
+    ViewData["Title"] = "CTS User Roles and Capabilities";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1 class="mb-3">@ViewData["Title"]</h1>
 
-<h2>Public</h2>
+<h2 class="h4">Public</h2>
+
+<p><em>Visitors</em> to this site who are not logged in can only do the following:</p>
+
+<ul>
+    <li>Search for and view basic info for all Complaints, excluding caller info.</li>
+    <li>Search for and view all info for Complaints that have been closed, excluding caller info.</li>
+</ul>
+
+<h2 class="h4">User</h2>
+
+<p>All active <em>Users</em> with work accounts who are logged into the application can:</p>
+
+<ul>
+    <li>
+        Search for and view all info for all Complaints and Complaint Actions, excluding deleted Complaints
+        and Actions.
+    </li>
+    <li>Search for and view CTS Users.</li>
+    <li>View the list of EPD Offices and Assignors.</li>
+    <li>View the lists of Complaint Action Types and Areas of Concern.</li>
+    <li>View the list of roles and capabilities.</li>
+    <li>Edit account info for themselves, including changing assigned Office.</li>
+</ul>
+
 <p>
-    <em>Describe the capabilities available to visitors to the site who are not logged in.</em>
+    Note: Users who still have current work accounts can be marked "Inactive" by a user account administrator. Inactive
+    users are not able to sign in to the application.
 </p>
 
-<h2>User</h2>
-<p>All Users with SOG work accounts who are logged into the application can:</p>
-<ul class="pb-3">
-    <li>View a list of Users.</li>
-    <li>Edit account profile info for themselves, including changing assigned Office.</li>
+<h2 class="h4">Office Assignor</h2>
+
+<p>One <em>User</em> in each Office is designated the <em>Assignor</em> for that Office. The <em>Assignor</em> can:</p>
+
+<ul>
+    <li>Assign unassigned Complaints to users within that Office.</li>
+</ul>
+
+<h2 class="h4" id="cts-roles">CTS Roles</h2>
+
+<p><em>Users</em> can be granted one or more of the following roles.</p>
+
+<h3 class="h5">Staff</h3>
+
+<p>Users in the <em>Staff</em> role can:</p>
+
+<ul>
+    <li>Create new Complaints and either assign them to Users within the same Office or to the Assignor of another Office.</li>
+    <li>Edit Complaints assigned to them.</li>
+    <li>Edit Complaints they entered into the CTS for one hour after time of entry (whether assigned to them or not).</li>
+    <li>Add/edit Complaint Actions for Complaints assigned to them.</li>
+    <li>Delete/restore Complaint Actions for Complaints assigned to them.</li>
+    <li>Transfer (reassign) their Complaints to other Users within the same Office or to the Assignor of another Office.</li>
+    <li>Add/delete Attachments for open Complaints assigned to them.</li>
+    <li>View CTS status reports.</li>
+</ul>
+
+<h3 class="h5">Manager</h3>
+
+<p>Users in the <em>Manager</em> role have all the capabilities of the <em>Staff</em> role. Plus they can:</p>
+
+<ul>
     <li>
-        <em>List additional capabilities here.</em>
+        Manage open Complaints currently assigned to Users in the same Office, including:
+        <ul>
+            <li>Edit Complaints.</li>
+            <li>Reassign Complaints.</li>
+            <li>Add/delete Attachments.</li>
+            <li>Edit, delete, and restore Complaint Actions.</li>
+        </ul>
+    </li>
+    <li>Be selected as the requested reviewer for Complaints currently assigned to their Office.</li>
+    <li>Approve & close Complaints that have been submitted for review.</li>
+</ul>
+
+<h3 class="h5">User Account Admin</h3>
+
+<p>Users in the <em>User Account Admin</em> role can:</p>
+
+<ul>
+    <li>Manage CTS User accounts and assign roles (excluding the <em>Division Manager</em> role).</li>
+</ul>
+
+<h3 class="h5">Attachments Editor</h3>
+
+<p>Users in the <em>Attachments Editor</em> role can:</p>
+
+<ul>
+    <li>
+        Add/delete Attachments for all Complaints, including closed Complaints. (Normally, Attachments can only be
+        edited for open complaints the user is already able to edit.)
     </li>
 </ul>
 
-<h2>User Roles</h2>
-<p>Users can also be granted one or more of the following roles.</p>
+<h3 class="h5">Site Maintenance</h3>
+
+<p>Users in the <em>Site Maintenance</em> role can:</p>
+
 <ul>
-    <li>
-        <h3 class="h4">Staff</h3>
-        <p>Users in the <em>Staff</em> role can:</p>
-        <ul class="pb-3">
-            <li>
-                <em>List capabilities here.</em>
-            </li>
-        </ul>
-    </li>
-    <li>
-        <h3 class="h4">Manager</h3>
-        <p>Users in the <em>Manager</em> role have all the capabilities of the <em>Staff</em> role. Plus they can:</p>
-        <ul class="pb-3">
-            <li>
-                <em>List additional capabilities here.</em>
-            </li>
-        </ul>
-    </li>
-    <li>
-        <h3 class="h4">User Account Admin</h3>
-        <p>Users in the <em>User Account Admin</em> role can:</p>
-        <ul class="pb-3">
-            <li>Manage user accounts and assign roles.</li>
-        </ul>
-    </li>
-    <li>
-        <h3 class="h4">Site Maintenance</h3>
-        <p>Users in the <em>Site Maintenance</em> role can:</p>
-        <ul>
-            <li>Edit the lookup tables used for drop-down lists.</li>
-        </ul>
-    </li>
+    <li>Edit EPD Offices and designate the Assignor for each Office.</li>
+    <li>Edit the lookup tables for Complaint Action Types and Areas of Concern.</li>
+</ul>
+
+<h3 class="h5">Data Exporter</h3>
+
+<p>Users in the <em>Data Export</em> role can:</p>
+
+<ul>
+    <li>Generate a ZIP archive of Complaints.</li>
+</ul>
+
+<h3 class="h5">Division Manager</h3>
+
+<p>
+    Users in the <em>Division Manager</em> role have all the capabilities of the
+    <em>Staff, Manager, User Account Admin, Attachments Editor,</em> and <em>Site Maintenance</em> roles.
+    (Division Managers can review complaints, but can't necessarily be selected as the requested reviewer.)
+</p>
+
+<p>Plus they can:</p>
+
+<ul>
+    <li>Assign the <em>Division Manager</em> role (along with the other roles).</li>
+    <li>Search for deleted Complaints and deleted Complaint Actions.</li>
+    <li>Edit all Complaints and Complaint Actions.</li>
+    <li>Reopen Complaints that have been closed.</li>
+    <li>Delete and restore all Complaints.</li>
+    <li>Delete and restore all Complaint Actions.</li>
 </ul>

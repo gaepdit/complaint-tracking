@@ -60,9 +60,21 @@ public class AppRole
 
     [UsedImplicitly]
     public static AppRole StaffRole { get; } = new(
-        RoleName.Staff, "CTS Staff",
+        RoleName.Staff, "Staff",
         "Can create new complaints and work with complaints assigned to them. Can transfer their " +
         "complaints to other users or offices."
+    );
+
+    [UsedImplicitly]
+    public static AppRole ManagerRole { get; } = new(
+        RoleName.Manager, "Manager",
+        "Can manage complaints for all users assigned to the same office."
+    );
+
+    [UsedImplicitly]
+    public static AppRole UserAdminRole { get; } = new(
+        RoleName.UserAdmin, "User Account Admin",
+        "Can edit all users and roles, excluding the Division Manager role."
     );
 
     [UsedImplicitly]
@@ -72,34 +84,21 @@ public class AppRole
     );
 
     [UsedImplicitly]
+    public static AppRole SiteMaintenanceRole { get; } = new(
+        RoleName.SiteMaintenance, "Site Maintenance",
+        "Can edit offices, assignors, and lookup tables (drop-down lists)."
+    );
+
+    [UsedImplicitly]
     public static AppRole DataExportRole { get; } = new(
-        RoleName.DataExport, "Data Export",
+        RoleName.DataExport, "Data Exporter",
         "Can generate a ZIP archive of complaints."
     );
 
     [UsedImplicitly]
     public static AppRole DivisionManagerRole { get; } = new(
         RoleName.DivisionManager, "Division Manager",
-        "Can register and edit all users and roles. Can manage all complaints. Can delete and restore " +
-        "complaints and complaint actions. Can edit offices, assignors, and lookup tables."
-    );
-
-    [UsedImplicitly]
-    public static AppRole ManagerRole { get; } = new(
-        RoleName.Manager, "Manager",
-        "Can manage complaints for all users assigned to the same office. Can delete and restore " +
-        "complaint actions."
-    );
-
-    [UsedImplicitly]
-    public static AppRole SiteMaintenanceRole { get; } = new(
-        RoleName.SiteMaintenance, "Site Maintenance",
-        "Can update values in lookup tables (drop-down lists)."
-    );
-
-    [UsedImplicitly]
-    public static AppRole UserAdminRole { get; } = new(
-        RoleName.UserAdmin, "User Account Admin",
-        "Can register and edit all users and roles, excluding the Division Manager role."
+        "Can manage all complaints. Can delete and restore complaints. " +
+        "Can edit all users and roles. Can edit offices, assignors, and lookup tables."
     );
 }
