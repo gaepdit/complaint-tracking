@@ -18,7 +18,6 @@ public class ComplaintOperation :
     public static readonly ComplaintOperation EditActions = new(nameof(EditActions));
     public static readonly ComplaintOperation EditAttachments = new(nameof(EditAttachments));
     public static readonly ComplaintOperation EditDetails = new(nameof(EditDetails));
-    public static readonly ComplaintOperation ManageDeletedActions = new(nameof(ManageDeletedActions));
     public static readonly ComplaintOperation ManageDeletions = new(nameof(ManageDeletions));
     public static readonly ComplaintOperation Reassign = new(nameof(Reassign));
     public static readonly ComplaintOperation Reopen = new(nameof(Reopen));

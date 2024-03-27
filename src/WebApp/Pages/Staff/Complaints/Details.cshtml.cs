@@ -67,9 +67,7 @@ public class DetailsModel(
         return Page();
     }
 
-    /// <summary>
     /// OnPostAccept is used for the current user to accept the Complaint.
-    /// </summary>
     public async Task<IActionResult> OnPostAcceptAsync(int? id, CancellationToken token)
     {
         if (id is null) return BadRequest();
@@ -85,9 +83,7 @@ public class DetailsModel(
         return RedirectToPage("Details", routeValues: new { id });
     }
 
-    /// <summary>
     /// PostNewAction is used to add a new Action for this Complaint.
-    /// </summary>
     public async Task<IActionResult> OnPostNewActionAsync(int? id, ActionCreateDto newAction,
         CancellationToken token)
     {
@@ -114,9 +110,7 @@ public class DetailsModel(
         return RedirectToPage("Details", pageHandler: null, routeValues: new { id }, fragment: HighlightId.ToString());
     }
 
-    /// <summary>
     /// PostUploadFiles is used to add attachment files to this Complaint.
-    /// </summary>
     public async Task<IActionResult> OnPostUploadFilesAsync(int? id, List<IFormFile> files,
         CancellationToken token)
     {
