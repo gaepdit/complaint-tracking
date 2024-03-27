@@ -13,7 +13,7 @@ public static class PrincipalExtensions
         principal.HasClaim(claim => claim.Type == nameof(Policies.ActiveUser) && claim.Value == true.ToString());
 
     private static bool IsInRoles(this IPrincipal principal, IEnumerable<string> roles) =>
-        roles.All(principal.IsInRole);
+        roles.Any(principal.IsInRole);
 
     internal static bool IsAttachmentsEditor(this IPrincipal principal) =>
         principal.IsInRoles([RoleName.AttachmentsEditor, RoleName.DivisionManager]);

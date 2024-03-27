@@ -17,6 +17,8 @@ public static class AuthorizationPolicies
         services.AddAuthorizationBuilder()
             .AddPolicy(nameof(Policies.ActiveUser), Policies.ActiveUser)
             .AddPolicy(nameof(Policies.DataExporter), Policies.DataExporter)
+            .AddPolicy(nameof(Policies.DivisionManager), Policies.DivisionManager)
+            .AddPolicy(nameof(Policies.Manager), Policies.Manager)
             .AddPolicy(nameof(Policies.SiteMaintainer), Policies.SiteMaintainer)
             .AddPolicy(nameof(Policies.StaffUser), Policies.StaffUser)
             .AddPolicy(nameof(Policies.UserAdministrator), Policies.UserAdministrator);
