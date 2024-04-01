@@ -1,4 +1,5 @@
 using Cts.AppServices.Permissions;
+using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.Staff;
 using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Identity;
@@ -14,7 +15,7 @@ public class EditRolesModel(IStaffService staffService, IAuthorizationService au
     public string UserId { get; set; } = string.Empty;
 
     [BindProperty]
-    public List<RoleSetting> RoleSettings { get; set; } = new();
+    public List<RoleSetting> RoleSettings { get; set; } = [];
 
     public StaffViewDto DisplayStaff { get; private set; } = default!;
     public string? OfficeName => DisplayStaff.Office?.Name;
@@ -28,7 +29,7 @@ public class EditRolesModel(IStaffService staffService, IAuthorizationService au
 
         DisplayStaff = staff;
         UserId = id;
-        CanEditDivisionManager = (await authorization.AuthorizeAsync(User, Policies.DivisionManager)).Succeeded;
+        CanEditDivisionManager = await authorization.Succeeded(User, Policies.DivisionManager);
 
         await PopulateRoleSettingsAsync();
         return Page();
@@ -36,14 +37,8 @@ public class EditRolesModel(IStaffService staffService, IAuthorizationService au
 
     public async Task<IActionResult> OnPostAsync()
     {
-        CanEditDivisionManager = (await authorization.AuthorizeAsync(User, Policies.DivisionManager)).Succeeded;
-
-        var roleDictionary = CanEditDivisionManager
-            ? RoleSettings.ToDictionary(roleSetting => roleSetting.Name, roleSetting => roleSetting.IsSelected)
-            : RoleSettings.Where(roleSetting => roleSetting.Name != RoleName.DivisionManager)
-                .ToDictionary(roleSetting => roleSetting.Name, roleSetting => roleSetting.IsSelected);
-
-        var result = await staffService.UpdateRolesAsync(UserId, roleDictionary);
+        var rolesDictionary = RoleSettings.ToDictionary(setting => setting.Name, setting => setting.IsSelected);
+        var result = await staffService.UpdateRolesAsync(UserId, rolesDictionary);
 
         if (result.Succeeded)
         {

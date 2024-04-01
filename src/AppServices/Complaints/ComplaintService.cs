@@ -3,6 +3,8 @@ using Cts.AppServices.Attachments;
 using Cts.AppServices.Attachments.ValidationAttributes;
 using Cts.AppServices.Complaints.CommandDto;
 using Cts.AppServices.Complaints.QueryDto;
+using Cts.AppServices.Permissions;
+using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.ComplaintTransitions;
@@ -10,10 +12,12 @@ using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
 using GaEpd.AppLibrary.Pagination;
+using Microsoft.AspNetCore.Authorization;
 using System.Linq.Expressions;
 
 namespace Cts.AppServices.Complaints;
 
+#pragma warning disable S107
 public sealed class ComplaintService(
     IComplaintRepository complaintRepository,
     IComplaintManager complaintManager,
@@ -22,8 +26,10 @@ public sealed class ComplaintService(
     IAttachmentService attachmentService,
     // ReSharper disable once SuggestBaseTypeForParameterInConstructor
     IMapper mapper,
-    IUserService userService)
+    IUserService userService,
+    IAuthorizationService authorization)
     : IComplaintService
+#pragma warning restore S107
 {
     // Public read methods
 
@@ -58,9 +64,15 @@ public sealed class ComplaintService(
     public async Task<bool> ExistsAsync(int id, CancellationToken token = default) =>
         await complaintRepository.ExistsAsync(id, token).ConfigureAwait(false);
 
-    public Task<IPaginatedResult<ComplaintSearchResultDto>> SearchAsync(
-        ComplaintSearchDto spec, PaginatedRequest paging, CancellationToken token = default) =>
-        PerformPagedSearchAsync(paging, ComplaintFilters.SearchPredicate(spec), token);
+    public async Task<IPaginatedResult<ComplaintSearchResultDto>> SearchAsync(ComplaintSearchDto spec,
+        PaginatedRequest paging, CancellationToken token = default)
+    {
+        var principal = userService.GetCurrentPrincipal();
+        if (!await authorization.Succeeded(principal!, Policies.DivisionManager).ConfigureAwait(false))
+            spec.DeletedStatus = null;
+        return await PerformPagedSearchAsync(paging, ComplaintFilters.SearchPredicate(spec), token)
+            .ConfigureAwait(false);
+    }
 
     // Private search methods
 

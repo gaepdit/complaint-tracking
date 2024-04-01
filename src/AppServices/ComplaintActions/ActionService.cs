@@ -1,10 +1,13 @@
 using AutoMapper;
 using Cts.AppServices.ComplaintActions.Dto;
+using Cts.AppServices.Permissions;
+using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.ActionTypes;
 using Cts.Domain.Entities.ComplaintActions;
 using Cts.Domain.Entities.Complaints;
 using GaEpd.AppLibrary.Pagination;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cts.AppServices.ComplaintActions;
 
@@ -12,6 +15,7 @@ public sealed class ActionService(
     // ReSharper disable once SuggestBaseTypeForParameterInConstructor
     IMapper mapper,
     IUserService userService,
+    IAuthorizationService authorization,
     IComplaintRepository complaintRepository,
     IComplaintManager complaintManager,
     IActionRepository actionRepository,
@@ -44,8 +48,13 @@ public sealed class ActionService(
             await actionRepository.FindAsync(action => action.Id == id && !action.IsDeleted, token)
                 .ConfigureAwait(false));
 
-    public async Task<IPaginatedResult<ActionSearchResultDto>> SearchAsync(ActionSearchDto spec, PaginatedRequest paging, CancellationToken token = default)
+    public async Task<IPaginatedResult<ActionSearchResultDto>> SearchAsync(ActionSearchDto spec,
+        PaginatedRequest paging, CancellationToken token = default)
     {
+        var principal = userService.GetCurrentPrincipal();
+        if (!await authorization.Succeeded(principal!, Policies.DivisionManager).ConfigureAwait(false))
+            spec.DeletedStatus = null;
+
         var predicate = ActionFilters.SearchPredicate(spec);
         var count = await actionRepository.CountAsync(predicate, token).ConfigureAwait(false);
         var actions = await actionRepository.GetPagedListAsync(predicate, paging, token).ConfigureAwait(false);

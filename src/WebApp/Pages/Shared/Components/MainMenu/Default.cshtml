@@ -3,7 +3,7 @@
 <header role="banner">
     <nav id="main-nav" class="navbar nav-underline navbar-expand-sm text-bg-brand bg-gradient border-bottom shadow-sm mb-3 d-print-none">
         <div class="container">
-            @if (Model.IsLoggedInUser)
+            @if (Model.IsStaffUser)
             {
                 <a asp-page="/Staff/Index" title="Dashboard">
                     <img src="~/images/epd-icon.svg" alt="Georgia EPD" class="img-logo pe-2" />
@@ -24,13 +24,13 @@
 
             <div class="navbar-collapse collapse d-sm-inline-flex" id="main-nav-content">
                 <ul class="navbar-nav flex-grow-1">
-                    @if (Model.IsLoggedInUser)
+                    @if (Model.IsStaffUser)
                     {
                         <li class="nav-item">
                             <a class="nav-link" asp-page="/Staff/Index" title="Dashboard">Dashboard</a>
                         </li>
                     }
-                    @if (Model.IsStaffUser)
+                    @if (Model.IsActiveUser)
                     {
                         <li class="nav-item">
                             <a class="nav-link" asp-page="/Staff/Complaints/Index" title="Complaint Search">
@@ -58,9 +58,12 @@
                                 <li class="nav-item">
                                     <a class="dropdown-item" asp-page="/Staff/ComplaintActions/Index">Complaint Action Search</a>
                                 </li>
-                                <li>
-                                    <a class="dropdown-item" asp-page="/Admin/Reporting/Index">Reports</a>
-                                </li>
+                                @if (Model.IsStaffUser)
+                                {
+                                    <li>
+                                        <a class="dropdown-item" asp-page="/Admin/Reporting/Index">Reports</a>
+                                    </li>
+                                }
                                 <li>
                                     <a class="dropdown-item" asp-page="/Admin/Users/Index">CTS Users</a>
                                 </li>
@@ -74,7 +77,7 @@
                         </li>
                     }
 
-                    @if (Model.IsLoggedInUser)
+                    @if (Model.IsActiveUser)
                     {
                         <li class="nav-item dropdown">
                             <button class="nav-link dropdown-toggle" id="accountDropdownMenuLink" type="button"

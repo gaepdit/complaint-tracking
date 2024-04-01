@@ -4,6 +4,7 @@ using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
+using Microsoft.AspNetCore.Authorization;
 using System.Linq.Expressions;
 
 namespace AppServicesTests.Complaints;
@@ -23,7 +24,8 @@ public class FindPublic
 
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
-            Substitute.For<IAttachmentService>(), AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
+            Substitute.For<IAttachmentService>(), AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>(),
+            Substitute.For<IAuthorizationService>());
 
         // Act
         var result = await appService.FindPublicAsync(item.Id);
@@ -41,7 +43,8 @@ public class FindPublic
             .Returns((Complaint?)null);
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
-            Substitute.For<IAttachmentService>(), AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>());
+            Substitute.For<IAttachmentService>(), AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>(),
+            Substitute.For<IAuthorizationService>());
 
         // Act
         var result = await appService.FindPublicAsync(0);

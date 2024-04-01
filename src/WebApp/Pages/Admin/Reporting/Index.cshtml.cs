@@ -1,6 +1,7 @@
 using Cts.AppServices.Complaints.QueryDto;
 using Cts.AppServices.Offices;
 using Cts.AppServices.Permissions;
+using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.Reporting;
 using Cts.AppServices.Staff;
 using Cts.Domain.DataViews.ReportingViews;
@@ -9,7 +10,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Cts.WebApp.Pages.Admin.Reporting;
 
-[Authorize(Policy = nameof(Policies.ActiveUser))]
+[Authorize(Policy = nameof(Policies.StaffUser))]
 public class ReportingIndexModel(
     IReportingService reportingService,
     IOfficeService officeService,
@@ -70,7 +71,7 @@ public class ReportingIndexModel(
     // Menu page
     public async Task OnGetAsync()
     {
-        CanExportDataArchive = (await authorization.AuthorizeAsync(User, nameof(Policies.DataExporter))).Succeeded;
+        CanExportDataArchive = await authorization.Succeeded(User, Policies.DataExporter);
         CurrentReport = Menu;
     }
 

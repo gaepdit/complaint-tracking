@@ -2,13 +2,16 @@
 using Cts.AppServices.Attachments.Dto;
 using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Complaints.QueryDto;
+using Cts.AppServices.Permissions;
+using Cts.AppServices.Permissions.Helpers;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using Cts.WebApp.Platform.Settings;
 
 namespace Cts.WebApp.Pages.Staff.Complaints.Attachment;
 
-public class AttachmentDeleteModel(IAttachmentService attachmentService, IAuthorizationService authorizationService)
+[Authorize(Policy = nameof(Policies.ActiveUser))]
+public class AttachmentDeleteModel(IAttachmentService attachmentService, IAuthorizationService authorization)
     : PageModel
 {
     [BindProperty]
@@ -52,6 +55,6 @@ public class AttachmentDeleteModel(IAttachmentService attachmentService, IAuthor
             fragment: "attachments");
     }
 
-    private async Task<bool> UserCanDeleteAttachmentAsync(ComplaintViewDto item) =>
-        (await authorizationService.AuthorizeAsync(User, item, ComplaintOperation.EditAttachments)).Succeeded;
+    private Task<bool> UserCanDeleteAttachmentAsync(ComplaintViewDto item) =>
+        authorization.Succeeded(User, item, ComplaintOperation.EditAttachments);
 }

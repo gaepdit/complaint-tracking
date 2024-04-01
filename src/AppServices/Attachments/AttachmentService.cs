@@ -75,12 +75,6 @@ public class AttachmentService(
                 token).ConfigureAwait(false);
     }
 
-
-    public Task<int> SaveAttachmentsAsync(AttachmentsCreateDto resource,
-        IAttachmentService.AttachmentServiceConfig config,
-        CancellationToken token = default) =>
-        SaveAttachmentsAsync(resource.ComplaintId, resource.Files, config, token);
-
     public async Task<int> SaveAttachmentsAsync(int complaintId, List<IFormFile> files,
         IAttachmentService.AttachmentServiceConfig config, CancellationToken token = default)
     {

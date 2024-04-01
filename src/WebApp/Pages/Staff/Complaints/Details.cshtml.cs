@@ -1,17 +1,19 @@
 ﻿using Cts.AppServices.ActionTypes;
 using Cts.AppServices.Attachments;
-using Cts.AppServices.Attachments.Dto;
+using Cts.AppServices.Attachments.ValidationAttributes;
 using Cts.AppServices.ComplaintActions;
 using Cts.AppServices.ComplaintActions.Dto;
 using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Complaints.QueryDto;
 using Cts.AppServices.Permissions;
+using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.Staff;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using Cts.WebApp.Platform.Settings;
 using GaEpd.AppLibrary.ListItems;
+using System.ComponentModel.DataAnnotations;
 
 namespace Cts.WebApp.Pages.Staff.Complaints;
 
@@ -29,7 +31,13 @@ public class DetailsModel(
     public Dictionary<IAuthorizationRequirement, bool> UserCan { get; private set; } = new();
 
     public ActionCreateDto NewAction { get; set; } = default!;
-    public AttachmentsCreateDto NewAttachments { get; set; } = default!;
+
+    [Required(ErrorMessage = "No files were selected.")]
+    [ValidateFileTypes]
+    [FilesNotEmpty]
+    [FilesRequired]
+    [MaxNumberOfFiles(IAttachmentService.MaxSimultaneousUploads)]
+    public List<IFormFile> Files { get; } = [];
 
     [TempData]
     public Guid HighlightId { get; set; }
@@ -55,21 +63,18 @@ public class DetailsModel(
 
         ComplaintView = complaintView;
         NewAction = new ActionCreateDto(complaintView.Id) { Investigator = currentUser.Name };
-        NewAttachments = new AttachmentsCreateDto(complaintView.Id);
         await PopulateSelectListsAsync();
         return Page();
     }
 
-    /// <summary>
     /// OnPostAccept is used for the current user to accept the Complaint.
-    /// </summary>
     public async Task<IActionResult> OnPostAcceptAsync(int? id, CancellationToken token)
     {
         if (id is null) return BadRequest();
 
         var complaintView = await complaintService.FindAsync(id.Value, includeDeletedActions: true, token);
         if (complaintView is null || complaintView.IsDeleted) return BadRequest();
-        
+
         await SetPermissionsAsync(complaintView);
         if (!UserCan[ComplaintOperation.Accept]) return BadRequest();
 
@@ -78,9 +83,7 @@ public class DetailsModel(
         return RedirectToPage("Details", routeValues: new { id });
     }
 
-    /// <summary>
     /// PostNewAction is used to add a new Action for this Complaint.
-    /// </summary>
     public async Task<IActionResult> OnPostNewActionAsync(int? id, ActionCreateDto newAction,
         CancellationToken token)
     {
@@ -98,7 +101,6 @@ public class DetailsModel(
         {
             ValidatingSection = nameof(OnPostNewActionAsync);
             ComplaintView = complaintView;
-            NewAttachments = new AttachmentsCreateDto(complaintView.Id);
             await PopulateSelectListsAsync();
             return Page();
         }
@@ -108,15 +110,13 @@ public class DetailsModel(
         return RedirectToPage("Details", pageHandler: null, routeValues: new { id }, fragment: HighlightId.ToString());
     }
 
-    /// <summary>
     /// PostUploadFiles is used to add attachment files to this Complaint.
-    /// </summary>
-    public async Task<IActionResult> OnPostUploadFilesAsync(int? id, AttachmentsCreateDto newAttachments,
+    public async Task<IActionResult> OnPostUploadFilesAsync(int? id, List<IFormFile> files,
         CancellationToken token)
     {
-        if (id is null || newAttachments.ComplaintId != id) return BadRequest();
+        if (id is null) return BadRequest();
 
-        var complaintView = await complaintService.FindAsync(id.Value, true, token);
+        var complaintView = await complaintService.FindAsync(id.Value, includeDeletedActions: true, token);
         if (complaintView is null || complaintView.IsDeleted) return BadRequest();
 
         var currentUser = await staffService.GetCurrentUserAsync();
@@ -134,7 +134,7 @@ public class DetailsModel(
             return Page();
         }
 
-        await attachmentService.SaveAttachmentsAsync(newAttachments, AppSettings.AttachmentServiceConfig, token);
+        await attachmentService.SaveAttachmentsAsync(id.Value, files, AppSettings.AttachmentServiceConfig, token);
         return RedirectToPage("Details", pageHandler: null, routeValues: new { id }, fragment: "attachments");
     }
 
@@ -144,6 +144,6 @@ public class DetailsModel(
     private async Task SetPermissionsAsync(ComplaintViewDto item)
     {
         foreach (var operation in ComplaintOperation.AllOperations)
-            UserCan[operation] = (await authorization.AuthorizeAsync(User, item, operation)).Succeeded;
+            UserCan[operation] = await authorization.Succeeded(User, item, operation);
     }
 }

@@ -4,17 +4,20 @@ using Cts.AppServices.ComplaintActions.Dto;
 using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Complaints.QueryDto;
+using Cts.AppServices.Permissions;
+using Cts.AppServices.Permissions.Helpers;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using GaEpd.AppLibrary.ListItems;
 
 namespace Cts.WebApp.Pages.Staff.ComplaintActions;
 
+[Authorize(Policy = nameof(Policies.StaffUser))]
 public class EditActionModel(
     IActionService actionService,
     IComplaintService complaintService,
     IActionTypeService actionTypeService,
-    IAuthorizationService authorizationService)
+    IAuthorizationService authorization)
     : PageModel
 {
     [BindProperty]
@@ -32,7 +35,7 @@ public class EditActionModel(
     public async Task<IActionResult> OnGetAsync(Guid? actionId)
     {
         if (actionId is null) return RedirectToPage("Index");
-        
+
         var actionItem = await actionService.FindForUpdateAsync(actionId.Value);
         if (actionItem is null) return NotFound();
 
@@ -75,6 +78,6 @@ public class EditActionModel(
     private async Task PopulateSelectListsAsync() =>
         ActionItemTypeSelectList = (await actionTypeService.GetAsListItemsAsync()).ToSelectList();
 
-    private async Task<bool> UserCanEditActionItemsAsync(ComplaintViewDto item) =>
-        (await authorizationService.AuthorizeAsync(User, item, ComplaintOperation.EditActions)).Succeeded;
+    private Task<bool> UserCanEditActionItemsAsync(ComplaintViewDto item) =>
+        authorization.Succeeded(User, item, ComplaintOperation.EditActions);
 }

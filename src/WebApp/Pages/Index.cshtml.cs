@@ -51,14 +51,11 @@ public class IndexModel(IComplaintService complaints, IConcernService concerns) 
 
     public async Task<IActionResult> OnGetSearchAsync(ComplaintPublicSearchDto spec, [FromQuery] int p = 1)
     {
-        spec.TrimAll();
-        var paging = new PaginatedRequest(p, GlobalConstants.PageSize, spec.Sort.GetDescription());
-
-        Spec = spec;
-        ShowResults = true;
-
+        Spec = spec.TrimAll();
         await PopulateSelectListsAsync();
-        SearchResults = await complaints.PublicSearchAsync(spec, paging);
+        var paging = new PaginatedRequest(p, GlobalConstants.PageSize, Spec.Sort.GetDescription());
+        SearchResults = await complaints.PublicSearchAsync(Spec, paging);
+        ShowResults = true;
         return Page();
     }
 
