@@ -1,5 +1,6 @@
 ﻿using Cts.AppServices.Attachments;
 using Cts.AppServices.Complaints;
+using Cts.AppServices.Email;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.Concerns;
@@ -24,8 +25,8 @@ public class FindPublic
 
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
-            Substitute.For<IAttachmentService>(), AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>(),
-            Substitute.For<IAuthorizationService>());
+            Substitute.For<IAttachmentService>(), Substitute.For<INotificationService>(), AppServicesTestsSetup.Mapper!,
+            Substitute.For<IUserService>(), Substitute.For<IAuthorizationService>());
 
         // Act
         var result = await appService.FindPublicAsync(item.Id);
@@ -41,10 +42,11 @@ public class FindPublic
         var repoMock = Substitute.For<IComplaintRepository>();
         repoMock.FindAsync(Arg.Any<Expression<Func<Complaint, bool>>>(), Arg.Any<CancellationToken>())
             .Returns((Complaint?)null);
+
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
-            Substitute.For<IAttachmentService>(), AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>(),
-            Substitute.For<IAuthorizationService>());
+            Substitute.For<IAttachmentService>(), Substitute.For<INotificationService>(), AppServicesTestsSetup.Mapper!,
+            Substitute.For<IUserService>(), Substitute.For<IAuthorizationService>());
 
         // Act
         var result = await appService.FindPublicAsync(0);

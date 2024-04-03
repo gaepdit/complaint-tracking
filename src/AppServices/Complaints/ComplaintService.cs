@@ -3,6 +3,7 @@ using Cts.AppServices.Attachments;
 using Cts.AppServices.Attachments.ValidationAttributes;
 using Cts.AppServices.Complaints.CommandDto;
 using Cts.AppServices.Complaints.QueryDto;
+using Cts.AppServices.Email;
 using Cts.AppServices.Permissions;
 using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.UserServices;
@@ -11,7 +12,9 @@ using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
+using GaEpd.AppLibrary.Extensions;
 using GaEpd.AppLibrary.Pagination;
+using GaEpd.EmailService;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq.Expressions;
 
@@ -24,6 +27,7 @@ public sealed class ComplaintService(
     IConcernRepository concernRepository,
     IOfficeRepository officeRepository,
     IAttachmentService attachmentService,
+    INotificationService notificationService,
     // ReSharper disable once SuggestBaseTypeForParameterInConstructor
     IMapper mapper,
     IUserService userService,
@@ -133,7 +137,7 @@ public sealed class ComplaintService(
     // Staff complaint write methods
 
     public async Task<ComplaintCreateResult> CreateAsync(ComplaintCreateDto resource,
-        IAttachmentService.AttachmentServiceConfig config, CancellationToken token = default)
+        IAttachmentService.AttachmentServiceConfig config, string? baseUrl = null, CancellationToken token = default)
     {
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
         var complaint = await CreateComplaintFromDtoAsync(resource, currentUser, token).ConfigureAwait(false);
@@ -143,15 +147,43 @@ public sealed class ComplaintService(
         await AddAssignmentTransitionsAsync(complaint, currentUser, token).ConfigureAwait(false);
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
 
+        var result = ComplaintCreateResult.Create(complaint.Id);
+
+        // Send email
+        var emailResult = await SendNewComplaintEmail(complaint, baseUrl, token).ConfigureAwait(false);
+        if (!emailResult.Success) result.AddWarning(emailResult.FailureMessage);
+
         // Process attachments
-        if (resource.Files is null || resource.Files.Count == 0)
-            return ComplaintCreateResult.Success(complaint.Id);
+        if (resource.Files is null || resource.Files.Count <= 0) return result;
+
         var validateFilesResult = resource.Files.Validate(IAttachmentService.MaxSimultaneousUploads);
-        if (!validateFilesResult.IsValid)
-            return ComplaintCreateResult.Success(complaint.Id, validateFilesResult.ValidationErrors);
-        var attachmentCount = await attachmentService.SaveAttachmentsAsync(complaint.Id, resource.Files, config, token)
+        if (validateFilesResult.IsValid)
+        {
+            result.SetNumberOfAttachments(await attachmentService
+                .SaveAttachmentsAsync(complaint.Id, resource.Files, config, token)
+                .ConfigureAwait(false));
+        }
+        else
+        {
+            result.AddWarning("No files were attached: " +
+                validateFilesResult.ValidationErrors.ConcatWithSeparator("; ") + ".");
+        }
+
+        return result;
+    }
+
+    private async Task<OperationResult> SendNewComplaintEmail(Complaint complaint, string? baseUrl,
+        CancellationToken token)
+    {
+        var recipient = complaint.CurrentOwner != null
+            ? complaint.CurrentOwner?.Email ?? string.Empty
+            : complaint.CurrentOffice.Assignor?.Email ?? string.Empty;
+        var template = complaint.CurrentOwner != null
+            ? EmailTemplate.ComplaintAssigned
+            : EmailTemplate.NewUnassignedComplaint;
+        var complaintUrl = $"{baseUrl ?? string.Empty}/Details/{complaint.Id}";
+        return await notificationService.SendNotificationAsync(template, recipient, complaint, complaintUrl, token)
             .ConfigureAwait(false);
-        return ComplaintCreateResult.Success(complaint.Id, attachmentCount);
     }
 
     public async Task UpdateAsync(int id, ComplaintUpdateDto resource, CancellationToken token = default)

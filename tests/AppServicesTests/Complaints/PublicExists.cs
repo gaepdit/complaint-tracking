@@ -1,5 +1,6 @@
 ﻿using Cts.AppServices.Attachments;
 using Cts.AppServices.Complaints;
+using Cts.AppServices.Email;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.Concerns;
@@ -14,32 +15,40 @@ public class PublicExists
     [Test]
     public async Task WhenItemExists_ReturnsTrue()
     {
+        // Arrange
         var repoMock = Substitute.For<IComplaintRepository>();
         repoMock.ExistsAsync(Arg.Any<Expression<Func<Complaint, bool>>>(), Arg.Any<CancellationToken>())
             .Returns(true);
+
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
-            Substitute.For<IAttachmentService>(), AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>(),
-            Substitute.For<IAuthorizationService>());
+            Substitute.For<IAttachmentService>(), Substitute.For<INotificationService>(), AppServicesTestsSetup.Mapper!,
+            Substitute.For<IUserService>(), Substitute.For<IAuthorizationService>());
 
+        // Act
         var result = await appService.PublicExistsAsync(0);
 
+        // Assert
         result.Should().BeTrue();
     }
 
     [Test]
     public async Task WhenNoItemExists_ReturnsFalse()
     {
+        // Arrange
         var repoMock = Substitute.For<IComplaintRepository>();
         repoMock.ExistsAsync(Arg.Any<Expression<Func<Complaint, bool>>>(), Arg.Any<CancellationToken>())
             .Returns(false);
+
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
-            Substitute.For<IAttachmentService>(), AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>(),
-            Substitute.For<IAuthorizationService>());
+            Substitute.For<IAttachmentService>(), Substitute.For<INotificationService>(), AppServicesTestsSetup.Mapper!,
+            Substitute.For<IUserService>(), Substitute.For<IAuthorizationService>());
 
+        // Act
         var result = await appService.PublicExistsAsync(0);
 
+        // Assert
         result.Should().BeFalse();
     }
 }

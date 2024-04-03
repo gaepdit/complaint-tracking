@@ -1,12 +1,14 @@
 ﻿using Cts.AppServices.Attachments;
 using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.CommandDto;
+using Cts.AppServices.Email;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
 using Cts.TestData.Constants;
+using GaEpd.EmailService;
 using Microsoft.AspNetCore.Authorization;
 
 namespace AppServicesTests.Complaints;
@@ -20,7 +22,7 @@ public class Create
         const int id = 99;
         var complaintManagerMock = Substitute.For<IComplaintManager>();
         complaintManagerMock.Create(Arg.Any<ApplicationUser?>())
-            .Returns(new Complaint(id));
+            .Returns(new Complaint(id) { CurrentOffice = new Office() });
 
         var userServiceMock = Substitute.For<IUserService>();
         userServiceMock.GetCurrentUserAsync()
@@ -32,14 +34,20 @@ public class Create
         officeRepoMock.GetAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
             .Returns(new Office(Guid.NewGuid(), TextData.ValidName));
 
+        var notificationMock = Substitute.For<INotificationService>();
+        notificationMock.SendNotificationAsync(Arg.Any<EmailTemplate>(), Arg.Any<string>(), Arg.Any<Complaint>(),
+                Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(OperationResult.SuccessResult());
+
         var appService = new ComplaintService(Substitute.For<IComplaintRepository>(), complaintManagerMock,
             Substitute.For<IConcernRepository>(), officeRepoMock, Substitute.For<IAttachmentService>(),
-            AppServicesTestsSetup.Mapper!, userServiceMock, Substitute.For<IAuthorizationService>());
+            notificationMock, AppServicesTestsSetup.Mapper!, userServiceMock, Substitute.For<IAuthorizationService>());
 
         var item = new ComplaintCreateDto { OfficeId = Guid.Empty };
 
         // Act
-        var result = await appService.CreateAsync(item, AppServiceHelpers.AttachmentServiceConfig);
+        var result = await appService.CreateAsync(item, AppServiceHelpers.AttachmentServiceConfig, null,
+            CancellationToken.None);
 
         // Assert
         using var scope = new AssertionScope();
@@ -64,9 +72,14 @@ public class Create
         officeRepoMock.GetAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
             .Returns(office);
 
+        var notificationMock = Substitute.For<INotificationService>();
+        notificationMock.SendNotificationAsync(Arg.Any<EmailTemplate>(), Arg.Any<string>(), Arg.Any<Complaint>(),
+                Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(OperationResult.SuccessResult());
+
         var appService = new ComplaintService(Substitute.For<IComplaintRepository>(), complaintManagerMock,
             Substitute.For<IConcernRepository>(), officeRepoMock, Substitute.For<IAttachmentService>(),
-            AppServicesTestsSetup.Mapper!, userServiceMock, Substitute.For<IAuthorizationService>());
+            notificationMock, AppServicesTestsSetup.Mapper!, userServiceMock, Substitute.For<IAuthorizationService>());
 
         var item = new ComplaintCreateDto
         {

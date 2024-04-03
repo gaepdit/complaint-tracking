@@ -1,6 +1,7 @@
 ﻿using Cts.AppServices.Attachments;
 using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.QueryDto;
+using Cts.AppServices.Email;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.Concerns;
@@ -39,8 +40,8 @@ public class Search
 
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
-            Substitute.For<IAttachmentService>(), AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>(),
-            authorizationMock);
+            Substitute.For<IAttachmentService>(), Substitute.For<INotificationService>(), AppServicesTestsSetup.Mapper!,
+            Substitute.For<IUserService>(), authorizationMock);
 
         // Act
         var result = await appService.SearchAsync(new ComplaintSearchDto(), paging, CancellationToken.None);
@@ -75,8 +76,8 @@ public class Search
 
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
-            Substitute.For<IAttachmentService>(), AppServicesTestsSetup.Mapper!, Substitute.For<IUserService>(),
-            authorizationMock);
+            Substitute.For<IAttachmentService>(), Substitute.For<INotificationService>(), AppServicesTestsSetup.Mapper!,
+            Substitute.For<IUserService>(), authorizationMock);
 
         // Act
         var result = await appService.SearchAsync(new ComplaintSearchDto(), paging, CancellationToken.None);

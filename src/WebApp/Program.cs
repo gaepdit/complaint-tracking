@@ -3,6 +3,7 @@ using Cts.AppServices.RegisterServices;
 using Cts.WebApp.Platform.AppConfiguration;
 using Cts.WebApp.Platform.ErrorLogging;
 using Cts.WebApp.Platform.Settings;
+using GaEpd.EmailService;
 using GaEpd.FileService;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.DataProtection;
@@ -78,6 +79,9 @@ builder.Services.AddSwaggerGen(options =>
 
 // Configure bundling and minification.
 builder.Services.AddWebOptimizer();
+
+// Add email service
+builder.Services.AddEmailServices();
 
 // Build the application.
 var app = builder.Build();
