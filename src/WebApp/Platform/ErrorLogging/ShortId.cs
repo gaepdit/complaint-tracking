@@ -7,7 +7,7 @@ public static class ShortId
     private static readonly Random Random = new();
     private const string Pool = "ABCDEFGHKMNPQRSTUVWXYZ2345689";
 
-    public static string GetShortId(int length = 4)
+    public static string GetShortId(int length = 5)
     {
         var poolLength = Pool.Length;
         var output = new StringBuilder();

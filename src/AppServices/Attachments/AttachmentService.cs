@@ -131,16 +131,16 @@ public class AttachmentService(
 
             return true;
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            // Log error but take no other action here
+            // Log error but take no other action here.
             var customData = new Dictionary<string, object>
             {
                 { "Action", "Saving Image" },
                 { "IFormFile", formFile },
                 { "File ID", fileId },
             };
-            await errorLogger.LogErrorAsync(ex, customData).ConfigureAwait(false);
+            await errorLogger.LogErrorAsync(e, customData).ConfigureAwait(false);
             return false;
         }
     }

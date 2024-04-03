@@ -14,9 +14,9 @@ public class ThrowErrorModel(IErrorLogger errorLogger) : PageModel
         {
             throw new TestException("Test handled exception");
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            ShortCode = await errorLogger.LogErrorAsync(ex);
+            ShortCode = await errorLogger.LogErrorAsync(e);
         }
     }
 
