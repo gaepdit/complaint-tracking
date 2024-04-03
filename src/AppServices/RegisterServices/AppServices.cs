@@ -4,6 +4,7 @@ using Cts.AppServices.ComplaintActions;
 using Cts.AppServices.Complaints;
 using Cts.AppServices.Concerns;
 using Cts.AppServices.DataExport;
+using Cts.AppServices.Email;
 using Cts.AppServices.Offices;
 using Cts.AppServices.Reporting;
 using Cts.Domain.Entities.ActionTypes;
@@ -37,6 +38,9 @@ public static class AppServices
         // Concerns
         services.AddScoped<IConcernManager, ConcernManager>();
         services.AddScoped<IConcernService, ConcernService>();
+
+        // Email
+        services.AddScoped<INotificationService, NotificationService>();
 
         // Offices
         services.AddScoped<IOfficeManager, OfficeManager>();
