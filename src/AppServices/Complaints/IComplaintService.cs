@@ -47,7 +47,7 @@ public interface IComplaintService : IDisposable, IAsyncDisposable
     // Staff complaint write methods
 
     Task<ComplaintCreateResult> CreateAsync(ComplaintCreateDto resource,
-        IAttachmentService.AttachmentServiceConfig config, string? baseUrl = null, CancellationToken token = default);
+        IAttachmentService.AttachmentServiceConfig config, string? baseUrl, CancellationToken token = default);
 
     Task UpdateAsync(int id, ComplaintUpdateDto resource, CancellationToken token = default);
 
@@ -55,8 +55,8 @@ public interface IComplaintService : IDisposable, IAsyncDisposable
 
     Task AcceptAsync(int id, CancellationToken token = default);
 
-    Task<bool> AssignAsync(ComplaintAssignmentDto resource, ComplaintViewDto currentComplaint,
-        CancellationToken token = default);
+    Task<ComplaintAssignResult> AssignAsync(ComplaintAssignmentDto resource, ComplaintViewDto currentComplaint,
+        string? baseUrl, CancellationToken token = default);
 
     Task CloseAsync(ComplaintClosureDto resource, CancellationToken token = default);
     Task ReopenAsync(ComplaintClosureDto resource, CancellationToken token = default);

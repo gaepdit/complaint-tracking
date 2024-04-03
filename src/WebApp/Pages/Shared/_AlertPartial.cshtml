@@ -37,6 +37,7 @@
             @Model.Message
             @if (Model.Details.Count > 0)
             {
+                @:The following warnings were generated:
                 <ul class="pt-1 mb-0 ps-3">
                     @foreach (var s in Model.Details)
                     {

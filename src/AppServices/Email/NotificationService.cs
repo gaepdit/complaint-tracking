@@ -18,7 +18,7 @@ public class NotificationService(
     private const string FailurePrefix = "Notification email not sent:";
 
     public async Task<OperationResult> SendNotificationAsync(EmailTemplate template, string recipient,
-        Complaint complaint, string complaintUrl, CancellationToken token = default)
+        Complaint complaint, string? baseUrl, CancellationToken token = default)
     {
         var subjectPrefix = environment.EnvironmentName switch
         {
@@ -27,10 +27,12 @@ public class NotificationService(
             _ => "[CTS]",
         };
 
+        baseUrl ??= string.Empty;
+        var complaintUrl = $"{baseUrl}Staff/Complaints/Details/{complaint.Id}";
         var subject = string.Format($"{subjectPrefix} {template.Subject}", complaint.Id.ToString());
-        var textBody = string.Format(template.TextBody, complaint.Id.ToString(), complaintUrl,
+        var textBody = string.Format(template.TextBody + EmailTemplate.TextSignature, complaint.Id.ToString(), complaintUrl, baseUrl,
             complaint.CurrentOffice.Name);
-        var htmlBody = string.Format(template.HtmlBody, complaint.Id.ToString(), complaintUrl,
+        var htmlBody = string.Format(template.HtmlBody + EmailTemplate.HtmlSignature, complaint.Id.ToString(), complaintUrl, baseUrl,
             complaint.CurrentOffice.Name);
 
         var settings = new EmailServiceSettings();

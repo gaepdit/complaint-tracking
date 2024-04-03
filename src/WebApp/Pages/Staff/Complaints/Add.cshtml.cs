@@ -20,8 +20,7 @@ public class AddModel(
     IConcernService concernService,
     IOfficeService officeService,
     IValidator<ComplaintCreateDto> validator,
-    IHttpContextAccessor httpContext)
-    : PageModel
+    IHttpContextAccessor httpContext) : PageModel
 {
     [BindProperty]
     public ComplaintCreateDto NewComplaint { get; set; } = default!;
@@ -51,7 +50,7 @@ public class AddModel(
             return Page();
         }
 
-        var baseUrl = Url.Page("Index", null, null, protocol: "https",
+        var baseUrl = Url.Page("/Index", null, null, protocol: "https",
             host: httpContext.HttpContext?.Request.Host.ToString());
         var createResult =
             await complaintService.CreateAsync(NewComplaint, AppSettings.AttachmentServiceConfig, baseUrl);
@@ -62,8 +61,6 @@ public class AddModel(
             1 => "Complaint successfully created and one file attached.",
             _ => $"Complaint successfully created and {createResult.NumberOfAttachments} files attached.",
         };
-
-        if (createResult.HasWarnings) message += " The following warnings were generated:";
 
         TempData.SetDisplayMessage(
             createResult.HasWarnings ? DisplayMessage.AlertContext.Warning : DisplayMessage.AlertContext.Success,

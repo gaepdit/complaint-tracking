@@ -137,7 +137,7 @@ public sealed class ComplaintService(
     // Staff complaint write methods
 
     public async Task<ComplaintCreateResult> CreateAsync(ComplaintCreateDto resource,
-        IAttachmentService.AttachmentServiceConfig config, string? baseUrl = null, CancellationToken token = default)
+        IAttachmentService.AttachmentServiceConfig config, string? baseUrl, CancellationToken token = default)
     {
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
         var complaint = await CreateComplaintFromDtoAsync(resource, currentUser, token).ConfigureAwait(false);
@@ -147,10 +147,10 @@ public sealed class ComplaintService(
         await AddAssignmentTransitionsAsync(complaint, currentUser, token).ConfigureAwait(false);
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
 
-        var result = ComplaintCreateResult.Create(complaint.Id);
+        var result = new ComplaintCreateResult(complaint.Id);
 
         // Send email
-        var emailResult = await SendNewComplaintEmail(complaint, baseUrl, token).ConfigureAwait(false);
+        var emailResult = await SendComplaintAssignmentEmail(complaint, baseUrl, token).ConfigureAwait(false);
         if (!emailResult.Success) result.AddWarning(emailResult.FailureMessage);
 
         // Process attachments
@@ -172,17 +172,16 @@ public sealed class ComplaintService(
         return result;
     }
 
-    private async Task<OperationResult> SendNewComplaintEmail(Complaint complaint, string? baseUrl,
+    private async Task<OperationResult> SendComplaintAssignmentEmail(Complaint complaint, string? baseUrl,
         CancellationToken token)
     {
         var recipient = complaint.CurrentOwner != null
             ? complaint.CurrentOwner?.Email ?? string.Empty
             : complaint.CurrentOffice.Assignor?.Email ?? string.Empty;
         var template = complaint.CurrentOwner != null
-            ? EmailTemplate.ComplaintAssigned
-            : EmailTemplate.NewUnassignedComplaint;
-        var complaintUrl = $"{baseUrl ?? string.Empty}/Details/{complaint.Id}";
-        return await notificationService.SendNotificationAsync(template, recipient, complaint, complaintUrl, token)
+            ? EmailTemplate.AssignedComplaint
+            : EmailTemplate.UnassignedComplaint;
+        return await notificationService.SendNotificationAsync(template, recipient, complaint, baseUrl, token)
             .ConfigureAwait(false);
     }
 
@@ -207,12 +206,14 @@ public sealed class ComplaintService(
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
     }
 
-    public async Task<bool> AssignAsync(ComplaintAssignmentDto resource, ComplaintViewDto currentComplaint,
-        CancellationToken token = default)
+    public async Task<ComplaintAssignResult> AssignAsync(ComplaintAssignmentDto resource,
+        ComplaintViewDto currentComplaint, string? baseUrl, CancellationToken token = default)
     {
+        var result = new ComplaintAssignResult();
+
         if (resource.OfficeId == currentComplaint.CurrentOffice?.Id &&
             resource.OwnerId == currentComplaint.CurrentOwner?.Id)
-            return false;
+            return result;
 
         var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
@@ -225,7 +226,13 @@ public sealed class ComplaintService(
         await complaintRepository.UpdateAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
         await AddAssignmentTransitionsAsync(complaint, currentUser, token, resource.Comment).ConfigureAwait(false);
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
-        return true;
+        result.IsReassigned = true;
+
+        // Send email
+        var emailResult = await SendComplaintAssignmentEmail(complaint, baseUrl, token).ConfigureAwait(false);
+        if (!emailResult.Success) result.AddWarning(emailResult.FailureMessage);
+
+        return result;
     }
 
     public async Task CloseAsync(ComplaintClosureDto resource, CancellationToken token = default)

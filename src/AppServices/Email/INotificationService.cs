@@ -6,5 +6,5 @@ namespace Cts.AppServices.Email;
 public interface INotificationService
 {
     Task<OperationResult> SendNotificationAsync(EmailTemplate template, string recipient, Complaint complaint,
-        string complaintUrl, CancellationToken token = default);
+        string? baseUrl, CancellationToken token = default);
 }
