@@ -14,6 +14,8 @@ namespace AppServicesTests.Complaints;
 
 public class Create
 {
+    private readonly ApplicationUser _user = new() { Id = Guid.Empty.ToString(), Email = TextData.ValidEmail };
+
     [Test]
     public async Task OnSuccessfulInsert_ReturnsSuccessfully()
     {
@@ -21,13 +23,15 @@ public class Create
         const int id = 99;
         var complaintManagerMock = Substitute.For<IComplaintManager>();
         complaintManagerMock.Create(Arg.Any<ApplicationUser?>())
-            .Returns(new Complaint(id) { CurrentOffice = new Office() });
+            .Returns(new Complaint(id) { CurrentOffice = new Office(), CurrentOwner = _user });
 
         var userServiceMock = Substitute.For<IUserService>();
         userServiceMock.GetCurrentUserAsync()
-            .Returns(new ApplicationUser { Id = Guid.Empty.ToString() });
+            .Returns(_user);
         userServiceMock.GetUserAsync(Arg.Any<string>())
-            .Returns(new ApplicationUser { Id = Guid.Empty.ToString() });
+            .Returns(_user);
+        userServiceMock.FindUserAsync(Arg.Any<string>())
+            .Returns(_user);
 
         var officeRepoMock = Substitute.For<IOfficeRepository>();
         officeRepoMock.GetAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
@@ -64,7 +68,7 @@ public class Create
 
         var userServiceMock = Substitute.For<IUserService>();
         userServiceMock.GetCurrentUserAsync()
-            .Returns(new ApplicationUser { Id = Guid.Empty.ToString() });
+            .Returns(_user);
 
         var office = new Office(Guid.NewGuid(), TextData.ValidName);
         var officeRepoMock = Substitute.For<IOfficeRepository>();
