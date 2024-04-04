@@ -61,8 +61,11 @@ public class ReturnModel(
             return Page();
         }
 
-        await complaintService.ReturnAsync(ComplaintAssignment);
-        TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "The Complaint has been returned.");
+        var notificationResult = await complaintService.ReturnAsync(ComplaintAssignment, this.GetBaseUrl());
+        TempData.SetDisplayMessage(
+            notificationResult.Success ? DisplayMessage.AlertContext.Success : DisplayMessage.AlertContext.Warning,
+            "The Complaint has been returned.", notificationResult.FailureMessage);
+
         return RedirectToPage("Details", new { id = ComplaintAssignment.ComplaintId });
     }
 

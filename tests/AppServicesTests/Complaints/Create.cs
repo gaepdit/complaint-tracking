@@ -1,14 +1,13 @@
 ﻿using Cts.AppServices.Attachments;
 using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.CommandDto;
-using Cts.AppServices.Email;
+using Cts.AppServices.Notifications;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
 using Cts.TestData.Constants;
-using GaEpd.EmailService;
 using Microsoft.AspNetCore.Authorization;
 
 namespace AppServicesTests.Complaints;
@@ -35,9 +34,9 @@ public class Create
             .Returns(new Office(Guid.NewGuid(), TextData.ValidName));
 
         var notificationMock = Substitute.For<INotificationService>();
-        notificationMock.SendNotificationAsync(Arg.Any<EmailTemplate>(), Arg.Any<string>(), Arg.Any<Complaint>(),
-                Arg.Any<string>(), Arg.Any<CancellationToken>())
-            .Returns(OperationResult.SuccessResult());
+        notificationMock.SendNotificationAsync(Arg.Any<Template>(), Arg.Any<string>(), Arg.Any<Complaint>(),
+                Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(NotificationResult.SuccessResult());
 
         var appService = new ComplaintService(Substitute.For<IComplaintRepository>(), complaintManagerMock,
             Substitute.For<IConcernRepository>(), officeRepoMock, Substitute.For<IAttachmentService>(),
@@ -73,9 +72,9 @@ public class Create
             .Returns(office);
 
         var notificationMock = Substitute.For<INotificationService>();
-        notificationMock.SendNotificationAsync(Arg.Any<EmailTemplate>(), Arg.Any<string>(), Arg.Any<Complaint>(),
-                Arg.Any<string>(), Arg.Any<CancellationToken>())
-            .Returns(OperationResult.SuccessResult());
+        notificationMock.SendNotificationAsync(Arg.Any<Template>(), Arg.Any<string>(), Arg.Any<Complaint>(),
+                Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(NotificationResult.SuccessResult());
 
         var appService = new ComplaintService(Substitute.For<IComplaintRepository>(), complaintManagerMock,
             Substitute.For<IConcernRepository>(), officeRepoMock, Substitute.For<IAttachmentService>(),

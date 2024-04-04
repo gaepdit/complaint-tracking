@@ -4,7 +4,7 @@ using Cts.AppServices.ComplaintActions;
 using Cts.AppServices.Complaints;
 using Cts.AppServices.Concerns;
 using Cts.AppServices.DataExport;
-using Cts.AppServices.Email;
+using Cts.AppServices.Notifications;
 using Cts.AppServices.Offices;
 using Cts.AppServices.Reporting;
 using Cts.Domain.Entities.ActionTypes;

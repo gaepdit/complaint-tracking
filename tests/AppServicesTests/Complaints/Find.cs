@@ -1,6 +1,6 @@
 ﻿using Cts.AppServices.Attachments;
 using Cts.AppServices.Complaints;
-using Cts.AppServices.Email;
+using Cts.AppServices.Notifications;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.Concerns;

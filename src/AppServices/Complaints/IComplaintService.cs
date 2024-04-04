@@ -1,8 +1,8 @@
 ﻿using Cts.AppServices.Attachments;
 using Cts.AppServices.Complaints.CommandDto;
 using Cts.AppServices.Complaints.QueryDto;
+using Cts.AppServices.Notifications;
 using GaEpd.AppLibrary.Pagination;
-using GaEpd.EmailService;
 
 namespace Cts.AppServices.Complaints;
 
@@ -59,13 +59,14 @@ public interface IComplaintService : IDisposable, IAsyncDisposable
     Task<ComplaintAssignResult> AssignAsync(ComplaintAssignmentDto resource, ComplaintViewDto currentComplaint,
         string? baseUrl, CancellationToken token = default);
 
-    Task CloseAsync(ComplaintClosureDto resource, CancellationToken token = default);
-    Task ReopenAsync(ComplaintClosureDto resource, CancellationToken token = default);
+    Task<NotificationResult> CloseAsync(ComplaintClosureDto resource, string? baseUrl, CancellationToken token = default);
+    Task<NotificationResult> ReopenAsync(ComplaintClosureDto resource, string? baseUrl, CancellationToken token = default);
 
-    Task<OperationResult> RequestReviewAsync(ComplaintRequestReviewDto resource, string? baseUrl,
+    Task<NotificationResult> RequestReviewAsync(ComplaintRequestReviewDto resource, string? baseUrl,
         CancellationToken token = default);
 
-    Task ReturnAsync(ComplaintAssignmentDto resource, CancellationToken token = default);
+    Task<NotificationResult> ReturnAsync(ComplaintAssignmentDto resource, string? baseUrl,
+        CancellationToken token = default);
     Task DeleteAsync(ComplaintClosureDto resource, CancellationToken token = default);
     Task RestoreAsync(ComplaintClosureDto resource, CancellationToken token = default);
 }

@@ -40,8 +40,11 @@ public class ApproveModel(IComplaintService complaintService, IAuthorizationServ
         if (complaintView is null || !await UserCanReviewAsync(complaintView))
             return BadRequest();
 
-        await complaintService.CloseAsync(ComplaintClosure);
-        TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "The Complaint has been approved/closed.");
+        var notificationResult = await complaintService.CloseAsync(ComplaintClosure, this.GetBaseUrl());
+        TempData.SetDisplayMessage(
+            notificationResult.Success ? DisplayMessage.AlertContext.Success : DisplayMessage.AlertContext.Warning,
+            "The Complaint has been approved/closed.", notificationResult.FailureMessage);
+
         return RedirectToPage("Details", new { id = ComplaintClosure.ComplaintId });
     }
 

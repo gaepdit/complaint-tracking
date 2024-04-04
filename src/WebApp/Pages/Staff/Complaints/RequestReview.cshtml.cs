@@ -69,10 +69,10 @@ public class RequestReviewModel(
             return Page();
         }
 
-        var emailResult = await complaintService.RequestReviewAsync(ComplaintRequestReview, this.GetBaseUrl());
+        var notificationResult = await complaintService.RequestReviewAsync(ComplaintRequestReview, this.GetBaseUrl());
         TempData.SetDisplayMessage(
-            emailResult.Success ? DisplayMessage.AlertContext.Success : DisplayMessage.AlertContext.Warning,
-            "The Complaint has been submitted for review.", emailResult.FailureMessage);
+            notificationResult.Success ? DisplayMessage.AlertContext.Success : DisplayMessage.AlertContext.Warning,
+            "The Complaint has been submitted for review.", notificationResult.FailureMessage);
 
         return RedirectToPage("Details", new { id = ComplaintRequestReview.ComplaintId });
     }
