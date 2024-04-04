@@ -4,6 +4,7 @@ using Cts.AppServices.ComplaintActions;
 using Cts.AppServices.Complaints;
 using Cts.AppServices.Concerns;
 using Cts.AppServices.DataExport;
+using Cts.AppServices.Notifications;
 using Cts.AppServices.Offices;
 using Cts.AppServices.Reporting;
 using Cts.Domain.Entities.ActionTypes;
@@ -11,6 +12,7 @@ using Cts.Domain.Entities.Attachments;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
+using GaEpd.EmailService;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Cts.AppServices.RegisterServices;
@@ -37,6 +39,10 @@ public static class AppServices
         // Concerns
         services.AddScoped<IConcernManager, ConcernManager>();
         services.AddScoped<IConcernService, ConcernService>();
+
+        // Email
+        services.AddTransient<IEmailService, EmailService>();
+        services.AddScoped<INotificationService, NotificationService>();
 
         // Offices
         services.AddScoped<IOfficeManager, OfficeManager>();

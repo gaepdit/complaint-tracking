@@ -3,6 +3,7 @@ using Cts.AppServices.RegisterServices;
 using Cts.WebApp.Platform.AppConfiguration;
 using Cts.WebApp.Platform.ErrorLogging;
 using Cts.WebApp.Platform.Settings;
+using GaEpd.EmailService;
 using GaEpd.FileService;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.DataProtection;

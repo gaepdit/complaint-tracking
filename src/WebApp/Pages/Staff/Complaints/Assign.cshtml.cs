@@ -17,8 +17,7 @@ public class AssignModel(
     IComplaintService complaintService,
     IAuthorizationService authorization,
     IOfficeService officeService,
-    IStaffService staffService
-) : PageModel
+    IStaffService staffService) : PageModel
 {
     [BindProperty]
     public ComplaintAssignmentDto ComplaintAssignment { get; set; } = default!;
@@ -61,9 +60,12 @@ public class AssignModel(
             return Page();
         }
 
-        if (await complaintService.AssignAsync(ComplaintAssignment, complaintView))
+        var assignResult = await complaintService.AssignAsync(ComplaintAssignment, complaintView, this.GetBaseUrl());
+        if (assignResult.IsReassigned)
         {
-            TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "The Complaint has been assigned.");
+            TempData.SetDisplayMessage(
+                assignResult.HasWarnings ? DisplayMessage.AlertContext.Warning : DisplayMessage.AlertContext.Success,
+                "The Complaint has been assigned.", assignResult.Warnings);
         }
         else
         {

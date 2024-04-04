@@ -11,6 +11,7 @@ using Cts.EfRepository.DbConnection;
 using Cts.EfRepository.Repositories;
 using Cts.LocalRepository.Repositories;
 using Cts.WebApp.Platform.Settings;
+using GaEpd.EmailService.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
@@ -31,6 +32,7 @@ public static class DataPersistence
             services.AddSingleton<IComplaintTransitionRepository, LocalComplaintTransitionRepository>();
             services.AddSingleton<IConcernRepository, LocalConcernRepository>();
             services.AddSingleton<IDataViewRepository, LocalDataViewRepository>();
+            services.AddSingleton<IEmailLogRepository, LocalEmailLogRepository>();
             services.AddSingleton<IOfficeRepository, LocalOfficeRepository>();
         }
         else
@@ -66,6 +68,7 @@ public static class DataPersistence
             services.AddScoped<IComplaintTransitionRepository, ComplaintTransitionRepository>();
             services.AddScoped<IConcernRepository, ConcernRepository>();
             services.AddScoped<IDataViewRepository, DataViewRepository>();
+            services.AddScoped<IEmailLogRepository, EmailLogRepository>();
             services.AddScoped<IOfficeRepository, OfficeRepository>();
         }
     }

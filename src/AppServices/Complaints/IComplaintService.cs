@@ -1,6 +1,7 @@
 ﻿using Cts.AppServices.Attachments;
 using Cts.AppServices.Complaints.CommandDto;
 using Cts.AppServices.Complaints.QueryDto;
+using Cts.AppServices.Notifications;
 using GaEpd.AppLibrary.Pagination;
 
 namespace Cts.AppServices.Complaints;
@@ -47,7 +48,7 @@ public interface IComplaintService : IDisposable, IAsyncDisposable
     // Staff complaint write methods
 
     Task<ComplaintCreateResult> CreateAsync(ComplaintCreateDto resource,
-        IAttachmentService.AttachmentServiceConfig config, CancellationToken token = default);
+        IAttachmentService.AttachmentServiceConfig config, string? baseUrl, CancellationToken token = default);
 
     Task UpdateAsync(int id, ComplaintUpdateDto resource, CancellationToken token = default);
 
@@ -55,13 +56,17 @@ public interface IComplaintService : IDisposable, IAsyncDisposable
 
     Task AcceptAsync(int id, CancellationToken token = default);
 
-    Task<bool> AssignAsync(ComplaintAssignmentDto resource, ComplaintViewDto currentComplaint,
+    Task<ComplaintAssignResult> AssignAsync(ComplaintAssignmentDto resource, ComplaintViewDto currentComplaint,
+        string? baseUrl, CancellationToken token = default);
+
+    Task<NotificationResult> CloseAsync(ComplaintClosureDto resource, string? baseUrl, CancellationToken token = default);
+    Task<NotificationResult> ReopenAsync(ComplaintClosureDto resource, string? baseUrl, CancellationToken token = default);
+
+    Task<NotificationResult> RequestReviewAsync(ComplaintRequestReviewDto resource, string? baseUrl,
         CancellationToken token = default);
 
-    Task CloseAsync(ComplaintClosureDto resource, CancellationToken token = default);
-    Task ReopenAsync(ComplaintClosureDto resource, CancellationToken token = default);
-    Task RequestReviewAsync(ComplaintRequestReviewDto resource, CancellationToken token = default);
-    Task ReturnAsync(ComplaintAssignmentDto resource, CancellationToken token = default);
+    Task<NotificationResult> ReturnAsync(ComplaintAssignmentDto resource, string? baseUrl,
+        CancellationToken token = default);
     Task DeleteAsync(ComplaintClosureDto resource, CancellationToken token = default);
     Task RestoreAsync(ComplaintClosureDto resource, CancellationToken token = default);
 }

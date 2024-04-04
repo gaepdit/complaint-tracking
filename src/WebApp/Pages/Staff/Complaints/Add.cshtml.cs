@@ -19,8 +19,7 @@ public class AddModel(
     IStaffService staffService,
     IConcernService concernService,
     IOfficeService officeService,
-    IValidator<ComplaintCreateDto> validator)
-    : PageModel
+    IValidator<ComplaintCreateDto> validator) : PageModel
 {
     [BindProperty]
     public ComplaintCreateDto NewComplaint { get; set; } = default!;
@@ -50,26 +49,21 @@ public class AddModel(
             return Page();
         }
 
-        var result = await complaintService.CreateAsync(NewComplaint, AppSettings.AttachmentServiceConfig);
+        var createResult =
+            await complaintService.CreateAsync(NewComplaint, AppSettings.AttachmentServiceConfig, this.GetBaseUrl());
 
-        if (result.HasWarnings)
+        var message = createResult.NumberOfAttachments switch
         {
-            TempData.SetDisplayMessage(DisplayMessage.AlertContext.Warning,
-                "Complaint successfully created. No files were attached because of the following errors: " +
-                result.WarningsDisplay);
-        }
-        else
-        {
-            var successMessage = result.NumberOfAttachments switch
-            {
-                0 => "Complaint successfully created.",
-                1 => "Complaint successfully created and one file attached.",
-                _ => $"Complaint successfully created and {result.NumberOfAttachments} files attached.",
-            };
-            TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, successMessage);
-        }
+            0 => "Complaint successfully created.",
+            1 => "Complaint successfully created and one file attached.",
+            _ => $"Complaint successfully created and {createResult.NumberOfAttachments} files attached.",
+        };
 
-        return RedirectToPage("Details", new { id = result.ComplaintId });
+        TempData.SetDisplayMessage(
+            createResult.HasWarnings ? DisplayMessage.AlertContext.Warning : DisplayMessage.AlertContext.Success,
+            message, createResult.Warnings);
+
+        return RedirectToPage("Details", new { id = createResult.ComplaintId });
     }
 
     private async Task PopulateSelectListsAsync(Guid? currentOfficeId)

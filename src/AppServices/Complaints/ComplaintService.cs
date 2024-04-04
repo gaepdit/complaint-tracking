@@ -3,6 +3,7 @@ using Cts.AppServices.Attachments;
 using Cts.AppServices.Attachments.ValidationAttributes;
 using Cts.AppServices.Complaints.CommandDto;
 using Cts.AppServices.Complaints.QueryDto;
+using Cts.AppServices.Notifications;
 using Cts.AppServices.Permissions;
 using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.UserServices;
@@ -11,6 +12,7 @@ using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
+using GaEpd.AppLibrary.Extensions;
 using GaEpd.AppLibrary.Pagination;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq.Expressions;
@@ -24,11 +26,11 @@ public sealed class ComplaintService(
     IConcernRepository concernRepository,
     IOfficeRepository officeRepository,
     IAttachmentService attachmentService,
+    INotificationService notificationService,
     // ReSharper disable once SuggestBaseTypeForParameterInConstructor
     IMapper mapper,
     IUserService userService,
-    IAuthorizationService authorization)
-    : IComplaintService
+    IAuthorizationService authorization) : IComplaintService
 #pragma warning restore S107
 {
     // Public read methods
@@ -133,7 +135,7 @@ public sealed class ComplaintService(
     // Staff complaint write methods
 
     public async Task<ComplaintCreateResult> CreateAsync(ComplaintCreateDto resource,
-        IAttachmentService.AttachmentServiceConfig config, CancellationToken token = default)
+        IAttachmentService.AttachmentServiceConfig config, string? baseUrl, CancellationToken token = default)
     {
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
         var complaint = await CreateComplaintFromDtoAsync(resource, currentUser, token).ConfigureAwait(false);
@@ -143,15 +145,50 @@ public sealed class ComplaintService(
         await AddAssignmentTransitionsAsync(complaint, currentUser, token).ConfigureAwait(false);
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
 
+        var result = new ComplaintCreateResult(complaint.Id);
+
+        // Send notification
+        var template = complaint.CurrentOwner != null
+            ? Template.AssignedComplaint
+            : Template.UnassignedComplaint;
+        var notificationResult =
+            await NotifyOwnerAsync(complaint, template, baseUrl, null, token).ConfigureAwait(false);
+        if (!notificationResult.Success) result.AddWarning(notificationResult.FailureMessage);
+
         // Process attachments
-        if (resource.Files is null || resource.Files.Count == 0)
-            return ComplaintCreateResult.Success(complaint.Id);
+        if (resource.Files is null || resource.Files.Count <= 0) return result;
+
         var validateFilesResult = resource.Files.Validate(IAttachmentService.MaxSimultaneousUploads);
-        if (!validateFilesResult.IsValid)
-            return ComplaintCreateResult.Success(complaint.Id, validateFilesResult.ValidationErrors);
-        var attachmentCount = await attachmentService.SaveAttachmentsAsync(complaint.Id, resource.Files, config, token)
+        if (validateFilesResult.IsValid)
+        {
+            result.SetNumberOfAttachments(await attachmentService
+                .SaveAttachmentsAsync(complaint.Id, resource.Files, config, token)
+                .ConfigureAwait(false));
+        }
+        else
+        {
+            result.AddWarning("No files were attached: " +
+                validateFilesResult.ValidationErrors.ConcatWithSeparator("; ") + ".");
+        }
+
+        return result;
+    }
+
+    private async Task<NotificationResult> NotifyOwnerAsync(Complaint complaint, Template template,
+        string? baseUrl, string? comment, CancellationToken token)
+    {
+        var recipient = complaint.CurrentOwner ?? complaint.CurrentOffice.Assignor;
+
+        if (recipient is null)
+            return NotificationResult.FailureResult("This complaint does not have an available owner or assignor.");
+        if (!recipient.Active)
+            return NotificationResult.FailureResult("The complaint owner or assignor is not an active CTS user.");
+        if (recipient.Email is null)
+            return NotificationResult.FailureResult("The complaint owner or assignor cannot be emailed.");
+
+        return await notificationService
+            .SendNotificationAsync(template, recipient.Email, complaint, baseUrl, comment, token)
             .ConfigureAwait(false);
-        return ComplaintCreateResult.Success(complaint.Id, attachmentCount);
     }
 
     public async Task UpdateAsync(int id, ComplaintUpdateDto resource, CancellationToken token = default)
@@ -175,12 +212,14 @@ public sealed class ComplaintService(
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
     }
 
-    public async Task<bool> AssignAsync(ComplaintAssignmentDto resource, ComplaintViewDto currentComplaint,
-        CancellationToken token = default)
+    public async Task<ComplaintAssignResult> AssignAsync(ComplaintAssignmentDto resource,
+        ComplaintViewDto currentComplaint, string? baseUrl, CancellationToken token = default)
     {
+        var result = new ComplaintAssignResult();
+
         if (resource.OfficeId == currentComplaint.CurrentOffice?.Id &&
             resource.OwnerId == currentComplaint.CurrentOwner?.Id)
-            return false;
+            return result;
 
         var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
@@ -193,10 +232,21 @@ public sealed class ComplaintService(
         await complaintRepository.UpdateAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
         await AddAssignmentTransitionsAsync(complaint, currentUser, token, resource.Comment).ConfigureAwait(false);
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
-        return true;
+        result.IsReassigned = true;
+
+        // Send notification
+        var template = complaint.CurrentOwner != null
+            ? Template.AssignedComplaint
+            : Template.UnassignedComplaint;
+        var notificationResult = await NotifyOwnerAsync(complaint, template, baseUrl, null, token)
+            .ConfigureAwait(false);
+        if (!notificationResult.Success) result.AddWarning(notificationResult.FailureMessage);
+
+        return result;
     }
 
-    public async Task CloseAsync(ComplaintClosureDto resource, CancellationToken token = default)
+    public async Task<NotificationResult> CloseAsync(ComplaintClosureDto resource, string? baseUrl,
+        CancellationToken token = default)
     {
         var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
@@ -206,9 +256,14 @@ public sealed class ComplaintService(
         await AddTransitionAsync(complaint, TransitionType.Closed, currentUser, token, resource.Comment)
             .ConfigureAwait(false);
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
+
+        // Send notification
+        return await NotifyOwnerAsync(complaint, Template.ReviewApproved, baseUrl, resource.Comment, token)
+            .ConfigureAwait(false);
     }
 
-    public async Task ReopenAsync(ComplaintClosureDto resource, CancellationToken token = default)
+    public async Task<NotificationResult> ReopenAsync(ComplaintClosureDto resource, string? baseUrl,
+        CancellationToken token = default)
     {
         var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
@@ -218,22 +273,37 @@ public sealed class ComplaintService(
         await AddTransitionAsync(complaint, TransitionType.Reopened, currentUser, token, resource.Comment)
             .ConfigureAwait(false);
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
+
+        // Send notification
+        return await NotifyOwnerAsync(complaint, Template.ComplaintReopened, baseUrl, resource.Comment,
+            token).ConfigureAwait(false);
     }
 
-    public async Task RequestReviewAsync(ComplaintRequestReviewDto resource, CancellationToken token = default)
+    public async Task<NotificationResult> RequestReviewAsync(ComplaintRequestReviewDto resource, string? baseUrl,
+        CancellationToken token = default)
     {
         var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
-        var reviewer = await userService.FindUserAsync(resource.ReviewerId!).ConfigureAwait(false);
+        var reviewer = (await userService.FindUserAsync(resource.ReviewerId!).ConfigureAwait(false))!;
 
-        complaintManager.RequestReview(complaint, reviewer!, currentUser);
+        complaintManager.RequestReview(complaint, reviewer, currentUser);
         await complaintRepository.UpdateAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
         await AddTransitionAsync(complaint, TransitionType.SubmittedForReview, currentUser, token, resource.Comment)
             .ConfigureAwait(false);
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
+
+        // Send notification
+        if (!reviewer.Active)
+            return NotificationResult.FailureResult("The requested reviewer is not an active CTS user.");
+        if (reviewer.Email is null)
+            return NotificationResult.FailureResult("The requested reviewer cannot be emailed.");
+
+        return await notificationService.SendNotificationAsync(Template.ReviewRequested, reviewer.Email, complaint,
+            baseUrl, resource.Comment, token).ConfigureAwait(false);
     }
 
-    public async Task ReturnAsync(ComplaintAssignmentDto resource, CancellationToken token = default)
+    public async Task<NotificationResult> ReturnAsync(ComplaintAssignmentDto resource, string? baseUrl,
+        CancellationToken token = default)
     {
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
 
@@ -253,6 +323,10 @@ public sealed class ComplaintService(
             complaint.CurrentOwner == currentUser)
             await AddTransitionAsync(complaint, TransitionType.Accepted, currentUser, token).ConfigureAwait(false);
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
+
+        // Send notification
+        return await NotifyOwnerAsync(complaint, Template.ReviewReturned, baseUrl, resource.Comment, token)
+            .ConfigureAwait(false);
     }
 
     public async Task DeleteAsync(ComplaintClosureDto resource, CancellationToken token = default)

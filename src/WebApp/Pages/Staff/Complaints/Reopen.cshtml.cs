@@ -39,8 +39,11 @@ public class ReopenModel(IComplaintService complaintService, IAuthorizationServi
         if (complaintView is null || !await UserCanReviewAsync(complaintView))
             return BadRequest();
 
-        await complaintService.ReopenAsync(ComplaintClosure);
-        TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "The Complaint has been reopened.");
+        var notificationResult = await complaintService.ReopenAsync(ComplaintClosure, this.GetBaseUrl());
+        TempData.SetDisplayMessage(
+            notificationResult.Success ? DisplayMessage.AlertContext.Success : DisplayMessage.AlertContext.Warning,
+            "The Complaint has been reopened.", notificationResult.FailureMessage);
+
         return RedirectToPage("Details", new { id = ComplaintClosure.ComplaintId });
     }
 
