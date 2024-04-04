@@ -12,6 +12,7 @@ using Cts.Domain.Entities.Attachments;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
+using GaEpd.EmailService;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Cts.AppServices.RegisterServices;
@@ -40,6 +41,7 @@ public static class AppServices
         services.AddScoped<IConcernService, ConcernService>();
 
         // Email
+        services.AddTransient<IEmailService, EmailService>();
         services.AddScoped<INotificationService, NotificationService>();
 
         // Offices

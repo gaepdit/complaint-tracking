@@ -1,6 +1,4 @@
-﻿using GaEpd.FileService;
-
-namespace GaEpd.EmailService;
+﻿namespace GaEpd.EmailService;
 
 public record Message
 {
@@ -18,7 +16,8 @@ public record Message
     public static Message Create(string subject, ICollection<string> recipients, string sender, string? textBody,
         string? htmlBody, IEnumerable<string>? copyRecipients = null)
     {
-        Guard.NotNullOrWhiteSpace(subject);
+        if(string.IsNullOrWhiteSpace(subject))
+            throw new ArgumentException("A subject must be provided.", nameof(subject));
 
         if (recipients.Count == 0)
             throw new ArgumentException("At least one recipient must be specified.", nameof(recipients));

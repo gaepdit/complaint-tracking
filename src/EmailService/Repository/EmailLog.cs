@@ -7,6 +7,8 @@ public record EmailLog
     [Key]
     public required Guid Id { get; init; }
 
+    public DateTimeOffset? CreatedAt { get; init; }
+
     [StringLength(200)]
     public required string Sender { get; init; }
 
@@ -24,8 +26,6 @@ public record EmailLog
 
     [StringLength(20_000)]
     public string? HtmlBody { get; init; }
-
-    public DateTimeOffset? CreatedAt { get; init; }
 
     public static EmailLog Create(Message message) => new()
     {

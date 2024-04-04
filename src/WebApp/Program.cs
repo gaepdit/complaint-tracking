@@ -80,9 +80,6 @@ builder.Services.AddSwaggerGen(options =>
 // Configure bundling and minification.
 builder.Services.AddWebOptimizer();
 
-// Add email service
-builder.Services.AddEmailServices();
-
 // Build the application.
 var app = builder.Build();
 
