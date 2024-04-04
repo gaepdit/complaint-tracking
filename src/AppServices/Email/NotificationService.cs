@@ -4,6 +4,7 @@ using GaEpd.EmailService;
 using GaEpd.EmailService.Repository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using System.Web;
 
 namespace Cts.AppServices.Email;
 
@@ -12,13 +13,12 @@ public class NotificationService(
     IEmailLogRepository repository,
     IHostEnvironment environment,
     IConfiguration configuration,
-    IErrorLogger errorLogger)
-    : INotificationService
+    IErrorLogger errorLogger) : INotificationService
 {
     private const string FailurePrefix = "Notification email not sent:";
 
-    public async Task<OperationResult> SendNotificationAsync(EmailTemplate template, string recipient,
-        Complaint complaint, string? baseUrl, CancellationToken token = default)
+    public async Task<OperationResult> SendNotificationAsync(EmailTemplate template, string recipientEmail,
+        Complaint complaint, string? baseUrl, string? comments = null, CancellationToken token = default)
     {
         var subjectPrefix = environment.EnvironmentName switch
         {
@@ -30,21 +30,21 @@ public class NotificationService(
         baseUrl ??= string.Empty;
         var complaintUrl = $"{baseUrl}Staff/Complaints/Details/{complaint.Id}";
         var subject = string.Format($"{subjectPrefix} {template.Subject}", complaint.Id.ToString());
-        var textBody = string.Format(template.TextBody + EmailTemplate.TextSignature, complaint.Id.ToString(), complaintUrl, baseUrl,
-            complaint.CurrentOffice.Name);
-        var htmlBody = string.Format(template.HtmlBody + EmailTemplate.HtmlSignature, complaint.Id.ToString(), complaintUrl, baseUrl,
-            complaint.CurrentOffice.Name);
+        var textBody = string.Format(template.TextBody + EmailTemplate.TextSignature, complaint.Id.ToString(),
+            complaintUrl, baseUrl, complaint.CurrentOffice.Name, comments);
+        var htmlBody = string.Format(template.HtmlBody + EmailTemplate.HtmlSignature, complaint.Id.ToString(),
+            complaintUrl, baseUrl, complaint.CurrentOffice.Name, HttpUtility.HtmlEncode(comments));
 
         var settings = new EmailServiceSettings();
         configuration.GetSection(nameof(EmailServiceSettings)).Bind(settings);
 
-        if (string.IsNullOrEmpty(recipient))
+        if (string.IsNullOrEmpty(recipientEmail))
             return OperationResult.FailureResult($"{FailurePrefix} A recipient could not be determined.");
 
         Message message;
         try
         {
-            message = Message.Create(subject, recipient, settings.DefaultSender, textBody, htmlBody);
+            message = Message.Create(subject, recipientEmail, settings.DefaultSender, textBody, htmlBody);
         }
         catch (Exception e)
         {

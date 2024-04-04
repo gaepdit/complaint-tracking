@@ -19,8 +19,7 @@ public class AddModel(
     IStaffService staffService,
     IConcernService concernService,
     IOfficeService officeService,
-    IValidator<ComplaintCreateDto> validator,
-    IHttpContextAccessor httpContext) : PageModel
+    IValidator<ComplaintCreateDto> validator) : PageModel
 {
     [BindProperty]
     public ComplaintCreateDto NewComplaint { get; set; } = default!;
@@ -50,10 +49,8 @@ public class AddModel(
             return Page();
         }
 
-        var baseUrl = Url.Page("/Index", null, null, protocol: "https",
-            host: httpContext.HttpContext?.Request.Host.ToString());
         var createResult =
-            await complaintService.CreateAsync(NewComplaint, AppSettings.AttachmentServiceConfig, baseUrl);
+            await complaintService.CreateAsync(NewComplaint, AppSettings.AttachmentServiceConfig, this.GetBaseUrl());
 
         var message = createResult.NumberOfAttachments switch
         {

@@ -16,6 +16,9 @@ public static class TempDataExtensions
     }
 
     public static void SetDisplayMessage(this ITempDataDictionary tempData, DisplayMessage.AlertContext context,
+        string message, string detail) => tempData.SetDisplayMessage(context, message, [detail]);
+
+    public static void SetDisplayMessage(this ITempDataDictionary tempData, DisplayMessage.AlertContext context,
         string message, List<string>? details = null) =>
         tempData.Set(nameof(DisplayMessage), new DisplayMessage(context, message, details ?? []));
 

@@ -31,8 +31,7 @@ public sealed class ComplaintService(
     // ReSharper disable once SuggestBaseTypeForParameterInConstructor
     IMapper mapper,
     IUserService userService,
-    IAuthorizationService authorization)
-    : IComplaintService
+    IAuthorizationService authorization) : IComplaintService
 #pragma warning restore S107
 {
     // Public read methods
@@ -149,7 +148,7 @@ public sealed class ComplaintService(
 
         var result = new ComplaintCreateResult(complaint.Id);
 
-        // Send email
+        // Send notification
         var emailResult = await SendComplaintAssignmentEmail(complaint, baseUrl, token).ConfigureAwait(false);
         if (!emailResult.Success) result.AddWarning(emailResult.FailureMessage);
 
@@ -181,7 +180,7 @@ public sealed class ComplaintService(
         var template = complaint.CurrentOwner != null
             ? EmailTemplate.AssignedComplaint
             : EmailTemplate.UnassignedComplaint;
-        return await notificationService.SendNotificationAsync(template, recipient, complaint, baseUrl, token)
+        return await notificationService.SendNotificationAsync(template, recipient, complaint, baseUrl, null, token)
             .ConfigureAwait(false);
     }
 
@@ -228,7 +227,7 @@ public sealed class ComplaintService(
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
         result.IsReassigned = true;
 
-        // Send email
+        // Send notification
         var emailResult = await SendComplaintAssignmentEmail(complaint, baseUrl, token).ConfigureAwait(false);
         if (!emailResult.Success) result.AddWarning(emailResult.FailureMessage);
 
@@ -259,17 +258,22 @@ public sealed class ComplaintService(
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
     }
 
-    public async Task RequestReviewAsync(ComplaintRequestReviewDto resource, CancellationToken token = default)
+    public async Task<OperationResult> RequestReviewAsync(ComplaintRequestReviewDto resource, string? baseUrl,
+        CancellationToken token = default)
     {
         var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
-        var reviewer = await userService.FindUserAsync(resource.ReviewerId!).ConfigureAwait(false);
+        var reviewer = (await userService.FindUserAsync(resource.ReviewerId!).ConfigureAwait(false))!;
 
-        complaintManager.RequestReview(complaint, reviewer!, currentUser);
+        complaintManager.RequestReview(complaint, reviewer, currentUser);
         await complaintRepository.UpdateAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
         await AddTransitionAsync(complaint, TransitionType.SubmittedForReview, currentUser, token, resource.Comment)
             .ConfigureAwait(false);
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
+
+        // Send notification
+        return await notificationService.SendNotificationAsync(EmailTemplate.ReviewRequested, reviewer.Email!,
+            complaint, baseUrl, resource.Comment, token).ConfigureAwait(false);
     }
 
     public async Task ReturnAsync(ComplaintAssignmentDto resource, CancellationToken token = default)

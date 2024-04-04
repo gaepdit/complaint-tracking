@@ -17,8 +17,7 @@ public class AssignModel(
     IComplaintService complaintService,
     IAuthorizationService authorization,
     IOfficeService officeService,
-    IStaffService staffService,
-    IHttpContextAccessor httpContext) : PageModel
+    IStaffService staffService) : PageModel
 {
     [BindProperty]
     public ComplaintAssignmentDto ComplaintAssignment { get; set; } = default!;
@@ -61,9 +60,7 @@ public class AssignModel(
             return Page();
         }
 
-        var baseUrl = Url.Page("/Index", null, null, protocol: "https",
-            host: httpContext.HttpContext?.Request.Host.ToString());
-        var assignResult = await complaintService.AssignAsync(ComplaintAssignment, complaintView, baseUrl);
+        var assignResult = await complaintService.AssignAsync(ComplaintAssignment, complaintView, this.GetBaseUrl());
         if (assignResult.IsReassigned)
         {
             TempData.SetDisplayMessage(

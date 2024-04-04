@@ -2,6 +2,7 @@
 using Cts.AppServices.Complaints.CommandDto;
 using Cts.AppServices.Complaints.QueryDto;
 using GaEpd.AppLibrary.Pagination;
+using GaEpd.EmailService;
 
 namespace Cts.AppServices.Complaints;
 
@@ -60,7 +61,10 @@ public interface IComplaintService : IDisposable, IAsyncDisposable
 
     Task CloseAsync(ComplaintClosureDto resource, CancellationToken token = default);
     Task ReopenAsync(ComplaintClosureDto resource, CancellationToken token = default);
-    Task RequestReviewAsync(ComplaintRequestReviewDto resource, CancellationToken token = default);
+
+    Task<OperationResult> RequestReviewAsync(ComplaintRequestReviewDto resource, string? baseUrl,
+        CancellationToken token = default);
+
     Task ReturnAsync(ComplaintAssignmentDto resource, CancellationToken token = default);
     Task DeleteAsync(ComplaintClosureDto resource, CancellationToken token = default);
     Task RestoreAsync(ComplaintClosureDto resource, CancellationToken token = default);

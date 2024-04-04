@@ -69,8 +69,11 @@ public class RequestReviewModel(
             return Page();
         }
 
-        await complaintService.RequestReviewAsync(ComplaintRequestReview);
-        TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "The Complaint has been submitted for review.");
+        var emailResult = await complaintService.RequestReviewAsync(ComplaintRequestReview, this.GetBaseUrl());
+        TempData.SetDisplayMessage(
+            emailResult.Success ? DisplayMessage.AlertContext.Success : DisplayMessage.AlertContext.Warning,
+            "The Complaint has been submitted for review.", emailResult.FailureMessage);
+
         return RedirectToPage("Details", new { id = ComplaintRequestReview.ComplaintId });
     }
 
