@@ -11,6 +11,22 @@ namespace Cts.EfRepository.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            // Rename old tables
+            migrationBuilder.RenameTable(name: "AspNetUsers", newName: "_archive_AspNetUsers");
+            migrationBuilder.RenameTable(name: "AspNetRoles", newName: "_archive_AspNetRoles");
+            migrationBuilder.RenameTable(name: "AspNetUserRoles", newName: "_archive_AspNetUserRoles");
+            migrationBuilder.RenameTable(name: "Attachments", newName: "_archive_Attachments");
+            migrationBuilder.RenameTable(name: "ComplaintActions", newName: "_archive_ComplaintActions");
+            migrationBuilder.RenameTable(name: "Complaints", newName: "_archive_Complaints");
+            migrationBuilder.RenameTable(name: "ComplaintTransitions", newName: "_archive_ComplaintTransitions");
+            migrationBuilder.RenameTable(name: "EmailLogs", newName: "_archive_EmailLogs");
+            migrationBuilder.RenameTable(name: "LookupActionTypes", newName: "_archive_LookupActionTypes");
+            migrationBuilder.RenameTable(name: "LookupConcerns", newName: "_archive_LookupConcerns");
+            migrationBuilder.RenameTable(name: "LookupCounties", newName: "_archive_LookupCounties");
+            migrationBuilder.RenameTable(name: "LookupOffices", newName: "_archive_LookupOffices");
+            migrationBuilder.RenameTable(name: "LookupStates", newName: "_archive_LookupStates");
+
+            // Create new tables
             migrationBuilder.CreateTable(
                 name: "ActionTypes",
                 columns: table => new
@@ -678,6 +694,20 @@ namespace Cts.EfRepository.Migrations
 
             migrationBuilder.DropTable(
                 name: "Offices");
+            
+            migrationBuilder.RenameTable(name: "_archive_AspNetUsers", newName: "AspNetUsers");
+            migrationBuilder.RenameTable(name: "_archive_AspNetRoles", newName: "AspNetRoles");
+            migrationBuilder.RenameTable(name: "_archive_AspNetUserRoles", newName: "AspNetUserRoles");
+            migrationBuilder.RenameTable(name: "_archive_Attachments", newName: "Attachments");
+            migrationBuilder.RenameTable(name: "_archive_ComplaintActions", newName: "ComplaintActions");
+            migrationBuilder.RenameTable(name: "_archive_Complaints", newName: "Complaints");
+            migrationBuilder.RenameTable(name: "_archive_ComplaintTransitions", newName: "ComplaintTransitions");
+            migrationBuilder.RenameTable(name: "_archive_EmailLogs", newName: "EmailLogs");
+            migrationBuilder.RenameTable(name: "_archive_LookupActionTypes", newName: "LookupActionTypes");
+            migrationBuilder.RenameTable(name: "_archive_LookupConcerns", newName: "LookupConcerns");
+            migrationBuilder.RenameTable(name: "_archive_LookupCounties", newName: "LookupCounties");
+            migrationBuilder.RenameTable(name: "_archive_LookupOffices", newName: "LookupOffices");
+            migrationBuilder.RenameTable(name: "_archive_LookupStates", newName: "LookupStates");
         }
     }
 }
