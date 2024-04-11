@@ -11,6 +11,7 @@ namespace Cts.EfRepository.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.Sql(Migrate.ActionTypes);
             migrationBuilder.Sql(Migrate.EmailLogs);
         }
     }
