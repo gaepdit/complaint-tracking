@@ -11,7 +11,15 @@ namespace Cts.EfRepository.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            // Identity
+            migrationBuilder.Sql(Migrate.AspNetRoles);
+
+            // Lookups
             migrationBuilder.Sql(Migrate.ActionTypes);
+            
+            // Application data
+
+            // Ancillary data
             migrationBuilder.Sql(Migrate.EmailLogs);
         }
     }
