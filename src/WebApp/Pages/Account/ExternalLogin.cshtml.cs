@@ -133,7 +133,7 @@ public class ExternalLoginModel(
             Email = info.Principal.FindFirstValue(ClaimTypes.Email),
             GivenName = info.Principal.FindFirstValue(ClaimTypes.GivenName) ?? "",
             FamilyName = info.Principal.FindFirstValue(ClaimTypes.Surname) ?? "",
-            AzureAdObjectId = info.Principal.FindFirstValue(ClaimConstants.ObjectId),
+            ObjectIdentifier = info.Principal.FindFirstValue(ClaimConstants.ObjectId),
         };
 
         // Create the user in the backing store.

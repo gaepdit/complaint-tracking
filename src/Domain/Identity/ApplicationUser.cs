@@ -48,7 +48,7 @@ public class ApplicationUser : IdentityUser, IEntity<string>
     /// </summary>
     [PersonalData]
     [StringLength(36)]
-    public string? AzureAdObjectId { get; init; }
+    public string? ObjectIdentifier { get; set; }
 
     // Display properties
     public string SortableFullName =>
