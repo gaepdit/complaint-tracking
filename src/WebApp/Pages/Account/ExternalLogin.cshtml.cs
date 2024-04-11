@@ -87,10 +87,16 @@ public class ExternalLoginModel(
         if (preferredUserName is null)
             return RedirectToLoginPageWithError("Error loading detailed work account information.");
 
+        if (!preferredUserName.IsValidEmailDomain())
+        {
+            logger.LogWarning("User {UserName} with invalid email domain attempted signin", preferredUserName);
+            return RedirectToPage("./Unavailable");
+        }
+
         // Determine if a user account already exists.
         var user = await userManager.FindByNameAsync(preferredUserName);
 
-        // If the user does not have an account yet, then create one and sign in.
+        // If the user does not have a local account yet, then create one and sign in.
         if (user is null)
             return await CreateUserAndSignInAsync(externalLoginInfo);
 
@@ -101,18 +107,22 @@ public class ExternalLoginModel(
             return RedirectToPage("./Unavailable");
         }
 
-        // Sign in the user locally with the external provider key.
+        // Try to sign in the user locally with the external provider key.
         var signInResult = await signInManager.ExternalLoginSignInAsync(externalLoginInfo.LoginProvider,
             externalLoginInfo.ProviderKey, true, true);
+
+        if (signInResult.IsLockedOut || signInResult.IsNotAllowed || signInResult.RequiresTwoFactor)
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToPage("./Unavailable");
+        }
 
         if (signInResult.Succeeded)
             return await RefreshUserInfoAndSignInAsync(user, externalLoginInfo);
 
-        if (signInResult.IsLockedOut || signInResult.IsNotAllowed || signInResult.RequiresTwoFactor)
-            return RedirectToPage("./Unavailable");
-
         // If ExternalLoginInfo successfully returned from external provider, and the user exists, but
         // ExternalLoginSignInAsync failed, then add the external provider info to the user and sign in.
+        // (Implied `signInResult.Succeeded == false`.)
         return await AddLoginProviderAndSignInAsync(user, externalLoginInfo);
     }
 
@@ -133,7 +143,7 @@ public class ExternalLoginModel(
             Email = info.Principal.FindFirstValue(ClaimTypes.Email),
             GivenName = info.Principal.FindFirstValue(ClaimTypes.GivenName) ?? "",
             FamilyName = info.Principal.FindFirstValue(ClaimTypes.Surname) ?? "",
-            AzureAdObjectId = info.Principal.FindFirstValue(ClaimConstants.ObjectId),
+            ObjectIdentifier = info.Principal.FindFirstValue(ClaimConstants.ObjectId),
         };
 
         // Create the user in the backing store.
@@ -141,10 +151,11 @@ public class ExternalLoginModel(
         if (!createUserResult.Succeeded)
         {
             logger.LogWarning("Failed to create new user {UserName}", user.UserName);
-            return FailedLogin(createUserResult, user);
+            return await FailedLoginAsync(createUserResult, user);
         }
 
-        logger.LogInformation("Created new user {UserName}", user.UserName);
+        logger.LogInformation("Created new user {UserName} with object ID {ObjectId}", user.UserName,
+            user.ObjectIdentifier);
 
         // Add new user to application Roles if seeded in app settings or local admin user setting is enabled.
         var seedAdminUsers = configuration.GetSection("SeedAdminUsers").Get<string[]>();
@@ -164,7 +175,7 @@ public class ExternalLoginModel(
         // Add the external provider info to the user and sign in.
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success,
             "Your account has successfully been created. Select “Edit Profile” to update your info.");
-        return await AddLoginProviderAndSignInAsync(user, info, true);
+        return await AddLoginProviderAndSignInAsync(user, info, newUser: true);
     }
 
     // Update local store with from external provider. 
@@ -182,7 +193,7 @@ public class ExternalLoginModel(
 
     // Add external login provider to user account and sign in user.
     private async Task<IActionResult> AddLoginProviderAndSignInAsync(
-        ApplicationUser user, ExternalLoginInfo info, bool redirectToAccount = false)
+        ApplicationUser user, ExternalLoginInfo info, bool newUser = false)
     {
         var addLoginResult = await userManager.AddLoginAsync(user, info);
 
@@ -190,11 +201,17 @@ public class ExternalLoginModel(
         {
             logger.LogWarning("Failed to add login provider {LoginProvider} for user {UserName}",
                 info.LoginProvider, user.UserName);
-            return FailedLogin(addLoginResult, user);
+            return await FailedLoginAsync(addLoginResult, user);
         }
 
-        logger.LogInformation("Login provider {LoginProvider} added for user {UserName}",
-            info.LoginProvider, user.UserName);
+        if (user.ObjectIdentifier == null)
+        {
+            user.ObjectIdentifier = info.Principal.FindFirstValue(ClaimConstants.ObjectId);
+            await userManager.UpdateAsync(user);
+        }
+
+        logger.LogInformation("Login provider {LoginProvider} added for user {UserName} with object ID {ObjectId}",
+            info.LoginProvider, user.UserName, user.ObjectIdentifier);
 
         // Include the access token in the properties.
         var props = new AuthenticationProperties();
@@ -202,13 +219,15 @@ public class ExternalLoginModel(
         props.IsPersistent = true;
 
         await signInManager.SignInAsync(user, props, info.LoginProvider);
-        return redirectToAccount ? RedirectToPage("./Index") : LocalRedirectOrHome();
+        // If new user, redirect to Account page
+        return newUser ? RedirectToPage("./Index") : LocalRedirectOrHome();
     }
 
     // Add error info and return this Page.
-    private PageResult FailedLogin(IdentityResult result, ApplicationUser user)
+    private async Task<PageResult> FailedLoginAsync(IdentityResult result, ApplicationUser user)
     {
         DisplayFailedUser = user;
+        await signInManager.SignOutAsync();
         foreach (var error in result.Errors) ModelState.AddModelError(string.Empty, error.Description);
         return Page();
     }

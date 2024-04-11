@@ -15,7 +15,7 @@ internal static partial class UserData
             Email = "admin.user@example.net",
             Phone = TextData.ValidPhoneNumber,
             Office = OfficeData.GetOffices.ElementAt(0),
-            AzureAdObjectId = Guid.NewGuid().ToString(),
+            ObjectIdentifier = Guid.NewGuid().ToString(),
         },
         new() // 1
         {
@@ -24,7 +24,7 @@ internal static partial class UserData
             FamilyName = "User2",
             Email = "general.user@example.net",
             Office = OfficeData.GetOffices.ElementAt(1),
-            AzureAdObjectId = Guid.NewGuid().ToString(),
+            ObjectIdentifier = Guid.NewGuid().ToString(),
         },
         new() // 2
         {
@@ -33,7 +33,7 @@ internal static partial class UserData
             FamilyName = "User3",
             Email = "limited.user@example.net",
             Office = OfficeData.GetOffices.ElementAt(0),
-            AzureAdObjectId = Guid.NewGuid().ToString(),
+            ObjectIdentifier = Guid.NewGuid().ToString(),
         },
         new() // 3
         {
@@ -43,7 +43,7 @@ internal static partial class UserData
             Email = "inactive.user@example.net",
             Active = false,
             Office = OfficeData.GetOffices.ElementAt(0),
-            AzureAdObjectId = Guid.NewGuid().ToString(),
+            ObjectIdentifier = Guid.NewGuid().ToString(),
         },
     };
 

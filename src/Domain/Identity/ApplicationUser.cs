@@ -44,11 +44,11 @@ public class ApplicationUser : IdentityUser, IEntity<string>
     /// credentials. The <c>oid</c> claim is a GUID and can't be reused.</para>
     /// <para>Value comes from the <c>ClaimConstants.ObjectId</c> claim
     /// (<c>"http://schemas.microsoft.com/identity/claims/objectidentifier</c>").</para>
-    /// <para>ID token claims reference: https://learn.microsoft.com/en-us/entra/identity-platform/id-token-claims-reference#payload-claims</para>
+    /// <para>ID token claims reference: https://learn.microsoft.com/en-us/entra/identity-platform/id-token-claims-reference#use-claims-to-reliably-identify-a-user</para>
     /// </summary>
     [PersonalData]
     [StringLength(36)]
-    public string? AzureAdObjectId { get; init; }
+    public string? ObjectIdentifier { get; set; }
 
     // Display properties
     public string SortableFullName =>
