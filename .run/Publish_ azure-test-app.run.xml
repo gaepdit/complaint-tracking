@@ -1,0 +1,6 @@
+﻿<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Publish: azure-test-app" type="DotNetMsBuildPublish" factoryName="Publish to IIS" editBeforeRun="true">
+    <riderPublish configuration="Release" platform="Any CPU" publish_profile="azure-test-app.pubxml" pubxml_path="$PROJECT_DIR$/src/WebApp/Properties/PublishProfiles/azure-test-app.pubxml" uuid_high="2865509030761742963" uuid_low="-6571148799467566827" />
+    <method v="2" />
+  </configuration>
+</component>
