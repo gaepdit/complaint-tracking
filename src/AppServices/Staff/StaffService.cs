@@ -134,7 +134,7 @@ public sealed class StaffService(
         var user = await userManager.FindByIdAsync(id).ConfigureAwait(false)
             ?? throw new EntityNotFoundException<ApplicationUser>(id);
 
-        user.Phone = resource.Phone;
+        user.PhoneNumber = resource.PhoneNumber;
         user.Office = resource.OfficeId is null
             ? null
             : await officeRepository.GetAsync(resource.OfficeId.Value).ConfigureAwait(false);

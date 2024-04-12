@@ -168,7 +168,6 @@ namespace Cts.EfRepository.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     GivenName = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
                     FamilyName = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: true),
                     OfficeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Active = table.Column<bool>(type: "bit", nullable: false),
                     ObjectIdentifier = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: true),

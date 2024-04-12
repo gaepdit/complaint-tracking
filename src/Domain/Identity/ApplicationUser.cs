@@ -5,7 +5,7 @@ using System.Text;
 namespace Cts.Domain.Identity;
 
 // Add profile data for application users by adding properties to the ApplicationUser class.
-// (IdentityUser already includes Id, Email, and UserName properties.)
+// (IdentityUser already includes ID, Email, UserName, and PhoneNumber properties.)
 public class ApplicationUser : IdentityUser, IEntity<string>
 {
     /// <summary>
@@ -24,10 +24,6 @@ public class ApplicationUser : IdentityUser, IEntity<string>
 
     // Editable user/staff properties
     public const int MaxPhoneLength = 25;
-
-    [ProtectedPersonalData]
-    [StringLength(MaxPhoneLength)]
-    public string? Phone { get; set; }
 
     [InverseProperty("StaffMembers")]
     public Office? Office { get; set; }

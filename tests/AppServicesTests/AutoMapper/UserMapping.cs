@@ -13,7 +13,7 @@ public class UserMapping
         GivenName = TextData.ValidName,
         FamilyName = TextData.NewValidName,
         Email = TextData.ValidEmail,
-        Phone = TextData.ValidPhoneNumber,
+        PhoneNumber = TextData.ValidPhoneNumber,
         Office = new Office(Guid.NewGuid(), TextData.ValidName),
     };
 
@@ -27,7 +27,7 @@ public class UserMapping
         result.GivenName.Should().Be(_item.GivenName);
         result.FamilyName.Should().Be(_item.FamilyName);
         result.Email.Should().Be(_item.Email);
-        result.Phone.Should().Be(_item.Phone);
+        result.PhoneNumber.Should().Be(_item.PhoneNumber);
         result.Office.Should().BeEquivalentTo(_item.Office);
         result.Active.Should().BeTrue();
     }

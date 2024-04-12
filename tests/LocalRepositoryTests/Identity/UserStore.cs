@@ -46,7 +46,7 @@ public class UserStore
     {
         var store = RepositoryHelper.GetLocalUserStore();
         var user = store.UserStore.First();
-        user.Phone = "1";
+        user.PhoneNumber = "1";
         user.Office = new Office(Guid.NewGuid(), "abc");
 
         var result = await store.UpdateAsync(user, CancellationToken.None);
