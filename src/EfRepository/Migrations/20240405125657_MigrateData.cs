@@ -12,6 +12,7 @@ namespace Cts.EfRepository.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             // Identity
+            migrationBuilder.Sql(Migrate.AspNetUsers);
             migrationBuilder.Sql(Migrate.AspNetRoles);
 
             // Lookups

@@ -19,7 +19,7 @@ public static partial class Migrate
                    null, CreatedById)                           as CreatedById,
                UpdatedDate at time zone 'Eastern Standard Time' as UpdatedAt,
                UpdatedById,
-               Name,
+               trim(Name)                                       as Name,
                Active
         from dbo._archive_LookupActionTypes
         where Active = convert(bit, 1)
