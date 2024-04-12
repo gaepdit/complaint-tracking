@@ -5,7 +5,7 @@ public static partial class Migrate
     // language=sql
     public const string Concerns =
         """
-        insert into Concerns
+        insert into dbo.Concerns
             (Id,
              CreatedAt,
              CreatedById,
@@ -21,9 +21,9 @@ public static partial class Migrate
                UpdatedById,
                Name,
                Active
-        from _archive_LookupConcerns
+        from dbo._archive_LookupConcerns
         where Active = convert(bit, 1)
-        or (Id in (select distinct PrimaryConcernId from _archive_Complaints)
-         or Id in (select distinct SecondaryConcernId from _archive_Complaints));
+        or (Id in (select distinct PrimaryConcernId from dbo._archive_Complaints)
+         or Id in (select distinct SecondaryConcernId from dbo._archive_Complaints));
         """;
 }

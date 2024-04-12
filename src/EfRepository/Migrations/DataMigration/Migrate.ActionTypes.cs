@@ -5,7 +5,7 @@ public static partial class Migrate
     // language=sql
     public const string ActionTypes =
         """
-        insert into ActionTypes
+        insert into dbo.ActionTypes
             (Id,
              CreatedAt,
              CreatedById,
@@ -21,8 +21,8 @@ public static partial class Migrate
                UpdatedById,
                Name,
                Active
-        from _archive_LookupActionTypes
+        from dbo._archive_LookupActionTypes
         where Active = convert(bit, 1)
-           or Id in (select ActionTypeId from _archive_ComplaintActions);
+           or Id in (select ActionTypeId from dbo._archive_ComplaintActions);
         """;
 }

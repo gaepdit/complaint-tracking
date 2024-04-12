@@ -5,7 +5,7 @@ public static partial class Migrate
     // language=sql
     public const string EmailLogs =
         """
-        insert into EmailLogs
+        insert into dbo.EmailLogs
             (Id,
              Sender,
              Subject,
@@ -22,6 +22,6 @@ public static partial class Migrate
                TextBody,
                HtmlBody,
                DateSent at time zone 'Eastern Standard Time' as CreatedAt
-        from _archive_EmailLogs;
+        from dbo._archive_EmailLogs;
         """;
 }

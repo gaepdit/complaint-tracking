@@ -5,7 +5,7 @@ public static partial class Migrate
     // language=sql
     public const string AspNetRoles =
         """
-        insert into AspNetRoles
+        insert into dbo.AspNetRoles
             (Id,
              Name,
              NormalizedName,
@@ -14,6 +14,6 @@ public static partial class Migrate
                Name,
                NormalizedName,
                ConcurrencyStamp
-        from _archive_AspNetRoles;
+        from dbo._archive_AspNetRoles;
         """;
 }
