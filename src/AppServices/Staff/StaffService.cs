@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Security.Claims;
+using AutoMapper;
 using Cts.AppServices.Permissions;
 using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.Staff.Dto;
@@ -25,7 +26,7 @@ public sealed class StaffService(
     public async Task<StaffViewDto> GetCurrentUserAsync()
     {
         var user = await userService.GetCurrentUserAsync().ConfigureAwait(false)
-            ?? throw new CurrentUserNotFoundException();
+                   ?? throw new CurrentUserNotFoundException();
         return mapper.Map<StaffViewDto>(user);
     }
 
@@ -102,7 +103,7 @@ public sealed class StaffService(
             : roles.Where(pair => pair.Key != RoleName.DivisionManager);
 
         var user = await userManager.FindByIdAsync(id).ConfigureAwait(false)
-            ?? throw new EntityNotFoundException<ApplicationUser>(id);
+                   ?? throw new EntityNotFoundException<ApplicationUser>(id);
 
         foreach (var (role, value) in filteredRoles)
         {
@@ -128,11 +129,14 @@ public sealed class StaffService(
     public async Task<IdentityResult> UpdateAsync(string id, StaffUpdateDto resource)
     {
         var principal = userService.GetCurrentPrincipal()!;
-        if (await authorization.Succeeded(principal, Policies.UserAdministrator).ConfigureAwait(false))
+        if (id != principal.FindFirstValue(ClaimConstants.NameIdentifierId) &&
+            !await authorization.Succeeded(principal, Policies.UserAdministrator).ConfigureAwait(false))
+        {
             throw new InsufficientPermissionsException(nameof(Policies.UserAdministrator));
+        }
 
         var user = await userManager.FindByIdAsync(id).ConfigureAwait(false)
-            ?? throw new EntityNotFoundException<ApplicationUser>(id);
+                   ?? throw new EntityNotFoundException<ApplicationUser>(id);
 
         user.Phone = resource.Phone;
         user.Office = resource.OfficeId is null
