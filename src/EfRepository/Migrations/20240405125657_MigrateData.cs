@@ -22,6 +22,7 @@ namespace Cts.EfRepository.Migrations
             migrationBuilder.Sql(Migrate.Offices);
             
             // Application data
+            migrationBuilder.Sql(Migrate.Complaints);
 
             // Ancillary data
             migrationBuilder.Sql(Migrate.EmailLogs);
