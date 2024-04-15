@@ -24,6 +24,7 @@ namespace Cts.EfRepository.Migrations
             // Application data
             migrationBuilder.Sql(Migrate.Complaints);
             migrationBuilder.Sql(Migrate.ComplaintActions);
+            migrationBuilder.Sql(Migrate.ComplaintTransitions);
             migrationBuilder.Sql(Migrate.Attachments);
 
             // Ancillary data
