@@ -103,29 +103,29 @@ public static partial class Migrate
              LockoutEnd,
              LockoutEnabled,
              AccessFailedCount)
-        select lower(a.Id)               as Id,
-               trim(a.FirstName)         as GivenName,
-               trim(a.LastName)          as FamilyName,
-               lower(a.OfficeId)         as OfficeId,
-               a.Active,
-               null                      as ObjectIdentifier,
-               a.UserName,
-               a.NormalizedUserName,
-               a.Email,
-               a.NormalizedEmail,
-               a.EmailConfirmed,
-               null                      as PasswordHash,
-               a.SecurityStamp,
-               a.ConcurrencyStamp,
-               nullif(trim(a.Phone), '') as PhoneNumber,
-               a.PhoneNumberConfirmed,
-               a.TwoFactorEnabled,
-               null                      as LockoutEnd,
-               convert(bit, 1)           as LockoutEnabled,
-               a.AccessFailedCount
-        from dbo._archive_AspNetUsers a
+        select lower(u.Id)                                                                         as Id,
+               trim(u.FirstName)                                                                   as GivenName,
+               trim(u.LastName)                                                                    as FamilyName,
+               lower(u.OfficeId)                                                                   as OfficeId,
+               u.Active,
+               null                                                                                as ObjectIdentifier,
+               replace(replace(u.UserName, '_', '.'), '@dnr.state.ga.us', '@dnr.ga.gov')           as UserName,
+               replace(replace(u.NormalizedUserName, '_', '.'), '@DNR.STATE.GA.US', '@DNR.GA.GOV') as NormalizedUserName,
+               replace(replace(u.Email, '_', '.'), '@dnr.state.ga.us', '@dnr.ga.gov')              as Email,
+               replace(replace(u.NormalizedEmail, '_', '.'), '@DNR.STATE.GA.US', '@DNR.GA.GOV')    as NormalizedEmail,
+               u.EmailConfirmed,
+               null                                                                                as PasswordHash,
+               u.SecurityStamp,
+               u.ConcurrencyStamp,
+               nullif(trim(u.Phone), '')                                                           as PhoneNumber,
+               u.PhoneNumberConfirmed,
+               u.TwoFactorEnabled,
+               null                                                                                as LockoutEnd,
+               convert(bit, 1)                                                                     as LockoutEnabled,
+               u.AccessFailedCount
+        from dbo._archive_AspNetUsers u
             left join cte
-            on lower(a.Id) = lower(cte.cId)
+            on lower(u.Id) = lower(cte.cId)
         where cte.cId is not null
         """;
 }
