@@ -14,6 +14,7 @@ namespace Cts.EfRepository.Migrations
             // Identity
             migrationBuilder.Sql(Migrate.AspNetUsers);
             migrationBuilder.Sql(Migrate.AspNetRoles);
+            migrationBuilder.Sql(Migrate.AspNetUserRoles);
 
             // Lookups
             migrationBuilder.Sql(Migrate.ActionTypes);
