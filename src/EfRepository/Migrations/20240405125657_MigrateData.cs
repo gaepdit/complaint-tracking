@@ -18,6 +18,7 @@ namespace Cts.EfRepository.Migrations
             // Lookups
             migrationBuilder.Sql(Migrate.ActionTypes);
             migrationBuilder.Sql(Migrate.Concerns);
+            migrationBuilder.Sql(Migrate.Offices);
             
             // Application data
 
