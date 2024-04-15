@@ -13,17 +13,16 @@ public static partial class Migrate
              UpdatedById,
              Name,
              Active)
-        select Id,
-               CreatedDate at time zone 'Eastern Standard Time' as CreatedAt,
-               IIF(CreatedById = '00000000-0000-0000-0000-000000000000',
-                   null, CreatedById)                           as CreatedById,
-               UpdatedDate at time zone 'Eastern Standard Time' as UpdatedAt,
-               UpdatedById,
-               trim(Name)                                       as Name,
+        select lower(Id)                                                                           as Id,
+               CreatedDate at time zone 'Eastern Standard Time'                                    as CreatedAt,
+               IIF(CreatedById = '00000000-0000-0000-0000-000000000000', null, lower(CreatedById)) as CreatedById,
+               UpdatedDate at time zone 'Eastern Standard Time'                                    as UpdatedAt,
+               lower(UpdatedById)                                                                  as UpdatedById,
+               trim(Name)                                                                          as Name,
                Active
         from dbo._archive_LookupConcerns
         where Active = convert(bit, 1)
-        or (Id in (select distinct PrimaryConcernId from dbo._archive_Complaints)
-         or Id in (select distinct SecondaryConcernId from dbo._archive_Complaints));
+           or (Id in (select distinct PrimaryConcernId from dbo._archive_Complaints)
+            or Id in (select distinct SecondaryConcernId from dbo._archive_Complaints));
         """;
 }

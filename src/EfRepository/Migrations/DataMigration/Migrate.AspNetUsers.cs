@@ -103,10 +103,10 @@ public static partial class Migrate
              LockoutEnd,
              LockoutEnabled,
              AccessFailedCount)
-        select a.Id,
+        select lower(a.Id)               as Id,
                trim(a.FirstName)         as GivenName,
                trim(a.LastName)          as FamilyName,
-               a.OfficeId,
+               lower(a.OfficeId)         as OfficeId,
                a.Active,
                null                      as ObjectIdentifier,
                a.UserName,
@@ -125,7 +125,7 @@ public static partial class Migrate
                a.AccessFailedCount
         from dbo._archive_AspNetUsers a
             left join cte
-            on a.Id = cte.cId
+            on lower(a.Id) = lower(cte.cId)
         where cte.cId is not null
         """;
 }

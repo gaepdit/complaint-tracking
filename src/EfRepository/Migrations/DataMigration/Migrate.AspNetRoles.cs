@@ -10,7 +10,7 @@ public static partial class Migrate
              Name,
              NormalizedName,
              ConcurrencyStamp)
-        select Id,
+        select lower(Id) as Id,
                Name,
                NormalizedName,
                ConcurrencyStamp
