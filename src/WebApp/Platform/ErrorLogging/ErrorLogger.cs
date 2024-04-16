@@ -1,17 +1,12 @@
-﻿using Cts.AppServices.ErrorLogging;
+﻿using System.Collections;
+using Cts.AppServices.ErrorLogging;
+using Cts.WebApp.Platform.Settings;
 using GaEpd.FileService;
-using Microsoft.Extensions.Options;
 using Mindscape.Raygun4Net.AspNetCore;
-using System.Collections;
 
 namespace Cts.WebApp.Platform.ErrorLogging;
 
-public class ErrorLogger(
-    IRaygunAspNetCoreClientProvider clientProvider,
-    IOptions<RaygunSettings> settings,
-    IHttpContextAccessor httpContextAccessor,
-    IFileService fileService)
-    : IErrorLogger
+public class ErrorLogger(IFileService fileService, IServiceProvider serviceProvider) : IErrorLogger
 {
     public Task<string> LogErrorAsync(Exception exception, string context = "")
     {
@@ -25,7 +20,7 @@ public class ErrorLogger(
         var shortId = ShortId.GetShortId();
         customData.Add("CTS Error ID", shortId);
 
-        if (!string.IsNullOrEmpty(settings.Value.ApiKey))
+        if (!string.IsNullOrEmpty(AppSettings.RaygunSettings.ApiKey))
         {
             await LogRaygunErrorAsync(exception, customData);
             return shortId;
@@ -55,7 +50,6 @@ public class ErrorLogger(
         return shortId;
     }
 
-    private Task LogRaygunErrorAsync(Exception exception, IDictionary customData) =>
-        clientProvider.GetClient(settings.Value, httpContextAccessor.HttpContext)
-            .SendInBackground(exception, null, customData);
+    private Task LogRaygunErrorAsync(Exception exception, IDictionary customData) => 
+        serviceProvider.GetService<RaygunClient>()!.SendInBackground(exception, null, customData);
 }

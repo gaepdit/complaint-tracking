@@ -22,6 +22,7 @@ internal static partial class AppSettings
     public record RaygunClientSettings
     {
         public string? ApiKey { get; [UsedImplicitly] init; }
+        public bool ExcludeErrorsFromLocal { get; [UsedImplicitly] init; }
     }
 
     // Attachment File Service configuration

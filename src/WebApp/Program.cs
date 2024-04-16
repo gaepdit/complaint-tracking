@@ -1,13 +1,14 @@
+using System.Reflection;
 using Cts.AppServices.ErrorLogging;
 using Cts.AppServices.RegisterServices;
 using Cts.WebApp.Platform.AppConfiguration;
 using Cts.WebApp.Platform.ErrorLogging;
 using Cts.WebApp.Platform.Settings;
-using GaEpd.EmailService;
 using GaEpd.FileService;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.OpenApi.Models;
+using Mindscape.Raygun4Net;
 using Mindscape.Raygun4Net.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -45,8 +46,20 @@ if (!builder.Environment.IsDevelopment())
 
 // Configure application monitoring.
 builder.Services.AddTransient<IErrorLogger, ErrorLogger>();
-builder.Services.AddRaygun(builder.Configuration,
-    new RaygunMiddlewareSettings { ClientProvider = new RaygunClientProvider() });
+builder.Services.AddSingleton(provider =>
+{
+    var client = new RaygunClient(provider.GetService<RaygunSettings>()!, provider.GetService<IRaygunUserProvider>()!);
+    client.SendingMessage += (_, eventArgs) => eventArgs.Message.Details.Tags.Add(builder.Environment.EnvironmentName);
+    return client;
+});
+builder.Services.AddRaygun(opts =>
+{
+    opts.ApiKey = AppSettings.RaygunSettings.ApiKey;
+    opts.ApplicationVersion = Assembly.GetEntryAssembly()?.GetName().Version?.ToString(3);
+    opts.ExcludeErrorsFromLocal = AppSettings.RaygunSettings.ExcludeErrorsFromLocal;
+    opts.IgnoreFormFieldNames = ["*Password"];
+});
+builder.Services.AddRaygunUserProvider();
 builder.Services.AddHttpContextAccessor(); // needed by RaygunScriptPartial
 
 // Add app services.
