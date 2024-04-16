@@ -12,17 +12,19 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
+using Mindscape.Raygun4Net;
 using Mindscape.Raygun4Net.AspNetCore;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 namespace ComplaintTracking
 {
-    public class Startup(IConfiguration configuration)
+    public class Startup(IConfiguration configuration, IWebHostEnvironment env)
     {
         internal static bool IsLocal { get; private set; }
 
         private IConfiguration Configuration { get; } = configuration;
+        private IWebHostEnvironment WebHostEnvironment { get; } = env;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -74,10 +76,20 @@ namespace ComplaintTracking
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
 
             // Add error logging
-            services.AddRaygun(Configuration, new RaygunMiddlewareSettings()
+            services.AddSingleton(s =>
             {
-                ClientProvider = new RaygunClientProvider()
+                var client = new RaygunClient(s.GetService<RaygunSettings>()!, s.GetService<IRaygunUserProvider>()!);
+                client.SendingMessage += (sender, eventArgs) => { eventArgs.Message.Details.Tags.Add(WebHostEnvironment.EnvironmentName); };
+                return client;
             });
+            services.AddRaygun(Configuration, opts =>
+            {
+                opts.ApiKey = ApplicationSettings.RaygunSettings.ApiKey;
+                opts.ExcludedStatusCodes = ApplicationSettings.RaygunSettings.ExcludedStatusCodes;
+                opts.ExcludeErrorsFromLocal = ApplicationSettings.RaygunSettings.ExcludeErrorsFromLocal;
+                opts.IgnoreFormFieldNames = ["*Password"];
+            });
+            services.AddRaygunUserProvider();
 
             // Add sessions
             services.AddSession();
@@ -148,8 +160,7 @@ namespace ComplaintTracking
 
             app.UseAuthentication();
             app.UseAuthorization();
-
-            app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); });
+            app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
         }
     }
 }

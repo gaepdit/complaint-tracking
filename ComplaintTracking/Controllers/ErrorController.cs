@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.Threading.Tasks;
-using ComplaintTracking.Services;
+﻿using ComplaintTracking.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ComplaintTracking.Controllers
@@ -46,7 +41,7 @@ namespace ComplaintTracking.Controllers
             if (statusCode is StatusCodes.Status404NotFound or StatusCodes.Status400BadRequest) return View("Error");
 
             // Get the details of the exception that occurred
-            var message =  string.Concat("HTTP Error: ", statusCode, " ", statusCodeDesc).Trim();
+            var message = string.Concat("HTTP Error: ", statusCode, " ", statusCodeDesc).Trim();
             var feature = HttpContext.Features.Get<IStatusCodeReExecuteFeature>();
             var pathAndQueryString = feature == null
                 ? string.Concat(Request.Path.ToString(), Request.QueryString.ToString())
@@ -75,16 +70,17 @@ namespace ComplaintTracking.Controllers
 #pragma warning disable S125 // Sections of code should not be commented out
         // These commented-out methods are useful for testing exception handling
 
-        //[Route("Error/TestUnhandledException")]
+        //[Route("TestUnhandledException")]
         //public IActionResult TestUnhandledException()
 
         //{
         //    throw new ArgumentException("Testing Unhandled Exception");
         //}
 
-        //[Route("Error/TestHandledException")]
+        //[Route("TestHandledException")]
         //public async Task<IActionResult> TestHandledException()
         //{
+        //    string result;
         //    try
         //    {
         //        throw new ArgumentException("Testing Handled Exception");
@@ -95,10 +91,10 @@ namespace ComplaintTracking.Controllers
         //        {
         //            { "Custom Data", "Some data" }
         //        };
-        //        await _errorLogger.LogErrorAsync(ex, "Error/TestHandledException", customData);
+        //        result = await _errorLogger.LogErrorAsync(ex, "Error/TestHandledException", customData);
         //    }
 
-        //    return Ok();
+        //    return Ok(result);
         //}
 #pragma warning restore S125 // Sections of code should not be commented out
 

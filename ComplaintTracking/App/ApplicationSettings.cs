@@ -12,6 +12,8 @@ internal static class ApplicationSettings
 internal class RaygunClientSettings
 {
     public string ApiKey { get; init; }
+    public bool ExcludeErrorsFromLocal { get; init; }
+    public int[] ExcludedStatusCodes { get; init; }
 }
 
 internal class ContactEmails
