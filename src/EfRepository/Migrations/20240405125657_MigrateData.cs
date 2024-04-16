@@ -11,6 +11,9 @@ namespace Cts.EfRepository.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            // Disable foreign key constraint
+            migrationBuilder.Sql("ALTER TABLE AspNetUsers NOCHECK CONSTRAINT FK_AspNetUsers_Offices_OfficeId");
+
             // Identity
             migrationBuilder.Sql(Migrate.AspNetUsers);
             migrationBuilder.Sql(Migrate.AspNetRoles);
@@ -29,6 +32,9 @@ namespace Cts.EfRepository.Migrations
 
             // Ancillary data
             migrationBuilder.Sql(Migrate.EmailLogs);
+
+            // Reenable foreign key constraint
+            migrationBuilder.Sql("ALTER TABLE AspNetUsers WITH CHECK CHECK CONSTRAINT FK_AspNetUsers_Offices_OfficeId");
         }
     }
 }
