@@ -15,5 +15,20 @@ public static partial class Migrate
                NormalizedName,
                ConcurrencyStamp
         from dbo._archive_AspNetRoles;
+
+        insert into dbo.AspNetRoles
+            (Id,
+             Name,
+             NormalizedName,
+             ConcurrencyStamp)
+        values
+            (newid(),
+             'SiteMaintenance',
+             upper('SiteMaintenance'),
+             newid()),
+            (newid(),
+             'Staff',
+             upper('Staff'),
+             newid());
         """;
 }
