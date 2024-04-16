@@ -19,8 +19,8 @@ public static partial class Migrate
         insert into dbo.AspNetUserRoles
             (UserId,
              RoleId)
-        select lower(u.Id)                                                              as UserId,
-               (select lower(t.Id) from AspNetRoles t where t.Name = 'SiteMaintenance') as RoleId
+        select lower(u.Id)                                                                  as UserId,
+               (select lower(t.Id) from dbo.AspNetRoles t where t.Name = 'SiteMaintenance') as RoleId
         from dbo._archive_AspNetUserRoles ur
             inner join dbo.AspNetUsers u
             on lower(u.Id) = lower(ur.UserId)
@@ -32,8 +32,8 @@ public static partial class Migrate
         insert into dbo.AspNetUserRoles
             (UserId,
              RoleId)
-        select lower(u.Id)                                                    as UserId,
-               (select lower(t.Id) from AspNetRoles t where t.Name = 'Staff') as RoleId
+        select lower(u.Id)                                                        as UserId,
+               (select lower(t.Id) from dbo.AspNetRoles t where t.Name = 'Staff') as RoleId
         from dbo.AspNetUsers u
         where u.Active = convert(bit, 1)
           and u.EmailConfirmed = convert(bit, 1);

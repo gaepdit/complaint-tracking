@@ -19,7 +19,7 @@ public static partial class Migrate
                     select TransferredFromOfficeId as cId
                     from dbo._archive_ComplaintTransitions)
         insert
-        into Offices
+        into dbo.Offices
             (Id,
              AssignorId,
              CreatedAt,

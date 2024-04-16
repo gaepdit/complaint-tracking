@@ -5,7 +5,7 @@ public static partial class Migrate
     // language=sql
     public const string ComplaintTransitions =
         """
-        insert into ComplaintTransitions
+        insert into dbo.ComplaintTransitions
             (Id,
              ComplaintId,
              TransitionType,
@@ -18,30 +18,32 @@ public static partial class Migrate
              CreatedById,
              UpdatedAt,
              UpdatedById)
-        select lower(Id)                                            as Id,
-               ComplaintId,
+        select lower(t.Id)                                            as Id,
+               t.ComplaintId,
                case
-                   when TransitionType = 0 then 'New'
-                   when TransitionType = 1 then 'Assigned'
-                   when TransitionType = 2 then 'SubmittedForReview'
-                   when TransitionType = 3 then 'ReturnedByReviewer'
-                   when TransitionType = 4 then 'Closed'
-                   when TransitionType = 5 then 'Reopened'
-                   when TransitionType = 6 then 'Deleted'
-                   when TransitionType = 7 then 'Restored'
-               end                                                  as TransitionType,
-               DateTransferred at time zone 'Eastern Standard Time' as CommittedDate,
-               lower(TransferredByUserId)                           as CommittedByUserId,
-               lower(TransferredToUserId)                           as TransferredToUserId,
-               lower(TransferredToOfficeId)                         as TransferredToOfficeId,
-               trim(Comment)                                        as Comment,
-               CreatedDate at time zone 'Eastern Standard Time'     as CreatedDate,
-               lower(CreatedById)                                   as CreatedById,
-               UpdatedDate at time zone 'Eastern Standard Time'     as UpdatedDate,
-               lower(UpdatedById)                                   as UpdatedById
-        from _archive_ComplaintTransitions;
-        
-        insert into ComplaintTransitions
+                   when t.TransitionType = 0 then 'New'
+                   when t.TransitionType = 1 then 'Assigned'
+                   when t.TransitionType = 2 then 'SubmittedForReview'
+                   when t.TransitionType = 3 then 'ReturnedByReviewer'
+                   when t.TransitionType = 4 then 'Closed'
+                   when t.TransitionType = 5 then 'Reopened'
+                   when t.TransitionType = 6 then 'Deleted'
+                   when t.TransitionType = 7 then 'Restored'
+               end                                                    as TransitionType,
+               t.DateTransferred at time zone 'Eastern Standard Time' as CommittedDate,
+               lower(t.TransferredByUserId)                           as CommittedByUserId,
+               lower(t.TransferredToUserId)                           as TransferredToUserId,
+               lower(t.TransferredToOfficeId)                         as TransferredToOfficeId,
+               trim(t.Comment)                                        as Comment,
+               t.CreatedDate at time zone 'Eastern Standard Time'     as CreatedDate,
+               lower(t.CreatedById)                                   as CreatedById,
+               t.UpdatedDate at time zone 'Eastern Standard Time'     as UpdatedDate,
+               lower(t.UpdatedById)                                   as UpdatedById
+        from dbo._archive_ComplaintTransitions t
+            inner join dbo.Complaints c
+            on c.Id = t.ComplaintId;
+
+        insert into dbo.ComplaintTransitions
             (Id,
              ComplaintId,
              TransitionType,
@@ -54,19 +56,21 @@ public static partial class Migrate
              CreatedById,
              UpdatedAt,
              UpdatedById)
-        select lower(Id)                                         as Id,
-               ComplaintId,
-               'Accepted'                                        as TransitionType,
-               DateAccepted at time zone 'Eastern Standard Time' as CommittedDate,
-               lower(TransferredToUserId)                        as CommittedByUserId,
-               null                                              as TransferredToUserId,
-               null                                              as TransferredToOfficeId,
-               null                                              as Comment,
-               CreatedDate at time zone 'Eastern Standard Time'  as CreatedDate,
-               lower(CreatedById)                                as CreatedById,
-               UpdatedDate at time zone 'Eastern Standard Time'  as UpdatedDate,
-               lower(UpdatedById)                                as UpdatedById
-        from _archive_ComplaintTransitions
-        where DateAccepted is not null;
+        select newid()                                             as Id,
+               t.ComplaintId,
+               'Accepted'                                          as TransitionType,
+               t.DateAccepted at time zone 'Eastern Standard Time' as CommittedDate,
+               lower(t.TransferredToUserId)                        as CommittedByUserId,
+               null                                                as TransferredToUserId,
+               null                                                as TransferredToOfficeId,
+               null                                                as Comment,
+               t.CreatedDate at time zone 'Eastern Standard Time'  as CreatedDate,
+               lower(t.CreatedById)                                as CreatedById,
+               t.UpdatedDate at time zone 'Eastern Standard Time'  as UpdatedDate,
+               lower(t.UpdatedById)                                as UpdatedById
+        from dbo._archive_ComplaintTransitions t
+            inner join dbo.Complaints c
+            on c.Id = t.ComplaintId
+        where DateAccepted is not null
         """;
 }

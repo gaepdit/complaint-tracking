@@ -5,8 +5,8 @@ public static partial class Migrate
     // language=sql
     public const string Complaints =
         """
-        SET IDENTITY_INSERT Complaints ON;
-        insert into Complaints
+        SET IDENTITY_INSERT dbo.Complaints ON;
+        insert into dbo.Complaints
             (Id,
              Status,
              EnteredDate,
@@ -159,13 +159,13 @@ public static partial class Migrate
                c.Deleted,
                c.DateDeleted at time zone 'Eastern Standard Time'              as DateDeleted,
                lower(c.DeletedById)                                            as DeletedById
-        from _archive_Complaints c
-            left join _archive_LookupStates s1
+        from dbo._archive_Complaints c
+            left join dbo._archive_LookupStates s1
             on c.CallerStateId = s1.Id
-            left join _archive_LookupStates s2
+            left join dbo._archive_LookupStates s2
             on c.SourceStateId = s2.Id
-            left join _archive_LookupCounties u
+            left join dbo._archive_LookupCounties u
             on c.ComplaintCountyId = u.Id;
-        SET IDENTITY_INSERT Complaints OFF;
+        SET IDENTITY_INSERT dbo.Complaints OFF;
         """;
 }
