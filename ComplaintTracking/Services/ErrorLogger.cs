@@ -1,9 +1,8 @@
-﻿using ComplaintTracking.App;
-using Mindscape.Raygun4Net.AspNetCore;
+﻿using Mindscape.Raygun4Net.AspNetCore;
 
 namespace ComplaintTracking.Services
 {
-    public class ErrorLogger : IErrorLogger
+    public class ErrorLogger(IServiceProvider serviceProvider) : IErrorLogger
     {
         public async Task<string> LogErrorAsync(
             Exception exception,
@@ -18,16 +17,7 @@ namespace ComplaintTracking.Services
             if (!string.IsNullOrEmpty(context)) customData.Add("Context", context);
 
             // Send to error logger
-            RaygunSettings raygunSettings = new()
-            {
-                ApiKey = ApplicationSettings.RaygunSettings.ApiKey,
-                ExcludedStatusCodes = ApplicationSettings.RaygunSettings.ExcludedStatusCodes,
-                ExcludeErrorsFromLocal = ApplicationSettings.RaygunSettings.ExcludeErrorsFromLocal,
-                IgnoreFormFieldNames = ["*Password"]
-            };
-
-            var raygunClient = new RaygunClient(raygunSettings);
-            await raygunClient.SendInBackground(exception, [CTS.CurrentEnvironment.ToString()], customData);
+            await serviceProvider.GetService<RaygunClient>().SendInBackground(exception, null, customData);
 
             return shortId;
         }

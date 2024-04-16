@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Mindscape.Raygun4Net;
 using Mindscape.Raygun4Net.AspNetCore;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace ComplaintTracking
@@ -79,12 +80,13 @@ namespace ComplaintTracking
             services.AddSingleton(s =>
             {
                 var client = new RaygunClient(s.GetService<RaygunSettings>()!, s.GetService<IRaygunUserProvider>()!);
-                client.SendingMessage += (sender, eventArgs) => { eventArgs.Message.Details.Tags.Add(WebHostEnvironment.EnvironmentName); };
+                client.SendingMessage += (_, eventArgs) => { eventArgs.Message.Details.Tags.Add(WebHostEnvironment.EnvironmentName); };
                 return client;
             });
             services.AddRaygun(Configuration, opts =>
             {
                 opts.ApiKey = ApplicationSettings.RaygunSettings.ApiKey;
+                opts.ApplicationVersion = Assembly.GetEntryAssembly()?.GetName().Version?.ToString(3);
                 opts.ExcludedStatusCodes = ApplicationSettings.RaygunSettings.ExcludedStatusCodes;
                 opts.ExcludeErrorsFromLocal = ApplicationSettings.RaygunSettings.ExcludeErrorsFromLocal;
                 opts.IgnoreFormFieldNames = ["*Password"];
