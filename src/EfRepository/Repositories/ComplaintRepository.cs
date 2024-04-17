@@ -39,7 +39,7 @@ public sealed class ComplaintRepository(AppDbContext context)
             .Include(complaint => complaint.DeletedBy)
             .Include(complaint => complaint.Attachments
                 .Where(attachment => !attachment.IsDeleted)
-                .OrderByDescending(attachment => attachment.UploadedDate)
+                .OrderBy(attachment => attachment.UploadedDate)
                 .ThenBy(attachment => attachment.Id)
             )
             .Include(complaint => complaint.Actions

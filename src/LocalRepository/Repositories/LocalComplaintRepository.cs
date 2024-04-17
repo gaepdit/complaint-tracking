@@ -53,7 +53,7 @@ public sealed class LocalComplaintRepository(
         complaint.Attachments.AddRange((await attachmentRepository
                 .GetListAsync(attachment => attachment.Complaint.Id == complaint.Id && !attachment.IsDeleted, token)
                 .ConfigureAwait(false))
-            .OrderByDescending(attachment => attachment.UploadedDate)
+            .OrderBy(attachment => attachment.UploadedDate)
             .ThenBy(attachment => attachment.FileName)
             .ThenBy(attachment => attachment.Id));
 
