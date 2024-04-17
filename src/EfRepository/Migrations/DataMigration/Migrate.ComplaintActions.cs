@@ -22,20 +22,20 @@ public static partial class Migrate
              DeletedAt,
              DeletedById)
         select lower(a.Id)                                                           as Id,
-               a.ComplaintId,
+               a.ComplaintId                                                         as ComplaintId,
                lower(a.ActionTypeId)                                                 as ActionTypeId,
                a.ActionDate at time zone 'Eastern Standard Time'                     as ActionDate,
                trim(a.Investigator)                                                  as Investigator,
                trim(CHAR(13) + CHAR(10) + CHAR(9) + ' ' from isnull(a.Comments, '')) as Comments,
                a.DateEntered at time zone 'Eastern Standard Time'                    as DateEntered,
-               lower(a.EnteredById)                                                  as EnteredById,
+               dbo.FixUserId(a.EnteredById)                                          as EnteredById,
                a.CreatedDate at time zone 'Eastern Standard Time'                    as CreatedDate,
-               lower(a.CreatedById)                                                  as CreatedById,
+               dbo.FixUserId(a.CreatedById)                                          as CreatedById,
                a.UpdatedDate at time zone 'Eastern Standard Time'                    as UpdatedDate,
-               lower(a.UpdatedById)                                                  as UpdatedById,
-               a.Deleted,
+               dbo.FixUserId(a.UpdatedById)                                          as UpdatedById,
+               a.Deleted                                                             as Deleted,
                a.DateDeleted at time zone 'Eastern Standard Time'                    as DateDeleted,
-               lower(a.DeletedById)                                                  as DeletedById
+               dbo.FixUserId(a.DeletedById)                                          as DeletedById
         from dbo._archive_ComplaintActions a
             inner join dbo.Complaints c
             on c.Id = a.ComplaintId;

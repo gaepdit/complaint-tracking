@@ -19,7 +19,7 @@ public static partial class Migrate
              UpdatedAt,
              UpdatedById)
         select lower(t.Id)                                              as Id,
-               t.ComplaintId,
+               t.ComplaintId                                            as ComplaintId,
                case
                    when t.TransitionType = 0 then 'New'
                    when t.TransitionType = 1 then 'Assigned'
@@ -31,14 +31,14 @@ public static partial class Migrate
                    when t.TransitionType = 7 then 'Restored'
                end                                                      as TransitionType,
                t.DateTransferred at time zone 'Eastern Standard Time'   as CommittedDate,
-               lower(t.TransferredByUserId)                             as CommittedByUserId,
-               lower(t.TransferredToUserId)                             as TransferredToUserId,
+               dbo.FixUserId(t.TransferredByUserId)                     as CommittedByUserId,
+               dbo.FixUserId(t.TransferredToUserId)                     as TransferredToUserId,
                lower(t.TransferredToOfficeId)                           as TransferredToOfficeId,
                trim(CHAR(13) + CHAR(10) + CHAR(9) + ' ' from t.Comment) as Comment,
                t.CreatedDate at time zone 'Eastern Standard Time'       as CreatedDate,
-               lower(t.CreatedById)                                     as CreatedById,
+               dbo.FixUserId(t.CreatedById)                             as CreatedById,
                t.UpdatedDate at time zone 'Eastern Standard Time'       as UpdatedDate,
-               lower(t.UpdatedById)                                     as UpdatedById
+               dbo.FixUserId(t.UpdatedById)                             as UpdatedById
         from dbo._archive_ComplaintTransitions t
             inner join dbo.Complaints c
             on c.Id = t.ComplaintId;
@@ -57,20 +57,20 @@ public static partial class Migrate
              UpdatedAt,
              UpdatedById)
         select newid()                                             as Id,
-               t.ComplaintId,
+               t.ComplaintId                                       as ComplaintId,
                'Accepted'                                          as TransitionType,
                t.DateAccepted at time zone 'Eastern Standard Time' as CommittedDate,
-               lower(t.TransferredToUserId)                        as CommittedByUserId,
+               dbo.FixUserId(t.TransferredToUserId)                as CommittedByUserId,
                null                                                as TransferredToUserId,
                null                                                as TransferredToOfficeId,
                null                                                as Comment,
                t.CreatedDate at time zone 'Eastern Standard Time'  as CreatedDate,
-               lower(t.CreatedById)                                as CreatedById,
+               dbo.FixUserId(t.CreatedById)                        as CreatedById,
                t.UpdatedDate at time zone 'Eastern Standard Time'  as UpdatedDate,
-               lower(t.UpdatedById)                                as UpdatedById
+               dbo.FixUserId(t.UpdatedById)                        as UpdatedById
         from dbo._archive_ComplaintTransitions t
             inner join dbo.Complaints c
             on c.Id = t.ComplaintId
-        where DateAccepted is not null
+        where DateAccepted is not null;
         """;
 }

@@ -13,13 +13,13 @@ public static partial class Migrate
              UpdatedById,
              Name,
              Active)
-        select lower(Id)                                                                           as Id,
-               CreatedDate at time zone 'Eastern Standard Time'                                    as CreatedAt,
-               IIF(CreatedById = '00000000-0000-0000-0000-000000000000', null, lower(CreatedById)) as CreatedById,
-               UpdatedDate at time zone 'Eastern Standard Time'                                    as UpdatedAt,
-               lower(UpdatedById)                                                                  as UpdatedById,
-               trim(Name)                                                                          as Name,
-               Active
+        select lower(Id)                                        as Id,
+               CreatedDate at time zone 'Eastern Standard Time' as CreatedAt,
+               dbo.FixUserId(CreatedById)                       as CreatedById,
+               UpdatedDate at time zone 'Eastern Standard Time' as UpdatedAt,
+               dbo.FixUserId(UpdatedById)                       as UpdatedById,
+               trim(Name)                                       as Name,
+               Active                                           as Active
         from dbo._archive_LookupConcerns
         where Active = convert(bit, 1)
            or (Id in (select distinct PrimaryConcernId from dbo._archive_Complaints)

@@ -19,8 +19,8 @@ public static partial class Migrate
                left(Subject, 200)                            as Subject,
                left([To], 2000)                              as Recipients,
                null                                          as CopyRecipients,
-               TextBody,
-               HtmlBody,
+               TextBody                                      as TextBody,
+               HtmlBody                                      as HtmlBody,
                DateSent at time zone 'Eastern Standard Time' as CreatedAt
         from dbo._archive_EmailLogs;
         """;

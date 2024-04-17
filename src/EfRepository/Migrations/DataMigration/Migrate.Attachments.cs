@@ -22,22 +22,22 @@ public static partial class Migrate
              DeletedAt,
              DeletedById)
         select lower(a.Id)                                         as Id,
-               a.ComplaintId,
+               a.ComplaintId                                       as ComplaintId,
                trim(a.FileName)                                    as FileName,
-               a.FileExtension,
-               a.Size,
+               a.FileExtension                                     as FileExtension,
+               a.Size                                              as Size,
                a.DateUploaded at time zone 'Eastern Standard Time' as DateUploaded,
-               lower(a.UploadedById)                               as UploadedById,
-               a.IsImage,
+               dbo.FixUserId(a.UploadedById)                       as UploadedById,
+               a.IsImage                                           as IsImage,
                null                                                as CreatedAt,
                null                                                as CreatedById,
                null                                                as UpdatedAt,
                null                                                as UpdatedById,
-               a.Deleted,
+               a.Deleted                                           as Deleted,
                a.DateDeleted at time zone 'Eastern Standard Time'  as DateDeleted,
-               lower(a.DeletedById)                                as DeletedById
+               dbo.FixUserId(a.DeletedById)                        as DeletedById
         from dbo._archive_Attachments a
             inner join dbo.Complaints c
-            on c.Id = a.ComplaintId
+            on c.Id = a.ComplaintId;
         """;
 }

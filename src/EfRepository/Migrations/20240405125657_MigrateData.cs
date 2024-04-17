@@ -1,4 +1,5 @@
 ﻿using Cts.EfRepository.Migrations.DataMigration;
+using Cts.EfRepository.Migrations.UserDefinedFunction;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -11,6 +12,9 @@ namespace Cts.EfRepository.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            // Add function to consolidate duplicate Users
+            migrationBuilder.Sql(Function.FixUserId);
+            
             // Disable foreign key constraint
             migrationBuilder.Sql("ALTER TABLE AspNetUsers NOCHECK CONSTRAINT FK__AspNetUsers_Offices_OfficeId");
 
@@ -35,6 +39,9 @@ namespace Cts.EfRepository.Migrations
 
             // Reenable foreign key constraint
             migrationBuilder.Sql("ALTER TABLE AspNetUsers WITH CHECK CHECK CONSTRAINT FK__AspNetUsers_Offices_OfficeId");
+
+            // Remove function to consolidate duplicate Users
+            migrationBuilder.Sql(Function.DropFixUserId);
         }
     }
 }

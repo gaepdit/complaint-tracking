@@ -65,7 +65,7 @@ public static partial class Migrate
              IsDeleted,
              DeletedAt,
              DeletedById)
-        select c.Id,
+        select c.Id                                                                 as Id,
                case
                    when c.Status = 0 then 'New'
                    when c.Status = 1 then 'UnderInvestigation'
@@ -74,9 +74,9 @@ public static partial class Migrate
                    when c.Status = 4 then 'AdministrativelyClosed'
                end                                                                  as Status,
                c.DateEntered at time zone 'Eastern Standard Time'                   as DateEntered,
-               lower(c.EnteredById)                                                 as EnteredById,
+               dbo.FixUserId(c.EnteredById)                                         as EnteredById,
                c.DateReceived at time zone 'Eastern Standard Time'                  as DateReceived,
-               lower(c.ReceivedById)                                                as ReceivedById,
+               dbo.FixUserId(c.ReceivedById)                                        as ReceivedById,
                trim(c.CallerName)                                                   as CallerName,
                trim(c.CallerRepresents)                                             as CallerRepresents,
                trim(c.CallerStreet)                                                 as CallerStreet,
@@ -144,21 +144,21 @@ public static partial class Migrate
                end                                                                  as SourceTertiaryPhoneType,
                trim(c.SourceEmail)                                                  as SourceEmail,
                lower(c.CurrentOfficeId)                                             as CurrentOfficeId,
-               lower(c.CurrentOwnerId)                                              as CurrentOwnerId,
+               dbo.FixUserId(c.CurrentOwnerId)                                      as CurrentOwnerId,
                c.DateCurrentOwnerAssigned at time zone 'Eastern Standard Time'      as DateCurrentOwnerAssigned,
                c.DateCurrentOwnerAccepted at time zone 'Eastern Standard Time'      as DateCurrentOwnerAccepted,
-               lower(c.ReviewById)                                                  as ReviewById,
+               dbo.FixUserId(c.ReviewById)                                          as ReviewById,
                trim(CHAR(13) + CHAR(10) + CHAR(9) + ' ' from c.ReviewComments)      as ReviewComments,
-               c.ComplaintClosed,
+               c.ComplaintClosed                                                    as ComplaintClosed,
                c.DateComplaintClosed at time zone 'Eastern Standard Time'           as DateComplaintClosed,
                trim(CHAR(13) + CHAR(10) + CHAR(9) + ' ' from c.DeleteComments)      as DeleteComments,
                c.CreatedDate at time zone 'Eastern Standard Time'                   as CreatedDate,
-               lower(c.CreatedById)                                                 as CreatedById,
+               dbo.FixUserId(c.CreatedById)                                         as CreatedById,
                c.UpdatedDate at time zone 'Eastern Standard Time'                   as UpdatedDate,
-               lower(c.UpdatedById)                                                 as UpdatedById,
-               c.Deleted,
+               dbo.FixUserId(c.UpdatedById)                                         as UpdatedById,
+               c.Deleted                                                            as Deleted,
                c.DateDeleted at time zone 'Eastern Standard Time'                   as DateDeleted,
-               lower(c.DeletedById)                                                 as DeletedById
+               dbo.FixUserId(c.DeletedById)                                         as DeletedById
         from dbo._archive_Complaints c
             left join dbo._archive_LookupStates s1
             on c.CallerStateId = s1.Id

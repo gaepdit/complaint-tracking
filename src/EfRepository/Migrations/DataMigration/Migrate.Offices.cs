@@ -28,14 +28,14 @@ public static partial class Migrate
              UpdatedById,
              Name,
              Active)
-        select lower(o.Id)                                                                             as Id,
-               lower(o.MasterUserId)                                                                   as AssignorId,
-               o.CreatedDate at time zone 'Eastern Standard Time'                                      as CreatedAt,
-               IIF(o.CreatedById = '00000000-0000-0000-0000-000000000000', null, lower(o.CreatedById)) as CreatedById,
-               o.UpdatedDate at time zone 'Eastern Standard Time'                                      as UpdatedAt,
-               lower(o.UpdatedById)                                                                    as UpdatedById,
-               o.Name,
-               o.Active
+        select lower(o.Id)                                        as Id,
+               dbo.FixUserId(o.MasterUserId)                      as AssignorId,
+               o.CreatedDate at time zone 'Eastern Standard Time' as CreatedAt,
+               dbo.FixUserId(o.CreatedById)                       as CreatedById,
+               o.UpdatedDate at time zone 'Eastern Standard Time' as UpdatedAt,
+               dbo.FixUserId(o.UpdatedById)                       as UpdatedById,
+               o.Name                                             as Name,
+               o.Active                                           as Active
         from dbo._archive_LookupOffices o
             left join cte
             on lower(o.Id) = lower(cte.cId)
