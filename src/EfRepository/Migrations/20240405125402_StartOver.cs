@@ -12,9 +12,13 @@ namespace Cts.EfRepository.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             // Rename old tables
-            migrationBuilder.RenameTable(name: "AspNetUsers", newName: "_archive_AspNetUsers");
+            migrationBuilder.RenameTable(name: "AspNetRoleClaims", newName: "_archive_AspNetRoleClaims");
             migrationBuilder.RenameTable(name: "AspNetRoles", newName: "_archive_AspNetRoles");
+            migrationBuilder.RenameTable(name: "AspNetUserClaims", newName: "_archive_AspNetUserClaims");
+            migrationBuilder.RenameTable(name: "AspNetUserLogins", newName: "_archive_AspNetUserLogins");
             migrationBuilder.RenameTable(name: "AspNetUserRoles", newName: "_archive_AspNetUserRoles");
+            migrationBuilder.RenameTable(name: "AspNetUsers", newName: "_archive_AspNetUsers");
+            migrationBuilder.RenameTable(name: "AspNetUserTokens", newName: "_archive_AspNetUserTokens");
             migrationBuilder.RenameTable(name: "Attachments", newName: "_archive_Attachments");
             migrationBuilder.RenameTable(name: "ComplaintActions", newName: "_archive_ComplaintActions");
             migrationBuilder.RenameTable(name: "Complaints", newName: "_archive_Complaints");
@@ -694,9 +698,13 @@ namespace Cts.EfRepository.Migrations
             migrationBuilder.DropTable(
                 name: "Offices");
             
-            migrationBuilder.RenameTable(name: "_archive_AspNetUsers", newName: "AspNetUsers");
+            migrationBuilder.RenameTable(name: "_archive_AspNetRoleClaims", newName: "AspNetRoleClaims");
             migrationBuilder.RenameTable(name: "_archive_AspNetRoles", newName: "AspNetRoles");
+            migrationBuilder.RenameTable(name: "_archive_AspNetUserClaims", newName: "AspNetUserClaims");
+            migrationBuilder.RenameTable(name: "_archive_AspNetUserLogins", newName: "AspNetUserLogins");
             migrationBuilder.RenameTable(name: "_archive_AspNetUserRoles", newName: "AspNetUserRoles");
+            migrationBuilder.RenameTable(name: "_archive_AspNetUsers", newName: "AspNetUsers");
+            migrationBuilder.RenameTable(name: "_archive_AspNetUserTokens", newName: "AspNetUserTokens");
             migrationBuilder.RenameTable(name: "_archive_Attachments", newName: "Attachments");
             migrationBuilder.RenameTable(name: "_archive_ComplaintActions", newName: "ComplaintActions");
             migrationBuilder.RenameTable(name: "_archive_Complaints", newName: "Complaints");
