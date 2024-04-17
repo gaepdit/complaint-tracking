@@ -18,7 +18,7 @@ public static partial class Migrate
              CreatedById,
              UpdatedAt,
              UpdatedById)
-        select lower(t.Id)                                            as Id,
+        select lower(t.Id)                                              as Id,
                t.ComplaintId,
                case
                    when t.TransitionType = 0 then 'New'
@@ -29,20 +29,20 @@ public static partial class Migrate
                    when t.TransitionType = 5 then 'Reopened'
                    when t.TransitionType = 6 then 'Deleted'
                    when t.TransitionType = 7 then 'Restored'
-               end                                                    as TransitionType,
-               t.DateTransferred at time zone 'Eastern Standard Time' as CommittedDate,
-               lower(t.TransferredByUserId)                           as CommittedByUserId,
-               lower(t.TransferredToUserId)                           as TransferredToUserId,
-               lower(t.TransferredToOfficeId)                         as TransferredToOfficeId,
-               trim(t.Comment)                                        as Comment,
-               t.CreatedDate at time zone 'Eastern Standard Time'     as CreatedDate,
-               lower(t.CreatedById)                                   as CreatedById,
-               t.UpdatedDate at time zone 'Eastern Standard Time'     as UpdatedDate,
-               lower(t.UpdatedById)                                   as UpdatedById
+               end                                                      as TransitionType,
+               t.DateTransferred at time zone 'Eastern Standard Time'   as CommittedDate,
+               lower(t.TransferredByUserId)                             as CommittedByUserId,
+               lower(t.TransferredToUserId)                             as TransferredToUserId,
+               lower(t.TransferredToOfficeId)                           as TransferredToOfficeId,
+               trim(CHAR(13) + CHAR(10) + CHAR(9) + ' ' from t.Comment) as Comment,
+               t.CreatedDate at time zone 'Eastern Standard Time'       as CreatedDate,
+               lower(t.CreatedById)                                     as CreatedById,
+               t.UpdatedDate at time zone 'Eastern Standard Time'       as UpdatedDate,
+               lower(t.UpdatedById)                                     as UpdatedById
         from dbo._archive_ComplaintTransitions t
             inner join dbo.Complaints c
             on c.Id = t.ComplaintId;
-
+        
         insert into dbo.ComplaintTransitions
             (Id,
              ComplaintId,
