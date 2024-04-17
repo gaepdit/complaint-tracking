@@ -113,7 +113,7 @@ public static partial class Migrate
                u.Name                                                          as ComplaintCounty,
                lower(c.PrimaryConcernId)                                       as PrimaryConcernId,
                lower(c.SecondaryConcernId)                                     as SecondaryConcernId,
-               lower(c.SourceFacilityId)                                       as SourceFacilityId,
+               trim(c.SourceFacilityId)                                        as SourceFacilityId,
                trim(c.SourceFacilityName)                                      as SourceFacilityName,
                trim(c.SourceContactName)                                       as SourceContactName,
                trim(c.SourceStreet)                                            as SourceStreet,
