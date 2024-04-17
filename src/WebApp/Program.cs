@@ -58,6 +58,7 @@ builder.Services.AddRaygun(opts =>
     opts.ApplicationVersion = Assembly.GetEntryAssembly()?.GetName().Version?.ToString(3);
     opts.ExcludeErrorsFromLocal = AppSettings.RaygunSettings.ExcludeErrorsFromLocal;
     opts.IgnoreFormFieldNames = ["*Password"];
+    opts.EnvironmentVariables.Add("ASPNETCORE_*");
 });
 builder.Services.AddRaygunUserProvider();
 builder.Services.AddHttpContextAccessor(); // needed by RaygunScriptPartial
