@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using GaEpd.EmailService.Utilities;
+using System.ComponentModel.DataAnnotations;
 
 namespace GaEpd.EmailService.Repository;
 
@@ -30,18 +31,12 @@ public record EmailLog
     public static EmailLog Create(Message message) => new()
     {
         Id = Guid.NewGuid(),
-        Sender = message.Sender,
-        Subject = message.Subject,
-        Recipients = message.Recipients.ConcatWithSeparator(","),
-        CopyRecipients = message.CopyRecipients.ConcatWithSeparator(","),
-        TextBody = message.TextBody,
-        HtmlBody = message.HtmlBody,
+        Sender = message.Sender[..200],
+        Subject = message.Subject[..200],
+        Recipients = message.Recipients.ConcatWithSeparator(",")[..2000],
+        CopyRecipients = message.CopyRecipients.ConcatWithSeparator(",")[..2000],
+        TextBody = message.TextBody?[..15_000],
+        HtmlBody = message.HtmlBody?[..20_000],
         CreatedAt = DateTimeOffset.Now,
     };
-}
-
-public static class StringExtensions
-{
-    public static string ConcatWithSeparator(this IEnumerable<string?> items, string separator = " ") =>
-        string.Join(separator, items.Where(s => !string.IsNullOrEmpty(s)));
 }
