@@ -41,7 +41,7 @@ namespace Cts.EfRepository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ActionTypes", x => x.Id);
+                    table.PrimaryKey("PK__ActionTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -55,7 +55,7 @@ namespace Cts.EfRepository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                    table.PrimaryKey("PK__AspNetRoles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -72,7 +72,7 @@ namespace Cts.EfRepository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Concerns", x => x.Id);
+                    table.PrimaryKey("PK__Concerns", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -90,7 +90,7 @@ namespace Cts.EfRepository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EmailLogs", x => x.Id);
+                    table.PrimaryKey("PK__EmailLogs", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -105,9 +105,9 @@ namespace Cts.EfRepository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
+                    table.PrimaryKey("PK__AspNetRoleClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
+                        name: "FK__AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
@@ -126,7 +126,7 @@ namespace Cts.EfRepository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
+                    table.PrimaryKey("PK__AspNetUserClaims", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -140,7 +140,7 @@ namespace Cts.EfRepository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    table.PrimaryKey("PK__AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
                 });
 
             migrationBuilder.CreateTable(
@@ -152,9 +152,9 @@ namespace Cts.EfRepository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.PrimaryKey("PK__AspNetUserRoles", x => new { x.UserId, x.RoleId });
                     table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
+                        name: "FK__AspNetUserRoles_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
@@ -188,7 +188,7 @@ namespace Cts.EfRepository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.PrimaryKey("PK__AspNetUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -202,9 +202,9 @@ namespace Cts.EfRepository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                    table.PrimaryKey("PK__AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
                     table.ForeignKey(
-                        name: "FK_AspNetUserTokens_AspNetUsers_UserId",
+                        name: "FK__AspNetUserTokens_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -226,9 +226,9 @@ namespace Cts.EfRepository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Offices", x => x.Id);
+                    table.PrimaryKey("PK__Offices", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Offices_AspNetUsers_AssignorId",
+                        name: "FK__Offices_AspNetUsers_AssignorId",
                         column: x => x.AssignorId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
@@ -300,45 +300,45 @@ namespace Cts.EfRepository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Complaints", x => x.Id);
+                    table.PrimaryKey("PK__Complaints", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Complaints_AspNetUsers_CurrentOwnerId",
+                        name: "FK__Complaints_AspNetUsers_CurrentOwnerId",
                         column: x => x.CurrentOwnerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Complaints_AspNetUsers_DeletedById",
+                        name: "FK__Complaints_AspNetUsers_DeletedById",
                         column: x => x.DeletedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Complaints_AspNetUsers_EnteredById",
+                        name: "FK__Complaints_AspNetUsers_EnteredById",
                         column: x => x.EnteredById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Complaints_AspNetUsers_ReceivedById",
+                        name: "FK__Complaints_AspNetUsers_ReceivedById",
                         column: x => x.ReceivedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Complaints_AspNetUsers_ReviewedById",
+                        name: "FK__Complaints_AspNetUsers_ReviewedById",
                         column: x => x.ReviewedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Complaints_Concerns_PrimaryConcernId",
+                        name: "FK__Complaints_Concerns_PrimaryConcernId",
                         column: x => x.PrimaryConcernId,
                         principalTable: "Concerns",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Complaints_Concerns_SecondaryConcernId",
+                        name: "FK__Complaints_Concerns_SecondaryConcernId",
                         column: x => x.SecondaryConcernId,
                         principalTable: "Concerns",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Complaints_Offices_CurrentOfficeId",
+                        name: "FK__Complaints_Offices_CurrentOfficeId",
                         column: x => x.CurrentOfficeId,
                         principalTable: "Offices",
                         principalColumn: "Id",
@@ -367,14 +367,14 @@ namespace Cts.EfRepository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Attachments", x => x.Id);
+                    table.PrimaryKey("PK__Attachments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Attachments_AspNetUsers_UploadedById",
+                        name: "FK__Attachments_AspNetUsers_UploadedById",
                         column: x => x.UploadedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Attachments_Complaints_ComplaintId",
+                        name: "FK__Attachments_Complaints_ComplaintId",
                         column: x => x.ComplaintId,
                         principalTable: "Complaints",
                         principalColumn: "Id",
@@ -403,25 +403,25 @@ namespace Cts.EfRepository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ComplaintActions", x => x.Id);
+                    table.PrimaryKey("PK__ComplaintActions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ComplaintActions_ActionTypes_ActionTypeId",
+                        name: "FK__ComplaintActions_ActionTypes_ActionTypeId",
                         column: x => x.ActionTypeId,
                         principalTable: "ActionTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ComplaintActions_AspNetUsers_DeletedById",
+                        name: "FK__ComplaintActions_AspNetUsers_DeletedById",
                         column: x => x.DeletedById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_ComplaintActions_AspNetUsers_EnteredById",
+                        name: "FK__ComplaintActions_AspNetUsers_EnteredById",
                         column: x => x.EnteredById,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_ComplaintActions_Complaints_ComplaintId",
+                        name: "FK__ComplaintActions_Complaints_ComplaintId",
                         column: x => x.ComplaintId,
                         principalTable: "Complaints",
                         principalColumn: "Id",
@@ -447,171 +447,171 @@ namespace Cts.EfRepository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ComplaintTransitions", x => x.Id);
+                    table.PrimaryKey("PK__ComplaintTransitions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ComplaintTransitions_AspNetUsers_CommittedByUserId",
+                        name: "FK__ComplaintTransitions_AspNetUsers_CommittedByUserId",
                         column: x => x.CommittedByUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_ComplaintTransitions_AspNetUsers_TransferredToUserId",
+                        name: "FK__ComplaintTransitions_AspNetUsers_TransferredToUserId",
                         column: x => x.TransferredToUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_ComplaintTransitions_Complaints_ComplaintId",
+                        name: "FK__ComplaintTransitions_Complaints_ComplaintId",
                         column: x => x.ComplaintId,
                         principalTable: "Complaints",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ComplaintTransitions_Offices_TransferredToOfficeId",
+                        name: "FK__ComplaintTransitions_Offices_TransferredToOfficeId",
                         column: x => x.TransferredToOfficeId,
                         principalTable: "Offices",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetRoleClaims_RoleId",
+                name: "IX__AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "RoleNameIndex",
+                name: "RoleName_Index",
                 table: "AspNetRoles",
                 column: "NormalizedName",
                 unique: true,
                 filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserClaims_UserId",
+                name: "IX__AspNetUserClaims_UserId",
                 table: "AspNetUserClaims",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserLogins_UserId",
+                name: "IX__AspNetUserLogins_UserId",
                 table: "AspNetUserLogins",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserRoles_RoleId",
+                name: "IX__AspNetUserRoles_RoleId",
                 table: "AspNetUserRoles",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "EmailIndex",
+                name: "Email_Index",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_OfficeId",
+                name: "IX__AspNetUsers_OfficeId",
                 table: "AspNetUsers",
                 column: "OfficeId");
 
             migrationBuilder.CreateIndex(
-                name: "UserNameIndex",
+                name: "UserName_Index",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Attachments_ComplaintId",
+                name: "IX__Attachments_ComplaintId",
                 table: "Attachments",
                 column: "ComplaintId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Attachments_UploadedById",
+                name: "IX__Attachments_UploadedById",
                 table: "Attachments",
                 column: "UploadedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ComplaintActions_ActionTypeId",
+                name: "IX__ComplaintActions_ActionTypeId",
                 table: "ComplaintActions",
                 column: "ActionTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ComplaintActions_ComplaintId",
+                name: "IX__ComplaintActions_ComplaintId",
                 table: "ComplaintActions",
                 column: "ComplaintId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ComplaintActions_DeletedById",
+                name: "IX__ComplaintActions_DeletedById",
                 table: "ComplaintActions",
                 column: "DeletedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ComplaintActions_EnteredById",
+                name: "IX__ComplaintActions_EnteredById",
                 table: "ComplaintActions",
                 column: "EnteredById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Complaints_CurrentOfficeId",
+                name: "IX__Complaints_CurrentOfficeId",
                 table: "Complaints",
                 column: "CurrentOfficeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Complaints_CurrentOwnerId",
+                name: "IX__Complaints_CurrentOwnerId",
                 table: "Complaints",
                 column: "CurrentOwnerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Complaints_DeletedById",
+                name: "IX__Complaints_DeletedById",
                 table: "Complaints",
                 column: "DeletedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Complaints_EnteredById",
+                name: "IX__Complaints_EnteredById",
                 table: "Complaints",
                 column: "EnteredById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Complaints_PrimaryConcernId",
+                name: "IX__Complaints_PrimaryConcernId",
                 table: "Complaints",
                 column: "PrimaryConcernId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Complaints_ReceivedById",
+                name: "IX__Complaints_ReceivedById",
                 table: "Complaints",
                 column: "ReceivedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Complaints_ReviewedById",
+                name: "IX__Complaints_ReviewedById",
                 table: "Complaints",
                 column: "ReviewedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Complaints_SecondaryConcernId",
+                name: "IX__Complaints_SecondaryConcernId",
                 table: "Complaints",
                 column: "SecondaryConcernId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ComplaintTransitions_CommittedByUserId",
+                name: "IX__ComplaintTransitions_CommittedByUserId",
                 table: "ComplaintTransitions",
                 column: "CommittedByUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ComplaintTransitions_ComplaintId",
+                name: "IX__ComplaintTransitions_ComplaintId",
                 table: "ComplaintTransitions",
                 column: "ComplaintId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ComplaintTransitions_TransferredToOfficeId",
+                name: "IX__ComplaintTransitions_TransferredToOfficeId",
                 table: "ComplaintTransitions",
                 column: "TransferredToOfficeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ComplaintTransitions_TransferredToUserId",
+                name: "IX__ComplaintTransitions_TransferredToUserId",
                 table: "ComplaintTransitions",
                 column: "TransferredToUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Offices_AssignorId",
+                name: "IX__Offices_AssignorId",
                 table: "Offices",
                 column: "AssignorId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUserClaims_AspNetUsers_UserId",
+                name: "FK__AspNetUserClaims_AspNetUsers_UserId",
                 table: "AspNetUserClaims",
                 column: "UserId",
                 principalTable: "AspNetUsers",
@@ -619,7 +619,7 @@ namespace Cts.EfRepository.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUserLogins_AspNetUsers_UserId",
+                name: "FK__AspNetUserLogins_AspNetUsers_UserId",
                 table: "AspNetUserLogins",
                 column: "UserId",
                 principalTable: "AspNetUsers",
@@ -627,7 +627,7 @@ namespace Cts.EfRepository.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                name: "FK__AspNetUserRoles_AspNetUsers_UserId",
                 table: "AspNetUserRoles",
                 column: "UserId",
                 principalTable: "AspNetUsers",
@@ -635,7 +635,7 @@ namespace Cts.EfRepository.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUsers_Offices_OfficeId",
+                name: "FK__AspNetUsers_Offices_OfficeId",
                 table: "AspNetUsers",
                 column: "OfficeId",
                 principalTable: "Offices",
@@ -646,7 +646,7 @@ namespace Cts.EfRepository.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Offices_AspNetUsers_AssignorId",
+                name: "FK__Offices_AspNetUsers_AssignorId",
                 table: "Offices");
 
             migrationBuilder.DropTable(

@@ -12,7 +12,7 @@ namespace Cts.EfRepository.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             // Disable foreign key constraint
-            migrationBuilder.Sql("ALTER TABLE AspNetUsers NOCHECK CONSTRAINT FK_AspNetUsers_Offices_OfficeId");
+            migrationBuilder.Sql("ALTER TABLE AspNetUsers NOCHECK CONSTRAINT FK__AspNetUsers_Offices_OfficeId");
 
             // Identity
             migrationBuilder.Sql(Migrate.AspNetUsers);
@@ -34,7 +34,7 @@ namespace Cts.EfRepository.Migrations
             migrationBuilder.Sql(Migrate.EmailLogs);
 
             // Reenable foreign key constraint
-            migrationBuilder.Sql("ALTER TABLE AspNetUsers WITH CHECK CHECK CONSTRAINT FK_AspNetUsers_Offices_OfficeId");
+            migrationBuilder.Sql("ALTER TABLE AspNetUsers WITH CHECK CHECK CONSTRAINT FK__AspNetUsers_Offices_OfficeId");
         }
     }
 }
