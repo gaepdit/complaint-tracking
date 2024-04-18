@@ -25,7 +25,7 @@ public static partial class Migrate
                a.ComplaintId                                                         as ComplaintId,
                lower(a.ActionTypeId)                                                 as ActionTypeId,
                a.ActionDate at time zone 'Eastern Standard Time'                     as ActionDate,
-               trim(a.Investigator)                                                  as Investigator,
+               trim(isnull(a.Investigator, ''))                                      as Investigator,
                trim(CHAR(13) + CHAR(10) + CHAR(9) + ' ' from isnull(a.Comments, '')) as Comments,
                a.DateEntered at time zone 'Eastern Standard Time'                    as DateEntered,
                dbo.FixUserId(a.EnteredById)                                          as EnteredById,
