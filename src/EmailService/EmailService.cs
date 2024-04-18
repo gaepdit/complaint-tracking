@@ -37,12 +37,13 @@ public class EmailService : IEmailService
             emailMessage.To.AddRange(settings.AuditEmailRecipients
                 .Select(address => new MailboxAddress(string.Empty, address)));
 
+            const string auditText = "This is a copy of the original email for auditing purposes. Original recipient: ";
             var auditBuilder = new BodyBuilder
             {
-                TextBody = string.Concat($"Original recipient: {message.Recipients.ConcatWithSeparator(", ")}",
-                    Environment.NewLine, Environment.NewLine, message.TextBody),
-                HtmlBody = string.Concat($"<em>Original recipient: {message.Recipients.ConcatWithSeparator(", ")}</em>",
-                    "<br><br>", message.HtmlBody)
+                TextBody = string.Concat(auditText, message.Recipients.ConcatWithSeparator(", "), Environment.NewLine,
+                    Environment.NewLine, message.TextBody),
+                HtmlBody = string.Concat($"<em>{auditText}{message.Recipients.ConcatWithSeparator(", ")}</em><br><br>",
+                    message.HtmlBody)
             };
             emailMessage.Body = auditBuilder.ToMessageBody();
 
