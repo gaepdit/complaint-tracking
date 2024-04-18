@@ -16,7 +16,7 @@ public record StaffViewDto : INamedEntity
     [Display(Name = "Email (cannot be changed)")]
     public string? Email { get; init; }
 
-    public string? Phone { get; init; }
+    public string? PhoneNumber { get; init; }
     public OfficeViewDto? Office { get; init; }
     public bool Active { get; init; }
 
@@ -59,7 +59,7 @@ public record StaffViewDto : INamedEntity
 
     public StaffUpdateDto AsUpdateDto() => new()
     {
-        Phone = Phone,
+        PhoneNumber = PhoneNumber,
         OfficeId = Office?.Id,
         Active = Active,
     };

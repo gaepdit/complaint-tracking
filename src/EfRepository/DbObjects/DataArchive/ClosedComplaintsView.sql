@@ -93,5 +93,5 @@ from Complaints c
     on c.ReceivedById = receivedBy.Id
     left join AspNetUsers reviewedBy
     on c.ReviewedById = reviewedBy.Id
-where c.IsDeleted = convert(bit, 0) -- Not deleted
-  and c.ComplaintClosed = convert(bit, 1); -- Closed
+where c.IsDeleted = convert(bit, 0) -- Complaint not deleted
+  and c.ComplaintClosed = convert(bit, 1); -- Complaint closed

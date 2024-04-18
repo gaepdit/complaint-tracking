@@ -7,7 +7,7 @@ public record StaffUpdateDto
 {
     [StringLength(ApplicationUser.MaxPhoneLength,
         ErrorMessage = "The Phone Number must not be longer than {1} characters.")]
-    public string? Phone { get; init; }
+    public string? PhoneNumber { get; init; }
 
     [Required]
     [Display(Name = "Office")]

@@ -50,7 +50,7 @@ public class StaffDtoTests
         {
             Id = Guid.NewGuid().ToString(),
             Active = true,
-            Phone = TextData.ValidPhoneNumber,
+            PhoneNumber = TextData.ValidPhoneNumber,
             Office = new OfficeViewDto(Guid.NewGuid(), TextData.ValidName, true),
         };
 
@@ -58,7 +58,7 @@ public class StaffDtoTests
 
         using var scope = new AssertionScope();
         result.Active.Should().BeTrue();
-        result.Phone.Should().Be(staffViewDto.Phone);
+        result.PhoneNumber.Should().Be(staffViewDto.PhoneNumber);
         result.OfficeId.Should().Be(staffViewDto.Office.Id);
     }
 }

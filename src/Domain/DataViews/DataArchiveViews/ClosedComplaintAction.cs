@@ -9,7 +9,7 @@ public class ClosedComplaintAction
     public DateOnly ActionDate { get; set; }
     public string ActionType { get; set; } = string.Empty;
     public string Comments { get; set; } = string.Empty;
-    public DateTimeOffset EnteredDate { get; set; }
+    public DateTimeOffset? EnteredDate { get; set; }
     public string? EnteredBy { get; set; }
     public string Investigator { get; set; } = string.Empty;
 }

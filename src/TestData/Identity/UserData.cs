@@ -13,7 +13,7 @@ internal static partial class UserData
             GivenName = "Admin",
             FamilyName = "User1",
             Email = "admin.user@example.net",
-            Phone = TextData.ValidPhoneNumber,
+            PhoneNumber = TextData.ValidPhoneNumber,
             Office = OfficeData.GetOffices.ElementAt(0),
             ObjectIdentifier = Guid.NewGuid().ToString(),
         },

@@ -31,7 +31,7 @@ public class ComplaintAction : AuditableSoftDeleteEntity
     [StringLength(10_000)]
     public string Comments { get; set; } = string.Empty;
 
-    public DateTimeOffset EnteredDate { get; init; } = DateTimeOffset.Now;
+    public DateTimeOffset? EnteredDate { get; init; } = DateTimeOffset.Now;
 
     public ApplicationUser? EnteredBy { get; init; }
 
