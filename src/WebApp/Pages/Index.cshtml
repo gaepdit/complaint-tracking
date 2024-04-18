@@ -1,4 +1,4 @@
-﻿@page "{handler?}"
+@page "{handler?}"
 @using Cts.AppServices.Complaints.QueryDto
 @using Cts.WebApp.Pages.Shared.DisplayTemplates
 @using Cts.WebApp.Platform.PageModelHelpers
@@ -214,83 +214,6 @@
         }
     </div>
 }
-
-<div class="card mt-4 border-info shadow">
-    <div class="card-header text-bg-info">
-        <h2 class="h5">Some helpful temporary development links</h2>
-    </div>
-    <div class="card-body">
-        <h3>Public pages</h3>
-        <ul>
-            <li>
-                <a asp-page="/Complaint" asp-route-id="1">Closed complaint</a>
-            </li>
-            <li>
-                <a asp-page="/Complaint" asp-route-id="2">Open complaint (404)</a>
-            </li>
-            <li>
-                <a asp-page="/Complaint" asp-route-id="3">Another closed complaint</a>
-            </li>
-            <li>
-                <a asp-page="/Complaint" asp-route-id="0">Non-existent complaint ID (404)</a>
-            </li>
-            <li>
-                <a asp-page="/Complaint" asp-route-id="5">Deleted complaint (404)</a>
-            </li>
-            <li>
-                <a href="api-docs/">API docs</a>
-            </li>
-        </ul>
-
-        <h3>Staff pages</h3>
-        <ul>
-            <li>
-                <a asp-page="/Staff/Complaints/Index">Complaint search</a>
-                <ul>
-                    <li>
-                        <a asp-page="/Staff/Complaints/Details" asp-route-id="1">Closed complaint</a>
-                    </li>
-                    <li>
-                        <a asp-page="/Staff/Complaints/Details" asp-route-id="2">Open complaint</a>
-                    </li>
-                    <li>
-                        <a asp-page="/Staff/Complaints/Details" asp-route-id="7">Open complaint: under investigation</a>
-                    </li>
-                    <li>
-                        <a asp-page="/Staff/Complaints/Details" asp-route-id="4">Open complaint: ready to accept</a>
-                    </li>
-                    <li>
-                        <a asp-page="/Staff/Complaints/Details" asp-route-id="3">Another closed complaint</a>
-                    </li>
-                    <li>
-                        <a asp-page="/Staff/Complaints/Details" asp-route-id="0">Non-existent complaint ID (404)</a>
-                    </li>
-                    <li>
-                        <a asp-page="/Staff/Complaints/Details" asp-route-id="5">Deleted complaint</a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a asp-page="/Staff/ComplaintActions/Index">Complaint Action search</a>
-            </li>
-            <li>
-                <a asp-page="/Staff/Complaints/Add">Add new complaint</a>
-            </li>
-            <li>
-                <a asp-page="/Account/Index">Account page</a>
-            </li>
-            <li>
-                <a asp-page="/Admin/Users/Index">All users</a>
-            </li>
-            <li>
-                <a asp-page="/Admin/Maintenance/Index">Site maintenance</a>
-            </li>
-            <li>
-                <a asp-page="/Admin/Reporting/Index">Reporting</a>
-            </li>
-        </ul>
-    </div>
-</div>
 
 @section Scripts {
     <script src="~/js/formSearch.js"></script>
