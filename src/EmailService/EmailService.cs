@@ -1,5 +1,6 @@
 ﻿using GaEpd.EmailService.Utilities;
 using MailKit.Net.Smtp;
+using MailKit.Security;
 using MimeKit;
 
 namespace GaEpd.EmailService;
@@ -52,8 +53,10 @@ public class EmailService : IEmailService
     private static async Task SendEmailMessageAsync(MimeMessage emailMessage, EmailServiceSettings settings,
         CancellationToken token)
     {
+        if (!Enum.TryParse(settings.SecureSocketOption, out SecureSocketOptions secureSocketOption))
+            secureSocketOption = SecureSocketOptions.Auto;
         using var client = new SmtpClient();
-        await client.ConnectAsync(settings.SmtpHost, settings.SmtpPort, cancellationToken: token)
+        await client.ConnectAsync(settings.SmtpHost, settings.SmtpPort, secureSocketOption, token)
             .ConfigureAwait(false);
         await client.SendAsync(emailMessage, token).ConfigureAwait(false);
         await client.DisconnectAsync(true, token).ConfigureAwait(false);
