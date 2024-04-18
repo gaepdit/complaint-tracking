@@ -35,9 +35,9 @@ UNION
 SELECT 'Complaint Actions',
        count(*),
        3
-FROM ComplaintActions ca
+FROM ComplaintActions a
          INNER JOIN Complaints c
-                    ON ca.ComplaintId = c.Id
-WHERE ca.IsDeleted = convert(bit, 0) -- Not deleted
-  AND c.IsDeleted = convert(bit, 0)  -- Not deleted
-  AND c.ComplaintClosed = convert(bit, 1); -- Closed
+                    ON a.ComplaintId = c.Id
+where a.IsDeleted = convert(bit, 0) -- Action not deleted
+  and c.IsDeleted = convert(bit, 0) -- Complaint not deleted
+  and c.ComplaintClosed = convert(bit, 1); -- Complaint closed

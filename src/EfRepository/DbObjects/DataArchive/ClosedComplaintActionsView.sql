@@ -45,6 +45,6 @@ from ComplaintActions a
     on a.ActionTypeId = actionType.Id
     left join AspNetUsers enteredBy
     on a.EnteredById = enteredBy.Id
-where a.IsDeleted = 0 -- Not deleted
-  and c.IsDeleted = 0 -- Not deleted
-  and c.ComplaintClosed = 1; -- Closed
+where a.IsDeleted = convert(bit, 0) -- Action not deleted
+  and c.IsDeleted = convert(bit, 0) -- Complaint not deleted
+  and c.ComplaintClosed = convert(bit, 1); -- Complaint closed
