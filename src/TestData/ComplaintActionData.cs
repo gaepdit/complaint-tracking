@@ -88,7 +88,7 @@ internal static class ComplaintActionData
             EnteredBy = UserData.GetUsers.ElementAt(0),
             Comments = TextData.Phrase,
         },
-        new(new Guid("30000000-0000-0000-0000-000000000003"), // 8
+        new(new Guid("30000000-0000-0000-0000-000000000009"), // 8
             ComplaintData.GetComplaints.ElementAt(0),
             ActionTypeData.GetActionTypes.ElementAt(5))
         {
