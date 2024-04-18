@@ -1,5 +1,6 @@
 ﻿using GaEpd.EmailService.Utilities;
 using MailKit.Net.Smtp;
+using MailKit.Security;
 using MimeKit;
 
 namespace GaEpd.EmailService;
@@ -36,12 +37,13 @@ public class EmailService : IEmailService
             emailMessage.To.AddRange(settings.AuditEmailRecipients
                 .Select(address => new MailboxAddress(string.Empty, address)));
 
+            const string auditText = "This is a copy of the original email for auditing purposes. Original recipient: ";
             var auditBuilder = new BodyBuilder
             {
-                TextBody = string.Concat($"Original recipient: {message.Recipients.ConcatWithSeparator(", ")}",
-                    Environment.NewLine, Environment.NewLine, message.TextBody),
-                HtmlBody = string.Concat($"<em>Original recipient: {message.Recipients.ConcatWithSeparator(", ")}</em>",
-                    "<br><br>", message.HtmlBody)
+                TextBody = string.Concat(auditText, message.Recipients.ConcatWithSeparator(", "), Environment.NewLine,
+                    Environment.NewLine, message.TextBody),
+                HtmlBody = string.Concat($"<em>{auditText}{message.Recipients.ConcatWithSeparator(", ")}</em><br><br>",
+                    message.HtmlBody)
             };
             emailMessage.Body = auditBuilder.ToMessageBody();
 
@@ -52,8 +54,10 @@ public class EmailService : IEmailService
     private static async Task SendEmailMessageAsync(MimeMessage emailMessage, EmailServiceSettings settings,
         CancellationToken token)
     {
+        if (!Enum.TryParse(settings.SecureSocketOption, out SecureSocketOptions secureSocketOption))
+            secureSocketOption = SecureSocketOptions.Auto;
         using var client = new SmtpClient();
-        await client.ConnectAsync(settings.SmtpHost, settings.SmtpPort, cancellationToken: token)
+        await client.ConnectAsync(settings.SmtpHost, settings.SmtpPort, secureSocketOption, token)
             .ConfigureAwait(false);
         await client.SendAsync(emailMessage, token).ConfigureAwait(false);
         await client.DisconnectAsync(true, token).ConfigureAwait(false);

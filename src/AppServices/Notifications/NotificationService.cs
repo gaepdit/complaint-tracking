@@ -54,7 +54,7 @@ public class NotificationService(
 
         if (settings.SaveEmail) await repository.InsertAsync(EmailLog.Create(message), token).ConfigureAwait(false);
 
-        if (!settings.EnableEmail)
+        if (settings is { EnableEmail: false, EnableEmailAuditing: false })
         {
             return NotificationResult.FailureResult($"{FailurePrefix} Emailing is not enabled on the server.");
         }
