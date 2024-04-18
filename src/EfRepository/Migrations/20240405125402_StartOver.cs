@@ -395,7 +395,7 @@ namespace Cts.EfRepository.Migrations
                     ActionDate = table.Column<DateOnly>(type: "date", nullable: false),
                     Investigator = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Comments = table.Column<string>(type: "nvarchar(max)", maxLength: 10000, nullable: false),
-                    EnteredDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    EnteredDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     EnteredById = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     CreatedById = table.Column<string>(type: "nvarchar(max)", nullable: true),

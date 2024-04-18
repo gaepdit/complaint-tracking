@@ -60,27 +60,30 @@
                         <label asp-for="Spec.EnteredFrom" class="form-label px-2 mb-0">Date Action Entered</label>
                         <div class="input-group">
                             <div class="form-floating">
-                                <input asp-for="Spec.EnteredFrom" name="@nameof(Model.Spec.EnteredFrom)" class="form-control" />
+                                <input asp-for="Spec.EnteredFrom" name="@nameof(Model.Spec.EnteredFrom)" class="form-control" aria-describedby="EnteredDateHelpBlock"/>
                                 <label asp-for="Spec.EnteredFrom" class="form-label"></label>
                             </div>
                             <div class="form-floating">
-                                <input asp-for="Spec.EnteredTo" name="@nameof(Model.Spec.EnteredTo)" class="form-control" />
+                                <input asp-for="Spec.EnteredTo" name="@nameof(Model.Spec.EnteredTo)" class="form-control" aria-describedby="EnteredDateHelpBlock"/>
                                 <label asp-for="Spec.EnteredTo" class="form-label"></label>
                             </div>
                         </div>
+                        <small id="EnteredDateHelpBlock" class="form-text text-body-secondary d-block px-2">
+                            Note: Some earlier Complaint Actions do not have an entry date and will be excluded when searching by date entered.
+                        </small>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md mb-3">
                         <div class="form-floating">
-                            <input asp-for="Spec.Investigator" name="@nameof(Model.Spec.Investigator)" class="form-control" />
+                            <input asp-for="Spec.Investigator" name="@nameof(Model.Spec.Investigator)" class="form-control"/>
                             <label asp-for="Spec.Investigator" class="form-label"></label>
                         </div>
                     </div>
                     <div class="col-md mb-3">
                         <div class="form-floating">
-                            <input asp-for="Spec.Comments" name="@nameof(Model.Spec.Comments)" class="form-control" />
+                            <input asp-for="Spec.Comments" name="@nameof(Model.Spec.Comments)" class="form-control"/>
                             <label asp-for="Spec.Comments" class="form-label"></label>
                         </div>
                     </div>
@@ -95,7 +98,7 @@
                         <label asp-for="Spec.Concern" class="form-label"></label>
                     </div>
                     <small id="ConcernHelpBlock" class="form-text text-body-secondary d-block px-2">
-                        Searches both primary and secondary areas of concern.
+                        Note: Searches both primary and secondary areas of concern.
                     </small>
                 </div>
 
@@ -122,7 +125,7 @@
             <div class="table-responsive-md">
                 <table class="table table-hover" aria-label="Facility search results">
                     <caption class="caption-top">
-                        <partial name="Shared/_PaginationNavAndCount" model="Model.PaginationNav" />
+                        <partial name="Shared/_PaginationNavAndCount" model="Model.PaginationNav"/>
                     </caption>
                     <thead>
                     <tr>
@@ -167,12 +170,12 @@
                                 @if (item.IsDeleted)
                                 {
                                     <strong class="text-nowrap">DELETED ACTION</strong>
-                                    <br />
+                                    <br/>
                                 }
                                 @if (item.ComplaintIsDeleted)
                                 {
                                     <strong class="text-nowrap">Deleted Complaint</strong>
-                                    <br />
+                                    <br/>
                                 }
                                 @Html.DisplayFor(_ => item.ActionTypeName, DisplayTemplate.StringOrPlaceholder)
                             </td>
@@ -180,7 +183,7 @@
                             <td>@Html.DisplayFor(_ => item.Investigator, DisplayTemplate.StringOrPlaceholder)</td>
                             <td>
                                 @Html.DisplayFor(_ => item.EnteredByName, DisplayTemplate.StringOrPlaceholder)
-                                <br />
+                                <br/>
                                 @Html.DisplayFor(_ => item.EnteredByOffice, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "" })
                             </td>
                             <td>@Html.DisplayFor(_ => item.Comments, DisplayTemplate.TruncateText)</td>
@@ -189,7 +192,7 @@
                     </tbody>
                 </table>
             </div>
-            <partial name="_PaginationNav" model="Model.PaginationNav" />
+            <partial name="_PaginationNav" model="Model.PaginationNav"/>
         }
     </div>
 }

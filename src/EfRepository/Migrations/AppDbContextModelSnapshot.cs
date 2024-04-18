@@ -153,7 +153,7 @@ namespace Cts.EfRepository.Migrations
                     b.Property<string>("EnteredBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTimeOffset>("EnteredDate")
+                    b.Property<DateTimeOffset?>("EnteredDate")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Investigator")
@@ -368,7 +368,7 @@ namespace Cts.EfRepository.Migrations
                     b.Property<string>("EnteredById")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTimeOffset>("EnteredDate")
+                    b.Property<DateTimeOffset?>("EnteredDate")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Investigator")

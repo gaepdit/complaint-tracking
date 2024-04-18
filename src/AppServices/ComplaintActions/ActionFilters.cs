@@ -64,13 +64,17 @@ internal static class ActionFilters
         this Expression<Func<ComplaintAction, bool>> predicate, DateOnly? input) =>
         input is null
             ? predicate
-            : predicate.And(action => action.EnteredDate.Date >= input.Value.ToDateTime(TimeOnly.MinValue));
+            : predicate.And(action =>
+                action.EnteredDate.HasValue &&
+                action.EnteredDate.Value.Date >= input.Value.ToDateTime(TimeOnly.MinValue));
 
     private static Expression<Func<ComplaintAction, bool>> EnteredToDate(
         this Expression<Func<ComplaintAction, bool>> predicate, DateOnly? input) =>
         input is null
             ? predicate
-            : predicate.And(action => action.EnteredDate.Date <= input.Value.ToDateTime(TimeOnly.MinValue));
+            : predicate.And(action =>
+                action.EnteredDate.HasValue &&
+                action.EnteredDate.Value.Date <= input.Value.ToDateTime(TimeOnly.MinValue));
 
     private static Expression<Func<ComplaintAction, bool>> ContainsInvestigator(
         this Expression<Func<ComplaintAction, bool>> predicate, string? input) =>
