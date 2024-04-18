@@ -31,12 +31,12 @@ public record EmailLog
     public static EmailLog Create(Message message) => new()
     {
         Id = Guid.NewGuid(),
-        Sender = message.Sender[..200],
-        Subject = message.Subject[..200],
-        Recipients = message.Recipients.ConcatWithSeparator(",")[..2000],
-        CopyRecipients = message.CopyRecipients.ConcatWithSeparator(",")[..2000],
-        TextBody = message.TextBody?[..15_000],
-        HtmlBody = message.HtmlBody?[..20_000],
+        Sender = message.Sender.Truncate(200),
+        Subject = message.Subject.Truncate(200),
+        Recipients = message.Recipients.ConcatWithSeparator(",").Truncate(2000),
+        CopyRecipients = message.CopyRecipients.ConcatWithSeparator(",").Truncate(2000),
+        TextBody = message.TextBody.Truncate(15_000),
+        HtmlBody = message.HtmlBody.Truncate(20_000),
         CreatedAt = DateTimeOffset.Now,
     };
 }
