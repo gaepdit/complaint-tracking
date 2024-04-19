@@ -1,4 +1,6 @@
-﻿using Cts.Domain.Identity;
+﻿using Cts.AppServices.Permissions.AppClaims;
+using Cts.Domain.Identity;
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 using System.Security.Principal;
 
@@ -9,8 +11,11 @@ public static class PrincipalExtensions
     public static string? GetUserIdValue(this ClaimsPrincipal principal) =>
         principal.FindFirstValue(ClaimTypes.NameIdentifier);
 
+    public static bool HasRealClaim(this ClaimsPrincipal principal, string type, [NotNullWhen(true)] string? value) =>
+        value is not null && principal.HasClaim(type, value);
+
     internal static bool IsActive(this ClaimsPrincipal principal) =>
-        principal.HasClaim(claim => claim.Type == nameof(Policies.ActiveUser) && claim.Value == true.ToString());
+        principal.HasClaim(AppClaimTypes.ActiveUser, true.ToString());
 
     private static bool IsInRoles(this IPrincipal principal, IEnumerable<string> roles) =>
         roles.Any(principal.IsInRole);

@@ -55,14 +55,13 @@ public class DetailsModel(
         var complaintView = await complaintService.FindAsync(id.Value, true);
         if (complaintView is null) return NotFound();
 
-        var currentUser = await staffService.GetCurrentUserAsync();
-        complaintView.CurrentUserOfficeId = currentUser.Office?.Id ?? Guid.Empty;
 
         await SetPermissionsAsync(complaintView);
         if (complaintView.IsDeleted && !UserCan[ComplaintOperation.ManageDeletions]) return NotFound();
 
         ComplaintView = complaintView;
-        NewAction = new ActionCreateDto(complaintView.Id) { Investigator = currentUser.Name };
+        var investigator = (await staffService.GetCurrentUserAsync()).Name;
+        NewAction = new ActionCreateDto(complaintView.Id) { Investigator = investigator };
         await PopulateSelectListsAsync();
         return Page();
     }
@@ -92,8 +91,6 @@ public class DetailsModel(
         var complaintView = await complaintService.FindAsync(id.Value, includeDeletedActions: true, token);
         if (complaintView is null || complaintView.IsDeleted) return BadRequest();
 
-        complaintView.CurrentUserOfficeId = (await staffService.GetCurrentUserAsync()).Office?.Id ?? Guid.Empty;
-
         await SetPermissionsAsync(complaintView);
         if (!UserCan[ComplaintOperation.EditActions]) return BadRequest();
 
@@ -119,9 +116,6 @@ public class DetailsModel(
         var complaintView = await complaintService.FindAsync(id.Value, includeDeletedActions: true, token);
         if (complaintView is null || complaintView.IsDeleted) return BadRequest();
 
-        var currentUser = await staffService.GetCurrentUserAsync();
-        complaintView.CurrentUserOfficeId = currentUser.Office?.Id ?? Guid.Empty;
-
         await SetPermissionsAsync(complaintView);
         if (!UserCan[ComplaintOperation.EditAttachments]) return BadRequest();
 
@@ -129,7 +123,8 @@ public class DetailsModel(
         {
             ValidatingSection = nameof(OnPostUploadFilesAsync);
             ComplaintView = complaintView;
-            NewAction = new ActionCreateDto(complaintView.Id) { Investigator = currentUser.Name };
+            var investigator = (await staffService.GetCurrentUserAsync()).Name;
+            NewAction = new ActionCreateDto(complaintView.Id) { Investigator = investigator };
             await PopulateSelectListsAsync();
             return Page();
         }

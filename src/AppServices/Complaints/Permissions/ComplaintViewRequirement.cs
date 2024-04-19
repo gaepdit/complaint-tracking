@@ -1,4 +1,5 @@
 using Cts.AppServices.Complaints.QueryDto;
+using Cts.AppServices.Permissions.AppClaims;
 using Cts.AppServices.Permissions.Helpers;
 using Cts.Domain;
 using Cts.Domain.Entities.Complaints;
@@ -7,19 +8,22 @@ using System.Security.Claims;
 
 namespace Cts.AppServices.Complaints.Permissions;
 
-internal class ComplaintViewRequirement : AuthorizationHandler<ComplaintOperation, ComplaintViewDto>
+internal class ComplaintViewRequirement :
+    AuthorizationHandler<ComplaintOperation, ComplaintViewDto>
 {
     private ClaimsPrincipal _user = default!;
     private ComplaintViewDto _resource = default!;
 
-    protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, ComplaintOperation requirement,
+    protected override Task HandleRequirementAsync(
+        AuthorizationHandlerContext context,
+        ComplaintOperation requirement,
         ComplaintViewDto resource)
     {
+        if (context.User.Identity is not { IsAuthenticated: true })
+            return Task.FromResult(0);
+
         _user = context.User;
         _resource = resource;
-
-        if (!(_user.Identity?.IsAuthenticated ?? false))
-            return Task.FromResult(0);
 
         var success = requirement.Name switch
         {
@@ -41,7 +45,6 @@ internal class ComplaintViewRequirement : AuthorizationHandler<ComplaintOperatio
         if (success) context.Succeed(requirement);
         return Task.FromResult(0);
     }
-
 
     // Permissions methods
     private bool UserCanAssign() => IsUnencumbered() && IsNotAssigned() && IsCurrentOwnerOrManagerOrAssignor();
@@ -75,7 +78,8 @@ internal class ComplaintViewRequirement : AuthorizationHandler<ComplaintOperatio
     private bool IsAssignorForOffice() => _resource.CurrentOffice?.Assignor?.Id == _user.GetUserIdValue();
 
     private bool IsCurrentManager() =>
-        _user.IsManager() && _resource.CurrentOffice?.Id == _resource.CurrentUserOfficeId ||
+        _user.IsManager() &&
+        _user.HasRealClaim(AppClaimTypes.OfficeId, _resource.CurrentOffice?.Id.ToString()) ||
         _user.IsDivisionManager();
 
     private bool IsCurrentOwner() => _user.IsStaff() && _resource.CurrentOwner?.Id == _user.GetUserIdValue();

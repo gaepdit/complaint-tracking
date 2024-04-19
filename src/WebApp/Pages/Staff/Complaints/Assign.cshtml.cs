@@ -77,8 +77,8 @@ public class AssignModel(
 
     private Task<bool> UserCanAssignAsync(ComplaintViewDto complaintView) =>
         complaintView.CurrentOwner is null
-            ? authorization.Succeeded(User, complaintView, ComplaintOperation.Assign)
-            : authorization.Succeeded(User, complaintView, ComplaintOperation.Reassign);
+            ? authorization.Succeeded(User, complaintView, requirement: ComplaintOperation.Assign)
+            : authorization.Succeeded(User, complaintView, requirement: ComplaintOperation.Reassign);
 
     private async Task PopulateSelectListsAsync(Guid? officeId)
     {

@@ -1,5 +1,7 @@
 ﻿using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Permissions;
+using Cts.AppServices.Permissions.AppClaims;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics.CodeAnalysis;
@@ -27,5 +29,8 @@ public static class AuthorizationPolicies
         // var canAssign = await authorization.Succeeded(User, complaintView, ComplaintOperation.Assign);
 
         services.AddSingleton<IAuthorizationHandler, ComplaintViewRequirement>();
+
+        // Add claims transformations
+        services.AddScoped<IClaimsTransformation, AppClaimsTransformation>();
     }
 }
