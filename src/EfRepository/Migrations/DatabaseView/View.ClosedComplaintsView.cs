@@ -70,7 +70,7 @@ public static partial class View
                                           as [EnteredBy],
                primaryConcern.Name        as [PrimaryConcern],
                secondaryConcern.Name      as [SecondaryConcern],
-               IIF(c.ReceivedById is null, null, concat_ws(', ', receivedBy.FamilyName, receivedBy.GivenName))
+               IIF(c.ReceivedById is null, '', concat_ws(', ', receivedBy.FamilyName, receivedBy.GivenName))
                                           as [ReceivedBy],
                IIF(c.ReviewedById is null, null, concat_ws(', ', reviewedBy.FamilyName, reviewedBy.GivenName))
                                           as [ReviewedBy],

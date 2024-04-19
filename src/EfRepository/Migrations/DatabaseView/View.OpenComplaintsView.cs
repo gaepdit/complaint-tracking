@@ -61,7 +61,7 @@ public static partial class View
                primaryConcern.Name        as [PrimaryConcern],
                secondaryConcern.Name      as [SecondaryConcern],
                c.ReceivedDate             as [ReceivedDate],
-               IIF(c.ReceivedById is null, null, concat_ws(', ', receivedBy.FamilyName, receivedBy.GivenName))
+               IIF(c.ReceivedById is null, '', concat_ws(', ', receivedBy.FamilyName, receivedBy.GivenName))
                                           as [ReceivedBy]
         from Complaints c
             left join Concerns primaryConcern
