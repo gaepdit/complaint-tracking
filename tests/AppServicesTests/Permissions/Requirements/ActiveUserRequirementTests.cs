@@ -1,4 +1,4 @@
-﻿using Cts.AppServices.Permissions;
+﻿using Cts.AppServices.Permissions.AppClaims;
 using Cts.AppServices.Permissions.Requirements;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
@@ -12,7 +12,7 @@ public class ActiveUserRequirementTests
     {
         var handler = new ActiveUserRequirement();
         var user = new ClaimsPrincipal(new ClaimsIdentity(
-            new Claim[] { new(nameof(Policies.ActiveUser), true.ToString()) }));
+            new Claim[] { new(AppClaimTypes.ActiveUser, true.ToString()) }));
         var context = new AuthorizationHandlerContext([handler], user, null);
 
         await handler.HandleAsync(context);

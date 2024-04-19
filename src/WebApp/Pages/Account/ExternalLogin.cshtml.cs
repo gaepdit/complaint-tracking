@@ -139,7 +139,8 @@ public class ExternalLoginModel(
         var user = new ApplicationUser
         {
             UserName = info.Principal.FindFirstValue(ClaimConstants.PreferredUserName),
-            Email = info.Principal.FindFirstValue(ClaimTypes.Email),
+            Email = info.Principal.FindFirstValue(ClaimTypes.Email) ??
+                    info.Principal.FindFirstValue(ClaimConstants.PreferredUserName),
             GivenName = info.Principal.FindFirstValue(ClaimTypes.GivenName) ?? "",
             FamilyName = info.Principal.FindFirstValue(ClaimTypes.Surname) ?? "",
             ObjectIdentifier = info.Principal.FindFirstValue(ClaimConstants.ObjectId),
@@ -182,9 +183,10 @@ public class ExternalLoginModel(
     {
         logger.LogInformation("Existing user {UserName} logged in with {LoginProvider} provider",
             user.UserName, info.LoginProvider);
-        user.Email = info.Principal.FindFirstValue(ClaimTypes.Email);
-        user.GivenName = info.Principal.FindFirstValue(ClaimTypes.GivenName) ?? "";
-        user.FamilyName = info.Principal.FindFirstValue(ClaimTypes.Surname) ?? "";
+        user.Email = info.Principal.FindFirstValue(ClaimTypes.Email) ??
+                     info.Principal.FindFirstValue(ClaimConstants.PreferredUserName);
+        user.GivenName = info.Principal.FindFirstValue(ClaimTypes.GivenName) ?? user.GivenName;
+        user.FamilyName = info.Principal.FindFirstValue(ClaimTypes.Surname) ?? user.FamilyName;
         await userManager.UpdateAsync(user);
         await signInManager.RefreshSignInAsync(user);
         return LocalRedirectOrHome();

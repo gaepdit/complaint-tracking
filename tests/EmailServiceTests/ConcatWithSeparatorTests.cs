@@ -5,27 +5,31 @@ namespace EmailServiceTests;
 [TestFixture]
 public class ConcatWithSeparatorTests
 {
+    private static readonly string[] Items = ["a", "b"];
+    private static readonly string[] ItemsWithEmptyValues = ["a", "", "b", ""];
+    private static readonly string?[] ItemsWithNullValues = ["a", null, "b", null];
+
     [Test]
     public void ConcatWithSeparator_WithDefaultSeparator()
     {
-        new[] { "a", "b" }.ConcatWithSeparator().Should().Be("a b");
+        Items.ConcatWithSeparator().Should().Be("a b");
     }
 
     [Test]
     public void ConcatWithSeparator_WithCustomSeparator()
     {
-        new[] { "a", "b" }.ConcatWithSeparator("X").Should().Be("aXb");
-    }
-
-    [Test]
-    public void ConcatWithSeparator_WithNullValues()
-    {
-        new[] { "a", null, "b", null }.ConcatWithSeparator().Should().Be("a b");
+        Items.ConcatWithSeparator("X").Should().Be("aXb");
     }
 
     [Test]
     public void ConcatWithSeparator_WithEmptyStrings()
     {
-        new[] { "a", "", "b", "" }.ConcatWithSeparator().Should().Be("a b");
+        ItemsWithEmptyValues.ConcatWithSeparator().Should().Be("a b");
+    }
+
+    [Test]
+    public void ConcatWithSeparator_WithNullValues()
+    {
+        ItemsWithNullValues.ConcatWithSeparator().Should().Be("a b");
     }
 }

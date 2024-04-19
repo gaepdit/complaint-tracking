@@ -37,10 +37,8 @@ public class AutoMapperProfile : Profile
             .ForMember(dto => dto.ReceivedDate, expression =>
                 expression.MapFrom(complaint => DateOnly.FromDateTime(complaint.ReceivedDate.Date)))
             .ForMember(dto => dto.ReceivedTime, expression =>
-                expression.MapFrom(complaint => TimeOnly.FromTimeSpan(complaint.ReceivedDate.TimeOfDay)))
-            .ForMember(dto => dto.CurrentUserOfficeId, expression => expression.Ignore());
-        CreateMap<Complaint, ComplaintViewDto>()
-            .ForMember(dto => dto.CurrentUserOfficeId, expression => expression.Ignore());
+                expression.MapFrom(complaint => TimeOnly.FromTimeSpan(complaint.ReceivedDate.TimeOfDay)));
+        CreateMap<Complaint, ComplaintViewDto>();
 
         CreateMap<ComplaintAction, ActionPublicViewDto>();
         CreateMap<ComplaintAction, ActionSearchResultDto>();

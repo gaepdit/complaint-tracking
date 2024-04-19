@@ -56,7 +56,6 @@ public class ComplaintUpdateMapping
         result.IsDeleted.Should().BeTrue();
         result.CurrentOwnerId.Should().Be(expectedCurrentOwnerId);
         result.CurrentOfficeId.Should().Be(expectedCurrentOfficeId);
-        result.CurrentUserOfficeId.Should().Be(Guid.Empty);
         result.EnteredById.Should().Be(expectedEnteredById);
         result.EnteredDate.Should().Be(expectedEnteredDate);
         result.CurrentOwnerAcceptedDate.Should().Be(expectedCurrentOwnerAcceptedDate);

@@ -1,11 +1,12 @@
 ﻿using Cts.AppServices.Complaints.CommandDto;
+using Cts.AppServices.Permissions.AppClaims;
 using Cts.AppServices.Permissions.Helpers;
 using Cts.Domain;
 using Cts.Domain.Entities.Complaints;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 
-namespace Cts.AppServices.Permissions.Requirements;
+namespace Cts.AppServices.Complaints.Permissions;
 
 public class ComplaintUpdateRequirement :
     AuthorizationHandler<ComplaintUpdateRequirement, ComplaintUpdateDto>, IAuthorizationRequirement
@@ -39,7 +40,8 @@ public class ComplaintUpdateRequirement :
     private bool IsCurrentOwner() => _resource.CurrentOwnerId == _user.GetUserIdValue();
 
     private bool IsCurrentManager() =>
-        _user.IsManager() && _resource.CurrentOfficeId == _resource.CurrentUserOfficeId ||
+        _user.IsManager() &&
+        _user.HasRealClaim(AppClaimTypes.OfficeId, _resource.CurrentOfficeId?.ToString()) ||
         _user.IsDivisionManager();
 
     private bool IsRecentReporter() =>

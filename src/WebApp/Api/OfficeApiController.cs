@@ -2,7 +2,6 @@ using Cts.AppServices.Offices;
 using Cts.AppServices.Permissions;
 using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.Permissions.Requirements;
-using Cts.AppServices.UserServices;
 
 namespace Cts.WebApp.Api;
 
@@ -11,7 +10,6 @@ namespace Cts.WebApp.Api;
 [Produces("application/json")]
 public class OfficeApiController(
     IOfficeService officeService,
-    IUserService userService,
     IAuthorizationService authorization) : Controller
 {
     [HttpGet]
@@ -40,9 +38,9 @@ public class OfficeApiController(
     {
         if (!await authorization.Succeeded(User, Policies.ActiveUser)) return Unauthorized();
 
-        var resource = new OfficeAndUser(await officeService.FindAsync(id), await userService.GetCurrentUserAsync());
+        var office = await officeService.FindAsync(id);
 
-        return await authorization.Succeeded(User, resource, new OfficeAssignmentRequirement())
+        return await authorization.Succeeded(User, office, new OfficeAssignmentRequirement())
             ? Json(await officeService.GetStaffAsListItemsAsync(id))
             : Json(null);
     }

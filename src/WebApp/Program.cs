@@ -1,15 +1,14 @@
-using System.Reflection;
 using Cts.AppServices.ErrorLogging;
 using Cts.AppServices.RegisterServices;
 using Cts.WebApp.Platform.AppConfiguration;
 using Cts.WebApp.Platform.ErrorLogging;
 using Cts.WebApp.Platform.Settings;
 using GaEpd.FileService;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.OpenApi.Models;
 using Mindscape.Raygun4Net;
 using Mindscape.Raygun4Net.AspNetCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +25,6 @@ builder.Services.AddIdentityStores();
 
 // Configure Authentication.
 builder.Services.AddAuthenticationServices(builder.Configuration);
-builder.Services.AddTransient<IClaimsTransformation, AddActiveUserClaimToPrincipal>();
 
 // Persist data protection keys.
 var keysFolder = Path.Combine(builder.Configuration["PersistedFilesBasePath"] ?? "", "DataProtectionKeys");

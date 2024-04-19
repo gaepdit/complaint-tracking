@@ -10,11 +10,6 @@ namespace Cts.AppServices.Complaints.QueryDto;
 
 public record ComplaintViewDto
 {
-    // Authorization handler assist properties
-    public Guid CurrentUserOfficeId { get; set; }
-
-    // Properties
-
     public int Id { get; init; }
 
     // Properties: Status & meta-data

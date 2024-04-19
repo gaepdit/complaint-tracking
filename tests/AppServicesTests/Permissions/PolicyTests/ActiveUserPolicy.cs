@@ -1,4 +1,5 @@
 ﻿using Cts.AppServices.Permissions;
+using Cts.AppServices.Permissions.AppClaims;
 using Cts.AppServices.Permissions.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,7 +20,7 @@ public class ActiveUserPolicy
     public async Task WhenActiveAndAuthenticated_Succeeds()
     {
         var user = new ClaimsPrincipal(new ClaimsIdentity(
-            new Claim[] { new(nameof(Policies.ActiveUser), true.ToString()), },
+            new Claim[] { new(AppClaimTypes.ActiveUser, true.ToString()), },
             "Basic"));
         var result = await _authorization.Succeeded(user, Policies.ActiveUser);
         result.Should().BeTrue();
@@ -37,7 +38,7 @@ public class ActiveUserPolicy
     public async Task WhenNotAuthenticated_DoesNotSucceed()
     {
         var user = new ClaimsPrincipal(new ClaimsIdentity(
-            new Claim[] { new(nameof(Policies.ActiveUser), true.ToString()), }));
+            new Claim[] { new(AppClaimTypes.ActiveUser, true.ToString()), }));
         var result = await _authorization.Succeeded(user, Policies.ActiveUser);
         result.Should().BeFalse();
     }

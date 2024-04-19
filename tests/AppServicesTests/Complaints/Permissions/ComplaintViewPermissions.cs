@@ -20,7 +20,7 @@ public class ComplaintViewPermissions
             "Basic"));
         var resource = new ComplaintViewDto();
         var context = new AuthorizationHandlerContext(requirements, user, resource);
-        var handler = new ComplaintViewPermissionsHandler();
+        var handler = new ComplaintViewRequirement();
 
         await handler.HandleAsync(context);
 
@@ -36,7 +36,7 @@ public class ComplaintViewPermissions
             new Claim[] { new(ClaimTypes.Role, RoleName.DivisionManager) }));
         var resource = new ComplaintViewDto();
         var context = new AuthorizationHandlerContext(requirements, user, resource);
-        var handler = new ComplaintViewPermissionsHandler();
+        var handler = new ComplaintViewRequirement();
 
         await handler.HandleAsync(context);
 
@@ -50,7 +50,7 @@ public class ComplaintViewPermissions
         var user = new ClaimsPrincipal(new ClaimsIdentity("Basic"));
         var resource = new ComplaintViewDto();
         var context = new AuthorizationHandlerContext(requirements, user, resource);
-        var handler = new ComplaintViewPermissionsHandler();
+        var handler = new ComplaintViewRequirement();
 
         await handler.HandleAsync(context);
 
@@ -75,7 +75,7 @@ public class ComplaintViewPermissions
             EnteredBy = new StaffViewDto { Id = Guid.Empty.ToString() },
         };
         var context = new AuthorizationHandlerContext(requirements, user, resource);
-        var handler = new ComplaintViewPermissionsHandler();
+        var handler = new ComplaintViewRequirement();
 
         await handler.HandleAsync(context);
 
@@ -99,7 +99,7 @@ public class ComplaintViewPermissions
             EnteredBy = new StaffViewDto { Id = Guid.Empty.ToString() },
         };
         var context = new AuthorizationHandlerContext(requirements, user, resource);
-        var handler = new ComplaintViewPermissionsHandler();
+        var handler = new ComplaintViewRequirement();
 
         await handler.HandleAsync(context);
 

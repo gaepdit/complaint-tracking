@@ -11,7 +11,6 @@ public record ComplaintUpdateDto : IComplaintCommandDto
     public bool IsDeleted { get; init; }
     public string? CurrentOwnerId { get; init; }
     public Guid? CurrentOfficeId { get; init; }
-    public Guid CurrentUserOfficeId { get; set; }
     public string? EnteredById { get; init; }
     public DateTimeOffset EnteredDate { get; init; }
     public DateTimeOffset? CurrentOwnerAcceptedDate { get; init; }

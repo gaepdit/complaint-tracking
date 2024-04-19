@@ -1,4 +1,5 @@
 ﻿using Cts.AppServices.Permissions;
+using Cts.AppServices.Permissions.AppClaims;
 using Cts.AppServices.Permissions.Helpers;
 using Cts.Domain.Identity;
 using Microsoft.AspNetCore.Authorization;
@@ -21,7 +22,7 @@ public class RoleBasedPolicy
         var user = new ClaimsPrincipal(new ClaimsIdentity(
             new Claim[]
             {
-                new(nameof(Policies.ActiveUser), true.ToString()),
+                new(AppClaimTypes.ActiveUser, true.ToString()),
                 new(ClaimTypes.Role, RoleName.SiteMaintenance),
             }, "Basic"));
         var result = await _authorization.Succeeded(user, Policies.SiteMaintainer);
@@ -46,7 +47,7 @@ public class RoleBasedPolicy
         var user = new ClaimsPrincipal(new ClaimsIdentity(
             new Claim[]
             {
-                new(nameof(Policies.ActiveUser), true.ToString()),
+                new(AppClaimTypes.ActiveUser, true.ToString()),
             }, "Basic"));
         var result = await _authorization.Succeeded(user, Policies.SiteMaintainer);
         result.Should().BeFalse();
@@ -58,7 +59,7 @@ public class RoleBasedPolicy
         var user = new ClaimsPrincipal(new ClaimsIdentity(
             new Claim[]
             {
-                new(nameof(Policies.ActiveUser), true.ToString()),
+                new(AppClaimTypes.ActiveUser, true.ToString()),
                 new(ClaimTypes.Role, RoleName.SiteMaintenance),
             }));
         var result = await _authorization.Succeeded(user, Policies.SiteMaintainer);
