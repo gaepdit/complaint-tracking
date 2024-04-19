@@ -7,7 +7,7 @@ using System.Security.Claims;
 
 namespace Cts.AppServices.Complaints.Permissions;
 
-internal class ComplaintViewPermissionsHandler : AuthorizationHandler<ComplaintOperation, ComplaintViewDto>
+internal class ComplaintViewRequirement : AuthorizationHandler<ComplaintOperation, ComplaintViewDto>
 {
     private ClaimsPrincipal _user = default!;
     private ComplaintViewDto _resource = default!;

@@ -5,7 +5,7 @@ using Cts.Domain.Entities.Complaints;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 
-namespace Cts.AppServices.Permissions.Requirements;
+namespace Cts.AppServices.Complaints.Permissions;
 
 public class ComplaintUpdateRequirement :
     AuthorizationHandler<ComplaintUpdateRequirement, ComplaintUpdateDto>, IAuthorizationRequirement
