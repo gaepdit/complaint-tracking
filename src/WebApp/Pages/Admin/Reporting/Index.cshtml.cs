@@ -90,7 +90,7 @@ public class ReportingIndexModel(
     public async Task OnGetComplaintsByStaffAsync(Guid? office, DateOnly? from, DateOnly? to,
         CancellationToken token)
     {
-        CurrentReport = ComplaintsReceived;
+        CurrentReport = ComplaintsByStaff;
         ShowDateRange = true;
         ShowOfficeSelect = true;
         ShowStaffReport = true;
@@ -200,7 +200,7 @@ public class ReportingIndexModel(
     // Reports metadata
     public const string Menu = nameof(Menu);
     public const string ComplaintsAssignedToInactiveUsers = nameof(ComplaintsAssignedToInactiveUsers);
-    public const string ComplaintsReceived = nameof(ComplaintsReceived);
+    public const string ComplaintsByStaff = nameof(ComplaintsByStaff);
     public const string DaysSinceMostRecentAction = nameof(DaysSinceMostRecentAction);
     public const string DaysToClosureByOffice = nameof(DaysToClosureByOffice);
     public const string DaysToClosureByStaff = nameof(DaysToClosureByStaff);
@@ -209,7 +209,7 @@ public class ReportingIndexModel(
     public Dictionary<string, string> ReportTitle { get; } = new()
     {
         { ComplaintsAssignedToInactiveUsers, "Open Complaints Assigned To Inactive Users" },
-        { ComplaintsReceived, "Complaints Received" },
+        { ComplaintsByStaff, "All Complaints By Staff" },
         { DaysSinceMostRecentAction, "Days Since Most Recent Action" },
         { DaysToClosureByOffice, "Days To Closure By Office" },
         { DaysToClosureByStaff, "Days To Closure By Staff" },
