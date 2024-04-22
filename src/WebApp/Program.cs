@@ -40,7 +40,10 @@ builder.Services.AddRazorPages();
 // For more info on updating HSTS max age value for production, see:
 // https://gaepdit.github.io/web-apps/use-https.html#how-to-enable-hsts
 if (!builder.Environment.IsDevelopment())
-    builder.Services.AddHsts(opts => opts.MaxAge = TimeSpan.FromMinutes(300));
+{
+    builder.Services.AddHsts(options => options.MaxAge = TimeSpan.FromMinutes(300))
+        .AddHttpsRedirection(options => options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect);
+}
 
 // Configure application monitoring.
 builder.Services.AddTransient<IErrorLogger, ErrorLogger>();
