@@ -4,6 +4,7 @@ using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
 using Cts.TestData.Constants;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AppServicesTests.Offices;
 
@@ -12,6 +13,7 @@ public class FindForUpdate
     [Test]
     public async Task WhenItemExists_ReturnsViewDto()
     {
+        // Arrange
         var user = new ApplicationUser
         {
             Id = Guid.NewGuid().ToString(),
@@ -23,29 +25,31 @@ public class FindForUpdate
 
         var repoMock = Substitute.For<IOfficeRepository>();
         repoMock.FindIncludeAssignorAsync(office.Id, Arg.Any<CancellationToken>()).Returns(office);
-        var managerMock = Substitute.For<IOfficeManager>();
-        var userServiceMock = Substitute.For<IUserService>();
-        var appService = new OfficeService(repoMock, managerMock,
-            AppServicesTestsSetup.Mapper!, userServiceMock);
 
+        var appService = new OfficeService(repoMock, Substitute.For<IOfficeManager>(), AppServicesTestsSetup.Mapper!,
+            Substitute.For<IUserService>(), Substitute.For<IAuthorizationService>());
+
+        // Act
         var result = await appService.FindForUpdateAsync(Guid.Empty);
 
+        // Assert
         result.Should().BeEquivalentTo(office);
     }
 
     [Test]
     public async Task WhenDoesNotExist_ReturnsNull()
     {
+        // Arrange
         var repoMock = Substitute.For<IOfficeRepository>();
         repoMock.FindAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>()).Returns((Office?)null);
-        var managerMock = Substitute.For<IOfficeManager>();
-        var mapperMock = Substitute.For<IMapper>();
-        var userServiceMock = Substitute.For<IUserService>();
-        var appService = new OfficeService(repoMock, managerMock,
-            mapperMock, userServiceMock);
 
+        var appService = new OfficeService(repoMock, Substitute.For<IOfficeManager>(), Substitute.For<IMapper>(),
+            Substitute.For<IUserService>(), Substitute.For<IAuthorizationService>());
+
+        // Act
         var result = await appService.FindForUpdateAsync(Guid.Empty);
 
+        // Assert
         result.Should().BeNull();
     }
 }

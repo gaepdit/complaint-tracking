@@ -2,6 +2,7 @@ using AutoMapper;
 using Cts.AppServices.Attachments;
 using Cts.AppServices.Attachments.ValidationAttributes;
 using Cts.AppServices.Complaints.CommandDto;
+using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Complaints.QueryDto;
 using Cts.AppServices.Notifications;
 using Cts.AppServices.Permissions;
@@ -56,7 +57,14 @@ public sealed class ComplaintService(
     {
         var complaint = await complaintRepository.FindIncludeAllAsync(id, includeDeletedActions, token)
             .ConfigureAwait(false);
-        return complaint is null ? null : mapper.Map<ComplaintViewDto>(complaint);
+        if (complaint is null) return null;
+
+        var principal = userService.GetCurrentPrincipal();
+        var auth = await authorization.Succeeded(principal!, complaint, ComplaintOperation.ViewDeletedActions)
+            .ConfigureAwait(false);
+        if (!auth) complaint.Actions.RemoveAll(action => action.IsDeleted);
+
+        return mapper.Map<ComplaintViewDto>(complaint);
     }
 
     public async Task<ComplaintUpdateDto?> FindForUpdateAsync(int id, CancellationToken token = default) =>

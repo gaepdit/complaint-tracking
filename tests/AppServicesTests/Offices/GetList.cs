@@ -3,6 +3,7 @@ using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
 using Cts.TestData.Constants;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AppServicesTests.Offices;
 
@@ -11,6 +12,7 @@ public class GetList
     [Test]
     public async Task WhenItemsExist_ReturnsViewDtoList()
     {
+        // Arrange
         var office = new Office(Guid.Empty, TextData.ValidName);
         var user = new ApplicationUser
         {
@@ -24,28 +26,31 @@ public class GetList
 
         var repoMock = Substitute.For<IOfficeRepository>();
         repoMock.GetListIncludeAssignorAsync(Arg.Any<CancellationToken>()).Returns(itemList);
-        var managerMock = Substitute.For<IOfficeManager>();
-        var userServiceMock = Substitute.For<IUserService>();
-        var appService = new OfficeService(repoMock, managerMock,
-            AppServicesTestsSetup.Mapper!, userServiceMock);
 
+        var appService = new OfficeService(repoMock, Substitute.For<IOfficeManager>(), AppServicesTestsSetup.Mapper!,
+            Substitute.For<IUserService>(), Substitute.For<IAuthorizationService>());
+
+        // Act
         var result = await appService.GetListIncludeAssignorAsync();
 
+        // Assert
         result.Should().BeEquivalentTo(itemList);
     }
 
     [Test]
     public async Task WhenNoItemsExist_ReturnsEmptyList()
     {
+        // Arrange
         var repoMock = Substitute.For<IOfficeRepository>();
         repoMock.GetListAsync(Arg.Any<CancellationToken>()).Returns(new List<Office>());
-        var managerMock = Substitute.For<IOfficeManager>();
-        var userServiceMock = Substitute.For<IUserService>();
-        var appService = new OfficeService(repoMock, managerMock,
-            AppServicesTestsSetup.Mapper!, userServiceMock);
 
+        var appService = new OfficeService(repoMock, Substitute.For<IOfficeManager>(), AppServicesTestsSetup.Mapper!,
+            Substitute.For<IUserService>(), Substitute.For<IAuthorizationService>());
+
+        // Act
         var result = await appService.GetListAsync();
 
+        // Assert
         result.Should().BeEmpty();
     }
 }
