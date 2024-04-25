@@ -55,7 +55,6 @@ public class DetailsModel(
         var complaintView = await complaintService.FindAsync(id.Value, true);
         if (complaintView is null) return NotFound();
 
-
         await SetPermissionsAsync(complaintView);
         if (complaintView.IsDeleted && !UserCan[ComplaintOperation.ManageDeletions]) return NotFound();
 

@@ -32,7 +32,7 @@
                                 <select asp-for="Spec.DeletedStatus" name="@nameof(Model.Spec.DeletedStatus)"
                                         asp-items="Html.GetEnumSelectList<SearchDeleteStatus>()" class="form-select"
                                         aria-describedby="DeletedStatusHelpBlock">
-                                    <option value="">Not Deleted</option>
+                                    <option value="">@SelectOptions.SelectNotDeleted</option>
                                 </select>
                                 <label asp-for="Spec.DeletedStatus" class="form-label"></label>
                             </div>

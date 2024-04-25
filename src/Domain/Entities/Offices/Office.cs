@@ -1,4 +1,4 @@
-﻿using Cts.Domain.Identity;
+using Cts.Domain.Identity;
 
 namespace Cts.Domain.Entities.Offices;
 
@@ -6,6 +6,7 @@ public class Office : StandardNamedEntity
 {
     public override int MinNameLength => AppConstants.MinimumNameLength;
     public override int MaxNameLength => AppConstants.MaximumNameLength;
+
     public Office() { }
     internal Office(Guid id, string name) : base(id, name) { }
 
