@@ -2,11 +2,16 @@
 
 namespace Cts.AppServices.Complaints.QueryDto;
 
-public record ComplaintPublicSearchDto
+public record ComplaintPublicSearchDto : IBasicSearchDisplay
 {
     // Sorting
 
     public SortBy Sort { get; init; } = SortBy.IdDesc;
+
+    // Status
+
+    [Display(Name = "Complaint Status")]
+    public SearchComplaintStatus? Status { get; init; }
 
     // Dates
 

@@ -2,7 +2,7 @@
 
 namespace Cts.AppServices.Complaints.QueryDto;
 
-public record ComplaintSearchDto
+public record ComplaintSearchDto : IBasicSearchDisplay
 {
     // Sorting
 

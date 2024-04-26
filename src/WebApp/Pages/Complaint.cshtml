@@ -31,6 +31,21 @@
     <small class="text-body-secondary">Report generated @(DateTime.Now.ToString(DateTimeFormatConstants.LongDateTimeFormat)).</small>
 </p>
 
+@if (!Model.Item.ComplaintClosed)
+{
+    <div class="callout callout-warning d-flex align-items-center">
+        <svg class="bi me-3" role="img" aria-label="Danger:">
+            <use href="@Url.Content("~/images/app-icons.svg")#app-icon-exclamation-triangle-fill"></use>
+        </svg>
+        <p>
+            This Complaint is still under investigation, and only limited information is publicly available.
+            Once the investigation is complete, all public information will be made available on this page.
+        </p>
+    </div>
+}
+
+<h2>Status: <em class="text-info-emphasis">@Model.Item.Status.GetDisplayName()</em></h2>
+
 <div class="container">
     <dl class="row">
         <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ReceivedDate)</dt>
@@ -40,16 +55,17 @@
     </dl>
 </div>
 
-<h2>Status: <em class="text-info-emphasis">@Model.Item.Status.GetDisplayName()</em></h2>
-
-<div class="container">
-    <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ComplaintClosedDate)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.Item.ComplaintClosedDate, DisplayTemplate.LongDateTimeOrNotEntered)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ReviewComments)</dt>
-        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(_ => Model.Item.ReviewComments, DisplayTemplate.StringOrPlaceholder)</dd>
-    </dl>
-</div>
+@if (Model.Item.ComplaintClosed)
+{
+    <div class="container">
+        <dl class="row">
+            <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ComplaintClosedDate)</dt>
+            <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.Item.ComplaintClosedDate, DisplayTemplate.LongDateTimeOrNotEntered)</dd>
+            <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ReviewComments)</dt>
+            <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(_ => Model.Item.ReviewComments, DisplayTemplate.StringOrPlaceholder)</dd>
+        </dl>
+    </div>
+}
 
 <h2>Nature of Complaint</h2>
 
@@ -99,76 +115,79 @@
     </dl>
 </div>
 
-<h2>Actions</h2>
-
-@if (Model.Item.Actions is { Count: > 0 })
+@if (Model.Item.ComplaintClosed)
 {
-    <div class="row row-cols-1 g-3 mb-3">
-        @foreach (var action in Model.Item.Actions)
-        {
-            <div class="col">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 id="@action.Id.ToString()" class="h5 card-title">
-                            @action.ActionTypeName
-                        </h3>
-                        <h4 class="h5 card-subtitle text-body-secondary">
-                            @Html.DisplayFor(_ => action.ActionDate, DisplayTemplate.DateOnlyOrNotEntered)
-                            @if (!string.IsNullOrWhiteSpace(action.Investigator))
-                            {
-                                @:by @Html.DisplayFor(_ => action.Investigator)
-                            }
-                        </h4>
-                    </div>
-                    <div class="card-body ">
-                        <div class="text-break text-pre-line">@Html.DisplayFor(_ => action.Comments, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })</div>
+    <h2>Actions</h2>
+
+    @if (Model.Item.Actions is { Count: > 0 })
+    {
+        <div class="row row-cols-1 g-3 mb-3">
+            @foreach (var action in Model.Item.Actions)
+            {
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 id="@action.Id.ToString()" class="h5 card-title">
+                                @action.ActionTypeName
+                            </h3>
+                            <h4 class="h5 card-subtitle text-body-secondary">
+                                @Html.DisplayFor(_ => action.ActionDate, DisplayTemplate.DateOnlyOrNotEntered)
+                                @if (!string.IsNullOrWhiteSpace(action.Investigator))
+                                {
+                                    @:by @Html.DisplayFor(_ => action.Investigator)
+                                }
+                            </h4>
+                        </div>
+                        <div class="card-body ">
+                            <div class="text-break text-pre-line">@Html.DisplayFor(_ => action.Comments, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
-    </div>
-}
-else
-{
+            }
+        </div>
+    }
+    else
+    {
+        <p>
+            <em>None.</em>
+        </p>
+    }
+
+    <h2>Attachments</h2>
+
     <p>
-        <em>None.</em>
+        <em>(Attachments may not be available for complaints resolved before April 2018. Please note that not every complaint has attachments.)</em>
     </p>
-}
 
-<h2>Attachments</h2>
-
-<p>
-    <em>(Attachments may not be available for complaints resolved before April 2018. Please note that not every complaint has attachments.)</em>
-</p>
-
-@if (Model.Item.Attachments is { Count: > 0 })
-{
-    <table class="table table-hover align-middle" aria-label="File attachments">
-        <thead>
-        <tr>
-            <th scope="col">File</th>
-            <th scope="col">Size</th>
-            <th scope="col">Date Uploaded</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var attachment in Model.Item.Attachments)
-        {
-            attachment.IsForPublic = true;
+    @if (Model.Item.Attachments is { Count: > 0 })
+    {
+        <table class="table table-hover align-middle" aria-label="File attachments">
+            <thead>
             <tr>
-                <td>
-                    <partial name="Shared/_AttachmentLinkPartial" model="attachment" />
-                </td>
-                <td>@Html.DisplayFor(_ => attachment.Size, DisplayTemplate.FileSize)</td>
-                <td>@Html.DisplayFor(_ => attachment.UploadedDate, DisplayTemplate.ShortDate)</td>
+                <th scope="col">File</th>
+                <th scope="col">Size</th>
+                <th scope="col">Date Uploaded</th>
             </tr>
-        }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>
-        <em>None.</em>
-    </p>
+            </thead>
+            <tbody>
+            @foreach (var attachment in Model.Item.Attachments)
+            {
+                attachment.IsForPublic = true;
+                <tr>
+                    <td>
+                        <partial name="Shared/_AttachmentLinkPartial" model="attachment" />
+                    </td>
+                    <td>@Html.DisplayFor(_ => attachment.Size, DisplayTemplate.FileSize)</td>
+                    <td>@Html.DisplayFor(_ => attachment.UploadedDate, DisplayTemplate.ShortDate)</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>
+            <em>None.</em>
+        </p>
+    }
 }
