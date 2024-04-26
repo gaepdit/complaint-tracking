@@ -58,13 +58,14 @@ public sealed class ComplaintService(
         var complaint = await complaintRepository.FindIncludeAllAsync(id, includeDeletedActions, token)
             .ConfigureAwait(false);
         if (complaint is null) return null;
+        var complaintViewDto = mapper.Map<ComplaintViewDto>(complaint);
 
         var principal = userService.GetCurrentPrincipal();
-        var auth = await authorization.Succeeded(principal!, complaint, ComplaintOperation.ViewDeletedActions)
+        var auth = await authorization.Succeeded(principal!, complaintViewDto, ComplaintOperation.ViewDeletedActions)
             .ConfigureAwait(false);
-        if (!auth) complaint.Actions.RemoveAll(action => action.IsDeleted);
+        if (!auth) complaintViewDto.Actions.RemoveAll(action => action.IsDeleted);
 
-        return mapper.Map<ComplaintViewDto>(complaint);
+        return complaintViewDto;
     }
 
     public async Task<ComplaintUpdateDto?> FindForUpdateAsync(int id, CancellationToken token = default) =>
@@ -176,7 +177,7 @@ public sealed class ComplaintService(
         else
         {
             result.AddWarning("No files were attached: " +
-                validateFilesResult.ValidationErrors.ConcatWithSeparator("; ") + ".");
+                              validateFilesResult.ValidationErrors.ConcatWithSeparator("; ") + ".");
         }
 
         return result;
