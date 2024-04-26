@@ -5,12 +5,17 @@ using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
+using Cts.Domain.Identity;
+using Cts.TestData.Constants;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace AppServicesTests.Complaints;
 
 public class Find
 {
+    private readonly ApplicationUser _user = new() { Id = Guid.Empty.ToString(), Email = TextData.ValidEmail };
+
     [Test]
     public async Task WhenItemExists_ReturnsViewDto()
     {
@@ -21,10 +26,19 @@ public class Find
         repoMock.FindIncludeAllAsync(Arg.Any<int>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
             .Returns(item);
 
+        var userServiceMock = Substitute.For<IUserService>();
+        userServiceMock.GetCurrentUserAsync()
+            .Returns(_user);
+
+        var authorizationMock = Substitute.For<IAuthorizationService>();
+        authorizationMock.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), resource: Arg.Any<object?>(),
+                requirements: Arg.Any<IEnumerable<IAuthorizationRequirement>>())
+            .Returns(AuthorizationResult.Success());
+
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
             Substitute.For<IAttachmentService>(), Substitute.For<INotificationService>(), AppServicesTestsSetup.Mapper!,
-            Substitute.For<IUserService>(), Substitute.For<IAuthorizationService>());
+            userServiceMock, authorizationMock);
 
         // Act
         var result = await appService.FindAsync(item.Id);
@@ -44,10 +58,19 @@ public class Find
         repoMock.FindIncludeAllAsync(Arg.Any<int>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
             .Returns(item);
 
+        var userServiceMock = Substitute.For<IUserService>();
+        userServiceMock.GetCurrentUserAsync()
+            .Returns(_user);
+
+        var authorizationMock = Substitute.For<IAuthorizationService>();
+        authorizationMock.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), resource: Arg.Any<object?>(),
+                requirements: Arg.Any<IEnumerable<IAuthorizationRequirement>>())
+            .Returns(AuthorizationResult.Success());
+
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
             Substitute.For<IAttachmentService>(), Substitute.For<INotificationService>(), AppServicesTestsSetup.Mapper!,
-            Substitute.For<IUserService>(), Substitute.For<IAuthorizationService>());
+            userServiceMock, authorizationMock);
 
         // Act
         var result = await appService.FindAsync(item.Id);
