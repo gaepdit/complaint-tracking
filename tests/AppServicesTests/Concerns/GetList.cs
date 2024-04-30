@@ -12,7 +12,7 @@ public class GetList
     {
         var itemList = new List<Concern> { new(Guid.Empty, TextData.ValidName) };
         var repoMock = Substitute.For<IConcernRepository>();
-        repoMock.GetListAsync(Arg.Any<CancellationToken>())
+        repoMock.GetOrderedListAsync(Arg.Any<CancellationToken>())
             .Returns(itemList);
         var managerMock = Substitute.For<IConcernManager>();
         var userServiceMock = Substitute.For<IUserService>();
