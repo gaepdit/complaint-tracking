@@ -1,0 +1,48 @@
+# Workflow to register a new application version with GitHub Releases and Raygun deployment tracking.
+
+name: Release Tracking
+
+on:
+  push:
+    tags:
+      - "prod/[0-9]+.[0-9]+.[0-9]+"
+
+jobs:
+  release-tracking:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the version number
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
+
+      - name: Send to the Raygun Deployments API
+        id: raygun_deployment
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: https://api.raygun.com/v3/applications/api-key/${{ secrets.RAYGUN_APIKEY }}/deployments
+          method: POST
+          bearerToken: ${{ secrets.RAYGUN_AUTHTOKEN }}
+          data: >-
+            {
+              "version": "${{ steps.get_version.outputs.VERSION }}",
+              "ownerName": "${{ github.event.pusher.name }}",
+              "emailAddress": "${{ github.event.pusher.email }}",
+              "scmIdentifier": "${{ github.sha }}",
+              "scmType": "GitHub"
+            }
+
+      - name: Show Raygun response
+        run: echo ${{ steps.raygun_deployment.outputs.response }}
+
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Create GitHub Release
+        id: github_release
+        uses: docker://ghcr.io/anton-yurchenko/git-release:v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_PREFIX_REGEX: "prod\/"
+
+      - name: Show GitHub response
+        run: echo ${{ steps.github_release.outputs.response }}
