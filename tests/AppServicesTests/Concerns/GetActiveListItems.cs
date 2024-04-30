@@ -18,7 +18,7 @@ public class GetActiveListItems
         };
 
         var repoMock = Substitute.For<IConcernRepository>();
-        repoMock.GetListAsync(Arg.Any<Expression<Func<Concern, bool>>>(), Arg.Any<CancellationToken>())
+        repoMock.GetOrderedListAsync(Arg.Any<Expression<Func<Concern, bool>>>(), Arg.Any<CancellationToken>())
             .Returns(itemList);
 
         var managerMock = Substitute.For<IConcernManager>();

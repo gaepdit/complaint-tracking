@@ -20,8 +20,6 @@ public sealed class LocalOfficeRepository() : NamedEntityRepository<Office>(Offi
     public Task<Office?> FindIncludeAssignorAsync(Guid id, CancellationToken token = default) =>
         FindAsync(id, token);
 
-    public async Task<IReadOnlyCollection<Office>> GetListIncludeAssignorAsync(CancellationToken token = default) =>
-        (await GetListAsync(token).ConfigureAwait(false))
-        .OrderBy(office => office.Name).ThenBy(office => office.Id)
-        .ToList();
+    public Task<IReadOnlyCollection<Office>> GetListIncludeAssignorAsync(CancellationToken token = default) =>
+        GetOrderedListAsync(token);
 }

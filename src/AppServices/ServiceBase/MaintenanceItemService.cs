@@ -24,18 +24,13 @@ public abstract class MaintenanceItemService<TEntity, TViewDto, TUpdateDto>(
     public async Task<TUpdateDto?> FindForUpdateAsync(Guid id, CancellationToken token = default) =>
         mapper.Map<TUpdateDto>(await repository.FindAsync(id, token).ConfigureAwait(false));
 
-    public async Task<IReadOnlyList<TViewDto>> GetListAsync(CancellationToken token = default)
-    {
-        var list = (await repository.GetListAsync(token).ConfigureAwait(false))
-            .OrderBy(entity => entity.Name).ThenBy(entity => entity.Id).ToList();
-        return mapper.Map<IReadOnlyList<TViewDto>>(list);
-    }
+    public async Task<IReadOnlyList<TViewDto>> GetListAsync(CancellationToken token = default) =>
+        mapper.Map<IReadOnlyList<TViewDto>>(await repository.GetOrderedListAsync(token).ConfigureAwait(false));
 
     public async Task<IReadOnlyList<ListItem>> GetAsListItemsAsync(bool includeInactive = false,
         CancellationToken token = default) =>
-        (await repository.GetListAsync(entity => includeInactive || entity.Active, token).ConfigureAwait(false))
+        (await repository.GetOrderedListAsync(entity => includeInactive || entity.Active, token).ConfigureAwait(false))
         .Select(entity => new ListItem(entity.Id, entity.Name))
-        .OrderBy(item => item.Name).ThenBy(item => item.Id)
         .ToList();
 
     public async Task<Guid> CreateAsync(string name, CancellationToken token = default)
