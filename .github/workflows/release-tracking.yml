@@ -42,7 +42,7 @@ jobs:
         uses: docker://ghcr.io/anton-yurchenko/git-release:v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG_PREFIX_REGEX: "prod\/"
+          TAG_PREFIX_REGEX: prod\/
 
       - name: Show GitHub response
         run: echo ${{ steps.github_release.outputs.response }}
