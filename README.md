@@ -63,7 +63,7 @@ The following settings configure the data stores and authentication for developm
 }
 ```
 
-- *UseDevSettings* — Indicates whether the Dev settings should be applied.
+- *UseDevSettings* — Indicates whether the following Dev settings should be applied.
 - *UseInMemoryData*
     - When `true`, the "LocalRepository" project is used for repositories and data stores. Data is initially seeded from the "TestData" project. 
     - When `false`, the "EfRepository" project is used, and a SQL Server database (as specified by the connection string) is created. <small>(If the connection string is missing, then a temporary EF Core in-memory database provider is used. This option is included for convenience and is not recommended.)</small>
@@ -74,6 +74,8 @@ The following settings configure the data stores and authentication for developm
 - *LocalUserIsStaff* — Adds the Staff and Site Maintenance Roles to the logged in account when `true` or no roles when `false`. (Applies whether *UserAzureAd* is `true` or `false`.)
 - *LocalUserIsAdmin* — Adds all App Roles to the logged in account when `true` or no roles when `false`. (Applies whether *UserAzureAd* is `true` or `false`.)     <small>An alternative way to create admin users is to add them to the `SeedAdminUsers` setting as an array of email addresses.</small>
 - *UseSecurityHeadersLocally* — Sets whether to include HTTP security headers when running locally in the Development environment.
+
+#### Production defaults
 
 When `UseDevSettings` is missing or set to `false` or if the `DevSettings` section is missing, the settings are automatically set to production defaults as follows:
 
@@ -144,15 +146,3 @@ flowchart LR
         B --> D
     end
 ```
-
-### Entity Framework database migrations
-
-Instructions for adding a new Entity Framework database migration:
-
-1. Build the solution.
-
-2. Open a command prompt to the "./src/EfRepository/" folder.
-
-3. Run the following command with an appropriate migration name:
-
-   `dotnet ef migrations add NAME_OF_MIGRATION`
