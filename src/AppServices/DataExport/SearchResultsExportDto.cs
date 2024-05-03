@@ -10,7 +10,7 @@ public record SearchResultsExportDto
     public SearchResultsExportDto(Complaint complaint)
     {
         ComplaintId = complaint.Id;
-        ReceivedByName = complaint.ReceivedBy.SortableFullName;
+        ReceivedByName = complaint.ReceivedBy?.SortableFullName;
         DateReceived = complaint.ReceivedDate;
         Status = complaint.Status.GetDisplayName();
         DateComplaintClosed = complaint.ComplaintClosedDate;
@@ -35,7 +35,7 @@ public record SearchResultsExportDto
     public int ComplaintId { get; init; }
 
     [XLColumn(Header = "Received By")]
-    public string ReceivedByName { get; init; }
+    public string? ReceivedByName { get; init; }
 
     [XLColumn(Header = "Date Received")]
     public DateTimeOffset DateReceived { get; init; }

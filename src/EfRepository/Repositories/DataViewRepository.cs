@@ -10,6 +10,9 @@ namespace Cts.EfRepository.Repositories;
 
 public sealed class DataViewRepository(AppDbContext context, IDbConnectionFactory dbConnection) : IDataViewRepository
 {
+    // Only needed until Dapper supports DateOnly.
+    private readonly TimeOnly _midnight = new(hour: 0, minute: 0, second: 0);
+
     // Data archive export
     public Task<List<OpenComplaint>> OpenComplaintsAsync(CancellationToken token) =>
         context.OpenComplaintsView.ToListAsync(cancellationToken: token);
@@ -29,13 +32,12 @@ public sealed class DataViewRepository(AppDbContext context, IDbConnectionFactor
 
     public async Task<List<StaffReportView>> ComplaintsByStaffAsync(Guid officeId, DateOnly dateFrom, DateOnly dateTo)
     {
-        var midnight = new TimeOnly(0, 0, 0); // Only needed until Dapper supports DateOnly.
         return await QueryStaffReportAsync(ReportingQueries.ComplaintsByStaff,
             new
             {
                 officeId,
-                dateFrom = dateFrom.ToDateTime(midnight),
-                dateTo = dateTo.ToDateTime(midnight),
+                dateFrom = dateFrom.ToDateTime(_midnight),
+                dateTo = dateTo.ToDateTime(_midnight),
             }).ConfigureAwait(false);
     }
 
@@ -47,11 +49,10 @@ public sealed class DataViewRepository(AppDbContext context, IDbConnectionFactor
     public async Task<List<OfficeReportView>> DaysToClosureByOfficeAsync(DateOnly dateFrom, DateOnly dateTo,
         bool includeAdminClosed)
     {
-        var midnight = new TimeOnly(0, 0, 0); // Only needed until Dapper supports DateOnly.
         var parameters = new
         {
-            dateFrom = dateFrom.ToDateTime(midnight),
-            dateTo = dateTo.ToDateTime(midnight),
+            dateFrom = dateFrom.ToDateTime(_midnight),
+            dateTo = dateTo.ToDateTime(_midnight),
             includeAdminClosed,
         };
         using var db = dbConnection.Create();
@@ -63,13 +64,12 @@ public sealed class DataViewRepository(AppDbContext context, IDbConnectionFactor
     public async Task<List<StaffReportView>> DaysToClosureByStaffAsync(Guid officeId, DateOnly dateFrom,
         DateOnly dateTo, bool includeAdminClosed)
     {
-        var midnight = new TimeOnly(0, 0, 0); // Only needed until Dapper supports DateOnly.
         return await QueryStaffReportAsync(ReportingQueries.DaysToClosureByStaff,
             new
             {
                 officeId,
-                dateFrom = dateFrom.ToDateTime(midnight),
-                dateTo = dateTo.ToDateTime(midnight),
+                dateFrom = dateFrom.ToDateTime(_midnight),
+                dateTo = dateTo.ToDateTime(_midnight),
                 includeAdminClosed,
             }).ConfigureAwait(false);
     }
@@ -77,13 +77,12 @@ public sealed class DataViewRepository(AppDbContext context, IDbConnectionFactor
     public async Task<List<StaffReportView>> DaysToFollowupByStaffAsync(Guid officeId, DateOnly dateFrom,
         DateOnly dateTo)
     {
-        var midnight = new TimeOnly(0, 0, 0); // Only needed until Dapper supports DateOnly.
         return await QueryStaffReportAsync(ReportingQueries.DaysToFollowupByStaff,
             new
             {
                 officeId,
-                dateFrom = dateFrom.ToDateTime(midnight),
-                dateTo = dateTo.ToDateTime(midnight),
+                dateFrom = dateFrom.ToDateTime(_midnight),
+                dateTo = dateTo.ToDateTime(_midnight),
             }).ConfigureAwait(false);
     }
 
