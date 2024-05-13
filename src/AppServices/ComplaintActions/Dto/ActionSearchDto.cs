@@ -8,7 +8,7 @@ public record ActionSearchDto
 {
     // Sorting
 
-    public SortBy Sort { get; init; } = SortBy.IdAsc;
+    public SortBy Sort { get; init; } = SortBy.DateDesc;
 
     // Spec
 

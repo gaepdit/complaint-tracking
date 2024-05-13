@@ -1,6 +1,7 @@
 # Site Map
 
 * `/` Home page with public search form and [menu bar](Menu%20bar.md) allowing access to staff pages.
+* `/Support` (Help/support page)
 
 ## Public Pages
 
@@ -51,7 +52,6 @@ These pages are only available to logged-in staff.
 * `/Account` (View profile)
 * `/Account/Login` (Work account login form)
 * `/Account/Edit` (Edit contact info)
-* `/Account/Support` (Help/support page)
 
 ## Admin pages
 
