@@ -17,6 +17,10 @@ namespace Cts.EfRepository.Migrations
             
             // Disable foreign key constraint
             migrationBuilder.Sql("ALTER TABLE AspNetUsers NOCHECK CONSTRAINT FK__AspNetUsers_Offices_OfficeId");
+            
+            // Add archival user data columns
+            migrationBuilder.Sql("ALTER TABLE dbo.AspNetUsers ADD MigratedEmail nvarchar(42)");
+            migrationBuilder.Sql("ALTER TABLE dbo.AspNetUsers ADD OracleEmail nvarchar(42)");
 
             // Identity
             migrationBuilder.Sql(Migrate.AspNetUsers);
