@@ -1,3 +1,4 @@
+using Cts.AppServices.Attachments.Dto;
 using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.QueryDto;
 
@@ -12,7 +13,7 @@ public class DetailsPagePostUploadFilesTests
         var page = PageModelHelpers.BuildDetailsPageModel();
 
         // Act
-        var result = await page.OnPostUploadFilesAsync(null, [], CancellationToken.None);
+        var result = await page.OnPostUploadFilesAsync(null, new AttachmentsUploadDto(), CancellationToken.None);
 
         // Assert
         result.Should().BeOfType<BadRequestResult>();
@@ -28,7 +29,7 @@ public class DetailsPagePostUploadFilesTests
         var page = PageModelHelpers.BuildDetailsPageModel(complaintService: complaintService);
 
         // Act
-        var result = await page.OnPostUploadFilesAsync(id, [], CancellationToken.None);
+        var result = await page.OnPostUploadFilesAsync(id, new AttachmentsUploadDto(), CancellationToken.None);
 
         // Assert
         result.Should().BeOfType<BadRequestResult>();
@@ -43,7 +44,7 @@ public class DetailsPagePostUploadFilesTests
         var page = PageModelHelpers.BuildDetailsPageModel(complaintService: complaintService);
 
         // Act
-        var result = await page.OnPostUploadFilesAsync(id, [], CancellationToken.None);
+        var result = await page.OnPostUploadFilesAsync(id, new AttachmentsUploadDto(), CancellationToken.None);
 
         // Assert
         result.Should().BeOfType<BadRequestResult>();

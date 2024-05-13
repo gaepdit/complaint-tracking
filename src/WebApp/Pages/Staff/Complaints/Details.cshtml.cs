@@ -1,6 +1,6 @@
 ﻿using Cts.AppServices.ActionTypes;
 using Cts.AppServices.Attachments;
-using Cts.AppServices.Attachments.ValidationAttributes;
+using Cts.AppServices.Attachments.Dto;
 using Cts.AppServices.ComplaintActions;
 using Cts.AppServices.ComplaintActions.Dto;
 using Cts.AppServices.Complaints;
@@ -13,7 +13,6 @@ using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using Cts.WebApp.Platform.Settings;
 using GaEpd.AppLibrary.ListItems;
-using System.ComponentModel.DataAnnotations;
 
 namespace Cts.WebApp.Pages.Staff.Complaints;
 
@@ -32,12 +31,7 @@ public class DetailsModel(
 
     public ActionCreateDto NewAction { get; set; } = default!;
 
-    [Required(ErrorMessage = "No files were selected.")]
-    [ValidateFileTypes]
-    [FilesNotEmpty]
-    [FilesRequired]
-    [MaxNumberOfFiles(IAttachmentService.MaxSimultaneousUploads)]
-    public List<IFormFile> Files { get; } = [];
+    public AttachmentsUploadDto FileUploads { get; set; } = default!;
 
     [TempData]
     public Guid HighlightId { get; set; }
@@ -54,7 +48,6 @@ public class DetailsModel(
 
         var complaintView = await complaintService.FindAsync(id.Value, true);
         if (complaintView is null) return NotFound();
-
 
         await SetPermissionsAsync(complaintView);
         if (complaintView.IsDeleted && !UserCan[ComplaintOperation.ManageDeletions]) return NotFound();
@@ -108,7 +101,7 @@ public class DetailsModel(
     }
 
     /// PostUploadFiles is used to add attachment files to this Complaint.
-    public async Task<IActionResult> OnPostUploadFilesAsync(int? id, List<IFormFile> files,
+    public async Task<IActionResult> OnPostUploadFilesAsync(int? id, AttachmentsUploadDto fileUploads,
         CancellationToken token)
     {
         if (id is null) return BadRequest();
@@ -129,7 +122,8 @@ public class DetailsModel(
             return Page();
         }
 
-        await attachmentService.SaveAttachmentsAsync(id.Value, files, AppSettings.AttachmentServiceConfig, token);
+        await attachmentService.SaveAttachmentsAsync(id.Value, fileUploads.Files, AppSettings.AttachmentServiceConfig,
+            token);
         return RedirectToPage("Details", pageHandler: null, routeValues: new { id }, fragment: "attachments");
     }
 

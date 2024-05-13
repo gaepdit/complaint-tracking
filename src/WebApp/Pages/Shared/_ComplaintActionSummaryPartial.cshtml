@@ -1,0 +1,18 @@
+﻿@using Cts.WebApp.Pages.Shared.DisplayTemplates
+@model Cts.AppServices.ComplaintActions.Dto.ActionViewDto
+
+<div class="container small">
+    <p>
+        <em>For Complaint ID @Model.ComplaintId.ToString()</em>
+    </p>
+    <dl class="row">
+        <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(dto => dto.ActionTypeName)</dt>
+        <dd class="col-md-8 col-lg-9">@Html.DisplayFor(dto => dto.ActionTypeName)</dd>
+        <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(dto => dto.ActionDate)</dt>
+        <dd class="col-md-8 col-lg-9">@Html.DisplayFor(dto => dto.ActionDate, DisplayTemplate.DateOnly)</dd>
+        <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(dto => dto.Investigator)</dt>
+        <dd class="col-md-8 col-lg-9">@Html.DisplayFor(dto => dto.Investigator)</dd>
+        <dt class="col-md-4 col-lg-3">@Html.DisplayNameFor(dto => dto.Comments)</dt>
+        <dd class="col-md-8 col-lg-9">@Html.DisplayFor(dto => dto.Comments, DisplayTemplate.TruncateText)</dd>
+    </dl>
+</div>

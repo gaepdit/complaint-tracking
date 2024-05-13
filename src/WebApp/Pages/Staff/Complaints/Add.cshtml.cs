@@ -22,7 +22,7 @@ public class AddModel(
     IValidator<ComplaintCreateDto> validator) : PageModel
 {
     [BindProperty]
-    public ComplaintCreateDto NewComplaint { get; set; } = default!;
+    public ComplaintCreateDto Item { get; set; } = default!; // Caution: Object name is used in "copyContactInfo.js" script.
 
     public SelectList ConcernsSelectList { get; private set; } = default!;
     public SelectList OfficesSelectList { get; private set; } = default!;
@@ -35,22 +35,22 @@ public class AddModel(
     public async Task OnGetAsync()
     {
         var user = await staffService.GetCurrentUserAsync();
-        NewComplaint = new ComplaintCreateDto(user.Id, user.Office?.Id);
+        Item = new ComplaintCreateDto(user.Id, user.Office?.Id);
         await PopulateSelectListsAsync(user.Office?.Id);
     }
 
     public async Task<IActionResult> OnPostAsync()
     {
-        await validator.ApplyValidationAsync(NewComplaint, ModelState);
+        await validator.ApplyValidationAsync(Item, ModelState);
 
         if (!ModelState.IsValid)
         {
-            await PopulateSelectListsAsync(NewComplaint.OfficeId);
+            await PopulateSelectListsAsync(Item.OfficeId);
             return Page();
         }
 
         var createResult =
-            await complaintService.CreateAsync(NewComplaint, AppSettings.AttachmentServiceConfig, this.GetBaseUrl());
+            await complaintService.CreateAsync(Item, AppSettings.AttachmentServiceConfig, this.GetBaseUrl());
 
         var message = createResult.NumberOfAttachments switch
         {

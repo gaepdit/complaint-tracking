@@ -1,8 +1,11 @@
 using AutoMapper;
+using Cts.AppServices.Permissions;
+using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.ServiceBase;
 using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Offices;
 using GaEpd.AppLibrary.ListItems;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Cts.AppServices.Offices;
 
@@ -10,7 +13,8 @@ public sealed class OfficeService(
     IOfficeRepository repository,
     IOfficeManager manager,
     IMapper mapper,
-    IUserService userService)
+    IUserService userService,
+    IAuthorizationService authorization)
     : MaintenanceItemService<Office, OfficeViewDto, OfficeUpdateDto>
         (repository, manager, mapper, userService),
         IOfficeService
@@ -63,11 +67,19 @@ public sealed class OfficeService(
     }
 
     public async Task<IReadOnlyList<ListItem<string>>> GetStaffAsListItemsAsync(Guid? id, bool includeInactive = false,
-        CancellationToken token = default) =>
-        id is null
-            ? Array.Empty<ListItem<string>>()
-            : (await repository.GetStaffMembersListAsync(id.Value, includeInactive, token).ConfigureAwait(false))
-            .Select(user => new ListItem<string>(user.Id, user.SortableNameWithInactive)).ToList();
+        CancellationToken token = default)
+    {
+        if (id is null) return Array.Empty<ListItem<string>>();
+
+        var principal = _userService.GetCurrentPrincipal();
+
+        if (includeInactive &&
+            (principal is null || !await authorization.Succeeded(principal, Policies.ActiveUser).ConfigureAwait(false)))
+            includeInactive = false;
+
+        return (await repository.GetStaffMembersListAsync(id.Value, includeInactive, token).ConfigureAwait(false))
+            .Select(staff => new ListItem<string>(staff.Id, staff.SortableNameWithInactive)).ToList();
+    }
 
     public async Task<bool> UserIsAssignorForOfficeAsync(Guid id, string userId, CancellationToken token = default)
     {
@@ -79,5 +91,6 @@ public sealed class OfficeService(
         CancellationToken token = default) =>
         _mapper.Map<IReadOnlyCollection<OfficeViewDto>>(await repository
             .GetListAsync(office => office.Id != ignoreOffice &&
-                office.Assignor != null && office.Assignor.Id == userId, token).ConfigureAwait(false));
+                                    office.Assignor != null && office.Assignor.Id == userId, token)
+            .ConfigureAwait(false));
 }

@@ -2,8 +2,8 @@
 
 public static partial class Data
 {
-    public static IEnumerable<string> States => new List<string>
-    {
+    public static IEnumerable<string> States { get; } =
+    [
         "Alabama",
         "Alaska",
         "Arizona",
@@ -55,5 +55,5 @@ public static partial class Data
         "West Virginia",
         "Wisconsin",
         "Wyoming",
-    };
+    ];
 }

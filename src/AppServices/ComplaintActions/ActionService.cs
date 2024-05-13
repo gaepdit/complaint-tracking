@@ -40,12 +40,12 @@ public sealed class ActionService(
     }
 
     public async Task<ActionViewDto?> FindAsync(Guid id, CancellationToken token = default) =>
-        mapper.Map<ActionViewDto>(
-            await actionRepository.FindAsync(id, token).ConfigureAwait(false));
+        mapper.Map<ActionViewDto>(await actionRepository.FindIncludeAllAsync(action => action.Id == id, token)
+            .ConfigureAwait(false));
 
     public async Task<ActionUpdateDto?> FindForUpdateAsync(Guid id, CancellationToken token = default) =>
         mapper.Map<ActionUpdateDto>(
-            await actionRepository.FindAsync(action => action.Id == id && !action.IsDeleted, token)
+            await actionRepository.FindIncludeAllAsync(action => action.Id == id && !action.IsDeleted, token)
                 .ConfigureAwait(false));
 
     public async Task<IPaginatedResult<ActionSearchResultDto>> SearchAsync(ActionSearchDto spec,

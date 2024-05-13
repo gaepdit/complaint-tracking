@@ -26,7 +26,7 @@ public class EditModel(
     public int Id { get; set; }
 
     [BindProperty]
-    public ComplaintUpdateDto Item { get; set; } = default!;
+    public ComplaintUpdateDto Item { get; set; } = default!; // Caution: Object name is used in "copyContactInfo.js" script.
 
     public SelectList ConcernsSelectList { get; private set; } = default!;
     public SelectList StaffSelectList { get; private set; } = default!;
