@@ -1,6 +1,7 @@
 @page "{id:int?}"
 @using Cts.AppServices.Attachments
 @using Cts.AppServices.Complaints.Permissions
+@using Cts.Domain.Data
 @using Cts.WebApp.Pages.Shared.DisplayTemplates
 @using Cts.WebApp.Pages.Shared.EditorTemplates
 @using GaEpd.AppLibrary.Extensions
@@ -434,6 +435,12 @@ else
     <details>
         <summary class="h5 text-secondary mb-2">Show full audit history</summary>
         <div class="table-responsive-md">
+            @if (Model.ShowHistoryNotification)
+            {
+                <p>
+                    <small>Audit history prior to @Html.DisplayFor(_ => DomainConstants.OracleMigrationDate, DisplayTemplate.LongDate) may be incomplete.</small>
+                </p>
+            }
             <table class="table table-sm table-hover small align-top" aria-label="Audit history">
                 <thead>
                 <tr>
