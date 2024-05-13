@@ -48,8 +48,9 @@ public class AttachmentService(
         IAttachmentService.AttachmentServiceConfig config, CancellationToken token = default)
     {
         Config = config;
-        await using var response = await fileService.TryGetFileAsync(fileId, ExpandPath(fileId, getThumbnail), token)
+        var response = await fileService.TryGetFileAsync(fileId, ExpandPath(fileId, getThumbnail), token)
             .ConfigureAwait(false);
+        await using var responseDisposable = response.ConfigureAwait(false);
         if (!response.Success) return [];
 
         using var ms = new MemoryStream();
@@ -150,7 +151,8 @@ public class AttachmentService(
 
     private async Task SaveImageAsFileAsync(Image image, string fileId, bool asThumbnail = false)
     {
-        await using var ms = new MemoryStream();
+        var ms = new MemoryStream();
+        await using var msDisposable = ms.ConfigureAwait(false);
         await image.SaveAsync(ms, image.Metadata.DecodedImageFormat!).ConfigureAwait(false);
         await fileService.SaveFileAsync(ms, fileId, ExpandPath(fileId, asThumbnail)).ConfigureAwait(false);
     }
