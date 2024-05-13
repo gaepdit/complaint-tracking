@@ -86,17 +86,25 @@ public static class AttachmentData
         _attachmentFiles = null;
     }
 
-    private static IEnumerable<AttachmentFile> AttachmentFilesSeedItems => new List<AttachmentFile>
+    private static IEnumerable<AttachmentFile> AttachmentFilesSeedItems
     {
-        new("20000000-0000-0000-0000-000000000001.png", "UserFiles/Attachments/20", EncodedPngFile),
-        new("20000000-0000-0000-0000-000000000001.png", "UserFiles/Thumbnails/20", EncodedPngFile),
-        new("20000000-0000-0000-0000-000000000002.svg", "UserFiles/Attachments/20", EncodedSvgFile),
-        new("20000000-0000-0000-0000-000000000003.pdf", "UserFiles/Attachments/20", EncodedPdfFile),
-        new("20000000-0000-0000-0000-000000000004.png", "UserFiles/Attachments/20", null),
-        new("20000000-0000-0000-0000-000000000004.png", "UserFiles/Thumbnails/20", null),
-        new("20000000-0000-0000-0000-000000000005.pdf", "UserFiles/Attachments/20", null),
-        new("20000000-0000-0000-0000-000000000006.pdf", "UserFiles/Attachments/20", EncodedPdfFile),
-    };
+        get
+        {
+            const string attachmentsPath = "UserFiles/Attachments/20";
+            const string thumbnailsPath = "UserFiles/Thumbnails/20";
+            return new List<AttachmentFile>
+            {
+                new("20000000-0000-0000-0000-000000000001.png", attachmentsPath, EncodedPngFile),
+                new("20000000-0000-0000-0000-000000000001.png", thumbnailsPath, EncodedPngFile),
+                new("20000000-0000-0000-0000-000000000002.svg", attachmentsPath, EncodedSvgFile),
+                new("20000000-0000-0000-0000-000000000003.pdf", attachmentsPath, EncodedPdfFile),
+                new("20000000-0000-0000-0000-000000000004.png", attachmentsPath, Base64EncodedFile: null),
+                new("20000000-0000-0000-0000-000000000004.png", thumbnailsPath, Base64EncodedFile: null),
+                new("20000000-0000-0000-0000-000000000005.pdf", attachmentsPath, Base64EncodedFile: null),
+                new("20000000-0000-0000-0000-000000000006.pdf", attachmentsPath, EncodedPdfFile),
+            };
+        }
+    }
 
     private static IEnumerable<AttachmentFile>? _attachmentFiles;
 
