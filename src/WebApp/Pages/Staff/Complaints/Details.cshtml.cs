@@ -9,6 +9,7 @@ using Cts.AppServices.Complaints.QueryDto;
 using Cts.AppServices.Permissions;
 using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.Staff;
+using Cts.Domain.Data;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using Cts.WebApp.Platform.Settings;
@@ -38,6 +39,7 @@ public class DetailsModel(
 
     public string? ValidatingSection { get; private set; }
     public SelectList ActionItemTypeSelectList { get; private set; } = default!;
+    public bool ShowHistoryNotification => ComplaintView.EarliestTransition < DomainConstants.OracleMigrationDate;
 
     public bool ViewableActions => ComplaintView.Actions.Exists(action =>
         !action.IsDeleted || UserCan[ComplaintOperation.ViewDeletedActions]);
