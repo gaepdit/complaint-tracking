@@ -38,7 +38,7 @@ public class PublicSearchSpec
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
-            .Excluding(e => e.ReceivedBy.Office)
+            .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
             .Excluding(e => e.ReviewedBy!.Office)
         );
@@ -65,7 +65,7 @@ public class PublicSearchSpec
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
-            .Excluding(e => e.ReceivedBy.Office)
+            .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
         );
     }
@@ -87,7 +87,7 @@ public class PublicSearchSpec
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
-            .Excluding(e => e.ReceivedBy.Office)
+            .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
         );
     }
@@ -109,7 +109,7 @@ public class PublicSearchSpec
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
-            .Excluding(e => e.ReceivedBy.Office)
+            .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
         );
     }
@@ -131,7 +131,7 @@ public class PublicSearchSpec
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
-            .Excluding(e => e.ReceivedBy.Office)
+            .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
         );
     }
@@ -153,7 +153,7 @@ public class PublicSearchSpec
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
-            .Excluding(e => e.ReceivedBy.Office)
+            .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
         );
     }
@@ -176,7 +176,7 @@ public class PublicSearchSpec
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
-            .Excluding(e => e.ReceivedBy.Office)
+            .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
         );
     }
@@ -200,7 +200,7 @@ public class PublicSearchSpec
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
-            .Excluding(e => e.ReceivedBy.Office)
+            .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
         );
     }
@@ -223,7 +223,7 @@ public class PublicSearchSpec
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
-            .Excluding(e => e.ReceivedBy.Office)
+            .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
         );
     }
@@ -246,7 +246,7 @@ public class PublicSearchSpec
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
-            .Excluding(e => e.ReceivedBy.Office)
+            .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
         );
     }
@@ -270,7 +270,7 @@ public class PublicSearchSpec
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
-            .Excluding(e => e.ReceivedBy.Office)
+            .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
         );
     }

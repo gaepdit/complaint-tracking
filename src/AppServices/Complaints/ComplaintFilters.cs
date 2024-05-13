@@ -117,7 +117,9 @@ internal static class ComplaintFilters
 
     private static Expression<Func<Complaint, bool>> ReceivedBy(this Expression<Func<Complaint, bool>> predicate,
         string? input) =>
-        string.IsNullOrWhiteSpace(input) ? predicate : predicate.And(complaint => complaint.ReceivedBy.Id == input);
+        string.IsNullOrWhiteSpace(input)
+            ? predicate
+            : predicate.And(complaint => complaint.ReceivedBy != null && complaint.ReceivedBy.Id == input);
 
     private static Expression<Func<Complaint, bool>> ContainsCaller(this Expression<Func<Complaint, bool>> predicate,
         string? input) =>
@@ -180,7 +182,7 @@ internal static class ComplaintFilters
             : predicate.And(complaint =>
                 complaint.SourceAddress != null &&
                 ((complaint.SourceAddress.Street != null && complaint.SourceAddress.Street.Contains(input)) ||
-                    (complaint.SourceAddress.Street2 != null && complaint.SourceAddress.Street2.Contains(input))));
+                 (complaint.SourceAddress.Street2 != null && complaint.SourceAddress.Street2.Contains(input))));
 
     private static Expression<Func<Complaint, bool>> ContainsCity(this Expression<Func<Complaint, bool>> predicate,
         string? input) =>
