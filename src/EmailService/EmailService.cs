@@ -27,7 +27,7 @@ public class EmailService : IEmailService
             };
             emailMessage.Body = builder.ToMessageBody();
 
-            await SendEmailMessageAsync(emailMessage, settings, token);
+            await SendEmailMessageAsync(emailMessage, settings, token).ConfigureAwait(false);
         }
 
         if (settings is { EnableEmailAuditing: true, AuditEmailRecipients.Count: > 0 })
@@ -47,7 +47,7 @@ public class EmailService : IEmailService
             };
             emailMessage.Body = auditBuilder.ToMessageBody();
 
-            await SendEmailMessageAsync(emailMessage, settings, token);
+            await SendEmailMessageAsync(emailMessage, settings, token).ConfigureAwait(false);
         }
     }
 
