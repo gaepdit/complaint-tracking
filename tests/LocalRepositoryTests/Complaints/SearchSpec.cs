@@ -124,7 +124,7 @@ public class SearchSpec
     public async Task ReceivedBySpec_ReturnsFilteredList()
     {
         var referenceItem = _repository.Items.First();
-        var spec = new ComplaintSearchDto { ReceivedBy = referenceItem.ReceivedBy.Id };
+        var spec = new ComplaintSearchDto { ReceivedBy = referenceItem.ReceivedBy!.Id };
         var predicate = ComplaintFilters.SearchPredicate(spec);
 
         var results = await _repository.GetListAsync(predicate);
