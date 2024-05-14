@@ -427,6 +427,14 @@ else
             @Html.DisplayFor(model => model.ComplaintView.EnteredBy, DisplayTemplate.NameOrPlaceholder)
             on @Html.DisplayFor(model => model.ComplaintView.EnteredDate, DisplayTemplate.LongDateTime)
         </dd>
+        @if (Model.ComplaintView.ComplaintClosed)
+        {
+            <dt class="col-sm-4 col-lg-3">Reviewed and Closed By</dt>
+            <dd class="col-sm-8 col-lg-9">
+                @Html.DisplayFor(model => model.ComplaintView.ReviewedBy, DisplayTemplate.NameOrPlaceholder)
+                on @Html.DisplayFor(model => model.ComplaintView.ComplaintClosedDate, DisplayTemplate.LongDateTime)
+            </dd>
+        }
     </dl>
 </div>
 
