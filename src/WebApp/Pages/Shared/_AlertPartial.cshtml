@@ -35,7 +35,7 @@
 
         <div>
             @Model.Message
-            @if (Model.Details.Any(s => !string.IsNullOrEmpty(s)))
+            @if (Model.Details.Exists(s => !string.IsNullOrEmpty(s)))
             {
                 @:The following warnings were generated:
                 <ul class="pt-1 mb-0 ps-3">
