@@ -111,9 +111,11 @@ public class Template
         --
         This is an automatically generated email sent from the Complaint Tracking System at
         {2}
-
+        
+        Please do not reply to this email. This mailbox is not monitored.
         """;
 
     public const string HtmlSignature = "<hr><p>This is an automatically generated email sent from the Complaint " +
-        "Tracking System at<br><a href='{2}'>{2}</a></p>";
+        "Tracking System at<br><a href='{2}'>{2}</a></p>" +
+        "<p>Please do not reply to this email. This mailbox is not monitored.</p>";
 }
