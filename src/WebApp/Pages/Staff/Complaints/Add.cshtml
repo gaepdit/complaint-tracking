@@ -33,28 +33,6 @@
             </div>
         </div>
 
-        <h2>Complaint</h2>
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <h3 class="h5">Description</h3>
-                <div class="mb-3">
-                    @Html.EditorFor(model => model.Item.ComplaintNature, EditorTemplate.Textarea,
-                        additionalViewData: new { Rows = 5 })
-                </div>
-            </div>
-            <div class="col-md-6">
-                <h3 class="h5">Environmental areas of concern</h3>
-                <div class="mb-3">
-                    @Html.EditorFor(model => model.Item.PrimaryConcernId, EditorTemplate.Select,
-                        additionalViewData: new { Items = Model.ConcernsSelectList })
-                </div>
-                <div class="mb-3">
-                    @Html.EditorFor(model => model.Item.SecondaryConcernId, EditorTemplate.Select,
-                        additionalViewData: new { Items = Model.ConcernsSelectList, Placeholder = string.Empty })
-                </div>
-            </div>
-        </div>
-
         <h2>Caller</h2>
         <div class="row">
             <div class="col-md-6 mb-3">
@@ -113,6 +91,28 @@
                     @Html.EditorFor(model => model.Item.CallerAddress.State, EditorTemplate.Select,
                         additionalViewData: new { Items = Model.StatesSelectList, Placeholder = string.Empty })
                     @Html.EditorFor(model => model.Item.CallerAddress.PostalCode, EditorTemplate.Input)
+                </div>
+            </div>
+        </div>
+
+        <h2>Complaint</h2>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <h3 class="h5">Description</h3>
+                <div class="mb-3">
+                    @Html.EditorFor(model => model.Item.ComplaintNature, EditorTemplate.Textarea,
+                    additionalViewData: new { Rows = 5 })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h3 class="h5">Environmental areas of concern</h3>
+                <div class="mb-3">
+                    @Html.EditorFor(model => model.Item.PrimaryConcernId, EditorTemplate.Select,
+                    additionalViewData: new { Items = Model.ConcernsSelectList })
+                </div>
+                <div class="mb-3">
+                    @Html.EditorFor(model => model.Item.SecondaryConcernId, EditorTemplate.Select,
+                    additionalViewData: new { Items = Model.ConcernsSelectList, Placeholder = string.Empty })
                 </div>
             </div>
         </div>
