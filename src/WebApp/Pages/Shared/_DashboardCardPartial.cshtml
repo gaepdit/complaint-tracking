@@ -35,15 +35,19 @@
                             <td class="text-nowrap">@Html.DisplayFor(_ => complaint.ReceivedDate, DisplayTemplate.ShortDate)</td>
                             <td>@Html.DisplayFor(_ => complaint.Status)</td>
                             <td>
-                                @Html.DisplayFor(_ => complaint.SourceFacilityName, DisplayTemplate.StringOrPlaceholder)
-                                @if (complaint.SourceFacilityIdNumber != null || complaint.ComplaintCounty != null)
+                                @Html.DisplayFor(_ => complaint.SourceFacilityName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "[Facility name not entered]" })
+                                @if (!string.IsNullOrEmpty(complaint.SourceFacilityIdNumber) || !string.IsNullOrEmpty(complaint.ComplaintCounty) || !string.IsNullOrEmpty(complaint.SourceAddressCityState))
                                 {
                                     <ul>
-                                        @if (complaint.SourceFacilityIdNumber != null)
+                                        @if (!string.IsNullOrEmpty(complaint.SourceFacilityIdNumber))
                                         {
                                             <li>ID: @complaint.SourceFacilityIdNumber</li>
                                         }
-                                        @if (complaint.ComplaintCounty != null)
+                                        @if (!string.IsNullOrEmpty(complaint.SourceAddressCityState))
+                                        {
+                                            <li>@complaint.SourceAddressCityState</li>
+                                        }
+                                        @if (!string.IsNullOrEmpty(complaint.ComplaintCounty))
                                         {
                                             <li>@Html.DisplayFor(_ => complaint.ComplaintCounty, DisplayTemplate.County)</li>
                                         }
