@@ -6,7 +6,7 @@ public record ComplaintPublicSearchDto
 {
     // Sorting
 
-    public SortBy Sort { get; init; } = SortBy.IdAsc;
+    public SortBy Sort { get; init; } = SortBy.IdDesc;
 
     // Dates
 
