@@ -21,5 +21,5 @@ public class MaintenanceOption
             startsWithVowelSound: true);
 
     public static MaintenanceOption Office { get; } =
-        new(singularName: "Office", pluralName: "Offices", startsWithVowelSound: true);
+        new(singularName: "Office", pluralName: "Offices and Assignors", startsWithVowelSound: true);
 }
