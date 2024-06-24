@@ -16,7 +16,7 @@
         else
         {
             <div class="table-responsive-md">
-                <table class="table table-borderless table-hover" aria-describedby="@Model.CardId">
+                <table class="table table-borderless table-hover mb-0" aria-describedby="@Model.CardId">
                     <thead>
                     <tr>
                         <th scope="col">ID</th>
@@ -38,7 +38,7 @@
                                 @Html.DisplayFor(_ => complaint.SourceFacilityName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "[Facility name not entered]" })
                                 @if (!string.IsNullOrEmpty(complaint.SourceFacilityIdNumber) || !string.IsNullOrEmpty(complaint.ComplaintCounty) || !string.IsNullOrEmpty(complaint.SourceAddressCityState))
                                 {
-                                    <ul>
+                                    <ul class="mb-0">
                                         @if (!string.IsNullOrEmpty(complaint.SourceFacilityIdNumber))
                                         {
                                             <li>ID: @complaint.SourceFacilityIdNumber</li>
