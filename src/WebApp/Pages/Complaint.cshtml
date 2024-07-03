@@ -6,6 +6,7 @@
 @{
     ViewData["Title"] = $"Complaint ID {Model.Item.Id.ToString()}";
 }
+<link rel="stylesheet" href="~/css/fancybox.css" />
 
 <div class="container-full">
     <div class="row justify-content-between align-items-baseline g-0 my-1">
@@ -167,4 +168,9 @@ else
     <p>
         <em>None.</em>
     </p>
+}
+
+@section Scripts
+{
+    <script src="~/js/fancybox.js"></script>
 }
