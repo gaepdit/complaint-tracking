@@ -1,4 +1,4 @@
-﻿@using Cts.AppServices.Complaints.QueryDto
+@using Cts.AppServices.Complaints.QueryDto
 @using Cts.WebApp.Pages.Shared.DisplayTemplates
 @model Cts.WebApp.Models.SearchResultsDisplay
 
@@ -71,6 +71,10 @@
                         @if (item.SourceFacilityIdNumber != null)
                         {
                             <li>ID: @item.SourceFacilityIdNumber</li>
+                        }
+                        @if (!string.IsNullOrEmpty(item.SourceAddressCityState))
+                        {
+                        <li>@item.SourceAddressCityState</li>
                         }
                         @if (item.ComplaintCounty != null)
                         {
