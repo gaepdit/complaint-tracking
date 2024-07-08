@@ -27,7 +27,7 @@
     <p>View a detailed description of <a asp-page="Roles" target="_blank">user roles and capabilities</a>.</p>
     <form method="post">
         <div asp-validation-summary="All" class="alert alert-danger d-flex align-items-center" role="alert">
-            <svg class="bi me-2">
+            <svg class="bi me-2" role="img" aria-label="Danger:">
                 <use href="@Url.Content("~/images/app-icons.svg")#exclamation-triangle-fill"></use>
             </svg>
             <div>Roles update failed:</div>
