@@ -177,6 +177,9 @@ html:not([data-bs-theme="dark"]) .bg-dark-subtle .text-danger-emphasis {
 
 .btn-img img {
     height: 25px;
+    background: white;
+    box-shadow: 0 0 1px white;
+    margin-right: 2px;
 }
 
 /* Additional font style utilities
@@ -320,13 +323,6 @@ details.card:not([open]) summary.card-header {
     fill: currentColor;
     vertical-align: -.125em;
     overflow: visible !important;
-}
-
-.link-offset-2 .bi {
-    height: 1.4em;
-    border-bottom: 1px solid;
-    padding: .2em 0;
-    margin-bottom: -.2em;
 }
 
 /* Fix for Bootstrap textarea with "floating" label
