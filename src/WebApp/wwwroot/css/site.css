@@ -321,6 +321,12 @@ details.card:not([open]) summary.card-header {
     vertical-align: -.125em;
     overflow: visible !important;
 }
+.link-offset-2 .bi {
+    height: 1.4em;
+    border-bottom: 1px solid;
+    padding: .2em 0;
+    margin-bottom: -.2em;
+}
 
 /* Fix for Bootstrap textarea with "floating" label
 -------------------------------------------------- */
