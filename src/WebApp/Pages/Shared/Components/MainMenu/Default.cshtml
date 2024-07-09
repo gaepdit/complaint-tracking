@@ -48,7 +48,11 @@
                     @if (Model.IsStaffUser)
                     {
                         <li class="nav-item">
-                            <a class="nav-link" asp-page="/Staff/Complaints/Add" title="Add New Complaint">&#x2795;&nbsp;<span class="d-inline d-sm-none">Add&nbsp;</span>New <span class="d-inline d-sm-none d-lg-inline">Complaint</span></a>
+                            <a class="nav-link" asp-page="/Staff/Complaints/Add" title="Add New Complaint">
+                                <svg class="bi">
+                                    <use href="@Url.Content("~/images/app-icons.svg")#plus-lg"></use>
+                                </svg>&nbsp;<span class="d-inline d-sm-none">Add&nbsp;</span>New <span class="d-inline d-sm-none d-lg-inline">Complaint</span>
+                            </a>
                         </li>
                     }
                     @if (Model.IsActiveUser)
