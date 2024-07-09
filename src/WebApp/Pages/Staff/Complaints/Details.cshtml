@@ -18,7 +18,11 @@
         @if (Model.ComplaintView.IsPublic)
         {
             <div class="col-auto d-print-none ms-2">
-                <a asp-page="/Complaint" asp-route-id="@Model.ComplaintView.Id.ToString()" class="link-offset-2">📢 View public copy</a>
+                <a asp-page="/Complaint" asp-route-id="@Model.ComplaintView.Id.ToString()" class="link-offset-2">
+                    <svg class="bi me-2">
+                        <use href="@Url.Content("~/images/app-icons.svg")#app-icon-people-fill"></use>
+                    </svg>View public copy
+                </a>
             </div>
         }
     </div>

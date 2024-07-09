@@ -177,6 +177,9 @@ html:not([data-bs-theme="dark"]) .bg-dark-subtle .text-danger-emphasis {
 
 .btn-img img {
     height: 25px;
+    background: white;
+    box-shadow: 0 0 1px white;
+    margin-right: 2px;
 }
 
 /* Additional font style utilities
@@ -315,10 +318,10 @@ details.card:not([open]) summary.card-header {
 /* Bootstrap Icons
 -------------------------------------------------- */
 .bi {
-    width: 1.1em;
-    height: 1.1em;
+    width: 1em;
+    height: 1em;
     fill: currentColor;
-    vertical-align: text-bottom;
+    vertical-align: -.125em;
     overflow: visible !important;
 }
 
