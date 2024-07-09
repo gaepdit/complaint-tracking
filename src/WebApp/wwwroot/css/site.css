@@ -315,10 +315,10 @@ details.card:not([open]) summary.card-header {
 /* Bootstrap Icons
 -------------------------------------------------- */
 .bi {
-    width: 1.1em;
-    height: 1.1em;
+    width: 1em;
+    height: 1em;
     fill: currentColor;
-    vertical-align: text-bottom;
+    vertical-align: -.125em;
     overflow: visible !important;
 }
 
