@@ -321,6 +321,7 @@ details.card:not([open]) summary.card-header {
     vertical-align: -.125em;
     overflow: visible !important;
 }
+
 .link-offset-2 .bi {
     height: 1.4em;
     border-bottom: 1px solid;
