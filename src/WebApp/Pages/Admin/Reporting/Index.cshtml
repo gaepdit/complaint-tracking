@@ -30,7 +30,9 @@ else
     ViewData["Title"] = $"Report: {Model.ReportTitle[Model.CurrentReport]}";
 
     <p class="d-print-none">
-        <a asp-page="Index" class="lead link-offset-2">← CTS Reports</a>
+        <a asp-page="Index" class="lead link-offset-2"><svg class="bi me-2">
+                <use href="@Url.Content("~/images/app-icons.svg")#app-icon-arrow-90deg-up"></use>
+            </svg>CTS Reports</a>
     </p>
     <h1 id="table-description">Report: @Model.ReportTitle[Model.CurrentReport]</h1>
 
