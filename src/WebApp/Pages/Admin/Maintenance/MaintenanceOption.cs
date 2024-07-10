@@ -2,8 +2,8 @@ namespace Cts.WebApp.Pages.Admin.Maintenance;
 
 public class MaintenanceOption
 {
-    public string SingularName { get; private init; } = string.Empty;
-    public string PluralName { get; private init; } = string.Empty;
+    public string SingularName { get; private init; }
+    public string PluralName { get; private init; }
     public bool StartsWithVowelSound { get; private init; }
 
     private MaintenanceOption(string singularName, string pluralName, bool startsWithVowelSound = false)
