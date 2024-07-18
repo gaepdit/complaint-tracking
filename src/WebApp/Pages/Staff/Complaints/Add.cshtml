@@ -217,7 +217,12 @@
             </div>
             <div class="row">
                 <div class="col-md-9 col-lg-6">
-                    <input class="form-control form-control-lg mb-3" type="file" asp-for="Item.Files" multiple accept="@FileTypes.FileTypesAcceptString">
+                    <div id="drop-area" class="border border-primary-subtle rounded-3 p-3 mb-3 bg-light-subtle">
+                        <p>Drag files here or click to select.</p>
+                        <input id="fileElem" type="file" asp-for="Item.Files" multiple accept="@FileTypes.FileTypesAcceptString" style="display:none;" />
+                        <button class="btn btn-outline-primary" onclick="document.getElementById('fileElem').click(); return false;">Select Files</button>
+                        <div id="upload-success" class="text-success mt-2"></div>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -255,10 +260,67 @@
     <script src="~/lib/axios/axios.min.js"></script>
     <script src="~/js/staffSelect.js"></script>
     <script>
-    setUpStaffDropdown(
-        "@nameof(Model.Item)_@nameof(ComplaintCreateDto.OfficeId)",
-        "@nameof(Model.Item)_@nameof(ComplaintCreateDto.OwnerId)",
-        true,
-        "@SelectOptions.SelectTextDefaultAssignor");
+        setUpStaffDropdown(
+            "@nameof(Model.Item)_@nameof(ComplaintCreateDto.OfficeId)",
+            "@nameof(Model.Item)_@nameof(ComplaintCreateDto.OwnerId)",
+            true,
+            "@SelectOptions.SelectTextDefaultAssignor");
+            
+        // Drag and Drop functionality
+        document.addEventListener('DOMContentLoaded', (event) => {
+            let dropArea = document.getElementById('drop-area');
+            let successMessageArea = document.getElementById('upload-success');
+            let fileInput = document.getElementById('fileElem');
+            // Prevent default drag behaviors
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            });
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            // Highlight drop area when item is dragged over it
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, () => dropArea.classList.add('bg-primary-subtle'), false);
+            });
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, () => dropArea.classList.remove('bg-primary-subtle'), false);
+            });
+            // Handle dropped files
+            dropArea.addEventListener('drop', handleDrop, false);
+            function handleDrop(e) {
+                let dt = e.dataTransfer;
+                let files = dt.files;
+                handleFiles(files);
+                displaySuccessMessage(files);
+            }
+            // Handle file selection
+            fileInput.addEventListener('change', (e) => {
+                let files = e.target.files;
+                displaySuccessMessage(files);
+            });
+            function handleFiles(files) {
+                let dataTransfer = new DataTransfer();
+                // Add existing files
+                for (let i = 0; i < fileInput.files.length; i++) {
+                    dataTransfer.items.add(fileInput.files[i]);
+                }
+                // Add dropped files
+                for (let i = 0; i < files.length; i++) {
+                    dataTransfer.items.add(files[i]);
+                }
+                // Update the file input with the new files
+                fileInput.files = dataTransfer.files;
+            }
+            function displaySuccessMessage(files) {
+                successMessageArea.innerHTML = "";
+                for (let i = 0; i < files.length; i++) {
+                    let file = files[i];
+                    let message = document.createElement('p');
+                    message.textContent = `${file.name} selected.`;
+                    successMessageArea.appendChild(message);
+                }
+            }
+        });
     </script>
 }
