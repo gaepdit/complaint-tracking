@@ -12,7 +12,7 @@ public class ComplaintModel(
 {
     public ComplaintPublicViewDto Item { get; private set; } = default!;
     public bool UserIsActive { get; private set; }
-    
+
     public async Task<IActionResult> OnGetAsync(int? id)
     {
         if (id is null) return RedirectToPage("../Index");
