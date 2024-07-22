@@ -1,4 +1,12 @@
-# Workflow to register a new application version with GitHub Releases and Raygun deployment tracking.
+# Workflow to register a new application version with both GitHub Releases and Raygun deployment tracking.
+
+# The workflow is triggered when a tag in the format "v1.0.0" is pushed to GitHub.
+#
+# Learn more about Raygun Deployment Tracking at:
+# https://raygun.com/documentation/product-guides/deployment-tracking/overview/
+#
+# Learn more about the GitHub release action at:
+# https://github.com/marketplace/actions/git-release
 
 name: Release Tracking
 
@@ -9,11 +17,18 @@ on:
 
 jobs:
   release-tracking:
+    # ↓ Change this to "false" to disable the workflow without any alert messages.
+    if: ${{ true }}
+    # ↑ Change to "true" (or delete) to enable the workflow.
+
     runs-on: ubuntu-latest
     steps:
       - name: Get the version number
         id: get_version
-        run: echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+          echo Version: $VERSION
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Send to the Raygun Deployments API
         id: raygun_deployment
