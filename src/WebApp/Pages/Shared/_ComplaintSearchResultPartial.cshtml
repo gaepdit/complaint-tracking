@@ -6,32 +6,32 @@
 <div class="table-responsive-md mb-3">
     <table class="table table-hover" aria-label="Facility search results">
         <thead>
-        <tr>
-            <th scope="col" class="text-nowrap">
+        <tr class="text-nowrap">
+            <th scope="col">
                 <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
                    asp-route-Sort="@(Model.Spec.Sort == SortBy.IdAsc ? nameof(SortBy.IdDesc) : nameof(SortBy.IdAsc))"
-                   class="link-offset-2">
+                   class="link-offset-2 text-dotted-underline">
                     ID @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
                            new { up = nameof(SortBy.IdAsc), down = nameof(SortBy.IdDesc) })
                 </a>
             </th>
-            <th scope="col" class="text-nowrap">
+            <th scope="col">
                 <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
                    asp-route-Sort="@(Model.Spec.Sort == SortBy.ReceivedDateAsc ? nameof(SortBy.ReceivedDateDesc) : nameof(SortBy.ReceivedDateAsc))"
-                   class="link-offset-2">
+                   class="link-offset-2 text-dotted-underline">
                     Date Received @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
                                       new { up = nameof(SortBy.ReceivedDateAsc), down = nameof(SortBy.ReceivedDateDesc) })
                 </a>
             </th>
-            <th scope="col" class="text-nowrap">
+            <th scope="col">
                 <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
                    asp-route-Sort="@(Model.Spec.Sort == SortBy.StatusAsc ? nameof(SortBy.StatusDesc) : nameof(SortBy.StatusAsc))"
-                   class="link-offset-2">
+                   class="link-offset-2 text-dotted-underline">
                     Status @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
                                new { up = nameof(SortBy.StatusAsc), down = nameof(SortBy.StatusDesc) })
                 </a>
             </th>
-            <th scope="col">Source/Location</th>
+            <th scope="col">Source &amp; Location</th>
             <th scope="col">Office Assigned</th>
             <th scope="col">Areas of Concern</th>
         </tr>
@@ -71,6 +71,10 @@
                         @if (item.SourceFacilityIdNumber != null)
                         {
                             <li>ID: @item.SourceFacilityIdNumber</li>
+                        }
+                        @if (!string.IsNullOrEmpty(item.SourceAddressCityState))
+                        {
+                            <li>@item.SourceAddressCityState</li>
                         }
                         @if (item.ComplaintCounty != null)
                         {

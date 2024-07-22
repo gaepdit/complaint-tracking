@@ -182,7 +182,7 @@ html:not([data-bs-theme="dark"]) .bg-dark-subtle .text-danger-emphasis {
     margin-right: 2px;
 }
 
-/* Additional font style utilities
+/* Additional text utilities
 -------------------------------------------------- */
 .font-weight-medium {
     font-weight: 500 !important;
@@ -198,6 +198,10 @@ html:not([data-bs-theme="dark"]) .bg-dark-subtle .text-danger-emphasis {
 
 .text-decoration-hover:hover, .text-decoration-hover:focus {
     text-decoration: underline !important;
+}
+
+.text-dotted-underline {
+    text-decoration: underline dotted;
 }
 
 /* External links

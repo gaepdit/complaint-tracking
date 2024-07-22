@@ -13,6 +13,7 @@ public record ComplaintSearchResultDto
     public string? SourceFacilityName { get; init; }
     public string? ComplaintLocation { get; init; }
     public string? SourceFacilityIdNumber { get; init; }
+    public string? SourceAddressCityState { get; init; }
     public string? ComplaintCounty { get; init; }
     public string? PrimaryConcernName { get; init; }
     public string? SecondaryConcernName { get; init; }
