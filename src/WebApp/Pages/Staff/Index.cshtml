@@ -4,6 +4,16 @@
     ViewData["Title"] = "Staff Dashboard";
 }
 
+<div class="alert alert-warning d-flex align-items-center validation-summary-errors" role="alert" data-valmsg-summary="true">
+    <svg class="bi me-2" role="img" aria-label="Danger:">
+        <use href="/images/app-icons.svg#app-icon-exclamation-triangle-fill"></use>
+    </svg>
+    <div>
+        Due to the recent global event this last Friday, any records submitted July 18th may be lost. EPD IT is
+        still working on data recovery and will provide updates as soon as possible. Please resubmit any missing data.
+    </div>
+</div>
+
 @if (Model.IsStaff)
 {
     <div class="p-3 rounded-3 bg-light-subtle border mt-3 mb-3 col">
