@@ -19,6 +19,7 @@ public class ComplaintAction : AuditableSoftDeleteEntity
 
     // Properties
 
+    public int ComplaintId { get; init; }
     public Complaint Complaint { get; private init; } = default!;
 
     public ActionType ActionType { get; set; } = default!;
