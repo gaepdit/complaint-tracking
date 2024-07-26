@@ -90,15 +90,20 @@ public class ExternalLoginModel(
 
         if (!configuration.IsTenantAllowed(userTenant))
         {
-            logger.LogWarning("User in disallowed Tenant {TenantId} attempted signin", userTenant);
-            return RedirectToLoginPageWithError($"User account tenant '{userTenant}' does not have access to this application.");
+            logger.LogWarning("User {UserName} in disallowed tenant {TenantId} attempted signin", preferredUserName,
+                userTenant);
+            return RedirectToLoginPageWithError(
+                $"User account tenant '{userTenant}' does not have access to this application.");
         }
-        
+
         if (!preferredUserName.IsValidEmailDomain())
         {
             logger.LogWarning("User {UserName} with invalid email domain attempted signin", preferredUserName);
             return RedirectToPage("./Unavailable");
         }
+
+        logger.LogInformation("User {UserName} in tenant {TenantID} successfully signed in", preferredUserName,
+            userTenant);
 
         // Determine if a user account already exists.
         var user = await userManager.FindByNameAsync(preferredUserName);
