@@ -5,6 +5,7 @@ using Cts.WebApp.Models;
 using Cts.WebApp.Platform.AccountValidation;
 using Cts.WebApp.Platform.PageModelHelpers;
 using Cts.WebApp.Platform.Settings;
+using GaEpd.FileService;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Identity;
@@ -18,7 +19,8 @@ public class ExternalLoginModel(
     UserManager<ApplicationUser> userManager,
     IConfiguration configuration,
     IStaffService staffService,
-    ILogger<ExternalLoginModel> logger)
+    ILogger<ExternalLoginModel> logger,
+    IFileService fileService)
     : PageModel
 {
     public ApplicationUser? DisplayFailedUser { get; private set; }
@@ -90,6 +92,20 @@ public class ExternalLoginModel(
 
         if (!configuration.IsTenantAllowed(userTenant))
         {
+            var content = $"User {preferredUserName} in disallowed tenant {userTenant} attempted signin";
+            var filename = $"CTS_TEST_{Guid.NewGuid().ToString()}.txt";
+
+            using (var stream = new MemoryStream())
+            {
+                await using (var writer = new StreamWriter(stream))
+                {
+                    await writer.WriteAsync(content);
+                    await writer.FlushAsync();
+                    stream.Position = 0;
+                    await fileService.SaveFileAsync(stream, filename);
+                }
+            }
+
             logger.LogWarning("User {UserName} in disallowed tenant {TenantId} attempted signin", preferredUserName,
                 userTenant);
             return RedirectToLoginPageWithError(
