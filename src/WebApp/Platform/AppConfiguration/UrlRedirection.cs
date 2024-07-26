@@ -29,6 +29,8 @@ public static class UrlRedirection
                 // Staff complaint pages
                 .AddRedirect(regex: "^Complaints(?:/)?$", replacement: "Staff/Complaints",
                     statusCode: StatusCodes.Status302Found)
+                .AddRedirect(regex: "^Complaints/Create(?:/)?$", replacement: "Staff/Complaints/Add",
+                    statusCode: StatusCodes.Status302Found)
                 .AddRedirect(regex: $"^Complaints/(?:Details|Actions)/{IntRegex}$",
                     replacement: "Staff/Complaints/Details/$1",
                     statusCode: StatusCodes.Status302Found)
