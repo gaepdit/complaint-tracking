@@ -358,6 +358,12 @@ label:has([disabled]), label:has(:disabled) {
     margin-bottom: 0;
 }
 
+/* Table of contents
+-------------------------------------------------- */
+#toc-container {
+    top: 2rem;
+}
+
 /* Footer links
 -------------------------------------------------- */
 footer a {
