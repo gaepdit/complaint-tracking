@@ -2,9 +2,6 @@
 
 The Complaint Tracking System (CTS) is an online application to allow EPD staff to enter, assign, review, and close complaints received from the public.
 
-## CTS Next
-
-The CTS is in the process of being completely rebuilt in the `vNext/*` set of branches. For the currently deployed application, go to the [`main` branch](https://github.com/gaepdit/complaint-tracking/tree/main).
 
 [![Georgia EPD-IT](https://raw.githubusercontent.com/gaepdit/gaepd-brand/main/blinkies/blinkies.cafe-gaepdit.gif)](https://github.com/gaepdit)
 [![.NET Test](https://github.com/gaepdit/complaint-tracking/actions/workflows/dotnet-test.yml/badge.svg)](https://github.com/gaepdit/complaint-tracking/actions/workflows/dotnet-test.yml)
