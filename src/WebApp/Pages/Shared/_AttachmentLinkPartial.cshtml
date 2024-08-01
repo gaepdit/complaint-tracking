@@ -16,7 +16,7 @@
 else
 {
     <a asp-page="Attachment" asp-route-id="@Model.Id.ToString()" asp-route-fileName="@Model.FileName" target="_blank"
-       data-fancybox="gallery" class="text-decoration-hover rounded d-block p-2 no-external-link">
+       class="text-decoration-hover rounded d-block p-2 no-external-link">
         @Html.DisplayFor(dto => dto.FileExtension, DisplayTemplate.FileTypeIcon) @Model.FileName
     </a>
 }
