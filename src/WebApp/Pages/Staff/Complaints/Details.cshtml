@@ -385,59 +385,6 @@ else
     </p>
 }
 
-<!-- HOVER AREA CSS STYLE -->
-<style>
-    #drop-area {
-        position: relative;
-        border: 2px dashed #007bff;
-        border-radius: 5px;
-        padding: 20px;
-        text-align: center;
-        transition: all 0.3s ease;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 200px;
-        overflow: hidden;
-    }
-    #drop-area.hover {
-        background-color: rgba(0, 123, 255, 0.1);
-        border-color: #007bff;
-    }
-    #drop-area.hover::before {
-        content: "Drop files here";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: #007bff;
-        font-size: 1.5em;
-        text-align: center;
-        z-index: 10;
-    }
-    #drop-area.hover::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 123, 255, 0.1);
-        z-index: 5;
-        backdrop-filter: blur(5px);
-    }
-    #drop-area p {
-        margin: 0 0 10px 0;
-        text-align: center;
-    }
-    #fileElem {
-        display: none;
-    }
-    #upload-success {
-        margin-top: 10px;
-    }
-</style>
 
 @if (Model.UserCan[ComplaintOperation.EditAttachments])
 {
@@ -450,11 +397,11 @@ else
         <form method="post" asp-page-handler="UploadFiles" asp-fragment="upload-attachments" enctype="multipart/form-data">
             @Html.DisplayFor(_ => Model.ValidatingSection, DisplayTemplate.ValidationSummaryConditional,
                 new { ValidatingSection = nameof(DetailsModel.OnPostUploadFilesAsync) })
-            <div id="drop-area" class="mb-3 mt-2">
-                <p>Drag files here or click to select.</p>
-                <input id="fileElem" type="file" asp-for="FileUploads.Files" multiple accept="@FileTypes.FileTypesAcceptString" style="display:none;" />
-                <button class="btn btn-outline-primary" onclick="document.getElementById('fileElem').click(); return false;">Select Files</button>
-                <div id="upload-success" class="text-success mt-2"></div>
+            <div class="drop-area">
+                <p>Drag & Drop files here or click to select.</p>
+                <input class="fileElem" type="file" asp-for="FileUploads.Files" multiple accept="@FileTypes.FileTypesAcceptString" />
+                <button class="btn btn-outline-primary select-files-button">Select Files</button>
+                <div class="upload-success text-success mt-2"></div>
             </div>
             <p>
                 Up to ten files may be uploaded at a time. Supported file types are images, documents, and spreadsheets.
@@ -467,7 +414,6 @@ else
         </form>
     </div>
 }
-
 
 <h2 class="h3">Audit History</h2>
 
@@ -541,70 +487,7 @@ else
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script>
-        // Drag and Drop functionality
-        document.addEventListener('DOMContentLoaded', (event) => {
-            let dropArea = document.getElementById('drop-area');
-            let successMessageArea = document.getElementById('upload-success');
-            let overallSuccessMessageArea = document.getElementById('overall-success');
-            let fileInput = document.getElementById('fileElem');
-            // Prevent default drag behaviors
-            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                dropArea.addEventListener(eventName, preventDefaults, false);
-            });
-            function preventDefaults(e) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-            // Highlight drop area when item is dragged over it
-            ['dragenter', 'dragover'].forEach(eventName => {
-                dropArea.addEventListener(eventName, () => {
-                    dropArea.classList.add('hover');
-                    clearOverallSuccessMessage();
-                }, false);
-            });
-            ['dragleave', 'drop'].forEach(eventName => {
-                dropArea.addEventListener(eventName, () => dropArea.classList.remove('hover'), false);
-            });
-            // Handle dropped files
-            dropArea.addEventListener('drop', handleDrop, false);
-            function handleDrop(e) {
-                let dt = e.dataTransfer;
-                let files = dt.files;
-                handleFiles(files);
-                displaySuccessMessage(files);
-            }
-            // Handle file selection
-            fileInput.addEventListener('change', (e) => {
-                let files = e.target.files;
-                displaySuccessMessage(files);
-                clearOverallSuccessMessage();
-            });
-            function handleFiles(files) {
-                let dataTransfer = new DataTransfer();
-                // Add existing files
-                for (let i = 0; i < fileInput.files.length; i++) {
-                    dataTransfer.items.add(fileInput.files[i]);
-                }
-                // Add new files from drop
-                for (let i = 0; i < files.length; i++) {
-                    dataTransfer.items.add(files[i]);
-                }
-                // Update the file input with the new files
-                fileInput.files = dataTransfer.files;
-            }
-            function displaySuccessMessage(files) {
-                successMessageArea.innerHTML = "";
-                for (let i = 0; i < files.length; i++) {
-                    let file = files[i];
-                    let message = document.createElement('p');
-                    message.textContent = `${file.name} selected.`;
-                    successMessageArea.appendChild(message);
-                }
-            }
-            function clearOverallSuccessMessage() {
-                overallSuccessMessageArea.innerHTML = "";
-            }
-        });
-    </script>
+    <script src="~/lib/axios/axios.min.js"></script>
+    <script src="~/js/staffSelect.js"></script>
+    <script src="~/js/fileUpload.js"></script>
 }

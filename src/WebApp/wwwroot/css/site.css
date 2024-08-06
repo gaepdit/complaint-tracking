@@ -417,3 +417,64 @@ svg:not(:root) {
     max-width: 90px;
     max-height: 90px;
 }
+
+/* Styles for drag-and-drop file upload area */
+.drop-area {
+    position: relative;
+    border: 2px dashed #007bff;
+    border-radius: 5px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background-color: rgba(0, 123, 255, 0.1);
+    width: 100%;
+    min-height: 200px;
+}
+
+.drop-area.hover {
+    background-color: rgba(0, 123, 255, 0.1);
+    border-color: #007bff;
+}
+
+.drop-area.hover::before {
+    content: "Drop files here";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #007bff;
+    font-size: 1.5em;
+    text-align: center;
+    z-index: 10;
+}
+
+.drop-area.hover::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 123, 255, 0.1);
+    z-index: 5;
+    backdrop-filter: blur(5px);
+}
+
+.drop-area p {
+    margin: 0 0 10px 0;
+    text-align: center;
+}
+
+.fileElem {
+    display: none;
+}
+
+.upload-success,
+.overall-success {
+    margin-top: 10px;
+}
