@@ -44,9 +44,10 @@ public class DetailsModel(
     public bool ViewableActions => ComplaintView.Actions.Exists(action =>
         !action.IsDeleted || UserCan[ComplaintOperation.ViewDeletedActions]);
 
-    public bool UploadSuccess { get; set; } = false;
+    [TempData]
+    public bool UploadSuccess { get; set; }
 
-    public async Task<IActionResult> OnGetAsync(int? id, bool uploadSuccess = false)
+    public async Task<IActionResult> OnGetAsync(int? id)
     {
         if (id is null) return RedirectToPage("../Index");
 
@@ -60,8 +61,6 @@ public class DetailsModel(
         var investigator = (await staffService.GetCurrentUserAsync()).Name;
         NewAction = new ActionCreateDto(complaintView.Id) { Investigator = investigator };
         await PopulateSelectListsAsync();
-
-        UploadSuccess = uploadSuccess;
 
         return Page();
     }
@@ -131,7 +130,8 @@ public class DetailsModel(
 
         await attachmentService.SaveAttachmentsAsync(id.Value, fileUploads.Files, AppSettings.AttachmentServiceConfig,
             token);
-        return RedirectToPage("Details", new { id, uploadSuccess = true });
+        UploadSuccess = true;
+        return RedirectToPage("Details", new { id });
     }
 
     private async Task PopulateSelectListsAsync() =>

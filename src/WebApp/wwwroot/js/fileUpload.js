@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     dropAreas.forEach(dropArea => {
         let successMessageArea = dropArea.querySelector('.upload-success');
         let fileInput = dropArea.querySelector('.fileElem');
-        let selectFilesBtn = dropArea.querySelector('.select-files-button');
+        let selectFilesBtn = dropArea.querySelector('.select-files-btn');
 
         // Prevent default drag behaviors
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -30,7 +30,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         function handleDrop(e) {
             let dt = e.dataTransfer;
             let files = dt.files;
-            handleFiles(files);
             displaySuccessMessage(files);
         }
 
@@ -45,17 +44,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
             e.preventDefault();
             fileInput.click();
         });
-
-        function handleFiles(files) {
-            let dataTransfer = new DataTransfer();
-            for (let i = 0; i < fileInput.files.length; i++) {
-                dataTransfer.items.add(fileInput.files[i]);
-            }
-            for (let i = 0; i < files.length; i++) {
-                dataTransfer.items.add(files[i]);
-            }
-            fileInput.files = dataTransfer.files;
-        }
 
         function displaySuccessMessage(files) {
             successMessageArea.innerHTML = "";
