@@ -5,7 +5,20 @@ document.getElementById("SearchButton").addEventListener("click", function (e) {
   //alert(dateFrom + " " + dateTo + " " + today);
 
   if (dateTo > today) {
-    alert("not valid date");
+    alert(
+      "Through date (" + dateTo + ") cannot exceed current date (" + today + ")"
+    );
     e.preventDefault();
+  } else if (dateFrom > today) {
+    alert(
+      "From date (" + dateFrom + ") cannot exceed current date (" + today + ")"
+    );
+    e.preventDefault();
+  } else if (dateFrom > dateTo) {
+    alert(
+      "From date (" + dateFrom + ") cannot exceed through date (" + dateTo + ")"
+    );
+    e.preventDefault();
+  } else {
   }
 });
