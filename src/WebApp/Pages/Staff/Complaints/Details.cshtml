@@ -413,22 +413,24 @@ else
         <form method="post" asp-page-handler="UploadFiles" asp-fragment="upload-attachments" enctype="multipart/form-data">
             @Html.DisplayFor(_ => Model.ValidatingSection, DisplayTemplate.ValidationSummaryConditional,
                 new { ValidatingSection = nameof(DetailsModel.OnPostUploadFilesAsync) })
-            <div class="row row-cols-sm-auto g-3 align-items-center mb-3 mt-2">
-                <div class="col-12">
-                    <input class="form-control" type="file" asp-for="FileUploads.Files" multiple accept="@FileTypes.FileTypesAcceptString">
-                </div>
-                <div class="col-12">
-                    <button type="submit" class="btn btn-primary">Upload selected files</button>
-                </div>
+            <div class="drop-area d-flex flex-column justify-content-center align-items-center">
+                <p>Drag & Drop files here or click to select.</p>
+                <input class="fileElem d-none" type="file" asp-for="FileUploads.Files" multiple accept="@FileTypes.FileTypesAcceptString" />
+                <button class="btn btn-outline-primary select-files-btn">Select Files</button>
+                <div class="upload-success text-success mt-2"></div>
+            </div>
+            <p class="col-lg-12">
+                Up to ten files may be uploaded with a new complaint. Additional files can be added after the 
+                complaint is created. Supported file types are images, documents, and spreadsheets.
+                All files must comply with the <a href="~/static/Complaint-Attachments-Policy.pdf" target="_blank">EPD Complaint Attachments Policy (<abbr>PDF</abbr>)</a>.
+            </p>
+            <div>
+                <button id="uploadButton" type="submit" class="btn btn-primary">Upload selected files</button>
+                <div id="overall-success" class="text-success mt-2">@((Model.UploadSuccess) ? "Files uploaded successfully." : "")</div>
             </div>
         </form>
-        <p>
-            Up to ten files may be uploaded at a time. Supported file types are images, documents, and spreadsheets.
-            All files must comply with the <a href="~/static/Complaint-Attachments-Policy.pdf" target="_blank">EPD Complaint Attachments Policy (<abbr>PDF</abbr>)</a>.
-        </p>
     </div>
 }
-
 
 <h2 class="h3">Audit History</h2>
 
@@ -505,8 +507,9 @@ else
 
 @section Scripts
 {
-    <script src="~/js/table-of-contents.js" defer></script>
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/fileUpload.js"></script>
+    <script src="~/js/table-of-contents.js" defer></script>
     <script src="~/lib/fancybox/jquery.fancybox.min.js"></script>
     <script src="~/js/fancyboxConfig.js"></script>
 }
