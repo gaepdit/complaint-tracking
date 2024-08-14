@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         function handleDrop(e) {
             let dt = e.dataTransfer;
             let files = dt.files;
+            handleFiles(files);
             displaySuccessMessage(files);
         }
 
@@ -44,6 +45,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
             e.preventDefault();
             fileInput.click();
         });
+
+        function handleFiles(files) {
+            let dataTransfer = new DataTransfer();
+            for (let i = 0; i < files.length; i++) {
+                dataTransfer.items.add(files[i]);
+            }
+            fileInput.files = dataTransfer.files;
+        }
 
         function displaySuccessMessage(files) {
             successMessageArea.innerHTML = "";
