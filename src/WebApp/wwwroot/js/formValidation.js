@@ -20,6 +20,7 @@ document.getElementById("SearchButton").addEventListener("click", function (e) {
     );
     e.preventDefault();
   } else {
+    //formSearch.js
     // (Add this script to search forms that use GET for submit. It keeps clutter out of the resulting query string.)
     $(document).ready(function () {
       function disableEmptyInput(n, el) {
