@@ -16,8 +16,7 @@ public class PublicSearchSpec
     [SetUp]
     public void SetUp()
     {
-        _repository = new LocalComplaintRepository(Substitute.For<IAttachmentRepository>(),
-            Substitute.For<IActionRepository>(), Substitute.For<IComplaintTransitionRepository>());
+        _repository = new LocalComplaintRepository(Substitute.For<IComplaintTransitionRepository>());
         _referenceItem =
             _repository.Items.Single(e => e.ComplaintNature == "PublicSearchSpec complaint nature reference");
     }

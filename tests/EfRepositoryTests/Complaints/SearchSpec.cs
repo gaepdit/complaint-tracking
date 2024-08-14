@@ -610,4 +610,56 @@ public class SearchSpec
             .Excluding(e => e.ReviewedBy!.Office)
         );
     }
+
+    [Test]
+    public async Task Attachments_Yes()
+    {
+        // Arrange
+        var spec = new ComplaintSearchDto { Attachments = YesNoAny.Yes };
+        var predicate = ComplaintFilters.SearchPredicate(spec);
+        var expected = ComplaintData.GetComplaints.Where(complaint =>
+            !complaint.IsDeleted && complaint.Attachments.Exists(attachment => !attachment.IsDeleted));
+
+        // Act
+        var results = await _repository.GetListAsync(predicate);
+
+        // Assert
+        results.Should().BeEquivalentTo(expected, options => options
+            .Excluding(e => e.CurrentOffice.StaffMembers)
+            .Excluding(e => e.CurrentOffice.Assignor)
+            .Excluding(e => e.Actions)
+            .Excluding(e => e.ComplaintTransitions)
+            .Excluding(e => e.EnteredBy!.Office)
+            .Excluding(e => e.ReceivedBy!.Office)
+            .Excluding(e => e.CurrentOwner!.Office)
+            .Excluding(e => e.Attachments)
+            .Excluding(e => e.ReviewedBy!.Office)
+        );
+    }
+
+    [Test]
+    public async Task Attachments_No()
+    {
+        // Arrange
+        var spec = new ComplaintSearchDto { Attachments = YesNoAny.No };
+        var predicate = ComplaintFilters.SearchPredicate(spec);
+        var expected = ComplaintData.GetComplaints.Where(complaint =>
+            !complaint.IsDeleted && !complaint.Attachments.Exists(attachment => !attachment.IsDeleted));
+
+        // Act
+        var results = await _repository.GetListAsync(predicate);
+
+        // Assert
+        results.Should().BeEquivalentTo(expected, options => options
+            .Excluding(e => e.CurrentOffice.StaffMembers)
+            .Excluding(e => e.CurrentOffice.Assignor)
+            .Excluding(e => e.Actions)
+            .Excluding(e => e.ComplaintTransitions)
+            .Excluding(e => e.EnteredBy!.Office)
+            .Excluding(e => e.ReceivedBy!.Office)
+            .Excluding(e => e.CurrentOwner!.Office)
+            .Excluding(e => e.Attachments)
+            .Excluding(e => e.ReviewedBy!.Office)
+        );
+    }
 }

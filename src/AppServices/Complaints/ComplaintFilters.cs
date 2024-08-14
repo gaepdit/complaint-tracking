@@ -121,11 +121,13 @@ internal static class ComplaintFilters
         this Expression<Func<Complaint, bool>> predicate,
         YesNoAny? input) => input switch
     {
-        YesNoAny.Yes => predicate.And(complaint => complaint.Attachments.Count != 0),
-        YesNoAny.No => predicate.And(complaint => complaint.Attachments.Count == 0),
+        YesNoAny.Yes => predicate.And(complaint => complaint.Attachments.Any(attachment => !attachment.IsDeleted)),
+#pragma warning disable S6603
+        YesNoAny.No => predicate.And(complaint => complaint.Attachments.All(attachment => attachment.IsDeleted)),
+#pragma warning restore S6603
         _ => predicate,
     };
-    
+
     private static Expression<Func<Complaint, bool>> ReceivedBy(this Expression<Func<Complaint, bool>> predicate,
         string? input) =>
         string.IsNullOrWhiteSpace(input)

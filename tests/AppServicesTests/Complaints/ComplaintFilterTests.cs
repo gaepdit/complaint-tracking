@@ -1,17 +1,6 @@
-﻿using Cts.AppServices.Attachments;
-using Cts.AppServices.Complaints;
+﻿using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.QueryDto;
-using Cts.AppServices.Notifications;
-using Cts.AppServices.UserServices;
-using Cts.Domain.Entities.Complaints;
-using Cts.Domain.Entities.Concerns;
-using Cts.Domain.Entities.Offices;
 using Cts.TestData;
-using GaEpd.AppLibrary.Pagination;
-using Microsoft.AspNetCore.Authorization;
-using System.Collections.ObjectModel;
-using System.Linq.Expressions;
-using System.Security.Claims;
 
 namespace AppServicesTests.Complaints;
 
@@ -136,7 +125,7 @@ public class ComplaintFilterTests
         var expression = ComplaintFilters.SearchPredicate(spec);
 
         var expected = ComplaintData.GetComplaints.Where(complaint =>
-            complaint is { IsDeleted: false, Attachments.Count: > 0 });
+            !complaint.IsDeleted && complaint.Attachments.Exists(attachment => !attachment.IsDeleted));
 
         // Act
         var result = ComplaintData.GetComplaints.Where(expression.Compile());
@@ -153,7 +142,7 @@ public class ComplaintFilterTests
         var expression = ComplaintFilters.SearchPredicate(spec);
 
         var expected = ComplaintData.GetComplaints.Where(complaint =>
-            complaint is { IsDeleted: false, Attachments.Count: 0 });
+            !complaint.IsDeleted && !complaint.Attachments.Exists(attachment => !attachment.IsDeleted));
 
         // Act
         var result = ComplaintData.GetComplaints.Where(expression.Compile());

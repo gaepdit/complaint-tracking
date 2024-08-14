@@ -7,7 +7,7 @@ public static class AttachmentData
 {
     private static IEnumerable<Attachment> AttachmentSeedItems => new List<Attachment>
     {
-        new(new Guid("20000000-0000-0000-0000-000000000001"))
+        new(new Guid("20000000-0000-0000-0000-000000000001")) // 0
         {
             Complaint = ComplaintData.GetComplaints.ElementAt(0),
             FileName = "FileOne.png",
@@ -17,7 +17,7 @@ public static class AttachmentData
             UploadedBy = UserData.GetUsers.ElementAt(1),
             IsImage = true,
         },
-        new(new Guid("20000000-0000-0000-0000-000000000002"))
+        new(new Guid("20000000-0000-0000-0000-000000000002")) // 1
         {
             Complaint = ComplaintData.GetComplaints.ElementAt(0),
             FileName = "File Two.svg",
@@ -27,7 +27,7 @@ public static class AttachmentData
             UploadedBy = UserData.GetUsers.ElementAt(1),
             IsImage = false,
         },
-        new(new Guid("20000000-0000-0000-0000-000000000003"))
+        new(new Guid("20000000-0000-0000-0000-000000000003")) // 2
         {
             Complaint = ComplaintData.GetComplaints.ElementAt(0),
             FileName = "File-Three-💻.pdf",
@@ -36,7 +36,7 @@ public static class AttachmentData
             UploadedBy = UserData.GetUsers.ElementAt(2),
             UploadedDate = DateTimeOffset.Now.AddDays(-1),
         },
-        new(new Guid("20000000-0000-0000-0000-000000000004"))
+        new(new Guid("20000000-0000-0000-0000-000000000004")) // 3
         {
             Complaint = ComplaintData.GetComplaints.ElementAt(0),
             FileName = "File-Four-Empty-File.png",
@@ -46,7 +46,7 @@ public static class AttachmentData
             UploadedBy = UserData.GetUsers.ElementAt(0),
             IsImage = true,
         },
-        new(new Guid("20000000-0000-0000-0000-000000000005"))
+        new(new Guid("20000000-0000-0000-0000-000000000005")) // 4
         {
             Complaint = ComplaintData.GetComplaints.ElementAt(0),
             FileName = "File-Five-Attachment-Deleted.pdf",
@@ -55,10 +55,19 @@ public static class AttachmentData
             UploadedDate = DateTimeOffset.Now.AddDays(-3),
             UploadedBy = UserData.GetUsers.ElementAt(0),
         },
-        new(new Guid("20000000-0000-0000-0000-000000000006"))
+        new(new Guid("20000000-0000-0000-0000-000000000006")) // 5
         {
             Complaint = ComplaintData.GetComplaints.ElementAt(3),
             FileName = "File-Six-Complaint-Deleted.pdf",
+            FileExtension = ".pdf",
+            Size = 1000,
+            UploadedDate = DateTimeOffset.Now.AddDays(-3),
+            UploadedBy = UserData.GetUsers.ElementAt(0),
+        },
+        new(new Guid("20000000-0000-0000-0000-000000000007")) // 6
+        {
+            Complaint = ComplaintData.GetComplaints.ElementAt(1),
+            FileName = "File-Seven-Attachment-Deleted.pdf",
             FileExtension = ".pdf",
             Size = 1000,
             UploadedDate = DateTimeOffset.Now.AddDays(-3),
@@ -76,6 +85,7 @@ public static class AttachmentData
 
             _attachments = AttachmentSeedItems.ToList();
             _attachments.ElementAt(4).SetDeleted("20000000-0000-0000-0000-000000000002");
+            _attachments.ElementAt(6).SetDeleted("20000000-0000-0000-0000-000000000002");
             return _attachments;
         }
     }
@@ -102,6 +112,7 @@ public static class AttachmentData
                 new("20000000-0000-0000-0000-000000000004.png", thumbnailsPath, Base64EncodedFile: null),
                 new("20000000-0000-0000-0000-000000000005.pdf", attachmentsPath, Base64EncodedFile: null),
                 new("20000000-0000-0000-0000-000000000006.pdf", attachmentsPath, EncodedPdfFile),
+                new("20000000-0000-0000-0000-000000000007.pdf", attachmentsPath, EncodedPdfFile),
             };
         }
     }
