@@ -12,8 +12,8 @@
     const getPreferredTheme = () => getStoredTheme() || 'auto'
 
     const setTheme = theme => {
-        if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.documentElement.setAttribute('data-bs-theme', 'dark')
+        if (theme === 'auto') {
+            document.documentElement.setAttribute('data-bs-theme', (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'))
         } else {
             document.documentElement.setAttribute('data-bs-theme', theme)
         }

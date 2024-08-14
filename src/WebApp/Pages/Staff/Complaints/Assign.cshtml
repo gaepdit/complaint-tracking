@@ -42,8 +42,7 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script src="~/lib/axios/axios.min.js"></script>
-    <script src="~/js/staffSelect.js"></script>
+<partial name="_StaffSelectScriptsPartial" />
     <script>
     setUpStaffDropdown(
         "@nameof(Model.ComplaintAssignment)_@nameof(ComplaintAssignmentDto.OfficeId)",

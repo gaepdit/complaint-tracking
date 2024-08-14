@@ -246,9 +246,8 @@
 
 @section Scripts {
     <script src="~/js/formSearch.js"></script>
-    <script src="~/lib/axios/axios.min.js"></script>
-    <script src="~/js/staffSelect.js"></script>
-    <script>
+<partial name="_StaffSelectScriptsPartial" />
+<script>
     setUpStaffDropdown(
         "@nameof(Model.Spec)_@nameof(ComplaintSearchDto.Office)",
         "@nameof(Model.Spec)_@nameof(ComplaintSearchDto.Assigned)",
