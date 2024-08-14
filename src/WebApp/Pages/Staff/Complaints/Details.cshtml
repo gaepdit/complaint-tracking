@@ -15,12 +15,13 @@
         <div class="col">
             <h1>@ViewData["Title"]</h1>
         </div>
-        @if (Model.ComplaintView.IsPublic)
-        {
-            <div class="col-auto d-print-none ms-2">
-                <a asp-page="/Complaint" asp-route-id="@Model.ComplaintView.Id.ToString()" class="link-offset-2">📢 View public copy</a>
-            </div>
-        }
+        <div class="col-auto d-print-none ms-2">
+            <a asp-page="/Complaint" asp-route-id="@Model.ComplaintView.Id.ToString()" class="link-offset-2">
+                <svg class="bi me-2">
+                    <use href="@Url.Content("~/images/app-icons.svg")#app-icon-people-fill"></use>
+                </svg>View public copy
+            </a>
+        </div>
     </div>
 </div>
 
@@ -83,6 +84,22 @@
         }
     </div>
 }
+
+<div class="container-full">
+<div class="row gx-md-3">
+<div class="col-md-3 mb-3 mb-md-0 d-print-none">
+    <div class="sticky-md-top" id="toc-container">
+        <div class="pb-2 d-grid d-md-none">
+            <button class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" data-bs-target="#toc" aria-expanded="false" aria-controls="toc">
+                On this Page
+            </button>
+        </div>
+        <h3 class="h5 d-none d-md-block no-anchor">On this Page</h3>
+        <div class="list-group list-group-flush collapse d-md-block" id="toc"></div>
+    </div>
+</div>
+
+<div class="col-md-9 order-md-first">
 
 <h2 id="status">Status: <em class="text-info-emphasis">@Model.ComplaintView.Status.GetDisplayName()</em></h2>
 
@@ -484,8 +501,20 @@ else
         </div>
     </details>
 }
+</div>
+</div>
+</div>
 
-@section Scripts {
+@section Scripts
+{
     <partial name="_ValidationScriptsPartial" />
     <script src="~/js/fileUpload.js"></script>
+    <script src="~/js/table-of-contents.js" defer></script>
+    <script src="~/lib/fancybox/jquery.fancybox.min.js"></script>
+    <script src="~/js/fancyboxConfig.js"></script>
+}
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/lib/fancybox/jquery.fancybox.min.css" />
 }

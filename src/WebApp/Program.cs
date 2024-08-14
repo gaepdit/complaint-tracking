@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.OpenApi.Models;
 using Mindscape.Raygun4Net;
 using Mindscape.Raygun4Net.AspNetCore;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,7 +55,7 @@ builder.Services.AddSingleton(provider =>
 builder.Services.AddRaygun(opts =>
 {
     opts.ApiKey = AppSettings.RaygunSettings.ApiKey;
-    opts.ApplicationVersion = Assembly.GetEntryAssembly()?.GetName().Version?.ToString(3);
+    opts.ApplicationVersion = AppSettings.SupportSettings.InformationalVersion;
     opts.ExcludeErrorsFromLocal = AppSettings.RaygunSettings.ExcludeErrorsFromLocal;
     opts.IgnoreFormFieldNames = ["*Password"];
     opts.EnvironmentVariables.Add("ASPNETCORE_*");
@@ -135,4 +134,4 @@ app.MapRazorPages();
 app.MapControllers();
 
 // Make it so.
-app.Run();
+await app.RunAsync();

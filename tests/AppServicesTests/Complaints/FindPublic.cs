@@ -19,8 +19,7 @@ public class FindPublic
         var item = new Complaint(1);
 
         var repoMock = Substitute.For<IComplaintRepository>();
-        repoMock.FindIncludeAllAsync(Arg.Any<Expression<Func<Complaint, bool>>>(), Arg.Any<bool>(),
-                Arg.Any<CancellationToken>())
+        repoMock.FindPublicAsync(Arg.Any<Expression<Func<Complaint, bool>>>(), Arg.Any<CancellationToken>())
             .Returns(item);
 
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),

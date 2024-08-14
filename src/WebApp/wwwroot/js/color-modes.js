@@ -9,11 +9,7 @@
 
     const getStoredTheme = () => localStorage.getItem('theme')
     const setStoredTheme = theme => localStorage.setItem('theme', theme)
-
-    const getPreferredTheme = () => {
-        const storedTheme = getStoredTheme()
-        return storedTheme || 'auto';
-    }
+    const getPreferredTheme = () => getStoredTheme() || 'auto'
 
     const setTheme = theme => {
         if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -40,10 +36,12 @@
         document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
             element.classList.remove('active')
             element.setAttribute('aria-pressed', 'false')
+            element.querySelector('.theme-checkmark').classList.add('d-none')
         })
 
         btnToActive.classList.add('active')
         btnToActive.setAttribute('aria-pressed', 'true')
+        btnToActive.querySelector('.theme-checkmark').classList.remove('d-none')
         activeThemeIcon.setAttribute('href', svgOfActiveBtn)
         const themeSwitcherLabel = `${themeSwitcherText.textContent} (${btnToActive.dataset.bsThemeValue})`
         themeSwitcher.setAttribute('aria-label', themeSwitcherLabel)

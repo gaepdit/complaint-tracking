@@ -21,6 +21,8 @@ public record ComplaintPublicViewDto
     // Properties: Status & meta-data
 
     public ComplaintStatus Status { get; init; }
+    public bool ComplaintClosed { get; init; }
+
 
     [Display(Name = "Complaint Received")]
     public DateTimeOffset ReceivedDate { get; init; }

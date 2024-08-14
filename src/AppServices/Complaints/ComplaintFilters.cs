@@ -13,6 +13,7 @@ internal static class ComplaintFilters
     public static Expression<Func<Complaint, bool>> PublicSearchPredicate(ComplaintPublicSearchDto spec) =>
         PredicateBuilder.True<Complaint>()
             .IsPublic()
+            .ByStatus(spec.Status)
             .FromDate(spec.DateFrom)
             .ToDate(spec.DateTo)
             .ContainsNature(spec.Description)
@@ -49,7 +50,7 @@ internal static class ComplaintFilters
             .ReviewRequestedFrom(spec.Reviewer);
 
     private static Expression<Func<Complaint, bool>> IsPublic(this Expression<Func<Complaint, bool>> predicate) =>
-        predicate.IsClosed().ExcludeDeleted();
+        predicate.ExcludeDeleted();
 
     // Comprises both "Closed" and "AdministrativelyClosed" statuses.
     private static Expression<Func<Complaint, bool>> IsClosed(this Expression<Func<Complaint, bool>> predicate) =>

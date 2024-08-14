@@ -29,12 +29,17 @@
     <p>For technical support, contact <a href="@AppSettings.SupportSettings.TechnicalSupportSite" target="_blank" rel="noopener">EPD IT support</a>.</p>
 }
 
-<div class="callout">
+<div class="callout callout-info">
     <small>
-        The CTS was developed by Georgia EPD-IT.<br/>
-        @if (Model.CurrentVersion is not null)
+        The CTS was developed by Georgia EPD-IT.<br />
+        @if (!string.IsNullOrEmpty(AppSettings.SupportSettings.InformationalVersion))
         {
-            @:Current version: <em>@Model.CurrentVersion</em>.<br/>
+            @:Current version: <em>@AppSettings.SupportSettings.InformationalVersion</em>.<br />
+        }
+        @if (!string.IsNullOrEmpty(AppSettings.SupportSettings.InformationalBuild))
+        {
+            @:Build: <em>@AppSettings.SupportSettings.InformationalBuild</em>.
+            <br />
         }
         Source code available on
         <a href="https://github.com/gaepdit/complaint-tracking" target="_blank" rel="noopener" class="text-decoration-hover link-offset-2">GitHub</a>.

@@ -22,10 +22,10 @@ public sealed class LocalComplaintRepository(
         await GetComplaintDetailsAsync(await FindAsync(id, token).ConfigureAwait(false), includeDeletedActions, token)
             .ConfigureAwait(false);
 
-    public async Task<Complaint?> FindIncludeAllAsync(Expression<Func<Complaint, bool>> predicate,
-        bool includeDeletedActions = false, CancellationToken token = default) =>
-        await GetComplaintDetailsAsync(await FindAsync(predicate, token).ConfigureAwait(false), includeDeletedActions,
-            token).ConfigureAwait(false);
+    public async Task<Complaint?> FindPublicAsync(Expression<Func<Complaint, bool>> predicate,
+        CancellationToken token = default) =>
+        await GetComplaintDetailsAsync(await FindAsync(predicate, token).ConfigureAwait(false), false, token)
+            .ConfigureAwait(false);
 
     public Task<IReadOnlyCollection<Complaint>> GetListWithMostRecentActionAsync(
         Expression<Func<Complaint, bool>> predicate, string sorting = "", CancellationToken token = default)
@@ -60,7 +60,7 @@ public sealed class LocalComplaintRepository(
         complaint.Actions.Clear();
         complaint.Actions.AddRange((await actionRepository
                 .GetListAsync(action => action.Complaint.Id == complaint.Id &&
-                    (!action.IsDeleted || includeDeletedActions), token).ConfigureAwait(false))
+                                        (!action.IsDeleted || includeDeletedActions), token).ConfigureAwait(false))
             .OrderByDescending(action => action.ActionDate)
             .ThenByDescending(action => action.EnteredDate)
             .ThenBy(action => action.Id));

@@ -2,6 +2,7 @@ using Cts.AppServices.Staff;
 using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Identity;
 using Cts.WebApp.Models;
+using Cts.WebApp.Platform.AccountValidation;
 using Cts.WebApp.Platform.PageModelHelpers;
 using Cts.WebApp.Platform.Settings;
 using Microsoft.AspNetCore.Authentication;
@@ -82,15 +83,27 @@ public class ExternalLoginModel(
         if (externalLoginInfo?.Principal is null)
             return RedirectToLoginPageWithError("Error loading work account information.");
 
+        var userTenant = externalLoginInfo.Principal.FindFirstValue(ClaimConstants.TenantId);
         var preferredUserName = externalLoginInfo.Principal.FindFirstValue(ClaimConstants.PreferredUserName);
-        if (preferredUserName is null)
+        if (preferredUserName is null || userTenant is null)
             return RedirectToLoginPageWithError("Error loading detailed work account information.");
+
+        if (!configuration.IsTenantAllowed(userTenant))
+        {
+            logger.LogWarning("User {UserName} in disallowed tenant {TenantId} attempted signin", preferredUserName,
+                userTenant);
+            return RedirectToLoginPageWithError(
+                $"User account tenant '{userTenant}' does not have access to this application.");
+        }
 
         if (!preferredUserName.IsValidEmailDomain())
         {
             logger.LogWarning("User {UserName} with invalid email domain attempted signin", preferredUserName);
             return RedirectToPage("./Unavailable");
         }
+
+        logger.LogInformation("User {UserName} in tenant {TenantID} successfully signed in", preferredUserName,
+            userTenant);
 
         // Determine if a user account already exists.
         var user = await userManager.FindByNameAsync(preferredUserName);

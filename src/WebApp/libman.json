@@ -52,6 +52,14 @@
         "axios.js.map",
         "axios.min.js.map"
       ]
+    },
+    {
+      "library": "fancybox@3.5.7",
+      "destination": "wwwroot/lib/fancybox/",
+      "files": [
+        "jquery.fancybox.min.js",
+        "jquery.fancybox.min.css"
+      ]
     }
   ]
 }

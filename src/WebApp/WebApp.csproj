@@ -1,12 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <AssemblyVersion>2023.9.13</AssemblyVersion>
+        <InformationalVersion>2024.7.26</InformationalVersion>
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>Cts.WebApp</RootNamespace>
     </PropertyGroup>
+
+    <ItemGroup>
+      <Content Remove="wwwroot\js\table-of-contents.js" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\js\table-of-contents.js" />
+    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="LigerShark.WebOptimizer.Core" />
@@ -47,6 +55,7 @@
     <ItemGroup>
         <None Include="../../CHANGELOG.md" />
         <None Include="../../README.md" />
+        <None Include="wwwroot\js\table-of-contents.js" />
     </ItemGroup>
     
     <ItemGroup>

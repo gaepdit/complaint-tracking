@@ -20,6 +20,7 @@ Rules are approximately ordered from the most frequently matched rule to the lea
 | Redirect                                           | To                                            |
 |----------------------------------------------------|-----------------------------------------------|
 | `/Complaints`                                      | `/Staff/Complaints`                           |
+| `/Complaints/Create`                               | `/Staff/Complaints/Add`                       |
 | `/Complaints/Details/{id}`                         | `/Staff/Complaints/Details/{id}`              |
 | `/Complaints/Actions/{id}`                         | `/Staff/Complaints/Details/{id}`              |
 | `/Complaints/Attachment/{attachmentId}[/filename]` | `/Staff/Complaints/Attachment/{attachmentId}` |
