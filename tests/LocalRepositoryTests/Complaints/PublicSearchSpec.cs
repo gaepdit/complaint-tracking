@@ -40,7 +40,7 @@ public class PublicSearchSpec
     [Test]
     public async Task ClosedStatusSpec_ReturnsFilteredList()
     {
-        var spec = new ComplaintPublicSearchDto { Status = SearchComplaintStatus.AllClosed };
+        var spec = new ComplaintPublicSearchDto { Status = PublicSearchStatus.Closed };
         var predicate = ComplaintFilters.PublicSearchPredicate(spec);
 
         var results = await _repository.GetListAsync(predicate);
@@ -50,15 +50,14 @@ public class PublicSearchSpec
     }
 
     [Test]
-    public async Task NotAcceptedSpec_ReturnsFilteredList()
+    public async Task OpenStatusSpec_ReturnsFilteredList()
     {
-        var spec = new ComplaintPublicSearchDto { Status = SearchComplaintStatus.NotAccepted };
+        var spec = new ComplaintPublicSearchDto { Status = PublicSearchStatus.Open };
         var predicate = ComplaintFilters.PublicSearchPredicate(spec);
 
         var results = await _repository.GetListAsync(predicate);
 
-        var expected = _repository.Items.Where(e => e is
-            { IsDeleted: false, ComplaintClosed: false, CurrentOwner: not null, CurrentOwnerAcceptedDate: null });
+        var expected = _repository.Items.Where(e => e is { IsDeleted: false, ComplaintClosed: false });
         results.Should().BeEquivalentTo(expected);
     }
 

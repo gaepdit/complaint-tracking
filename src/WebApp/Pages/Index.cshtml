@@ -68,7 +68,8 @@
                 <div class="row">
                     <div class="col-md mb-3">
                         <div class="form-floating">
-                            <select asp-for="Spec.Status" name="@nameof(Model.Spec.Status)" asp-items="Html.GetEnumSelectList<SearchComplaintStatus>()" class="form-select">
+                            <select asp-for="Spec.Status" name="@nameof(Model.Spec.Status)"
+                                    asp-items="Html.GetEnumSelectList<PublicSearchStatus>()" class="form-select">
                                 <option value="">@SelectOptions.SelectTextAny</option>
                             </select>
                             <label asp-for="Spec.Status" class="form-label"></label>

@@ -13,7 +13,7 @@ internal static class ComplaintFilters
     public static Expression<Func<Complaint, bool>> PublicSearchPredicate(ComplaintPublicSearchDto spec) =>
         PredicateBuilder.True<Complaint>()
             .IsPublic()
-            .ByStatus(spec.Status)
+            .ByPublicStatus(spec.Status)
             .FromDate(spec.DateFrom)
             .ToDate(spec.DateTo)
             .ContainsNature(spec.Description)
@@ -59,6 +59,14 @@ internal static class ComplaintFilters
 
     private static Expression<Func<Complaint, bool>> IsOpen(this Expression<Func<Complaint, bool>> predicate) =>
         predicate.And(complaint => !complaint.ComplaintClosed);
+
+    private static Expression<Func<Complaint, bool>> ByPublicStatus(this Expression<Func<Complaint, bool>> predicate,
+        PublicSearchStatus? input) => input switch
+    {
+        PublicSearchStatus.Open => predicate.IsOpen(),
+        PublicSearchStatus.Closed => predicate.IsClosed(),
+        _ => predicate,
+    };
 
     private static Expression<Func<Complaint, bool>> ByStatus(this Expression<Func<Complaint, bool>> predicate,
         SearchComplaintStatus? input) => input switch
