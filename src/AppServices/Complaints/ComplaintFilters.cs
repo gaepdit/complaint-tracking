@@ -31,6 +31,7 @@ internal static class ComplaintFilters
             .ByDeletedStatus(spec.DeletedStatus)
             .FromClosedDate(spec.ClosedFrom)
             .ToClosedDate(spec.ClosedTo)
+            .HasAttachments(spec.Attachments)
             .FromDate(spec.ReceivedFrom)
             .ToDate(spec.ReceivedTo)
             .ReceivedBy(spec.ReceivedBy)
@@ -116,6 +117,15 @@ internal static class ComplaintFilters
                 complaint.ComplaintClosedDate != null &&
                 complaint.ComplaintClosedDate.Value.Date <= input.Value.ToDateTime(TimeOnly.MinValue));
 
+    private static Expression<Func<Complaint, bool>> HasAttachments(
+        this Expression<Func<Complaint, bool>> predicate,
+        YesNoAny? input) => input switch
+    {
+        YesNoAny.Yes => predicate.And(complaint => complaint.Attachments.Count != 0),
+        YesNoAny.No => predicate.And(complaint => complaint.Attachments.Count == 0),
+        _ => predicate,
+    };
+    
     private static Expression<Func<Complaint, bool>> ReceivedBy(this Expression<Func<Complaint, bool>> predicate,
         string? input) =>
         string.IsNullOrWhiteSpace(input)
