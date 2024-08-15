@@ -11,7 +11,7 @@ public record ComplaintPublicSearchDto : IBasicSearchDisplay
     // Status
 
     [Display(Name = "Complaint Status")]
-    public SearchComplaintStatus? Status { get; init; }
+    public PublicSearchStatus? Status { get; init; }
 
     // Dates
 
@@ -63,6 +63,7 @@ public record ComplaintPublicSearchDto : IBasicSearchDisplay
     public IDictionary<string, string?> AsRouteValues() => new Dictionary<string, string?>
     {
         { nameof(Sort), Sort.ToString() },
+        { nameof(Status), Status?.ToString() },
         { nameof(DateFrom), DateFrom?.ToString("d") },
         { nameof(DateTo), DateTo?.ToString("d") },
         { nameof(Description), Description },

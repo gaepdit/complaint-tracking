@@ -21,7 +21,6 @@ public class ComplaintFilterTests
         result.Should().BeEquivalentTo(expected);
     }
 
-
     [Test]
     public void DeleteStatus_All_ReturnsAll()
     {
