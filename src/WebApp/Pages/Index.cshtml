@@ -121,15 +121,22 @@
                                     <label asp-for="Spec.Street" class="form-label"></label>
                                 </div>
                             </div>
-                            <div class="col-sm-8 mb-3">
+                            <div class="col-md-5 mb-3">
                                 <div class="form-floating">
-                                    <select asp-for="Spec.State" name="@nameof(Model.Spec.State)" asp-items="Model.StatesSelectList" class="form-select">
+                                    <input asp-for="Spec.City" name="@nameof(Model.Spec.City)" class="form-control" />
+                                    <label asp-for="Spec.City" class="form-label"></label>
+                                </div>
+                            </div>
+                            <div class="col-sm-8 col-md-4 mb-3">
+                                <div class="form-floating">
+                                    <select asp-for="Spec.State" name="@nameof(Model.Spec.State)"
+                                            asp-items="Model.StatesSelectList" class="form-select">
                                         <option value="">@SelectOptions.SelectTextAny</option>
                                     </select>
                                     <label asp-for="Spec.State" class="form-label"></label>
                                 </div>
                             </div>
-                            <div class="col-sm-4 mb-3">
+                            <div class="col-sm-4 col-md-3 mb-3">
                                 <div class="form-floating">
                                     <input asp-for="Spec.PostalCode" name="@nameof(Model.Spec.PostalCode)" class="form-control" />
                                     <label asp-for="Spec.PostalCode" class="form-label"></label>
