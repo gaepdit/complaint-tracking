@@ -42,13 +42,3 @@ public enum SearchDeleteStatus
     Deleted = 0,
     All = 1,
 }
-
-// "(Any)" (null) = no filtering
-// "Yes" = only if value is true
-// "No" = only if value is false
-[JsonConverter(typeof(JsonStringEnumConverter))]
-public enum YesNoAny
-{
-    Yes = 1,
-    No = 0,
-}

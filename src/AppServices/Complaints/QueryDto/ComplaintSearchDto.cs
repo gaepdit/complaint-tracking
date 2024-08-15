@@ -26,10 +26,6 @@ public record ComplaintSearchDto : IBasicSearchDisplay
     [DisplayFormat(DataFormatString = "{0:O}", ApplyFormatInEditMode = true)]
     public DateOnly? ClosedTo { get; init; }
 
-    // Attachments
-    [Display(Name = "Has Attachments")]
-    public YesNoAny? Attachments { get; init; }
-
     // Received
 
     [Display(Name = "From")]
@@ -107,7 +103,6 @@ public record ComplaintSearchDto : IBasicSearchDisplay
         { nameof(DeletedStatus), DeletedStatus?.ToString() },
         { nameof(ClosedFrom), ClosedFrom?.ToString("d") },
         { nameof(ClosedTo), ClosedTo?.ToString("d") },
-        { nameof(Attachments), Attachments?.ToString() },
         { nameof(ReceivedFrom), ReceivedFrom?.ToString("d") },
         { nameof(ReceivedTo), ReceivedTo?.ToString("d") },
         { nameof(ReceivedBy), ReceivedBy },

@@ -66,21 +66,12 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md mb-3">
+                    <div class="mb-3">
                         <div class="form-floating">
                             <select asp-for="Spec.ReceivedBy" name="@nameof(Model.Spec.ReceivedBy)" asp-items="Model.ReceivedBySelectList" class="form-select">
                                 <option value="">@SelectOptions.SelectTextAny</option>
                             </select>
                             <label asp-for="Spec.ReceivedBy" class="form-label"></label>
-                        </div>
-                    </div>
-                    <div class="col-md mb-3">
-                        <div class="form-floating">
-                            <select asp-for="Spec.Attachments" name="@nameof(Model.Spec.Attachments)"
-                                    asp-items="Html.GetEnumSelectList<YesNoAny>()" class="form-select">
-                                <option value="">@SelectOptions.SelectTextAny</option>
-                            </select>
-                            <label asp-for="Spec.Attachments" class="form-label"></label>
                         </div>
                     </div>
                 </div>
