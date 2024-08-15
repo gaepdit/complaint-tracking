@@ -26,17 +26,17 @@
     <div class="row">
         <section class="col-md mb-3">
             <h1 class="h2 text-nowrap">@ViewData["Title"]</h1>
-            <partial name="Shared/_DashboardCardPartial" model="Model.MyNewComplaints" />
-            <partial name="Shared/_DashboardCardPartial" model="Model.MyOpenComplaints" />
+            <partial name="_DashboardCardPartial" model="Model.MyNewComplaints" />
+            <partial name="_DashboardCardPartial" model="Model.MyOpenComplaints" />
         </section>
 
         @if (Model.IsManager)
         {
             <section class="col-md mb-3">
                 <h1 class="h2 text-nowrap">Management Dashboard</h1>
-                <partial name="Shared/_DashboardCardPartial" model="Model.MgrReviewPending" />
-                <partial name="Shared/_DashboardCardPartial" model="Model.MgrUnassignedComplaints" />
-                <partial name="Shared/_DashboardCardPartial" model="Model.MgrUnacceptedComplaints" />
+                <partial name="_DashboardCardPartial" model="Model.MgrReviewPending" />
+                <partial name="_DashboardCardPartial" model="Model.MgrUnassignedComplaints" />
+                <partial name="_DashboardCardPartial" model="Model.MgrUnacceptedComplaints" />
             </section>
         }
 
@@ -46,7 +46,7 @@
                 <h1 class="h2 text-nowrap">Assignor Dashboard</h1>
                 @foreach (var card in Model.AssignorUnassignedComplaints)
                 {
-                    <partial name="Shared/_DashboardCardPartial" model="card" />
+                    <partial name="_DashboardCardPartial" model="card" />
                 }
             </section>
         }
