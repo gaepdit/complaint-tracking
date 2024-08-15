@@ -50,24 +50,25 @@ public sealed class LocalComplaintRepository(
         if (complaint is null) return null;
 
         complaint.Attachments.Clear();
-        complaint.Attachments.AddRange((await attachmentRepository
-                .GetListAsync(attachment => attachment.Complaint.Id == complaint.Id && !attachment.IsDeleted, token)
+        complaint.Attachments.AddRange((await attachmentRepository.GetListAsync(attachment =>
+                    attachment.Complaint.Id == complaint.Id && !attachment.IsDeleted, token)
                 .ConfigureAwait(false))
             .OrderBy(attachment => attachment.UploadedDate)
             .ThenBy(attachment => attachment.FileName)
             .ThenBy(attachment => attachment.Id));
 
         complaint.Actions.Clear();
-        complaint.Actions.AddRange((await actionRepository
-                .GetListAsync(action => action.Complaint.Id == complaint.Id &&
-                                        (!action.IsDeleted || includeDeletedActions), token).ConfigureAwait(false))
+        complaint.Actions.AddRange((await actionRepository.GetListAsync(action =>
+                    action.Complaint.Id == complaint.Id && (!action.IsDeleted || includeDeletedActions), token)
+                .ConfigureAwait(false))
             .OrderByDescending(action => action.ActionDate)
             .ThenByDescending(action => action.EnteredDate)
             .ThenBy(action => action.Id));
 
         complaint.ComplaintTransitions.Clear();
-        complaint.ComplaintTransitions.AddRange((await transitionRepository
-                .GetListAsync(transition => transition.Complaint.Id == complaint.Id, token).ConfigureAwait(false))
+        complaint.ComplaintTransitions.AddRange((await transitionRepository.GetListAsync(transition =>
+                    transition.Complaint.Id == complaint.Id, token)
+                .ConfigureAwait(false))
             .OrderBy(transition => transition.CommittedDate).ThenBy(transition => transition.Id));
 
         return complaint;

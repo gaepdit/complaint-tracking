@@ -46,7 +46,8 @@ internal static class ComplaintData
         },
         new(2) // 1
         {
-            ComplaintNature = $"New complaint entered less than an hour ago. Email: {TextData.ValidEmail} & Phone: {TextData.ValidPhoneNumber}",
+            ComplaintNature =
+                $"New complaint entered less than an hour ago. Email: {TextData.ValidEmail} & Phone: {TextData.ValidPhoneNumber}",
             Status = ComplaintStatus.New,
             EnteredBy = UserData.GetUsers.ElementAt(1),
             EnteredDate = DateTimeOffset.Now.AddMinutes(30),
@@ -186,7 +187,19 @@ internal static class ComplaintData
             foreach (var complaint in _complaints)
             {
                 complaint.Actions.AddRange(ComplaintActionData.GetComplaintActions
-                    .Where(e => e.Complaint.Id == complaint.Id));
+                    .Where(action => action.Complaint.Id == complaint.Id)
+                    .OrderByDescending(action => action.ActionDate)
+                    .ThenByDescending(action => action.EnteredDate)
+                    .ThenBy(action => action.Id));
+                complaint.Attachments.AddRange(AttachmentData.GetAttachments
+                    .Where(attachment => attachment.Complaint.Id == complaint.Id)
+                    .OrderBy(attachment => attachment.UploadedDate)
+                    .ThenBy(attachment => attachment.FileName)
+                    .ThenBy(attachment => attachment.Id));
+                complaint.ComplaintTransitions.AddRange(ComplaintTransitionData.GetComplaintTransitions
+                    .Where(transition => transition.Complaint.Id == complaint.Id)
+                    .OrderBy(transition => transition.CommittedDate)
+                    .ThenBy(transition => transition.Id));
             }
 
             return _complaints;

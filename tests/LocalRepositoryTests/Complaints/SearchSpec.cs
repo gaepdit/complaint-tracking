@@ -96,7 +96,7 @@ public class SearchSpec
 
         var expected = _repository.Items
             .Where(e => e is { IsDeleted: false, ComplaintClosed: true }
-                && e.ComplaintClosedDate == referenceItem.ComplaintClosedDate);
+                        && e.ComplaintClosedDate == referenceItem.ComplaintClosedDate);
         results.Should().BeEquivalentTo(expected);
     }
 
@@ -116,7 +116,7 @@ public class SearchSpec
         var results = await _repository.GetListAsync(predicate);
 
         var expected = _repository.Items.Where(e => e is { IsDeleted: false }
-            && e.ReceivedDate == referenceItem.ReceivedDate);
+                                                    && e.ReceivedDate == referenceItem.ReceivedDate);
         results.Should().BeEquivalentTo(expected);
     }
 
@@ -130,7 +130,7 @@ public class SearchSpec
         var results = await _repository.GetListAsync(predicate);
 
         var expected = _repository.Items.Where(e => e is { IsDeleted: false }
-            && e.ReceivedBy == referenceItem.ReceivedBy);
+                                                    && e.ReceivedBy == referenceItem.ReceivedBy);
         results.Should().BeEquivalentTo(expected);
     }
 
@@ -144,7 +144,7 @@ public class SearchSpec
         var results = await _repository.GetListAsync(predicate);
 
         var expected = _repository.Items.Where(e => e is { IsDeleted: false }
-            && e.CallerName == referenceItem.CallerName);
+                                                    && e.CallerName == referenceItem.CallerName);
         results.Should().BeEquivalentTo(expected);
     }
 
@@ -157,8 +157,8 @@ public class SearchSpec
 
         var results = await _repository.GetListAsync(predicate);
 
-        var expected = _repository.Items.Where(e => e is { IsDeleted: false }
-            && e.CallerRepresents == referenceItem.CallerRepresents);
+        var expected = _repository.Items.Where(e =>
+            e is { IsDeleted: false } && e.CallerRepresents == referenceItem.CallerRepresents);
         results.Should().BeEquivalentTo(expected);
     }
 
@@ -171,8 +171,8 @@ public class SearchSpec
 
         var results = await _repository.GetListAsync(predicate);
 
-        var expected = _repository.Items.Where(e => e is { IsDeleted: false }
-            && e.ComplaintNature == referenceItem.ComplaintNature);
+        var expected = _repository.Items.Where(e =>
+            e is { IsDeleted: false } && e.ComplaintNature == referenceItem.ComplaintNature);
         results.Should().BeEquivalentTo(expected);
     }
 
@@ -185,8 +185,8 @@ public class SearchSpec
 
         var results = await _repository.GetListAsync(predicate);
 
-        var expected = _repository.Items.Where(e => e is { IsDeleted: false }
-            && e.ComplaintLocation == referenceItem.ComplaintLocation);
+        var expected = _repository.Items.Where(e =>
+            e is { IsDeleted: false } && e.ComplaintLocation == referenceItem.ComplaintLocation);
         results.Should().BeEquivalentTo(expected);
     }
 
@@ -199,8 +199,8 @@ public class SearchSpec
 
         var results = await _repository.GetListAsync(predicate);
 
-        var expected = _repository.Items.Where(e => e is { IsDeleted: false }
-            && e.ComplaintDirections == referenceItem.ComplaintDirections);
+        var expected = _repository.Items.Where(e =>
+            e is { IsDeleted: false } && e.ComplaintDirections == referenceItem.ComplaintDirections);
         results.Should().BeEquivalentTo(expected);
     }
 
@@ -213,8 +213,8 @@ public class SearchSpec
 
         var results = await _repository.GetListAsync(predicate);
 
-        var expected = _repository.Items.Where(e => e is { IsDeleted: false }
-            && e.ComplaintCity == referenceItem.ComplaintCity);
+        var expected = _repository.Items.Where(e =>
+            e is { IsDeleted: false } && e.ComplaintCity == referenceItem.ComplaintCity);
         results.Should().BeEquivalentTo(expected);
     }
 
@@ -227,8 +227,8 @@ public class SearchSpec
 
         var results = await _repository.GetListAsync(predicate);
 
-        var expected = _repository.Items.Where(e => e is { IsDeleted: false }
-            && e.ComplaintCounty == referenceItem.ComplaintCounty);
+        var expected = _repository.Items.Where(e =>
+            e is { IsDeleted: false } && e.ComplaintCounty == referenceItem.ComplaintCounty);
         results.Should().BeEquivalentTo(expected);
     }
 
@@ -241,9 +241,10 @@ public class SearchSpec
 
         var results = await _repository.GetListAsync(predicate);
 
-        var expected = _repository.Items.Where(e => e is { IsDeleted: false }
-            && (e.PrimaryConcern.Id == referenceItem.PrimaryConcern.Id
-                || (e.SecondaryConcern != null && e.SecondaryConcern.Id == referenceItem.PrimaryConcern.Id)));
+        var expected = _repository.Items.Where(e =>
+            e is { IsDeleted: false } &&
+            (e.PrimaryConcern.Id == referenceItem.PrimaryConcern.Id ||
+             (e.SecondaryConcern != null && e.SecondaryConcern.Id == referenceItem.PrimaryConcern.Id)));
         results.Should().BeEquivalentTo(expected);
     }
 
@@ -256,8 +257,8 @@ public class SearchSpec
 
         var results = await _repository.GetListAsync(predicate);
 
-        var expected = _repository.Items.Where(e => e is { IsDeleted: false }
-            && e.SourceFacilityName == referenceItem.SourceFacilityName);
+        var expected = _repository.Items.Where(e =>
+            e is { IsDeleted: false } && e.SourceFacilityName == referenceItem.SourceFacilityName);
         results.Should().BeEquivalentTo(expected);
     }
 
@@ -270,8 +271,9 @@ public class SearchSpec
 
         var results = await _repository.GetListAsync(predicate);
 
-        var expected = _repository.Items.Where(e => e is { IsDeleted: false }
-            && e.SourceAddress != null && e.SourceAddress.Street == referenceItem.SourceAddress.Street);
+        var expected = _repository.Items.Where(e =>
+            e is { IsDeleted: false } && e.SourceAddress != null &&
+            e.SourceAddress.Street == referenceItem.SourceAddress.Street);
         results.Should().BeEquivalentTo(expected);
     }
 
@@ -285,8 +287,9 @@ public class SearchSpec
 
         var results = await _repository.GetListAsync(predicate);
 
-        var expected = _repository.Items.Where(e => e is { IsDeleted: false }
-            && e.SourceAddress != null && e.SourceAddress.Street2 == referenceItem.SourceAddress.Street2);
+        var expected = _repository.Items.Where(e =>
+            e is { IsDeleted: false } && e.SourceAddress != null &&
+            e.SourceAddress.Street2 == referenceItem.SourceAddress.Street2);
         results.Should().BeEquivalentTo(expected);
     }
 
@@ -299,8 +302,9 @@ public class SearchSpec
 
         var results = await _repository.GetListAsync(predicate);
 
-        var expected = _repository.Items.Where(e => e is { IsDeleted: false }
-            && e.SourceAddress != null && e.SourceAddress.City == referenceItem.SourceAddress.City);
+        var expected = _repository.Items.Where(e =>
+            e is { IsDeleted: false } && e.SourceAddress != null &&
+            e.SourceAddress.City == referenceItem.SourceAddress.City);
         results.Should().BeEquivalentTo(expected);
     }
 
@@ -313,8 +317,9 @@ public class SearchSpec
 
         var results = await _repository.GetListAsync(predicate);
 
-        var expected = _repository.Items.Where(e => e is { IsDeleted: false }
-            && e.SourceAddress != null && e.SourceAddress.State == referenceItem.SourceAddress.State);
+        var expected = _repository.Items.Where(e =>
+            e is { IsDeleted: false } && e.SourceAddress != null &&
+            e.SourceAddress.State == referenceItem.SourceAddress.State);
         results.Should().BeEquivalentTo(expected);
     }
 
@@ -327,8 +332,9 @@ public class SearchSpec
 
         var results = await _repository.GetListAsync(predicate);
 
-        var expected = _repository.Items.Where(e => e is { IsDeleted: false }
-            && e.SourceAddress != null && e.SourceAddress.PostalCode == referenceItem.SourceAddress.PostalCode);
+        var expected = _repository.Items.Where(e =>
+            e is { IsDeleted: false } && e.SourceAddress != null &&
+            e.SourceAddress.PostalCode == referenceItem.SourceAddress.PostalCode);
         results.Should().BeEquivalentTo(expected);
     }
 
@@ -342,7 +348,7 @@ public class SearchSpec
         var results = await _repository.GetListAsync(predicate);
 
         var expected = _repository.Items.Where(e => e is { IsDeleted: false }
-            && e.CurrentOffice == referenceItem.CurrentOffice);
+                                                    && e.CurrentOffice == referenceItem.CurrentOffice);
         results.Should().BeEquivalentTo(expected);
     }
 
@@ -356,7 +362,39 @@ public class SearchSpec
         var results = await _repository.GetListAsync(predicate);
 
         var expected = _repository.Items.Where(e => e is { IsDeleted: false }
-            && e.CurrentOwner == referenceItem.CurrentOwner);
+                                                    && e.CurrentOwner == referenceItem.CurrentOwner);
+        results.Should().BeEquivalentTo(expected);
+    }
+
+    [Test]
+    public async Task Attachments_Yes()
+    {
+        // Arrange
+        var spec = new ComplaintSearchDto { Attachments = YesNoAny.Yes };
+        var predicate = ComplaintFilters.SearchPredicate(spec);
+        var expected = _repository.Items.Where(complaint =>
+            !complaint.IsDeleted && complaint.Attachments.Exists(attachment => !attachment.IsDeleted));
+
+        // Act
+        var results = await _repository.GetListAsync(predicate);
+
+        // Assert
+        results.Should().BeEquivalentTo(expected);
+    }
+
+    [Test]
+    public async Task Attachments_No()
+    {
+        // Arrange
+        var spec = new ComplaintSearchDto { Attachments = YesNoAny.No };
+        var predicate = ComplaintFilters.SearchPredicate(spec);
+        var expected = _repository.Items.Where(complaint =>
+            !complaint.IsDeleted && !complaint.Attachments.Exists(attachment => !attachment.IsDeleted));
+
+        // Act
+        var results = await _repository.GetListAsync(predicate);
+
+        // Assert
         results.Should().BeEquivalentTo(expected);
     }
 }
