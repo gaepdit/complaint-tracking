@@ -1,3 +1,5 @@
+using Cts.Domain.Entities.Attachments;
+using Cts.Domain.Entities.ComplaintActions;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.TestData;
@@ -6,7 +8,10 @@ using System.Linq.Expressions;
 
 namespace Cts.LocalRepository.Repositories;
 
-public sealed class LocalComplaintRepository(IComplaintTransitionRepository transitionRepository)
+public sealed class LocalComplaintRepository(
+    IAttachmentRepository attachmentRepository,
+    IActionRepository actionRepository,
+    IComplaintTransitionRepository transitionRepository)
     : BaseRepository<Complaint, int>(ComplaintData.GetComplaints), IComplaintRepository
 {
     // Local repository requires ID to be manually set.
@@ -14,11 +19,13 @@ public sealed class LocalComplaintRepository(IComplaintTransitionRepository tran
 
     public async Task<Complaint?> FindIncludeAllAsync(int id, bool includeDeletedActions = false,
         CancellationToken token = default) =>
-        CleanComplaintActions(await FindAsync(id, token).ConfigureAwait(false), includeDeletedActions);
+        await GetComplaintDetailsAsync(await FindAsync(id, token).ConfigureAwait(false), includeDeletedActions, token)
+            .ConfigureAwait(false);
 
     public async Task<Complaint?> FindPublicAsync(Expression<Func<Complaint, bool>> predicate,
         CancellationToken token = default) =>
-        CleanComplaintActions(await FindAsync(predicate, token).ConfigureAwait(false), false);
+        await GetComplaintDetailsAsync(await FindAsync(predicate, token).ConfigureAwait(false), false, token)
+            .ConfigureAwait(false);
 
     public Task<IReadOnlyCollection<Complaint>> GetListWithMostRecentActionAsync(
         Expression<Func<Complaint, bool>> predicate, string sorting = "", CancellationToken token = default)
@@ -37,11 +44,33 @@ public sealed class LocalComplaintRepository(IComplaintTransitionRepository tran
         return Task.FromResult(complaints.ToList() as IReadOnlyCollection<Complaint>);
     }
 
-    private static Complaint? CleanComplaintActions(Complaint? complaint, bool includeDeletedActions)
+    private async Task<Complaint?> GetComplaintDetailsAsync(Complaint? complaint, bool includeDeletedActions,
+        CancellationToken token)
     {
         if (complaint is null) return null;
-        complaint.Attachments.RemoveAll(attachment => attachment.IsDeleted);
-        if (!includeDeletedActions) complaint.Actions.RemoveAll(action => action.IsDeleted);
+
+        complaint.Attachments.Clear();
+        complaint.Attachments.AddRange((await attachmentRepository.GetListAsync(attachment =>
+                    attachment.Complaint.Id == complaint.Id && !attachment.IsDeleted, token)
+                .ConfigureAwait(false))
+            .OrderBy(attachment => attachment.UploadedDate)
+            .ThenBy(attachment => attachment.FileName)
+            .ThenBy(attachment => attachment.Id));
+
+        complaint.Actions.Clear();
+        complaint.Actions.AddRange((await actionRepository.GetListAsync(action =>
+                    action.Complaint.Id == complaint.Id && (!action.IsDeleted || includeDeletedActions), token)
+                .ConfigureAwait(false))
+            .OrderByDescending(action => action.ActionDate)
+            .ThenByDescending(action => action.EnteredDate)
+            .ThenBy(action => action.Id));
+
+        complaint.ComplaintTransitions.Clear();
+        complaint.ComplaintTransitions.AddRange((await transitionRepository.GetListAsync(transition =>
+                    transition.Complaint.Id == complaint.Id, token)
+                .ConfigureAwait(false))
+            .OrderBy(transition => transition.CommittedDate).ThenBy(transition => transition.Id));
+
         return complaint;
     }
 

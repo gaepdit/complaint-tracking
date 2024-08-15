@@ -123,6 +123,8 @@ internal static class ComplaintFilters
     {
         YesNoAny.Yes => predicate.And(complaint => complaint.Attachments.Any(attachment => !attachment.IsDeleted)),
 #pragma warning disable S6603
+        // 'The collection-specific "TrueForAll" method should be used instead of the "All" extension'
+        // "TrueForAll" is incompatible with EF Core.
         YesNoAny.No => predicate.And(complaint => complaint.Attachments.All(attachment => attachment.IsDeleted)),
 #pragma warning restore S6603
         _ => predicate,
