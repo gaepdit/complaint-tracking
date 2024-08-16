@@ -239,36 +239,15 @@
         else
         {
             <div class="table-responsive-md">
-                <table class="table table-hover" aria-label="Facility search results">
+                <table class="gaepd-table-responsive table-hover" aria-label="Facility search results">
                     <caption class="caption-top">
                         <partial name="Shared/_PaginationNavAndCount" model="Model.PaginationNav" />
                     </caption>
                     <thead>
                     <tr>
-                        <th scope="col" class="text-nowrap">
-                            <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                               asp-route-Sort="@(Model.Spec.Sort == SortBy.IdAsc ? nameof(SortBy.IdDesc) : nameof(SortBy.IdAsc))"
-                               class="link-offset-2">
-                                ID @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
-                                       new { up = nameof(SortBy.IdAsc), down = nameof(SortBy.IdDesc) })
-                            </a>
-                        </th>
-                        <th scope="col" class="text-nowrap">
-                            <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                               asp-route-Sort="@(Model.Spec.Sort == SortBy.ReceivedDateAsc ? nameof(SortBy.ReceivedDateDesc) : nameof(SortBy.ReceivedDateAsc))"
-                               class="link-offset-2">
-                                Received @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
-                                             new { up = nameof(SortBy.ReceivedDateAsc), down = nameof(SortBy.ReceivedDateDesc) })
-                            </a>
-                        </th>
-                        <th scope="col" class="text-nowrap">
-                            <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                               asp-route-Sort="@(Model.Spec.Sort == SortBy.StatusAsc ? nameof(SortBy.StatusDesc) : nameof(SortBy.StatusAsc))"
-                               class="link-offset-2">
-                                Status @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
-                                           new { up = nameof(SortBy.StatusAsc), down = nameof(SortBy.StatusDesc) })
-                            </a>
-                        </th>
+                        <th scope="col" class="text-nowrap">ID</th>
+                        <th scope="col" class="text-nowrap">Received</th>
+                        <th scope="col" class="text-nowrap">Status</th>
                         <th scope="col">Source/Location</th>
                         <th scope="col">Current Assignment</th>
                         <th scope="col">Areas of Concern</th>
@@ -279,11 +258,11 @@
                     @foreach (var item in Model.SearchResults.Items)
                     {
                         <tr class="@(item.IsDeleted ? "table-danger" : "")">
-                            <th scope="row">
+                            <td data-label="ID">
                                 <a asp-page="Details" asp-route-id="@item.Id.ToString()" class="btn btn-outline-primary btn-sm">@item.Id.ToString()</a>
-                            </th>
-                            <td class="text-nowrap">@Html.DisplayFor(_ => item.ReceivedDate, DisplayTemplate.ShortDate)</td>
-                            <td>
+                            </td>
+                            <td data-label="Received" class="text-nowrap">@Html.DisplayFor(_ => item.ReceivedDate, DisplayTemplate.ShortDate)</td>
+                            <td data-label="Status">
                                 @if (item.IsDeleted)
                                 {
                                     <strong>DELETED</strong>
@@ -296,7 +275,7 @@
                                     @:on @Html.DisplayFor(_ => item.ComplaintClosedDate, DisplayTemplate.ShortDate)
                                 }
                             </td>
-                            <td>
+                            <td data-label="Source/Location">
                                 @Html.DisplayFor(_ => item.SourceFacilityName, DisplayTemplate.StringOrPlaceholder)
                                 <ul>
                                     @if (item.SourceFacilityIdNumber != null)
@@ -309,12 +288,12 @@
                                     }
                                 </ul>
                             </td>
-                            <td>
+                            <td data-label="Current Assignment">
                                 @Html.DisplayFor(_ => item.AssignedOwnerName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "[Unassigned]" })
                                 <br />
                                 @Html.DisplayFor(_ => item.CurrentOfficeName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "[No office assigned]" })
                             </td>
-                            <td>
+                            <td data-label="Areas of Concern">
                                 <ol type="I">
                                     <li>@Html.DisplayFor(_ => item.PrimaryConcernName, DisplayTemplate.StringOrPlaceholder)</li>
                                     @if (item.SecondaryConcernName is not null)
@@ -332,6 +311,7 @@
         }
     </div>
 }
+
 
 @section Scripts {
     <script src="~/js/formSearch.js"></script>

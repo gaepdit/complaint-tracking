@@ -152,26 +152,14 @@
         else
         {
             <div class="table-responsive-sm">
-                <table class="table table-hover" aria-label="Facility search results">
+                <table class="gaepd-table-responsive table-hover" aria-label="Facility search results">
                     <caption class="caption-top">
                         <partial name="Shared/_PaginationNavAndCount" model="Model.PaginationNav"/>
                     </caption>
                     <thead>
                     <tr>
-                        <th scope="col" class="text-nowrap">
-                            <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                               asp-route-Sort="@(Model.Spec.Sort == SortBy.IdAsc ? nameof(SortBy.IdDesc) : nameof(SortBy.IdAsc))">
-                                ID @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
-                                       new { up = nameof(SortBy.IdAsc), down = nameof(SortBy.IdDesc) })
-                            </a>
-                        </th>
-                        <th scope="col" class="text-nowrap">
-                            <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                               asp-route-Sort="@(Model.Spec.Sort == SortBy.ReceivedDateAsc ? nameof(SortBy.ReceivedDateDesc) : nameof(SortBy.ReceivedDateAsc))">
-                                Date Received @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
-                                                  new { up = nameof(SortBy.ReceivedDateAsc), down = nameof(SortBy.ReceivedDateDesc) })
-                            </a>
-                        </th>
+                        <th scope="col" class="text-nowrap">ID</th>
+                        <th scope="col" class="text-nowrap">Date Received</th>
                         <th scope="col">Source/Location</th>
                         <th scope="col">EPD Office Assigned</th>
                         <th scope="col">Areas of Concern</th>
@@ -182,11 +170,11 @@
                     @foreach (var item in Model.SearchResults.Items)
                     {
                         <tr>
-                            <th scope="row">
+                            <td data-label="ID">
                                 <a asp-page="./Complaint" asp-route-id="@item.Id.ToString()" class="btn btn-outline-primary btn-sm">@item.Id.ToString()</a>
-                            </th>
-                            <td class="text-nowrap">@Html.DisplayFor(_ => item.ReceivedDate, DisplayTemplate.ShortDate)</td>
-                            <td>
+                            </td>
+                            <td data-label="Date Received" class="text-nowrap">@Html.DisplayFor(_ => item.ReceivedDate, DisplayTemplate.ShortDate)</td>
+                            <td data-label="Source/Location">
                                 <ul>
                                     <li>@Html.DisplayFor(_ => item.SourceFacilityName, DisplayTemplate.StringOrPlaceholder)</li>
                                     @if (item.ComplaintCounty != null)
@@ -195,8 +183,8 @@
                                     }
                                 </ul>
                             </td>
-                            <td>@Html.DisplayFor(_ => item.CurrentOfficeName, DisplayTemplate.StringOrPlaceholder)</td>
-                            <td>
+                            <td data-label="EPD Office Assigned">@Html.DisplayFor(_ => item.CurrentOfficeName, DisplayTemplate.StringOrPlaceholder)</td>
+                            <td data-label="Areas of Concern">
                                 <ol type="I">
                                     <li>@Html.DisplayFor(_ => item.PrimaryConcernName, DisplayTemplate.StringOrPlaceholder)</li>
                                     @if (item.SecondaryConcernName is not null)
