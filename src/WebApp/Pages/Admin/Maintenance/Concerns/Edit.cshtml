@@ -7,17 +7,7 @@
 
 <h1>Edit @EditModel.ThisOption.SingularName</h1>
 <hr />
-
-<div class="alert alert-warning d-flex align-items-center" role="alert">
-    <svg class="bi me-3" role="img" aria-label="Warning:">
-        <use href="/images/app-icons.svg#app-icon-exclamation-triangle-fill"></use>
-    </svg>
-    <div>
-        Warning: Changing the name of @(EditModel.ThisOption.StartsWithVowelSound ? "an" : "a")
-        @EditModel.ThisOption.SingularName will affect all of its existing uses. Before proceeding, consider
-        whether it would be better to deactivate this one and create a new one.
-    </div>
-</div>
+<partial name="Admin/Maintenance/_MaintenanceItemEditWarning" model="@EditModel.ThisOption" />
 
 <h2>@Model.OriginalName</h2>
 
