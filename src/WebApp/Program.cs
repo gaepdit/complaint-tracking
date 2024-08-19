@@ -93,8 +93,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 // Configure bundling and minification.
-builder.Services.AddWebOptimizer();
-
+builder.Services.AddWebOptimizer(!builder.Environment.IsDevelopment());
 // Build the application.
 var app = builder.Build();
 
