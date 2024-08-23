@@ -9,7 +9,7 @@ function datePairs(fromID, toID, fromString, toString) {
       if (dateTo && dateTo > today) {
         alert(
           toString +
-            "(" +
+            " (" +
             dateTo +
             ") cannot exceed current date (" +
             today +
@@ -19,7 +19,7 @@ function datePairs(fromID, toID, fromString, toString) {
       } else if (dateFrom && dateFrom > today) {
         alert(
           fromString +
-            "(" +
+            " (" +
             dateFrom +
             ") cannot exceed current date (" +
             today +
@@ -29,11 +29,11 @@ function datePairs(fromID, toID, fromString, toString) {
       } else if (dateTo && dateFrom && dateFrom > dateTo) {
         alert(
           fromString +
-            "(" +
+            " (" +
             dateFrom +
             ") cannot exceed " +
             toString +
-            "(" +
+            " (" +
             dateTo +
             ")"
         );
