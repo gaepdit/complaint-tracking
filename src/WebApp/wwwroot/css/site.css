@@ -362,6 +362,8 @@ label:has([disabled]), label:has(:disabled) {
 -------------------------------------------------- */
 #toc-container {
     top: 2rem;
+    z-index: 999;
+    /* Ensure the TOC is below the navbar menu. (Sticky-top z-index is 1020; navbar dropdown menu z-index is 1000.) */
 }
 
 /* Footer links
