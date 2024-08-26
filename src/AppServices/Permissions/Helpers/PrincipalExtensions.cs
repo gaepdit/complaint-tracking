@@ -17,11 +17,11 @@ public static class PrincipalExtensions
     internal static bool IsActive(this ClaimsPrincipal principal) =>
         principal.HasClaim(AppClaimTypes.ActiveUser, true.ToString());
 
-    private static bool IsInRoles(this IPrincipal principal, IEnumerable<string> roles) =>
+    private static bool IsInOneOfRoles(this IPrincipal principal, IEnumerable<string> roles) =>
         roles.Any(principal.IsInRole);
 
     internal static bool IsAttachmentsEditor(this IPrincipal principal) =>
-        principal.IsInRoles([RoleName.AttachmentsEditor, RoleName.DivisionManager]);
+        principal.IsInOneOfRoles([RoleName.AttachmentsEditor, RoleName.DivisionManager]);
 
     internal static bool IsDataExporter(this IPrincipal principal) =>
         principal.IsInRole(RoleName.DataExport);
@@ -30,14 +30,17 @@ public static class PrincipalExtensions
         principal.IsInRole(RoleName.DivisionManager);
 
     internal static bool IsManager(this IPrincipal principal) =>
-        principal.IsInRoles([RoleName.Manager, RoleName.DivisionManager]);
+        principal.IsInOneOfRoles([RoleName.Manager, RoleName.DivisionManager]);
 
     internal static bool IsSiteMaintainer(this IPrincipal principal) =>
-        principal.IsInRoles([RoleName.SiteMaintenance, RoleName.DivisionManager]);
+        principal.IsInOneOfRoles([RoleName.SiteMaintenance, RoleName.DivisionManager]);
 
     internal static bool IsStaff(this IPrincipal principal) =>
-        principal.IsInRoles([RoleName.Staff, RoleName.Manager, RoleName.DivisionManager]);
+        principal.IsInOneOfRoles([RoleName.Staff, RoleName.Manager, RoleName.DivisionManager]);
 
     internal static bool IsUserAdmin(this IPrincipal principal) =>
-        principal.IsInRoles([RoleName.UserAdmin, RoleName.DivisionManager]);
+        principal.IsInOneOfRoles([RoleName.UserAdmin, RoleName.SuperUserAdmin, RoleName.DivisionManager]);
+
+    internal static bool IsSuperUserAdmin(this IPrincipal principal) =>
+        principal.IsInOneOfRoles([RoleName.SuperUserAdmin, RoleName.DivisionManager]);
 }

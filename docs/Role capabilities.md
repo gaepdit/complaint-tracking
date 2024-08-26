@@ -62,6 +62,12 @@ Users in the *User Account Admin* role can:
 
 * Manage CTS User accounts and assign roles (excluding the *Division Manager* role).
 
+### Super-User Account Admin
+
+Users in the *Super-User Account Admin* role can:
+
+* Manage CTS User accounts and assign all roles (**including** the *Division Manager* role).
+
 ### Attachments Editor
 
 Users in the *Attachments Editor* role can:
@@ -84,7 +90,8 @@ Users in the *Data Export* role can:
 
 ### Division Manager
 
-Users in the *Division Manager* role have all the capabilities of the *Staff, Manager, User Account Admin, Attachments
+Users in the *Division Manager* role have all the capabilities of the *Staff, Manager, Super-User Account Admin,
+Attachments
 Editor,* and *Site Maintenance* roles. (Division Managers can review complaints, but can't necessarily be selected as
 the requested reviewer.)
 
