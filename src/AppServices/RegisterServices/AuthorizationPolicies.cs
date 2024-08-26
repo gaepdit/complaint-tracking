@@ -23,6 +23,7 @@ public static class AuthorizationPolicies
             .AddPolicy(nameof(Policies.Manager), Policies.Manager)
             .AddPolicy(nameof(Policies.SiteMaintainer), Policies.SiteMaintainer)
             .AddPolicy(nameof(Policies.StaffUser), Policies.StaffUser)
+            .AddPolicy(nameof(Policies.SuperUserAdministrator), Policies.SuperUserAdministrator)
             .AddPolicy(nameof(Policies.UserAdministrator), Policies.UserAdministrator);
 
         // Resource/operation-based permission handlers, e.g.:

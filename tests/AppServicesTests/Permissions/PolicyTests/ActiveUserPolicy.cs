@@ -19,8 +19,7 @@ public class ActiveUserPolicy
     [Test]
     public async Task WhenActiveAndAuthenticated_Succeeds()
     {
-        var user = new ClaimsPrincipal(new ClaimsIdentity(
-            new Claim[] { new(AppClaimTypes.ActiveUser, true.ToString()), },
+        var user = new ClaimsPrincipal(new ClaimsIdentity([new Claim(AppClaimTypes.ActiveUser, true.ToString())],
             "Basic"));
         var result = await _authorization.Succeeded(user, Policies.ActiveUser);
         result.Should().BeTrue();
@@ -37,8 +36,7 @@ public class ActiveUserPolicy
     [Test]
     public async Task WhenNotAuthenticated_DoesNotSucceed()
     {
-        var user = new ClaimsPrincipal(new ClaimsIdentity(
-            new Claim[] { new(AppClaimTypes.ActiveUser, true.ToString()), }));
+        var user = new ClaimsPrincipal(new ClaimsIdentity([new Claim(AppClaimTypes.ActiveUser, true.ToString())]));
         var result = await _authorization.Succeeded(user, Policies.ActiveUser);
         result.Should().BeFalse();
     }

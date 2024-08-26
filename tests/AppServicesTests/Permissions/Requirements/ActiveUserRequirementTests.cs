@@ -11,8 +11,7 @@ public class ActiveUserRequirementTests
     public async Task WhenActive_Succeeds()
     {
         var handler = new ActiveUserRequirement();
-        var user = new ClaimsPrincipal(new ClaimsIdentity(
-            new Claim[] { new(AppClaimTypes.ActiveUser, true.ToString()) }));
+        var user = new ClaimsPrincipal(new ClaimsIdentity([new Claim(AppClaimTypes.ActiveUser, true.ToString())]));
         var context = new AuthorizationHandlerContext([handler], user, null);
 
         await handler.HandleAsync(context);

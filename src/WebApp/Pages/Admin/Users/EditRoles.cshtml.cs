@@ -19,7 +19,7 @@ public class EditRolesModel(IStaffService staffService, IAuthorizationService au
 
     public StaffViewDto DisplayStaff { get; private set; } = default!;
     public string? OfficeName => DisplayStaff.Office?.Name;
-    public bool CanEditDivisionManager { get; private set; }
+    public bool CanEditWithElevatedPriviledge { get; private set; }
 
     public async Task<IActionResult> OnGetAsync(string? id)
     {
@@ -29,7 +29,7 @@ public class EditRolesModel(IStaffService staffService, IAuthorizationService au
 
         DisplayStaff = staff;
         UserId = id;
-        CanEditDivisionManager = await authorization.Succeeded(User, Policies.DivisionManager);
+        CanEditWithElevatedPriviledge = await authorization.Succeeded(User, Policies.SuperUserAdministrator);
 
         await PopulateRoleSettingsAsync();
         return Page();

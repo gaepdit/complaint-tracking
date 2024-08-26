@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using AutoMapper;
+﻿using AutoMapper;
 using Cts.AppServices.Permissions;
 using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.Staff.Dto;
@@ -11,6 +10,7 @@ using GaEpd.AppLibrary.ListItems;
 using GaEpd.AppLibrary.Pagination;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace Cts.AppServices.Staff;
 
@@ -98,9 +98,10 @@ public sealed class StaffService(
         if (!await authorization.Succeeded(principal, Policies.UserAdministrator).ConfigureAwait(false))
             throw new InsufficientPermissionsException(nameof(Policies.UserAdministrator));
 
-        var filteredRoles = await authorization.Succeeded(principal, Policies.DivisionManager).ConfigureAwait(false)
-            ? roles
-            : roles.Where(pair => pair.Key != RoleName.DivisionManager);
+        var filteredRoles =
+            await authorization.Succeeded(principal, Policies.SuperUserAdministrator).ConfigureAwait(false)
+                ? roles
+                : roles.Where(pair => pair.Key != RoleName.DivisionManager && pair.Key != RoleName.SuperUserAdmin);
 
         var user = await userManager.FindByIdAsync(id).ConfigureAwait(false)
                    ?? throw new EntityNotFoundException<ApplicationUser>(id);

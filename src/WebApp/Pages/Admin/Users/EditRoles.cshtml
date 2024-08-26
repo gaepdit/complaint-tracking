@@ -37,7 +37,7 @@
             @for (var i = 0; i < Model.RoleSettings.Count; i++)
             {
                 var index = i;
-                var disabled = !Model.CanEditDivisionManager && Model.RoleSettings[index].Name == RoleName.DivisionManager;
+                var disabled = !Model.CanEditWithElevatedPriviledge && (Model.RoleSettings[index].Name == RoleName.DivisionManager || Model.RoleSettings[index].Name == RoleName.SuperUserAdmin);
                 <div class="col">
                     <div class="card h-100">
                         <label class="form-check-label p-1 h-100" asp-for="@Model.RoleSettings[index].IsSelected">

@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- A new "Super-user Account Admin" role has been added.
+
 ## [2024.8.23] - 2024-08-23
 
 ### Added
