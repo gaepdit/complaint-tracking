@@ -1,0 +1,17 @@
+﻿@model Cts.WebApp.Models.SearchResultsColumnDisplay
+
+<th scope="col" class="text-nowrap">
+    <a asp-fragment="SearchResults" asp-all-route-data="Model.RouteValues" asp-route-handler="search"
+       asp-route-Sort="@(Model.SortByName == Model.Up ? Model.Down : Model.Up)"
+       class="link-offset-2 text-dotted-underline">
+        @Model.Heading
+        @if (string.Equals(Model.SortByName, Model.Up, StringComparison.Ordinal))
+        {
+            @:▲
+        }
+        else if (string.Equals(Model.SortByName, Model.Down, StringComparison.Ordinal))
+        {
+            @:▼
+        }
+    </a>
+</th>
