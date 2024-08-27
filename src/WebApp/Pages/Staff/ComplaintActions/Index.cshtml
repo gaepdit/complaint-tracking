@@ -1,5 +1,6 @@
 @page "{handler?}"
 @using Cts.AppServices.ComplaintActions.Dto
+@using Cts.WebApp.Models
 @using Cts.WebApp.Pages.Shared.DisplayTemplates
 @using Cts.WebApp.Platform.PageModelHelpers
 @model IndexModel
@@ -60,11 +61,11 @@
                         <label asp-for="Spec.EnteredFrom" class="form-label px-2 mb-0">Date Action Entered</label>
                         <div class="input-group">
                             <div class="form-floating">
-                                <input asp-for="Spec.EnteredFrom" name="@nameof(Model.Spec.EnteredFrom)" class="form-control" aria-describedby="EnteredDateHelpBlock"/>
+                                <input asp-for="Spec.EnteredFrom" name="@nameof(Model.Spec.EnteredFrom)" class="form-control" aria-describedby="EnteredDateHelpBlock" />
                                 <label asp-for="Spec.EnteredFrom" class="form-label"></label>
                             </div>
                             <div class="form-floating">
-                                <input asp-for="Spec.EnteredTo" name="@nameof(Model.Spec.EnteredTo)" class="form-control" aria-describedby="EnteredDateHelpBlock"/>
+                                <input asp-for="Spec.EnteredTo" name="@nameof(Model.Spec.EnteredTo)" class="form-control" aria-describedby="EnteredDateHelpBlock" />
                                 <label asp-for="Spec.EnteredTo" class="form-label"></label>
                             </div>
                         </div>
@@ -77,13 +78,13 @@
                 <div class="row">
                     <div class="col-md mb-3">
                         <div class="form-floating">
-                            <input asp-for="Spec.Investigator" name="@nameof(Model.Spec.Investigator)" class="form-control"/>
+                            <input asp-for="Spec.Investigator" name="@nameof(Model.Spec.Investigator)" class="form-control" />
                             <label asp-for="Spec.Investigator" class="form-label"></label>
                         </div>
                     </div>
                     <div class="col-md mb-3">
                         <div class="form-floating">
-                            <input asp-for="Spec.Comments" name="@nameof(Model.Spec.Comments)" class="form-control"/>
+                            <input asp-for="Spec.Comments" name="@nameof(Model.Spec.Comments)" class="form-control" />
                             <label asp-for="Spec.Comments" class="form-label"></label>
                         </div>
                     </div>
@@ -125,34 +126,13 @@
             <div class="table-responsive-md">
                 <table class="table table-hover" aria-label="Facility search results">
                     <caption class="caption-top">
-                        <partial name="_PaginationNavAndCount" model="Model.PaginationNav"/>
+                        <partial name="_PaginationNavAndCount" model="Model.PaginationNav" />
                     </caption>
                     <thead>
                     <tr class="text-nowrap">
-                        <th scope="col">
-                            <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                               asp-route-Sort="@(Model.Spec.Sort == SortBy.IdAsc ? nameof(SortBy.IdDesc) : nameof(SortBy.IdAsc))"
-                               class="link-offset-2 text-dotted-underline">
-                                Complaint ID @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
-                                                 additionalViewData: new { up = nameof(SortBy.IdAsc), down = nameof(SortBy.IdDesc) })
-                            </a>
-                        </th>
-                        <th scope="col">
-                            <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                               asp-route-Sort="@(Model.Spec.Sort == SortBy.TypeAsc ? nameof(SortBy.TypeDesc) : nameof(SortBy.TypeAsc))"
-                               class="link-offset-2 text-dotted-underline">
-                                Action Type @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
-                                                additionalViewData: new { up = nameof(SortBy.TypeAsc), down = nameof(SortBy.TypeDesc) })
-                            </a>
-                        </th>
-                        <th scope="col">
-                            <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
-                               asp-route-Sort="@(Model.Spec.Sort == SortBy.DateAsc ? nameof(SortBy.DateDesc) : nameof(SortBy.DateAsc))"
-                               class="link-offset-2 text-dotted-underline">
-                                Action Date @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
-                                                additionalViewData: new { up = nameof(SortBy.DateAsc), down = nameof(SortBy.DateDesc) })
-                            </a>
-                        </th>
+                        <partial name="_SortableTableColHead" model='new SearchResultsColumnDisplay("Complaint ID", SortBy.IdAsc, SortBy.IdDesc, Model.Spec)' />
+                        <partial name="_SortableTableColHead" model='new SearchResultsColumnDisplay("Action Type", SortBy.TypeAsc, SortBy.TypeDesc, Model.Spec)' />
+                        <partial name="_SortableTableColHead" model='new SearchResultsColumnDisplay("Action Date", SortBy.DateAsc, SortBy.DateDesc, Model.Spec)' />
                         <th scope="col">Investigator</th>
                         <th scope="col">Entered By</th>
                         <th scope="col">Comments</th>
@@ -170,12 +150,12 @@
                                 @if (item.IsDeleted)
                                 {
                                     <strong class="text-nowrap">DELETED ACTION</strong>
-                                    <br/>
+                                    <br />
                                 }
                                 @if (item.ComplaintIsDeleted)
                                 {
                                     <strong class="text-nowrap">Deleted Complaint</strong>
-                                    <br/>
+                                    <br />
                                 }
                                 @Html.DisplayFor(_ => item.ActionTypeName, DisplayTemplate.StringOrPlaceholder)
                             </td>
@@ -183,7 +163,7 @@
                             <td>@Html.DisplayFor(_ => item.Investigator, DisplayTemplate.StringOrPlaceholder)</td>
                             <td>
                                 @Html.DisplayFor(_ => item.EnteredByName, DisplayTemplate.StringOrPlaceholder)
-                                <br/>
+                                <br />
                                 @Html.DisplayFor(_ => item.EnteredByOffice, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "" })
                             </td>
                             <td>@Html.DisplayFor(_ => item.Comments, DisplayTemplate.TruncateText)</td>
@@ -192,7 +172,7 @@
                     </tbody>
                 </table>
             </div>
-            <partial name="_PaginationNav" model="Model.PaginationNav"/>
+            <partial name="_PaginationNav" model="Model.PaginationNav" />
         }
     </div>
 }

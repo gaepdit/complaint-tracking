@@ -14,6 +14,7 @@ public class ComplaintAction : AuditableSoftDeleteEntity
     internal ComplaintAction(Guid id, Complaint complaint, ActionType actionType) : base(id)
     {
         Complaint = complaint;
+        ComplaintId = complaint.Id;
         ActionType = actionType;
     }
 
