@@ -1,10 +1,10 @@
 # Changelog
 
-## Unreleased
+## [2024.8.29] - 2024-08-29
 
 ### Added
 
-- A new "Super-user Account Admin" role has been added.
+- A new "Super-User Account Admin" role has been added.
 
 ## [2024.8.23] - 2024-08-23
 
@@ -40,6 +40,7 @@ _This version represents a complete rewrite of the Complaint Tracking System._
 
 New login system. New design library. Updated workflows. New public complaint page. Dark mode. And more! We hope you like it!
 
+[2024.8.29]: https://github.com/gaepdit/template-app/releases/tag/v2024.8.29
 [2024.8.23]: https://github.com/gaepdit/template-app/releases/tag/v2024.8.23
 [2024.7.26]: https://github.com/gaepdit/template-app/releases/tag/v2024.7.26
 [2024.7.25]: https://github.com/gaepdit/template-app/releases/tag/v2024.7.25
