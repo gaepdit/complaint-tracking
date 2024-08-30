@@ -7,7 +7,9 @@
 }
 
 <p class="d-print-none">
-    <a asp-page="../Index" class="lead link-offset-2">← Site Maintenance</a>
+    <a asp-page="../Index" class="lead link-offset-2"><svg class="bi me-2">
+            <use href="@Url.Content("~/images/app-icons.svg")#app-icon-arrow-90deg-up"></use>
+        </svg>Site Maintenance</a>
 </p>
 
 <h1>@IndexModel.ThisOption.PluralName</h1>

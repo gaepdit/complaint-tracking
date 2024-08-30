@@ -14,7 +14,8 @@ public class PublicSearchSpec
     public void SetUp()
     {
         _repository = RepositoryHelper.CreateSqlServerRepositoryHelper(this).GetComplaintRepository();
-        _referenceItem = ComplaintData.GetComplaints.Single(e => e.ComplaintNature == "PublicSearchSpec complaint nature reference");
+        _referenceItem = ComplaintData.GetComplaints
+            .Single(e => e.ComplaintNature == "PublicSearchSpec complaint nature reference");
     }
 
     [TearDown]
@@ -29,8 +30,7 @@ public class PublicSearchSpec
         await using var repository = RepositoryHelper.CreateSqlServerRepositoryHelper(this).GetComplaintRepository();
         var results = await repository.GetListAsync(predicate);
 
-        var expected = ComplaintData.GetComplaints
-            .Where(e => e is { IsDeleted: false, ComplaintClosed: true });
+        var expected = ComplaintData.GetComplaints.Where(e => !e.IsDeleted);
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
@@ -57,8 +57,7 @@ public class PublicSearchSpec
         var results = await _repository.GetListAsync(predicate);
 
         var expected = ComplaintData.GetComplaints
-            .Where(e => e.ReceivedDate == _referenceItem.ReceivedDate
-                && e is { IsDeleted: false, ComplaintClosed: true });
+            .Where(e => e.ReceivedDate == _referenceItem.ReceivedDate && !e.IsDeleted);
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
@@ -79,8 +78,7 @@ public class PublicSearchSpec
         var results = await _repository.GetListAsync(predicate);
 
         var expected = ComplaintData.GetComplaints
-            .Where(e => e.ComplaintNature == _referenceItem.ComplaintNature
-                && e is { IsDeleted: false, ComplaintClosed: true });
+            .Where(e => e.ComplaintNature == _referenceItem.ComplaintNature && !e.IsDeleted);
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
@@ -101,8 +99,7 @@ public class PublicSearchSpec
         var results = await _repository.GetListAsync(predicate);
 
         var expected = ComplaintData.GetComplaints
-            .Where(e => e.PrimaryConcern.Id == _referenceItem.PrimaryConcern.Id
-                && e is { IsDeleted: false, ComplaintClosed: true });
+            .Where(e => e.PrimaryConcern.Id == _referenceItem.PrimaryConcern.Id && !e.IsDeleted);
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
@@ -111,6 +108,7 @@ public class PublicSearchSpec
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
+            .Excluding(e => e.Attachments)
         );
     }
 
@@ -123,8 +121,7 @@ public class PublicSearchSpec
         var results = await _repository.GetListAsync(predicate);
 
         var expected = ComplaintData.GetComplaints
-            .Where(e => e.SourceFacilityName == _referenceItem.SourceFacilityName
-                && e is { IsDeleted: false, ComplaintClosed: true });
+            .Where(e => e.SourceFacilityName == _referenceItem.SourceFacilityName && !e.IsDeleted);
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
@@ -145,8 +142,7 @@ public class PublicSearchSpec
         var results = await _repository.GetListAsync(predicate);
 
         var expected = ComplaintData.GetComplaints
-            .Where(e => e.ComplaintCounty == _referenceItem.ComplaintCounty
-                && e is { IsDeleted: false, ComplaintClosed: true });
+            .Where(e => e.ComplaintCounty == _referenceItem.ComplaintCounty && !e.IsDeleted);
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
@@ -168,8 +164,8 @@ public class PublicSearchSpec
 
         var expected = ComplaintData.GetComplaints
             .Where(e => e.SourceAddress != null
-                && e.SourceAddress.Street == _referenceItem.SourceAddress.Street
-                && e is { IsDeleted: false, ComplaintClosed: true });
+                        && e.SourceAddress.Street == _referenceItem.SourceAddress.Street
+                        && !e.IsDeleted);
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
@@ -192,8 +188,8 @@ public class PublicSearchSpec
 
         var expected = ComplaintData.GetComplaints
             .Where(e => e.SourceAddress != null
-                && e.SourceAddress.Street2 == _referenceItem.SourceAddress.Street2
-                && e is { IsDeleted: false, ComplaintClosed: true });
+                        && e.SourceAddress.Street2 == _referenceItem.SourceAddress.Street2
+                        && !e.IsDeleted);
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
@@ -215,8 +211,8 @@ public class PublicSearchSpec
 
         var expected = ComplaintData.GetComplaints
             .Where(e => e.SourceAddress != null
-                && e.SourceAddress.City == _referenceItem.SourceAddress.City
-                && e is { IsDeleted: false, ComplaintClosed: true });
+                        && e.SourceAddress.City == _referenceItem.SourceAddress.City
+                        && !e.IsDeleted);
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
@@ -238,8 +234,8 @@ public class PublicSearchSpec
 
         var expected = ComplaintData.GetComplaints
             .Where(e => e.SourceAddress != null
-                && e.SourceAddress.State == _referenceItem.SourceAddress.State
-                && e is { IsDeleted: false, ComplaintClosed: true });
+                        && e.SourceAddress.State == _referenceItem.SourceAddress.State
+                        && !e.IsDeleted);
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
@@ -262,8 +258,8 @@ public class PublicSearchSpec
 
         var expected = ComplaintData.GetComplaints
             .Where(e => e.SourceAddress != null
-                && e.SourceAddress.PostalCode == _referenceItem.SourceAddress.PostalCode
-                && e is { IsDeleted: false, ComplaintClosed: true });
+                        && e.SourceAddress.PostalCode == _referenceItem.SourceAddress.PostalCode
+                        && !e.IsDeleted);
         results.Should().BeEquivalentTo(expected, opts => opts
             .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)

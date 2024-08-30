@@ -1,6 +1,5 @@
 @page "{handler?}"
 @using Cts.AppServices.Complaints.QueryDto
-@using Cts.WebApp.Pages.Shared.DisplayTemplates
 @using Cts.WebApp.Platform.PageModelHelpers
 @model IndexModel
 @{
@@ -67,12 +66,21 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="mb-3">
+                    <div class="col-md mb-3">
                         <div class="form-floating">
                             <select asp-for="Spec.ReceivedBy" name="@nameof(Model.Spec.ReceivedBy)" asp-items="Model.ReceivedBySelectList" class="form-select">
                                 <option value="">@SelectOptions.SelectTextAny</option>
                             </select>
                             <label asp-for="Spec.ReceivedBy" class="form-label"></label>
+                        </div>
+                    </div>
+                    <div class="col-md mb-3">
+                        <div class="form-floating">
+                            <select asp-for="Spec.Attachments" name="@nameof(Model.Spec.Attachments)"
+                                    asp-items="Html.GetEnumSelectList<YesNoAny>()" class="form-select">
+                                <option value="">@SelectOptions.SelectTextAny</option>
+                            </select>
+                            <label asp-for="Spec.Attachments" class="form-label"></label>
                         </div>
                     </div>
                 </div>
@@ -225,7 +233,9 @@
                 {
                     <div class="col-auto d-print-none ms-2">
                         <a asp-page="DownloadSearch" asp-all-route-data="Model.Spec.AsRouteValues()" class="btn btn-sm btn-outline-secondary">
-                            💾 Download search results
+                            <svg class="bi me-1">
+                                <use href="@Url.Content("~/images/app-icons.svg")#app-icon-download"></use>
+                            </svg>&nbsp;Download search results
                         </a>
                     </div>
                 }
@@ -308,6 +318,7 @@
                 </table>
             </div>
             <partial name="_PaginationNav" model="Model.PaginationNav" />
+            <partial name="_ComplaintSearchResultPartial" model="Model.ResultsDisplay" />
         }
     </div>
 }
@@ -315,9 +326,8 @@
 
 @section Scripts {
     <script src="~/js/formSearch.js"></script>
-    <script src="~/lib/axios/axios.min.js"></script>
-    <script src="~/js/staffSelect.js"></script>
-    <script>
+<partial name="_StaffSelectScriptsPartial" />
+<script>
     setUpStaffDropdown(
         "@nameof(Model.Spec)_@nameof(ComplaintSearchDto.Office)",
         "@nameof(Model.Spec)_@nameof(ComplaintSearchDto.Assigned)",

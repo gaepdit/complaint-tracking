@@ -27,8 +27,8 @@ public class IndexModel(
     public bool ShowResults { get; private set; }
     public bool CanViewDeletedComplaints { get; private set; }
     public IPaginatedResult<ComplaintSearchResultDto> SearchResults { get; private set; } = default!;
-    public string SortByName => Spec.Sort.ToString();
     public PaginationNavModel PaginationNav => new(SearchResults, Spec.AsRouteValues());
+    public SearchResultsDisplay ResultsDisplay => new(Spec, SearchResults, PaginationNav, IsPublic: false);
 
     public SelectList ReceivedBySelectList { get; private set; } = default!;
     public SelectList ConcernsSelectList { get; private set; } = default!;

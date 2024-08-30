@@ -14,6 +14,8 @@ internal static partial class AppSettings
         public string? CustomerSupportEmail { get; [UsedImplicitly] init; }
         public string? TechnicalSupportEmail { get; [UsedImplicitly] init; }
         public string? TechnicalSupportSite { get; [UsedImplicitly] init; }
+        public string? InformationalVersion { get; set; }
+        public string? InformationalBuild { get; set; }
     }
 
     // Raygun client settings

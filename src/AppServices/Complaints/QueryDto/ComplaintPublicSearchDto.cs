@@ -2,11 +2,16 @@
 
 namespace Cts.AppServices.Complaints.QueryDto;
 
-public record ComplaintPublicSearchDto
+public record ComplaintPublicSearchDto : IBasicSearchDisplay
 {
     // Sorting
 
-    public SortBy Sort { get; init; } = SortBy.IdAsc;
+    public SortBy Sort { get; init; } = SortBy.IdDesc;
+
+    // Status
+
+    [Display(Name = "Complaint Status")]
+    public PublicSearchStatus? Status { get; init; }
 
     // Dates
 
@@ -58,6 +63,7 @@ public record ComplaintPublicSearchDto
     public IDictionary<string, string?> AsRouteValues() => new Dictionary<string, string?>
     {
         { nameof(Sort), Sort.ToString() },
+        { nameof(Status), Status?.ToString() },
         { nameof(DateFrom), DateFrom?.ToString("d") },
         { nameof(DateTo), DateTo?.ToString("d") },
         { nameof(Description), Description },

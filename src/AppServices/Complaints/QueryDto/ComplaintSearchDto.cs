@@ -2,7 +2,7 @@
 
 namespace Cts.AppServices.Complaints.QueryDto;
 
-public record ComplaintSearchDto
+public record ComplaintSearchDto : IBasicSearchDisplay
 {
     // Sorting
 
@@ -25,6 +25,10 @@ public record ComplaintSearchDto
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = "{0:O}", ApplyFormatInEditMode = true)]
     public DateOnly? ClosedTo { get; init; }
+
+    // Attachments
+    [Display(Name = "Has Attachments")]
+    public YesNoAny? Attachments { get; init; }
 
     // Received
 
@@ -103,6 +107,7 @@ public record ComplaintSearchDto
         { nameof(DeletedStatus), DeletedStatus?.ToString() },
         { nameof(ClosedFrom), ClosedFrom?.ToString("d") },
         { nameof(ClosedTo), ClosedTo?.ToString("d") },
+        { nameof(Attachments), Attachments?.ToString() },
         { nameof(ReceivedFrom), ReceivedFrom?.ToString("d") },
         { nameof(ReceivedTo), ReceivedTo?.ToString("d") },
         { nameof(ReceivedBy), ReceivedBy },

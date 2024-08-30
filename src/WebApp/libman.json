@@ -3,7 +3,7 @@
   "defaultProvider": "cdnjs",
   "libraries": [
     {
-      "library": "jquery@3.6.1",
+      "library": "jquery@3.7.1",
       "destination": "wwwroot/lib/jquery/",
       "files": [
         "jquery.min.js",
@@ -12,7 +12,7 @@
       ]
     },
     {
-      "library": "bootstrap@5.3.1",
+      "library": "bootstrap@5.3.3",
       "destination": "wwwroot/lib/bootstrap/",
       "files": [
         "js/bootstrap.bundle.min.js",
@@ -24,7 +24,7 @@
       ]
     },
     {
-      "library": "jquery-validate@1.19.5",
+      "library": "jquery-validate@1.21.0",
       "destination": "wwwroot/lib/jquery-validate/",
       "files": [
         "jquery.validate.min.js",
@@ -44,13 +44,21 @@
       "destination": "wwwroot/lib/anchor-js/"
     },
     {
-      "library": "axios@1.3.5",
+      "library": "axios@1.7.4",
       "destination": "wwwroot/lib/axios/",
       "files": [
         "axios.min.js",
         "axios.js",
         "axios.js.map",
         "axios.min.js.map"
+      ]
+    },
+    {
+      "library": "fancybox@3.5.7",
+      "destination": "wwwroot/lib/fancybox/",
+      "files": [
+        "jquery.fancybox.min.js",
+        "jquery.fancybox.min.css"
       ]
     }
   ]

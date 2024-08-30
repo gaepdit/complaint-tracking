@@ -125,9 +125,31 @@
             <div class="table-responsive-md">
                 <table class="gaepd-table-responsive table-hover" aria-label="Facility search results">
                     <caption class="caption-top">
-                        <partial name="Shared/_PaginationNavAndCount" model="Model.PaginationNav"/>
+                        <partial name="_PaginationNavAndCount" model="Model.PaginationNav"/>
                     </caption>
                     <thead>
+                    <tr class="text-nowrap">
+                        <th scope="col" class="text-nowrap">Complaint ID</th>
+                            <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
+                               asp-route-Sort="@(Model.Spec.Sort == SortBy.IdAsc ? nameof(SortBy.IdDesc) : nameof(SortBy.IdAsc))"
+                               class="link-offset-2 text-dotted-underline">
+                                Complaint ID @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
+                                                 additionalViewData: new { up = nameof(SortBy.IdAsc), down = nameof(SortBy.IdDesc) })
+                            </a>
+                        <th scope="col" class="text-nowrap">Action Type</th>
+                            <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
+                               asp-route-Sort="@(Model.Spec.Sort == SortBy.TypeAsc ? nameof(SortBy.TypeDesc) : nameof(SortBy.TypeAsc))"
+                               class="link-offset-2 text-dotted-underline">
+                                Action Type @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
+                                                additionalViewData: new { up = nameof(SortBy.TypeAsc), down = nameof(SortBy.TypeDesc) })
+                            </a>
+                        <th scope="col" class="text-nowrap">Action Date</th>
+                            <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
+                               asp-route-Sort="@(Model.Spec.Sort == SortBy.DateAsc ? nameof(SortBy.DateDesc) : nameof(SortBy.DateAsc))"
+                               class="link-offset-2 text-dotted-underline">
+                                Action Date @Html.DisplayFor(model => model.SortByName, DisplayTemplate.SortArrow,
+                                                additionalViewData: new { up = nameof(SortBy.DateAsc), down = nameof(SortBy.DateDesc) })
+                            </a>
                     <tr>
                         <th scope="col" class="text-nowrap">Complaint ID</th>
                         <th scope="col" class="text-nowrap">Action Type</th>

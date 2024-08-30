@@ -2,9 +2,9 @@ name: .NET Unit Tests
 
 on:
   push:
-    branches: ["main", "vNext/main"]
+    branches: ["main"]
   pull_request:
-    branches: ["main", "vNext/main"]
+    branches: ["main"]
 
 
 jobs:

@@ -17,7 +17,11 @@
         @if (Model.UserIsActive)
         {
             <div class="col-auto d-print-none ms-2">
-                <a asp-page="/Staff/Complaints/Details" asp-route-id="@Model.Item.Id.ToString()" class="link-offset-2">📢 View staff copy</a>
+                <a asp-page="/Staff/Complaints/Details" asp-route-id="@Model.Item.Id.ToString()" class="link-offset-2">
+                    <svg class="bi me-2">
+                        <use href="@Url.Content("~/images/app-icons.svg")#app-icon-person-badge"></use>
+                    </svg>View staff copy
+                </a>
             </div>
         }
     </div>
@@ -27,144 +31,188 @@
     <small class="text-body-secondary">Report generated @(DateTime.Now.ToString(DateTimeFormatConstants.LongDateTimeFormat)).</small>
 </p>
 
-<div class="container">
-    <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ReceivedDate)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.Item.ReceivedDate, DisplayTemplate.LongDateTime)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.CurrentOfficeName)</dt>
-        <dd class="col-sm-8 col-lg-9">@Model.Item.CurrentOfficeName</dd>
-    </dl>
-</div>
-
-<h2>Status: <em class="text-info-emphasis">@Model.Item.Status.GetDisplayName()</em></h2>
-
-<div class="container">
-    <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ComplaintClosedDate)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.Item.ComplaintClosedDate, DisplayTemplate.LongDateTimeOrNotEntered)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ReviewComments)</dt>
-        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(_ => Model.Item.ReviewComments, DisplayTemplate.StringOrPlaceholder)</dd>
-    </dl>
-</div>
-
-<h2>Nature of Complaint</h2>
-
-<p class="container text-break text-pre-line">@Html.DisplayFor(_ => Model.Item.ComplaintNature, DisplayTemplate.StringOrPlaceholder)</p>
-
-<div class="container">
-    <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.PrimaryConcernName)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.PrimaryConcernName, DisplayTemplate.StringOrPlaceholder)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.SecondaryConcernName)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SecondaryConcernName, DisplayTemplate.StringOrPlaceholder)</dd>
-    </dl>
-</div>
-
-<h2>Complaint Location</h2>
-
-<div class="container">
-    <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ComplaintLocation)</dt>
-        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(_ => Model.Item.ComplaintLocation, DisplayTemplate.StringOrPlaceholder)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ComplaintCity)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.ComplaintCity, DisplayTemplate.StringOrPlaceholder)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ComplaintCounty)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.ComplaintCounty, DisplayTemplate.County)</dd>
-    </dl>
-</div>
-
-<h2>Source</h2>
-
-<div class="container">
-    <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.SourceFacilityName)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SourceFacilityName, DisplayTemplate.StringOrPlaceholder)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.SourceFacilityIdNumber)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SourceFacilityIdNumber, DisplayTemplate.StringOrPlaceholder)</dd>
-    </dl>
-</div>
-
-<h2>Source Contact</h2>
-
-<div class="container">
-    <dl class="row">
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.SourceContactName)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SourceContactName, DisplayTemplate.StringOrPlaceholder)</dd>
-        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.SourceAddress)</dt>
-        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SourceAddress)</dd>
-    </dl>
-</div>
-
-<h2>Actions</h2>
-
-@if (Model.Item.Actions is { Count: > 0 })
+@if (!Model.Item.ComplaintClosed)
 {
-    <div class="row row-cols-1 g-3 mb-3">
-        @foreach (var action in Model.Item.Actions)
-        {
-            <div class="col">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 id="@action.Id.ToString()" class="h5 card-title">
-                            @action.ActionTypeName
-                        </h3>
-                        <h4 class="h5 card-subtitle text-body-secondary">
-                            @Html.DisplayFor(_ => action.ActionDate, DisplayTemplate.DateOnlyOrNotEntered)
-                            @if (!string.IsNullOrWhiteSpace(action.Investigator))
-                            {
-                                @:by @Html.DisplayFor(_ => action.Investigator)
-                            }
-                        </h4>
-                    </div>
-                    <div class="card-body ">
-                        <div class="text-break text-pre-line">@Html.DisplayFor(_ => action.Comments, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })</div>
-                    </div>
-                </div>
-            </div>
-        }
+    <div class="callout callout-warning d-flex align-items-center">
+        <svg class="bi me-3" role="img" aria-label="Danger:">
+            <use href="@Url.Content("~/images/app-icons.svg")#app-icon-exclamation-triangle-fill"></use>
+        </svg>
+        <p>
+            This Complaint is still under investigation, and only limited information is publicly available.
+            Once the investigation is complete, all public information will be made available on this page.
+        </p>
     </div>
 }
-else
+
+<div class="container-full">
+    <div class="row gx-md-3">
+        <div class="col-md-3 mb-3 mb-md-0 d-print-none">
+            <div class="sticky-md-top" id="toc-container">
+                <div class="pb-2 d-grid d-md-none">
+                    <button class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" data-bs-target="#toc" aria-expanded="false" aria-controls="toc">
+                        On this Page
+                    </button>
+                </div>
+                <h3 class="h5 d-none d-md-block no-anchor">On this Page</h3>
+                <div class="list-group list-group-flush collapse d-md-block" id="toc"></div>
+            </div>
+        </div>
+
+        <div class="col-md-9 order-md-first">
+            <h2>Status: <em class="text-info-emphasis">@Model.Item.Status.GetDisplayName()</em></h2>
+
+            <div class="container">
+                <dl class="row">
+                    <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ReceivedDate)</dt>
+                    <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.Item.ReceivedDate, DisplayTemplate.LongDateTime)</dd>
+                    <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.CurrentOfficeName)</dt>
+                    <dd class="col-sm-8 col-lg-9">@Model.Item.CurrentOfficeName</dd>
+
+                    @if (Model.Item.ComplaintClosed)
+                    {
+                        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ComplaintClosedDate)</dt>
+                        <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(model => model.Item.ComplaintClosedDate, DisplayTemplate.LongDateTimeOrNotEntered)</dd>
+                        <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ReviewComments)</dt>
+                        <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(_ => Model.Item.ReviewComments, DisplayTemplate.StringOrPlaceholder)</dd>
+                    }
+                </dl>
+            </div>
+
+            <h2>Nature of Complaint</h2>
+
+            <p class="container text-break text-pre-line">@Html.DisplayFor(_ => Model.Item.ComplaintNature, DisplayTemplate.StringOrPlaceholder)</p>
+
+            <div class="container">
+                <dl class="row">
+                    <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.PrimaryConcernName)</dt>
+                    <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.PrimaryConcernName, DisplayTemplate.StringOrPlaceholder)</dd>
+                    <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.SecondaryConcernName)</dt>
+                    <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SecondaryConcernName, DisplayTemplate.StringOrPlaceholder)</dd>
+                </dl>
+            </div>
+
+            <h2>Complaint Location</h2>
+
+            <div class="container">
+                <dl class="row">
+                    <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ComplaintLocation)</dt>
+                    <dd class="col-sm-8 col-lg-9 text-break text-pre-line">@Html.DisplayFor(_ => Model.Item.ComplaintLocation, DisplayTemplate.StringOrPlaceholder)</dd>
+                    <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ComplaintCity)</dt>
+                    <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.ComplaintCity, DisplayTemplate.StringOrPlaceholder)</dd>
+                    <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.ComplaintCounty)</dt>
+                    <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.ComplaintCounty, DisplayTemplate.County)</dd>
+                </dl>
+            </div>
+
+            <h2>Source</h2>
+
+            <div class="container">
+                <dl class="row">
+                    <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.SourceFacilityName)</dt>
+                    <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SourceFacilityName, DisplayTemplate.StringOrPlaceholder)</dd>
+                    <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.SourceFacilityIdNumber)</dt>
+                    <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SourceFacilityIdNumber, DisplayTemplate.StringOrPlaceholder)</dd>
+                </dl>
+            </div>
+
+            <h2>Source Contact</h2>
+
+            <div class="container">
+                <dl class="row">
+                    <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.SourceContactName)</dt>
+                    <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SourceContactName, DisplayTemplate.StringOrPlaceholder)</dd>
+                    <dt class="col-sm-4 col-lg-3">@Html.DisplayNameFor(model => model.Item.SourceAddress)</dt>
+                    <dd class="col-sm-8 col-lg-9">@Html.DisplayFor(_ => Model.Item.SourceAddress)</dd>
+                </dl>
+            </div>
+
+            @if (Model.Item.ComplaintClosed)
+            {
+                <h2>Actions</h2>
+
+                @if (Model.Item.Actions is { Count: > 0 })
+                {
+                    <div class="row row-cols-1 g-3 mb-3">
+                        @foreach (var action in Model.Item.Actions)
+                        {
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 id="@action.Id.ToString()" class="h5 card-title">
+                                            @action.ActionTypeName
+                                        </h3>
+                                        <h4 class="h5 card-subtitle text-body-secondary">
+                                            @Html.DisplayFor(_ => action.ActionDate, DisplayTemplate.DateOnlyOrNotEntered)
+                                            @if (!string.IsNullOrWhiteSpace(action.Investigator))
+                                            {
+                                                @:by @Html.DisplayFor(_ => action.Investigator)
+                                            }
+                                        </h4>
+                                    </div>
+                                    <div class="card-body ">
+                                        <div class="text-break text-pre-line">@Html.DisplayFor(_ => action.Comments, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })</div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p>
+                        <em>None.</em>
+                    </p>
+                }
+
+                <h2>Attachments</h2>
+
+                <p>
+                    <em>(Attachments may not be available for complaints resolved before April 2018. Please note that not every complaint has attachments.)</em>
+                </p>
+
+                @if (Model.Item.Attachments is { Count: > 0 })
+                {
+                    <table class="table table-hover align-middle" aria-label="File attachments">
+                        <thead>
+                        <tr>
+                            <th scope="col">File</th>
+                            <th scope="col">Size</th>
+                            <th scope="col">Date Uploaded</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var attachment in Model.Item.Attachments)
+                        {
+                            attachment.IsForPublic = true;
+                            <tr>
+                                <td>
+                                    <partial name="_AttachmentLinkPartial" model="attachment" />
+                                </td>
+                                <td>@Html.DisplayFor(_ => attachment.Size, DisplayTemplate.FileSize)</td>
+                                <td>@Html.DisplayFor(_ => attachment.UploadedDate, DisplayTemplate.ShortDate)</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p>
+                        <em>None.</em>
+                    </p>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts
 {
-    <p>
-        <em>None.</em>
-    </p>
+    <script src="~/js/table-of-contents.js" defer></script>
+    <partial name="_FancyboxScriptsPartial" />
 }
 
-<h2>Attachments</h2>
-
-<p>
-    <em>(Attachments may not be available for complaints resolved before April 2018. Please note that not every complaint has attachments.)</em>
-</p>
-
-@if (Model.Item.Attachments is { Count: > 0 })
+@section Styles
 {
-    <table class="table table-hover align-middle" aria-label="File attachments">
-        <thead>
-        <tr>
-            <th scope="col">File</th>
-            <th scope="col">Size</th>
-            <th scope="col">Date Uploaded</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var attachment in Model.Item.Attachments)
-        {
-            attachment.IsForPublic = true;
-            <tr>
-                <td>
-                    <partial name="Shared/_AttachmentLinkPartial" model="attachment" />
-                </td>
-                <td>@Html.DisplayFor(_ => attachment.Size, DisplayTemplate.FileSize)</td>
-                <td>@Html.DisplayFor(_ => attachment.UploadedDate, DisplayTemplate.ShortDate)</td>
-            </tr>
-        }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>
-        <em>None.</em>
-    </p>
+    <partial name="_FancyboxStylesPartial" />
 }
