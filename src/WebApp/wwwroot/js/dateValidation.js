@@ -2,9 +2,9 @@ function datePairs(fromID, toID, fromString, toString) {
   document
     .getElementById("SearchButton")
     .addEventListener("click", function (e) {
-      var today = new Date().toISOString().slice(0, 10);
-      var dateFrom = document.getElementById(fromID).value;
-      var dateTo = document.getElementById(toID).value;
+      const today = new Date().toISOString().slice(0, 10);
+      const dateFrom = document.getElementById(fromID).value;
+      const dateTo = document.getElementById(toID).value;
 
       if (dateTo && dateTo > today) {
         alert(
