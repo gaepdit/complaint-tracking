@@ -8,11 +8,10 @@ namespace AppServicesTests.Permissions.Requirements;
 public class RoleBasedRequirementTests
 {
     [Test]
-    public async Task WhenDivisionManager_Succeeds()
+    public async Task WhenRequiredRoleExists_Succeeds()
     {
         var handler = new SiteMaintainerRequirement();
-        var user = new ClaimsPrincipal(new ClaimsIdentity(
-            new Claim[] { new(ClaimTypes.Role, RoleName.SiteMaintenance) }));
+        var user = new ClaimsPrincipal(new ClaimsIdentity([new Claim(ClaimTypes.Role, RoleName.SiteMaintenance)]));
         var context = new AuthorizationHandlerContext([handler], user, null);
 
         await handler.HandleAsync(context);
@@ -21,11 +20,10 @@ public class RoleBasedRequirementTests
     }
 
     [Test]
-    public async Task WhenOnlyUserAdmin_DoesNotSucceed()
+    public async Task WhenRequiredRoleDoesNotExist_Fails()
     {
         var handler = new SiteMaintainerRequirement();
-        var user = new ClaimsPrincipal(new ClaimsIdentity(
-            new Claim[] { new(ClaimTypes.Role, RoleName.UserAdmin) }));
+        var user = new ClaimsPrincipal(new ClaimsIdentity([new Claim(ClaimTypes.Role, RoleName.UserAdmin)]));
         var context = new AuthorizationHandlerContext([handler], user, null);
 
         await handler.HandleAsync(context);
@@ -34,7 +32,7 @@ public class RoleBasedRequirementTests
     }
 
     [Test]
-    public async Task WhenNoRoles_DoesNotSucceed()
+    public async Task WhenNoRoles_Failes()
     {
         var handler = new SiteMaintainerRequirement();
         var user = new ClaimsPrincipal(new ClaimsIdentity("Basic"));

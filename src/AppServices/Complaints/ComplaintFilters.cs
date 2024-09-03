@@ -13,6 +13,7 @@ internal static class ComplaintFilters
     public static Expression<Func<Complaint, bool>> PublicSearchPredicate(ComplaintPublicSearchDto spec) =>
         PredicateBuilder.True<Complaint>()
             .IsPublic()
+            .ByPublicStatus(spec.Status)
             .FromDate(spec.DateFrom)
             .ToDate(spec.DateTo)
             .ContainsNature(spec.Description)
@@ -30,6 +31,7 @@ internal static class ComplaintFilters
             .ByDeletedStatus(spec.DeletedStatus)
             .FromClosedDate(spec.ClosedFrom)
             .ToClosedDate(spec.ClosedTo)
+            .HasAttachments(spec.Attachments)
             .FromDate(spec.ReceivedFrom)
             .ToDate(spec.ReceivedTo)
             .ReceivedBy(spec.ReceivedBy)
@@ -49,7 +51,7 @@ internal static class ComplaintFilters
             .ReviewRequestedFrom(spec.Reviewer);
 
     private static Expression<Func<Complaint, bool>> IsPublic(this Expression<Func<Complaint, bool>> predicate) =>
-        predicate.IsClosed().ExcludeDeleted();
+        predicate.ExcludeDeleted();
 
     // Comprises both "Closed" and "AdministrativelyClosed" statuses.
     private static Expression<Func<Complaint, bool>> IsClosed(this Expression<Func<Complaint, bool>> predicate) =>
@@ -57,6 +59,14 @@ internal static class ComplaintFilters
 
     private static Expression<Func<Complaint, bool>> IsOpen(this Expression<Func<Complaint, bool>> predicate) =>
         predicate.And(complaint => !complaint.ComplaintClosed);
+
+    private static Expression<Func<Complaint, bool>> ByPublicStatus(this Expression<Func<Complaint, bool>> predicate,
+        PublicSearchStatus? input) => input switch
+    {
+        PublicSearchStatus.Open => predicate.IsOpen(),
+        PublicSearchStatus.Closed => predicate.IsClosed(),
+        _ => predicate,
+    };
 
     private static Expression<Func<Complaint, bool>> ByStatus(this Expression<Func<Complaint, bool>> predicate,
         SearchComplaintStatus? input) => input switch
@@ -114,6 +124,19 @@ internal static class ComplaintFilters
                 complaint.ComplaintClosed &&
                 complaint.ComplaintClosedDate != null &&
                 complaint.ComplaintClosedDate.Value.Date <= input.Value.ToDateTime(TimeOnly.MinValue));
+
+    private static Expression<Func<Complaint, bool>> HasAttachments(
+        this Expression<Func<Complaint, bool>> predicate,
+        YesNoAny? input) => input switch
+    {
+        YesNoAny.Yes => predicate.And(complaint => complaint.Attachments.Any(attachment => !attachment.IsDeleted)),
+#pragma warning disable S6603
+        // 'The collection-specific "TrueForAll" method should be used instead of the "All" extension'
+        // "TrueForAll" is incompatible with EF Core.
+        YesNoAny.No => predicate.And(complaint => complaint.Attachments.All(attachment => attachment.IsDeleted)),
+#pragma warning restore S6603
+        _ => predicate,
+    };
 
     private static Expression<Func<Complaint, bool>> ReceivedBy(this Expression<Func<Complaint, bool>> predicate,
         string? input) =>

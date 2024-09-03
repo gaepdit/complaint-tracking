@@ -13,6 +13,7 @@ public static class RoleName
     public const string Manager = nameof(Manager);
     public const string SiteMaintenance = nameof(SiteMaintenance);
     public const string Staff = nameof(Staff);
+    public const string SuperUserAdmin = nameof(SuperUserAdmin);
     public const string UserAdmin = nameof(UserAdmin);
 }
 
@@ -100,5 +101,11 @@ public class AppRole
         RoleName.DivisionManager, "Division Manager",
         "Can manage all complaints. Can delete and restore complaints. " +
         "Can edit all users and roles. Can edit offices, assignors, and lookup tables."
+    );
+
+    [UsedImplicitly]
+    public static AppRole SuperUserAdminRole { get; } = new(
+        RoleName.SuperUserAdmin, "Super-User Account Admin",
+        "Can edit all users and roles, including the Division Manager role."
     );
 }

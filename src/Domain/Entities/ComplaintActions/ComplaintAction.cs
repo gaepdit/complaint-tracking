@@ -14,11 +14,13 @@ public class ComplaintAction : AuditableSoftDeleteEntity
     internal ComplaintAction(Guid id, Complaint complaint, ActionType actionType) : base(id)
     {
         Complaint = complaint;
+        ComplaintId = complaint.Id;
         ActionType = actionType;
     }
 
     // Properties
 
+    public int ComplaintId { get; init; }
     public Complaint Complaint { get; private init; } = default!;
 
     public ActionType ActionType { get; set; } = default!;

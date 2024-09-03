@@ -52,4 +52,7 @@ public static class Policies
 
     public static AuthorizationPolicy UserAdministrator { get; } =
         ActiveUserPolicyBuilder.AddRequirements(new UserAdminRequirement()).Build();
+
+    public static AuthorizationPolicy SuperUserAdministrator { get; } =
+        ActiveUserPolicyBuilder.AddRequirements(new SuperUserAdminRequirement()).Build();
 }

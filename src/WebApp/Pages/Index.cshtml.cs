@@ -22,8 +22,8 @@ public class IndexModel(IComplaintService complaints, IConcernService concerns) 
     public ComplaintPublicSearchDto Spec { get; set; } = default!;
     public bool ShowResults { get; private set; }
     public IPaginatedResult<ComplaintSearchResultDto> SearchResults { get; private set; } = default!;
-    public string SortByName => Spec.Sort.ToString();
     public PaginationNavModel PaginationNav => new(SearchResults, Spec.AsRouteValues());
+    public SearchResultsDisplay ResultsDisplay => new(Spec, SearchResults, PaginationNav, IsPublic: true);
 
     public SelectList ConcernsSelectList { get; private set; } = default!;
     public SelectList CountiesSelectList => new(Data.Counties);
@@ -43,8 +43,7 @@ public class IndexModel(IComplaintService complaints, IConcernService concerns) 
             ModelState.AddModelError(nameof(FindId), "Complaint ID must be a number.");
         else if (!await complaints.PublicExistsAsync(idInt))
             ModelState.AddModelError(nameof(FindId),
-                "The Complaint ID entered does not exist or is not publicly available. " +
-                "(Complaints are only made available on this site after EPD’s investigation has concluded.)");
+                "The Complaint ID entered does not exist or is not publicly available.");
 
         return ModelState.IsValid ? RedirectToPage("Complaint", routeValues: new { id = FindId }) : Page();
     }

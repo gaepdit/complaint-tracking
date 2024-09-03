@@ -1,0 +1,84 @@
+﻿@using Cts.AppServices.Complaints.QueryDto
+@using Cts.WebApp.Models
+@using Cts.WebApp.Pages.Shared.DisplayTemplates
+@model Cts.WebApp.Models.SearchResultsDisplay
+
+<partial name="_PaginationNavAndCount" model="Model.Pagination" />
+<div class="table-responsive-md mb-3">
+    <table class="table table-hover" aria-label="Facility search results">
+        <thead>
+        <tr class="text-nowrap">
+            <partial name="_SortableTableColHead" model='new SearchResultsColumnDisplay("ID", SortBy.IdAsc, SortBy.IdDesc, Model.Spec)' />
+            <partial name="_SortableTableColHead" model='new SearchResultsColumnDisplay("Date Received", SortBy.ReceivedDateAsc, SortBy.ReceivedDateDesc, Model.Spec)' />
+            <partial name="_SortableTableColHead" model='new SearchResultsColumnDisplay("Status", SortBy.StatusAsc, SortBy.StatusDesc, Model.Spec)' />
+            <th scope="col">Source &amp; Location</th>
+            <th scope="col">Office Assigned</th>
+            <th scope="col">Areas of Concern</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        @foreach (var item in Model.SearchResults.Items)
+        {
+            <tr class="@(item.IsDeleted ? "table-danger" : "")">
+                <th scope="row">
+                    @if (Model.IsPublic)
+                    {
+                        <a asp-page="./Complaint" asp-route-id="@item.Id.ToString()" class="btn btn-outline-primary btn-sm">@item.Id.ToString()</a>
+                    }
+                    else
+                    {
+                        <a asp-page="Details" asp-route-id="@item.Id.ToString()" class="btn btn-outline-primary btn-sm">@item.Id.ToString()</a>
+                    }
+                </th>
+                <td class="text-nowrap">@Html.DisplayFor(_ => item.ReceivedDate, DisplayTemplate.ShortDate)</td>
+                <td>
+                    @if (item.IsDeleted)
+                    {
+                        <strong>DELETED</strong>
+                        <br />
+                    }
+                    @Html.DisplayFor(_ => item.Status)
+                    @if (item is { ComplaintClosed: true, ComplaintClosedDate: not null })
+                    {
+                        <br />
+                        @:on @Html.DisplayFor(_ => item.ComplaintClosedDate, DisplayTemplate.ShortDate)
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(_ => item.SourceFacilityName, DisplayTemplate.StringOrPlaceholder)
+                    <ul>
+                        @if (item.SourceFacilityIdNumber != null)
+                        {
+                            <li>ID: @item.SourceFacilityIdNumber</li>
+                        }
+                        @if (!string.IsNullOrEmpty(item.SourceAddressCityState))
+                        {
+                            <li>@item.SourceAddressCityState</li>
+                        }
+                        @if (item.ComplaintCounty != null)
+                        {
+                            <li>@Html.DisplayFor(_ => item.ComplaintCounty, DisplayTemplate.County)</li>
+                        }
+                    </ul>
+                </td>
+                <td>
+                    @Html.DisplayFor(_ => item.AssignedOwnerName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "[Unassigned]" })
+                    <br />
+                    @Html.DisplayFor(_ => item.CurrentOfficeName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "[No office assigned]" })
+                </td>
+                <td>
+                    <ol type="I">
+                        <li>@Html.DisplayFor(_ => item.PrimaryConcernName, DisplayTemplate.StringOrPlaceholder)</li>
+                        @if (item.SecondaryConcernName is not null)
+                        {
+                            <li>@Html.DisplayFor(_ => item.SecondaryConcernName, DisplayTemplate.StringOrPlaceholder)</li>
+                        }
+                    </ol>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+<partial name="_PaginationNav" model="Model.Pagination" />

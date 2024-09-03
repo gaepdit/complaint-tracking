@@ -38,8 +38,8 @@ public sealed class ComplaintService(
 
     public async Task<ComplaintPublicViewDto?> FindPublicAsync(int id, CancellationToken token = default)
     {
-        var complaint = await complaintRepository
-            .FindIncludeAllAsync(ComplaintFilters.PublicIdPredicate(id), token: token).ConfigureAwait(false);
+        var complaint = await complaintRepository.FindPublicAsync(ComplaintFilters.PublicIdPredicate(id), token: token)
+            .ConfigureAwait(false);
         return complaint is null ? null : mapper.Map<ComplaintPublicViewDto>(complaint);
     }
 

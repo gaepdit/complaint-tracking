@@ -12,7 +12,9 @@ public enum SortBy
     [Description("ReceivedDate, Id")] ReceivedDateAsc,
     [Description("ReceivedDate desc, Id")] ReceivedDateDesc,
     [Description("Status, ComplaintClosedDate, Id")] StatusAsc,
-    [Description("Status desc, ComplaintClosedDate desc, Id")] StatusDesc,
+
+    [Description("Status desc, ComplaintClosedDate desc, Id")]
+    StatusDesc,
 }
 
 // The order of the values in this enum is intentional:
@@ -32,6 +34,16 @@ public enum SearchComplaintStatus
     [Display(Name = "Administratively Closed")] AdministrativelyClosed = 6,
 }
 
+// "(Any)" (null) = no filtering
+// "Closed" = only closed complaints
+// "Open" = only open complaints
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum PublicSearchStatus
+{
+    Closed = 0,
+    Open = 1,
+}
+
 // "Not Deleted" is included as an additional Delete Status option in the UI representing the null default state.
 // "Deleted" = only deleted complaints
 // "All" = all complaints
@@ -41,4 +53,14 @@ public enum SearchDeleteStatus
 {
     Deleted = 0,
     All = 1,
+}
+
+// "(Any)" (null) = no filtering
+// "Yes" = only if value is true
+// "No" = only if value is false
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum YesNoAny
+{
+    Yes = 1,
+    No = 0,
 }
