@@ -1,6 +1,8 @@
 @page "{handler?}"
 @using Cts.AppServices.Complaints.QueryDto
 @using Cts.WebApp.Platform.PageModelHelpers
+@using Cts.WebApp.Pages.Shared.DisplayTemplates
+@using Cts.WebApp.Models
 @model IndexModel
 @{
     ViewData["Title"] = "Complaint Search";
@@ -15,203 +17,7 @@
                 <em>All fields are optional.</em>
             </div>
             <form method="get" asp-page-handler="Search" asp-fragment="SearchResults">
-                <h2 class="h4">Status</h2>
-                <div class="row">
-                    <div class="col-md mb-3">
-                        <div class="form-floating">
-                            <select asp-for="Spec.Status" name="@nameof(Model.Spec.Status)" asp-items="Html.GetEnumSelectList<SearchComplaintStatus>()" class="form-select">
-                                <option value="">@SelectOptions.SelectTextAny</option>
-                            </select>
-                            <label asp-for="Spec.Status" class="form-label"></label>
-                        </div>
-                    </div>
-                    @if (Model.CanViewDeletedComplaints)
-                    {
-                        <div class="col-md mb-3">
-                            <div class="form-floating">
-                                <select asp-for="Spec.DeletedStatus" name="@nameof(Model.Spec.DeletedStatus)" asp-items="Html.GetEnumSelectList<SearchDeleteStatus>()" class="form-select">
-                                    <option value="">@SelectOptions.SelectNotDeleted</option>
-                                </select>
-                                <label asp-for="Spec.DeletedStatus" class="form-label"></label>
-                            </div>
-                        </div>
-                    }
-                </div>
-                <div class="row">
-                    <div class="col-md mb-3">
-                        <label asp-for="Spec.ReceivedFrom" class="form-label px-2 mb-0">Date Complaint Received</label>
-                        <div class="input-group">
-                            <div class="form-floating">
-                                <input asp-for="Spec.ReceivedFrom" name="@nameof(Model.Spec.ReceivedFrom)" class="form-control" />
-                                <label asp-for="Spec.ReceivedFrom" class="form-label"></label>
-                            </div>
-                            <div class="form-floating">
-                                <input asp-for="Spec.ReceivedTo" name="@nameof(Model.Spec.ReceivedTo)" class="form-control" />
-                                <label asp-for="Spec.ReceivedTo" class="form-label"></label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md mb-3">
-                        <label asp-for="Spec.ClosedFrom" class="form-label px-2 mb-0">Date Complaint Closed</label>
-                        <div class="input-group">
-                            <div class="form-floating">
-                                <input asp-for="Spec.ClosedFrom" name="@nameof(Model.Spec.ClosedFrom)" class="form-control" />
-                                <label asp-for="Spec.ClosedFrom" class="form-label"></label>
-                            </div>
-                            <div class="form-floating">
-                                <input asp-for="Spec.ClosedTo" name="@nameof(Model.Spec.ClosedTo)" class="form-control" />
-                                <label asp-for="Spec.ClosedTo" class="form-label"></label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md mb-3">
-                        <div class="form-floating">
-                            <select asp-for="Spec.ReceivedBy" name="@nameof(Model.Spec.ReceivedBy)" asp-items="Model.ReceivedBySelectList" class="form-select">
-                                <option value="">@SelectOptions.SelectTextAny</option>
-                            </select>
-                            <label asp-for="Spec.ReceivedBy" class="form-label"></label>
-                        </div>
-                    </div>
-                    <div class="col-md mb-3">
-                        <div class="form-floating">
-                            <select asp-for="Spec.Attachments" name="@nameof(Model.Spec.Attachments)"
-                                    asp-items="Html.GetEnumSelectList<YesNoAny>()" class="form-select">
-                                <option value="">@SelectOptions.SelectTextAny</option>
-                            </select>
-                            <label asp-for="Spec.Attachments" class="form-label"></label>
-                        </div>
-                    </div>
-                </div>
-
-                <h2 class="h4">Caller</h2>
-                <div class="row">
-                    <div class="col-md mb-3">
-                        <div class="form-floating">
-                            <input asp-for="Spec.CallerName" name="@nameof(Model.Spec.CallerName)" class="form-control" />
-                            <label asp-for="Spec.CallerName" class="form-label"></label>
-                        </div>
-                    </div>
-                    <div class="col-md mb-3">
-                        <div class="form-floating">
-                            <input asp-for="Spec.Represents" name="@nameof(Model.Spec.Represents)" class="form-control" />
-                            <label asp-for="Spec.Represents" class="form-label"></label>
-                        </div>
-                    </div>
-                </div>
-
-                <h2 class="h4">Complaint Details</h2>
-                <div class="row">
-                    <div class="mb-3">
-                        <div class="form-floating">
-                            <input asp-for="Spec.Description" name="@nameof(Model.Spec.Description)" class="form-control" aria-describedby="DescriptionHelpBlock" />
-                            <label asp-for="Spec.Description" class="form-label"></label>
-                        </div>
-                        <small id="DescriptionHelpBlock" class="form-text text-body-secondary d-block px-2">
-                            (A word or phrase to search for. This will search within the <em>nature,</em> <em>location,</em> and <em>description</em> fields.)
-                        </small>
-                    </div>
-                    <div class="col-md mb-3">
-                        <div class="form-floating">
-                            <input asp-for="Spec.ComplaintCity" name="@nameof(Model.Spec.ComplaintCity)" class="form-control" />
-                            <label asp-for="Spec.ComplaintCity" class="form-label"></label>
-                        </div>
-                    </div>
-                    <div class="col-md mb-3">
-                        <div class="form-floating">
-                            <select asp-for="Spec.County" name="@nameof(Model.Spec.County)" asp-items="Model.CountiesSelectList" class="form-select">
-                                <option value="">@SelectOptions.SelectTextAny</option>
-                            </select>
-                            <label asp-for="Spec.County" class="form-label"></label>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <div class="form-floating">
-                            <select asp-for="Spec.Concern" name="@nameof(Model.Spec.Concern)" asp-items="Model.ConcernsSelectList"
-                                    class="form-select" aria-describedby="ConcernHelpBlock">
-                                <option value="">@SelectOptions.SelectTextAny</option>
-                            </select>
-                            <label asp-for="Spec.Concern" class="form-label"></label>
-                        </div>
-                        <small id="ConcernHelpBlock" class="form-text text-body-secondary d-block px-2">Searches both primary and secondary areas of concern.</small>
-                    </div>
-                </div>
-
-                <h2 class="h4">Source</h2>
-                <div class="row">
-                    <div>
-                        <div class="form-floating">
-                            <input asp-for="Spec.Source" name="@nameof(Model.Spec.Source)" class="form-control mb-3" />
-                            <label asp-for="Spec.Source" class="form-label"></label>
-                        </div>
-                    </div>
-                    <div class="col-md">
-                        <div class="form-floating">
-                            <input asp-for="Spec.FacilityIdNumber" name="@nameof(Model.Spec.FacilityIdNumber)" class="form-control mb-3" />
-                            <label asp-for="Spec.FacilityIdNumber" class="form-label"></label>
-                        </div>
-                    </div>
-                    <div class="col-md mb-3">
-                        <div class="form-floating">
-                            <input asp-for="Spec.Contact" name="@nameof(Model.Spec.Contact)" class="form-control" />
-                            <label asp-for="Spec.Contact" class="form-label"></label>
-                        </div>
-                    </div>
-                </div>
-
-                <h2 class="h4">Location</h2>
-                <div class="row">
-                    <div class="mb-3">
-                        <div class="form-floating">
-                            <input asp-for="Spec.Street" name="@nameof(Model.Spec.Street)" class="form-control" />
-                            <label asp-for="Spec.Street" class="form-label"></label>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <div class="form-floating">
-                            <input asp-for="Spec.City" name="@nameof(Model.Spec.City)" class="form-control" />
-                            <label asp-for="Spec.City" class="form-label"></label>
-                        </div>
-                    </div>
-                    <div class="col-sm-8 mb-3">
-                        <div class="form-floating">
-                            <select asp-for="Spec.State" name="@nameof(Model.Spec.State)" asp-items="Model.StatesSelectList" class="form-select">
-                                <option value="">@SelectOptions.SelectTextAny</option>
-                            </select>
-                            <label asp-for="Spec.State" class="form-label"></label>
-                        </div>
-                    </div>
-                    <div class="col-sm-4 mb-3">
-                        <div class="form-floating">
-                            <input asp-for="Spec.PostalCode" name="@nameof(Model.Spec.PostalCode)" class="form-control" />
-                            <label asp-for="Spec.PostalCode" class="form-label"></label>
-                        </div>
-                    </div>
-                </div>
-
-                <h2 class="h4">Assignment</h2>
-                <div class="row">
-                    <div class="col-md mb-3">
-                        <div class="form-floating">
-                            <select asp-for="Spec.Office" name="@nameof(Model.Spec.Office)" asp-items="Model.OfficesSelectList" class="form-select">
-                                <option value="">@SelectOptions.SelectTextAny</option>
-                            </select>
-                            <label asp-for="Spec.Office" class="form-label"></label>
-                        </div>
-                    </div>
-                    <div class="col-md mb-3">
-                        <div class="form-floating">
-                            <select asp-for="Spec.Assigned" name="@nameof(Model.Spec.Assigned)" asp-items="Model.AssignedToSelectList" class="form-select"
-                                    aria-describedby="StaffHelpBlock" disabled="@(!Model.AssignedToSelectList.Any())">
-                                <option value="">@SelectOptions.SelectTextAny</option>
-                            </select>
-                            <label asp-for="Spec.Assigned" class="form-label"></label>
-                        </div>
-                        <small id="StaffHelpBlock" class="form-text text-body-secondary d-block px-2">Choose an office to populate the dropdown for associate.</small>
-                    </div>
-                </div>
-
+                <!-- Existing form fields -->
                 <div class="mt-3 mb-1">
                     <button id="SearchButton" type="submit" class="btn btn-lg btn-primary col-4 me-2">Search</button>
                     <a asp-page="Index" class="btn btn-lg btn-outline-secondary col-4 col-md-3">Clear Form</a>
@@ -248,19 +54,108 @@
         }
         else
         {
-            <partial name="_ComplaintSearchResultPartial" model="Model.ResultsDisplay" />
+            <div class="table-responsive-md">
+                <table class="gaepd-table-responsive table-hover" aria-label="Facility search results">
+                    <caption class="caption-top">
+                        <partial name="Shared/_PaginationNavAndCount" model="Model.PaginationNav" />
+                    </caption>
+                    <thead>
+                        <tr class="text-nowrap">
+                            <th scope="col" class="text-nowrap gaepd-sortable" data-label="ID">
+                                <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
+                                   asp-route-Sort="@(Model.Spec.Sort == SortBy.IdAsc ? nameof(SortBy.IdDesc) : nameof(SortBy.IdAsc))"
+                                   class="link-offset-2 text-dotted-underline">
+                                    ID @Html.DisplayFor(model => model.Spec.Sort, DisplayTemplate.SortArrow,
+                                                 new { up = nameof(SortBy.IdAsc), down = nameof(SortBy.IdDesc) })
+                                </a>
+                            </th>
+                            <th scope="col" class="text-nowrap gaepd-sortable" data-label="Received">
+                                <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
+                                   asp-route-Sort="@(Model.Spec.Sort == SortBy.ReceivedDateAsc ? nameof(SortBy.ReceivedDateDesc) : nameof(SortBy.ReceivedDateAsc))"
+                                   class="link-offset-2 text-dotted-underline">
+                                    Received @Html.DisplayFor(model => model.Spec.Sort, DisplayTemplate.SortArrow,
+                                                 new { up = nameof(SortBy.ReceivedDateAsc), down = nameof(SortBy.ReceivedDateDesc) })
+                                </a>
+                            </th>
+                            <th scope="col" class="text-nowrap gaepd-sortable" data-label="Status">
+                                <a asp-fragment="SearchResults" asp-all-route-data="Model.Spec.AsRouteValues()" asp-route-handler="search"
+                                   asp-route-Sort="@(Model.Spec.Sort == SortBy.StatusAsc ? nameof(SortBy.StatusDesc) : nameof(SortBy.StatusAsc))"
+                                   class="link-offset-2 text-dotted-underline">
+                                    Status @Html.DisplayFor(model => model.Spec.Sort, DisplayTemplate.SortArrow,
+                                                 new { up = nameof(SortBy.StatusAsc), down = nameof(SortBy.StatusDesc) })
+                                </a>
+                            </th>
+                            <th scope="col" data-label="Source/Location">Source/Location</th>
+                            <th scope="col" data-label="Current Assignment">Current Assignment</th>
+                            <th scope="col" data-label="Areas of Concern">Areas of Concern</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in Model.SearchResults.Items)
+                    {
+                        <tr class="@(item.IsDeleted ? "table-danger" : "")">
+                            <td data-label="ID">
+                                <a asp-page="Details" asp-route-id="@item.Id.ToString()" class="btn btn-outline-primary btn-sm">@item.Id.ToString()</a>
+                            </td>
+                            <td data-label="Received" class="text-nowrap">@Html.DisplayFor(_ => item.ReceivedDate, DisplayTemplate.ShortDate)</td>
+                            <td data-label="Status">
+                                @if (item.IsDeleted)
+                                {
+                                    <strong>DELETED</strong>
+                                    <br />
+                                }
+                                @Html.DisplayFor(_ => item.Status, DisplayTemplate.StringOrPlaceholder)
+                                @if (item.ComplaintClosedDate != null)
+                                {
+                                    <br />
+                                    @:on @Html.DisplayFor(_ => item.ComplaintClosedDate, DisplayTemplate.ShortDate)
+                                }
+                            </td>
+                            <td data-label="Source/Location">
+                                @Html.DisplayFor(_ => item.SourceFacilityName, DisplayTemplate.StringOrPlaceholder)
+                                <ul>
+                                    @if (item.SourceFacilityIdNumber != null)
+                                    {
+                                        <li>@item.SourceFacilityIdNumber</li>
+                                    }
+                                    @if (item.ComplaintCounty != null)
+                                    {
+                                        <li>@item.ComplaintCounty County</li>
+                                    }
+                                </ul>
+                            </td>
+                            <td data-label="Current Assignment">
+                                @Html.DisplayFor(_ => item.AssignedOwnerName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "[Unassigned]" })
+                                <br />
+                                @Html.DisplayFor(_ => item.CurrentOfficeName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "[No office assigned]" })
+                            </td>
+                            <td data-label="Areas of Concern">
+                                <ol type="I">
+                                    <li>@Html.DisplayFor(_ => item.PrimaryConcernName, DisplayTemplate.StringOrPlaceholder)</li>
+                                    @if (item.SecondaryConcernName is not null)
+                                    {
+                                        <li>@Html.DisplayFor(_ => item.SecondaryConcernName, DisplayTemplate.StringOrPlaceholder)</li>
+                                    }
+                                </ol>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+            <partial name="_PaginationNav" model="Model.PaginationNav" />
         }
     </div>
 }
 
 @section Scripts {
     <script src="~/js/formSearch.js"></script>
-<partial name="_StaffSelectScriptsPartial" />
-<script>
-    setUpStaffDropdown(
-        "@nameof(Model.Spec)_@nameof(ComplaintSearchDto.Office)",
-        "@nameof(Model.Spec)_@nameof(ComplaintSearchDto.Assigned)",
-        false,
-        "@SelectOptions.SelectTextAny");
+    <partial name="_StaffSelectScriptsPartial" />
+    <script>
+        setUpStaffDropdown(
+            "@nameof(Model.Spec)_@nameof(ComplaintSearchDto.Office)",
+            "@nameof(Model.Spec)_@nameof(ComplaintSearchDto.Assigned)",
+            false,
+            "@SelectOptions.SelectTextAny");
     </script>
 }

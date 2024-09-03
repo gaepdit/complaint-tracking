@@ -463,3 +463,43 @@ svg:not(:root) {
     background-color: rgba(0, 123, 255, 0.1);
     backdrop-filter: blur(5px);
 }
+
+/* Responsive Table Styles */
+@media screen and (max-width: 576px) {
+    .gaepd-table-responsive {
+        border: 0;
+        line-height: 1.5;
+        font-size: 1.7rem; 
+    }
+    .gaepd-table-responsive thead th:not(.gaepd-sortable) {
+        display: none; 
+    }
+    .gaepd-table-responsive tr {
+        display: block; 
+    }
+    .gaepd-table-responsive tfoot tr,
+    .gaepd-table-responsive tbody tr {
+        border-top: 2px solid #5b616b;
+        margin-bottom: 2rem; 
+    }
+    .gaepd-table-responsive th {
+        background: #f1f1f1; 
+    }
+    .gaepd-table-responsive th,
+    .gaepd-table-responsive td {
+        display: block;
+        text-align: left;
+        border-bottom: 1px solid #aeb0b5;
+        padding: 1rem 0.5rem; 
+    }
+    .gaepd-table-responsive th:before,
+    .gaepd-table-responsive td:before {
+        content: attr(data-label) ": ";
+        float: left;
+        font-weight: 700; 
+    }
+    .gaepd-table-responsive th:last-child,
+    .gaepd-table-responsive td:last-child {
+        border-bottom: none; 
+    }
+}
