@@ -337,8 +337,8 @@
     <script src="~/js/dateValidation.js"></script>
     <script>
     datePairs(
-        "Spec_RecieveFrom",
-        "Spec_ReceiveTo",
+        "Spec_ReceivedFrom",
+        "Spec_ReceivedTo",
         "Received FROM Date",
         "Received THROUGH Date");
     datePairs(
@@ -349,6 +349,7 @@
     </script>
     <script src="~/lib/axios/axios.min.js"></script>
     <script src="~/js/staffSelect.js"></script>
+    <script src="~/js/formSearch.js"></script>
     <script>
     setUpStaffDropdown(
         "@nameof(Model.Spec)_@nameof(ComplaintSearchDto.Office)",
