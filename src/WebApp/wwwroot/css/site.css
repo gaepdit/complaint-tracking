@@ -463,3 +463,26 @@ svg:not(:root) {
     background-color: rgba(0, 123, 255, 0.1);
     backdrop-filter: blur(5px);
 }
+
+/* Styling for menu button mobile device usage */
+@media (max-width: 396px) {
+    .navbar-toggler .align-middle {
+        width: 50px;
+        height: 50px;
+        padding: 0.5rem;
+        display:none;
+    }
+
+    .navbar-brand {
+        font-size: 1rem;
+    }
+
+    .img-logo {
+        width: 30px;
+        height: auto;
+    }
+
+    .navbar-collapse {
+        text-align: left;
+    }
+}
