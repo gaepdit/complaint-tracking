@@ -465,24 +465,14 @@ svg:not(:root) {
 }
 
 /* Styling for menu button mobile device usage */
-@media (max-width: 396px) {
-    .navbar-toggler .align-middle {
-        width: 50px;
-        height: 50px;
-        padding: 0.5rem;
-        display:none;
+@media (max-width: 395px) {
+    .d-396-none {
+        display: none;
     }
+}
 
-    .navbar-brand {
-        font-size: 1rem;
-    }
-
-    .img-logo {
-        width: 30px;
-        height: auto;
-    }
-
-    .navbar-collapse {
-        text-align: left;
+@media (min-width: 396px) {
+    .d-396-none {
+        display: inline;
     }
 }
