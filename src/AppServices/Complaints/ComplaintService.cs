@@ -157,9 +157,9 @@ public sealed class ComplaintService(
         var result = new ComplaintCreateResult(complaint.Id);
 
         // Send notification
-        var template = complaint.CurrentOwner != null
-            ? Template.AssignedComplaint
-            : Template.UnassignedComplaint;
+        var template = complaint.CurrentOwner == null
+            ? Template.UnassignedComplaint
+            : Template.AssignedComplaint;
         var notificationResult =
             await NotifyOwnerAsync(complaint, template, baseUrl, null, token).ConfigureAwait(false);
         if (!notificationResult.Success) result.AddWarning(notificationResult.FailureMessage);
@@ -386,7 +386,8 @@ public sealed class ComplaintService(
         var complaint = complaintManager.Create(currentUser);
         await MapComplaintDetailsAsync(complaint, resource, token).ConfigureAwait(false);
 
-        var office = await officeRepository.GetAsync(resource.OfficeId!.Value, token).ConfigureAwait(false);
+        var office = await officeRepository.GetAsync(resource.OfficeId!.Value, Office.IncludeAssignor, token)
+            .ConfigureAwait(false);
         var owner = await userService.FindUserAsync(resource.OwnerId ?? "").ConfigureAwait(false);
         complaintManager.Assign(complaint, office, owner, currentUser);
         return complaint;
