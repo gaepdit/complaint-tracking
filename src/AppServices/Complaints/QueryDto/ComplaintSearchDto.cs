@@ -96,6 +96,9 @@ public record ComplaintSearchDto : IBasicSearchDisplay
     [Display(Name = "Assigned associate")]
     public string? Assigned { get; init; }
 
+    [Display(Name = "Only include unassigned complaints")]
+    public bool OnlyUnassigned { get; init; }
+
     // Additional search terms used on Dashboard; these should not be added to UI route values.
     public string? Reviewer { get; init; }
 
@@ -126,6 +129,7 @@ public record ComplaintSearchDto : IBasicSearchDisplay
         { nameof(PostalCode), PostalCode },
         { nameof(Office), Office?.ToString() },
         { nameof(Assigned), Assigned },
+        { nameof(OnlyUnassigned), OnlyUnassigned.ToString() },
     };
 
     public ComplaintSearchDto TrimAll() => this with

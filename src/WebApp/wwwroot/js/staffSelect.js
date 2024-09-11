@@ -1,5 +1,5 @@
 ﻿// Populate the associate dropdown when an office selection is made.
-    function setUpStaffDropdown(officeElementId, staffElementId, forAssignment, placeholder) {
+function setUpStaffDropdown(officeElementId, staffElementId, forAssignment, placeholder) {
     let apiPath;
 
     if (forAssignment === true) {
@@ -21,7 +21,9 @@
                 const data = response.data;
                 if (data == null || data.length === 0) return;
 
-                staffSelect.disabled = false;
+                const onlyUnassignedCheckbox = document.getElementById("Spec_OnlyUnassigned");
+                staffSelect.disabled = onlyUnassignedCheckbox ? onlyUnassignedCheckbox.checked : false;
+
                 let opt;
                 for (const item of data) {
                     opt = document.createElement('option');

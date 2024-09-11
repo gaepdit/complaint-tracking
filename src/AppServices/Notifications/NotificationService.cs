@@ -4,6 +4,7 @@ using GaEpd.EmailService;
 using GaEpd.EmailService.Repository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System.Web;
 
 namespace Cts.AppServices.Notifications;
@@ -13,8 +14,12 @@ public class NotificationService(
     IEmailLogRepository repository,
     IHostEnvironment environment,
     IConfiguration configuration,
+    ILogger<NotificationService> logger,
     IErrorLogger errorLogger) : INotificationService
 {
+    internal static readonly EventId NotificationServiceFailure = new(2301, nameof(NotificationServiceFailure));
+    internal static readonly EventId NotificationServiceException = new(2302, nameof(NotificationServiceException));
+    internal static readonly EventId NotificationPreparationFailure = new(2303, nameof(NotificationPreparationFailure));
     private const string FailurePrefix = "Notification email not sent:";
 
     public async Task<NotificationResult> SendNotificationAsync(Template template, string recipientEmail,
@@ -39,7 +44,11 @@ public class NotificationService(
         configuration.GetSection(nameof(EmailServiceSettings)).Bind(settings);
 
         if (string.IsNullOrEmpty(recipientEmail))
+        {
+            logger.LogWarning(NotificationServiceFailure,
+                "Notification email attempted with empty recipient for Complaint {ComplaintId}.", complaint.Id);
             return NotificationResult.FailureResult($"{FailurePrefix} A recipient could not be determined.");
+        }
 
         Message message;
         try
@@ -49,6 +58,8 @@ public class NotificationService(
         catch (Exception e)
         {
             await errorLogger.LogErrorAsync(e, subject).ConfigureAwait(false);
+            logger.LogError(NotificationServiceException, e,
+                "Exception raised sending a notification email for Complaint {ComplaintId}.", complaint.Id);
             return NotificationResult.FailureResult($"{FailurePrefix} An error occurred when generating the email.");
         }
 
@@ -56,6 +67,9 @@ public class NotificationService(
 
         if (settings is { EnableEmail: false, EnableEmailAuditing: false })
         {
+            logger.LogWarning(NotificationServiceFailure,
+                "Emailing is not enabled on the server. Notification attempted for Complaint {ComplaintId}.",
+                complaint.Id);
             return NotificationResult.FailureResult($"{FailurePrefix} Emailing is not enabled on the server.");
         }
 
@@ -66,6 +80,8 @@ public class NotificationService(
         catch (Exception e)
         {
             await errorLogger.LogErrorAsync(e, subject).ConfigureAwait(false);
+            logger.LogError(NotificationServiceException, e,
+                "Exception raised sending a notification email for Complaint {ComplaintId}.", complaint.Id);
             return NotificationResult.FailureResult($"{FailurePrefix} An error occurred when sending the email.");
         }
 

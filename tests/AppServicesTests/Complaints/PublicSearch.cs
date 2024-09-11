@@ -9,6 +9,7 @@ using Cts.Domain.Entities.Offices;
 using Cts.TestData;
 using GaEpd.AppLibrary.Pagination;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
 using System.Linq.Expressions;
 
@@ -34,7 +35,8 @@ public class PublicSearch
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
             Substitute.For<IAttachmentService>(), Substitute.For<INotificationService>(), AppServicesTestsSetup.Mapper!,
-            Substitute.For<IUserService>(), Substitute.For<IAuthorizationService>());
+            Substitute.For<IUserService>(), Substitute.For<IAuthorizationService>(),
+            Substitute.For<ILogger<ComplaintService>>());
 
         // Act
         var result = await appService.PublicSearchAsync(new ComplaintPublicSearchDto(), paging, CancellationToken.None);
@@ -63,7 +65,8 @@ public class PublicSearch
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
             Substitute.For<IAttachmentService>(), Substitute.For<INotificationService>(), AppServicesTestsSetup.Mapper!,
-            Substitute.For<IUserService>(), Substitute.For<IAuthorizationService>());
+            Substitute.For<IUserService>(), Substitute.For<IAuthorizationService>(),
+            Substitute.For<ILogger<ComplaintService>>());
 
         // Act
         var result = await appService.PublicSearchAsync(new ComplaintPublicSearchDto(), paging, CancellationToken.None);

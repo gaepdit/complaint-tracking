@@ -6,6 +6,7 @@ public class Office : StandardNamedEntity
 {
     public override int MinNameLength => AppConstants.MinimumNameLength;
     public override int MaxNameLength => AppConstants.MaximumNameLength;
+    public static string[] IncludeAssignor => [nameof(Assignor)];
 
     public Office() { }
     internal Office(Guid id, string name) : base(id, name) { }
