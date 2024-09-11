@@ -1,5 +1,15 @@
 # Changelog
 
+## [2024.9.11] - 2024-09-11
+
+### Added
+
+- The complaint search page now has an option to filter for unassigned complaints.
+
+### Fixed
+
+- Notification emails were not being sent to the assignor for unassigned complaints.
+
 ## [2024.8.29] - 2024-08-29
 
 ### Added
