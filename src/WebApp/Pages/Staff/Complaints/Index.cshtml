@@ -283,6 +283,23 @@
         "Closed THROUGH Date");
     </script>
     <script src="~/js/formSearch.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const onlyUnassignedCheckbox = document.querySelector('#Spec_OnlyUnassigned');
+        const assignedSelect = document.querySelector('#Spec_Assigned');
+
+        function toggleAssignedSelect() {
+            assignedSelect.disabled = onlyUnassignedCheckbox.checked || assignedSelect.options.length <= 1;
+            if (onlyUnassignedCheckbox.checked) assignedSelect.selectedIndex = 0; // Set to the first option
+        }
+
+        // Initial check on page load
+        toggleAssignedSelect();
+
+        // Add event listener for changes
+        onlyUnassignedCheckbox.addEventListener('change', toggleAssignedSelect);
+    });
+</script>
     <partial name="_StaffSelectScriptsPartial" />
     <script>
     setUpStaffDropdown(
