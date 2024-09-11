@@ -9,6 +9,7 @@ using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
 using Cts.TestData.Constants;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 
 namespace AppServicesTests.Complaints;
 
@@ -44,7 +45,8 @@ public class Create
 
         var appService = new ComplaintService(Substitute.For<IComplaintRepository>(), complaintManagerMock,
             Substitute.For<IConcernRepository>(), officeRepoMock, Substitute.For<IAttachmentService>(),
-            notificationMock, AppServicesTestsSetup.Mapper!, userServiceMock, Substitute.For<IAuthorizationService>());
+            notificationMock, AppServicesTestsSetup.Mapper!, userServiceMock, Substitute.For<IAuthorizationService>(),
+            Substitute.For<ILogger<ComplaintService>>());
 
         var item = new ComplaintCreateDto { OfficeId = Guid.Empty };
 
@@ -82,7 +84,8 @@ public class Create
 
         var appService = new ComplaintService(Substitute.For<IComplaintRepository>(), complaintManagerMock,
             Substitute.For<IConcernRepository>(), officeRepoMock, Substitute.For<IAttachmentService>(),
-            notificationMock, AppServicesTestsSetup.Mapper!, userServiceMock, Substitute.For<IAuthorizationService>());
+            notificationMock, AppServicesTestsSetup.Mapper!, userServiceMock, Substitute.For<IAuthorizationService>(),
+            Substitute.For<ILogger<ComplaintService>>());
 
         var item = new ComplaintCreateDto
         {

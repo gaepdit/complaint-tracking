@@ -16,6 +16,7 @@ using Cts.Domain.Identity;
 using GaEpd.AppLibrary.Extensions;
 using GaEpd.AppLibrary.Pagination;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
 
 namespace Cts.AppServices.Complaints;
@@ -31,7 +32,8 @@ public sealed class ComplaintService(
     // ReSharper disable once SuggestBaseTypeForParameterInConstructor
     IMapper mapper,
     IUserService userService,
-    IAuthorizationService authorization) : IComplaintService
+    IAuthorizationService authorization,
+    ILogger<ComplaintService> logger) : IComplaintService
 #pragma warning restore S107
 {
     // Public read methods
@@ -189,11 +191,27 @@ public sealed class ComplaintService(
         var recipient = complaint.CurrentOwner ?? complaint.CurrentOffice.Assignor;
 
         if (recipient is null)
+        {
+            logger.LogWarning(NotificationService.NotificationPreparationFailure,
+                "Complaint {ComplaintId} notification recipient is null.", complaint.Id);
             return NotificationResult.FailureResult("This complaint does not have an available owner or assignor.");
+        }
+
         if (!recipient.Active)
+        {
+            logger.LogWarning(NotificationService.NotificationPreparationFailure,
+                "Complaint {ComplaintId} notification recipient {RecipientId} is not active in CTS.",
+                complaint.Id, recipient.Id);
             return NotificationResult.FailureResult("The complaint owner or assignor is not an active CTS user.");
-        if (recipient.Email is null)
+        }
+
+        if (string.IsNullOrEmpty(recipient.Email))
+        {
+            logger.LogWarning(NotificationService.NotificationPreparationFailure,
+                "Complaint {ComplaintId} notification recipient {RecipientId} email address is null.",
+                complaint.Id, recipient.Id);
             return NotificationResult.FailureResult("The complaint owner or assignor cannot be emailed.");
+        }
 
         return await notificationService
             .SendNotificationAsync(template, recipient.Email, complaint, baseUrl, comment, token)
@@ -303,9 +321,20 @@ public sealed class ComplaintService(
 
         // Send notification
         if (!reviewer.Active)
+        {
+            logger.LogWarning(NotificationService.NotificationPreparationFailure,
+                "Complaint {ComplaintId} requested reviewer {RecipientId} is not active in CTS.",
+                complaint.Id, reviewer.Id);
             return NotificationResult.FailureResult("The requested reviewer is not an active CTS user.");
-        if (reviewer.Email is null)
+        }
+
+        if (string.IsNullOrEmpty(reviewer.Email))
+        {
+            logger.LogWarning(NotificationService.NotificationPreparationFailure,
+                "Complaint {ComplaintId} requested reviewer {RecipientId} email address is null.",
+                complaint.Id, reviewer.Id);
             return NotificationResult.FailureResult("The requested reviewer cannot be emailed.");
+        }
 
         return await notificationService.SendNotificationAsync(Template.ReviewRequested, reviewer.Email, complaint,
             baseUrl, resource.Comment, token).ConfigureAwait(false);
