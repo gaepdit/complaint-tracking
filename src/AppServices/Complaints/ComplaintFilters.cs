@@ -47,8 +47,9 @@ internal static class ComplaintFilters
             .ContainsState(spec.State)
             .ContainsPostalCode(spec.PostalCode)
             .AssignedToOffice(spec.Office)
-            .AssignedToAssociate(spec.Assigned)
-            .ReviewRequestedFrom(spec.Reviewer);
+            .AssignedToAssociate(spec.Assigned, spec.OnlyUnassigned)
+            .ReviewRequestedFrom(spec.Reviewer)
+            .OnlyUnassigned(spec.OnlyUnassigned);
 
     private static Expression<Func<Complaint, bool>> IsPublic(this Expression<Func<Complaint, bool>> predicate) =>
         predicate.ExcludeDeleted();
@@ -239,8 +240,8 @@ internal static class ComplaintFilters
         input is null ? predicate : predicate.And(complaint => complaint.CurrentOffice.Id == input);
 
     private static Expression<Func<Complaint, bool>> AssignedToAssociate(
-        this Expression<Func<Complaint, bool>> predicate, string? input) =>
-        input is null
+        this Expression<Func<Complaint, bool>> predicate, string? input, bool onlyUnassigned) =>
+        input is null || onlyUnassigned
             ? predicate
             : predicate.And(complaint => complaint.CurrentOwner != null && complaint.CurrentOwner.Id == input);
 
@@ -249,4 +250,8 @@ internal static class ComplaintFilters
         input is null
             ? predicate
             : predicate.And(complaint => complaint.ReviewedBy != null && complaint.ReviewedBy.Id == input);
+
+    private static Expression<Func<Complaint, bool>> OnlyUnassigned(this Expression<Func<Complaint, bool>> predicate,
+        bool onlyUnassigned) =>
+        onlyUnassigned ? predicate.And(complaint => complaint.CurrentOwner == null) : predicate;
 }
