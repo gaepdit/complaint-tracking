@@ -3,6 +3,7 @@
 @using Cts.WebApp.Pages.Shared.DisplayTemplates
 @model Cts.WebApp.Models.SearchResultsDisplay
 
+<partial name="_PaginationNavAndCount" model="Model.Pagination" />
 <div class="gaepd-table-responsive table-responsive-md mb-3">
 <table class="table table-hover" aria-label="Complaint search results">
     <thead>
@@ -73,4 +74,4 @@
     </tbody>
 </table>
 </div>
-<partial name="_PaginationNavAndCount" model="Model.Pagination" />
+<partial name="_PaginationNav" model="Model.Pagination" />
