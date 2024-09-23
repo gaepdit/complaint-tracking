@@ -6,28 +6,29 @@
 
 <header role="banner">
     <nav id="main-nav" class="navbar nav-underline navbar-expand-sm text-bg-brand bg-gradient border-bottom shadow-sm mb-3 d-print-none">
-        <div class="container d-flex justify-content-between align-items-center">
+        <div class="container d-flex justify-content-between align-items-center flex-nowrap">
             @if (Model.IsStaffUser)
             {
-                <a asp-page="/Staff/Index" title="Dashboard"  class="d-flex align-items-center">
+                <a asp-page="/Staff/Index" class="navbar-brand d-flex align-items-center text-decoration-none" title="Dashboard">
                     <img src="~/images/epd-icon.svg" alt="Georgia EPD" class="img-logo pe-2" />
+                    Complaint Tracking System
                 </a>
-                <a asp-page="/Staff/Index" title="Dashboard" class="navbar-brand me-2 d-inline d-sm-none">Complaint Tracking System</a>
             }
             else
             {
-                <a asp-page="/Index" class="d-flex align-items-center" title="Complaint Tracking System">
+                <a asp-page="/Index" class="navbar-brand d-flex align-items-center text-decoration-none" title="Complaint Tracking System">
                     <img src="~/images/epd-icon.svg" alt="Georgia EPD" class="img-logo pe-2" />
+                    Complaint Tracking System
                 </a>
-                <a class="navbar-brand nav-link me-2" asp-page="/Index" title="Complaint Tracking System">Complaint Tracking System</a>
             }
-            <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav-content"
-                    aria-controls="main-nav-content" aria-haspopup="menu" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span> <span class="d-inline d-396-none">Menu</span>
+            <button class="navbar-toggler ms-auto p-2" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav-content"
+                    aria-controls="main-nav-content" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                <span class="menu-text">Menu</span>
             </button>
-
-            <div class="navbar-collapse collapse d-sm-inline-flex" id="main-nav-content">
-                <ul class="navbar-nav flex-grow-1">
+        </div>
+        <div class="collapse navbar-collapse text-start" id="main-nav-content">
+            <ul class="navbar-nav me-auto">
                     @if (Model.IsStaffUser)
                     {
                         <li class="nav-item">

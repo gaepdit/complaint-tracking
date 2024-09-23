@@ -464,15 +464,23 @@ svg:not(:root) {
     backdrop-filter: blur(5px);
 }
 
-/* Styling for menu button mobile device usage */
+/* Menu Button styles for mobile devices */
 @media (max-width: 395px) {
-    .d-396-none {
+    .menu-text {
         display: none;
     }
-}
-
-@media (min-width: 396px) {
-    .d-396-none {
-        display: inline;
+    .navbar-brand {
+        font-size: 0.875rem;
     }
+    .img-logo {
+        width: 25px;
+        height: auto;
+    }
+    .navbar-toggler {
+        padding-right: 0;
+        margin-left: 10px;
+    }
+}
+.container {
+    flex-wrap: nowrap;
 }
