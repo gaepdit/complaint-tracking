@@ -470,10 +470,10 @@ svg:not(:root) {
         display: none;
     }
     .navbar-brand {
-        font-size: 0.875rem;
+        font-size: 1rem;
     }
     .img-logo {
-        width: 25px;
+        width: 30px;
         height: auto;
     }
     .navbar-toggler {
