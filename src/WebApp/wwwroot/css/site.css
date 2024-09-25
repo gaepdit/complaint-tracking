@@ -464,6 +464,71 @@ svg:not(:root) {
     backdrop-filter: blur(5px);
 }
 
+/* Collapsible tables
+-------------------------------------------------- */
+@media screen and (max-width: 768px) {
+    .gaepd-table-responsive {
+        border: 0;
+    }
+
+    .gaepd-table-responsive thead th {
+        display: none;
+    }
+
+    .gaepd-table-responsive thead tr::before {
+        content: "Sort by:";
+        display: inline-block;
+        padding: .5rem 0.5rem;
+        font-weight: 700;
+    }
+
+    .gaepd-table-responsive thead th.gaepd-sortable {
+        display: inline-block;
+        border-bottom: none;
+    }
+
+    .gaepd-table-responsive tr {
+        display: block;
+    }
+
+    .gaepd-table-responsive tfoot tr,
+    .gaepd-table-responsive tbody tr {
+        border-top: 2px solid #5b616b;
+    }
+
+    .gaepd-table-responsive tbody th {
+        background: #f1f1f1;
+    }
+
+    .gaepd-table-responsive th,
+    .gaepd-table-responsive td {
+        display: block;
+        text-align: left;
+        border-bottom: 1px solid #aeb0b5;
+        border-left: none;
+        border-right: none;
+        border-top: none;
+        padding: 0.5rem 0.5rem;
+    }
+
+    .gaepd-table-responsive th::after,
+    .gaepd-table-responsive td::after {
+        clear: both;
+        content: "";
+        display: block;
+    }
+
+    .gaepd-table-responsive th:last-child,
+    .gaepd-table-responsive td:last-child {
+        border-bottom: none;
+    }
+
+    .gaepd-table-responsive td:before {
+        content: attr(data-label) ": ";
+        font-weight: 700;
+    }
+} 
+
 /* Menu styles for mobile devices
 -------------------------------------------------- */
 @media (max-width: 395px) {
