@@ -477,10 +477,6 @@ svg:not(:root) {
         height: auto;
     }
     .navbar-toggler {
-        padding-right: 0;
         margin-left: 10px;
     }
-}
-.container {
-    flex-wrap: nowrap;
 }
