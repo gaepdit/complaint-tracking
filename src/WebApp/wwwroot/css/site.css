@@ -464,7 +464,8 @@ svg:not(:root) {
     backdrop-filter: blur(5px);
 }
 
-/* Collapsible tables */
+/* Collapsible tables
+-------------------------------------------------- */
 @media screen and (max-width: 768px) {
     .gaepd-table-responsive {
         border: 0;
@@ -527,3 +528,20 @@ svg:not(:root) {
         font-weight: 700;
     }
 } 
+
+/* Menu styles for mobile devices
+-------------------------------------------------- */
+@media (max-width: 395px) {
+    .menu-text {
+        display: none;
+    }
+
+    .navbar-brand {
+        font-size: 1rem;
+    }
+
+    .img-logo {
+        width: 30px;
+        height: auto;
+    }
+}
