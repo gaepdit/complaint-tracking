@@ -85,7 +85,7 @@ builder.Services.AddSwaggerGen(options =>
         Title = "Complaint Tracking System API",
         Contact = new OpenApiContact
         {
-            Name = "Complaint Tracking System Support",
+            Name = "Complaint Tracking System Technical Support",
             Email = AppSettings.SupportSettings.TechnicalSupportEmail,
         },
     });

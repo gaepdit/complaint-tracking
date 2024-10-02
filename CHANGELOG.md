@@ -1,5 +1,17 @@
 # Changelog
 
+## [2024.10.2] - 2024-10-02
+
+### Added
+
+- The display of search results has been improved on smaller screens.
+- The navigation menu display has been improved on extra-small screens.
+
+### Fixed
+
+- The color mode toggle now works on older browsers.
+- The data export tool was exporting the wrong complaints.
+
 ## [2024.9.11] - 2024-09-11
 
 ### Added
