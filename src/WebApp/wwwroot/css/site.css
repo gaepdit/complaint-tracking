@@ -467,41 +467,42 @@ svg:not(:root) {
 /* Collapsible tables
 -------------------------------------------------- */
 @media screen and (max-width: 768px) {
-    .gaepd-table-responsive {
+    .table-collapsible {
         border: 0;
     }
 
-    .gaepd-table-responsive thead th {
+    .table-collapsible thead th {
         display: none;
     }
 
-    .gaepd-table-responsive thead tr::before {
+    .table-collapsible thead tr::before {
         content: "Sort by:";
         display: inline-block;
         padding: .5rem 0.5rem;
         font-weight: 700;
     }
 
-    .gaepd-table-responsive thead th.gaepd-sortable {
+    .table-collapsible thead th.table-collapsible-sortable {
         display: inline-block;
         border-bottom: none;
     }
 
-    .gaepd-table-responsive tr {
+    .table-collapsible tr {
         display: block;
     }
 
-    .gaepd-table-responsive tfoot tr,
-    .gaepd-table-responsive tbody tr {
+    .table-collapsible tfoot tr,
+    .table-collapsible tbody tr {
+        margin-bottom: 1rem;
         border-top: 2px solid #5b616b;
     }
 
-    .gaepd-table-responsive tbody th {
+    .table-collapsible tbody th {
         background: #f1f1f1;
     }
 
-    .gaepd-table-responsive th,
-    .gaepd-table-responsive td {
+    .table-collapsible th,
+    .table-collapsible td {
         display: block;
         text-align: left;
         border-bottom: 1px solid #aeb0b5;
@@ -511,19 +512,19 @@ svg:not(:root) {
         padding: 0.5rem 0.5rem;
     }
 
-    .gaepd-table-responsive th::after,
-    .gaepd-table-responsive td::after {
+    .table-collapsible th::after,
+    .table-collapsible td::after {
         clear: both;
         content: "";
         display: block;
     }
 
-    .gaepd-table-responsive th:last-child,
-    .gaepd-table-responsive td:last-child {
+    .table-collapsible th:last-child,
+    .table-collapsible td:last-child {
         border-bottom: none;
     }
 
-    .gaepd-table-responsive td:before {
+    .table-collapsible tbody th:before, .table-collapsible td:before {
         content: attr(data-label) ": ";
         font-weight: 700;
     }

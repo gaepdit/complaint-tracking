@@ -1,6 +1,6 @@
 ﻿@model Cts.WebApp.Models.SearchResultsColumnDisplay
 
-<th scope="col" class="gaepd-sortable text-nowrap">
+<th scope="col" class="table-collapsible-sortable text-nowrap">
     <a asp-fragment="SearchResults" asp-all-route-data="Model.RouteValues" asp-route-handler="search"
        asp-route-Sort="@(Model.SortByName == Model.Up ? Model.Down : Model.Up)"
        class="link-offset-2 text-dotted-underline">
