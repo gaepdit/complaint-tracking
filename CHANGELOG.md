@@ -62,6 +62,8 @@ _This version represents a complete rewrite of the Complaint Tracking System._
 
 New login system. New design library. Updated workflows. New public complaint page. Dark mode. And more! We hope you like it!
 
+[2024.10.2]: https://github.com/gaepdit/template-app/releases/tag/v2024.10.2
+[2024.9.11]: https://github.com/gaepdit/template-app/releases/tag/v2024.9.11
 [2024.8.29]: https://github.com/gaepdit/template-app/releases/tag/v2024.8.29
 [2024.8.23]: https://github.com/gaepdit/template-app/releases/tag/v2024.8.23
 [2024.7.26]: https://github.com/gaepdit/template-app/releases/tag/v2024.7.26
