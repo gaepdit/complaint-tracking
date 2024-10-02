@@ -1,2 +1,3 @@
+@using Cts.WebApp.Platform.Constants
 @model DateTimeOffset
-@Model.ToString(Platform.Constants.DateTimeFormatConstants.ShortDateFormat)
+<span class="text-nowrap">@Model.ToString(DateTimeFormatConstants.ShortDateFormat)</span>

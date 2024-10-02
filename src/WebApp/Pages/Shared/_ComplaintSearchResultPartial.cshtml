@@ -1,19 +1,19 @@
-@using Cts.AppServices.Complaints.QueryDto
+﻿@using Cts.AppServices.Complaints.QueryDto
 @using Cts.WebApp.Models
 @using Cts.WebApp.Pages.Shared.DisplayTemplates
 @model Cts.WebApp.Models.SearchResultsDisplay
 
 <partial name="_PaginationNavAndCount" model="Model.Pagination" />
-<div class="table-responsive-md mb-3">
-    <table class="table gaepd-table-responsive table-hover" aria-label="Complaint search results">
+<div class="table-responsive-md">
+    <table class="table table-collapsible table-hover" aria-label="Complaint search results">
         <thead>
         <tr class="text-nowrap">
             <partial name="_SortableTableColHead" model='new SearchResultsColumnDisplay("ID", SortBy.IdAsc, SortBy.IdDesc, Model.Spec)' />
             <partial name="_SortableTableColHead" model='new SearchResultsColumnDisplay("Date Received", SortBy.ReceivedDateAsc, SortBy.ReceivedDateDesc, Model.Spec)' />
             <partial name="_SortableTableColHead" model='new SearchResultsColumnDisplay("Status", SortBy.StatusAsc, SortBy.StatusDesc, Model.Spec)' />
             <th scope="col" data-label="Source & Location">Source & Location</th>
-            <th scope="col" data-label="Office Assigned">Office Assigned</th>
-            <th scope="col" data-label="Areas of Concern">Areas of Concern</th>
+            <th scope="col" data-label="Staff/Office Assigned">Staff/Office Assigned</th>
+            <th scope="col" data-label="Area(s) of Concern">Area(s) of Concern</th>
         </tr>
         </thead>
 
@@ -21,21 +21,21 @@
         @foreach (var item in Model.SearchResults.Items)
         {
             <tr class="@(item.IsDeleted ? "table-danger" : "")">
-                <th scope="row" data-label="ID">
+                <th scope="row" data-label="Complaint ID">
                     @if (Model.IsPublic)
                     {
-                        <a asp-page="./Complaint" asp-route-id="@item.Id.ToString()" class="btn btn-outline-primary btn-sm-md">
+                        <a asp-page="./Complaint" asp-route-id="@item.Id.ToString()" class="btn btn-outline-primary btn-sm">
                             @item.Id.ToString()
                         </a>
                     }
                     else
                     {
-                        <a asp-page="Details" asp-route-id="@item.Id.ToString()" class="btn btn-outline-primary btn-sm-md">
+                        <a asp-page="Details" asp-route-id="@item.Id.ToString()" class="btn btn-outline-primary btn-sm">
                             @item.Id.ToString()
                         </a>
                     }
                 </th>
-                <td class="text-nowrap" data-label="Date Received">@Html.DisplayFor(_ => item.ReceivedDate, DisplayTemplate.ShortDate)</td>
+                <td data-label="Date Received">@Html.DisplayFor(_ => item.ReceivedDate, DisplayTemplate.ShortDate)</td>
                 <td data-label="Status">
                     @if (item.IsDeleted)
                     {
@@ -45,13 +45,12 @@
                     @Html.DisplayFor(_ => item.Status)
                     @if (item is { ComplaintClosed: true, ComplaintClosedDate: not null })
                     {
-                        <br />
                         @:on @Html.DisplayFor(_ => item.ComplaintClosedDate, DisplayTemplate.ShortDate)
                     }
                 </td>
                 <td data-label="Source & Location">
                     @Html.DisplayFor(_ => item.SourceFacilityName, DisplayTemplate.StringOrPlaceholder)
-                    <ul>
+                    <ul class="mb-0">
                         @if (item.SourceFacilityIdNumber != null)
                         {
                             <li>ID: @item.SourceFacilityIdNumber</li>
@@ -66,19 +65,23 @@
                         }
                     </ul>
                 </td>
-                <td data-label="Office Assigned">
+                <td data-label="Staff/Office Assigned">
                     @Html.DisplayFor(_ => item.AssignedOwnerName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "[Unassigned]" })
-                    <br />
+                    <br class="d-none d-md-inline" /><span class="d-inline d-md-none">—</span>
                     @Html.DisplayFor(_ => item.CurrentOfficeName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "[No office assigned]" })
                 </td>
-                <td data-label="Areas of Concern">
-                    <ol type="I">
-                        <li>@Html.DisplayFor(_ => item.PrimaryConcernName, DisplayTemplate.StringOrPlaceholder)</li>
-                        @if (item.SecondaryConcernName is not null)
-                        {
+                <td data-label="Area(s) of Concern">
+                    @if (item.SecondaryConcernName is null)
+                    {
+                        @Html.DisplayFor(_ => item.PrimaryConcernName, DisplayTemplate.StringOrPlaceholder)
+                    }
+                    else
+                    {
+                        <ol class="mb-0 ps-md-3">
+                            <li>@Html.DisplayFor(_ => item.PrimaryConcernName, DisplayTemplate.StringOrPlaceholder)</li>
                             <li>@Html.DisplayFor(_ => item.SecondaryConcernName, DisplayTemplate.StringOrPlaceholder)</li>
-                        }
-                    </ol>
+                        </ol>
+                    }
                 </td>
             </tr>
         }
