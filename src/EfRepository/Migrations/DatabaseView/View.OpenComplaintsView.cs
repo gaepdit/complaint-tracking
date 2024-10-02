@@ -71,6 +71,6 @@ public static partial class View
             left join AspNetUsers receivedBy
             on c.ReceivedById = receivedBy.Id
         where c.IsDeleted = convert(bit, 0) -- Complaint not deleted
-          and c.ComplaintClosed = convert(bit, 1); -- Complaint closed
+          and c.ComplaintClosed = convert(bit, 0); -- Complaint open
         """;
 }
