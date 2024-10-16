@@ -298,13 +298,14 @@
 
         // Add event listener for changes
         onlyUnassignedCheckbox.addEventListener('change', toggleAssignedSelect);
+
+        setUpStaffDropdown(
+            "@nameof(Model.Spec)_@nameof(ComplaintSearchDto.Office)",
+            "@nameof(Model.Spec)_@nameof(ComplaintSearchDto.Assigned)",
+            false,
+            "@SelectOptions.SelectTextAny"
+        );
     });
-    setUpStaffDropdown(
-        "@nameof(Model.Spec)_@nameof(ComplaintSearchDto.Office)",
-        "@nameof(Model.Spec)_@nameof(ComplaintSearchDto.Assigned)",
-        false,
-        "@SelectOptions.SelectTextAny"
-    );
     </script>
     <partial name="_StaffSelectScriptsPartial" />
 }
