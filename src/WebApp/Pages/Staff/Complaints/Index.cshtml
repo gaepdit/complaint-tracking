@@ -270,21 +270,21 @@
 
 @section Scripts {
     <script src="~/js/dateValidation.js"></script>
-    <script>
-    datePairs(
-        "Spec_ReceivedFrom",
-        "Spec_ReceivedTo",
-        "Received FROM Date",
-        "Received THROUGH Date");
-    datePairs(
-        "Spec_ClosedFrom",
-        "Spec_ClosedTo",
-        "Closed FROM Date",
-        "Closed THROUGH Date");
-    </script>
     <script src="~/js/formSearch.js"></script>
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener("DOMContentLoaded", function() {
+        datePairs(
+            "Spec_ReceivedFrom",
+            "Spec_ReceivedTo",
+            "Received FROM Date",
+            "Received THROUGH Date"
+        );
+        datePairs(
+            "Spec_ClosedFrom",
+            "Spec_ClosedTo",
+            "Closed FROM Date",
+            "Closed THROUGH Date"
+        );
         const onlyUnassignedCheckbox = document.querySelector('#Spec_OnlyUnassigned');
         const assignedSelect = document.querySelector('#Spec_Assigned');
 
@@ -298,14 +298,14 @@
 
         // Add event listener for changes
         onlyUnassignedCheckbox.addEventListener('change', toggleAssignedSelect);
+
+        setUpStaffDropdown(
+            "@nameof(Model.Spec)_@nameof(ComplaintSearchDto.Office)",
+            "@nameof(Model.Spec)_@nameof(ComplaintSearchDto.Assigned)",
+            false,
+            "@SelectOptions.SelectTextAny"
+        );
     });
-</script>
-    <partial name="_StaffSelectScriptsPartial" />
-    <script>
-    setUpStaffDropdown(
-        "@nameof(Model.Spec)_@nameof(ComplaintSearchDto.Office)",
-        "@nameof(Model.Spec)_@nameof(ComplaintSearchDto.Assigned)",
-        false,
-        "@SelectOptions.SelectTextAny");
     </script>
+    <partial name="_StaffSelectScriptsPartial" />
 }
