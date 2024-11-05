@@ -8,8 +8,14 @@ namespace Cts.AppServices.Permissions.Helpers;
 
 public static class PrincipalExtensions
 {
-    public static string? GetUserIdValue(this ClaimsPrincipal principal) =>
-        principal.FindFirstValue(ClaimTypes.NameIdentifier);
+    public static string? GetEmail(this ClaimsPrincipal principal) =>
+        principal.FindFirstValue(ClaimTypes.Email);
+
+    public static string GetGivenName(this ClaimsPrincipal principal) =>
+        principal.FindFirstValue(ClaimTypes.GivenName) ?? string.Empty;
+
+    public static string GetFamilyName(this ClaimsPrincipal principal) =>
+        principal.FindFirstValue(ClaimTypes.Surname) ?? string.Empty;
 
     public static bool HasRealClaim(this ClaimsPrincipal principal, string type, [NotNullWhen(true)] string? value) =>
         value is not null && principal.HasClaim(type, value);

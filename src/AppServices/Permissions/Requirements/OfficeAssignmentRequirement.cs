@@ -2,6 +2,7 @@
 using Cts.AppServices.Permissions.AppClaims;
 using Cts.AppServices.Permissions.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Identity.Web;
 using System.Security.Claims;
 
 namespace Cts.AppServices.Permissions.Requirements;
@@ -21,7 +22,7 @@ public class OfficeAssignmentRequirement :
     }
 
     private static bool UserCanAssignForOffice(OfficeWithAssignorDto resource, ClaimsPrincipal user) =>
-        resource.Assignor?.Id == user.GetUserIdValue() ||
+        resource.Assignor?.Id == user.GetNameIdentifierId() ||
         user.HasClaim(AppClaimTypes.OfficeId, resource.Id.ToString()) ||
         user.IsDivisionManager();
 }

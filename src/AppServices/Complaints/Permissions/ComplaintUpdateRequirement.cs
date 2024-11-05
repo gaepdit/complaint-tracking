@@ -4,6 +4,7 @@ using Cts.AppServices.Permissions.Helpers;
 using Cts.Domain;
 using Cts.Domain.Entities.Complaints;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Identity.Web;
 using System.Security.Claims;
 
 namespace Cts.AppServices.Complaints.Permissions;
@@ -37,7 +38,7 @@ public class ComplaintUpdateRequirement :
     private bool NoReviewPending() => _resource is not { Status: ComplaintStatus.ReviewPending };
 
     // User status
-    private bool IsCurrentOwner() => _resource.CurrentOwnerId == _user.GetUserIdValue();
+    private bool IsCurrentOwner() => _resource.CurrentOwnerId == _user.GetNameIdentifierId();
 
     private bool IsCurrentManager() =>
         _user.IsManager() &&
@@ -45,6 +46,6 @@ public class ComplaintUpdateRequirement :
         _user.IsDivisionManager();
 
     private bool IsRecentReporter() =>
-        _resource.EnteredById == _user.GetUserIdValue() &&
+        _resource.EnteredById == _user.GetNameIdentifierId() &&
         _resource.EnteredDate.AddHours(AppConstants.RecentReporterDuration) > DateTimeOffset.Now;
 }
