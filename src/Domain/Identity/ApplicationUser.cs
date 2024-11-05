@@ -46,6 +46,11 @@ public class ApplicationUser : IdentityUser, IEntity<string>
     [StringLength(36)]
     public string? ObjectIdentifier { get; set; }
 
+    public DateTimeOffset? AccountCreatedAt { get; init; }
+    public DateTimeOffset? AccountUpdatedAt { get; set; }
+    public DateTimeOffset? ProfileUpdatedAt { get; set; }
+    public DateTimeOffset? MostRecentLogin { get; set; }
+
     // Display properties
     public string SortableFullName =>
         string.Join(", ", new[] { FamilyName, GivenName }.Where(s => !string.IsNullOrEmpty(s)));

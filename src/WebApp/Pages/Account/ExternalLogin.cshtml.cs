@@ -1,3 +1,4 @@
+using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.Staff;
 using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Identity;
@@ -8,7 +9,8 @@ using Cts.WebApp.Platform.Settings;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Web;
 
 namespace Cts.WebApp.Pages.Account;
 
@@ -61,7 +63,6 @@ public class ExternalLoginModel(
             search = new StaffSearchDto(SortBy.NameAsc, "Limited", null, null, null, null);
 
         var staffId = (await staffService.GetListAsync(search))[0].Id;
-
         var user = await userManager.FindByIdAsync(staffId);
         logger.LogInformation("Local user with ID {StaffId} signed in", staffId);
 
@@ -83,30 +84,35 @@ public class ExternalLoginModel(
         if (externalLoginInfo?.Principal is null)
             return RedirectToLoginPageWithError("Error loading work account information.");
 
-        var userTenant = externalLoginInfo.Principal.FindFirstValue(ClaimConstants.TenantId);
-        var preferredUserName = externalLoginInfo.Principal.FindFirstValue(ClaimConstants.PreferredUserName);
-        if (preferredUserName is null || userTenant is null)
+        var userTenant = externalLoginInfo.Principal.GetTenantId();
+        var userEmail = externalLoginInfo.Principal.GetEmail();
+        if (userEmail is null || userTenant is null)
             return RedirectToLoginPageWithError("Error loading detailed work account information.");
 
         if (!configuration.IsTenantAllowed(userTenant))
         {
-            logger.LogWarning("User {UserName} in disallowed tenant {TenantId} attempted signin", preferredUserName,
+            logger.LogWarning("User {UserName} in disallowed tenant {TenantId} attempted signin", userEmail,
                 userTenant);
             return RedirectToLoginPageWithError(
                 $"User account tenant '{userTenant}' does not have access to this application.");
         }
 
-        if (!preferredUserName.IsValidEmailDomain())
+        if (!userEmail.IsValidEmailDomain())
         {
-            logger.LogWarning("User {UserName} with invalid email domain attempted signin", preferredUserName);
+            logger.LogWarning("User {UserName} with invalid email domain attempted signin", userEmail);
             return RedirectToPage("./Unavailable");
         }
 
-        logger.LogInformation("User {UserName} in tenant {TenantID} successfully signed in", preferredUserName,
+        logger.LogInformation("User {UserName} in tenant {TenantID} successfully signed in", userEmail,
             userTenant);
 
-        // Determine if a user account already exists.
-        var user = await userManager.FindByNameAsync(preferredUserName);
+        // Determine if a user account already exists with the Object ID.
+        // If not, then determine if a user account already exists with the given username.
+        var user = AppSettings.DevSettings.UseInMemoryData
+            ? await userManager.FindByNameAsync(userEmail)
+            : await userManager.Users.SingleOrDefaultAsync(u =>
+                  u.ObjectIdentifier == externalLoginInfo.Principal.GetObjectId()) ??
+              await userManager.FindByNameAsync(userEmail);
 
         // If the user does not have a local account yet, then create one and sign in.
         if (user is null)
@@ -115,7 +121,7 @@ public class ExternalLoginModel(
         // If user has been marked as inactive, don't sign in.
         if (!user.Active)
         {
-            logger.LogWarning("Inactive user {UserName} attempted signin", preferredUserName);
+            logger.LogWarning("Inactive user {Email} attempted signin", userEmail);
             return RedirectToPage("./Unavailable");
         }
 
@@ -151,12 +157,13 @@ public class ExternalLoginModel(
     {
         var user = new ApplicationUser
         {
-            UserName = info.Principal.FindFirstValue(ClaimConstants.PreferredUserName),
-            Email = info.Principal.FindFirstValue(ClaimTypes.Email) ??
-                    info.Principal.FindFirstValue(ClaimConstants.PreferredUserName),
-            GivenName = info.Principal.FindFirstValue(ClaimTypes.GivenName) ?? "",
-            FamilyName = info.Principal.FindFirstValue(ClaimTypes.Surname) ?? "",
-            ObjectIdentifier = info.Principal.FindFirstValue(ClaimConstants.ObjectId),
+            UserName = info.Principal.GetDisplayName(),
+            Email = info.Principal.GetEmail(),
+            GivenName = info.Principal.GetGivenName(),
+            FamilyName = info.Principal.GetFamilyName(),
+            ObjectIdentifier = info.Principal.GetObjectId(),
+            AccountCreatedAt = DateTimeOffset.Now,
+            MostRecentLogin = DateTimeOffset.Now,
         };
 
         // Create the user in the backing store.
@@ -196,11 +203,29 @@ public class ExternalLoginModel(
     {
         logger.LogInformation("Existing user {UserName} logged in with {LoginProvider} provider",
             user.UserName, info.LoginProvider);
-        user.Email = info.Principal.FindFirstValue(ClaimTypes.Email) ??
-                     info.Principal.FindFirstValue(ClaimConstants.PreferredUserName);
-        user.GivenName = info.Principal.FindFirstValue(ClaimTypes.GivenName) ?? user.GivenName;
-        user.FamilyName = info.Principal.FindFirstValue(ClaimTypes.Surname) ?? user.FamilyName;
+
+        var previousValues = new ApplicationUser
+        {
+            UserName = user.UserName,
+            Email = user.Email,
+            GivenName = user.GivenName,
+            FamilyName = user.FamilyName,
+        };
+
+        user.UserName = info.Principal.GetDisplayName();
+        user.Email = info.Principal.GetEmail();
+        user.GivenName = info.Principal.GetGivenName();
+        user.FamilyName = info.Principal.GetFamilyName();
+        user.MostRecentLogin = DateTimeOffset.Now;
+
+        if (user.UserName != previousValues.UserName || user.Email != previousValues.Email ||
+            user.GivenName != previousValues.GivenName || user.FamilyName != previousValues.FamilyName)
+        {
+            user.AccountUpdatedAt = DateTimeOffset.Now;
+        }
+
         await userManager.UpdateAsync(user);
+
         await signInManager.RefreshSignInAsync(user);
         return LocalRedirectOrHome();
     }
@@ -218,11 +243,9 @@ public class ExternalLoginModel(
             return await FailedLoginAsync(addLoginResult, user);
         }
 
-        if (user.ObjectIdentifier == null)
-        {
-            user.ObjectIdentifier = info.Principal.FindFirstValue(ClaimConstants.ObjectId);
-            await userManager.UpdateAsync(user);
-        }
+        user.ObjectIdentifier ??= info.Principal.GetObjectId();
+        user.MostRecentLogin = DateTimeOffset.Now;
+        await userManager.UpdateAsync(user);
 
         logger.LogInformation("Login provider {LoginProvider} added for user {UserName} with object ID {ObjectId}",
             info.LoginProvider, user.UserName, user.ObjectIdentifier);

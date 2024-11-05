@@ -4,6 +4,7 @@ using Cts.AppServices.Permissions.Helpers;
 using Cts.Domain;
 using Cts.Domain.Entities.Complaints;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Identity.Web;
 using System.Security.Claims;
 
 namespace Cts.AppServices.Complaints.Permissions;
@@ -75,17 +76,17 @@ internal class ComplaintViewRequirement :
     private bool NoReviewPending() => _resource is { Status: not ComplaintStatus.ReviewPending };
 
     // User roles
-    private bool IsAssignorForOffice() => _resource.CurrentOffice?.Assignor?.Id == _user.GetUserIdValue();
+    private bool IsAssignorForOffice() => _resource.CurrentOffice?.Assignor?.Id == _user.GetNameIdentifierId();
 
     private bool IsCurrentManager() =>
         _user.IsManager() &&
         _user.HasRealClaim(AppClaimTypes.OfficeId, _resource.CurrentOffice?.Id.ToString()) ||
         _user.IsDivisionManager();
 
-    private bool IsCurrentOwner() => _user.IsStaff() && _resource.CurrentOwner?.Id == _user.GetUserIdValue();
+    private bool IsCurrentOwner() => _user.IsStaff() && _resource.CurrentOwner?.Id == _user.GetNameIdentifierId();
 
     private bool IsRecentReporter() =>
-        _resource.EnteredBy?.Id == _user.GetUserIdValue() &&
+        _resource.EnteredBy?.Id == _user.GetNameIdentifierId() &&
         _resource.EnteredDate.AddHours(AppConstants.RecentReporterDuration) > DateTimeOffset.Now;
 
     // User role combos
