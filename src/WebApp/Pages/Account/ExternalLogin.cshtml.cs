@@ -91,7 +91,7 @@ public class ExternalLoginModel(
 
         if (!configuration.IsTenantAllowed(userTenant))
         {
-            logger.LogWarning("User {UserName} in disallowed tenant {TenantId} attempted signin", userEmail,
+            logger.LogWarning("User {UserName} in disallowed tenant {TenantId} attempted signin", userEmail.MaskEmail(),
                 userTenant);
             return RedirectToLoginPageWithError(
                 $"User account tenant '{userTenant}' does not have access to this application.");
@@ -99,11 +99,11 @@ public class ExternalLoginModel(
 
         if (!userEmail.IsValidEmailDomain())
         {
-            logger.LogWarning("User {UserName} with invalid email domain attempted signin", userEmail);
+            logger.LogWarning("User {UserName} with invalid email domain attempted signin", userEmail.MaskEmail());
             return RedirectToPage("./Unavailable");
         }
 
-        logger.LogInformation("User {UserName} in tenant {TenantID} successfully signed in", userEmail,
+        logger.LogInformation("User {UserName} in tenant {TenantID} successfully signed in", userEmail.MaskEmail(),
             userTenant);
 
         // Determine if a user account already exists with the Object ID.
@@ -121,7 +121,7 @@ public class ExternalLoginModel(
         // If user has been marked as inactive, don't sign in.
         if (!user.Active)
         {
-            logger.LogWarning("Inactive user {Email} attempted signin", userEmail);
+            logger.LogWarning("Inactive user {Email} attempted signin", userEmail.MaskEmail());
             return RedirectToPage("./Unavailable");
         }
 
@@ -170,25 +170,25 @@ public class ExternalLoginModel(
         var createUserResult = await userManager.CreateAsync(user);
         if (!createUserResult.Succeeded)
         {
-            logger.LogWarning("Failed to create new user {UserName}", user.UserName);
+            logger.LogWarning("Failed to create new user {UserName}", user.Email.MaskEmail());
             return await FailedLoginAsync(createUserResult, user);
         }
 
-        logger.LogInformation("Created new user {UserName} with object ID {ObjectId}", user.UserName,
+        logger.LogInformation("Created new user {Email} with object ID {ObjectId}", user.Email.MaskEmail(),
             user.ObjectIdentifier);
 
         // Add new user to application Roles if seeded in app settings or local admin user setting is enabled.
         var seedAdminUsers = configuration.GetSection("SeedAdminUsers").Get<string[]>();
         if (AppSettings.DevSettings.LocalUserIsStaff)
         {
-            logger.LogInformation("Seeding staff role for new user {UserName}", user.UserName);
+            logger.LogInformation("Seeding staff role for new user {Email}", user.Email.MaskEmail());
             await userManager.AddToRoleAsync(user, RoleName.Staff);
         }
 
         if (AppSettings.DevSettings.LocalUserIsAdmin ||
             (seedAdminUsers != null && seedAdminUsers.Contains(user.Email, StringComparer.InvariantCultureIgnoreCase)))
         {
-            logger.LogInformation("Seeding all roles for new user {UserName}", user.UserName);
+            logger.LogInformation("Seeding all roles for new user {Email}", user.Email.MaskEmail());
             foreach (var role in AppRole.AllRoles) await userManager.AddToRoleAsync(user, role.Key);
         }
 
@@ -201,8 +201,8 @@ public class ExternalLoginModel(
     // Update local store with from external provider. 
     private async Task<IActionResult> RefreshUserInfoAndSignInAsync(ApplicationUser user, ExternalLoginInfo info)
     {
-        logger.LogInformation("Existing user {UserName} logged in with {LoginProvider} provider",
-            user.UserName, info.LoginProvider);
+        logger.LogInformation("Existing user {Email} logged in with {LoginProvider} provider",
+            user.Email.MaskEmail(), info.LoginProvider);
 
         var previousValues = new ApplicationUser
         {
@@ -238,8 +238,8 @@ public class ExternalLoginModel(
 
         if (!addLoginResult.Succeeded)
         {
-            logger.LogWarning("Failed to add login provider {LoginProvider} for user {UserName}",
-                info.LoginProvider, user.UserName);
+            logger.LogWarning("Failed to add login provider {LoginProvider} for user {Email}",
+                info.LoginProvider, user.Email.MaskEmail());
             return await FailedLoginAsync(addLoginResult, user);
         }
 
@@ -247,8 +247,8 @@ public class ExternalLoginModel(
         user.MostRecentLogin = DateTimeOffset.Now;
         await userManager.UpdateAsync(user);
 
-        logger.LogInformation("Login provider {LoginProvider} added for user {UserName} with object ID {ObjectId}",
-            info.LoginProvider, user.UserName, user.ObjectIdentifier);
+        logger.LogInformation("Login provider {LoginProvider} added for user {Email} with object ID {ObjectId}",
+            info.LoginProvider, user.Email.MaskEmail(), user.ObjectIdentifier);
 
         // Include the access token in the properties.
         var props = new AuthenticationProperties();
