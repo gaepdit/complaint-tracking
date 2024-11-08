@@ -4,8 +4,7 @@
 
 ### Fixed
 
-- If a user's email changes in the SOG account system, the email in the CTS database will now update the next time the
-  user logs in.
+- If a user's email changes in the SOG account system, the email in the CTS database will now update the next time the user logs in.
 
 ## [2024.10.16] - 2024-10-16
 
@@ -73,8 +72,7 @@
 
 _This version represents a complete rewrite of the Complaint Tracking System._
 
-New login system. New design library. Updated workflows. New public complaint page. Dark mode. And more! We hope you
-like it!
+New login system. New design library. Updated workflows. New public complaint page. Dark mode. And more! We hope you like it!
 
 [2024.11.5]: https://github.com/gaepdit/template-app/releases/tag/v2024.11.5
 

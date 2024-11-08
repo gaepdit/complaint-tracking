@@ -4,6 +4,7 @@ using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Identity;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.AccountValidation;
+using Cts.WebApp.Platform.Logging;
 using Cts.WebApp.Platform.PageModelHelpers;
 using Cts.WebApp.Platform.Settings;
 using Microsoft.AspNetCore.Authentication;
@@ -63,6 +64,7 @@ public class ExternalLoginModel(
             search = new StaffSearchDto(SortBy.NameAsc, "Limited", null, null, null, null);
 
         var staffId = (await staffService.GetListAsync(search))[0].Id;
+
         var user = await userManager.FindByIdAsync(staffId);
         logger.LogInformation("Local user with ID {StaffId} signed in", staffId);
 
@@ -103,7 +105,7 @@ public class ExternalLoginModel(
             return RedirectToPage("./Unavailable");
         }
 
-        logger.LogInformation("User {UserName} in tenant {TenantID} successfully signed in", userEmail.MaskEmail(),
+        logger.LogInformation("User {UserName} in tenant {TenantID} successfully authenticated", userEmail.MaskEmail(),
             userTenant);
 
         // Determine if a user account already exists with the Object ID.
@@ -135,13 +137,11 @@ public class ExternalLoginModel(
             return RedirectToPage("./Unavailable");
         }
 
-        if (signInResult.Succeeded)
-            return await RefreshUserInfoAndSignInAsync(user, externalLoginInfo);
-
-        // If ExternalLoginInfo successfully returned from external provider, and the user exists, but
+        return signInResult.Succeeded
+            ? await RefreshUserInfoAndSignInAsync(user, externalLoginInfo)
+            : await AddLoginProviderAndSignInAsync(user, externalLoginInfo);
+        // ↑ If ExternalLoginInfo successfully returned from external provider, and the user exists, but
         // ExternalLoginSignInAsync failed, then add the external provider info to the user and sign in.
-        // (Implied `signInResult.Succeeded == false`.)
-        return await AddLoginProviderAndSignInAsync(user, externalLoginInfo);
     }
 
     // Redirect to Login page with error message.
@@ -269,9 +269,6 @@ public class ExternalLoginModel(
         return Page();
     }
 
-    private IActionResult LocalRedirectOrHome()
-    {
-        if (ReturnUrl is null) return RedirectToPage("/Staff/Index");
-        return LocalRedirect(ReturnUrl);
-    }
+    private IActionResult LocalRedirectOrHome() => 
+        ReturnUrl is null ? RedirectToPage("/Staff/Index") : LocalRedirect(ReturnUrl);
 }
