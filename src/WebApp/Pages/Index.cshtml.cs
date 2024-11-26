@@ -29,15 +29,15 @@ public class IndexModel(IComplaintService complaints, IConcernService concerns) 
     public SelectList CountiesSelectList => new(Data.Counties);
     public SelectList StatesSelectList => new(Data.States);
 
-    public Task OnGetAsync()
-    {
-        Spec = new ComplaintPublicSearchDto();
-        return PopulateSelectListsAsync();
-    }
+    public async Task OnGetAsync() => await PopulateSelectListsAsync();
 
     public async Task<IActionResult> OnPostAsync()
     {
-        if (!ModelState.IsValid) return Page();
+        if (!ModelState.IsValid)
+        {
+            await PopulateSelectListsAsync();
+            return Page();
+        }
 
         if (!int.TryParse(FindId, out var idInt))
             ModelState.AddModelError(nameof(FindId), "Complaint ID must be a number.");
@@ -45,7 +45,11 @@ public class IndexModel(IComplaintService complaints, IConcernService concerns) 
             ModelState.AddModelError(nameof(FindId),
                 "The Complaint ID entered does not exist or is not publicly available.");
 
-        return ModelState.IsValid ? RedirectToPage("Complaint", routeValues: new { id = FindId }) : Page();
+        if (ModelState.IsValid)
+            return RedirectToPage("Complaint", routeValues: new { id = FindId });
+
+        await PopulateSelectListsAsync();
+        return Page();
     }
 
     public async Task<IActionResult> OnGetSearchAsync(ComplaintPublicSearchDto spec, [FromQuery] int p = 1)
