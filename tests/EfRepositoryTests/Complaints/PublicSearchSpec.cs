@@ -151,6 +151,7 @@ public class PublicSearchSpec
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
+            .Excluding(e => e.Attachments)
         );
     }
 
