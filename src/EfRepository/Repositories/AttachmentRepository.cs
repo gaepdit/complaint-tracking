@@ -2,5 +2,5 @@
 
 namespace Cts.EfRepository.Repositories;
 
-public sealed class AttachmentRepository(AppDbContext dbContext)
-    : BaseRepository<Attachment, Guid, AppDbContext>(dbContext), IAttachmentRepository;
+public sealed class AttachmentRepository(AppDbContext context)
+    : BaseRepository<Attachment, Guid, AppDbContext>(context), IAttachmentRepository;

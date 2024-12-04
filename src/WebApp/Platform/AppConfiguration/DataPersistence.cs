@@ -11,7 +11,7 @@ using Cts.EfRepository.DbConnection;
 using Cts.EfRepository.Repositories;
 using Cts.LocalRepository.Repositories;
 using Cts.WebApp.Platform.Settings;
-using GaEpd.EmailService.Repository;
+using GaEpd.EmailService.EmailLogRepository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
@@ -19,7 +19,8 @@ namespace Cts.WebApp.Platform.AppConfiguration;
 
 public static class DataPersistence
 {
-    public static void AddDataPersistence(this IServiceCollection services, ConfigurationManager configuration)
+    public static IServiceCollection AddDataPersistence(this IServiceCollection services,
+        ConfigurationManager configuration)
     {
         // When configured, use in-memory data; otherwise use a SQL Server database.
         if (AppSettings.DevSettings.UseInMemoryData)
@@ -71,5 +72,7 @@ public static class DataPersistence
             services.AddScoped<IEmailLogRepository, EmailLogRepository>();
             services.AddScoped<IOfficeRepository, OfficeRepository>();
         }
+
+        return services;
     }
 }

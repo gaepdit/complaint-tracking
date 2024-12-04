@@ -3,6 +3,7 @@ using Cts.AppServices.RegisterServices;
 using Cts.WebApp.Platform.AppConfiguration;
 using Cts.WebApp.Platform.ErrorLogging;
 using Cts.WebApp.Platform.Settings;
+using GaEpd.EmailService.Utilities;
 using GaEpd.FileService;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.OpenApi.Models;
@@ -40,37 +41,44 @@ builder.Services.AddRazorPages();
 // https://gaepdit.github.io/web-apps/use-https.html#how-to-enable-hsts
 if (!builder.Environment.IsDevelopment())
 {
-    builder.Services.AddHsts(options => options.MaxAge = TimeSpan.FromMinutes(300))
+    builder.Services
+        .AddHsts(options => options.MaxAge = TimeSpan.FromMinutes(300))
         .AddHttpsRedirection(options => options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect);
 }
 
 // Configure application monitoring.
-builder.Services.AddTransient<IErrorLogger, ErrorLogger>();
-builder.Services.AddSingleton(provider =>
-{
-    var client = new RaygunClient(provider.GetService<RaygunSettings>()!, provider.GetService<IRaygunUserProvider>()!);
-    client.SendingMessage += (_, eventArgs) => eventArgs.Message.Details.Tags.Add(builder.Environment.EnvironmentName);
-    return client;
-});
-builder.Services.AddRaygun(opts =>
-{
-    opts.ApiKey = AppSettings.RaygunSettings.ApiKey;
-    opts.ApplicationVersion = AppSettings.SupportSettings.InformationalVersion;
-    opts.ExcludeErrorsFromLocal = AppSettings.RaygunSettings.ExcludeErrorsFromLocal;
-    opts.IgnoreFormFieldNames = ["*Password"];
-    opts.EnvironmentVariables.Add("ASPNETCORE_*");
-});
-builder.Services.AddRaygunUserProvider();
-builder.Services.AddHttpContextAccessor(); // needed by RaygunScriptPartial
+builder.Services
+    .AddTransient<IErrorLogger, ErrorLogger>()
+    .AddSingleton(provider =>
+    {
+        var client = new RaygunClient(provider.GetService<RaygunSettings>()!,
+            provider.GetService<IRaygunUserProvider>()!);
+        client.SendingMessage += (_, eventArgs) =>
+            eventArgs.Message.Details.Tags.Add(builder.Environment.EnvironmentName);
+        return client;
+    })
+    .AddRaygun(opts =>
+    {
+        opts.ApiKey = AppSettings.RaygunSettings.ApiKey;
+        opts.ApplicationVersion = AppSettings.SupportSettings.InformationalVersion;
+        opts.ExcludeErrorsFromLocal = AppSettings.RaygunSettings.ExcludeErrorsFromLocal;
+        opts.IgnoreFormFieldNames = ["*Password"];
+        opts.EnvironmentVariables.Add("ASPNETCORE_*");
+    })
+    .AddRaygunUserProvider()
+    .AddHttpContextAccessor(); // needed by RaygunScriptPartial
 
 // Add app services.
-builder.Services.AddAutoMapperProfiles();
-builder.Services.AddAppServices();
-builder.Services.AddValidators();
+builder.Services
+    .AddAutoMapperProfiles()
+    .AddAppServices()
+    .AddEmailService()
+    .AddValidators();
 
 // Add data stores.
-builder.Services.AddDataPersistence(builder.Configuration);
-builder.Services.AddFileServices(builder.Configuration);
+builder.Services
+    .AddDataPersistence(builder.Configuration)
+    .AddFileServices(builder.Configuration);
 
 // Initialize database.
 builder.Services.AddHostedService<MigratorHostedService>();
@@ -110,7 +118,8 @@ if (!app.Environment.IsDevelopment() || AppSettings.DevSettings.UseSecurityHeade
 if (!string.IsNullOrEmpty(AppSettings.RaygunSettings.ApiKey)) app.UseRaygun();
 
 // Configure the application pipeline.
-app.UseStatusCodePagesWithReExecute("/Error/{0}")
+app
+    .UseStatusCodePagesWithReExecute("/Error/{0}")
     .UseHttpsRedirection()
     .UseWebOptimizer()
     .UseUrlRedirection()
@@ -120,7 +129,8 @@ app.UseStatusCodePagesWithReExecute("/Error/{0}")
     .UseAuthorization();
 
 // Configure API documentation.
-app.UseSwagger(options => { options.RouteTemplate = "api-docs/{documentName}/openapi.json"; })
+app
+    .UseSwagger(options => { options.RouteTemplate = "api-docs/{documentName}/openapi.json"; })
     .UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("v1/openapi.json", "Complaint Tracking System API v1");

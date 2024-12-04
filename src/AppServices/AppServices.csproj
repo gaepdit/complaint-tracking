@@ -12,6 +12,7 @@
         <PackageReference Include="ClosedXML" />
         <PackageReference Include="CsvHelper" />
         <PackageReference Include="FluentValidation.AspNetCore" />
+        <PackageReference Include="GaEpd.EmailService"/>
         <PackageReference Include="GaEpd.FileService" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" />
         <PackageReference Include="Microsoft.Identity.Web"/>
@@ -24,7 +25,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Domain\Domain.csproj" />
-        <ProjectReference Include="..\EmailService\EmailService.csproj" />
     </ItemGroup>
 
 </Project>

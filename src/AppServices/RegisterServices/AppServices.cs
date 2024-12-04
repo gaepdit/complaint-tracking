@@ -12,14 +12,13 @@ using Cts.Domain.Entities.Attachments;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
-using GaEpd.EmailService;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Cts.AppServices.RegisterServices;
 
 public static class AppServices
 {
-    public static void AddAppServices(this IServiceCollection services)
+    public static IServiceCollection AddAppServices(this IServiceCollection services)
     {
         // Action Types
         services.AddScoped<IActionTypeManager, ActionTypeManager>();
@@ -40,8 +39,7 @@ public static class AppServices
         services.AddScoped<IConcernManager, ConcernManager>();
         services.AddScoped<IConcernService, ConcernService>();
 
-        // Email
-        services.AddTransient<IEmailService, EmailService>();
+        // Notifications
         services.AddScoped<INotificationService, NotificationService>();
 
         // Offices
@@ -54,5 +52,7 @@ public static class AppServices
         // Data Export
         services.AddScoped<IDataExportService, DataExportService>();
         services.AddScoped<ISearchResultsExportService, SearchResultsExportService>();
+
+        return services;
     }
 }
