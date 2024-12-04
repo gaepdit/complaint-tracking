@@ -1,15 +1,21 @@
-﻿using GaEpd.EmailService.Repository;
+﻿using GaEpd.EmailService;
+using GaEpd.EmailService.EmailLogRepository;
 
 namespace Cts.EfRepository.Repositories;
 
-public sealed class EmailLogRepository(AppDbContext dbContext) : IEmailLogRepository
+public sealed class EmailLogRepository(AppDbContext context) : IEmailLogRepository
 {
-    public async Task InsertAsync(EmailLog emailLog, CancellationToken token = default)
+    public async Task InsertAsync(Message message, CancellationToken token = default)
     {
-        await dbContext.EmailLogs.AddAsync(emailLog, token).ConfigureAwait(false);
-        await dbContext.SaveChangesAsync(token).ConfigureAwait(false);
+        var emailLog = EmailLog.Create(message);
+        await context.EmailLogs.AddAsync(emailLog, token).ConfigureAwait(false);
+        await context.SaveChangesAsync(token).ConfigureAwait(false);
     }
 
-    public void Dispose() => dbContext.Dispose();
-    public ValueTask DisposeAsync() => dbContext.DisposeAsync();
+    #region IDisposable,  IAsyncDisposable
+
+    void IDisposable.Dispose() => context.Dispose();
+    async ValueTask IAsyncDisposable.DisposeAsync() => await context.DisposeAsync().ConfigureAwait(false);
+
+    #endregion
 }

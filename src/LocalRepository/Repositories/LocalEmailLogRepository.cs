@@ -1,10 +1,11 @@
-﻿using GaEpd.EmailService.Repository;
+﻿using GaEpd.EmailService;
+using GaEpd.EmailService.EmailLogRepository;
 
 namespace Cts.LocalRepository.Repositories;
 
 public sealed class LocalEmailLogRepository : IEmailLogRepository
 {
-    public Task InsertAsync(EmailLog emailLog, CancellationToken token = default) => Task.CompletedTask;
+    public Task InsertAsync(Message message, CancellationToken token = default) => Task.CompletedTask;
 
     public void Dispose()
     {

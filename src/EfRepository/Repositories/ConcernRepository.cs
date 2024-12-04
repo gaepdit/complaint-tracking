@@ -2,5 +2,5 @@
 
 namespace Cts.EfRepository.Repositories;
 
-public sealed class ConcernRepository(AppDbContext dbContext) :
-    NamedEntityRepository<Concern, AppDbContext>(dbContext), IConcernRepository;
+public sealed class ConcernRepository(AppDbContext context) :
+    NamedEntityRepository<Concern, AppDbContext>(context), IConcernRepository;
