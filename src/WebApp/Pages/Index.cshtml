@@ -6,6 +6,19 @@
     ViewData["Title"] = "Public Complaint Search";
 }
 
+@if (DateTime.Now < new DateTime(2024, 12, 9, 6, 0, 0, DateTimeKind.Local))
+{
+    <div class="row">
+        <div class="col-lg-9">
+            <div class="callout callout-danger">
+            <h3 class="h5">Planned Maintenance Outage</h3>
+            <p>There will be a scheduled major system maintenance outage for all EPD applications from
+                11&nbsp;AM&nbsp;Saturday, 12/7/2024 until 6&nbsp;AM&nbsp;Monday, 12/9/2024.</p>
+            </div>
+        </div>
+    </div>
+}
+
 <div class="row">
     <div class="col-lg-9">
         <div class="callout callout-info">
