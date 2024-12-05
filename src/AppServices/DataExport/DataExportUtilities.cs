@@ -49,8 +49,10 @@ public static class DataExportUtilities
         var config = new CsvConfiguration(CultureInfo.InvariantCulture) { InjectionOptions = InjectionOptions.Escape };
         var memoryStream = new MemoryStream();
 
-        await using var streamWriter = new StreamWriter(memoryStream, Encoding.UTF8);
-        await using var csvWriter = new CsvWriter(streamWriter, config);
+        var streamWriter = new StreamWriter(memoryStream, Encoding.UTF8);
+        var csvWriter = new CsvWriter(streamWriter, config);
+        await using var streamWriterAsyncDisposable = streamWriter.ConfigureAwait(false);
+        await using var csvWriterAsyncDisposable = csvWriter.ConfigureAwait(false);
 
         await csvWriter.WriteRecordsAsync(records).ConfigureAwait(false);
 
@@ -75,7 +77,8 @@ public static class DataExportUtilities
             foreach (var (key, value) in files)
             {
                 var zipEntry = zipArchive.CreateEntry(key);
-                await using var zipEntryStream = zipEntry.Open();
+                var zipEntryStream = zipEntry.Open();
+                await using var zipEntryStreamAsyncDisposable = zipEntryStream.ConfigureAwait(false);
                 await new MemoryStream((await value.ConfigureAwait(false)).ToArray()).CopyToAsync(zipEntryStream)
                     .ConfigureAwait(false);
             }
