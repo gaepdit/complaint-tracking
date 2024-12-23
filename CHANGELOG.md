@@ -1,5 +1,12 @@
 # Changelog
 
+## [2024.12.23] - 2024-12-23
+
+### Fixed
+
+- The Find by ID form on the public home page could break the search from in some circumstances.
+- Search results tables had some styling issues on smaller screens in dark mode.
+
 ## [2024.11.5] - 2024-11-05
 
 ### Fixed
@@ -73,6 +80,8 @@
 _This version represents a complete rewrite of the Complaint Tracking System._
 
 New login system. New design library. Updated workflows. New public complaint page. Dark mode. And more! We hope you like it!
+
+[2024.12.23]: https://github.com/gaepdit/template-app/releases/tag/v2024.12.23
 
 [2024.11.5]: https://github.com/gaepdit/template-app/releases/tag/v2024.11.5
 
