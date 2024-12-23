@@ -61,10 +61,9 @@ public sealed class StaffService(
         var status = includeInactive ? SearchStaffStatus.All : SearchStaffStatus.Active;
         var spec = new StaffSearchDto(SortBy.NameAsc, null, null, null, null, status);
         var users = userManager.Users.ApplyFilter(spec);
-        return Task.FromResult(mapper.Map<IReadOnlyList<StaffViewDto>>(users)
-                .Select(e => new ListItem<string>(e.Id, e.SortableNameWithOffice))
-                .ToList()
-            as IReadOnlyList<ListItem<string>>);
+        return Task.FromResult<IReadOnlyList<ListItem<string>>>(mapper.Map<IReadOnlyList<StaffViewDto>>(users)
+            .Select(e => new ListItem<string>(e.Id, e.SortableNameWithOffice))
+            .ToList());
     }
 
     public async Task<IReadOnlyList<ListItem<string>>> GetUsersInRoleAsListItemsAsync(AppRole role, Guid officeId) =>
