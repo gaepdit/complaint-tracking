@@ -498,7 +498,7 @@ svg:not(:root) {
     }
 
     .table-collapsible tbody th {
-        background: #f1f1f1;
+        background-color: rgb(var(--bs-secondary-bg-rgb));
     }
 
     .table-collapsible th,
@@ -528,7 +528,7 @@ svg:not(:root) {
         content: attr(data-label) ": ";
         font-weight: 700;
     }
-} 
+}
 
 /* Menu styles for mobile devices
 -------------------------------------------------- */
