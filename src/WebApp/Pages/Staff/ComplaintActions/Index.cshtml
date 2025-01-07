@@ -8,18 +8,6 @@
     ViewData["Title"] = "Complaint Action Search";
 }
 
-@functions {
-    private static string GetTrClass(ActionSearchResultDto item)
-    {
-        if (item.IsDeleted)
-        {
-            return "table-danger";
-        }
-
-        return item.ComplaintIsDeleted ? "table-warning" : "";
-    }
-}
-
 <h1>@ViewData["Title"]</h1>
 
 <div class="container">
@@ -163,20 +151,20 @@
                     <tbody>
                     @foreach (var item in Model.SearchResults.Items)
                     {
-                        <tr class="@GetTrClass(item)">
+                        <tr>
                             <th scope="row">
                                 <a asp-page="../Complaints/Details" asp-route-id="@item.ComplaintId.ToString()"
-                                   class="btn btn-outline-primary btn-sm">@item.ComplaintId.ToString()</a>
+                                   class="btn btn-outline-primary btn-sm @(item.IsDeleted || item.ComplaintIsDeleted ? "btn-outline-danger" : "")">@item.ComplaintId.ToString()</a>
                             </th>
                             <td>
                                 @if (item.IsDeleted)
                                 {
-                                    <strong class="text-nowrap">DELETED ACTION</strong>
+                                    <strong class="text-nowrap text-uppercase text-danger-emphasis">Deleted Action</strong>
                                     <br />
                                 }
                                 @if (item.ComplaintIsDeleted)
                                 {
-                                    <strong class="text-nowrap">Deleted Complaint</strong>
+                                    <strong class="text-nowrap text-uppercase text-danger-emphasis">Deleted Complaint</strong>
                                     <br />
                                 }
                                 @Html.DisplayFor(_ => item.ActionTypeName, DisplayTemplate.StringOrPlaceholder)
