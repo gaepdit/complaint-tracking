@@ -22,16 +22,16 @@ public class IndexModel(
     IAuthorizationService authorization)
     : PageModel
 {
-    public ActionSearchDto Spec { get; set; } = default!;
+    public ActionSearchDto Spec { get; set; } = null!;
     public bool ShowResults { get; private set; }
     public bool CanViewDeletedActions { get; private set; }
-    public IPaginatedResult<ActionSearchResultDto> SearchResults { get; private set; } = default!;
+    public IPaginatedResult<ActionSearchResultDto> SearchResults { get; private set; } = null!;
     public string SortByName => Spec.Sort.ToString();
     public PaginationNavModel PaginationNav => new(SearchResults, Spec.AsRouteValues());
 
-    public SelectList ActionTypeSelectList { get; private set; } = default!;
-    public SelectList EnteredBySelectList { get; private set; } = default!;
-    public SelectList ConcernsSelectList { get; private set; } = default!;
+    public SelectList ActionTypeSelectList { get; private set; } = null!;
+    public SelectList EnteredBySelectList { get; private set; } = null!;
+    public SelectList ConcernsSelectList { get; private set; } = null!;
 
     public async Task OnGetAsync()
     {

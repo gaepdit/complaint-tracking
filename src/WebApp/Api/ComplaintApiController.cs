@@ -7,7 +7,7 @@ namespace Cts.WebApp.Api;
 [ApiController]
 [Route("api/complaints")]
 [Produces("application/json")]
-public class ComplaintApiController(IComplaintService complaintService) : Controller
+public class ComplaintApiController(IComplaintService complaintService) : ControllerBase
 {
     [HttpGet]
     public async Task<IPaginatedResult<ComplaintSearchResultDto>> ListComplaintsAsync(

@@ -8,6 +8,18 @@
     ViewData["Title"] = "Complaint Action Search";
 }
 
+@functions {
+    private static string GetTrClass(ActionSearchResultDto item)
+    {
+        if (item.IsDeleted)
+        {
+            return "table-danger";
+        }
+
+        return item.ComplaintIsDeleted ? "table-warning" : "";
+    }
+}
+
 <h1>@ViewData["Title"]</h1>
 
 <div class="container">
@@ -20,7 +32,8 @@
                 <div class="row">
                     <div class="col-md mb-3">
                         <div class="form-floating">
-                            <select asp-for="Spec.ActionType" name="@nameof(Model.Spec.ActionType)" asp-items="Model.ActionTypeSelectList" class="form-select">
+                            <select asp-for="Spec.ActionType" name="@nameof(Model.Spec.ActionType)"
+                                    asp-items="Model.ActionTypeSelectList" class="form-select">
                                 <option value="">@SelectOptions.SelectTextAny</option>
                             </select>
                             <label asp-for="Spec.ActionType" class="form-label"></label>
@@ -61,16 +74,19 @@
                         <label asp-for="Spec.EnteredFrom" class="form-label px-2 mb-0">Date Action Entered</label>
                         <div class="input-group">
                             <div class="form-floating">
-                                <input asp-for="Spec.EnteredFrom" name="@nameof(Model.Spec.EnteredFrom)" class="form-control" aria-describedby="EnteredDateHelpBlock" />
+                                <input asp-for="Spec.EnteredFrom" name="@nameof(Model.Spec.EnteredFrom)"
+                                       class="form-control" aria-describedby="EnteredDateHelpBlock" />
                                 <label asp-for="Spec.EnteredFrom" class="form-label"></label>
                             </div>
                             <div class="form-floating">
-                                <input asp-for="Spec.EnteredTo" name="@nameof(Model.Spec.EnteredTo)" class="form-control" aria-describedby="EnteredDateHelpBlock" />
+                                <input asp-for="Spec.EnteredTo" name="@nameof(Model.Spec.EnteredTo)"
+                                       class="form-control" aria-describedby="EnteredDateHelpBlock" />
                                 <label asp-for="Spec.EnteredTo" class="form-label"></label>
                             </div>
                         </div>
                         <small id="EnteredDateHelpBlock" class="form-text text-body-secondary d-block px-2">
-                            Note: Some earlier Complaint Actions do not have an entry date and will be excluded when searching by date entered.
+                            Note: Some earlier Complaint Actions do not have an entry date and will be excluded when
+                            searching by date entered.
                         </small>
                     </div>
                 </div>
@@ -78,7 +94,8 @@
                 <div class="row">
                     <div class="col-md mb-3">
                         <div class="form-floating">
-                            <input asp-for="Spec.Investigator" name="@nameof(Model.Spec.Investigator)" class="form-control" />
+                            <input asp-for="Spec.Investigator" name="@nameof(Model.Spec.Investigator)"
+                                   class="form-control" />
                             <label asp-for="Spec.Investigator" class="form-label"></label>
                         </div>
                     </div>
@@ -92,8 +109,9 @@
 
                 <div class="mb-3">
                     <div class="form-floating">
-                        <select asp-for="Spec.Concern" name="@nameof(Model.Spec.Concern)" asp-items="Model.ConcernsSelectList"
-                                class="form-select" aria-describedby="ConcernHelpBlock">
+                        <select asp-for="Spec.Concern" name="@nameof(Model.Spec.Concern)"
+                                asp-items="Model.ConcernsSelectList" class="form-select"
+                                aria-describedby="ConcernHelpBlock">
                             <option value="">@SelectOptions.SelectTextAny</option>
                         </select>
                         <label asp-for="Spec.Concern" class="form-label"></label>
@@ -126,13 +144,16 @@
             <div class="table-responsive-md">
                 <table class="table table-hover" aria-label="Facility search results">
                     <caption class="caption-top">
-                        <partial name="_PaginationNavAndCount" model="Model.PaginationNav" />
+                        <partial name="Shared/_PaginationNavAndCount" model="Model.PaginationNav" />
                     </caption>
                     <thead>
                     <tr class="text-nowrap">
-                        <partial name="_SortableTableColHead" model='new SearchResultsColumnDisplay("Complaint ID", SortBy.IdAsc, SortBy.IdDesc, Model.Spec)' />
-                        <partial name="_SortableTableColHead" model='new SearchResultsColumnDisplay("Action Type", SortBy.TypeAsc, SortBy.TypeDesc, Model.Spec)' />
-                        <partial name="_SortableTableColHead" model='new SearchResultsColumnDisplay("Action Date", SortBy.DateAsc, SortBy.DateDesc, Model.Spec)' />
+                        <partial name="Shared/_SortableTableColHead"
+                                 model='new SearchResultsColumnDisplay("Complaint ID", SortBy.IdAsc, SortBy.IdDesc, Model.Spec)' />
+                        <partial name="Shared/_SortableTableColHead"
+                                 model='new SearchResultsColumnDisplay("Action Type", SortBy.TypeAsc, SortBy.TypeDesc, Model.Spec)' />
+                        <partial name="Shared/_SortableTableColHead"
+                                 model='new SearchResultsColumnDisplay("Action Date", SortBy.DateAsc, SortBy.DateDesc, Model.Spec)' />
                         <th scope="col">Investigator</th>
                         <th scope="col">Entered By</th>
                         <th scope="col">Comments</th>
@@ -142,9 +163,10 @@
                     <tbody>
                     @foreach (var item in Model.SearchResults.Items)
                     {
-                        <tr class="@(item.IsDeleted ? "table-danger" : item.ComplaintIsDeleted ? "table-warning" : "")">
+                        <tr class="@GetTrClass(item)">
                             <th scope="row">
-                                <a asp-page="../Complaints/Details" asp-route-id="@item.ComplaintId.ToString()" class="btn btn-outline-primary btn-sm">@item.ComplaintId.ToString()</a>
+                                <a asp-page="../Complaints/Details" asp-route-id="@item.ComplaintId.ToString()"
+                                   class="btn btn-outline-primary btn-sm">@item.ComplaintId.ToString()</a>
                             </th>
                             <td>
                                 @if (item.IsDeleted)
@@ -172,7 +194,7 @@
                     </tbody>
                 </table>
             </div>
-            <partial name="_PaginationNav" model="Model.PaginationNav" />
+            <partial name="Shared/_PaginationNav" model="Model.PaginationNav" />
         }
     </div>
 }
@@ -181,13 +203,13 @@
     <script src="~/js/dateValidation.js"></script>
     <script src="~/js/formSearch.js"></script>
     <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        datePairs(
-            "Spec_EnteredFrom",
-            "Spec_EnteredTo",
-            "Entered FROM Date",
-            "Entered THROUGH Date"
-        );
-    });
+        document.addEventListener("DOMContentLoaded", function () {
+            datePairs(
+                "Spec_EnteredFrom",
+                "Spec_EnteredTo",
+                "Entered FROM Date",
+                "Entered THROUGH Date"
+            );
+        });
     </script>
 }

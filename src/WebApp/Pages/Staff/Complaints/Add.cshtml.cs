@@ -22,15 +22,16 @@ public class AddModel(
     IValidator<ComplaintCreateDto> validator) : PageModel
 {
     [BindProperty]
-    public ComplaintCreateDto Item { get; set; } = default!; // Caution: Object name is used in "copyContactInfo.js" script.
+    public ComplaintCreateDto Item { get; set; } =
+        null!; // Caution: Object name is used in "copyContactInfo.js" script.
 
-    public SelectList ConcernsSelectList { get; private set; } = default!;
-    public SelectList OfficesSelectList { get; private set; } = default!;
-    public SelectList AllActiveStaffSelectList { get; private set; } = default!;
-    public SelectList ActiveStaffInOfficeSelectList { get; private set; } = default!;
+    public SelectList ConcernsSelectList { get; private set; } = null!;
+    public SelectList OfficesSelectList { get; private set; } = null!;
+    public SelectList AllActiveStaffSelectList { get; private set; } = null!;
+    public SelectList ActiveStaffInOfficeSelectList { get; private set; } = null!;
 
-    public SelectList StatesSelectList => new(Data.States);
-    public SelectList CountiesSelectList => new(Data.Counties);
+    public static SelectList StatesSelectList => new(Data.States);
+    public static SelectList CountiesSelectList => new(Data.Counties);
 
     public async Task OnGetAsync()
     {

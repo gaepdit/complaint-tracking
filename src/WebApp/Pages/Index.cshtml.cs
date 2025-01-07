@@ -19,15 +19,15 @@ public class IndexModel(IComplaintService complaints, IConcernService concerns) 
     [Display(Name = "Complaint ID")]
     public string? FindId { get; set; }
 
-    public ComplaintPublicSearchDto Spec { get; set; } = default!;
+    public ComplaintPublicSearchDto Spec { get; set; } = null!;
     public bool ShowResults { get; private set; }
-    public IPaginatedResult<ComplaintSearchResultDto> SearchResults { get; private set; } = default!;
+    public IPaginatedResult<ComplaintSearchResultDto> SearchResults { get; private set; } = null!;
     public PaginationNavModel PaginationNav => new(SearchResults, Spec.AsRouteValues());
     public SearchResultsDisplay ResultsDisplay => new(Spec, SearchResults, PaginationNav, IsPublic: true);
 
-    public SelectList ConcernsSelectList { get; private set; } = default!;
-    public SelectList CountiesSelectList => new(Data.Counties);
-    public SelectList StatesSelectList => new(Data.States);
+    public SelectList ConcernsSelectList { get; private set; } = null!;
+    public static SelectList CountiesSelectList => new(Data.Counties);
+    public static SelectList StatesSelectList => new(Data.States);
 
     public async Task OnGetAsync() => await PopulateSelectListsAsync();
 

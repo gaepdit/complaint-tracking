@@ -108,7 +108,7 @@
                 </div>
                 <div class="input-group mb-3">
                     @Html.EditorFor(model => model.Item.CallerAddress.State, EditorTemplate.Select,
-                        additionalViewData: new { Items = Model.StatesSelectList, Placeholder = string.Empty })
+                        additionalViewData: new { Items = EditModel.StatesSelectList, Placeholder = string.Empty })
                     @Html.EditorFor(model => model.Item.CallerAddress.PostalCode, EditorTemplate.Input)
                 </div>
             </div>
@@ -133,7 +133,7 @@
                 </div>
                 <div class="mb-3">
                     @Html.EditorFor(model => model.Item.ComplaintCounty, EditorTemplate.Select,
-                        additionalViewData: new { Items = Model.CountiesSelectList, Placeholder = string.Empty })
+                        additionalViewData: new { Items = EditModel.CountiesSelectList, Placeholder = string.Empty })
                 </div>
             </div>
         </div>
@@ -153,7 +153,9 @@
         <h2 class="h3">Source Contact</h2>
         <div class="row mb-3">
             <div class="mb-3">
-                <button id="copy-caller-info" type="button" class="btn btn-outline-info">Copy contact/address from Caller</button>
+                <button id="copy-caller-info" type="button" class="btn btn-outline-info">
+                    Copy contact/address from Caller
+                </button>
             </div>
             <div class="row">
                 <div class="col-md-6 mb-3">
@@ -204,7 +206,7 @@
                     </div>
                     <div class="input-group mb-3">
                         @Html.EditorFor(model => model.Item.SourceAddress.State, EditorTemplate.Select,
-                            additionalViewData: new { Items = Model.StatesSelectList, Placeholder = string.Empty })
+                            additionalViewData: new { Items = EditModel.StatesSelectList, Placeholder = string.Empty })
                         @Html.EditorFor(model => model.Item.SourceAddress.PostalCode, EditorTemplate.Input)
                     </div>
                 </div>

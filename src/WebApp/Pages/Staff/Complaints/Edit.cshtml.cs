@@ -26,12 +26,13 @@ public class EditModel(
     public int Id { get; set; }
 
     [BindProperty]
-    public ComplaintUpdateDto Item { get; set; } = default!; // Caution: Object name is used in "copyContactInfo.js" script.
+    public ComplaintUpdateDto Item { get; set; } =
+        null!; // Caution: Object name is used in "copyContactInfo.js" script.
 
-    public SelectList ConcernsSelectList { get; private set; } = default!;
-    public SelectList StaffSelectList { get; private set; } = default!;
-    public SelectList StatesSelectList => new(Data.States);
-    public SelectList CountiesSelectList => new(Data.Counties);
+    public SelectList ConcernsSelectList { get; private set; } = null!;
+    public SelectList StaffSelectList { get; private set; } = null!;
+    public static SelectList StatesSelectList => new(Data.States);
+    public static SelectList CountiesSelectList => new(Data.Counties);
 
     public async Task<IActionResult> OnGetAsync(int? id)
     {
