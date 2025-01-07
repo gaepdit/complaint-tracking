@@ -434,18 +434,17 @@ svg:not(:root) {
     max-height: 90px;
 }
 
-/* Styles for drag-and-drop file upload area */
+/* Styles for drag-and-drop file upload area
+-------------------------------------------------- */
 .drop-area {
     position: relative;
     border: 2px dashed #007bff;
     border-radius: 5px;
-    padding: 20px;
     transition: all 0.3s ease;
     overflow: hidden;
     background-color: rgba(0, 123, 255, 0.1);
     min-height: 200px;
 }
-
 
 .drop-area.hover::before {
     content: "Drop files here";

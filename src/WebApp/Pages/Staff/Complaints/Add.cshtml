@@ -219,23 +219,23 @@
             </div>
             <div class="row justify-content-center">
                 <div class="col-md-12">
-                    <div class="drop-area d-flex flex-column justify-content-center align-items-center">
-                        <p>Drag & Drop files here or click to select.</p>
-                        <input class="fileElem d-none" type="file" asp-for="Item.Files" multiple
-                               accept="@FileTypes.FileTypesAcceptString" />
-                        <button class="btn btn-outline-primary select-files-btn">Select Files</button>
-                        <div class="upload-success text-success mt-2"></div>
+                    <div class="drop-area d-flex flex-column justify-content-center align-items-center p-3">
+                        <div>
+                            <p>Drag & drop files here or click to select.</p>
+                            <input class="fileElem d-none" type="file" asp-for="Item.Files" multiple
+                                   accept="@FileTypes.FileTypesAcceptString" />
+                            <button class="btn btn-outline-primary select-files-btn">Select Files</button>
+                            <div class="upload-ready text-success"></div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <p class="col-lg-12">
-                    Up to ten files may be uploaded with a new complaint. Additional files can be added after the
-                    complaint is created. Supported file types are images, documents, and spreadsheets.
-                    All files must comply with the <a href="~/static/Complaint-Attachments-Policy.pdf" target="_blank">EPD
-                        Complaint Attachments Policy (<abbr>PDF</abbr>)</a>.
-                </p>
-            </div>
+            <p class="col-lg-12 mt-2">
+                Up to ten files may be uploaded with a new complaint. Additional files can be added after the complaint
+                is created. Supported file types are images, documents, and spreadsheets.
+                All files must comply with the <a href="~/static/Complaint-Attachments-Policy.pdf" target="_blank">EPD
+                    Complaint Attachments Policy (<abbr>PDF</abbr>)</a>.
+            </p>
         </div>
 
         <h2>Assignment</h2>

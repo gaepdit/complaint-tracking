@@ -1,7 +1,7 @@
-document.addEventListener('DOMContentLoaded', (event) => {
+document.addEventListener('DOMContentLoaded', () => {
     let dropAreas = document.querySelectorAll('.drop-area');
     dropAreas.forEach(dropArea => {
-        let successMessageArea = dropArea.querySelector('.upload-success');
+        let readyMessageArea = dropArea.querySelector('.upload-ready');
         let fileInput = dropArea.querySelector('.fileElem');
         let selectFilesBtn = dropArea.querySelector('.select-files-btn');
 
@@ -28,16 +28,22 @@ document.addEventListener('DOMContentLoaded', (event) => {
         dropArea.addEventListener('drop', handleDrop, false);
 
         function handleDrop(e) {
-            let dt = e.dataTransfer;
-            let files = dt.files;
-            handleFiles(files);
-            displaySuccessMessage(files);
+            handleFiles(e.dataTransfer.files);
+            displaySuccessMessage();
         }
 
         // Handle file selection
-        fileInput.addEventListener('change', (e) => {
-            let files = e.target.files;
-            displaySuccessMessage(files);
+        fileInput.addEventListener('change', () => {
+            let originalCount = fileInput.files.length;
+            if (originalCount > 10) {
+                alert(`${originalCount} files were selected, but only the first 10 will be uploaded.`);
+                let dataTransfer = new DataTransfer();
+                for (let i = 0; i < 10; i++) {
+                    dataTransfer.items.add(fileInput.files[i]);
+                }
+                fileInput.files = dataTransfer.files;
+            }
+            displaySuccessMessage();
         });
 
         // Add click event to the button
@@ -47,27 +53,41 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
 
         function handleFiles(files) {
-            let dataTransfer = new DataTransfer();
-            for (let i = 0; i < files.length; i++) {
-                dataTransfer.items.add(files[i]);
+            if (fileInput.files.length >= 10) {
+                alert("You can only upload up to 10 files at a time.");
+            } else {
+                let dataTransfer = new DataTransfer();
+                for (const file of fileInput.files) {
+                    dataTransfer.items.add(file);
+                }
+                for (const file of files) {
+                    if (![...dataTransfer.items].some(item => item.getAsFile().name === file.name)) {
+                        if (dataTransfer.items.length >= 10) {
+                            alert("You can only upload up to 10 files at a time.");
+                            break;
+                        }
+                        dataTransfer.items.add(file);
+                    }
+                }
+                fileInput.files = dataTransfer.files;
             }
-            fileInput.files = dataTransfer.files;
         }
 
-        function displaySuccessMessage(files) {
-            successMessageArea.innerHTML = "";
-            if (files.length > 1) {
-                let message = document.createElement('p');
-                message.textContent = "Multiple files selected.";
-                successMessageArea.appendChild(message);
-            } else {
-                for (let i = 0; i < files.length; i++) {
-                    let file = files[i];
-                    let message = document.createElement('p');
-                    message.textContent = `${file.name} selected.`;
-                    successMessageArea.appendChild(message);
-                }
+        function displaySuccessMessage() {
+            readyMessageArea.innerHTML = "";
+            let messageHeader = document.createElement('div');
+            messageHeader.setAttribute('class', 'mt-2');
+            messageHeader.textContent = `Ready to upload:`;
+            readyMessageArea.appendChild(messageHeader);
+
+            let fileList = document.createElement('ul');
+            fileList.setAttribute('class', 'm-0');
+            for (const file of fileInput.files) {
+                let message = document.createElement('li');
+                message.textContent = file.name;
+                fileList.appendChild(message);
             }
+            readyMessageArea.appendChild(fileList);
         }
     });
 });
