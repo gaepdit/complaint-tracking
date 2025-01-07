@@ -1,4 +1,4 @@
-﻿@using Cts.AppServices.Complaints.QueryDto
+@using Cts.AppServices.Complaints.QueryDto
 @using Cts.WebApp.Models
 @using Cts.WebApp.Pages.Shared.DisplayTemplates
 @model Cts.WebApp.Models.SearchResultsDisplay
@@ -20,17 +20,19 @@
         <tbody>
         @foreach (var item in Model.SearchResults.Items)
         {
-            <tr class="@(item.IsDeleted ? "table-danger" : "")">
+            <tr>
                 <th scope="row" data-label="Complaint ID">
                     @if (Model.IsPublic)
                     {
-                        <a asp-page="./Complaint" asp-route-id="@item.Id.ToString()" class="btn btn-outline-primary btn-sm">
+                        <a asp-page="./Complaint" asp-route-id="@item.Id.ToString()"
+                           class="btn btn-outline-primary btn-sm">
                             @item.Id.ToString()
                         </a>
                     }
                     else
                     {
-                        <a asp-page="Details" asp-route-id="@item.Id.ToString()" class="btn btn-outline-primary btn-sm">
+                        <a asp-page="Details" asp-route-id="@item.Id.ToString()"
+                           class="btn btn-outline-primary btn-sm @(item.IsDeleted ? "btn-outline-danger" : "btn-outline-primary")">
                             @item.Id.ToString()
                         </a>
                     }
@@ -39,7 +41,7 @@
                 <td data-label="Status">
                     @if (item.IsDeleted)
                     {
-                        <strong>DELETED</strong>
+                        <strong class="text-uppercase text-danger-emphasis">Deleted</strong>
                         <br />
                     }
                     @Html.DisplayFor(_ => item.Status)
