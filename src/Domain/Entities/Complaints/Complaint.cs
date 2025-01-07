@@ -74,7 +74,7 @@ public class Complaint : AuditableSoftDeleteEntity<int>
     [StringLength(15)]
     public string? ComplaintCounty { get; set; }
 
-    public Concern PrimaryConcern { get; set; } = default!;
+    public Concern PrimaryConcern { get; set; } = null!;
 
     public Concern? SecondaryConcern { get; set; }
 
@@ -102,7 +102,7 @@ public class Complaint : AuditableSoftDeleteEntity<int>
 
     // Properties: Assignment/History
 
-    public Office CurrentOffice { get; internal set; } = default!;
+    public Office CurrentOffice { get; internal set; } = null!;
 
     public ApplicationUser? CurrentOwner { get; internal set; }
 

@@ -46,13 +46,22 @@
                 </div>
 
                 <div class="row">
-                    <div class="mb-3">
+                    <div class="col-md mb-3">
                         <div class="form-floating">
                             <select asp-for="Spec.EnteredBy" name="@nameof(Model.Spec.EnteredBy)"
                                     asp-items="Model.EnteredBySelectList" class="form-select">
                                 <option value="">@SelectOptions.SelectTextAny</option>
                             </select>
                             <label asp-for="Spec.EnteredBy" class="form-label"></label>
+                        </div>
+                    </div>
+                    <div class="col-md mb-3">
+                        <div class="form-floating">
+                            <select asp-for="Spec.Office" name="@nameof(Model.Spec.Office)"
+                                    asp-items="Model.OfficesSelectList" class="form-select">
+                                <option value="">@SelectOptions.SelectTextAny</option>
+                            </select>
+                            <label asp-for="Spec.Office" class="form-label"></label>
                         </div>
                     </div>
                 </div>
@@ -95,19 +104,19 @@
                     </div>
                 </div>
 
-                <div class="mb-3">
-                    <div class="form-floating">
-                        <select asp-for="Spec.Concern" name="@nameof(Model.Spec.Concern)"
-                                asp-items="Model.ConcernsSelectList" class="form-select"
-                                aria-describedby="ConcernHelpBlock">
-                            <option value="">@SelectOptions.SelectTextAny</option>
-                        </select>
-                        <label asp-for="Spec.Concern" class="form-label"></label>
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <select asp-for="Spec.Concern" name="@nameof(Model.Spec.Concern)"
+                                    asp-items="Model.ConcernsSelectList" class="form-select"
+                                    aria-describedby="ConcernHelpBlock">
+                                <option value="">@SelectOptions.SelectTextAny</option>
+                            </select>
+                            <label asp-for="Spec.Concern" class="form-label"></label>
+                        </div>
+                        <small id="ConcernHelpBlock" class="form-text text-body-secondary d-block px-2">
+                            Note: Searches both primary and secondary areas of concern.
+                        </small>
                     </div>
-                    <small id="ConcernHelpBlock" class="form-text text-body-secondary d-block px-2">
-                        Note: Searches both primary and secondary areas of concern.
-                    </small>
-                </div>
 
                 <div class="mt-3 mb-1">
                     <button id="SearchButton" type="submit" class="btn btn-lg btn-primary col-4 me-2">Search</button>
@@ -159,12 +168,14 @@
                             <td>
                                 @if (item.IsDeleted)
                                 {
-                                    <strong class="text-nowrap text-uppercase text-danger-emphasis">Deleted Action</strong>
+                                    <strong class="text-nowrap text-uppercase text-danger-emphasis">Deleted
+                                        Action</strong>
                                     <br />
                                 }
                                 @if (item.ComplaintIsDeleted)
                                 {
-                                    <strong class="text-nowrap text-uppercase text-danger-emphasis">Deleted Complaint</strong>
+                                    <strong class="text-nowrap text-uppercase text-danger-emphasis">Deleted
+                                        Complaint</strong>
                                     <br />
                                 }
                                 @Html.DisplayFor(_ => item.ActionTypeName, DisplayTemplate.StringOrPlaceholder)
