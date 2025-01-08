@@ -130,7 +130,24 @@
 @if (Model.ShowResults)
 {
     <div id="SearchResults" class="mt-4">
-        <h3>Search Results</h3>
+        <div class="container-full">
+            <div class="row col-lg-9 justify-content-between align-items-start g-0 my-1">
+                <div class="col">
+                    <h3>Search Results</h3>
+                </div>
+                @if (Model.SearchResults.TotalCount > 0)
+                {
+                    <div class="col-auto d-print-none ms-2">
+                        <a asp-page="DownloadSearch" asp-all-route-data="Model.Spec.AsRouteValues()"
+                           class="btn btn-sm btn-outline-secondary">
+                            <svg class="bi me-1">
+                                <use href="@Url.Content("~/images/app-icons.svg")#app-icon-download"></use>
+                            </svg>&nbsp;Download search results
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
 
         @if (Model.SearchResults.TotalCount == 0)
         {

@@ -57,7 +57,9 @@ public sealed class ActionService(
 
         var predicate = ActionFilters.SearchPredicate(spec);
         var count = await actionRepository.CountAsync(predicate, token).ConfigureAwait(false);
-        var actions = await actionRepository.GetPagedListAsync(predicate, paging, token).ConfigureAwait(false);
+        var actions = await actionRepository
+            .GetPagedListAsync(predicate, paging, includeProperties: ["Complaint"], token)
+            .ConfigureAwait(false);
         var list = count > 0 ? mapper.Map<IReadOnlyList<ActionSearchResultDto>>(actions) : [];
 
         return new PaginatedResult<ActionSearchResultDto>(list, count, paging);
