@@ -17,7 +17,7 @@
     @if (Model.DisplayStaff.Email!.ToLowerInvariant().Equals(User.Identity?.Name!.ToLowerInvariant()))
     {
         <a asp-page="/Account/Index">
-            <span class="badge bg-info-subtle border border-info-subtle text-info-emphasis rounded-pill">YOU</span>
+            <span class="badge bg-info-subtle border border-info-subtle text-info-emphasis text-uppercase rounded-pill">You</span>
         </a>
     }
 </h2>
