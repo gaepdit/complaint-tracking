@@ -1,5 +1,19 @@
 # Changelog
 
+## [2025.1.8] - 2025-1-8
+
+### Added
+
+- File attachment drag and drop usability was improved.
+- You can now filter complaints by assigned office on the Complaint Action search page.
+- Complaint Action search results can be exported to Excel.
+- Display of deleted items was improved.
+
+### Fixed
+
+- Deleted complaints were not labeled correctly on the Complaint Action search page.
+- Some search terms were not preserved on the Complaint Action search page when sorting.
+
 ## [2024.12.23] - 2024-12-23
 
 ### Fixed
@@ -11,7 +25,8 @@
 
 ### Fixed
 
-- If a user's email changes in the SOG account system, the email in the CTS database will now update the next time the user logs in.
+- If a user's email changes in the SOG account system, the email in the CTS database will now update the next time the
+  user logs in.
 
 ## [2024.10.16] - 2024-10-16
 
@@ -79,7 +94,10 @@
 
 _This version represents a complete rewrite of the Complaint Tracking System._
 
-New login system. New design library. Updated workflows. New public complaint page. Dark mode. And more! We hope you like it!
+New login system. New design library. Updated workflows. New public complaint page. Dark mode. And more! We hope you
+like it!
+
+[2025.1.8]: https://github.com/gaepdit/template-app/releases/tag/v2025.1.8
 
 [2024.12.23]: https://github.com/gaepdit/template-app/releases/tag/v2024.12.23
 
