@@ -104,19 +104,19 @@
                     </div>
                 </div>
 
-                    <div class="mb-3">
-                        <div class="form-floating">
-                            <select asp-for="Spec.Concern" name="@nameof(Model.Spec.Concern)"
-                                    asp-items="Model.ConcernsSelectList" class="form-select"
-                                    aria-describedby="ConcernHelpBlock">
-                                <option value="">@SelectOptions.SelectTextAny</option>
-                            </select>
-                            <label asp-for="Spec.Concern" class="form-label"></label>
-                        </div>
-                        <small id="ConcernHelpBlock" class="form-text text-body-secondary d-block px-2">
-                            Note: Searches both primary and secondary areas of concern.
-                        </small>
+                <div class="mb-3">
+                    <div class="form-floating">
+                        <select asp-for="Spec.Concern" name="@nameof(Model.Spec.Concern)"
+                                asp-items="Model.ConcernsSelectList" class="form-select"
+                                aria-describedby="ConcernHelpBlock">
+                            <option value="">@SelectOptions.SelectTextAny</option>
+                        </select>
+                        <label asp-for="Spec.Concern" class="form-label"></label>
                     </div>
+                    <small id="ConcernHelpBlock" class="form-text text-body-secondary d-block px-2">
+                        Note: Searches both primary and secondary areas of concern.
+                    </small>
+                </div>
 
                 <div class="mt-3 mb-1">
                     <button id="SearchButton" type="submit" class="btn btn-lg btn-primary col-4 me-2">Search</button>
@@ -155,11 +155,9 @@
         }
         else
         {
+            <partial name="Shared/_PaginationNavAndCount" model="Model.PaginationNav" />
             <div class="table-responsive-md">
-                <table class="table table-hover" aria-label="Facility search results">
-                    <caption class="caption-top">
-                        <partial name="Shared/_PaginationNavAndCount" model="Model.PaginationNav" />
-                    </caption>
+                <table class="table table-collapsible table-hover" aria-label="Complaint Action search results">
                     <thead>
                     <tr class="text-nowrap">
                         <partial name="Shared/_SortableTableColHead"
@@ -178,33 +176,33 @@
                     @foreach (var item in Model.SearchResults.Items)
                     {
                         <tr>
-                            <th scope="row">
+                            <th scope="row" data-label="Complaint ID">
                                 <a asp-page="../Complaints/Details" asp-route-id="@item.ComplaintId.ToString()"
                                    class="btn btn-outline-primary btn-sm @(item.IsDeleted || item.ComplaintIsDeleted ? "btn-outline-danger" : "")">@item.ComplaintId.ToString()</a>
-                            </th>
-                            <td>
                                 @if (item.IsDeleted)
                                 {
-                                    <strong class="text-nowrap text-uppercase text-danger-emphasis">Deleted
-                                        Action</strong>
                                     <br />
+                                    <span class="text-nowrap text-uppercase text-danger-emphasis">Deleted Action</span>
                                 }
                                 @if (item.ComplaintIsDeleted)
                                 {
-                                    <strong class="text-nowrap text-uppercase text-danger-emphasis">Deleted
-                                        Complaint</strong>
                                     <br />
+                                    <span class="text-nowrap text-uppercase text-danger-emphasis">Deleted
+                                        Complaint</span>
                                 }
+                            </th>
+                            <td data-label="Action Type">
                                 @Html.DisplayFor(_ => item.ActionTypeName, DisplayTemplate.StringOrPlaceholder)
                             </td>
-                            <td class="text-nowrap">@Html.DisplayFor(_ => item.ActionDate, DisplayTemplate.DateOnly)</td>
-                            <td>@Html.DisplayFor(_ => item.Investigator, DisplayTemplate.StringOrPlaceholder)</td>
-                            <td>
+                            <td data-label="Action Date"
+                                class="text-nowrap">@Html.DisplayFor(_ => item.ActionDate, DisplayTemplate.DateOnly)</td>
+                            <td data-label="Investigator">@Html.DisplayFor(_ => item.Investigator, DisplayTemplate.StringOrPlaceholder)</td>
+                            <td data-label="Entered By">
                                 @Html.DisplayFor(_ => item.EnteredByName, DisplayTemplate.StringOrPlaceholder)
                                 <br />
                                 @Html.DisplayFor(_ => item.EnteredByOffice, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "" })
                             </td>
-                            <td>@Html.DisplayFor(_ => item.Comments, DisplayTemplate.TruncateText)</td>
+                            <td data-label="Comments">@Html.DisplayFor(_ => item.Comments, DisplayTemplate.TruncateText)</td>
                         </tr>
                     }
                     </tbody>
