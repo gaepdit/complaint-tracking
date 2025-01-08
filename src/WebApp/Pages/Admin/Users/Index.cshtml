@@ -110,7 +110,7 @@
                         @item.SortableFullName
                         @if (item.Email.ToLowerInvariant().Equals(User.Identity?.Name!.ToLowerInvariant()))
                         {
-                            <span class="badge bg-info-subtle border border-info-subtle text-info-emphasis rounded-pill">YOU</span>
+                            <span class="badge bg-info-subtle border border-info-subtle text-info-emphasis text-uppercase rounded-pill">You</span>
                         }
                     </td>
                     <td>@item.Email</td>

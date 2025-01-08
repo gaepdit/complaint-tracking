@@ -36,14 +36,14 @@
                             @item.Id.ToString()
                         </a>
                     }
+                    @if (item.IsDeleted)
+                    {
+                        <br />
+                        <span class="text-uppercase text-danger-emphasis">Deleted</span>
+                    }
                 </th>
                 <td data-label="Date Received">@Html.DisplayFor(_ => item.ReceivedDate, DisplayTemplate.ShortDate)</td>
                 <td data-label="Status">
-                    @if (item.IsDeleted)
-                    {
-                        <strong class="text-uppercase text-danger-emphasis">Deleted</strong>
-                        <br />
-                    }
                     @Html.DisplayFor(_ => item.Status)
                     @if (item is { ComplaintClosed: true, ComplaintClosedDate: not null })
                     {
