@@ -1,8 +1,11 @@
+using Cts.AppServices.ComplaintActions;
+using Cts.AppServices.ComplaintActions.Dto;
 using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.QueryDto;
 using Cts.AppServices.Permissions;
 using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.UserServices;
+using Cts.Domain.Entities.ComplaintActions;
 using Cts.Domain.Entities.Complaints;
 using GaEpd.AppLibrary.Extensions;
 using Microsoft.AspNetCore.Authorization;
@@ -11,11 +14,12 @@ namespace Cts.AppServices.DataExport;
 
 public sealed class SearchResultsExportService(
     IComplaintRepository complaintRepository,
+    IActionRepository actionRepository,
     IUserService userService,
     IAuthorizationService authorization)
     : ISearchResultsExportService
 {
-    public async Task<int> CountAsync(ComplaintSearchDto spec, CancellationToken token)
+    public async Task<int> CountComplaintsAsync(ComplaintSearchDto spec, CancellationToken token)
     {
         spec.TrimAll();
         var principal = userService.GetCurrentPrincipal();
@@ -26,7 +30,7 @@ public sealed class SearchResultsExportService(
             .ConfigureAwait(false);
     }
 
-    public async Task<IReadOnlyList<SearchResultsExportDto>> ExportSearchResultsAsync(ComplaintSearchDto spec,
+    public async Task<IReadOnlyList<ComplaintExportDto>> ExportComplaintsAsync(ComplaintSearchDto spec,
         CancellationToken token)
     {
         spec.TrimAll();
@@ -36,8 +40,32 @@ public sealed class SearchResultsExportService(
 
         return (await complaintRepository.GetListWithMostRecentActionAsync(ComplaintFilters.SearchPredicate(spec),
                 sorting: spec.Sort.GetDescription(), token).ConfigureAwait(false))
-            .Select(complaint => new SearchResultsExportDto(complaint)).ToList();
+            .Select(complaint => new ComplaintExportDto(complaint)).ToList();
     }
+
+    public async Task<int> CountActionsAsync(ActionSearchDto spec, CancellationToken token)
+    {
+        spec.TrimAll();
+        var principal = userService.GetCurrentPrincipal();
+        if (!await authorization.Succeeded(principal!, Policies.DivisionManager).ConfigureAwait(false))
+            spec.DeletedStatus = null;
+
+        return await actionRepository.CountAsync(ActionFilters.SearchPredicate(spec), token)
+            .ConfigureAwait(false);
+    }
+
+    public async Task<IReadOnlyList<ActionExportDto>> ExportActionsAsync(ActionSearchDto spec, CancellationToken token)
+    {
+        spec.TrimAll();
+        var principal = userService.GetCurrentPrincipal();
+        if (!await authorization.Succeeded(principal!, Policies.DivisionManager).ConfigureAwait(false))
+            spec.DeletedStatus = null;
+
+        return (await actionRepository.GetListAsync(ActionFilters.SearchPredicate(spec),
+                ordering: spec.Sort.GetDescription(), token).ConfigureAwait(false))
+            .Select(action => new ActionExportDto(action)).ToList();
+    }
+
 
     #region IDisposable,  IAsyncDisposable
 

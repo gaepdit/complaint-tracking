@@ -15,6 +15,7 @@ internal static class ActionFilters
             .FromDate(spec.DateFrom)
             .ToDate(spec.DateTo)
             .EnteredBy(spec.EnteredBy)
+            .AssignedTo(spec.Office)
             .EnteredFromDate(spec.EnteredFrom)
             .EnteredToDate(spec.EnteredTo)
             .ContainsInvestigator(spec.Investigator)
@@ -59,6 +60,13 @@ internal static class ActionFilters
         string.IsNullOrWhiteSpace(input)
             ? predicate
             : predicate.And(action => action.EnteredBy != null && action.EnteredBy.Id == input);
+
+    private static Expression<Func<ComplaintAction, bool>> AssignedTo(
+        this Expression<Func<ComplaintAction, bool>> predicate,
+        Guid? input) =>
+        input is null
+            ? predicate
+            : predicate.And(action => action.Complaint.CurrentOffice.Id == input);
 
     private static Expression<Func<ComplaintAction, bool>> EnteredFromDate(
         this Expression<Func<ComplaintAction, bool>> predicate, DateOnly? input) =>

@@ -5,9 +5,9 @@ using GaEpd.AppLibrary.Extensions;
 namespace Cts.AppServices.DataExport;
 
 [UsedImplicitly(ImplicitUseTargetFlags.Members)]
-public record SearchResultsExportDto
+public record ComplaintExportDto
 {
-    public SearchResultsExportDto(Complaint complaint)
+    public ComplaintExportDto(Complaint complaint)
     {
         ComplaintId = complaint.Id;
         ReceivedByName = complaint.ReceivedBy?.SortableFullName;

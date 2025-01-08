@@ -2,6 +2,7 @@
 using Cts.AppServices.ComplaintActions;
 using Cts.AppServices.ComplaintActions.Dto;
 using Cts.AppServices.Concerns;
+using Cts.AppServices.Offices;
 using Cts.AppServices.Permissions;
 using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.Staff;
@@ -19,6 +20,7 @@ public class IndexModel(
     IActionTypeService actionTypeService,
     IStaffService staffService,
     IConcernService concernService,
+    IOfficeService offices,
     IAuthorizationService authorization)
     : PageModel
 {
@@ -31,6 +33,7 @@ public class IndexModel(
 
     public SelectList ActionTypeSelectList { get; private set; } = null!;
     public SelectList EnteredBySelectList { get; private set; } = null!;
+    public SelectList OfficesSelectList { get; private set; } = null!;
     public SelectList ConcernsSelectList { get; private set; } = null!;
 
     public async Task OnGetAsync()
@@ -56,5 +59,6 @@ public class IndexModel(
         ActionTypeSelectList = (await actionTypeService.GetAsListItemsAsync(includeInactive: true)).ToSelectList();
         EnteredBySelectList = (await staffService.GetAsListItemsAsync(includeInactive: true)).ToSelectList();
         ConcernsSelectList = (await concernService.GetAsListItemsAsync(includeInactive: true)).ToSelectList();
+        OfficesSelectList = (await offices.GetAsListItemsAsync(includeInactive: true)).ToSelectList();
     }
 }

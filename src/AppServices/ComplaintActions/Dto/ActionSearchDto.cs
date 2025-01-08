@@ -31,6 +31,9 @@ public record ActionSearchDto
     [Display(Name = "Entered By")]
     public string? EnteredBy { get; init; }
 
+    [Display(Name = "Complaint assigned office")]
+    public Guid? Office { get; init; }
+
     [Display(Name = "From")]
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = "{0:O}", ApplyFormatInEditMode = true)]
@@ -42,10 +45,10 @@ public record ActionSearchDto
     public DateOnly? EnteredTo { get; init; }
 
     [Display(Name = "Investigator")]
-    public string? Investigator { get; set; }
+    public string? Investigator { get; init; }
 
     [Display(Name = "Comments")]
-    public string? Comments { get; set; }
+    public string? Comments { get; init; }
 
     [Display(Name = "Environmental Concern")]
     public Guid? Concern { get; init; }
@@ -58,6 +61,8 @@ public record ActionSearchDto
         { nameof(DeletedStatus), DeletedStatus?.ToString() },
         { nameof(DateFrom), DateFrom?.ToString("d") },
         { nameof(DateTo), DateTo?.ToString("d") },
+        { nameof(EnteredBy), EnteredBy },
+        { nameof(Office), Office?.ToString() },
         { nameof(EnteredFrom), EnteredFrom?.ToString("d") },
         { nameof(EnteredTo), EnteredTo?.ToString("d") },
         { nameof(Investigator), Investigator },
