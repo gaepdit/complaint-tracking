@@ -17,7 +17,8 @@
     <ul>
         <li>
             <p>
-                <a href="~/static/Complaint-Tracking-System-Instructions.pdf" target="_blank">General Instructions (<abbr>PDF</abbr>)</a>
+                <a href="~/static/Complaint-Tracking-System-Instructions.pdf" target="_blank">General Instructions
+                    (<abbr>PDF</abbr>)</a>
             </p>
         </li>
         <li>
@@ -26,22 +27,30 @@
             </p>
         </li>
     </ul>
-    <p>For technical support, contact <a href="@AppSettings.SupportSettings.TechnicalSupportSite" target="_blank" rel="noopener">EPD IT support</a>.</p>
+    <p>For technical support, contact <a href="@AppSettings.SupportSettings.TechnicalSupportSite" target="_blank"
+                                         rel="noopener">EPD IT support</a>.</p>
 }
 
 <div class="callout callout-info">
     <small>
-        The CTS was developed by Georgia EPD-IT.<br />
+        The Complaint Tracking System was developed by Georgia EPD-IT.<br />
         @if (!string.IsNullOrEmpty(AppSettings.SupportSettings.InformationalVersion))
         {
-            @:Current version: <em>@AppSettings.SupportSettings.InformationalVersion</em>.<br />
+            @:Current version: <em>@AppSettings.SupportSettings.InformationalVersion
+                @if (!string.IsNullOrEmpty(AppSettings.SupportSettings.InformationalBuild))
+                {
+                    @:(@AppSettings.SupportSettings.InformationalBuild).
+                }
+
+                @:</em>
         }
-        @if (!string.IsNullOrEmpty(AppSettings.SupportSettings.InformationalBuild))
-        {
-            @:Build: <em>@AppSettings.SupportSettings.InformationalBuild</em>.
-            <br />
-        }
+        <br />
+        View the
+        <a href="https://github.com/gaepdit/complaint-tracking/blob/main/CHANGELOG.md" target="_blank" rel="noopener"
+           class="text-decoration-hover link-offset-2">Changelog</a>.
+        <br />
         Source code available on
-        <a href="https://github.com/gaepdit/complaint-tracking" target="_blank" rel="noopener" class="text-decoration-hover link-offset-2">GitHub</a>.
+        <a href="https://github.com/gaepdit/complaint-tracking" target="_blank" rel="noopener"
+           class="text-decoration-hover link-offset-2">GitHub</a>.
     </small>
 </div>
