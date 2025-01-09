@@ -1,13 +1,22 @@
 # Changelog
 
+## [2025.1.9] - 2025-1-9
+
+### Changed
+
+- The complaint action search page performance was improved.
+
 ## [2025.1.8] - 2025-1-8
+
+### Changed
+
+- File attachment drag and drop usability was improved.
+- Display of deleted items was improved.
 
 ### Added
 
-- File attachment drag and drop usability was improved.
 - You can now filter complaints by assigned office on the Complaint Action search page.
 - Complaint Action search results can be exported to Excel.
-- Display of deleted items was improved.
 
 ### Fixed
 
@@ -96,6 +105,8 @@ _This version represents a complete rewrite of the Complaint Tracking System._
 
 New login system. New design library. Updated workflows. New public complaint page. Dark mode. And more! We hope you
 like it!
+
+[2025.1.9]: https://github.com/gaepdit/template-app/releases/tag/v2025.1.9
 
 [2025.1.8]: https://github.com/gaepdit/template-app/releases/tag/v2025.1.8
 
