@@ -21,14 +21,20 @@ public class MigratorHostedService(IServiceProvider serviceProvider, IConfigurat
         if (AppSettings.DevSettings.UseInMemoryData) return;
 
         var migrationConnectionString = configuration.GetConnectionString("MigrationConnection");
-        var migrationOptions = new DbContextOptionsBuilder<AppDbContext>()
+        var dbContextOptionsBuilder = new DbContextOptionsBuilder<AppDbContext>()
             .UseSqlServer(migrationConnectionString, builder =>
             {
                 builder.MigrationsAssembly("EfRepository");
                 builder.CommandTimeout((int)TimeSpan.FromMinutes(10).TotalSeconds);
-            }).Options;
+            });
 
-        await using var migrationContext = new AppDbContext(migrationOptions);
+        if (AppSettings.DevSettings.UseDevSettings)
+        {
+            dbContextOptionsBuilder
+                .LogTo(Console.WriteLine, [DbLoggerCategory.Database.Command.Name], LogLevel.Information);
+        }
+
+        await using var migrationContext = new AppDbContext(dbContextOptionsBuilder.Options);
 
         if (AppSettings.DevSettings.UseEfMigrations)
         {
@@ -38,9 +44,12 @@ public class MigratorHostedService(IServiceProvider serviceProvider, IConfigurat
             // Initialize any new roles. (No other data is seeded when running EF migrations.)
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             foreach (var role in AppRole.AllRoles.Keys)
-                if (!await migrationContext.Roles.AnyAsync(identityRole => identityRole.Name == role,
-                        cancellationToken))
+            {
+                if (!await migrationContext.Roles.AnyAsync(idRole => idRole.Name == role, cancellationToken))
+                {
                     await roleManager.CreateAsync(new IdentityRole(role));
+                }
+            }
         }
         else if (AppSettings.DevSettings.DeleteAndRebuildDatabase)
         {

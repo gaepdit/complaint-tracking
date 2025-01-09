@@ -1,6 +1,4 @@
-using Cts.Domain.Entities.ActionTypes;
 using Cts.Domain.Entities.Complaints;
-using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
 using Cts.EfRepository.Contexts;
 using Cts.EfRepository.Contexts.SeedDevData;
@@ -9,6 +7,7 @@ using Cts.TestData;
 using Cts.TestData.Identity;
 using GaEpd.AppLibrary.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using System.Runtime.CompilerServices;
 using TestSupport.EfHelpers;
 
@@ -27,7 +26,7 @@ namespace EfRepositoryTests;
 /// </summary>
 public sealed class RepositoryHelper : IDisposable, IAsyncDisposable
 {
-    private AppDbContext Context { get; set; } = default!;
+    private AppDbContext Context { get; set; } = null!;
 
     private readonly DbContextOptions<AppDbContext> _options;
     private readonly AppDbContext _context;
@@ -37,7 +36,8 @@ public sealed class RepositoryHelper : IDisposable, IAsyncDisposable
     /// </summary>
     private RepositoryHelper()
     {
-        _options = SqliteInMemory.CreateOptions<AppDbContext>();
+        _options = SqliteInMemory.CreateOptions<AppDbContext>(builder =>
+            builder.LogTo(Console.WriteLine, events: [RelationalEventId.CommandExecuted]));
         _context = new AppDbContext(_options);
         _context.Database.EnsureCreated();
     }
@@ -50,7 +50,8 @@ public sealed class RepositoryHelper : IDisposable, IAsyncDisposable
     private RepositoryHelper(object callingClass, string callingMember)
     {
         _options = callingClass.CreateUniqueMethodOptions<AppDbContext>(callingMember: callingMember,
-            builder: opts => opts.UseSqlServer());
+            builder: builder => builder.UseSqlServer()
+                .LogTo(Console.WriteLine, events: [RelationalEventId.CommandExecuted]));
         _context = new AppDbContext(_options);
         _context.Database.EnsureClean();
     }
@@ -133,18 +134,6 @@ public sealed class RepositoryHelper : IDisposable, IAsyncDisposable
     /// <summary>
     /// Seeds data and returns an instance of ActionTypeRepository.
     /// </summary>
-    /// <returns>An <see cref="ActionTypeRepository"/>.</returns>
-    public IActionTypeRepository GetActionTypeRepository()
-    {
-        ClearAllStaticData();
-        DbSeedDataHelpers.SeedActionTypeData(_context);
-        Context = new AppDbContext(_options);
-        return new ActionTypeRepository(Context);
-    }
-
-    /// <summary>
-    /// Seeds data and returns an instance of ActionTypeRepository.
-    /// </summary>
     /// <returns>An <see cref="ComplaintRepository"/>.</returns>
     public IComplaintRepository GetComplaintRepository()
     {
@@ -152,18 +141,6 @@ public sealed class RepositoryHelper : IDisposable, IAsyncDisposable
         DbSeedDataHelpers.SeedAllData(_context);
         Context = new AppDbContext(_options);
         return new ComplaintRepository(Context);
-    }
-
-    /// <summary>
-    /// Seeds data and returns an instance of ActionTypeRepository.
-    /// </summary>
-    /// <returns>An <see cref="ActionTypeRepository"/>.</returns>
-    public IConcernRepository GetConcernRepository()
-    {
-        ClearAllStaticData();
-        DbSeedDataHelpers.SeedConcernData(_context);
-        Context = new AppDbContext(_options);
-        return new ConcernRepository(Context);
     }
 
     /// <summary>
