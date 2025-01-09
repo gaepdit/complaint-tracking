@@ -38,12 +38,9 @@ public sealed class ComplaintService(
 {
     // Public read methods
 
-    public async Task<ComplaintPublicViewDto?> FindPublicAsync(int id, CancellationToken token = default)
-    {
-        var complaint = await complaintRepository.FindPublicAsync(ComplaintFilters.PublicIdPredicate(id), token: token)
-            .ConfigureAwait(false);
-        return complaint is null ? null : mapper.Map<ComplaintPublicViewDto>(complaint);
-    }
+    public async Task<ComplaintPublicViewDto?> FindPublicAsync(int id, CancellationToken token = default) =>
+        mapper.Map<ComplaintPublicViewDto>(await complaintRepository
+            .FindPublicAsync(ComplaintFilters.PublicIdPredicate(id), token: token).ConfigureAwait(false));
 
     public Task<bool> PublicExistsAsync(int id, CancellationToken token = default) =>
         complaintRepository.ExistsAsync(ComplaintFilters.PublicIdPredicate(id), token);

@@ -41,7 +41,7 @@ public sealed class LocalComplaintRepository(
         }
 #pragma warning restore S3267
 
-        return Task.FromResult(complaints.ToList() as IReadOnlyCollection<Complaint>);
+        return Task.FromResult<IReadOnlyCollection<Complaint>>(complaints.ToList());
     }
 
     private async Task<Complaint?> GetComplaintDetailsAsync(Complaint? complaint, bool includeDeletedActions,
