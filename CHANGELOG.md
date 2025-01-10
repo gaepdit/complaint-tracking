@@ -1,6 +1,6 @@
 # Changelog
 
-## [2025.1.9] - 2025-1-9
+## [2025.1.10] - 2025-1-10
 
 ### Changed
 
@@ -106,7 +106,7 @@ _This version represents a complete rewrite of the Complaint Tracking System._
 New login system. New design library. Updated workflows. New public complaint page. Dark mode. And more! We hope you
 like it!
 
-[2025.1.9]: https://github.com/gaepdit/template-app/releases/tag/v2025.1.9
+[2025.1.10]: https://github.com/gaepdit/template-app/releases/tag/v2025.1.10
 
 [2025.1.8]: https://github.com/gaepdit/template-app/releases/tag/v2025.1.8
 
