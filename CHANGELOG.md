@@ -1,5 +1,11 @@
 # Changelog
 
+## [2025.1.10.1] - 2025-1-10
+
+### Fixed
+
+- The updated file attachment drag and drop feature was not always working correctly due to a caching issue.
+
 ## [2025.1.10] - 2025-1-10
 
 ### Changed
@@ -105,6 +111,8 @@ _This version represents a complete rewrite of the Complaint Tracking System._
 
 New login system. New design library. Updated workflows. New public complaint page. Dark mode. And more! We hope you
 like it!
+
+[2025.1.10.1]: https://github.com/gaepdit/template-app/releases/tag/v2025.1.10.1
 
 [2025.1.10]: https://github.com/gaepdit/template-app/releases/tag/v2025.1.10
 
