@@ -25,38 +25,9 @@ public sealed class LocalUserStore :
         // Seed Roles
         Roles = UserData.GetRoles.ToList();
 
-        // Seed User Roles
-        UserRoles = new List<IdentityUserRole<string>>();
-
-        // -- admin
-        UserRoles.AddRange(Roles
-            .Select(role => new IdentityUserRole<string>
-                { RoleId = role.Id, UserId = UserStore.Single(e => e.GivenName == "Admin").Id })
-            .ToList());
-
-        // -- staff
-        var staffUserId = UserStore.Single(e => e.GivenName == "General").Id;
-        UserRoles.AddRange(new IdentityUserRole<string>[]
-        {
-            new()
-            {
-                RoleId = Roles.Single(e => e.Name == RoleName.Staff).Id,
-                UserId = staffUserId,
-            },
-            new()
-            {
-                RoleId = Roles.Single(e => e.Name == RoleName.SiteMaintenance).Id,
-                UserId = staffUserId,
-            },
-            new()
-            {
-                RoleId = Roles.Single(e => e.Name == RoleName.UserAdmin).Id,
-                UserId = staffUserId,
-            },
-        });
-
-        // Initialize Logins
-        UserLogins = new List<UserLogin>();
+        // Initialize User Roles & Logins
+        UserRoles = [];
+        UserLogins = [];
 
         // Seed Office data
         var offices = OfficeData.GetOffices.ToList();
@@ -100,7 +71,7 @@ public sealed class LocalUserStore :
     public async Task<IdentityResult> UpdateAsync(ApplicationUser user, CancellationToken cancellationToken)
     {
         var existingUser = await FindByIdAsync(user.Id, cancellationToken).ConfigureAwait(false)
-            ?? throw new EntityNotFoundException<ApplicationUser>(user.Id);
+                           ?? throw new EntityNotFoundException<ApplicationUser>(user.Id);
         UserStore.Remove(existingUser);
         UserStore.Add(user);
         return IdentityResult.Success;

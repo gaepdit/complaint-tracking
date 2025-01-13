@@ -1,4 +1,3 @@
-using Cts.Domain.Identity;
 using Cts.LocalRepository.Identity;
 using System.Diagnostics;
 
@@ -6,7 +5,7 @@ namespace LocalRepositoryTests.Identity;
 
 public class UserRoleStore
 {
-    private LocalUserStore _store = default!;
+    private LocalUserStore _store = null!;
 
     [SetUp]
     public void SetUp() => _store = RepositoryHelper.GetLocalUserStore();
@@ -36,6 +35,7 @@ public class UserRoleStore
         var user = _store.UserStore.First();
         var roleName = _store.Roles.First().Name;
         Debug.Assert(roleName != null, "role.NormalizedName != null");
+        await _store.AddToRoleAsync(user, roleName, CancellationToken.None);
         var resultBefore = await _store.IsInRoleAsync(user, roleName, CancellationToken.None);
 
         await _store.RemoveFromRoleAsync(user, roleName, CancellationToken.None);
@@ -50,12 +50,15 @@ public class UserRoleStore
     public async Task GetRoles_ReturnsListOfRoles()
     {
         var user = _store.UserStore.First();
-
+        var roleName = _store.Roles.First().Name;
+        Debug.Assert(roleName != null, "role.NormalizedName != null");
+        await _store.AddToRoleAsync(user, roleName, CancellationToken.None);
+        
         var result = await _store.GetRolesAsync(user, CancellationToken.None);
 
         using var scope = new AssertionScope();
         result.Should().NotBeNull();
-        result.Should().HaveCount(_store.Roles.Count);
+        result.Should().HaveCount(1);
     }
 
     [Test]
@@ -76,7 +79,10 @@ public class UserRoleStore
         var user = _store.UserStore.First();
         var roleName = _store.Roles.First().Name;
         Debug.Assert(roleName != null, "role.NormalizedName != null");
+        await _store.AddToRoleAsync(user, roleName, CancellationToken.None);
+        
         var result = await _store.IsInRoleAsync(user, roleName, CancellationToken.None);
+        
         result.Should().BeTrue();
     }
 
@@ -93,12 +99,16 @@ public class UserRoleStore
     [Test]
     public async Task GetUsersInRole_IfSome_ReturnsListOfUsers()
     {
-        using var store = new LocalUserStore();
-        var result = await store.GetUsersInRoleAsync(RoleName.DivisionManager, CancellationToken.None);
+        var user = _store.UserStore.First();
+        var roleName = _store.Roles.First().Name;
+        Debug.Assert(roleName != null, "role.NormalizedName != null");
+        await _store.AddToRoleAsync(user, roleName, CancellationToken.None);
+        
+        var result = await _store.GetUsersInRoleAsync(roleName, CancellationToken.None);
 
         using var scope = new AssertionScope();
         result.Should().HaveCount(1);
-        result[0].Should().BeEquivalentTo(store.UserStore.First(),
+        result[0].Should().BeEquivalentTo(_store.UserStore.First(),
             options => options.Excluding(e => e.Office));
     }
 

@@ -1,6 +1,4 @@
 using Cts.AppServices.Permissions.Helpers;
-using Cts.AppServices.Staff;
-using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Identity;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.AccountValidation;
@@ -19,7 +17,6 @@ public class ExternalLoginModel(
     SignInManager<ApplicationUser> signInManager,
     UserManager<ApplicationUser> userManager,
     IConfiguration configuration,
-    IStaffService staffService,
     ILogger<ExternalLoginModel> logger)
     : PageModel
 {
@@ -46,28 +43,18 @@ public class ExternalLoginModel(
 
     private async Task<IActionResult> SignInAsLocalUser()
     {
-        logger.LogInformation(
-            "Local user signin attempted with settings {LocalUserIsAuthenticated}, {LocalUserIsAdmin}, and {LocalUserIsStaff}",
-            AppSettings.DevSettings.LocalUserIsAuthenticated.ToString(),
-            AppSettings.DevSettings.LocalUserIsAdmin.ToString(),
-            AppSettings.DevSettings.LocalUserIsStaff.ToString());
+        logger.LogInformation("Local user signin attempted with setting {LocalUserIsAuthenticated}",
+            AppSettings.DevSettings.LocalUserIsAuthenticated.ToString());
+
         if (!AppSettings.DevSettings.LocalUserIsAuthenticated) return Forbid();
 
-        StaffSearchDto search;
+        var user = await userManager.FindByIdAsync("00000000-0000-0000-0000-000000000001");
+        logger.LogInformation("Local user with ID {StaffId} signed in", user!.Id);
 
-        if (AppSettings.DevSettings.LocalUserIsAdmin)
-            search = new StaffSearchDto(SortBy.NameAsc, "Admin", null, null, null, null);
-        else if (AppSettings.DevSettings.LocalUserIsStaff)
-            search = new StaffSearchDto(SortBy.NameAsc, "General", null, null, null, null);
-        else
-            search = new StaffSearchDto(SortBy.NameAsc, "Limited", null, null, null, null);
+        foreach (var pair in AppRole.AllRoles) await userManager.RemoveFromRoleAsync(user, pair.Value.Name);
+        foreach (var role in AppSettings.DevSettings.LocalUserRoles) await userManager.AddToRoleAsync(user, role);
 
-        var staffId = (await staffService.GetListAsync(search))[0].Id;
-
-        var user = await userManager.FindByIdAsync(staffId);
-        logger.LogInformation("Local user with ID {StaffId} signed in", staffId);
-
-        await signInManager.SignInAsync(user!, false);
+        await signInManager.SignInAsync(user, false);
         return LocalRedirectOrHome();
     }
 
@@ -176,25 +163,32 @@ public class ExternalLoginModel(
 
         logger.LogInformation("Created new user with object ID {ObjectId}", user.ObjectIdentifier);
 
-        // Add new user to application Roles if seeded in app settings or local admin user setting is enabled.
-        var seedAdminUsers = configuration.GetSection("SeedAdminUsers").Get<string[]>();
-        if (AppSettings.DevSettings.LocalUserIsStaff)
-        {
-            logger.LogInformation("Seeding staff role for new user with object ID {ObjectId}", user.ObjectIdentifier);
-            await userManager.AddToRoleAsync(user, RoleName.Staff);
-        }
-
-        if (AppSettings.DevSettings.LocalUserIsAdmin ||
-            (seedAdminUsers != null && seedAdminUsers.Contains(user.Email, StringComparer.InvariantCultureIgnoreCase)))
-        {
-            logger.LogInformation("Seeding all roles for new user with object ID {ObjectId}", user.ObjectIdentifier);
-            foreach (var role in AppRole.AllRoles) await userManager.AddToRoleAsync(user, role.Key);
-        }
+        await SeedRolesAsync(user);
 
         // Add the external provider info to the user and sign in.
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success,
             "Your account has successfully been created. Select “Edit Profile” to update your info.");
         return await AddLoginProviderAndSignInAsync(user, info, newUser: true);
+    }
+
+    private async Task SeedRolesAsync(ApplicationUser user)
+    {
+        // Add new user to application Roles if seeded in app settings.
+        var settings = new List<SeedUserRoles>();
+        configuration.GetSection(nameof(SeedUserRoles)).Bind(settings);
+        var roles = settings.SingleOrDefault(userRoles =>
+            userRoles.User.Equals(user.Email, StringComparison.InvariantCultureIgnoreCase))?.Roles;
+        if (roles is not null)
+        {
+            logger.LogInformation("Seeding roles for new user with object ID {ObjectId}", user.ObjectIdentifier);
+            foreach (var role in roles) await userManager.AddToRoleAsync(user, role);
+        }
+    }
+
+    private sealed class SeedUserRoles
+    {
+        public string User { get; init; } = string.Empty;
+        public List<string> Roles { get; init; } = null!;
     }
 
     // Update local store with from external provider. 
