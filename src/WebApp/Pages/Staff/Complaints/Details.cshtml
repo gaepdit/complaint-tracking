@@ -51,7 +51,7 @@
 @if (Model.UserCan[ComplaintOperation.ViewAsOwner])
 {
     var calloutClass = Model.UserCan[ComplaintOperation.Accept] ? "callout-info" : "";
-    <div class="callout @calloutClass">
+    <div class="callout @calloutClass" id="vue-accept">
         <div class="row justify-content-between align-items-center g-0">
             <div class="col">
                 This Complaint was assigned to you on @Html.DisplayFor(model => model.ComplaintView.CurrentOwnerAssignedDate, DisplayTemplate.LongDateTimeOrNotEntered).
@@ -62,10 +62,23 @@
             </div>
             @if (Model.UserCan[ComplaintOperation.Accept])
             {
+                <!-- Vue-driven button -->
                 <div class="col-auto d-print-none ms-3">
-                    <form asp-page-handler="Accept" class="d-inline-block">
-                        <button type="submit" class="btn btn-primary me-2">Accept</button>
-                    </form>
+                    <!-- If not accepted yet, show "Accept" -->
+                    <button 
+                        v-if="!accepted" 
+                        v-on:click="acceptComplaint" 
+                        class="btn btn-primary me-2">
+                        Accept
+                    </button>
+
+                    <a 
+                        v-else 
+                        asp-page="Edit" 
+                        asp-route-id="@Model.ComplaintView.Id" 
+                        class="btn btn-outline-primary me-2">
+                        Edit details
+                    </a>
                 </div>
             }
         </div>
@@ -516,6 +529,41 @@ else
     <script src="~/js/fileUpload.js"></script>
     <script src="~/js/table-of-contents.js" defer></script>
     <partial name="_FancyboxScriptsPartial" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+    const { createApp, ref } = Vue;
+
+    createApp({
+      setup() {
+        const accepted = ref(@(Model.ComplaintView.CurrentOwnerAcceptedDate != null ? "true" : "false"));
+
+        // The ID of the complaint
+        const complaintId = @(Model.ComplaintView.Id);
+
+        // Accept the complaint when the button is clicked
+        function acceptComplaint() {
+
+          const url = `?handler=Accept&id=${complaintId}`;
+
+          axios.post(url)
+            .then(response => {
+              if (response.data.success) {
+                accepted.value = true;
+              } else {
+                console.error("Accept failed:", response.data.message);
+              }
+            })
+            .catch(error => {
+              console.error("Accept error:", error);
+            });
+        }
+
+        return { accepted, acceptComplaint };
+      }
+    }).mount('#vue-accept'); // Vue root = #vue-accept
+    </script>
 }
 
 @section Styles

@@ -68,17 +68,17 @@ public class DetailsModel(
     /// OnPostAccept is used for the current user to accept the Complaint.
     public async Task<IActionResult> OnPostAcceptAsync(int? id, CancellationToken token)
     {
-        if (id is null) return BadRequest();
+        if (id is null) return new JsonResult(new { success = false, message = "No complaint ID provided." });
 
         var complaintView = await complaintService.FindAsync(id.Value, includeDeletedActions: true, token);
-        if (complaintView is null || complaintView.IsDeleted) return BadRequest();
+        if (complaintView is null || complaintView.IsDeleted) return new JsonResult(new { success = false, message = "Complaint not found or is deleted." });
 
         await SetPermissionsAsync(complaintView);
-        if (!UserCan[ComplaintOperation.Accept]) return BadRequest();
+        if (!UserCan[ComplaintOperation.Accept]) return new JsonResult(new { success = false, message = "Not allowed to Accept." });
 
         await complaintService.AcceptAsync(id.Value, token);
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "Complaint accepted.");
-        return RedirectToPage("Details", routeValues: new { id });
+        return new JsonResult(new { success = true, message = "Complaint accepted." });
     }
 
     /// PostNewAction is used to add a new Action for this Complaint.
