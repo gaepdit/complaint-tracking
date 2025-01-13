@@ -35,6 +35,7 @@ public class NotificationService(
         baseUrl ??= string.Empty;
         var complaintUrl = $"{baseUrl}Staff/Complaints/Details/{complaint.Id}";
         var subject = string.Format($"{subjectPrefix} {template.Subject}", complaint.Id.ToString());
+        comment = string.IsNullOrWhiteSpace(comment) ? "No comment entered." : comment;
         var textBody = string.Format(template.TextBody + Template.TextSignature, complaint.Id.ToString(),
             complaintUrl, baseUrl, complaint.CurrentOffice.Name, comment);
         var htmlBody = string.Format(template.HtmlBody + Template.HtmlSignature, complaint.Id.ToString(),
