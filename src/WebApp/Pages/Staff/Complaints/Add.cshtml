@@ -262,9 +262,9 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script src="~/js/copyContactInfo.js" asp-append-version="true"></script>
+    <script src="~/js/copyContactInfo.js"></script>
     <partial name="_StaffSelectScriptsPartial" />
-    <script src="~/js/fileUpload.js" asp-append-version="true"></script>
+    <script src="~/js/fileUpload.js"></script>
     <script>
         setUpStaffDropdown(
             "@nameof(Model.Item)_@nameof(ComplaintCreateDto.OfficeId)",

@@ -19,12 +19,13 @@ internal static partial class AppSettings
         LocalUserIsStaff = false,
         LocalUserIsAdmin = false,
         UseSecurityHeadersInDev = false,
+        EnableWebOptimizer = true,
     };
 
     public record DevSettingsSection
     {
         /// <summary>
-        /// Equals `true` when dev settings are in use, otherwise `false`.
+        /// Set to `true` to enable the development settings.
         /// </summary>
         public bool UseDevSettings { get; [UsedImplicitly] init; }
 
@@ -75,5 +76,10 @@ internal static partial class AppSettings
         /// Sets whether to include HTTP security headers when running locally in the Development environment.
         /// </summary>
         public bool UseSecurityHeadersInDev { get; [UsedImplicitly] init; }
+
+        /// <summary>
+        /// Sets whether to use WebOptimizer to bundle and minify CSS and JS files.
+        /// </summary>
+        public bool EnableWebOptimizer { get; [UsedImplicitly] init; }
     }
 }
