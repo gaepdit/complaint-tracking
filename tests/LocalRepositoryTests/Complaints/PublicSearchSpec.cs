@@ -10,8 +10,8 @@ namespace LocalRepositoryTests.Complaints;
 
 public class PublicSearchSpec
 {
-    private LocalComplaintRepository _repository = default!;
-    private Complaint _referenceItem = default!;
+    private LocalComplaintRepository _repository;
+    private Complaint _referenceItem;
 
     [SetUp]
     public void SetUp()

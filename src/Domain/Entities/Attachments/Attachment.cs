@@ -14,7 +14,7 @@ public class Attachment : AuditableSoftDeleteEntity
 
     // Properties
 
-    public required Complaint Complaint { get; init; } = default!;
+    public required Complaint Complaint { get; init; }
 
     [StringLength(245)]
     public required string FileName { get; init; } = string.Empty;

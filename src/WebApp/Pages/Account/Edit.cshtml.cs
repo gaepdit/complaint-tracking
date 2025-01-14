@@ -14,11 +14,11 @@ public class EditModel(IStaffService staffService, IOfficeService officeService,
     : PageModel
 {
     [BindProperty]
-    public StaffUpdateDto UpdateStaff { get; set; } = default!;
+    public StaffUpdateDto UpdateStaff { get; set; } = null!;
 
-    public StaffViewDto DisplayStaff { get; private set; } = default!;
+    public StaffViewDto DisplayStaff { get; private set; } = null!;
 
-    public SelectList OfficeSelectList { get; private set; } = default!;
+    public SelectList OfficeSelectList { get; private set; } = null!;
 
     public async Task<IActionResult> OnGetAsync()
     {

@@ -7,7 +7,7 @@ namespace Cts.WebApp.Pages.Admin.Maintenance.Concerns;
 [Authorize(Policy = nameof(Policies.ActiveUser))]
 public class IndexModel : PageModel
 {
-    public IReadOnlyList<ConcernViewDto> Items { get; private set; } = default!;
+    public IReadOnlyList<ConcernViewDto> Items { get; private set; } = null!;
     public static MaintenanceOption ThisOption => MaintenanceOption.Concern;
     public bool IsSiteMaintainer { get; private set; }
 

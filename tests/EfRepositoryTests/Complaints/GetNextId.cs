@@ -4,7 +4,7 @@ namespace EfRepositoryTests.Complaints;
 
 public class GetNextId
 {
-    private IComplaintRepository _repository = default!;
+    private IComplaintRepository _repository;
 
     [SetUp]
     public void SetUp() => _repository = RepositoryHelper.CreateRepositoryHelper().GetComplaintRepository();

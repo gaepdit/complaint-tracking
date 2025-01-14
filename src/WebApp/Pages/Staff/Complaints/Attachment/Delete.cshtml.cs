@@ -17,7 +17,7 @@ public class AttachmentDeleteModel(IAttachmentService attachmentService, IAuthor
     [BindProperty]
     public Guid AttachmentId { get; set; }
 
-    public AttachmentViewDto AttachmentView { get; private set; } = default!;
+    public AttachmentViewDto AttachmentView { get; private set; } = null!;
     public int ComplaintId { get; set; }
 
     public async Task<IActionResult> OnGetAsync(Guid? attachmentId)

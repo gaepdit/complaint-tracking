@@ -7,8 +7,8 @@ namespace EfRepositoryTests.Complaints;
 
 public class PublicSearchSpec
 {
-    private IComplaintRepository _repository = default!;
-    private Complaint _referenceItem = default!;
+    private IComplaintRepository _repository;
+    private Complaint _referenceItem;
 
     [SetUp]
     public void SetUp()

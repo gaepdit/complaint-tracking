@@ -9,7 +9,7 @@ namespace LocalRepositoryTests.Complaints;
 
 public class SearchSpec
 {
-    private LocalComplaintRepository _repository = default!;
+    private LocalComplaintRepository _repository;
 
     [SetUp]
     public void SetUp() => _repository = new LocalComplaintRepository(Substitute.For<IAttachmentRepository>(),

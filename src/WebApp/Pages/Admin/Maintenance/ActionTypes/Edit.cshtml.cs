@@ -13,7 +13,7 @@ public class EditModel(IActionTypeService service, IValidator<ActionTypeUpdateDt
     public Guid Id { get; set; }
 
     [BindProperty]
-    public ActionTypeUpdateDto Item { get; set; } = default!;
+    public ActionTypeUpdateDto Item { get; set; } = null!;
 
     [BindProperty]
     public string OriginalName { get; set; } = string.Empty;

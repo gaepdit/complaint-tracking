@@ -9,7 +9,7 @@ public record ActionViewDto
     public int ComplaintId { get; [UsedImplicitly] init; }
 
     [Display(Name = "Action Type")]
-    public string ActionTypeName { get; init; } = default!;
+    public string ActionTypeName { get; init; } = string.Empty;
 
     [Display(Name = "Action Date")]
     public DateOnly ActionDate { get; init; }

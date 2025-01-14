@@ -14,9 +14,9 @@ public class ApproveModel(IComplaintService complaintService, IAuthorizationServ
     : PageModel
 {
     [BindProperty]
-    public ComplaintClosureDto ComplaintClosure { get; set; } = default!;
+    public ComplaintClosureDto ComplaintClosure { get; set; } = null!;
 
-    public ComplaintViewDto ComplaintView { get; private set; } = default!;
+    public ComplaintViewDto ComplaintView { get; private set; } = null!;
 
     public async Task<IActionResult> OnGetAsync(int? id)
     {

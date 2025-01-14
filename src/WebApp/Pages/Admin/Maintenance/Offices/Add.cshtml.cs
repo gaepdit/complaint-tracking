@@ -13,14 +13,14 @@ public class AddModel(IOfficeService officeService, IStaffService staffService, 
     : PageModel
 {
     [BindProperty]
-    public OfficeCreateDto Item { get; set; } = default!;
+    public OfficeCreateDto Item { get; set; } = null!;
 
     [TempData]
     public Guid HighlightId { get; set; }
 
     public static MaintenanceOption ThisOption => MaintenanceOption.Office;
 
-    public SelectList ActiveStaffMembersSelectList { get; private set; } = default!;
+    public SelectList ActiveStaffMembersSelectList { get; private set; } = null!;
 
     public async Task<IActionResult> OnGetAsync()
     {

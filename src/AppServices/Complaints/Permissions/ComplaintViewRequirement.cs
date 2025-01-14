@@ -12,8 +12,8 @@ namespace Cts.AppServices.Complaints.Permissions;
 internal class ComplaintViewRequirement :
     AuthorizationHandler<ComplaintOperation, ComplaintViewDto>
 {
-    private ClaimsPrincipal _user = default!;
-    private ComplaintViewDto _resource = default!;
+    private ClaimsPrincipal _user = null!;
+    private ComplaintViewDto _resource = null!;
 
     protected override Task HandleRequirementAsync(
         AuthorizationHandlerContext context,
