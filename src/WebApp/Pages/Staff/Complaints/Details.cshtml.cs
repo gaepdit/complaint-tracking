@@ -27,18 +27,18 @@ public class DetailsModel(
     IAuthorizationService authorization)
     : PageModel
 {
-    public ComplaintViewDto ComplaintView { get; private set; } = default!;
+    public ComplaintViewDto ComplaintView { get; private set; } = null!;
     public Dictionary<IAuthorizationRequirement, bool> UserCan { get; private set; } = new();
 
-    public ActionCreateDto NewAction { get; set; } = default!;
+    public ActionCreateDto NewAction { get; set; } = null!;
 
-    public AttachmentsUploadDto FileUploads { get; set; } = default!;
+    public AttachmentsUploadDto FileUploads { get; set; } = null!;
 
     [TempData]
     public Guid HighlightId { get; set; }
 
     public string? ValidatingSection { get; private set; }
-    public SelectList ActionItemTypeSelectList { get; private set; } = default!;
+    public SelectList ActionItemTypeSelectList { get; private set; } = null!;
     public bool ShowHistoryNotification => ComplaintView.EarliestTransition < DomainConstants.OracleMigrationDate;
 
     public bool ViewableActions => ComplaintView.Actions.Exists(action =>

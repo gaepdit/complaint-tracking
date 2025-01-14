@@ -10,7 +10,7 @@ namespace Cts.WebApp.Pages.Admin.Maintenance.ActionTypes;
 public class AddModel : PageModel
 {
     [BindProperty]
-    public ActionTypeCreateDto Item { get; set; } = default!;
+    public ActionTypeCreateDto Item { get; set; } = null!;
 
     [TempData]
     public Guid HighlightId { get; set; }

@@ -16,7 +16,7 @@ public class EditModel(IOfficeService officeService, IStaffService staffService,
     public Guid Id { get; set; }
 
     [BindProperty]
-    public OfficeUpdateDto Item { get; set; } = default!;
+    public OfficeUpdateDto Item { get; set; } = null!;
 
     [BindProperty]
     public string OriginalName { get; set; } = string.Empty;
@@ -26,7 +26,7 @@ public class EditModel(IOfficeService officeService, IStaffService staffService,
 
     public static MaintenanceOption ThisOption => MaintenanceOption.Office;
 
-    public SelectList ActiveStaffMembersSelectList { get; private set; } = default!;
+    public SelectList ActiveStaffMembersSelectList { get; private set; } = null!;
 
     public async Task<IActionResult> OnGetAsync(Guid? id)
     {

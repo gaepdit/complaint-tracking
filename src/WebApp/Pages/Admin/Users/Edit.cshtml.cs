@@ -17,11 +17,11 @@ public class EditModel(IStaffService staffService, IOfficeService officeService,
     public Guid Id { get; set; }
 
     [BindProperty]
-    public StaffUpdateDto Item { get; set; } = default!;
+    public StaffUpdateDto Item { get; set; } = null!;
 
-    public StaffViewDto DisplayStaff { get; private set; } = default!;
+    public StaffViewDto DisplayStaff { get; private set; } = null!;
 
-    public SelectList OfficesSelectList { get; private set; } = default!;
+    public SelectList OfficesSelectList { get; private set; } = null!;
 
     public async Task<IActionResult> OnGetAsync(string? id)
     {

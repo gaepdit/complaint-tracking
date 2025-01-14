@@ -7,7 +7,7 @@ namespace Cts.WebApp.Pages.Admin.Maintenance.ActionTypes;
 [Authorize(Policy = nameof(Policies.ActiveUser))]
 public class IndexModel : PageModel
 {
-    public IReadOnlyList<ActionTypeViewDto> Items { get; private set; } = default!;
+    public IReadOnlyList<ActionTypeViewDto> Items { get; private set; } = null!;
     public static MaintenanceOption ThisOption => MaintenanceOption.ActionType;
     public bool IsSiteMaintainer { get; private set; }
 

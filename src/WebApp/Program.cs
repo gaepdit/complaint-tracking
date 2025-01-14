@@ -100,7 +100,10 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 // Configure bundling and minification.
-builder.Services.AddWebOptimizer(!builder.Environment.IsDevelopment());
+builder.Services.AddWebOptimizer(
+    minifyJavaScript: AppSettings.DevSettings.EnableWebOptimizer,
+    minifyCss: AppSettings.DevSettings.EnableWebOptimizer);
+
 // Build the application.
 var app = builder.Build();
 

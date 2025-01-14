@@ -21,11 +21,11 @@ public class ReturnModel(
 ) : PageModel
 {
     [BindProperty]
-    public ComplaintAssignmentDto ComplaintAssignment { get; set; } = default!;
+    public ComplaintAssignmentDto ComplaintAssignment { get; set; } = null!;
 
-    public ComplaintViewDto ComplaintView { get; private set; } = default!;
-    public SelectList OfficesSelectList { get; private set; } = default!;
-    public SelectList StaffSelectList { get; private set; } = default!;
+    public ComplaintViewDto ComplaintView { get; private set; } = null!;
+    public SelectList OfficesSelectList { get; private set; } = null!;
+    public SelectList StaffSelectList { get; private set; } = null!;
 
     public async Task<IActionResult> OnGetAsync(int? id)
     {

@@ -5,7 +5,7 @@ namespace EfRepositoryTests.Offices;
 
 public class GetActiveStaffMembersList
 {
-    private IOfficeRepository _repository = default!;
+    private IOfficeRepository _repository;
 
     [SetUp]
     public void SetUp() => _repository = RepositoryHelper.CreateRepositoryHelper().GetOfficeRepository();

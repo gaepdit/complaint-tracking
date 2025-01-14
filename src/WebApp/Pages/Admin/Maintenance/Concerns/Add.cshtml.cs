@@ -10,7 +10,7 @@ namespace Cts.WebApp.Pages.Admin.Maintenance.Concerns;
 public class AddModel : PageModel
 {
     [BindProperty]
-    public ConcernCreateDto Item { get; set; } = default!;
+    public ConcernCreateDto Item { get; set; } = null!;
 
     [TempData]
     public Guid HighlightId { get; set; }

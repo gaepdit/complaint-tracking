@@ -5,7 +5,7 @@ namespace Cts.AppServices.ComplaintActions.Dto;
 public record ActionSearchResultDto
 {
     public int ComplaintId { get; init; }
-    public string ActionTypeName { get; init; } = default!;
+    public string ActionTypeName { get; init; } = string.Empty;
     public DateOnly ActionDate { get; init; }
     public string? Investigator { get; init; }
     public StaffViewDto? EnteredBy { get; init; }

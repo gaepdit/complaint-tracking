@@ -13,7 +13,7 @@ internal static partial class UserData
         {
             if (_roles is not null) return _roles;
             _roles = AppRole.AllRoles
-                .Select(r => new IdentityRole(r.Value.Name) { NormalizedName = r.Key.ToUpperInvariant() })
+                .Select(pair => new IdentityRole(pair.Value.Name) { NormalizedName = pair.Key.ToUpperInvariant() })
                 .ToList();
             return _roles;
         }

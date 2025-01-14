@@ -20,10 +20,10 @@ public class RequestReviewModel(
 ) : PageModel
 {
     [BindProperty]
-    public ComplaintRequestReviewDto ComplaintRequestReview { get; set; } = default!;
+    public ComplaintRequestReviewDto ComplaintRequestReview { get; set; } = null!;
 
-    public ComplaintViewDto ComplaintView { get; private set; } = default!;
-    public SelectList ReviewersSelectList { get; private set; } = default!;
+    public ComplaintViewDto ComplaintView { get; private set; } = null!;
+    public SelectList ReviewersSelectList { get; private set; } = null!;
 
     public async Task<IActionResult> OnGetAsync(int? id)
     {

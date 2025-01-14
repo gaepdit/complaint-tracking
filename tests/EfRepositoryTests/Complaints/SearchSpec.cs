@@ -7,7 +7,7 @@ namespace EfRepositoryTests.Complaints;
 
 public class SearchSpec
 {
-    private IComplaintRepository _repository = default!;
+    private IComplaintRepository _repository;
 
     [SetUp]
     public void SetUp() =>
@@ -163,8 +163,8 @@ public class SearchSpec
     public async Task ReceivedDateSpec_ReturnsFilteredList()
     {
         await using var repository = RepositoryHelper.CreateSqlServerRepositoryHelper(this).GetComplaintRepository();
-        
-        var referenceItem = ComplaintData.GetComplaints.First(e=>!e.IsDeleted);
+
+        var referenceItem = ComplaintData.GetComplaints.First(e => !e.IsDeleted);
 
         var spec = new ComplaintSearchDto
         {

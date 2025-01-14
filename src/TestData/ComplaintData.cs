@@ -163,12 +163,12 @@ internal static class ComplaintData
         {
             ComplaintNature = "Open complaint assigned to inactive user.",
             Status = ComplaintStatus.New,
-            EnteredBy = UserData.GetUsers.ElementAt(3),
+            EnteredBy = UserData.GetUsers.ElementAt(2),
             ReceivedDate = DateTimeOffset.Now.AddDays(-1),
             ReceivedBy = UserData.GetUsers.ElementAt(1),
             PrimaryConcern = ConcernData.GetConcerns.ElementAt(2),
             CurrentOffice = OfficeData.GetOffices.ElementAt(0),
-            CurrentOwner = UserData.GetUsers.ElementAt(3),
+            CurrentOwner = UserData.GetUsers.ElementAt(2),
             CurrentOwnerAssignedDate = DateTimeOffset.Now.AddDays(-4),
         },
     };

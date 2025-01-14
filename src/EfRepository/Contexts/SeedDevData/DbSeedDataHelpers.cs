@@ -1,7 +1,5 @@
-using Cts.Domain.Identity;
 using Cts.TestData;
 using Cts.TestData.Identity;
-using Microsoft.AspNetCore.Identity;
 
 namespace Cts.EfRepository.Contexts.SeedDevData;
 
@@ -48,7 +46,7 @@ public static class DbSeedDataHelpers
         context.SaveChanges();
     }
 
-    public static void SeedConcernData(AppDbContext context)
+    private static void SeedConcernData(AppDbContext context)
     {
         if (context.Concerns.Any()) return;
         context.Concerns.AddRange(ConcernData.GetConcerns);
@@ -71,31 +69,6 @@ public static class DbSeedDataHelpers
         // Seed Roles
         var roles = UserData.GetRoles.ToList();
         if (!context.Roles.Any()) context.Roles.AddRange(roles);
-
-        // Seed User Roles
-        if (!context.UserRoles.Any())
-        {
-            // -- admin
-            var adminUserRoles = roles
-                .Select(role => new IdentityUserRole<string>
-                    { RoleId = role.Id, UserId = users.Single(e => e.GivenName == "Admin").Id })
-                .ToList();
-            context.UserRoles.AddRange(adminUserRoles);
-
-            // -- staff
-            var staffUserId = users.Single(e => e.GivenName == "General").Id;
-            context.UserRoles.AddRange(
-                new IdentityUserRole<string>
-                {
-                    RoleId = roles.Single(e => e.Name == RoleName.SiteMaintenance).Id,
-                    UserId = staffUserId,
-                },
-                new IdentityUserRole<string>
-                {
-                    RoleId = roles.Single(e => e.Name == RoleName.Staff).Id,
-                    UserId = staffUserId,
-                });
-        }
 
         // Seed Office Assignor data
         var offices = context.Offices.ToList();

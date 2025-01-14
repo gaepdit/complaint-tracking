@@ -17,9 +17,9 @@ public class EditRolesModel(IStaffService staffService, IAuthorizationService au
     [BindProperty]
     public List<RoleSetting> RoleSettings { get; set; } = [];
 
-    public StaffViewDto DisplayStaff { get; private set; } = default!;
+    public StaffViewDto DisplayStaff { get; private set; } = null!;
     public string? OfficeName => DisplayStaff.Office?.Name;
-    public bool CanEditWithElevatedPriviledge { get; private set; }
+    public bool CanEditWithElevatedPrivilege { get; private set; }
 
     public async Task<IActionResult> OnGetAsync(string? id)
     {
@@ -29,7 +29,7 @@ public class EditRolesModel(IStaffService staffService, IAuthorizationService au
 
         DisplayStaff = staff;
         UserId = id;
-        CanEditWithElevatedPriviledge = await authorization.Succeeded(User, Policies.SuperUserAdministrator);
+        CanEditWithElevatedPrivilege = await authorization.Succeeded(User, Policies.SuperUserAdministrator);
 
         await PopulateRoleSettingsAsync();
         return Page();
@@ -72,9 +72,9 @@ public class EditRolesModel(IStaffService staffService, IAuthorizationService au
 
     public class RoleSetting
     {
-        public string Name { get; init; } = default!;
-        public string DisplayName { get; init; } = default!;
-        public string Description { get; init; } = default!;
+        public string Name { get; init; } = string.Empty;
+        public string DisplayName { get; init; } = string.Empty;
+        public string Description { get; init; } = string.Empty;
         public bool IsSelected { get; init; }
     }
 }

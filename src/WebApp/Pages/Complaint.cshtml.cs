@@ -10,7 +10,7 @@ public class ComplaintModel(
     [FromServices] IComplaintService service,
     [FromServices] IAuthorizationService authorization) : PageModel
 {
-    public ComplaintPublicViewDto Item { get; private set; } = default!;
+    public ComplaintPublicViewDto Item { get; private set; } = null!;
     public bool UserIsActive { get; private set; }
 
     public async Task<IActionResult> OnGetAsync(int? id)

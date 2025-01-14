@@ -24,13 +24,13 @@ public class EditActionModel(
     public Guid ActionItemId { get; set; }
 
     [BindProperty]
-    public ActionUpdateDto ActionItemUpdate { get; set; } = default!;
+    public ActionUpdateDto ActionItemUpdate { get; set; } = null!;
 
     [TempData]
     public Guid HighlightId { get; set; }
 
-    public ComplaintViewDto ComplaintView { get; private set; } = default!;
-    public SelectList ActionItemTypeSelectList { get; private set; } = default!;
+    public ComplaintViewDto ComplaintView { get; private set; } = null!;
+    public SelectList ActionItemTypeSelectList { get; private set; } = null!;
 
     public async Task<IActionResult> OnGetAsync(Guid? actionId)
     {

@@ -13,7 +13,7 @@ public class EditModel(IConcernService service, IValidator<ConcernUpdateDto> val
     public Guid Id { get; set; }
 
     [BindProperty]
-    public ConcernUpdateDto Item { get; set; } = default!;
+    public ConcernUpdateDto Item { get; set; } = null!;
 
     [BindProperty]
     public string OriginalName { get; set; } = string.Empty;

@@ -12,8 +12,8 @@ namespace Cts.AppServices.Complaints.Permissions;
 public class ComplaintUpdateRequirement :
     AuthorizationHandler<ComplaintUpdateRequirement, ComplaintUpdateDto>, IAuthorizationRequirement
 {
-    private ClaimsPrincipal _user = default!;
-    private ComplaintUpdateDto _resource = default!;
+    private ClaimsPrincipal _user = null!;
+    private ComplaintUpdateDto _resource = null!;
 
     protected override Task HandleRequirementAsync(
         AuthorizationHandlerContext context,
