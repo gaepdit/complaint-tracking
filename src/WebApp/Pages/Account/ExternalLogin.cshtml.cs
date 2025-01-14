@@ -4,6 +4,7 @@ using Cts.WebApp.Models;
 using Cts.WebApp.Platform.AccountValidation;
 using Cts.WebApp.Platform.PageModelHelpers;
 using Cts.WebApp.Platform.Settings;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Identity;
@@ -187,8 +188,8 @@ public class ExternalLoginModel(
 
     private sealed class SeedUserRoles
     {
-        public string User { get; init; } = string.Empty;
-        public List<string> Roles { get; init; } = null!;
+        public string User { get; [UsedImplicitly] init; } = string.Empty;
+        public List<string> Roles { get; [UsedImplicitly] init; } = null!;
     }
 
     // Update local store with from external provider. 
