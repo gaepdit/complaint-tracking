@@ -66,7 +66,7 @@ public class DetailsModel(
     }
 
     /// OnPostAccept is used for the current user to accept the Complaint.
-    public async Task<IActionResult> OnPostAcceptAsync(int? id, CancellationToken token)
+    public async Task<JsonResult> OnPostAcceptAsync(int? id, CancellationToken token)
     {
         if (id is null) return new JsonResult(new { success = false, message = "No complaint ID provided." });
 
@@ -77,7 +77,6 @@ public class DetailsModel(
         if (!UserCan[ComplaintOperation.Accept]) return new JsonResult(new { success = false, message = "Not allowed to Accept." });
 
         await complaintService.AcceptAsync(id.Value, token);
-        TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "Complaint accepted.");
         return new JsonResult(new { success = true, message = "Complaint accepted." });
     }
 

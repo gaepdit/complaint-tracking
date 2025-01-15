@@ -5,10 +5,13 @@
 @using Cts.WebApp.Pages.Shared.DisplayTemplates
 @using Cts.WebApp.Pages.Shared.EditorTemplates
 @using GaEpd.AppLibrary.Extensions
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 @model DetailsModel
 @{
     ViewData["Title"] = $"Complaint ID {Model.ComplaintView.Id.ToString()}";
+    var requestToken = Antiforgery.GetAndStoreTokens(HttpContext).RequestToken;
 }
+<input id="RequestVerificationToken" type="hidden" value="@requestToken" />
 
 <div class="container-full">
     <div class="row justify-content-between align-items-baseline g-0 my-1">
@@ -533,36 +536,36 @@ else
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <script>
-    const { createApp, ref } = Vue;
+        const { createApp, ref } = Vue;
 
-    createApp({
-      setup() {
-        const accepted = ref(@(Model.ComplaintView.CurrentOwnerAcceptedDate != null ? "true" : "false"));
+        createApp({
+            setup() {
+                const accepted = ref(@(Model.ComplaintView.CurrentOwnerAcceptedDate != null ? "true" : "false"));
+                const url = `?handler=Accept`;
 
-        // The ID of the complaint
-        const complaintId = @(Model.ComplaintView.Id);
-
-        // Accept the complaint when the button is clicked
-        function acceptComplaint() {
-
-          const url = `?handler=Accept&id=${complaintId}`;
-
-          axios.post(url)
-            .then(response => {
-              if (response.data.success) {
-                accepted.value = true;
-              } else {
-                console.error("Accept failed:", response.data.message);
-              }
+                // Accept the complaint when the button is clicked
+                function acceptComplaint() {
+                    axios.post(url, null, {
+                            headers: {
+                                'RequestVerificationToken': document.getElementById('RequestVerificationToken').value
+                            }
+                        })
+                        .then(response => {
+                            if (response.data.success) {
+                                accepted.value = true;
+                                console.log("Accept successful:", response.data.message);
+                            } else {
+                                console.error("Accept failed:", response.data.message);
+                            }
             })
             .catch(error => {
               console.error("Accept error:", error);
-            });
-        }
+                        });
+                }
 
-        return { accepted, acceptComplaint };
-      }
-    }).mount('#vue-accept'); // Vue root = #vue-accept
+                return { accepted, acceptComplaint };
+            }
+        }).mount('#vue-accept'); // Vue root = #vue-accept
     </script>
 }
 

@@ -111,14 +111,14 @@ internal static class ComplaintData
         },
         new(6) // 4
         {
-            ComplaintNature = "Open complaint assigned to user.",
+            ComplaintNature = "Open complaint assigned to user, not accepted.",
             Status = ComplaintStatus.New,
             EnteredBy = UserData.GetUsers.ElementAt(1),
             ReceivedDate = DateTimeOffset.Now.AddDays(-1),
             ReceivedBy = UserData.GetUsers.ElementAt(1),
             PrimaryConcern = ConcernData.GetConcerns.ElementAt(2),
-            CurrentOffice = OfficeData.GetOffices.ElementAt(1),
-            CurrentOwner = UserData.GetUsers.ElementAt(1),
+            CurrentOffice = OfficeData.GetOffices.ElementAt(0),
+            CurrentOwner = UserData.GetUsers.ElementAt(0),
             CurrentOwnerAssignedDate = DateTimeOffset.Now.AddDays(-4),
         },
         new(7) // 5
