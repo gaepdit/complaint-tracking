@@ -7,7 +7,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/.artifacts/WebApp/bin/Debug/net8.0/WebApp.dll",
+            "program": "${workspaceFolder}/.artifacts/WebApp/bin/Debug/net9.0/WebApp.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/WebApp",
             "stopAtEntry": false,
