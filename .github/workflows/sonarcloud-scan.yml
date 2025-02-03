@@ -66,9 +66,9 @@ jobs:
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"gaepdit.complaint-tracking" /o:"gaepdit" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths=coverage.xml /d:sonar.exclusions=src/EfRepository/Migrations/**,src/TestData/**
           dotnet build
-          coverlet .\.artifacts\DomainTests\bin\Debug\net8.0\DomainTests.dll --target "dotnet" --targetargs "test tests/DomainTests --no-build" --exclude "[TestData]*"
-          coverlet .\.artifacts\EfRepositoryTests\bin\Debug\net8.0\EfRepositoryTests.dll --target "dotnet" --targetargs "test tests/EfRepositoryTests --no-build" --exclude "[TestData]*" --exclude "[EfRepository]Cts.EfRepository.Migrations.*" --merge-with "coverage.json"
-          coverlet .\.artifacts\LocalRepositoryTests\bin\Debug\net8.0\LocalRepositoryTests.dll --target "dotnet" --targetargs "test tests/LocalRepositoryTests --no-build" --exclude "[TestData]*" --merge-with "coverage.json"
-          coverlet .\.artifacts\AppServicesTests\bin\Debug\net8.0\AppServicesTests.dll --target "dotnet" --targetargs "test tests/AppServicesTests --no-build" --exclude "[TestData]*" --merge-with "coverage.json"
-          coverlet .\.artifacts\WebAppTests\bin\Debug\net8.0\WebAppTests.dll --target "dotnet" --targetargs "test tests/WebAppTests --no-build" --exclude "[TestData]*" --exclude "[EfRepository]Cts.EfRepository.Migrations.*" --merge-with "coverage.json" -f=opencover -o="coverage.xml"
+          coverlet .\.artifacts\DomainTests\bin\Debug\net9.0\DomainTests.dll --target "dotnet" --targetargs "test tests/DomainTests --no-build" --exclude "[TestData]*"
+          coverlet .\.artifacts\EfRepositoryTests\bin\Debug\net9.0\EfRepositoryTests.dll --target "dotnet" --targetargs "test tests/EfRepositoryTests --no-build" --exclude "[TestData]*" --exclude "[EfRepository]Cts.EfRepository.Migrations.*" --merge-with "coverage.json"
+          coverlet .\.artifacts\LocalRepositoryTests\bin\Debug\net9.0\LocalRepositoryTests.dll --target "dotnet" --targetargs "test tests/LocalRepositoryTests --no-build" --exclude "[TestData]*" --merge-with "coverage.json"
+          coverlet .\.artifacts\AppServicesTests\bin\Debug\net9.0\AppServicesTests.dll --target "dotnet" --targetargs "test tests/AppServicesTests --no-build" --exclude "[TestData]*" --merge-with "coverage.json"
+          coverlet .\.artifacts\WebAppTests\bin\Debug\net9.0\WebAppTests.dll --target "dotnet" --targetargs "test tests/WebAppTests --no-build" --exclude "[TestData]*" --exclude "[EfRepository]Cts.EfRepository.Migrations.*" --merge-with "coverage.json" -f=opencover -o="coverage.xml"
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"

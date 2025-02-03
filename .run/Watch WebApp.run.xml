@@ -1,9 +1,9 @@
 ﻿<component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Watch WebApp" type="RunDotNetWatch" factoryName="RunDotNetWatch">
-    <option name="exePath" value="$PROJECT_DIR$/.artifacts/WebApp/bin/Debug/net8.0/WebApp.exe" />
+    <option name="exePath" value="$PROJECT_DIR$/.artifacts/WebApp/bin/Debug/net9.0/WebApp.exe" />
     <option name="programParameters" value="" />
     <option name="projectFilePath" value="$PROJECT_DIR$/src/WebApp/WebApp.csproj" />
-    <option name="projectTfm" value="net8.0" />
+    <option name="projectTfm" value="net9.0" />
     <option name="restartOnRudeEditEditor" value="true" />
     <option name="watchParameters" value="" />
     <option name="workingDirectory" value="$PROJECT_DIR$/src/WebApp" />
