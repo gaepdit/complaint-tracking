@@ -1,3 +1,6 @@
+using AutoMapper;
+using Cts.AppServices.AutoMapper;
+
 namespace AppServicesTests.AutoMapper;
 
 public class AutoMapperConfiguration
@@ -5,6 +8,7 @@ public class AutoMapperConfiguration
     [Test]
     public void MappingConfigurationsAreValid()
     {
-        AppServicesTestsSetup.MapperConfig!.AssertConfigurationIsValid();
+        new MapperConfiguration(configure: configuration => configuration.AddProfile(new AutoMapperProfile()))
+            .AssertConfigurationIsValid();
     }
 }
