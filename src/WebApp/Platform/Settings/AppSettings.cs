@@ -17,6 +17,9 @@ internal static partial class AppSettings
         public string? InformationalVersion { get; set; }
         public string? InformationalBuild { get; set; }
     }
+    
+    // Organizational notifications
+    public static string? OrgNotificationsApiUrl { get; set; }
 
     // Raygun client settings
     public static RaygunClientSettings RaygunSettings { get; } = new();
