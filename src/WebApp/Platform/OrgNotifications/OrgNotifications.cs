@@ -5,7 +5,7 @@ namespace Cts.WebApp.Platform.OrgNotifications;
 
 // Organizational notifications
 
-public static class DataPersistence
+public static class OrgNotificationsServiceExtensions
 {
     public static void AddOrgNotifications(this IServiceCollection services)
     {
@@ -18,8 +18,7 @@ public interface IOrgNotifications
 {
     Task<List<OrgNotification>> FetchOrgNotificationsAsync();
 }
-
-public class OrgNotifications(IHttpClientFactory httpClientFactory) : IOrgNotifications
+public class OrgNotifications(IHttpClientFactory httpClientFactory, ILogger<OrgNotifications> logger) : IOrgNotifications
 {
     public async Task<List<OrgNotification>> FetchOrgNotificationsAsync()
     {
@@ -32,8 +31,9 @@ public class OrgNotifications(IHttpClientFactory httpClientFactory) : IOrgNotifi
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<List<OrgNotification>>() ?? [];
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            logger.LogError(ex, "Failed to fetch organizational notifications.");
             // If the API is unresponsive or other error occurs, no notifications will be displayed.
             return [];
         }
