@@ -24,6 +24,9 @@
             <DependentUpon>appsettings.json</DependentUpon>
             <CopyToPublishDirectory>Never</CopyToPublishDirectory>
         </Content>
+        <Content Update="appsettings.json">
+            <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+        </Content>
         <Content Update="libman.json">
             <CopyToOutputDirectory>Never</CopyToOutputDirectory>
             <CopyToPublishDirectory>Never</CopyToPublishDirectory>
