@@ -68,4 +68,5 @@ jobs:
           app-name: 'cts-demo'
           slot-name: 'Production'
           package: .
+          clean: true
           
