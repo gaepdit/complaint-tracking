@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Azure.Identity" />
         <PackageReference Include="LigerShark.WebOptimizer.Core" />
         <PackageReference Include="Microsoft.Azure.AppConfiguration.AspNetCore" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />

@@ -1,3 +1,4 @@
+using Azure.Identity;
 using Cts.AppServices.ErrorLogging;
 using Cts.AppServices.RegisterServices;
 using Cts.WebApp.Platform.AppConfiguration;
@@ -13,12 +14,8 @@ using Mindscape.Raygun4Net.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Use Azure App Configuration
-var configurationConnectionString =
-    builder.Configuration.GetConnectionString("AZURE_APPCONFIGURATION_CONNECTIONSTRING") ??
-    throw new InvalidOperationException("'AZURE_APPCONFIGURATION_CONNECTIONSTRING' was not found.");
-
-// Load configuration from Azure App Configuration
-builder.Configuration.AddAzureAppConfiguration(configurationConnectionString);
+builder.Configuration.AddAzureAppConfiguration(options =>
+    options.Connect(new Uri("https://cts-demo-config.azconfig.io"), new ManagedIdentityCredential()));
 
 // Set default timeout for regular expressions.
 // https://learn.microsoft.com/en-us/dotnet/standard/base-types/best-practices#use-time-out-values

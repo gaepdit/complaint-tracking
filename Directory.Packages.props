@@ -6,6 +6,7 @@
     <PackageVersion Include="AutoMapper" Version="13.0.1" />
     <PackageVersion Include="AwesomeAssertions" Version="8.0.1" />
     <PackageVersion Include="AwesomeAssertions.Analyzers" Version="0.34.2" />
+    <PackageVersion Include="Azure.Identity" Version="1.13.2" />
     <PackageVersion Include="ClosedXML" Version="0.104.2" />
     <PackageVersion Include="CsvHelper" Version="33.0.1" />
     <PackageVersion Include="Dapper" Version="2.1.35" />
