@@ -48,18 +48,18 @@ public record ComplaintSearchDto : IBasicSearchDisplay
     // Caller
 
     [Display(Name = "Caller Name")]
-    public string? CallerName { get; set; }
+    public string? CallerName { get; init; }
 
     [Display(Name = "Represents")]
-    public string? Represents { get; set; }
+    public string? Represents { get; init; }
 
     // Complaint
 
     [Display(Name = "Complaint Text")]
-    public string? Description { get; set; }
+    public string? Description { get; init; }
 
     [Display(Name = "City of Complaint")]
-    public string? ComplaintCity { get; set; }
+    public string? ComplaintCity { get; init; }
 
     [Display(Name = "County of Complaint")]
     public string? County { get; init; }
@@ -70,25 +70,25 @@ public record ComplaintSearchDto : IBasicSearchDisplay
     // Source
 
     [Display(Name = "Source/facility name")]
-    public string? Source { get; set; }
+    public string? Source { get; init; }
 
     [Display(Name = "Facility ID Number")]
-    public string? FacilityIdNumber { get; set; }
+    public string? FacilityIdNumber { get; init; }
 
     [Display(Name = "Source Contact")]
     public string? Contact { get; init; }
 
     [Display(Name = "Street Address")]
-    public string? Street { get; set; }
+    public string? Street { get; init; }
 
     [Display(Name = "City")]
-    public string? City { get; set; }
+    public string? City { get; init; }
 
     [Display(Name = "State")]
     public string? State { get; init; }
 
     [Display(Name = "Postal Code")]
-    public string? PostalCode { get; set; }
+    public string? PostalCode { get; init; }
 
     [Display(Name = "Assigned office")]
     public Guid? Office { get; init; }
