@@ -57,13 +57,17 @@
                         {
                             <li>ID: @item.SourceFacilityIdNumber</li>
                         }
-                        @if (!string.IsNullOrEmpty(item.SourceAddressCityState))
+                        @if (!string.IsNullOrEmpty(item.ComplaintCity))
                         {
-                            <li>@item.SourceAddressCityState</li>
+                            <li>City: @item.ComplaintCity</li>
                         }
                         @if (item.ComplaintCounty != null)
                         {
                             <li>@Html.DisplayFor(_ => item.ComplaintCounty, DisplayTemplate.County)</li>
+                        }
+                        @if (item.SourceAddressCityState != null)
+                        {
+                            <li>Contact location: @item.SourceAddressCityState</li>
                         }
                     </ul>
                 </td>

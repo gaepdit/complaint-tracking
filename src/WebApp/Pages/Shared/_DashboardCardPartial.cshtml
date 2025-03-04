@@ -36,16 +36,16 @@
                             <td>@Html.DisplayFor(_ => complaint.Status)</td>
                             <td>
                                 @Html.DisplayFor(_ => complaint.SourceFacilityName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "[Facility name not entered]" })
-                                @if (!string.IsNullOrEmpty(complaint.SourceFacilityIdNumber) || !string.IsNullOrEmpty(complaint.ComplaintCounty) || !string.IsNullOrEmpty(complaint.SourceAddressCityState))
+                                @if (!string.IsNullOrEmpty(complaint.SourceFacilityIdNumber) || !string.IsNullOrEmpty(complaint.ComplaintCounty) || !string.IsNullOrEmpty(complaint.ComplaintCity))
                                 {
                                     <ul class="mb-0">
                                         @if (!string.IsNullOrEmpty(complaint.SourceFacilityIdNumber))
                                         {
                                             <li>ID: @complaint.SourceFacilityIdNumber</li>
                                         }
-                                        @if (!string.IsNullOrEmpty(complaint.SourceAddressCityState))
+                                        @if (!string.IsNullOrEmpty(complaint.ComplaintCity))
                                         {
-                                            <li>@complaint.SourceAddressCityState</li>
+                                            <li>City: @complaint.ComplaintCity</li>
                                         }
                                         @if (!string.IsNullOrEmpty(complaint.ComplaintCounty))
                                         {
