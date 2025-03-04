@@ -12,9 +12,9 @@ namespace Cts.EfRepository.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             // Add database views
-            migrationBuilder.Sql(View.OpenComplaintsView);
-            migrationBuilder.Sql(View.ClosedComplaintsView);
-            migrationBuilder.Sql(View.ClosedComplaintActionsView);
+            // migrationBuilder.Sql(View.OpenComplaintsView);
+            // migrationBuilder.Sql(View.ClosedComplaintsView);
+            // migrationBuilder.Sql(View.ClosedComplaintActionsView);
             migrationBuilder.Sql(View.RecordsCountView);
         }
     }
