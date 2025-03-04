@@ -12,6 +12,14 @@ using Mindscape.Raygun4Net.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Use Azure App Configuration
+var configurationConnectionString =
+    builder.Configuration.GetConnectionString("AZURE_APPCONFIGURATION_CONNECTIONSTRING") ??
+    throw new InvalidOperationException("'AZURE_APPCONFIGURATION_CONNECTIONSTRING' was not found.");
+
+// Load configuration from Azure App Configuration
+builder.Configuration.AddAzureAppConfiguration(configurationConnectionString);
+
 // Set default timeout for regular expressions.
 // https://learn.microsoft.com/en-us/dotnet/standard/base-types/best-practices#use-time-out-values
 // ReSharper disable once HeapView.BoxingAllocation
