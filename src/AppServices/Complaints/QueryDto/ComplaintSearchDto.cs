@@ -69,13 +69,13 @@ public record ComplaintSearchDto : IBasicSearchDisplay
 
     // Source
 
-    [Display(Name = "Source/facility name")]
+    [Display(Name = "Source/Facility Name")]
     public string? Source { get; init; }
 
     [Display(Name = "Facility ID Number")]
     public string? FacilityIdNumber { get; init; }
 
-    [Display(Name = "Source Contact")]
+    [Display(Name = "Contact Name")]
     public string? Contact { get; init; }
 
     [Display(Name = "Street Address")]
