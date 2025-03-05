@@ -8,6 +8,11 @@ public record ComplaintSearchDto : IBasicSearchDisplay
 
     public SortBy Sort { get; init; } = SortBy.IdDesc;
 
+    // Full text search
+
+    [Display(Name = "Full Text Search")]
+    public string? Text { get; init; }
+
     // Status
 
     [Display(Name = "Complaint Status")]
@@ -55,7 +60,7 @@ public record ComplaintSearchDto : IBasicSearchDisplay
 
     // Complaint
 
-    [Display(Name = "Complaint Text")]
+    [Display(Name = "Complaint Details")]
     public string? Description { get; init; }
 
     [Display(Name = "City of Complaint")]
