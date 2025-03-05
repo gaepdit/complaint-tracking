@@ -1,5 +1,18 @@
 # Changelog
 
+## [2025.3.5] - 2025-03-05
+
+### Fixed
+
+- The email templates have been updated for clarity when no comments have been entered by the user.
+
+- The complaint search form has been fixed in several ways:
+  * Searching by "Facility ID" was broken.
+  * Searching by "Source Contact" was broken.
+  * Complaint city and county have been added back to the search results table and Excel export.
+  * The "Source Contact" search fields were reorganized and labeled more clearly.
+  * The Source Contact data in the search results and Excel export are labeled more clearly.
+
 ## [2025.2.3] - 2025-02-03
 
 - Updated to .NET 9.
@@ -116,6 +129,7 @@ _This version represents a complete rewrite of the Complaint Tracking System._
 New login system. New design library. Updated workflows. New public complaint page. Dark mode. And more! We hope you
 like it!
 
+[2025.3.5]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.3.5
 [2025.2.3]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.2.3
 [2025.1.10.1]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.1.10.1
 [2025.1.10]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.1.10
