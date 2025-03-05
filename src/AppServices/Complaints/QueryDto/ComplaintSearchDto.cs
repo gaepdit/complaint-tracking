@@ -140,6 +140,7 @@ public record ComplaintSearchDto : IBasicSearchDisplay
         ComplaintCity = ComplaintCity?.Trim(),
         Source = Source?.Trim(),
         FacilityIdNumber = FacilityIdNumber?.Trim(),
+        Contact = Contact?.Trim(),
         Street = Street?.Trim(),
         City = City?.Trim(),
         PostalCode = PostalCode?.Trim(),
