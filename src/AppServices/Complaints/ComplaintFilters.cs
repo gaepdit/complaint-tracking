@@ -42,6 +42,8 @@ internal static class ComplaintFilters
             .InCounty(spec.County)
             .IsConcernType(spec.Concern)
             .ContainsSourceName(spec.Source)
+            .ContainsFacilityId(spec.FacilityIdNumber)
+            .ContainsSourceContact(spec.Contact)
             .ContainsStreet(spec.Street)
             .ContainsCity(spec.City)
             .ContainsState(spec.State)
@@ -194,6 +196,20 @@ internal static class ComplaintFilters
             ? predicate
             : predicate.And(complaint =>
                 complaint.SourceFacilityName != null && complaint.SourceFacilityName.Contains(input));
+
+    private static Expression<Func<Complaint, bool>> ContainsFacilityId(
+        this Expression<Func<Complaint, bool>> predicate, string? input) =>
+        string.IsNullOrWhiteSpace(input)
+            ? predicate
+            : predicate.And(complaint =>
+                complaint.SourceFacilityIdNumber != null && complaint.SourceFacilityIdNumber.Contains(input));
+
+    private static Expression<Func<Complaint, bool>> ContainsSourceContact(
+        this Expression<Func<Complaint, bool>> predicate, string? input) =>
+        string.IsNullOrWhiteSpace(input)
+            ? predicate
+            : predicate.And(complaint =>
+                complaint.SourceContactName != null && complaint.SourceContactName.Contains(input));
 
     private static Expression<Func<Complaint, bool>> InCounty(this Expression<Func<Complaint, bool>> predicate,
         string? input) =>

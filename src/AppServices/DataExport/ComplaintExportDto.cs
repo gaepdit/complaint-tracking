@@ -16,7 +16,9 @@ public record ComplaintExportDto
         DateComplaintClosed = complaint.ComplaintClosedDate;
         ReviewComments = complaint.ReviewComments;
         SourceFacilityName = complaint.SourceFacilityName;
-        SourceLocation = complaint.SourceAddress?.CityState;
+        ComplaintCity = complaint.ComplaintCity;
+        ComplaintCounty = complaint.ComplaintCounty;
+        SourceContactLocation = complaint.SourceAddress?.CityState;
         SourceFacilityId = complaint.SourceFacilityIdNumber;
         CurrentOwnerName = complaint.CurrentOwner?.SortableFullName;
         CurrentOfficeName = complaint.CurrentOffice.Name;
@@ -52,8 +54,14 @@ public record ComplaintExportDto
     [XLColumn(Header = "Source Name")]
     public string? SourceFacilityName { get; init; }
 
-    [XLColumn(Header = "Source Location")]
-    public string? SourceLocation { get; init; }
+    [XLColumn(Header = "City of Complaint")]
+    public string? ComplaintCity { get; init; }
+
+    [XLColumn(Header = "County of Complaint")]
+    public string? ComplaintCounty { get; init; }
+
+    [XLColumn(Header = "Source Contact Location")]
+    public string? SourceContactLocation { get; init; }
 
     [XLColumn(Header = "Facility ID")]
     public string? SourceFacilityId { get; init; }
