@@ -135,6 +135,7 @@ public record ComplaintSearchDto : IBasicSearchDisplay
         { nameof(Office), Office?.ToString() },
         { nameof(Assigned), Assigned },
         { nameof(OnlyUnassigned), OnlyUnassigned.ToString() },
+        { nameof(Text), Text },
     };
 
     public ComplaintSearchDto TrimAll() => this with
@@ -149,5 +150,6 @@ public record ComplaintSearchDto : IBasicSearchDisplay
         Street = Street?.Trim(),
         City = City?.Trim(),
         PostalCode = PostalCode?.Trim(),
+        Text = Text?.Trim(),
     };
 }
