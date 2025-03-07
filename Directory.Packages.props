@@ -3,12 +3,12 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="AutoMapper" Version="13.0.1" />
+    <PackageVersion Include="AutoMapper" Version="14.0.0" />
     <PackageVersion Include="AwesomeAssertions" Version="8.0.1" />
     <PackageVersion Include="AwesomeAssertions.Analyzers" Version="0.34.2" />
     <PackageVersion Include="ClosedXML" Version="0.104.2" />
     <PackageVersion Include="CsvHelper" Version="33.0.1" />
-    <PackageVersion Include="Dapper" Version="2.1.35" />
+    <PackageVersion Include="Dapper" Version="2.1.66" />
     <PackageVersion Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageVersion Include="GaEpd.AppLibrary" Version="5.5.0" />
     <PackageVersion Include="GaEpd.EmailService" Version="1.1.0" />
@@ -17,28 +17,28 @@
     <PackageVersion Include="JetBrains.Annotations" Version="2024.3.0" />
     <PackageVersion Include="LigerShark.WebOptimizer.Core" Version="3.0.433" />
     <PackageVersion Include="MailKit" Version="4.5.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.1" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.1" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.1" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.1" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.1" />
+    <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.2" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.2" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.2" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.2" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.2" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Identity.Stores" Version="9.0.1" />
+    <PackageVersion Include="Microsoft.Extensions.Identity.Stores" Version="9.0.2" />
     <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Identity.Web" Version="3.6.2" />
+    <PackageVersion Include="Microsoft.Identity.Web" Version="3.7.1" />
     <PackageVersion Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
-    <PackageVersion Include="Mindscape.Raygun4Net.AspNetCore" Version="11.2.1" />
+    <PackageVersion Include="Mindscape.Raygun4Net.AspNetCore" Version="11.2.2" />
     <PackageVersion Include="NetEscapades.AspNetCore.SecurityHeaders" Version="0.24.0" />
-    <PackageVersion Include="SixLabors.ImageSharp" Version="3.1.6" />
-    <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.6.0.109712" />
-    <PackageVersion Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+    <PackageVersion Include="SixLabors.ImageSharp" Version="3.1.7" />
+    <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.7.0.110445" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="7.3.1" />
     <PackageVersion Include="coverlet.collector" Version="6.0.4" />
     <PackageVersion Include="EfCore.TestSupport" Version="9.0.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageVersion Include="NSubstitute" Version="5.3.0" />
     <PackageVersion Include="NSubstitute.Analyzers.CSharp" Version="1.0.17" />
     <PackageVersion Include="NUnit.Analyzers" Version="4.6.0" />
     <PackageVersion Include="NUnit" Version="4.3.2" />
-    <PackageVersion Include="NUnit3TestAdapter" Version="4.6.0" />
+    <PackageVersion Include="NUnit3TestAdapter" Version="5.0.0" />
   </ItemGroup>
 </Project>
