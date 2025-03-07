@@ -247,7 +247,8 @@ public sealed class ComplaintService(
 
         var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
-        var office = await officeRepository.GetAsync(resource.OfficeId!.Value, token).ConfigureAwait(false);
+        var office = await officeRepository.GetAsync(resource.OfficeId!.Value, Office.IncludeAssignor, token)
+            .ConfigureAwait(false);
         var owner = resource.OwnerId is not null
             ? await userService.FindUserAsync(resource.OwnerId).ConfigureAwait(false)
             : null;
@@ -344,7 +345,8 @@ public sealed class ComplaintService(
 
         var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
         var previousOwner = complaint.CurrentOwner;
-        var newOffice = await officeRepository.GetAsync(resource.OfficeId!.Value, token).ConfigureAwait(false);
+        var newOffice = await officeRepository.GetAsync(resource.OfficeId!.Value, Office.IncludeAssignor, token)
+            .ConfigureAwait(false);
         var newOwner = resource.OwnerId is not null
             ? await userService.FindUserAsync(resource.OwnerId).ConfigureAwait(false)
             : null;
@@ -414,7 +416,10 @@ public sealed class ComplaintService(
 
         var office = await officeRepository.GetAsync(resource.OfficeId!.Value, Office.IncludeAssignor, token)
             .ConfigureAwait(false);
-        var owner = await userService.FindUserAsync(resource.OwnerId ?? "").ConfigureAwait(false);
+        var owner = resource.OwnerId is not null
+            ? await userService.FindUserAsync(resource.OwnerId).ConfigureAwait(false)
+            : null;
+
         complaintManager.Assign(complaint, office, owner, currentUser);
         return complaint;
     }
