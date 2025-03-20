@@ -23,13 +23,11 @@ public class EditModel(IConcernService service, IValidator<ConcernUpdateDto> val
 
     public static MaintenanceOption ThisOption => MaintenanceOption.Concern;
 
-    public async Task<IActionResult> OnGetAsync(Guid? id)
+    public async Task<IActionResult> OnGetAsync()
     {
-        if (id is null) return RedirectToPage("Index");
-        var item = await service.FindForUpdateAsync(id.Value);
+        var item = await service.FindForUpdateAsync(Id);
         if (item is null) return NotFound();
 
-        Id = id.Value;
         Item = item;
         OriginalName = Item.Name;
         return Page();

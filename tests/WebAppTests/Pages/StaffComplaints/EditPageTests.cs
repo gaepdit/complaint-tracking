@@ -36,7 +36,7 @@ public class EditPageTests
     public async Task OnGet_ReturnsPage()
     {
         // Arrange
-        const int complaintId = 0;
+        const int complaintId = 1;
         var dto = new ComplaintUpdateDto();
 
         await using var complaintService = Substitute.For<IComplaintService>();
@@ -48,16 +48,33 @@ public class EditPageTests
             .Returns(AuthorizationResult.Success());
 
         var page = new EditModel(complaintService, _staffService, _concernService,
-            Substitute.For<IValidator<ComplaintUpdateDto>>(), authorization);
+                Substitute.For<IValidator<ComplaintUpdateDto>>(), authorization)
+            { Id = complaintId };
 
         // Act
-        var result = await page.OnGetAsync(complaintId);
+        var result = await page.OnGetAsync();
 
         // Assert
         using var scope = new AssertionScope();
         result.Should().BeOfType<PageResult>();
         page.Item.Should().BeOfType<ComplaintUpdateDto>();
         page.Item.Should().Be(dto);
+    }
+
+    [Test]
+    public async Task OnPost_ReturnsBadRequestWhenComplaintIdIsInvalid()
+    {
+        // Arrange
+        var page = new EditModel(Substitute.For<IComplaintService>(), Substitute.For<IStaffService>(),
+                Substitute.For<IConcernService>(), Substitute.For<IValidator<ComplaintUpdateDto>>(),
+                Substitute.For<IAuthorizationService>())
+            { Id = -1 };
+
+        // Act
+        var result = await page.OnPostAsync();
+
+        // Assert
+        result.Should().BeOfType<BadRequestResult>();
     }
 
     [Test]

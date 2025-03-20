@@ -1,9 +1,9 @@
-@page "{id:int?}"
+@page "{id:int}"
 @using Cts.Domain.ValueObjects
 @using Cts.WebApp.Pages.Shared.EditorTemplates
 @model EditModel
 @{
-    ViewData["Title"] = $"Edit Complaint ID {Model.Id.ToString()}";
+    ViewData["Title"] = $"Edit Complaint ID {Model.Id}";
     ViewData["NoAnchors"] = "True";
     var phoneTypesSelectList = Html.GetEnumSelectList<PhoneType>().ToArray();
 }
@@ -215,7 +215,7 @@
 
         <div class="mt-3 mb-1">
             <button type="submit" class="btn btn-primary col-6 col-sm-4 col-lg-3 me-2">Save Changes</button>
-            <a asp-page="Details" asp-route-id="@Model.Id.ToString()" class="btn btn-outline-secondary">Cancel</a>
+            <a asp-page="Details" asp-route-id="@Model.Id" class="btn btn-outline-secondary">Cancel</a>
         </div>
         <div class="text-danger-emphasis mt-3">* denotes a required field</div>
     </form>

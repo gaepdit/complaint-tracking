@@ -1,9 +1,9 @@
-﻿@page "{id:int?}"
+﻿@page "{id:int}"
 @using Cts.WebApp.Pages.Shared.EditorTemplates
 @model RestoreModel
 
 @{
-    ViewData["Title"] = $"Restore Complaint ID {Model.ComplaintClosure.ComplaintId}";
+    ViewData["Title"] = $"Restore Complaint ID {Model.Id}";
     ViewData["NoAnchors"] = "True";
 }
 
@@ -24,7 +24,7 @@
         </div>
         <div class="mt-3 mb-1">
             <button type="submit" class="btn btn-warning col-5 col-sm-3 col-lg-2 me-2">Restore</button>
-            <a asp-page="Details" asp-route-id="@Model.ComplaintClosure.ComplaintId.ToString()" class="btn btn-outline-secondary">Cancel</a>
+            <a asp-page="Details" asp-route-id="@Model.Id" class="btn btn-outline-secondary">Cancel</a>
         </div>
         <input asp-for="ComplaintClosure.ComplaintId" type="hidden" />
     </form>

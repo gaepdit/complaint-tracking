@@ -20,6 +20,9 @@ public class ReturnModel(
     IStaffService staffService
 ) : PageModel
 {
+    [FromRoute]
+    public int Id { get; set; }
+
     [BindProperty]
     public ComplaintAssignmentDto ComplaintAssignment { get; set; } = null!;
 
@@ -27,17 +30,17 @@ public class ReturnModel(
     public SelectList OfficesSelectList { get; private set; } = null!;
     public SelectList StaffSelectList { get; private set; } = null!;
 
-    public async Task<IActionResult> OnGetAsync(int? id)
+    public async Task<IActionResult> OnGetAsync()
     {
-        if (id is null) return RedirectToPage("Index");
+        if (Id <= 0) return RedirectToPage("Index");
 
-        var complaintView = await complaintService.FindAsync(id.Value);
+        var complaintView = await complaintService.FindAsync(Id);
         if (complaintView is null) return NotFound();
 
         if (!await UserCanReviewAsync(complaintView)) return Forbid();
 
         var userOfficeId = (await staffService.GetCurrentUserAsync()).Office?.Id;
-        ComplaintAssignment = new ComplaintAssignmentDto(id.Value)
+        ComplaintAssignment = new ComplaintAssignmentDto(Id)
         {
             OfficeId = complaintView.CurrentOffice?.Id ?? userOfficeId,
             OwnerId = complaintView.CurrentOwner?.Id,

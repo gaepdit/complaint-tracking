@@ -28,10 +28,9 @@ public class EditModel(IOfficeService officeService, IStaffService staffService,
 
     public SelectList ActiveStaffMembersSelectList { get; private set; } = null!;
 
-    public async Task<IActionResult> OnGetAsync(Guid? id)
+    public async Task<IActionResult> OnGetAsync()
     {
-        if (id is null) return RedirectToPage("Index");
-        var item = await officeService.FindForUpdateAsync(id.Value);
+        var item = await officeService.FindForUpdateAsync(Id);
         if (item is null) return NotFound();
 
         Item = item;

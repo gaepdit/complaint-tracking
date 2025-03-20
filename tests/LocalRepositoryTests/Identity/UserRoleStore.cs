@@ -53,7 +53,7 @@ public class UserRoleStore
         var roleName = _store.Roles.First().Name;
         Debug.Assert(roleName != null);
         await _store.AddToRoleAsync(user, roleName, CancellationToken.None);
-        
+
         var result = await _store.GetRolesAsync(user, CancellationToken.None);
 
         using var scope = new AssertionScope();
@@ -80,9 +80,9 @@ public class UserRoleStore
         var roleName = _store.Roles.First().Name;
         Debug.Assert(roleName != null);
         await _store.AddToRoleAsync(user, roleName, CancellationToken.None);
-        
+
         var result = await _store.IsInRoleAsync(user, roleName, CancellationToken.None);
-        
+
         result.Should().BeTrue();
     }
 
@@ -103,11 +103,11 @@ public class UserRoleStore
         var roleName = _store.Roles.First().Name;
         Debug.Assert(roleName != null);
         await _store.AddToRoleAsync(user, roleName, CancellationToken.None);
-        
+
         var result = await _store.GetUsersInRoleAsync(roleName, CancellationToken.None);
 
         using var scope = new AssertionScope();
-        result.Should().HaveCount(1);
+        result.Should().ContainSingle();
         result[0].Should().BeEquivalentTo(_store.UserStore.First(),
             options => options.Excluding(e => e.Office));
     }
@@ -116,6 +116,6 @@ public class UserRoleStore
     public async Task GetUsersInRole_IfNone_ReturnsEmptyList()
     {
         var result = await _store.GetUsersInRoleAsync("None", CancellationToken.None);
-        result.Should().HaveCount(0);
+        result.Should().BeEmpty();
     }
 }
