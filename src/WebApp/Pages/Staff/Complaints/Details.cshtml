@@ -1,4 +1,4 @@
-@page "{id:int?}"
+@page "{id:int}"
 @using Cts.AppServices.Attachments
 @using Cts.AppServices.Complaints.Permissions
 @using Cts.Domain.Data
@@ -7,7 +7,7 @@
 @using GaEpd.AppLibrary.Extensions
 @model DetailsModel
 @{
-    ViewData["Title"] = $"Complaint ID {Model.ComplaintView.Id.ToString()}";
+    ViewData["Title"] = $"Complaint ID {Model.Id}";
 }
 
 <div class="container-full">
@@ -16,7 +16,7 @@
             <h1>@ViewData["Title"]</h1>
         </div>
         <div class="col-auto d-print-none ms-2">
-            <a asp-page="/Complaint" asp-route-id="@Model.ComplaintView.Id.ToString()" 
+            <a asp-page="/Complaint" asp-route-id="@Model.Id" 
                class="link-underline link-underline-opacity-25 link-underline-opacity-100-hover link-offset-2">
                 <svg class="bi me-2">
                     <use href="@Url.Content("~/images/app-icons.svg")#app-icon-people-fill"></use>
@@ -35,7 +35,8 @@
                     <h4 class="text-danger-emphasis">Deleted Complaint</h4>
                 </div>
                 <div class="col-auto d-print-none ms-2">
-                    <a asp-page="Restore" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-warning">Restore deleted complaint</a>
+                    <a asp-page="Restore" asp-route-id="@Model.Id" class="btn btn-outline-warning">Restore deleted
+                        complaint</a>
                 </div>
             </div>
         </div>
@@ -77,11 +78,11 @@
     <div class="d-print-none mb-3">
         @if (Model.UserCan[ComplaintOperation.EditDetails])
         {
-            <a asp-page="Edit" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Edit details</a>
+            <a asp-page="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary me-2">Edit details</a>
         }
         @if (Model.UserCan[ComplaintOperation.ManageDeletions])
         {
-            <a asp-page="Delete" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-danger me-2">Delete</a>
+            <a asp-page="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger me-2">Delete</a>
         }
     </div>
 }
@@ -107,24 +108,26 @@
 <div class="d-print-none mb-2">
     @if (Model.UserCan[ComplaintOperation.Review])
     {
-        <a asp-page="Approve" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Close Complaint (approved)</a>
-        <a asp-page="Return" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Return to staff (not approved)</a>
+        <a asp-page="Approve" asp-route-id="@Model.Id" class="btn btn-outline-primary me-2">Close Complaint
+            (approved)</a>
+        <a asp-page="Return" asp-route-id="@Model.Id" class="btn btn-outline-primary me-2">Return to staff (not
+            approved)</a>
     }
     @if (Model.UserCan[ComplaintOperation.Assign])
     {
-        <a asp-page="Assign" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Assign</a>
+        <a asp-page="Assign" asp-route-id="@Model.Id" class="btn btn-outline-primary me-2">Assign</a>
     }
     @if (Model.UserCan[ComplaintOperation.RequestReview])
     {
-        <a asp-page="RequestReview" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Submit for review</a>
+        <a asp-page="RequestReview" asp-route-id="@Model.Id" class="btn btn-outline-primary me-2">Submit for review</a>
     }
     @if (Model.UserCan[ComplaintOperation.Reassign])
     {
-        <a asp-page="Assign" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Transfer/reassign</a>
+        <a asp-page="Assign" asp-route-id="@Model.Id" class="btn btn-outline-primary me-2">Transfer/reassign</a>
     }
     @if (Model.UserCan[ComplaintOperation.Reopen])
     {
-        <a asp-page="Reopen" asp-route-id="@Model.ComplaintView.Id.ToString()" class="btn btn-outline-primary me-2">Reopen</a>
+        <a asp-page="Reopen" asp-route-id="@Model.Id" class="btn btn-outline-primary me-2">Reopen</a>
     }
 </div>
 
@@ -307,12 +310,12 @@
                                     <div class="col-auto d-print-none ms-2">
                                         @if (!action.IsDeleted)
                                         {
-                                            <a asp-page="../ComplaintActions/Edit" asp-route-actionId="@action.Id.ToString()" class="btn btn-sm btn-outline-primary">Edit</a>
-                                            <a asp-page="../ComplaintActions/Delete" asp-route-actionId="@action.Id.ToString()" class="btn btn-sm btn-outline-danger ms-1">Delete</a>
+                                            <a asp-page="../ComplaintActions/Edit" asp-route-actionId="@action.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+                                            <a asp-page="../ComplaintActions/Delete" asp-route-actionId="@action.Id" class="btn btn-sm btn-outline-danger ms-1">Delete</a>
                                         }
                                         else
                                         {
-                                            <a asp-page="../ComplaintActions/Restore" asp-route-actionId="@action.Id.ToString()" class="btn btn-sm btn-outline-warning ms-1">Restore</a>
+                                            <a asp-page="../ComplaintActions/Restore" asp-route-actionId="@action.Id" class="btn btn-sm btn-outline-warning ms-1">Restore</a>
                                         }
                                     </div>
                                 }
@@ -388,7 +391,7 @@
                 @if (Model.UserCan[ComplaintOperation.EditAttachments])
                 {
                     <td>
-                        <a asp-page="Attachment/Delete" asp-route-attachmentId="@attachment.Id.ToString()" class="btn btn-sm btn-outline-danger">Delete</a>
+                        <a asp-page="Attachment/Delete" asp-route-attachmentId="@attachment.Id" class="btn btn-sm btn-outline-danger">Delete</a>
                     </td>
                 }
             </tr>

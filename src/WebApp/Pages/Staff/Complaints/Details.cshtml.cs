@@ -27,6 +27,9 @@ public class DetailsModel(
     IAuthorizationService authorization)
     : PageModel
 {
+    [FromRoute]
+    public int Id { get; set; }
+
     public ComplaintViewDto ComplaintView { get; private set; } = null!;
     public Dictionary<IAuthorizationRequirement, bool> UserCan { get; private set; } = new();
 
@@ -47,11 +50,11 @@ public class DetailsModel(
     [TempData]
     public bool UploadSuccess { get; set; }
 
-    public async Task<IActionResult> OnGetAsync(int? id)
+    public async Task<IActionResult> OnGetAsync()
     {
-        if (id is null) return RedirectToPage("../Index");
+        if (Id <= 0) return RedirectToPage("Index");
 
-        var complaintView = await complaintService.FindAsync(id.Value, true);
+        var complaintView = await complaintService.FindAsync(Id, true);
         if (complaintView is null) return NotFound();
 
         await SetPermissionsAsync(complaintView);
@@ -59,35 +62,34 @@ public class DetailsModel(
 
         ComplaintView = complaintView;
         var investigator = (await staffService.GetCurrentUserAsync()).Name;
-        NewAction = new ActionCreateDto(complaintView.Id) { Investigator = investigator };
+        NewAction = new ActionCreateDto(Id) { Investigator = investigator };
         await PopulateSelectListsAsync();
 
         return Page();
     }
 
     /// OnPostAccept is used for the current user to accept the Complaint.
-    public async Task<IActionResult> OnPostAcceptAsync(int? id, CancellationToken token)
+    public async Task<IActionResult> OnPostAcceptAsync(CancellationToken token)
     {
-        if (id is null) return BadRequest();
+        if (Id <= 0) return BadRequest();
 
-        var complaintView = await complaintService.FindAsync(id.Value, includeDeletedActions: true, token);
+        var complaintView = await complaintService.FindAsync(Id, includeDeletedActions: true, token);
         if (complaintView is null || complaintView.IsDeleted) return BadRequest();
 
         await SetPermissionsAsync(complaintView);
         if (!UserCan[ComplaintOperation.Accept]) return BadRequest();
 
-        await complaintService.AcceptAsync(id.Value, token);
+        await complaintService.AcceptAsync(Id, token);
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "Complaint accepted.");
-        return RedirectToPage("Details", routeValues: new { id });
+        return RedirectToPage("Details", routeValues: new { Id });
     }
 
     /// PostNewAction is used to add a new Action for this Complaint.
-    public async Task<IActionResult> OnPostNewActionAsync(int? id, ActionCreateDto newAction,
-        CancellationToken token)
+    public async Task<IActionResult> OnPostNewActionAsync(ActionCreateDto newAction, CancellationToken token)
     {
-        if (id is null || newAction.ComplaintId != id) return BadRequest();
+        if (Id <= 0 || newAction.ComplaintId != Id) return BadRequest();
 
-        var complaintView = await complaintService.FindAsync(id.Value, includeDeletedActions: true, token);
+        var complaintView = await complaintService.FindAsync(Id, includeDeletedActions: true, token);
         if (complaintView is null || complaintView.IsDeleted) return BadRequest();
 
         await SetPermissionsAsync(complaintView);
@@ -103,16 +105,15 @@ public class DetailsModel(
 
         HighlightId = await actionService.CreateAsync(newAction, token);
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "New Action successfully added.");
-        return RedirectToPage("Details", pageHandler: null, routeValues: new { id }, fragment: HighlightId.ToString());
+        return RedirectToPage("Details", pageHandler: null, routeValues: new { Id }, fragment: HighlightId.ToString());
     }
 
     /// PostUploadFiles is used to add attachment files to this Complaint.
-    public async Task<IActionResult> OnPostUploadFilesAsync(int? id, AttachmentsUploadDto fileUploads,
-        CancellationToken token)
+    public async Task<IActionResult> OnPostUploadFilesAsync(AttachmentsUploadDto fileUploads, CancellationToken token)
     {
-        if (id is null) return BadRequest();
+        if (Id <= 0) return BadRequest();
 
-        var complaintView = await complaintService.FindAsync(id.Value, includeDeletedActions: true, token);
+        var complaintView = await complaintService.FindAsync(Id, includeDeletedActions: true, token);
         if (complaintView is null || complaintView.IsDeleted) return BadRequest();
 
         await SetPermissionsAsync(complaintView);
@@ -123,15 +124,15 @@ public class DetailsModel(
             ValidatingSection = nameof(OnPostUploadFilesAsync);
             ComplaintView = complaintView;
             var investigator = (await staffService.GetCurrentUserAsync()).Name;
-            NewAction = new ActionCreateDto(complaintView.Id) { Investigator = investigator };
+            NewAction = new ActionCreateDto(Id) { Investigator = investigator };
             await PopulateSelectListsAsync();
             return Page();
         }
 
-        await attachmentService.SaveAttachmentsAsync(id.Value, fileUploads.Files, AppSettings.AttachmentServiceConfig,
+        await attachmentService.SaveAttachmentsAsync(Id, fileUploads.Files, AppSettings.AttachmentServiceConfig,
             token);
         UploadSuccess = true;
-        return RedirectToPage("Details", new { id });
+        return RedirectToPage("Details", new { Id });
     }
 
     private async Task PopulateSelectListsAsync() =>

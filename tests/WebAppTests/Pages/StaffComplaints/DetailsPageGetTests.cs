@@ -6,7 +6,7 @@ namespace WebAppTests.Pages.StaffComplaints;
 
 public class DetailsPageGetTests
 {
-    private static readonly ComplaintViewDto ItemTest = new() { Id = 0 };
+    private static readonly ComplaintViewDto ItemTest = new() { Id = 1 };
 
     [Test]
     public async Task OnGetReturnsWithCorrectPermissions()
@@ -26,11 +26,12 @@ public class DetailsPageGetTests
 
         var page = PageModelHelpers.BuildDetailsPageModel(complaintService: complaintServiceMock,
             authorizationService: authorizationMock);
+        page.Id = ItemTest.Id;
         page.TempData = WebAppTestsSetup.PageTempData();
         page.PageContext = WebAppTestsSetup.PageContextWithUser();
 
         // Act
-        await page.OnGetAsync(ItemTest.Id);
+        await page.OnGetAsync();
 
         // Assert
         using var scope = new AssertionScope();
@@ -41,15 +42,15 @@ public class DetailsPageGetTests
     }
 
     [Test]
-    public async Task OnGetAsync_NullId_ReturnsRedirectToPageResult()
+    public async Task OnGetAsync_DefaultId_ReturnsRedirectToPageResult()
     {
         var page = PageModelHelpers.BuildDetailsPageModel();
-        var result = await page.OnGetAsync(null);
+        var result = await page.OnGetAsync();
         result.Should().BeOfType<RedirectToPageResult>();
     }
 
     [Test]
-    public async Task OnGetAsync_CaseNotFound_ReturnsNotFoundResult()
+    public async Task OnGetAsync_IdNotFound_ReturnsNotFoundResult()
     {
         // Arrange
         const int id = 0;
@@ -58,9 +59,10 @@ public class DetailsPageGetTests
         complaintService.FindAsync(id).Returns((ComplaintViewDto?)null);
 
         var page = PageModelHelpers.BuildDetailsPageModel(complaintService: complaintService);
+        page.Id = 1_000_000;
 
         // Act
-        var result = await page.OnGetAsync(id);
+        var result = await page.OnGetAsync();
 
         // Assert
         result.Should().BeOfType<NotFoundResult>();
