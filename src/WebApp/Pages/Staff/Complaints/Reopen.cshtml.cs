@@ -12,21 +12,24 @@ namespace Cts.WebApp.Pages.Staff.Complaints;
 [Authorize(Policy = nameof(Policies.DivisionManager))]
 public class ReopenModel(IComplaintService complaintService, IAuthorizationService authorization) : PageModel
 {
+    [FromRoute]
+    public int Id { get; set; }
+
     [BindProperty]
     public ComplaintClosureDto ComplaintClosure { get; set; } = null!;
 
     public ComplaintViewDto ComplaintView { get; private set; } = null!;
 
-    public async Task<IActionResult> OnGetAsync(int? id)
+    public async Task<IActionResult> OnGetAsync()
     {
-        if (id is null) return RedirectToPage("Index");
+        if (Id <= 0) return RedirectToPage("Index");
 
-        var complaintView = await complaintService.FindAsync(id.Value);
+        var complaintView = await complaintService.FindAsync(Id);
         if (complaintView is null) return NotFound();
 
         if (!await UserCanReviewAsync(complaintView)) return Forbid();
 
-        ComplaintClosure = new ComplaintClosureDto(id.Value);
+        ComplaintClosure = new ComplaintClosureDto(Id);
         ComplaintView = complaintView;
         return Page();
     }

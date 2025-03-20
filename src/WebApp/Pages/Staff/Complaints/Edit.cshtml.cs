@@ -34,14 +34,13 @@ public class EditModel(
     public static SelectList StatesSelectList => new(Data.States);
     public static SelectList CountiesSelectList => new(Data.Counties);
 
-    public async Task<IActionResult> OnGetAsync(int? id)
+    public async Task<IActionResult> OnGetAsync()
     {
-        if (id is null) return RedirectToPage("Index");
-        var item = await complaintService.FindForUpdateAsync(id.Value);
+        if (Id <= 0) return RedirectToPage("Index");
+        var item = await complaintService.FindForUpdateAsync(Id);
         if (item is null) return NotFound();
         if (!await UserCanEditAsync(item)) return Forbid();
 
-        Id = id.Value;
         Item = item;
         await PopulateSelectListsAsync();
         return Page();

@@ -7,13 +7,13 @@ namespace WebAppTests.Pages.StaffComplaints;
 public class DetailsPagePostUploadFilesTests
 {
     [Test]
-    public async Task OnPostAsync_NullId_ReturnsRedirectToPageResult()
+    public async Task OnPostAsync_DefaultId_ReturnsRedirectToPageResult()
     {
         // Arrange
         var page = PageModelHelpers.BuildDetailsPageModel();
 
         // Act
-        var result = await page.OnPostUploadFilesAsync(null, new AttachmentsUploadDto(), CancellationToken.None);
+        var result = await page.OnPostUploadFilesAsync(new AttachmentsUploadDto(), CancellationToken.None);
 
         // Assert
         result.Should().BeOfType<BadRequestResult>();
@@ -23,28 +23,28 @@ public class DetailsPagePostUploadFilesTests
     public async Task OnPostAsync_ComplaintNotFound_ReturnsBadRequestResult()
     {
         // Arrange
-        const int id = 0;
         var complaintService = Substitute.For<IComplaintService>();
-        complaintService.FindAsync(id).Returns((ComplaintViewDto?)null);
+        complaintService.FindAsync(Arg.Any<int>()).Returns((ComplaintViewDto?)null);
         var page = PageModelHelpers.BuildDetailsPageModel(complaintService: complaintService);
+        page.Id = 1_000_000;
 
         // Act
-        var result = await page.OnPostUploadFilesAsync(id, new AttachmentsUploadDto(), CancellationToken.None);
+        var result = await page.OnPostUploadFilesAsync(new AttachmentsUploadDto(), CancellationToken.None);
 
         // Assert
         result.Should().BeOfType<BadRequestResult>();
     }
 
     [Test]
-    public async Task OnPostAsync_MismatchedId_ReturnsBadRequest()
+    public async Task OnPostAsync_InvalidId_ReturnsBadRequest()
     {
         // Arrange
-        const int id = 999;
         var complaintService = Substitute.For<IComplaintService>();
         var page = PageModelHelpers.BuildDetailsPageModel(complaintService: complaintService);
+        page.Id = -1;
 
         // Act
-        var result = await page.OnPostUploadFilesAsync(id, new AttachmentsUploadDto(), CancellationToken.None);
+        var result = await page.OnPostUploadFilesAsync(new AttachmentsUploadDto(), CancellationToken.None);
 
         // Assert
         result.Should().BeOfType<BadRequestResult>();

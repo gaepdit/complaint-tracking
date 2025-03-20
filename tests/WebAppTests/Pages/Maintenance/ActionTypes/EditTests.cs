@@ -15,34 +15,16 @@ public class EditTests
         serviceMock.FindForUpdateAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>()).Returns(ItemTest);
 
         var page = new EditModel(serviceMock, Substitute.For<IValidator<ActionTypeUpdateDto>>())
-            { TempData = WebAppTestsSetup.PageTempData() };
+            { TempData = WebAppTestsSetup.PageTempData(), Id = TextData.TestGuid };
 
         // Act
-        await page.OnGetAsync(Guid.Empty);
+        await page.OnGetAsync();
 
         // Assert
         using var scope = new AssertionScope();
         page.Item.Should().BeEquivalentTo(ItemTest);
         page.OriginalName.Should().Be(ItemTest.Name);
         page.HighlightId.Should().Be(Guid.Empty);
-    }
-
-    [Test]
-    public async Task OnGet_GivenNullId_ReturnsNotFound()
-    {
-        // Arrange
-        var serviceMock = Substitute.For<IActionTypeService>();
-
-        var page = new EditModel(serviceMock, Substitute.For<IValidator<ActionTypeUpdateDto>>())
-            { TempData = WebAppTestsSetup.PageTempData() };
-
-        // Act
-        var result = await page.OnGetAsync(null);
-
-        // Assert
-        using var scope = new AssertionScope();
-        result.Should().BeOfType<RedirectToPageResult>();
-        ((RedirectToPageResult)result).PageName.Should().Be("Index");
     }
 
     [Test]
@@ -54,10 +36,10 @@ public class EditTests
             .Returns((ActionTypeUpdateDto?)null);
 
         var page = new EditModel(serviceMock, Substitute.For<IValidator<ActionTypeUpdateDto>>())
-            { TempData = WebAppTestsSetup.PageTempData() };
+            { TempData = WebAppTestsSetup.PageTempData(), Id = TextData.TestGuid };
 
         // Act
-        var result = await page.OnGetAsync(Guid.Empty);
+        var result = await page.OnGetAsync();
 
         // Assert
         result.Should().BeOfType<NotFoundResult>();

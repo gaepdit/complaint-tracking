@@ -10,13 +10,16 @@ public class ComplaintModel(
     [FromServices] IComplaintService service,
     [FromServices] IAuthorizationService authorization) : PageModel
 {
+    [FromRoute]
+    public int Id { get; set; }
+
     public ComplaintPublicViewDto Item { get; private set; } = null!;
     public bool UserIsActive { get; private set; }
 
-    public async Task<IActionResult> OnGetAsync(int? id)
+    public async Task<IActionResult> OnGetAsync()
     {
-        if (id is null) return RedirectToPage("../Index");
-        var dto = await service.FindPublicAsync(id.Value);
+        if (Id <= 0) return RedirectToPage("Index");
+        var dto = await service.FindPublicAsync(Id);
         if (dto is null) return NotFound();
 
         UserIsActive = await authorization.Succeeded(User, Policies.ActiveUser);

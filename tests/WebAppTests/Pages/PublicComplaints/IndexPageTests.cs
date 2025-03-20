@@ -7,7 +7,7 @@ namespace WebAppTests.Pages.PublicComplaints;
 public class IndexPageTests
 {
     [Test]
-    public async Task OnGet_PopulatesThePageModel()
+    public async Task OnGet_ValidId_PopulatesThePageModel()
     {
         // Arrange
         var item = new ComplaintPublicViewDto();
@@ -21,10 +21,10 @@ public class IndexPageTests
                 requirements: Arg.Any<IEnumerable<IAuthorizationRequirement>>())
             .Returns(AuthorizationResult.Failed());
 
-        var pageModel = new ComplaintModel(serviceMock, authorizationMock);
+        var pageModel = new ComplaintModel(serviceMock, authorizationMock) { Id = 1 };
 
         // Act
-        var result = await pageModel.OnGetAsync(1);
+        var result = await pageModel.OnGetAsync();
 
         // Assert
         using var scope = new AssertionScope();
@@ -34,7 +34,7 @@ public class IndexPageTests
     }
 
     [Test]
-    public async Task OnGet_MissingIdReturnsNotFound()
+    public async Task OnGet_InvalidId_RedirectsToIndexPage()
     {
         // Arrange
         var serviceMock = Substitute.For<IComplaintService>();
@@ -44,19 +44,19 @@ public class IndexPageTests
                 requirements: Arg.Any<IEnumerable<IAuthorizationRequirement>>())
             .Returns(AuthorizationResult.Failed());
 
-        var pageModel = new ComplaintModel(serviceMock, authorizationMock);
+        var pageModel = new ComplaintModel(serviceMock, authorizationMock) { Id = -1 };
 
         // Act
-        var result = await pageModel.OnGetAsync(null);
+        var result = await pageModel.OnGetAsync();
 
         // Assert
         using var scope = new AssertionScope();
         result.Should().BeOfType<RedirectToPageResult>();
-        ((RedirectToPageResult)result).PageName.Should().Be("../Index");
+        ((RedirectToPageResult)result).PageName.Should().Be("Index");
     }
 
     [Test]
-    public async Task OnGet_NonexistentIdReturnsNotFound()
+    public async Task OnGet_NonexistentId_ReturnsNotFound()
     {
         // Arrange
         var serviceMock = Substitute.For<IComplaintService>();
@@ -66,10 +66,10 @@ public class IndexPageTests
                 requirements: Arg.Any<IEnumerable<IAuthorizationRequirement>>())
             .Returns(AuthorizationResult.Failed());
 
-        var pageModel = new ComplaintModel(serviceMock, authorizationMock);
+        var pageModel = new ComplaintModel(serviceMock, authorizationMock) { Id = 1_000_000 };
 
         // Act
-        var result = await pageModel.OnGetAsync(0);
+        var result = await pageModel.OnGetAsync();
 
         // Assert
         result.Should().BeOfType<NotFoundResult>();

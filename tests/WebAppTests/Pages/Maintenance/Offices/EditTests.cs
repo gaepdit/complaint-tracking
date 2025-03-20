@@ -20,37 +20,16 @@ public class EditTests
             .Returns(new List<ListItem<string>>());
 
         var page = new EditModel(officeServiceMock, staffServiceMock, Substitute.For<IValidator<OfficeUpdateDto>>())
-            { TempData = WebAppTestsSetup.PageTempData() };
+            { TempData = WebAppTestsSetup.PageTempData(), Id = TextData.TestGuid };
 
         // Act
-        await page.OnGetAsync(Guid.Empty);
+        await page.OnGetAsync();
 
         // Assert
         using var scope = new AssertionScope();
         page.Item.Should().BeEquivalentTo(ItemTest);
         page.OriginalName.Should().Be(ItemTest.Name);
         page.HighlightId.Should().Be(Guid.Empty);
-    }
-
-    [Test]
-    public async Task OnGet_GivenNullId_ReturnsNotFound()
-    {
-        // Arrange
-        var staffServiceMock = Substitute.For<IStaffService>();
-        staffServiceMock.GetAsListItemsAsync(Arg.Any<bool>())
-            .Returns(new List<ListItem<string>>());
-
-        var page = new EditModel(Substitute.For<IOfficeService>(), staffServiceMock,
-                Substitute.For<IValidator<OfficeUpdateDto>>())
-            { TempData = WebAppTestsSetup.PageTempData() };
-
-        // Act
-        var result = await page.OnGetAsync(null);
-
-        // Assert
-        using var scope = new AssertionScope();
-        result.Should().BeOfType<RedirectToPageResult>();
-        ((RedirectToPageResult)result).PageName.Should().Be("Index");
     }
 
     [Test]
@@ -66,10 +45,10 @@ public class EditTests
             .Returns(new List<ListItem<string>>());
 
         var page = new EditModel(officeServiceMock, staffServiceMock, Substitute.For<IValidator<OfficeUpdateDto>>())
-            { TempData = WebAppTestsSetup.PageTempData() };
+            { TempData = WebAppTestsSetup.PageTempData(), Id = TextData.TestGuid };
 
         // Act
-        var result = await page.OnGetAsync(Guid.Empty);
+        var result = await page.OnGetAsync();
 
         // Assert
         result.Should().BeOfType<NotFoundResult>();

@@ -23,10 +23,9 @@ public class EditModel(IActionTypeService service, IValidator<ActionTypeUpdateDt
 
     public static MaintenanceOption ThisOption => MaintenanceOption.ActionType;
 
-    public async Task<IActionResult> OnGetAsync(Guid? id)
+    public async Task<IActionResult> OnGetAsync()
     {
-        if (id is null) return RedirectToPage("Index");
-        var item = await service.FindForUpdateAsync(id.Value);
+        var item = await service.FindForUpdateAsync(Id);
         if (item is null) return NotFound();
 
         Item = item;

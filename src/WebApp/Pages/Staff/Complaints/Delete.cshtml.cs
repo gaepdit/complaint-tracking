@@ -13,16 +13,19 @@ namespace Cts.WebApp.Pages.Staff.Complaints;
 public class DeleteModel(IComplaintService complaintService, IAuthorizationService authorization)
     : PageModel
 {
+    [FromRoute]
+    public int Id { get; set; }
+
     [BindProperty]
     public ComplaintClosureDto ComplaintClosure { get; set; } = null!;
 
     public ComplaintViewDto ComplaintView { get; private set; } = null!;
 
-    public async Task<IActionResult> OnGetAsync(int? id)
+    public async Task<IActionResult> OnGetAsync()
     {
-        if (id is null) return RedirectToPage("Index");
+        if (Id <= 0) return RedirectToPage("Index");
 
-        var complaintView = await complaintService.FindAsync(id.Value);
+        var complaintView = await complaintService.FindAsync(Id);
         if (complaintView is null) return NotFound();
 
         if (!await UserCanManageDeletionsAsync(complaintView)) return Forbid();
@@ -31,10 +34,10 @@ public class DeleteModel(IComplaintService complaintService, IAuthorizationServi
         {
             TempData.SetDisplayMessage(DisplayMessage.AlertContext.Warning,
                 "Complaint cannot be deleted because it is already deleted.");
-            return RedirectToPage("Details", routeValues: new { id });
+            return RedirectToPage("Details", routeValues: new { Id });
         }
 
-        ComplaintClosure = new ComplaintClosureDto(id.Value);
+        ComplaintClosure = new ComplaintClosureDto(Id);
         ComplaintView = complaintView;
         return Page();
     }
