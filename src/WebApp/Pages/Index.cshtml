@@ -1,25 +1,12 @@
 @page "{handler?}"
 @using Cts.AppServices.Complaints.QueryDto
+@using Cts.WebApp.Pages.Shared.Components.Notifications
 @using Cts.WebApp.Platform.PageModelHelpers
 @model IndexModel
 @{
     ViewData["Title"] = "Public Complaint Search";
 }
-
-@if (Model.Notifications.Any())
-{
-    foreach (var notification in Model.Notifications)
-    {
-        <div class="row">
-            <div class="col-lg-9">
-                <div class="callout callout-danger">
-                    <h3 class="h5">Notice</h3>
-                    <p>@notification.Message</p>
-                </div>
-            </div>
-        </div>
-    }
-}
+<vc:notifications />
 
 <div class="row">
     <div class="col-lg-9">

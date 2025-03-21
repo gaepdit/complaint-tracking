@@ -18,7 +18,9 @@ public interface IOrgNotifications
 {
     Task<List<OrgNotification>> FetchOrgNotificationsAsync();
 }
-public class OrgNotifications(IHttpClientFactory httpClientFactory, ILogger<OrgNotifications> logger) : IOrgNotifications
+
+public class OrgNotifications(IHttpClientFactory httpClientFactory, ILogger<OrgNotifications> logger)
+    : IOrgNotifications
 {
     public async Task<List<OrgNotification>> FetchOrgNotificationsAsync()
     {
@@ -33,8 +35,8 @@ public class OrgNotifications(IHttpClientFactory httpClientFactory, ILogger<OrgN
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Failed to fetch organizational notifications.");
             // If the API is unresponsive or other error occurs, no notifications will be displayed.
+            logger.LogError(ex, "Failed to fetch organizational notifications.");
             return [];
         }
     }

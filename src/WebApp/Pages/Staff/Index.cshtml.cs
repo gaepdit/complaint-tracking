@@ -4,7 +4,6 @@ using Cts.AppServices.Offices;
 using Cts.AppServices.Permissions;
 using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.Staff;
-using Cts.WebApp.Platform.OrgNotifications;
 using System.ComponentModel.DataAnnotations;
 
 namespace Cts.WebApp.Pages.Staff;
@@ -14,8 +13,7 @@ public class DashboardIndexModel(
     IComplaintService complaintService,
     IStaffService staffService,
     IOfficeService officeService,
-    IAuthorizationService authorization,
-    IOrgNotifications orgNotifications) : PageModel
+    IAuthorizationService authorization) : PageModel
 {
     [BindProperty]
     [Required(ErrorMessage = "Please enter a complaint ID.")]
@@ -39,12 +37,8 @@ public class DashboardIndexModel(
 
     public Task<PageResult> OnGetAsync(CancellationToken token) => BuildDashboardAsync(token);
 
-    public List<OrgNotification> Notifications { get; set; } = [];
-
     public async Task<PageResult> BuildDashboardAsync(CancellationToken token)
     {
-        Notifications = await orgNotifications.FetchOrgNotificationsAsync();
-
         var user = await staffService.GetCurrentUserAsync();
         var officeName = user.Office?.Name;
         var officeId = user.Office?.Id ?? Guid.Empty;
