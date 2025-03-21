@@ -45,10 +45,10 @@ public class OrgNotifications(
 
     private async Task<List<OrgNotification>> GetNotificationsFromApiAsync()
     {
-        using var client = httpClientFactory.CreateClient();
         try
         {
-            var response = await client.GetAsync(AppSettings.OrgNotificationsApiUrl);
+            using var client = httpClientFactory.CreateClient();
+            using var response = await client.GetAsync(AppSettings.OrgNotificationsApiUrl);
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<List<OrgNotification>>() ?? [];
         }
