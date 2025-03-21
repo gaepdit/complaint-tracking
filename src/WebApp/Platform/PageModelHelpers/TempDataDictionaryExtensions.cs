@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace Cts.WebApp.Platform.PageModelHelpers;
 
-public static class TempDataExtensions
+public static class TempDataDictionaryExtensions
 {
     private static void Set<T>(this ITempDataDictionary tempData, string key, T value) where T : class =>
         tempData[key] = JsonSerializer.Serialize(value);

@@ -17,7 +17,7 @@ public static class OrgNotificationsServiceExtensions
 
 public interface IOrgNotifications
 {
-    Task<List<OrgNotification>> FetchOrgNotificationsAsync();
+    Task<List<OrgNotification>> GetOrgNotificationsAsync();
 }
 
 public record OrgNotification
@@ -30,27 +30,22 @@ public class OrgNotifications(
     IMemoryCache cache,
     ILogger<OrgNotifications> logger) : IOrgNotifications
 {
-    public async Task<List<OrgNotification>> FetchOrgNotificationsAsync()
+    private const string ApiEndpoint = "/current";
+    private const string CacheKey = nameof(OrgNotifications);
+
+    public async Task<List<OrgNotification>> GetOrgNotificationsAsync()
     {
         if (AppSettings.OrgNotificationsApiUrl is null) return [];
 
-        if (!cache.TryGetValue(nameof(OrgNotifications), out List<OrgNotification>? notifications))
-        {
-            notifications = await GetNotificationsFromApiAsync();
-            cache.Set(nameof(OrgNotifications), notifications, new TimeSpan(hours: 1, minutes: 0, seconds: 0));
-        }
+        if (cache.TryGetValue(CacheKey, out List<OrgNotification>? notifications) && notifications != null)
+            return notifications;
 
-        return notifications ?? [];
-    }
-
-    private async Task<List<OrgNotification>> GetNotificationsFromApiAsync()
-    {
         try
         {
-            using var client = httpClientFactory.CreateClient();
-            using var response = await client.GetAsync(AppSettings.OrgNotificationsApiUrl);
-            response.EnsureSuccessStatusCode();
-            return await response.Content.ReadFromJsonAsync<List<OrgNotification>>() ?? [];
+            notifications = await httpClientFactory.FetchApiDataAsync<List<OrgNotification>>(
+                AppSettings.OrgNotificationsApiUrl, ApiEndpoint);
+            if (notifications is null) return [];
+            cache.Set(CacheKey, notifications, new TimeSpan(hours: 1, minutes: 0, seconds: 0));
         }
         catch (Exception ex)
         {
@@ -58,5 +53,26 @@ public class OrgNotifications(
             logger.LogError(ex, "Failed to fetch organizational notifications.");
             return [];
         }
+
+        return notifications;
+    }
+}
+
+public static class ApiExtensions
+{
+    public static async Task<T?> FetchApiDataAsync<T>(this IHttpClientFactory httpClientFactory,
+        string apiUrl, string endpointPath)
+    {
+        using var client = httpClientFactory.CreateClient();
+        using var response = await client.GetAsync(UriCombine(apiUrl, endpointPath));
+        response.EnsureSuccessStatusCode();
+        return await response.Content.ReadFromJsonAsync<T>();
+    }
+
+    private static string UriCombine(string a, string b, char separator = '/')
+    {
+        if (string.IsNullOrEmpty(a)) return b;
+        if (string.IsNullOrEmpty(b)) return a;
+        return a.TrimEnd(separator) + separator + b.TrimStart(separator);
     }
 }
