@@ -1,5 +1,6 @@
 ﻿using Cts.WebApp.Platform.Settings;
 using JetBrains.Annotations;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Cts.WebApp.Platform.OrgNotifications;
 
@@ -19,13 +20,31 @@ public interface IOrgNotifications
     Task<List<OrgNotification>> FetchOrgNotificationsAsync();
 }
 
-public class OrgNotifications(IHttpClientFactory httpClientFactory, ILogger<OrgNotifications> logger)
-    : IOrgNotifications
+public record OrgNotification
+{
+    public required string Message { get; [UsedImplicitly] init; }
+}
+
+public class OrgNotifications(
+    IHttpClientFactory httpClientFactory,
+    IMemoryCache cache,
+    ILogger<OrgNotifications> logger) : IOrgNotifications
 {
     public async Task<List<OrgNotification>> FetchOrgNotificationsAsync()
     {
         if (AppSettings.OrgNotificationsApiUrl is null) return [];
 
+        if (!cache.TryGetValue(nameof(OrgNotifications), out List<OrgNotification>? notifications))
+        {
+            notifications = await GetNotificationsFromApiAsync();
+            cache.Set(nameof(OrgNotifications), notifications, new TimeSpan(hours: 1, minutes: 0, seconds: 0));
+        }
+
+        return notifications ?? [];
+    }
+
+    private async Task<List<OrgNotification>> GetNotificationsFromApiAsync()
+    {
         using var client = httpClientFactory.CreateClient();
         try
         {
@@ -40,9 +59,4 @@ public class OrgNotifications(IHttpClientFactory httpClientFactory, ILogger<OrgN
             return [];
         }
     }
-}
-
-public record OrgNotification
-{
-    public required string Message { get; [UsedImplicitly] init; }
 }
