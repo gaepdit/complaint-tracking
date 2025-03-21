@@ -1,0 +1,27 @@
+﻿@model List<Cts.WebApp.Platform.OrgNotifications.OrgNotification>
+
+@if (Model.Any())
+{
+    <div class="row">
+        <div class="col-lg-9">
+            <div class="callout callout-danger">
+                @if (Model.Count == 1)
+                {
+                    <h3 class="h5 mb-3">Notice</h3>
+                    <p>@Model[0].Message</p>
+                }
+                else
+                {
+                    <h3 class="h5 mb-3">Notifications</h3>
+                    <ul>
+                        @foreach (var notification in Model)
+                        {
+                            <li><p>@notification.Message</p></li>
+                        }
+                    </ul>
+                }
+                <p>Please refer to the <a href="https://status.gaepd.org/">EPD-IT status page</a> for updates.</p>
+            </div>
+        </div>
+    </div>
+}

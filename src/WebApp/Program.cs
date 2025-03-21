@@ -2,6 +2,7 @@ using Cts.AppServices.ErrorLogging;
 using Cts.AppServices.RegisterServices;
 using Cts.WebApp.Platform.AppConfiguration;
 using Cts.WebApp.Platform.ErrorLogging;
+using Cts.WebApp.Platform.OrgNotifications;
 using Cts.WebApp.Platform.Settings;
 using GaEpd.EmailService.Utilities;
 using GaEpd.FileService;
@@ -79,6 +80,9 @@ builder.Services
 builder.Services
     .AddDataPersistence(builder.Configuration)
     .AddFileServices(builder.Configuration);
+
+// Add organizational notifications.
+builder.Services.AddOrgNotifications();
 
 // Initialize database.
 builder.Services.AddHostedService<MigratorHostedService>();

@@ -22,7 +22,7 @@
 <environment exclude="Production">
     <div class="banner-test-site">Test Site</div>
 </environment>
-@await Component.InvokeAsync("MainMenu", Model)
+<vc:main-menu model="Model" />
 
 <main id="main-content" role="main" class="flex-grow-1">
     <div class="container">
