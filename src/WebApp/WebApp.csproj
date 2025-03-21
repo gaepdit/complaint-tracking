@@ -5,7 +5,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Azure.Identity" />
         <PackageReference Include="LigerShark.WebOptimizer.Core" />
+        <PackageReference Include="Microsoft.Azure.AppConfiguration.AspNetCore" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
         <PackageReference Include="Microsoft.Web.LibraryManager.Build" />
@@ -22,6 +24,9 @@
     <ItemGroup>
         <Content Update="appsettings.Development.json">
             <DependentUpon>appsettings.json</DependentUpon>
+            <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+        </Content>
+        <Content Update="appsettings.json">
             <CopyToPublishDirectory>Never</CopyToPublishDirectory>
         </Content>
         <Content Update="libman.json">
