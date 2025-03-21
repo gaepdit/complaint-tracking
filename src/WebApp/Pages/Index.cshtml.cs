@@ -4,6 +4,7 @@ using Cts.AppServices.Concerns;
 using Cts.Domain.Data;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.Constants;
+using Cts.WebApp.Platform.OrgNotifications;
 using GaEpd.AppLibrary.Extensions;
 using GaEpd.AppLibrary.ListItems;
 using GaEpd.AppLibrary.Pagination;
@@ -12,7 +13,8 @@ using System.ComponentModel.DataAnnotations;
 namespace Cts.WebApp.Pages;
 
 [AllowAnonymous]
-public class IndexModel(IComplaintService complaints, IConcernService concerns) : PageModel
+public class IndexModel(IComplaintService complaints, IConcernService concerns, IOrgNotifications orgNotifications)
+    : PageModel
 {
     [BindProperty]
     [Required(ErrorMessage = "Please enter a complaint ID.")]
@@ -29,13 +31,15 @@ public class IndexModel(IComplaintService complaints, IConcernService concerns) 
     public static SelectList CountiesSelectList => new(Data.Counties);
     public static SelectList StatesSelectList => new(Data.States);
 
-    public async Task OnGetAsync() => await PopulateSelectListsAsync();
+    public List<OrgNotification> Notifications { get; set; } = [];
+
+    public async Task OnGetAsync() => await InitializePageData();
 
     public async Task<IActionResult> OnPostAsync()
     {
         if (!ModelState.IsValid)
         {
-            await PopulateSelectListsAsync();
+            await InitializePageData();
             return Page();
         }
 
@@ -48,20 +52,23 @@ public class IndexModel(IComplaintService complaints, IConcernService concerns) 
         if (ModelState.IsValid)
             return RedirectToPage("Complaint", routeValues: new { id = FindId });
 
-        await PopulateSelectListsAsync();
+        await InitializePageData();
         return Page();
     }
 
     public async Task<IActionResult> OnGetSearchAsync(ComplaintPublicSearchDto spec, [FromQuery] int p = 1)
     {
         Spec = spec.TrimAll();
-        await PopulateSelectListsAsync();
+        await InitializePageData();
         var paging = new PaginatedRequest(p, GlobalConstants.PageSize, Spec.Sort.GetDescription());
         SearchResults = await complaints.PublicSearchAsync(Spec, paging);
         ShowResults = true;
         return Page();
     }
 
-    private async Task PopulateSelectListsAsync() =>
+    private async Task InitializePageData()
+    {
         ConcernsSelectList = (await concerns.GetAsListItemsAsync(includeInactive: true)).ToSelectList();
+        Notifications = await orgNotifications.FetchOrgNotificationsAsync();
+    }
 }
