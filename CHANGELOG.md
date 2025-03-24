@@ -1,5 +1,11 @@
 # Changelog
 
+## [2025.3.24] - 2025-03-24
+
+### Added
+
+- Improved display of outage notifications.
+
 ## [2025.3.7] - 2025-03-07
 
 ### Fixed
@@ -135,6 +141,7 @@ _This version represents a complete rewrite of the Complaint Tracking System._
 New login system. New design library. Updated workflows. New public complaint page. Dark mode. And more! We hope you
 like it!
 
+[2025.3.24]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.3.24
 [2025.3.7]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.3.7
 [2025.3.5]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.3.5
 [2025.2.3]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.2.3
