@@ -1,4 +1,5 @@
 ﻿using Cts.WebApp.Platform.Settings;
+using GaEpd.AppLibrary.Apis;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -43,7 +44,7 @@ public class OrgNotifications(
         try
         {
             notifications = await httpClientFactory.FetchApiDataAsync<List<OrgNotification>>(
-                AppSettings.OrgNotificationsApiUrl, ApiEndpoint);
+                AppSettings.OrgNotificationsApiUrl, ApiEndpoint, "NotificationsClient");
             if (notifications is null) return [];
             cache.Set(CacheKey, notifications, new TimeSpan(hours: 1, minutes: 0, seconds: 0));
         }
@@ -55,24 +56,5 @@ public class OrgNotifications(
         }
 
         return notifications;
-    }
-}
-
-public static class ApiExtensions
-{
-    public static async Task<T?> FetchApiDataAsync<T>(this IHttpClientFactory httpClientFactory,
-        string apiUrl, string endpointPath)
-    {
-        using var client = httpClientFactory.CreateClient();
-        using var response = await client.GetAsync(UriCombine(apiUrl, endpointPath));
-        response.EnsureSuccessStatusCode();
-        return await response.Content.ReadFromJsonAsync<T>();
-    }
-
-    private static string UriCombine(string a, string b, char separator = '/')
-    {
-        if (string.IsNullOrEmpty(a)) return b;
-        if (string.IsNullOrEmpty(b)) return a;
-        return a.TrimEnd(separator) + separator + b.TrimStart(separator);
     }
 }
