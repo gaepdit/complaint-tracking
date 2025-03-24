@@ -14,6 +14,10 @@ public static class BindingsConfiguration
         builder.Configuration.GetSection(nameof(AppSettings.RaygunSettings))
             .Bind(AppSettings.RaygunSettings);
 
+        // Organizational notifications
+        AppSettings.OrgNotificationsApiUrl =
+            builder.Configuration.GetValue<string>(nameof(AppSettings.OrgNotificationsApiUrl));
+
         // Set app version.
         var segments = (Assembly.GetEntryAssembly()?.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
             .InformationalVersion ?? Assembly.GetEntryAssembly()?.GetName().Version?.ToString() ?? "").Split('+');
