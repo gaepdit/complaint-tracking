@@ -61,8 +61,10 @@ public sealed class SearchResultsExportService(
         if (!await authorization.Succeeded(principal!, Policies.DivisionManager).ConfigureAwait(false))
             spec.DeletedStatus = null;
 
+        string[] includeProperties = spec.DeletedStatus is null ? [] : ["Complaint"];
         return (await actionRepository.GetListAsync(ActionFilters.SearchPredicate(spec),
-                ordering: spec.Sort.GetDescription(), token).ConfigureAwait(false))
+                    ordering: spec.Sort.GetDescription(), includeProperties: includeProperties, token: token)
+                .ConfigureAwait(false))
             .Select(action => new ActionExportDto(action)).ToList();
     }
 

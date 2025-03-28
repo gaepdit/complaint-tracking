@@ -1,7 +1,7 @@
 using Cts.AppServices.ErrorLogging;
 using Cts.AppServices.RegisterServices;
 using Cts.WebApp.Platform.AppConfiguration;
-using Cts.WebApp.Platform.ErrorLogging;
+using Cts.WebApp.Platform.Logging;
 using Cts.WebApp.Platform.OrgNotifications;
 using Cts.WebApp.Platform.Settings;
 using GaEpd.EmailService.Utilities;
