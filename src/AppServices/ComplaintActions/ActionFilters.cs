@@ -10,7 +10,6 @@ internal static class ActionFilters
     public static Expression<Func<ComplaintAction, bool>> SearchPredicate(ActionSearchDto spec) =>
         PredicateBuilder.True<ComplaintAction>()
             .IsActionType(spec.ActionType)
-            .ByComplaintDeletedStatus(spec.DeletedStatus)
             .ByDeletedStatus(spec.DeletedStatus)
             .FromDate(spec.DateFrom)
             .ToDate(spec.DateTo)
@@ -26,22 +25,13 @@ internal static class ActionFilters
         this Expression<Func<ComplaintAction, bool>> predicate, Guid? input) =>
         input is null ? predicate : predicate.And(action => action.ActionType.Id == input);
 
-    private static Expression<Func<ComplaintAction, bool>> ByComplaintDeletedStatus(
-        this Expression<Func<ComplaintAction, bool>> predicate, SearchDeleteStatus? input) =>
-        input switch
-        {
-            SearchDeleteStatus.All => predicate,
-            SearchDeleteStatus.Deleted => predicate,
-            _ => predicate.And(action => !action.Complaint.IsDeleted),
-        };
-
     private static Expression<Func<ComplaintAction, bool>> ByDeletedStatus(
         this Expression<Func<ComplaintAction, bool>> predicate, SearchDeleteStatus? input) =>
         input switch
         {
             SearchDeleteStatus.All => predicate,
-            SearchDeleteStatus.Deleted => predicate.And(action => action.IsDeleted),
-            _ => predicate.And(action => !action.IsDeleted),
+            SearchDeleteStatus.Deleted => predicate.And(action => action.IsDeleted || action.Complaint.IsDeleted),
+            _ => predicate.And(action => !action.IsDeleted && !action.Complaint.IsDeleted),
         };
 
     private static Expression<Func<ComplaintAction, bool>> FromDate(
