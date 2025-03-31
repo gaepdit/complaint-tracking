@@ -23,7 +23,7 @@ public class ActionTypeUpdateValidator : AbstractValidator<ActionTypeUpdateDto>
     private async Task<bool> NotDuplicateName(string name, IValidationContext context,
         CancellationToken token = default)
     {
-        var item = await _repository.FindByNameAsync(name, token).ConfigureAwait(false);
+        var item = await _repository.FindByNameAsync(name, token: token).ConfigureAwait(false);
         return item is null || item.Id == (Guid)context.RootContextData["Id"];
     }
 }

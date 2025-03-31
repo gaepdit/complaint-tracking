@@ -42,13 +42,13 @@ public class AttachmentDeleteModel(IAttachmentService attachmentService, IAuthor
     {
         if (!ModelState.IsValid) return BadRequest();
 
-        var originalAttachment = await attachmentService.FindAttachmentAsync(AttachmentId, token);
+        var originalAttachment = await attachmentService.FindAttachmentAsync(AttachmentId, token: token);
         if (originalAttachment is null) return BadRequest();
 
-        var complaintView = await attachmentService.FindComplaintForAttachmentAsync(AttachmentId, token);
+        var complaintView = await attachmentService.FindComplaintForAttachmentAsync(AttachmentId, token: token);
         if (complaintView is null || !await UserCanDeleteAttachmentAsync(complaintView)) return BadRequest();
 
-        await attachmentService.DeleteAttachmentAsync(originalAttachment, AppSettings.AttachmentServiceConfig, token);
+        await attachmentService.DeleteAttachmentAsync(originalAttachment, AppSettings.AttachmentServiceConfig, token: token);
 
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "Attachment successfully deleted.");
         return RedirectToPage("../Details", pageHandler: null, routeValues: new { complaintView.Id },

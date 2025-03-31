@@ -35,12 +35,12 @@ public class Create
             .Returns(_user);
 
         var officeRepoMock = Substitute.For<IOfficeRepository>();
-        officeRepoMock.GetAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+        officeRepoMock.GetAsync(Arg.Any<Guid>())
             .Returns(new Office(Guid.NewGuid(), TextData.ValidName));
 
         var notificationMock = Substitute.For<INotificationService>();
         notificationMock.SendNotificationAsync(Arg.Any<Template>(), Arg.Any<string>(), Arg.Any<Complaint>(),
-                Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
+                Arg.Any<string>(), Arg.Any<string>())
             .Returns(NotificationResult.SuccessResult());
 
         var appService = new ComplaintService(Substitute.For<IComplaintRepository>(), complaintManagerMock,
@@ -74,12 +74,12 @@ public class Create
 
         var office = new Office(Guid.NewGuid(), TextData.ValidName);
         var officeRepoMock = Substitute.For<IOfficeRepository>();
-        officeRepoMock.GetAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+        officeRepoMock.GetAsync(Arg.Any<Guid>())
             .Returns(office);
 
         var notificationMock = Substitute.For<INotificationService>();
         notificationMock.SendNotificationAsync(Arg.Any<Template>(), Arg.Any<string>(), Arg.Any<Complaint>(),
-                Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
+                Arg.Any<string>(), Arg.Any<string>())
             .Returns(NotificationResult.SuccessResult());
 
         var appService = new ComplaintService(Substitute.For<IComplaintRepository>(), complaintManagerMock,

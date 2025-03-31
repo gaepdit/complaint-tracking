@@ -10,7 +10,7 @@
     <PackageVersion Include="CsvHelper" Version="33.0.1" />
     <PackageVersion Include="Dapper" Version="2.1.66" />
     <PackageVersion Include="FluentValidation.AspNetCore" Version="11.3.0" />
-    <PackageVersion Include="GaEpd.AppLibrary" Version="5.6.1" />
+    <PackageVersion Include="GaEpd.AppLibrary" Version="6.0.0" />
     <PackageVersion Include="GaEpd.EmailService" Version="1.1.0" />
     <PackageVersion Include="GaEpd.FileService" Version="3.2.0" />
     <PackageVersion Include="HtmlSanitizer" Version="8.0.865" />

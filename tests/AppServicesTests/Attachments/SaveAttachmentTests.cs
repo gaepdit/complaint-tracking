@@ -20,7 +20,7 @@ public class SaveAttachmentTests
         var response = new IFileService.TryGetResponse(AppServiceHelpers.TestStream);
 
         var fileService = Substitute.For<IFileService>();
-        fileService.TryGetFileAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
+        fileService.TryGetFileAsync(Arg.Any<string>(), Arg.Any<string>())
             .Returns(response);
 
         var attachmentService = AppServiceHelpers.BuildAttachmentService(fileService: fileService);
@@ -38,7 +38,7 @@ public class SaveAttachmentTests
     {
         // Arrange
         var fileService = Substitute.For<IFileService>();
-        fileService.TryGetFileAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
+        fileService.TryGetFileAsync(Arg.Any<string>(), Arg.Any<string>())
             .Returns(IFileService.TryGetResponse.FailedTryGetResponse);
 
         var attachmentService = AppServiceHelpers.BuildAttachmentService(fileService: fileService);
@@ -62,7 +62,7 @@ public class SaveAttachmentTests
         formFile.FileName.Returns(TextData.ValidPdfFileName);
 
         var complaintRepository = Substitute.For<IComplaintRepository>();
-        complaintRepository.GetAsync(complaintId, Arg.Any<CancellationToken>())
+        complaintRepository.GetAsync(complaintId)
             .Returns(new Complaint(complaintId));
 
         var userService = Substitute.For<IUserService>();
@@ -92,7 +92,7 @@ public class SaveAttachmentTests
         // Assert
         attachmentManager.Received().Create(Arg.Any<IFormFile>(), Arg.Any<Complaint>(), Arg.Any<ApplicationUser?>());
         await attachmentRepository.Received()
-            .InsertAsync(Arg.Any<Attachment>(), Arg.Any<bool>(), Arg.Any<CancellationToken>());
+            .InsertAsync(Arg.Any<Attachment>(), Arg.Any<bool>());
     }
 
     [Test]
@@ -105,7 +105,7 @@ public class SaveAttachmentTests
         formFile.Length.Returns(0);
 
         var complaintRepository = Substitute.For<IComplaintRepository>();
-        complaintRepository.GetAsync(complaintId, Arg.Any<CancellationToken>())
+        complaintRepository.GetAsync(complaintId)
             .Returns(new Complaint(complaintId));
 
         var userService = Substitute.For<IUserService>();
@@ -125,7 +125,7 @@ public class SaveAttachmentTests
         // Assert
         attachmentManager.ReceivedCalls().Should().BeEmpty();
         await attachmentRepository.DidNotReceiveWithAnyArgs()
-            .InsertAsync(Arg.Any<Attachment>(), Arg.Any<bool>(), Arg.Any<CancellationToken>());
+            .InsertAsync(Arg.Any<Attachment>(), Arg.Any<bool>());
     }
 
     [Test]
@@ -139,7 +139,7 @@ public class SaveAttachmentTests
         formFile.FileName.Returns(string.Empty);
 
         var complaintRepository = Substitute.For<IComplaintRepository>();
-        complaintRepository.GetAsync(complaintId, Arg.Any<CancellationToken>())
+        complaintRepository.GetAsync(complaintId)
             .Returns(new Complaint(complaintId));
 
         var userService = Substitute.For<IUserService>();
@@ -159,6 +159,6 @@ public class SaveAttachmentTests
         // Assert
         attachmentManager.ReceivedCalls().Should().BeEmpty();
         await attachmentRepository.DidNotReceiveWithAnyArgs()
-            .InsertAsync(Arg.Any<Attachment>(), Arg.Any<bool>(), Arg.Any<CancellationToken>());
+            .InsertAsync(Arg.Any<Attachment>(), Arg.Any<bool>());
     }
 }

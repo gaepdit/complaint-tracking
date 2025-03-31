@@ -26,7 +26,7 @@ public sealed class SearchResultsExportService(
         if (!await authorization.Succeeded(principal!, Policies.DivisionManager).ConfigureAwait(false))
             spec.DeletedStatus = null;
 
-        return await complaintRepository.CountAsync(ComplaintFilters.SearchPredicate(spec), token)
+        return await complaintRepository.CountAsync(ComplaintFilters.SearchPredicate(spec), token: token)
             .ConfigureAwait(false);
     }
 
@@ -39,7 +39,7 @@ public sealed class SearchResultsExportService(
             spec.DeletedStatus = null;
 
         return (await complaintRepository.GetListWithMostRecentActionAsync(ComplaintFilters.SearchPredicate(spec),
-                sorting: spec.Sort.GetDescription(), token).ConfigureAwait(false))
+                sorting: spec.Sort.GetDescription(), token: token).ConfigureAwait(false))
             .Select(complaint => new ComplaintExportDto(complaint)).ToList();
     }
 
@@ -50,7 +50,7 @@ public sealed class SearchResultsExportService(
         if (!await authorization.Succeeded(principal!, Policies.DivisionManager).ConfigureAwait(false))
             spec.DeletedStatus = null;
 
-        return await actionRepository.CountAsync(ActionFilters.SearchPredicate(spec), token)
+        return await actionRepository.CountAsync(ActionFilters.SearchPredicate(spec), token: token)
             .ConfigureAwait(false);
     }
 

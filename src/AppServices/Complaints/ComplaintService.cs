@@ -43,18 +43,18 @@ public sealed class ComplaintService(
             .FindPublicAsync(ComplaintFilters.PublicIdPredicate(id), token: token).ConfigureAwait(false));
 
     public Task<bool> PublicExistsAsync(int id, CancellationToken token = default) =>
-        complaintRepository.ExistsAsync(ComplaintFilters.PublicIdPredicate(id), token);
+        complaintRepository.ExistsAsync(ComplaintFilters.PublicIdPredicate(id), token: token);
 
     public Task<IPaginatedResult<ComplaintSearchResultDto>> PublicSearchAsync(
         ComplaintPublicSearchDto spec, PaginatedRequest paging, CancellationToken token = default) =>
-        PerformPagedSearchAsync(paging, ComplaintFilters.PublicSearchPredicate(spec), token);
+        PerformPagedSearchAsync(paging, ComplaintFilters.PublicSearchPredicate(spec), token: token);
 
     // Staff read methods
 
     public async Task<ComplaintViewDto?> FindAsync(int id, bool includeDeletedActions = false,
         CancellationToken token = default)
     {
-        var complaint = await complaintRepository.FindIncludeAllAsync(id, includeDeletedActions, token)
+        var complaint = await complaintRepository.FindIncludeAllAsync(id, includeDeletedActions, token: token)
             .ConfigureAwait(false);
         if (complaint is null) return null;
         var complaintViewDto = mapper.Map<ComplaintViewDto>(complaint);
@@ -69,10 +69,10 @@ public sealed class ComplaintService(
 
     public async Task<ComplaintUpdateDto?> FindForUpdateAsync(int id, CancellationToken token = default) =>
         mapper.Map<ComplaintUpdateDto>(await complaintRepository.FindAsync(e =>
-            e.Id == id && !e.IsDeleted && !e.ComplaintClosed, token).ConfigureAwait(false));
+            e.Id == id && !e.IsDeleted && !e.ComplaintClosed, token: token).ConfigureAwait(false));
 
     public async Task<bool> ExistsAsync(int id, CancellationToken token = default) =>
-        await complaintRepository.ExistsAsync(id, token).ConfigureAwait(false);
+        await complaintRepository.ExistsAsync(id, token: token).ConfigureAwait(false);
 
     public async Task<IPaginatedResult<ComplaintSearchResultDto>> SearchAsync(ComplaintSearchDto spec,
         PaginatedRequest paging, CancellationToken token = default)
@@ -80,7 +80,7 @@ public sealed class ComplaintService(
         var principal = userService.GetCurrentPrincipal();
         if (!await authorization.Succeeded(principal!, Policies.DivisionManager).ConfigureAwait(false))
             spec.DeletedStatus = null;
-        return await PerformPagedSearchAsync(paging, ComplaintFilters.SearchPredicate(spec), token)
+        return await PerformPagedSearchAsync(paging, ComplaintFilters.SearchPredicate(spec), token: token)
             .ConfigureAwait(false);
     }
 
@@ -89,10 +89,10 @@ public sealed class ComplaintService(
     private async Task<IPaginatedResult<ComplaintSearchResultDto>> PerformPagedSearchAsync(PaginatedRequest paging,
         Expression<Func<Complaint, bool>> predicate, CancellationToken token)
     {
-        var count = await complaintRepository.CountAsync(predicate, token).ConfigureAwait(false);
+        var count = await complaintRepository.CountAsync(predicate, token: token).ConfigureAwait(false);
         var items = count > 0
             ? mapper.Map<IEnumerable<ComplaintSearchResultDto>>(await complaintRepository
-                .GetPagedListAsync(predicate, paging, token).ConfigureAwait(false))
+                .GetPagedListAsync(predicate, paging, token: token).ConfigureAwait(false))
             : [];
         return new PaginatedResult<ComplaintSearchResultDto>(items, count, paging);
     }
@@ -100,7 +100,7 @@ public sealed class ComplaintService(
     private async Task<IReadOnlyCollection<ComplaintSearchResultDto>> PerformSearchAsync(ComplaintSearchDto spec,
         CancellationToken token) =>
         mapper.Map<IReadOnlyCollection<ComplaintSearchResultDto>>((await complaintRepository
-                .GetListAsync(ComplaintFilters.SearchPredicate(spec), token).ConfigureAwait(false))
+                .GetListAsync(ComplaintFilters.SearchPredicate(spec), token: token).ConfigureAwait(false))
             .OrderByDescending(complaint => complaint.ReceivedDate));
 
     // Dashboard methods
@@ -109,35 +109,35 @@ public sealed class ComplaintService(
         CancellationToken token = default)
     {
         var spec = new ComplaintSearchDto { Status = SearchComplaintStatus.NotAccepted, Assigned = userId };
-        return PerformSearchAsync(spec, token);
+        return PerformSearchAsync(spec, token: token);
     }
 
     public Task<IReadOnlyCollection<ComplaintSearchResultDto>> GetOpenComplaintsForUserAsync(string userId,
         CancellationToken token = default)
     {
         var spec = new ComplaintSearchDto { Status = SearchComplaintStatus.AllOpen, Assigned = userId };
-        return PerformSearchAsync(spec, token);
+        return PerformSearchAsync(spec, token: token);
     }
 
     public Task<IReadOnlyCollection<ComplaintSearchResultDto>> GetReviewPendingComplaintsForUserAsync(string userId,
         CancellationToken token = default)
     {
         var spec = new ComplaintSearchDto { Status = SearchComplaintStatus.ReviewPending, Reviewer = userId };
-        return PerformSearchAsync(spec, token);
+        return PerformSearchAsync(spec, token: token);
     }
 
     public Task<IReadOnlyCollection<ComplaintSearchResultDto>> GetUnacceptedComplaintsForOfficeAsync(Guid officeId,
         CancellationToken token = default)
     {
         var spec = new ComplaintSearchDto { Status = SearchComplaintStatus.NotAccepted, Office = officeId };
-        return PerformSearchAsync(spec, token);
+        return PerformSearchAsync(spec, token: token);
     }
 
     public Task<IReadOnlyCollection<ComplaintSearchResultDto>> GetUnassignedComplaintsForOfficeAsync(Guid officeId,
         CancellationToken token = default)
     {
         var spec = new ComplaintSearchDto { Status = SearchComplaintStatus.NotAssigned, Office = officeId };
-        return PerformSearchAsync(spec, token);
+        return PerformSearchAsync(spec, token: token);
     }
 
     // Staff complaint write methods
@@ -146,11 +146,11 @@ public sealed class ComplaintService(
         IAttachmentService.AttachmentServiceConfig config, string? baseUrl, CancellationToken token = default)
     {
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
-        var complaint = await CreateComplaintFromDtoAsync(resource, currentUser, token).ConfigureAwait(false);
+        var complaint = await CreateComplaintFromDtoAsync(resource, currentUser, token: token).ConfigureAwait(false);
 
         await complaintRepository.InsertAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
-        await AddTransitionAsync(complaint, TransitionType.New, currentUser, token).ConfigureAwait(false);
-        await AddAssignmentTransitionsAsync(complaint, currentUser, token).ConfigureAwait(false);
+        await AddTransitionAsync(complaint, TransitionType.New, currentUser, token: token).ConfigureAwait(false);
+        await AddAssignmentTransitionsAsync(complaint, currentUser, token: token).ConfigureAwait(false);
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
 
         var result = new ComplaintCreateResult(complaint.Id);
@@ -160,7 +160,7 @@ public sealed class ComplaintService(
             ? Template.UnassignedComplaint
             : Template.AssignedComplaint;
         var notificationResult =
-            await NotifyOwnerAsync(complaint, template, baseUrl, null, token).ConfigureAwait(false);
+            await NotifyOwnerAsync(complaint, template, baseUrl, null, token: token).ConfigureAwait(false);
         if (!notificationResult.Success) result.AddWarning(notificationResult.FailureMessage);
 
         // Process attachments
@@ -170,7 +170,7 @@ public sealed class ComplaintService(
         if (validateFilesResult.IsValid)
         {
             result.SetNumberOfAttachments(await attachmentService
-                .SaveAttachmentsAsync(complaint.Id, resource.Files, config, token)
+                .SaveAttachmentsAsync(complaint.Id, resource.Files, config, token: token)
                 .ConfigureAwait(false));
         }
         else
@@ -211,15 +211,15 @@ public sealed class ComplaintService(
         }
 
         return await notificationService
-            .SendNotificationAsync(template, recipient.Email, complaint, baseUrl, comment, token)
+            .SendNotificationAsync(template, recipient.Email, complaint, baseUrl, comment, token: token)
             .ConfigureAwait(false);
     }
 
     public async Task UpdateAsync(int id, ComplaintUpdateDto resource, CancellationToken token = default)
     {
-        var complaint = await complaintRepository.GetAsync(id, token).ConfigureAwait(false);
+        var complaint = await complaintRepository.GetAsync(id, token: token).ConfigureAwait(false);
         complaint.SetUpdater((await userService.GetCurrentUserAsync().ConfigureAwait(false))?.Id);
-        await MapComplaintDetailsAsync(complaint, resource, token).ConfigureAwait(false);
+        await MapComplaintDetailsAsync(complaint, resource, token: token).ConfigureAwait(false);
         await complaintRepository.UpdateAsync(complaint, token: token).ConfigureAwait(false);
     }
 
@@ -227,12 +227,12 @@ public sealed class ComplaintService(
 
     public async Task AcceptAsync(int id, CancellationToken token = default)
     {
-        var complaint = await complaintRepository.GetAsync(id, token).ConfigureAwait(false);
+        var complaint = await complaintRepository.GetAsync(id, token: token).ConfigureAwait(false);
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
 
         complaintManager.Accept(complaint, currentUser);
         await complaintRepository.UpdateAsync(complaint, autoSave: false, token: token).ConfigureAwait(false);
-        await AddTransitionAsync(complaint, TransitionType.Accepted, currentUser, token).ConfigureAwait(false);
+        await AddTransitionAsync(complaint, TransitionType.Accepted, currentUser, token: token).ConfigureAwait(false);
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
     }
 
@@ -245,9 +245,9 @@ public sealed class ComplaintService(
             resource.OwnerId == currentComplaint.CurrentOwner?.Id)
             return result;
 
-        var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
+        var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token: token).ConfigureAwait(false);
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
-        var office = await officeRepository.GetAsync(resource.OfficeId!.Value, Office.IncludeAssignor, token)
+        var office = await officeRepository.GetAsync(resource.OfficeId!.Value, Office.IncludeAssignor, token: token)
             .ConfigureAwait(false);
         var owner = resource.OwnerId is not null
             ? await userService.FindUserAsync(resource.OwnerId).ConfigureAwait(false)
@@ -263,7 +263,7 @@ public sealed class ComplaintService(
         var template = complaint.CurrentOwner != null
             ? Template.AssignedComplaint
             : Template.UnassignedComplaint;
-        var notificationResult = await NotifyOwnerAsync(complaint, template, baseUrl, null, token)
+        var notificationResult = await NotifyOwnerAsync(complaint, template, baseUrl, null, token: token)
             .ConfigureAwait(false);
         if (!notificationResult.Success) result.AddWarning(notificationResult.FailureMessage);
 
@@ -273,7 +273,7 @@ public sealed class ComplaintService(
     public async Task<NotificationResult> CloseAsync(ComplaintClosureDto resource, string? baseUrl,
         CancellationToken token = default)
     {
-        var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
+        var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token: token).ConfigureAwait(false);
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
 
         complaintManager.Close(complaint, resource.Comment, currentUser);
@@ -283,14 +283,14 @@ public sealed class ComplaintService(
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
 
         // Send notification
-        return await NotifyOwnerAsync(complaint, Template.ReviewApproved, baseUrl, resource.Comment, token)
+        return await NotifyOwnerAsync(complaint, Template.ReviewApproved, baseUrl, resource.Comment, token: token)
             .ConfigureAwait(false);
     }
 
     public async Task<NotificationResult> ReopenAsync(ComplaintClosureDto resource, string? baseUrl,
         CancellationToken token = default)
     {
-        var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
+        var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token: token).ConfigureAwait(false);
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
 
         complaintManager.Reopen(complaint, currentUser);
@@ -307,7 +307,7 @@ public sealed class ComplaintService(
     public async Task<NotificationResult> RequestReviewAsync(ComplaintRequestReviewDto resource, string? baseUrl,
         CancellationToken token = default)
     {
-        var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
+        var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token: token).ConfigureAwait(false);
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
         var reviewer = (await userService.FindUserAsync(resource.ReviewerId!).ConfigureAwait(false))!;
 
@@ -335,7 +335,7 @@ public sealed class ComplaintService(
         }
 
         return await notificationService.SendNotificationAsync(Template.ReviewRequested, reviewer.Email, complaint,
-            baseUrl, resource.Comment, token).ConfigureAwait(false);
+            baseUrl, resource.Comment, token: token).ConfigureAwait(false);
     }
 
     public async Task<NotificationResult> ReturnAsync(ComplaintAssignmentDto resource, string? baseUrl,
@@ -343,9 +343,9 @@ public sealed class ComplaintService(
     {
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
 
-        var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
+        var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token: token).ConfigureAwait(false);
         var previousOwner = complaint.CurrentOwner;
-        var newOffice = await officeRepository.GetAsync(resource.OfficeId!.Value, Office.IncludeAssignor, token)
+        var newOffice = await officeRepository.GetAsync(resource.OfficeId!.Value, Office.IncludeAssignor, token: token)
             .ConfigureAwait(false);
         var newOwner = resource.OwnerId is not null
             ? await userService.FindUserAsync(resource.OwnerId).ConfigureAwait(false)
@@ -358,17 +358,17 @@ public sealed class ComplaintService(
         if (complaint.CurrentOwner != null &&
             complaint.CurrentOwner != previousOwner &&
             complaint.CurrentOwner == currentUser)
-            await AddTransitionAsync(complaint, TransitionType.Accepted, currentUser, token).ConfigureAwait(false);
+            await AddTransitionAsync(complaint, TransitionType.Accepted, currentUser, token: token).ConfigureAwait(false);
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
 
         // Send notification
-        return await NotifyOwnerAsync(complaint, Template.ReviewReturned, baseUrl, resource.Comment, token)
+        return await NotifyOwnerAsync(complaint, Template.ReviewReturned, baseUrl, resource.Comment, token: token)
             .ConfigureAwait(false);
     }
 
     public async Task DeleteAsync(ComplaintClosureDto resource, CancellationToken token = default)
     {
-        var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
+        var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token: token).ConfigureAwait(false);
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
 
         complaintManager.Delete(complaint, resource.Comment, currentUser);
@@ -380,7 +380,7 @@ public sealed class ComplaintService(
 
     public async Task RestoreAsync(ComplaintClosureDto resource, CancellationToken token = default)
     {
-        var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
+        var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token: token).ConfigureAwait(false);
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
 
         complaintManager.Restore(complaint, currentUser);
@@ -412,9 +412,9 @@ public sealed class ComplaintService(
         ApplicationUser? currentUser, CancellationToken token)
     {
         var complaint = complaintManager.Create(currentUser);
-        await MapComplaintDetailsAsync(complaint, resource, token).ConfigureAwait(false);
+        await MapComplaintDetailsAsync(complaint, resource, token: token).ConfigureAwait(false);
 
-        var office = await officeRepository.GetAsync(resource.OfficeId!.Value, Office.IncludeAssignor, token)
+        var office = await officeRepository.GetAsync(resource.OfficeId!.Value, Office.IncludeAssignor, token: token)
             .ConfigureAwait(false);
         var owner = resource.OwnerId is not null
             ? await userService.FindUserAsync(resource.OwnerId).ConfigureAwait(false)
@@ -446,12 +446,12 @@ public sealed class ComplaintService(
         complaint.ComplaintDirections = resource.ComplaintDirections;
         complaint.ComplaintCity = resource.ComplaintCity;
         complaint.ComplaintCounty = resource.ComplaintCounty;
-        complaint.PrimaryConcern = await concernRepository.GetAsync(resource.PrimaryConcernId, token)
+        complaint.PrimaryConcern = await concernRepository.GetAsync(resource.PrimaryConcernId, token: token)
             .ConfigureAwait(false);
         complaint.SecondaryConcern =
             resource.SecondaryConcernId == null || resource.SecondaryConcernId == resource.PrimaryConcernId
                 ? null
-                : await concernRepository.GetAsync(resource.SecondaryConcernId.Value, token).ConfigureAwait(false);
+                : await concernRepository.GetAsync(resource.SecondaryConcernId.Value, token: token).ConfigureAwait(false);
 
         // Properties: Source
         complaint.SourceFacilityIdNumber = resource.SourceFacilityIdNumber;

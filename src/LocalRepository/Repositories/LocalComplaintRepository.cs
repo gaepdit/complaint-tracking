@@ -19,12 +19,12 @@ public sealed class LocalComplaintRepository(
 
     public async Task<Complaint?> FindIncludeAllAsync(int id, bool includeDeletedActions = false,
         CancellationToken token = default) =>
-        await GetComplaintDetailsAsync(await FindAsync(id, token).ConfigureAwait(false), includeDeletedActions, token)
+        await GetComplaintDetailsAsync(await FindAsync(id, token: token).ConfigureAwait(false), includeDeletedActions, token: token)
             .ConfigureAwait(false);
 
     public async Task<Complaint?> FindPublicAsync(Expression<Func<Complaint, bool>> predicate,
         CancellationToken token = default) =>
-        await GetComplaintDetailsAsync(await FindAsync(predicate, token).ConfigureAwait(false), false, token)
+        await GetComplaintDetailsAsync(await FindAsync(predicate, token: token).ConfigureAwait(false), false, token: token)
             .ConfigureAwait(false);
 
     public Task<IReadOnlyCollection<Complaint>> GetListWithMostRecentActionAsync(
@@ -51,7 +51,7 @@ public sealed class LocalComplaintRepository(
 
         complaint.Attachments.Clear();
         complaint.Attachments.AddRange((await attachmentRepository.GetListAsync(attachment =>
-                    attachment.Complaint.Id == complaint.Id && !attachment.IsDeleted, token)
+                    attachment.Complaint.Id == complaint.Id && !attachment.IsDeleted, token: token)
                 .ConfigureAwait(false))
             .OrderBy(attachment => attachment.UploadedDate)
             .ThenBy(attachment => attachment.FileName)
@@ -59,7 +59,7 @@ public sealed class LocalComplaintRepository(
 
         complaint.Actions.Clear();
         complaint.Actions.AddRange((await actionRepository.GetListAsync(action =>
-                    action.Complaint.Id == complaint.Id && (!action.IsDeleted || includeDeletedActions), token)
+                    action.Complaint.Id == complaint.Id && (!action.IsDeleted || includeDeletedActions), token: token)
                 .ConfigureAwait(false))
             .OrderByDescending(action => action.ActionDate)
             .ThenByDescending(action => action.EnteredDate)
@@ -67,7 +67,7 @@ public sealed class LocalComplaintRepository(
 
         complaint.ComplaintTransitions.Clear();
         complaint.ComplaintTransitions.AddRange((await transitionRepository.GetListAsync(transition =>
-                    transition.Complaint.Id == complaint.Id, token)
+                    transition.Complaint.Id == complaint.Id, token: token)
                 .ConfigureAwait(false))
             .OrderBy(transition => transition.CommittedDate).ThenBy(transition => transition.Id));
 
@@ -76,5 +76,5 @@ public sealed class LocalComplaintRepository(
 
     public Task InsertTransitionAsync(ComplaintTransition transition, bool autoSave = true,
         CancellationToken token = default) =>
-        transitionRepository.InsertAsync(transition, autoSave, token);
+        transitionRepository.InsertAsync(transition, autoSave, token: token);
 }

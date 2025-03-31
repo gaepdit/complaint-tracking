@@ -24,15 +24,15 @@ public sealed class OfficeService(
 
     // Hide the following base methods in order to include the assignor.
     public new async Task<OfficeUpdateDto?> FindForUpdateAsync(Guid id, CancellationToken token = default) =>
-        _mapper.Map<OfficeUpdateDto>(await repository.FindIncludeAssignorAsync(id, token).ConfigureAwait(false));
+        _mapper.Map<OfficeUpdateDto>(await repository.FindIncludeAssignorAsync(id, token: token).ConfigureAwait(false));
 
     public new async Task UpdateAsync(Guid id, OfficeUpdateDto resource, CancellationToken token = default)
     {
-        var office = await repository.GetAsync(id, token).ConfigureAwait(false);
+        var office = await repository.GetAsync(id, token: token).ConfigureAwait(false);
         office.SetUpdater((await _userService.GetCurrentUserAsync().ConfigureAwait(false))?.Id);
 
         if (office.Name != resource.Name.Trim())
-            await manager.ChangeNameAsync(office, resource.Name, token).ConfigureAwait(false);
+            await manager.ChangeNameAsync(office, resource.Name, token: token).ConfigureAwait(false);
 
         office.Active = resource.Active;
 
@@ -51,14 +51,14 @@ public sealed class OfficeService(
 
     public async Task<OfficeWithAssignorDto?> FindAsync(Guid id, CancellationToken token = default)
     {
-        var office = await repository.FindIncludeAssignorAsync(id, token).ConfigureAwait(false);
+        var office = await repository.FindIncludeAssignorAsync(id, token: token).ConfigureAwait(false);
         return _mapper.Map<OfficeWithAssignorDto>(office);
     }
 
     public async Task<Guid> CreateAsync(OfficeCreateDto resource, CancellationToken token = default)
     {
         var office = await manager
-            .CreateAsync(resource.Name, (await _userService.GetCurrentUserAsync().ConfigureAwait(false))?.Id, token)
+            .CreateAsync(resource.Name, (await _userService.GetCurrentUserAsync().ConfigureAwait(false))?.Id, token: token)
             .ConfigureAwait(false);
         if (resource.AssignorId != null)
             office.Assignor = await _userService.FindUserAsync(resource.AssignorId).ConfigureAwait(false);
@@ -77,13 +77,13 @@ public sealed class OfficeService(
             (principal is null || !await authorization.Succeeded(principal, Policies.ActiveUser).ConfigureAwait(false)))
             includeInactive = false;
 
-        return (await repository.GetStaffMembersListAsync(id.Value, includeInactive, token).ConfigureAwait(false))
+        return (await repository.GetStaffMembersListAsync(id.Value, includeInactive, token: token).ConfigureAwait(false))
             .Select(staff => new ListItem<string>(staff.Id, staff.SortableNameWithInactive)).ToList();
     }
 
     public async Task<bool> UserIsAssignorForOfficeAsync(Guid id, string userId, CancellationToken token = default)
     {
-        var office = await repository.FindIncludeAssignorAsync(id, token).ConfigureAwait(false);
+        var office = await repository.FindIncludeAssignorAsync(id, token: token).ConfigureAwait(false);
         return office is { Active: true } && office.Assignor?.Id == userId;
     }
 
@@ -91,6 +91,6 @@ public sealed class OfficeService(
         CancellationToken token = default) =>
         _mapper.Map<IReadOnlyCollection<OfficeViewDto>>(await repository
             .GetListAsync(office => office.Id != ignoreOffice &&
-                                    office.Assignor != null && office.Assignor.Id == userId, token)
+                                    office.Assignor != null && office.Assignor.Id == userId, token: token)
             .ConfigureAwait(false));
 }

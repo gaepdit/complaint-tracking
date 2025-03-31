@@ -73,10 +73,10 @@ public class NotificationService(
             return NotificationResult.FailureResult($"{FailurePrefix} An error occurred when generating the email.");
         }
 
-        _ = emailService.SendEmailAsync(message, token);
+        _ = emailService.SendEmailAsync(message, token: token);
         if (settings.EnableEmailLog)
         {
-            await emailLogRepository.InsertAsync(message, token).ConfigureAwait(false);
+            await emailLogRepository.InsertAsync(message, token: token).ConfigureAwait(false);
         }
 
         return NotificationResult.SuccessResult();

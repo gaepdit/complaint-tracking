@@ -29,10 +29,9 @@ public class Search
 
         var repoMock = Substitute.For<IComplaintRepository>();
         repoMock.GetPagedListAsync(Arg.Any<Expression<Func<Complaint, bool>>>(),
-                Arg.Any<PaginatedRequest>(), Arg.Any<CancellationToken>())
+                Arg.Any<PaginatedRequest>())
             .Returns(itemList);
-        repoMock.CountAsync(Arg.Any<Expression<Func<Complaint, bool>>>(), Arg.Any<CancellationToken>())
-            .Returns(count);
+        repoMock.CountAsync(Arg.Any<Expression<Func<Complaint, bool>>>()).Returns(count);
 
         var authorizationMock = Substitute.For<IAuthorizationService>();
         authorizationMock.AuthorizeAsync(Arg.Any<ClaimsPrincipal>(), resource: Arg.Any<object?>(),
@@ -64,10 +63,9 @@ public class Search
 
         var repoMock = Substitute.For<IComplaintRepository>();
         repoMock.GetPagedListAsync(Arg.Any<Expression<Func<Complaint, bool>>>(),
-                Arg.Any<PaginatedRequest>(), Arg.Any<CancellationToken>())
+                Arg.Any<PaginatedRequest>())
             .Returns(itemList);
-        repoMock.CountAsync(
-                Arg.Any<Expression<Func<Complaint, bool>>>(), Arg.Any<CancellationToken>())
+        repoMock.CountAsync(Arg.Any<Expression<Func<Complaint, bool>>>())
             .Returns(count);
 
         var authorizationMock = Substitute.For<IAuthorizationService>();

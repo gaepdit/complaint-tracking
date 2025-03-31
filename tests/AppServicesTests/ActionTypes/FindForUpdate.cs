@@ -13,7 +13,7 @@ public class FindForUpdate
     {
         var item = new ActionType(Guid.Empty, TextData.ValidName);
         var repoMock = Substitute.For<IActionTypeRepository>();
-        repoMock.FindAsync(item.Id, Arg.Any<CancellationToken>())
+        repoMock.FindAsync(item.Id)
             .Returns(item);
         var managerMock = Substitute.For<IActionTypeManager>();
         var userServiceMock = Substitute.For<IUserService>();
@@ -30,7 +30,7 @@ public class FindForUpdate
     {
         var id = Guid.Empty;
         var repoMock = Substitute.For<IActionTypeRepository>();
-        repoMock.FindAsync(id, Arg.Any<CancellationToken>())
+        repoMock.FindAsync(id)
             .Returns((ActionType?)null);
         var managerMock = Substitute.For<IActionTypeManager>();
         var mapperMock = Substitute.For<IMapper>();

@@ -18,7 +18,7 @@ public sealed class LocalOfficeRepository() : NamedEntityRepository<Office>(Offi
             .ToList());
 
     public Task<Office?> FindIncludeAssignorAsync(Guid id, CancellationToken token = default) =>
-        FindAsync(id, token);
+        FindAsync(id, token: token);
 
     public Task<IReadOnlyCollection<Office>> GetListIncludeAssignorAsync(CancellationToken token = default) =>
         GetOrderedListAsync(token);
