@@ -27,7 +27,7 @@ public class PublicSearch
 
         var repoMock = Substitute.For<IComplaintRepository>();
         repoMock.GetPagedListAsync(Arg.Any<Expression<Func<Complaint, bool>>>(),
-                Arg.Any<PaginatedRequest>(), Arg.Any<CancellationToken>())
+                Arg.Any<PaginatedRequest>())
             .Returns(itemList);
         repoMock.CountAsync(Arg.Any<Expression<Func<Complaint, bool>>>(), Arg.Any<CancellationToken>())
             .Returns(count);
@@ -57,7 +57,7 @@ public class PublicSearch
 
         var repoMock = Substitute.For<IComplaintRepository>();
         repoMock.GetPagedListAsync(Arg.Any<Expression<Func<Complaint, bool>>>(),
-                Arg.Any<PaginatedRequest>(), Arg.Any<CancellationToken>())
+                Arg.Any<PaginatedRequest>())
             .Returns(itemList);
         repoMock.CountAsync(Arg.Any<Expression<Func<Complaint, bool>>>(), Arg.Any<CancellationToken>())
             .Returns(count);

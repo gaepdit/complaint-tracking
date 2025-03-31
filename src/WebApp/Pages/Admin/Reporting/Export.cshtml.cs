@@ -24,8 +24,8 @@ public class ExportModel(IDataExportService dataExportService, IFileService file
     public async Task<IActionResult> OnGetArchiveAsync(CancellationToken token = default)
     {
         var exportMeta = await dataExportService.ExportArchiveAsync(cacheLifetime: GlobalConstants.ExportLifespan,
-            exportFilePath: GlobalConstants.ExportFolder, token);
-        var response = await fileService.TryGetFileAsync(exportMeta.FileName, GlobalConstants.ExportFolder, token);
+            exportFilePath: GlobalConstants.ExportFolder, token: token);
+        var response = await fileService.TryGetFileAsync(exportMeta.FileName, GlobalConstants.ExportFolder, token: token);
 
         return response.Success
             ? File(response.Value, FileTypes.ZipContentType, exportMeta.FileName)

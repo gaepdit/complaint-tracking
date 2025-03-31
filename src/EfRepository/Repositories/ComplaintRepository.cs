@@ -43,7 +43,7 @@ public sealed class ComplaintRepository(AppDbContext context)
         if (complaintStatus is null) return null;
 
         if (complaintStatus is not (ComplaintStatus.Closed or ComplaintStatus.AdministrativelyClosed))
-            return await FindAsync(predicate, token).ConfigureAwait(false);
+            return await FindAsync(predicate, token: token).ConfigureAwait(false);
 
         return await Context.Complaints
             .Include(complaint => complaint.Attachments

@@ -13,8 +13,7 @@ public class FindForUpdate
     {
         var item = new Concern(Guid.Empty, TextData.ValidName);
         var repoMock = Substitute.For<IConcernRepository>();
-        repoMock.FindAsync(item.Id, Arg.Any<CancellationToken>())
-            .Returns(item);
+        repoMock.FindAsync(item.Id).Returns(item);
         var managerMock = Substitute.For<IConcernManager>();
         var userServiceMock = Substitute.For<IUserService>();
         var appService = new ConcernService(repoMock, managerMock,
@@ -30,8 +29,7 @@ public class FindForUpdate
     {
         var id = Guid.Empty;
         var repoMock = Substitute.For<IConcernRepository>();
-        repoMock.FindAsync(id, Arg.Any<CancellationToken>())
-            .Returns((Concern?)null);
+        repoMock.FindAsync(id).Returns((Concern?)null);
         var managerMock = Substitute.For<IConcernManager>();
         var mapperMock = Substitute.For<IMapper>();
         var userServiceMock = Substitute.For<IUserService>();

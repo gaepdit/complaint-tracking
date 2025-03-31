@@ -21,5 +21,5 @@ public class OfficeCreateValidator : AbstractValidator<OfficeCreateDto>
     }
 
     private async Task<bool> NotDuplicateName(string name, CancellationToken token = default) =>
-        await _repository.FindByNameAsync(name, token).ConfigureAwait(false) is null;
+        await _repository.FindByNameAsync(name, token: token).ConfigureAwait(false) is null;
 }

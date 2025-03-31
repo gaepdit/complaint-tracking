@@ -15,7 +15,4 @@ public interface IActionRepository : IRepository<ComplaintAction, Guid>
     /// <returns>A Complaint Action entity.</returns>
     Task<ComplaintAction?> FindIncludeAllAsync(Expression<Func<ComplaintAction, bool>> predicate,
         CancellationToken token = default);
-
-    Task<IReadOnlyCollection<ComplaintAction>> GetListAsync(Expression<Func<ComplaintAction, bool>> predicate,
-        string ordering, string[] includeProperties, CancellationToken token = default);
 }

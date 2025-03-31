@@ -73,13 +73,13 @@ public class DetailsModel(
     {
         if (Id <= 0) return BadRequest();
 
-        var complaintView = await complaintService.FindAsync(Id, includeDeletedActions: true, token);
+        var complaintView = await complaintService.FindAsync(Id, includeDeletedActions: true, token: token);
         if (complaintView is null || complaintView.IsDeleted) return BadRequest();
 
         await SetPermissionsAsync(complaintView);
         if (!UserCan[ComplaintOperation.Accept]) return BadRequest();
 
-        await complaintService.AcceptAsync(Id, token);
+        await complaintService.AcceptAsync(Id, token: token);
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "Complaint accepted.");
         return RedirectToPage("Details", routeValues: new { Id });
     }
@@ -89,7 +89,7 @@ public class DetailsModel(
     {
         if (Id <= 0 || newAction.ComplaintId != Id) return BadRequest();
 
-        var complaintView = await complaintService.FindAsync(Id, includeDeletedActions: true, token);
+        var complaintView = await complaintService.FindAsync(Id, includeDeletedActions: true, token: token);
         if (complaintView is null || complaintView.IsDeleted) return BadRequest();
 
         await SetPermissionsAsync(complaintView);
@@ -103,7 +103,7 @@ public class DetailsModel(
             return Page();
         }
 
-        HighlightId = await actionService.CreateAsync(newAction, token);
+        HighlightId = await actionService.CreateAsync(newAction, token: token);
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "New Action successfully added.");
         return RedirectToPage("Details", pageHandler: null, routeValues: new { Id }, fragment: HighlightId.ToString());
     }
@@ -113,7 +113,7 @@ public class DetailsModel(
     {
         if (Id <= 0) return BadRequest();
 
-        var complaintView = await complaintService.FindAsync(Id, includeDeletedActions: true, token);
+        var complaintView = await complaintService.FindAsync(Id, includeDeletedActions: true, token: token);
         if (complaintView is null || complaintView.IsDeleted) return BadRequest();
 
         await SetPermissionsAsync(complaintView);

@@ -14,7 +14,7 @@ public class FindAttachment
             attachment is { IsDeleted: false, Complaint: { IsDeleted: false, ComplaintClosed: true } });
 
         var attachmentRepository = Substitute.For<IAttachmentRepository>();
-        attachmentRepository.FindAsync(Arg.Any<Expression<Func<Attachment, bool>>>(), Arg.Any<CancellationToken>())
+        attachmentRepository.FindAsync(Arg.Any<Expression<Func<Attachment, bool>>>())
             .Returns(item);
 
         var appService = AppServiceHelpers.BuildAttachmentService(attachmentRepository: attachmentRepository);
@@ -31,7 +31,7 @@ public class FindAttachment
     {
         // Arrange
         var attachmentRepository = Substitute.For<IAttachmentRepository>();
-        attachmentRepository.FindAsync(Arg.Any<Expression<Func<Attachment, bool>>>(), Arg.Any<CancellationToken>())
+        attachmentRepository.FindAsync(Arg.Any<Expression<Func<Attachment, bool>>>())
             .Returns((Attachment?)null);
 
         var appService = AppServiceHelpers.BuildAttachmentService(attachmentRepository: attachmentRepository);
@@ -50,7 +50,7 @@ public class FindAttachment
         var item = AttachmentData.GetAttachments.First(attachment => attachment.IsDeleted);
 
         var attachmentRepository = Substitute.For<IAttachmentRepository>();
-        attachmentRepository.FindAsync(Arg.Any<Expression<Func<Attachment, bool>>>(), Arg.Any<CancellationToken>())
+        attachmentRepository.FindAsync(Arg.Any<Expression<Func<Attachment, bool>>>())
             .Returns(item);
 
         var appService = AppServiceHelpers.BuildAttachmentService(attachmentRepository: attachmentRepository);
@@ -70,7 +70,7 @@ public class FindAttachment
             attachment is { IsDeleted: false, Complaint.IsDeleted: true });
 
         var attachmentRepository = Substitute.For<IAttachmentRepository>();
-        attachmentRepository.FindAsync(Arg.Any<Expression<Func<Attachment, bool>>>(), Arg.Any<CancellationToken>())
+        attachmentRepository.FindAsync(Arg.Any<Expression<Func<Attachment, bool>>>())
             .Returns(item);
 
         var appService = AppServiceHelpers.BuildAttachmentService(attachmentRepository: attachmentRepository);

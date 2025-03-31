@@ -24,8 +24,8 @@ public sealed class ActionService(
 {
     public async Task<Guid> CreateAsync(ActionCreateDto resource, CancellationToken token = default)
     {
-        var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token).ConfigureAwait(false);
-        var actionItemType = await actionTypeRepository.GetAsync(resource.ActionTypeId!.Value, token)
+        var complaint = await complaintRepository.GetAsync(resource.ComplaintId, token: token).ConfigureAwait(false);
+        var actionItemType = await actionTypeRepository.GetAsync(resource.ActionTypeId!.Value, token: token)
             .ConfigureAwait(false);
 
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
@@ -40,12 +40,12 @@ public sealed class ActionService(
     }
 
     public async Task<ActionViewDto?> FindAsync(Guid id, CancellationToken token = default) =>
-        mapper.Map<ActionViewDto>(await actionRepository.FindIncludeAllAsync(action => action.Id == id, token)
+        mapper.Map<ActionViewDto>(await actionRepository.FindIncludeAllAsync(action => action.Id == id, token: token)
             .ConfigureAwait(false));
 
     public async Task<ActionUpdateDto?> FindForUpdateAsync(Guid id, CancellationToken token = default) =>
         mapper.Map<ActionUpdateDto>(
-            await actionRepository.FindIncludeAllAsync(action => action.Id == id && !action.IsDeleted, token)
+            await actionRepository.FindIncludeAllAsync(action => action.Id == id && !action.IsDeleted, token: token)
                 .ConfigureAwait(false));
 
     public async Task<IPaginatedResult<ActionSearchResultDto>> SearchAsync(ActionSearchDto spec,
@@ -56,10 +56,10 @@ public sealed class ActionService(
             spec.DeletedStatus = null;
 
         var predicate = ActionFilters.SearchPredicate(spec);
-        var count = await actionRepository.CountAsync(predicate, token).ConfigureAwait(false);
+        var count = await actionRepository.CountAsync(predicate, token: token).ConfigureAwait(false);
         string[] includeProperties = spec.DeletedStatus is null ? [] : ["Complaint"];
         var actions = await actionRepository
-            .GetPagedListAsync(predicate, paging, includeProperties, token)
+            .GetPagedListAsync(predicate, paging, includeProperties, token: token)
             .ConfigureAwait(false);
         var list = count > 0 ? mapper.Map<IReadOnlyList<ActionSearchResultDto>>(actions) : [];
 
@@ -68,10 +68,10 @@ public sealed class ActionService(
 
     public async Task UpdateAsync(Guid id, ActionUpdateDto resource, CancellationToken token = default)
     {
-        var action = await actionRepository.GetAsync(id, token).ConfigureAwait(false);
+        var action = await actionRepository.GetAsync(id, token: token).ConfigureAwait(false);
         action.SetUpdater((await userService.GetCurrentUserAsync().ConfigureAwait(false))?.Id);
 
-        action.ActionType = await actionTypeRepository.GetAsync(resource.ActionTypeId!.Value, token)
+        action.ActionType = await actionTypeRepository.GetAsync(resource.ActionTypeId!.Value, token: token)
             .ConfigureAwait(false);
         action.ActionDate = resource.ActionDate!.Value;
         action.Investigator = resource.Investigator;
@@ -82,14 +82,14 @@ public sealed class ActionService(
 
     public async Task DeleteAsync(Guid actionItemId, CancellationToken token = default)
     {
-        var action = await actionRepository.GetAsync(actionItemId, token).ConfigureAwait(false);
+        var action = await actionRepository.GetAsync(actionItemId, token: token).ConfigureAwait(false);
         action.SetDeleted((await userService.GetCurrentUserAsync().ConfigureAwait(false))?.Id);
         await actionRepository.UpdateAsync(action, token: token).ConfigureAwait(false);
     }
 
     public async Task RestoreAsync(Guid actionItemId, CancellationToken token = default)
     {
-        var action = await actionRepository.GetAsync(actionItemId, token).ConfigureAwait(false);
+        var action = await actionRepository.GetAsync(actionItemId, token: token).ConfigureAwait(false);
         action.SetNotDeleted();
         await actionRepository.UpdateAsync(action, token: token).ConfigureAwait(false);
     }

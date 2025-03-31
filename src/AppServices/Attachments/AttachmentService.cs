@@ -27,28 +27,28 @@ public class AttachmentService(
 
     public async Task<AttachmentViewDto?> FindAttachmentAsync(Guid id, CancellationToken token = default) =>
         mapper.Map<AttachmentViewDto>(await attachmentRepository
-            .FindAsync(AttachmentFilters.IdPredicate(id), token).ConfigureAwait(false));
+            .FindAsync(AttachmentFilters.IdPredicate(id), token: token).ConfigureAwait(false));
 
     public async Task<AttachmentViewDto?> FindPublicAttachmentAsync(Guid id, CancellationToken token = default) =>
         mapper.Map<AttachmentViewDto>(await attachmentRepository
-            .FindAsync(AttachmentFilters.PublicIdPredicate(id), token).ConfigureAwait(false));
+            .FindAsync(AttachmentFilters.PublicIdPredicate(id), token: token).ConfigureAwait(false));
 
     public async Task<ComplaintViewDto?> FindComplaintForAttachmentAsync(Guid attachmentId,
         CancellationToken token = default)
     {
-        var attachment = await attachmentRepository.FindAsync(AttachmentFilters.IdPredicate(attachmentId), token)
+        var attachment = await attachmentRepository.FindAsync(AttachmentFilters.IdPredicate(attachmentId), token: token)
             .ConfigureAwait(false);
         return attachment == null
             ? null
             : mapper.Map<ComplaintViewDto>(await complaintRepository
-                .FindAsync(complaint => complaint.Attachments.Contains(attachment), token).ConfigureAwait(false));
+                .FindAsync(complaint => complaint.Attachments.Contains(attachment), token: token).ConfigureAwait(false));
     }
 
     public async Task<byte[]> GetAttachmentFileAsync(string fileId, bool getThumbnail,
         IAttachmentService.AttachmentServiceConfig config, CancellationToken token = default)
     {
         Config = config;
-        var response = await fileService.TryGetFileAsync(fileId, ExpandPath(fileId, getThumbnail), token)
+        var response = await fileService.TryGetFileAsync(fileId, ExpandPath(fileId, getThumbnail), token: token)
             .ConfigureAwait(false);
         await using var responseDisposable = response.ConfigureAwait(false);
         if (!response.Success) return [];
@@ -63,7 +63,7 @@ public class AttachmentService(
     {
         Config = config;
 
-        var attachment = await attachmentRepository.GetAsync(attachmentView.Id, token).ConfigureAwait(false);
+        var attachment = await attachmentRepository.GetAsync(attachmentView.Id, token: token).ConfigureAwait(false);
         attachment.SetDeleted((await userService.GetCurrentUserAsync().ConfigureAwait(false))?.Id);
         await attachmentRepository.UpdateAsync(attachment, token: token).ConfigureAwait(false);
 
@@ -82,7 +82,7 @@ public class AttachmentService(
         if (files.Count == 0) return 0;
 
         Config = config;
-        var complaint = await complaintRepository.GetAsync(complaintId, token).ConfigureAwait(false);
+        var complaint = await complaintRepository.GetAsync(complaintId, token: token).ConfigureAwait(false);
         var currentUser = await userService.GetCurrentUserAsync().ConfigureAwait(false);
         var i = 0;
 

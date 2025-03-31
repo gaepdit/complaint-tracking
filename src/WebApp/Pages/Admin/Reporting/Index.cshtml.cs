@@ -96,7 +96,7 @@ public class ReportingIndexModel(
         ShowStaffReport = true;
 
         PopulateDateRangeForm(from, to);
-        await PopulateOfficeFormAsync(office, token);
+        await PopulateOfficeFormAsync(office, token: token);
 
         LinkReceivedDate = true;
         StaffReport = await reportingService.ComplaintsByStaffAsync(Office!.Value, From!.Value, To!.Value);
@@ -111,7 +111,7 @@ public class ReportingIndexModel(
         ShowStaffReport = true;
 
         PopulateThresholdForm(threshold);
-        await PopulateOfficeFormAsync(office, token);
+        await PopulateOfficeFormAsync(office, token: token);
 
         LinkStatus = SearchComplaintStatus.AllOpen;
         StaffReport = await reportingService.DaysSinceMostRecentActionAsync(Office!.Value, Threshold!.Value);
@@ -144,7 +144,7 @@ public class ReportingIndexModel(
 
         PopulateAdminClosedForm(includeAdminClosed);
         PopulateDateRangeForm(from, to);
-        await PopulateOfficeFormAsync(office, token);
+        await PopulateOfficeFormAsync(office, token: token);
 
         LinkClosedDate = true;
         StaffReport = await reportingService.DaysToClosureByStaffAsync(Office!.Value, From!.Value, To!.Value,
@@ -161,7 +161,7 @@ public class ReportingIndexModel(
         ShowStaffReport = true;
         
         PopulateDateRangeForm(from, to);
-        await PopulateOfficeFormAsync(office, token);
+        await PopulateOfficeFormAsync(office, token: token);
 
         LinkToActionsSearch = true;
         StaffReport = await reportingService.DaysToFollowupByStaffAsync(Office!.Value, From!.Value, To!.Value);

@@ -14,7 +14,7 @@ public class FindPublicAttachment
             attachment is { IsDeleted: false, Complaint: { IsDeleted: false, ComplaintClosed: true } });
 
         var attachmentRepository = Substitute.For<IAttachmentRepository>();
-        attachmentRepository.FindAsync(Arg.Any<Expression<Func<Attachment, bool>>>(), Arg.Any<CancellationToken>())
+        attachmentRepository.FindAsync(Arg.Any<Expression<Func<Attachment, bool>>>())
             .Returns(item);
 
         var appService = AppServiceHelpers.BuildAttachmentService(attachmentRepository: attachmentRepository);
@@ -32,7 +32,7 @@ public class FindPublicAttachment
     {
         // Arrange
         var attachmentRepository = Substitute.For<IAttachmentRepository>();
-        attachmentRepository.FindAsync(Arg.Any<Expression<Func<Attachment, bool>>>(), Arg.Any<CancellationToken>())
+        attachmentRepository.FindAsync(Arg.Any<Expression<Func<Attachment, bool>>>())
             .Returns((Attachment?)null);
 
         var appService = AppServiceHelpers.BuildAttachmentService(attachmentRepository: attachmentRepository);

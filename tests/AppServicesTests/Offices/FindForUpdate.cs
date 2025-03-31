@@ -24,7 +24,7 @@ public class FindForUpdate
         var office = new Office(Guid.Empty, TextData.ValidName) { Assignor = user };
 
         var repoMock = Substitute.For<IOfficeRepository>();
-        repoMock.FindIncludeAssignorAsync(office.Id, Arg.Any<CancellationToken>()).Returns(office);
+        repoMock.FindIncludeAssignorAsync(office.Id).Returns(office);
 
         var appService = new OfficeService(repoMock, Substitute.For<IOfficeManager>(), AppServicesTestsSetup.Mapper!,
             Substitute.For<IUserService>(), Substitute.For<IAuthorizationService>());
@@ -41,7 +41,7 @@ public class FindForUpdate
     {
         // Arrange
         var repoMock = Substitute.For<IOfficeRepository>();
-        repoMock.FindAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>()).Returns((Office?)null);
+        repoMock.FindAsync(Arg.Any<Guid>()).Returns((Office?)null);
 
         var appService = new OfficeService(repoMock, Substitute.For<IOfficeManager>(), Substitute.For<IMapper>(),
             Substitute.For<IUserService>(), Substitute.For<IAuthorizationService>());
