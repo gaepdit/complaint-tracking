@@ -38,9 +38,9 @@ public sealed class SearchResultsExportService(
         if (!await authorization.Succeeded(principal!, Policies.DivisionManager).ConfigureAwait(false))
             spec.DeletedStatus = null;
 
-        return (await complaintRepository.GetListWithMostRecentActionAsync(ComplaintFilters.SearchPredicate(spec),
-                sorting: spec.Sort.GetDescription(), token: token).ConfigureAwait(false))
-            .Select(complaint => new ComplaintExportDto(complaint)).ToList();
+        var results = await complaintRepository.GetListWithMostRecentActionAsync(ComplaintFilters.SearchPredicate(spec),
+            sorting: spec.Sort.GetDescription(), token: token).ConfigureAwait(false);
+        return results.Select(complaint => new ComplaintExportDto(complaint)).ToList();
     }
 
     public async Task<int> CountActionsAsync(ActionSearchDto spec, CancellationToken token)
@@ -61,11 +61,10 @@ public sealed class SearchResultsExportService(
         if (!await authorization.Succeeded(principal!, Policies.DivisionManager).ConfigureAwait(false))
             spec.DeletedStatus = null;
 
-        string[] includeProperties = spec.DeletedStatus is null ? [] : ["Complaint"];
-        return (await actionRepository.GetListAsync(ActionFilters.SearchPredicate(spec),
-                    ordering: spec.Sort.GetDescription(), includeProperties: includeProperties, token: token)
-                .ConfigureAwait(false))
-            .Select(action => new ActionExportDto(action)).ToList();
+        var results = await actionRepository.GetListAsync(ActionFilters.SearchPredicate(spec),
+                ordering: spec.Sort.GetDescription(), includeProperties: ["Complaint"], token: token)
+            .ConfigureAwait(false);
+        return results.Select(action => new ActionExportDto(action)).ToList();
     }
 
 
