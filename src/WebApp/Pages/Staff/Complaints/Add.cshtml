@@ -265,7 +265,7 @@
     <script src="~/js/copyContactInfo.js"></script>
     <partial name="_StaffSelectScriptsPartial" />
     <script src="~/js/fileUpload.js"></script>
-    <script>
+    <script asp-add-content-to-csp>
         setUpStaffDropdown(
             "@nameof(Model.Item)_@nameof(ComplaintCreateDto.OfficeId)",
             "@nameof(Model.Item)_@nameof(ComplaintCreateDto.OwnerId)",
