@@ -8,6 +8,11 @@ public record ComplaintSearchDto : IBasicSearchDisplay
 
     public SortBy Sort { get; init; } = SortBy.IdDesc;
 
+    // Full text search
+
+    [Display(Name = "Full Text Search")]
+    public string? Text { get; init; }
+
     // Status
 
     [Display(Name = "Complaint Status")]
@@ -55,7 +60,7 @@ public record ComplaintSearchDto : IBasicSearchDisplay
 
     // Complaint
 
-    [Display(Name = "Complaint Text")]
+    [Display(Name = "Complaint Details")]
     public string? Description { get; init; }
 
     [Display(Name = "City of Complaint")]
@@ -130,6 +135,7 @@ public record ComplaintSearchDto : IBasicSearchDisplay
         { nameof(Office), Office?.ToString() },
         { nameof(Assigned), Assigned },
         { nameof(OnlyUnassigned), OnlyUnassigned.ToString() },
+        { nameof(Text), Text },
     };
 
     public ComplaintSearchDto TrimAll() => this with
@@ -144,5 +150,6 @@ public record ComplaintSearchDto : IBasicSearchDisplay
         Street = Street?.Trim(),
         City = City?.Trim(),
         PostalCode = PostalCode?.Trim(),
+        Text = Text?.Trim(),
     };
 }

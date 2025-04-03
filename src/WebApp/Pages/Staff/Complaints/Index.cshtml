@@ -15,6 +15,18 @@
                 <em>All fields are optional.</em>
             </div>
             <form method="get" asp-page-handler="Search" asp-fragment="SearchResults">
+                <h2 class="h4">Text</h2>
+                <div class="mb-3">
+                    <div class="form-floating">
+                        <input asp-for="Spec.Text" class="form-control"
+                               aria-describedby="AllTextHelpBlock" />
+                        <label asp-for="Spec.Text" class="form-label"></label>
+                    </div>
+                    <small id="AllTextHelpBlock" class="form-text text-body-secondary d-block px-2">
+                        (A word or multiple words to search for. This will search within all complaint text fields, such
+                        as description, addresses, facility, etc.)
+                    </small>
+                </div>
                 <h2 class="h4">Status</h2>
                 <div class="row">
                     <div class="col-md mb-3">
@@ -104,7 +116,7 @@
                     </div>
                 </div>
 
-                <h2 class="h4">Complaint Details</h2>
+                <h2 class="h4">Details</h2>
                 <div class="row">
                     <div class="mb-3">
                         <div class="form-floating">
@@ -161,7 +173,7 @@
                     </div>
                 </div>
 
-                <h2 class="h4">Source Contact</h2>
+                <h3 class="h5">Source Contact</h3>
                 <div class="row">
                     <div class="mb-3">
                         <div class="form-floating">
@@ -250,7 +262,8 @@
                            class="btn btn-sm btn-outline-secondary">
                             <svg class="bi me-1">
                                 <use href="@Url.Content("~/images/app-icons.svg")#app-icon-download"></use>
-                            </svg> Download search results
+                            </svg>
+                            Download search results
                         </a>
                     </div>
                 }
@@ -269,8 +282,8 @@
 }
 
 @section Scripts {
-    <script src="~/js/dateValidation.js"  ></script>
-    <script src="~/js/formSearch.js"  ></script>
+    <script src="~/js/dateValidation.js"></script>
+    <script src="~/js/formSearch.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             datePairs(
