@@ -30,4 +30,31 @@ jobs:
         run: dotnet build --no-restore
 
       - name: Test
-        run: dotnet test --no-build --verbosity normal
+        run: dotnet test --no-build --verbosity normal --logger:nunit
+
+      - name: Upload test result artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          path: tests/**/TestResults.xml
+
+  publish-test-results:
+    name: Publish test results
+    needs: dotnet-test
+    runs-on: ubuntu-latest
+    if: always()
+
+    permissions:
+      checks: write
+      pull-requests: write
+
+    steps:
+      - name: Download test result artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: test-results # destination folder
+
+      - name: Publish test results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: test-results/**/TestResults.xml
