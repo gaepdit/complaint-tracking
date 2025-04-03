@@ -17,7 +17,7 @@
 {
     <p>Your download should start automatically. Please be patient; it may take several minutes.</p>
     <p>If the download fails, <a asp-page="Export">click here to try again</a>.</p>
-    <script>window.location = "Archive";</script>
+    <script asp-add-content-to-csp>window.location = "Archive";</script>
 }
 else
 {

@@ -11,6 +11,7 @@
         <PackageReference Include="Microsoft.Web.LibraryManager.Build" />
         <PackageReference Include="Mindscape.Raygun4Net.AspNetCore" />
         <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" />
+        <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders.TagHelpers" />
         <PackageReference Include="Swashbuckle.AspNetCore" />
     </ItemGroup>
 

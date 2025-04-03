@@ -43,7 +43,7 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <partial name="_StaffSelectScriptsPartial" />
-    <script>
+    <script asp-add-content-to-csp>
     setUpStaffDropdown(
         "@nameof(Model.ComplaintAssignment)_@nameof(ComplaintAssignmentDto.OfficeId)",
         "@nameof(Model.ComplaintAssignment)_@nameof(ComplaintAssignmentDto.OwnerId)",

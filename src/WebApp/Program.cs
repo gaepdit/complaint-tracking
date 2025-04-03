@@ -37,13 +37,10 @@ builder.Services.AddAuthorizationPolicies();
 // Configure UI services.
 builder.Services.AddRazorPages();
 
-// Starting value for HSTS max age is five minutes to allow for debugging.
-// For more info on updating HSTS max age value for production, see:
-// https://gaepdit.github.io/web-apps/use-https.html#how-to-enable-hsts
 if (!builder.Environment.IsDevelopment())
 {
     builder.Services
-        .AddHsts(options => options.MaxAge = TimeSpan.FromMinutes(300))
+        .AddHsts(options => options.MaxAge = TimeSpan.FromDays(360))
         .AddHttpsRedirection(options => options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect);
 }
 
