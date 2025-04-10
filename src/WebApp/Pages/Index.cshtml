@@ -186,7 +186,7 @@
 @section Scripts {
     <script src="~/js/dateValidation.js"></script>
     <script src="~/js/formSearch.js"></script>
-    <script>
+    <script asp-add-content-to-csp>
         document.addEventListener("DOMContentLoaded", function () {
             datePairs(
                 "Spec_DateFrom",
