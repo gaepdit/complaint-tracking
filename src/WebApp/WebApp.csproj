@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
     <PropertyGroup>
-        <InformationalVersion>2025.3.31</InformationalVersion>
+        <InformationalVersion>2025.4.10</InformationalVersion>
         <RootNamespace>Cts.WebApp</RootNamespace>
     </PropertyGroup>
 
