@@ -37,7 +37,7 @@ internal static class SecurityHeaders
             .UnsafeInline()
             .ReportSample();
         builder.AddImgSrc().Self().Data();
-        builder.AddConnectSrc()
+        builder.AddConnectSrc().Self()
             .From("https://api.raygun.com")
             .From("https://api.raygun.io");
         builder.AddFontSrc().Self().Data();

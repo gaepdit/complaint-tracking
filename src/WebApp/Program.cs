@@ -13,7 +13,7 @@ using Mindscape.Raygun4Net.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Set the default timeout for regular expressions.
-// https://learn.microsoft.com/en-us/dotnet/standard/base-types/best-practices#use-time-out-values
+// https://learn.microsoft.com/en-us/dotnet/standard/base-types/best-practices-regex#use-time-out-values
 AppDomain.CurrentDomain.SetData("REGEX_DEFAULT_MATCH_TIMEOUT", TimeSpan.FromMilliseconds(100));
 
 // Bind application settings.
