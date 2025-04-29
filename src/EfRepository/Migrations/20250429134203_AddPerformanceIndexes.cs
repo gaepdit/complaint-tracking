@@ -164,11 +164,47 @@ namespace Cts.EfRepository.Migrations
                 name: "missing_index_198_197",
                 table: "AspNetUsers",
                 column: "ObjectIdentifier");
+            
+            // The following three indexes were manually added to the migration. See notes in the AppDbContext file.
+            
+            migrationBuilder.CreateIndex(
+                name: "missing_index_14_13",
+                table: "Complaints",
+                columns: new[] { "CurrentOwnerId", "ComplaintClosed", "IsDeleted" })
+                .Annotation("SqlServer:Include", new[] { "Status", "EnteredDate", "EnteredById", "ReceivedDate", "ReceivedById", "CallerName", "CallerRepresents", "CallerAddress_Street", "CallerAddress_Street2", "CallerAddress_City", "CallerAddress_State", "CallerAddress_PostalCode", "CallerPhoneNumber_Number", "CallerPhoneNumber_Type", "CallerSecondaryPhoneNumber_Number", "CallerSecondaryPhoneNumber_Type", "CallerTertiaryPhoneNumber_Number", "CallerTertiaryPhoneNumber_Type", "CallerEmail", "ComplaintNature", "ComplaintLocation", "ComplaintDirections", "ComplaintCity", "ComplaintCounty", "PrimaryConcernId", "SecondaryConcernId", "SourceFacilityIdNumber", "SourceFacilityName", "SourceContactName", "SourceAddress_Street", "SourceAddress_Street2", "SourceAddress_City", "SourceAddress_State", "SourceAddress_PostalCode", "SourcePhoneNumber_Number", "SourcePhoneNumber_Type", "SourceSecondaryPhoneNumber_Number", "SourceSecondaryPhoneNumber_Type", "SourceTertiaryPhoneNumber_Number", "SourceTertiaryPhoneNumber_Type", "SourceEmail", "CurrentOfficeId", "CurrentOwnerAssignedDate", "CurrentOwnerAcceptedDate", "ReviewedById", "ReviewComments", "ComplaintClosedDate", "DeleteComments", "CreatedAt", "CreatedById", "UpdatedAt", "UpdatedById", "DeletedAt", "DeletedById" });
+
+            migrationBuilder.CreateIndex(
+                name: "missing_index_745_744",
+                table: "Complaints",
+                columns: new[] { "ComplaintCounty", "IsDeleted" })
+                .Annotation("SqlServer:Include", new[] { "Status", "EnteredDate", "EnteredById", "ReceivedDate", "ReceivedById", "CallerName", "CallerRepresents", "CallerAddress_Street", "CallerAddress_Street2", "CallerAddress_City", "CallerAddress_State", "CallerAddress_PostalCode", "CallerPhoneNumber_Number", "CallerPhoneNumber_Type", "CallerSecondaryPhoneNumber_Number", "CallerSecondaryPhoneNumber_Type", "CallerTertiaryPhoneNumber_Number", "CallerTertiaryPhoneNumber_Type", "CallerEmail", "ComplaintNature", "ComplaintLocation", "ComplaintDirections", "ComplaintCity", "PrimaryConcernId", "SecondaryConcernId", "SourceFacilityIdNumber", "SourceFacilityName", "SourceContactName", "SourceAddress_Street", "SourceAddress_Street2", "SourceAddress_City", "SourceAddress_State", "SourceAddress_PostalCode", "SourcePhoneNumber_Number", "SourcePhoneNumber_Type", "SourceSecondaryPhoneNumber_Number", "SourceSecondaryPhoneNumber_Type", "SourceTertiaryPhoneNumber_Number", "SourceTertiaryPhoneNumber_Type", "SourceEmail", "CurrentOfficeId", "CurrentOwnerId", "CurrentOwnerAssignedDate", "CurrentOwnerAcceptedDate", "ReviewedById", "ReviewComments", "ComplaintClosed", "ComplaintClosedDate", "DeleteComments", "CreatedAt", "CreatedById", "UpdatedAt", "UpdatedById", "DeletedAt", "DeletedById" });
+
+            migrationBuilder.CreateIndex(
+                name: "missing_index_949_948",
+                table: "Complaints",
+                columns: new[] { "ComplaintCounty", "IsDeleted" })
+                .Annotation("SqlServer:Include", new[] { "SourceAddress_Street", "SourceAddress_Street2", "SourceAddress_City", "SourceAddress_State", "SourceAddress_PostalCode" });
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            // The following three indexes were manually added to the migration.
+
+            migrationBuilder.DropIndex(
+                name: "missing_index_14_13",
+                table: "Complaints");
+
+            migrationBuilder.DropIndex(
+                name: "missing_index_745_744",
+                table: "Complaints");
+
+            migrationBuilder.DropIndex(
+                name: "missing_index_949_948",
+                table: "Complaints");
+
+            // The following indexes were created from the AppDbContext model builder.
+
             migrationBuilder.DropIndex(
                 name: "missing_index_1131_1130",
                 table: "Complaints");

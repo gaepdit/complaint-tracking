@@ -89,6 +89,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
         // === Performance-related indexes
         // See https://learn.microsoft.com/en-us/ef/core/modeling/indexes?tabs=fluent-api#included-columns
         // and https://github.com/gaepdit/EPDDatabases/blob/16e12d19ae063a8df96226f55ba78107170bd86e/Troubleshooting_Scripts/ImprovePerformance/Microsoft/ComplaintTracking.sql
+        // 
         // Some indexes cannot be added here because EF doesn't support indexing properties of complex/owned types.
         // These additional indexes are added directly in the EF migration file.
         // See https://github.com/dotnet/efcore/issues/31246#issuecomment-2836919642 for details.

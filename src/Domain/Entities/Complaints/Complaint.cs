@@ -8,11 +8,12 @@ using System.Text.Json.Serialization;
 
 namespace Cts.Domain.Entities.Complaints;
 
+// NOTE: Some database indexes have been manually added in the EF migration "20250429134203_AddPerformanceIndexes".
+// If you modify or remove any properties here that are included in the indexes, add a new EF migration to 
+// drop (and optionally rewrite) the affected indexes.
+
 public class Complaint : AuditableSoftDeleteEntity<int>
 {
-    // Constants
-
-
     // Constructors
 
     [UsedImplicitly] // Used by ORM.
