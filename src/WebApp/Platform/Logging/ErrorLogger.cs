@@ -1,5 +1,4 @@
 ﻿using Cts.AppServices.ErrorLogging;
-using Cts.WebApp.Platform.ErrorLogging;
 using Cts.WebApp.Platform.Settings;
 using GaEpd.FileService;
 using Mindscape.Raygun4Net.AspNetCore;
