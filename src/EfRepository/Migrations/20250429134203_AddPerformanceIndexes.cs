@@ -11,19 +11,19 @@ namespace Cts.EfRepository.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropIndex(
-                name: "IX_Complaints_CurrentOfficeId",
+                name: "IX__Complaints_CurrentOfficeId",
                 table: "Complaints");
 
             migrationBuilder.DropIndex(
-                name: "IX_Complaints_CurrentOwnerId",
+                name: "IX__Complaints_CurrentOwnerId",
                 table: "Complaints");
 
             migrationBuilder.DropIndex(
-                name: "IX_Complaints_ReceivedById",
+                name: "IX__Complaints_ReceivedById",
                 table: "Complaints");
 
             migrationBuilder.DropIndex(
-                name: "IX_ComplaintActions_EnteredById",
+                name: "IX__ComplaintActions_EnteredById",
                 table: "ComplaintActions");
 
             migrationBuilder.CreateIndex(
@@ -311,17 +311,17 @@ namespace Cts.EfRepository.Migrations
                 column: "CurrentOfficeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Complaints_CurrentOwnerId",
+                name: "IX__Complaints_CurrentOwnerId",
                 table: "Complaints",
                 column: "CurrentOwnerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Complaints_ReceivedById",
+                name: "IX__Complaints_ReceivedById",
                 table: "Complaints",
                 column: "ReceivedById");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ComplaintActions_EnteredById",
+                name: "IX__ComplaintActions_EnteredById",
                 table: "ComplaintActions",
                 column: "EnteredById");
         }
