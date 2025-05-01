@@ -43,7 +43,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
         // See https://learn.microsoft.com/en-us/ef/core/querying/related-data/eager#model-configuration-for-auto-including-navigations
 
         // Users
-        builder.Entity<ApplicationUser>().Navigation(e => e.Office).AutoInclude();
+        var appUserEntity = builder.Entity<ApplicationUser>();
+        appUserEntity.Navigation(e => e.Office).AutoInclude();
 
         // Attachments
         builder.Entity<Attachment>().Navigation(e => e.UploadedBy).AutoInclude();
@@ -82,10 +83,66 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
 
         // Let's save enums in the database as strings.
         // See https://learn.microsoft.com/en-us/ef/core/modeling/value-conversions?tabs=data-annotations#pre-defined-conversions
-        builder.Entity<Complaint>().Property(complaint => complaint.Status).HasConversion<string>();
-        builder.Entity<ComplaintTransition>().Property(transition => transition.TransitionType).HasConversion<string>();
+        complaintEntity.Property(complaint => complaint.Status).HasConversion<string>();
+        transitionEntity.Property(transition => transition.TransitionType).HasConversion<string>();
 
-        // ## The following configurations are Sqlite only. ##
+        // === Performance-related indexes
+        // See https://learn.microsoft.com/en-us/ef/core/modeling/indexes?tabs=fluent-api#included-columns
+        // and https://github.com/gaepdit/EPDDatabases/blob/16e12d19ae063a8df96226f55ba78107170bd86e/Troubleshooting_Scripts/ImprovePerformance/Microsoft/ComplaintTracking.sql
+        // 
+        // Some indexes cannot be added here because EF doesn't support indexing properties of complex/owned types.
+        // These additional indexes are added directly in the EF migration file.
+        // See https://github.com/dotnet/efcore/issues/31246#issuecomment-2836919642 for details.
+
+#pragma warning disable S1192 // String literals should not be duplicated
+        complaintEntity.HasIndex(["IsDeleted"], "missing_index_24_23");
+        complaintEntity.HasIndex(["ComplaintCounty", "IsDeleted"], "missing_index_739_738");
+        complaintEntity.HasIndex(["IsDeleted"], "missing_index_486_485")
+            .IncludeProperties("PrimaryConcernId", "SecondaryConcernId");
+        complaintEntity.HasIndex(["CurrentOwnerId", "CurrentOwnerAcceptedDate", "ComplaintClosed", "IsDeleted"],
+            "missing_index_12_11");
+        complaintEntity.HasIndex(["CurrentOfficeId", "CurrentOwnerAcceptedDate", "ComplaintClosed", "IsDeleted"],
+            "missing_index_348_347");
+        complaintEntity.HasIndex(["IsDeleted"], "missing_index_50_49").IncludeProperties("ReceivedDate");
+        complaintEntity.HasIndex(["ComplaintCounty", "IsDeleted"], "missing_index_743_742")
+            .IncludeProperties("PrimaryConcernId", "SecondaryConcernId");
+        complaintEntity.HasIndex(["CurrentOfficeId", "ComplaintClosed", "IsDeleted", "CurrentOwnerId"],
+                "missing_index_678_677")
+            .IncludeProperties("Status", "ReceivedDate", "ComplaintCounty", "SourceFacilityName");
+        complaintEntity.HasIndex(["ComplaintCounty", "IsDeleted"], "missing_index_1147_1146")
+            .IncludeProperties("ComplaintNature", "ComplaintLocation", "ComplaintDirections");
+        complaintEntity.HasIndex(["ComplaintCounty", "ComplaintClosed", "IsDeleted", "ComplaintClosedDate"],
+            "missing_index_951_950");
+        complaintEntity.HasIndex(["IsDeleted", "ComplaintCity"], "missing_index_1131_1130")
+            .IncludeProperties("ComplaintNature", "ComplaintLocation", "ComplaintDirections");
+        complaintEntity.HasIndex(["ComplaintCounty", "IsDeleted", "SourceFacilityName"], "missing_index_1260_1259");
+        complaintEntity.HasIndex(["CurrentOfficeId", "IsDeleted", "CurrentOwnerId"], "missing_index_594_593")
+            .IncludeProperties("Status", "ReceivedDate", "ComplaintCounty", "SourceFacilityName");
+        complaintEntity.HasIndex(["ComplaintCounty", "IsDeleted"], "missing_index_22_21")
+            .IncludeProperties("ReceivedDate");
+        complaintEntity.HasIndex(["ReceivedById", "IsDeleted"], "missing_index_632_631");
+        complaintEntity.HasIndex(["IsDeleted", "SourceContactName"], "missing_index_1208_1207");
+        complaintEntity.HasIndex(["IsDeleted"], "missing_index_727_726")
+            .IncludeProperties("ReceivedDate", "PrimaryConcernId", "SecondaryConcernId");
+        complaintEntity.HasIndex(["IsDeleted", "SourceFacilityName"], "missing_index_55_54");
+        complaintEntity.HasIndex(["CurrentOfficeId", "ComplaintClosed", "IsDeleted", "CurrentOwnerId"],
+                "missing_index_690_689")
+            .IncludeProperties("Status", "ReceivedDate", "ComplaintCounty", "SourceFacilityName",
+                "ComplaintClosedDate");
+        complaintEntity.HasIndex(["CurrentOfficeId", "CurrentOwnerId", "IsDeleted"], "missing_index_696_695");
+        complaintEntity.HasIndex(["CurrentOfficeId", "IsDeleted"], "missing_index_734_733")
+            .IncludeProperties("ReceivedDate", "PrimaryConcernId", "SecondaryConcernId");
+        complaintEntity.HasIndex(["CurrentOfficeId", "CurrentOwnerId", "IsDeleted"], "missing_index_596_595")
+            .IncludeProperties("ReceivedDate");
+        actionEntity.HasIndex(["EnteredById", "IsDeleted", "EnteredDate"], "missing_index_1190_1189")
+            .IncludeProperties("ComplaintId");
+        actionEntity.HasIndex(["EnteredById", "IsDeleted", "EnteredDate"], "missing_index_1192_1191")
+            .IncludeProperties("ComplaintId", "ActionTypeId", "ActionDate", "Investigator", "Comments", "CreatedAt",
+                "CreatedById", "UpdatedAt", "UpdatedById", "DeletedAt", "DeletedById");
+        appUserEntity.HasIndex(["ObjectIdentifier"], "missing_index_198_197");
+#pragma warning restore S1192 // String literals should not be duplicated
+
+        // === ## The following configurations are Sqlite only. ## ===
         if (Database.ProviderName != SqliteProvider) return;
 
 #pragma warning disable S125 // Sections of code should not be commented out
