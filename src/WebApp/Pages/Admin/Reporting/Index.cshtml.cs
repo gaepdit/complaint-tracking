@@ -4,6 +4,7 @@ using Cts.AppServices.Permissions;
 using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.Reporting;
 using Cts.AppServices.Staff;
+using Cts.Domain;
 using Cts.Domain.DataViews.ReportingViews;
 using GaEpd.AppLibrary.ListItems;
 using System.ComponentModel.DataAnnotations;
@@ -27,6 +28,7 @@ public class ReportingIndexModel(
     public bool ShowDateRange { get; private set; }
     public bool ShowOfficeSelect { get; private set; }
     public bool ShowAdminClosed { get; private set; }
+    public bool ShowDateError { get; private set; }
 
     // Table column display properties
     public bool ShowRecentAction { get; private set; }
@@ -37,13 +39,11 @@ public class ReportingIndexModel(
     public Guid? Office { get; set; }
     public int? Threshold { get; set; }
 
-    [Display(Name = "Date From")]
-    [DataType(DataType.Date)]
+    [Display(Name = "Date From"), DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = "{0:O}", ApplyFormatInEditMode = true)]
     public DateOnly? From { get; set; }
 
-    [Display(Name = "Date To")]
-    [DataType(DataType.Date)]
+    [Display(Name = "Date To"), DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = "{0:O}", ApplyFormatInEditMode = true)]
     public DateOnly? To { get; set; }
 
@@ -67,7 +67,7 @@ public class ReportingIndexModel(
     public bool LinkReceivedDate { get; private set; }
     public bool LinkClosedDate { get; private set; }
     public bool LinkToActionsSearch { get; private set; }
-    
+
     // Menu page
     public async Task OnGetAsync()
     {
@@ -82,7 +82,7 @@ public class ReportingIndexModel(
         CurrentReport = ComplaintsAssignedToInactiveUsers;
         ShowForm = false;
         ShowStaffReport = true;
-        
+
         LinkStatus = SearchComplaintStatus.AllOpen;
         StaffReport = await reportingService.ComplaintsAssignedToInactiveUsersAsync();
     }
@@ -95,8 +95,12 @@ public class ReportingIndexModel(
         ShowOfficeSelect = true;
         ShowStaffReport = true;
 
-        PopulateDateRangeForm(from, to);
         await PopulateOfficeFormAsync(office, token: token);
+        if (!PopulateDateRangeForm(from, to))
+        {
+            ShowDateError = true;
+            return;
+        }
 
         LinkReceivedDate = true;
         StaffReport = await reportingService.ComplaintsByStaffAsync(Office!.Value, From!.Value, To!.Value);
@@ -124,9 +128,13 @@ public class ReportingIndexModel(
         ShowDateRange = true;
         ShowAdminClosed = true;
         ShowOfficeReport = true;
-        
+
         PopulateAdminClosedForm(includeAdminClosed);
-        PopulateDateRangeForm(from, to);
+        if (!PopulateDateRangeForm(from, to))
+        {
+            ShowDateError = true;
+            return;
+        }
 
         LinkStatus = IncludeAdminClosed ? SearchComplaintStatus.AllClosed : SearchComplaintStatus.Closed;
         OfficeReport = await reportingService.DaysToClosureByOfficeAsync(From!.Value, To!.Value, IncludeAdminClosed);
@@ -143,8 +151,12 @@ public class ReportingIndexModel(
         ShowStaffReport = true;
 
         PopulateAdminClosedForm(includeAdminClosed);
-        PopulateDateRangeForm(from, to);
         await PopulateOfficeFormAsync(office, token: token);
+        if (!PopulateDateRangeForm(from, to))
+        {
+            ShowDateError = true;
+            return;
+        }
 
         LinkClosedDate = true;
         StaffReport = await reportingService.DaysToClosureByStaffAsync(Office!.Value, From!.Value, To!.Value,
@@ -159,9 +171,13 @@ public class ReportingIndexModel(
         ShowOfficeSelect = true;
         ShowDaysToFollowup = true;
         ShowStaffReport = true;
-        
-        PopulateDateRangeForm(from, to);
+
         await PopulateOfficeFormAsync(office, token: token);
+        if (!PopulateDateRangeForm(from, to))
+        {
+            ShowDateError = true;
+            return;
+        }
 
         LinkToActionsSearch = true;
         StaffReport = await reportingService.DaysToFollowupByStaffAsync(Office!.Value, From!.Value, To!.Value);
@@ -180,22 +196,26 @@ public class ReportingIndexModel(
     {
         OfficeSelectList = (await officeService.GetAsListItemsAsync(token: token)).ToSelectList();
         Office = office ??
-            (await staffService.GetCurrentUserAsync()).Office?.Id ??
-            (await officeService.GetListAsync(token)).FirstOrDefault()?.Id ??
-            Guid.Empty;
+                 (await staffService.GetCurrentUserAsync()).Office?.Id ??
+                 (await officeService.GetListAsync(token)).FirstOrDefault()?.Id ??
+                 Guid.Empty;
     }
 
     private void PopulateThresholdForm(int? threshold) => Threshold = threshold ?? 30;
 
     private void PopulateAdminClosedForm(bool? includeAdminClosed) => IncludeAdminClosed = includeAdminClosed ?? false;
 
-    private void PopulateDateRangeForm(DateOnly? dateFrom, DateOnly? dateTo)
+    private bool PopulateDateRangeForm(DateOnly? dateFrom, DateOnly? dateTo)
     {
         var now = DateTime.Now;
-        var currentMonth = new DateOnly(now.Year, now.Month, day: 1);
-        From = dateFrom ?? currentMonth.AddMonths(-1);
-        To = dateTo ?? currentMonth.AddDays(-1);
+        var firstOfThisMonth = new DateOnly(now.Year, now.Month, day: 1);
+        From = dateFrom ?? firstOfThisMonth.AddMonths(-1);
+        To = dateTo ?? firstOfThisMonth.AddDays(-1);
+        return DateIsDbValid(From.Value) && DateIsDbValid(To.Value);
     }
+
+    private static bool DateIsDbValid(DateOnly date) =>
+        date >= AppConstants.SqlServerMinDate && date <= AppConstants.SqlServerMaxDate;
 
     // Reports metadata
     public const string Menu = nameof(Menu);

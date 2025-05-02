@@ -39,6 +39,15 @@ else
     @if (Model.ShowForm)
     {
         <form asp-page-handler="@Model.CurrentReport" method="get" class="d-print-none">
+            @if (Model.ShowDateRange && Model.ShowDateError)
+            {
+                <div class="alert alert-danger d-flex align-items-center" role="alert">
+                    <svg class="bi me-2" role="img" aria-label="Danger:">
+                        <use href="@Url.Content("~/images/app-icons.svg")#app-icon-exclamation-triangle-fill"></use>
+                    </svg>
+                    <span>One or more dates are outside the valid date range.</span>
+                </div>
+            }
             <div role="search" class="p-3 rounded-3 bg-light-subtle border">
                 <div class="row g-3 align-items-md-end">
                     @if (Model.ShowThresholdSelect)
