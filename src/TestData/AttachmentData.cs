@@ -5,8 +5,8 @@ namespace Cts.TestData;
 
 public static class AttachmentData
 {
-    private static IEnumerable<Attachment> AttachmentSeedItems => new List<Attachment>
-    {
+    private static IEnumerable<Attachment> AttachmentSeedItems =>
+    [
         new(new Guid("20000000-0000-0000-0000-000000000001")) // 0
         {
             Complaint = ComplaintData.GetComplaints.ElementAt(0),
@@ -17,6 +17,7 @@ public static class AttachmentData
             UploadedBy = UserData.GetUsers.ElementAt(1),
             IsImage = true,
         },
+
         new(new Guid("20000000-0000-0000-0000-000000000002")) // 1
         {
             Complaint = ComplaintData.GetComplaints.ElementAt(0),
@@ -27,6 +28,7 @@ public static class AttachmentData
             UploadedBy = UserData.GetUsers.ElementAt(1),
             IsImage = false,
         },
+
         new(new Guid("20000000-0000-0000-0000-000000000003")) // 2
         {
             Complaint = ComplaintData.GetComplaints.ElementAt(0),
@@ -36,6 +38,7 @@ public static class AttachmentData
             UploadedBy = UserData.GetUsers.ElementAt(2),
             UploadedDate = DateTimeOffset.Now.AddDays(-1),
         },
+
         new(new Guid("20000000-0000-0000-0000-000000000004")) // 3
         {
             Complaint = ComplaintData.GetComplaints.ElementAt(0),
@@ -46,6 +49,7 @@ public static class AttachmentData
             UploadedBy = UserData.GetUsers.ElementAt(0),
             IsImage = true,
         },
+
         new(new Guid("20000000-0000-0000-0000-000000000005")) // 4
         {
             Complaint = ComplaintData.GetComplaints.ElementAt(0),
@@ -55,6 +59,7 @@ public static class AttachmentData
             UploadedDate = DateTimeOffset.Now.AddDays(-3),
             UploadedBy = UserData.GetUsers.ElementAt(0),
         },
+
         new(new Guid("20000000-0000-0000-0000-000000000006")) // 5
         {
             Complaint = ComplaintData.GetComplaints.ElementAt(3),
@@ -64,6 +69,7 @@ public static class AttachmentData
             UploadedDate = DateTimeOffset.Now.AddDays(-3),
             UploadedBy = UserData.GetUsers.ElementAt(0),
         },
+
         new(new Guid("20000000-0000-0000-0000-000000000007")) // 6
         {
             Complaint = ComplaintData.GetComplaints.ElementAt(1),
@@ -73,7 +79,7 @@ public static class AttachmentData
             UploadedDate = DateTimeOffset.Now.AddDays(-3),
             UploadedBy = UserData.GetUsers.ElementAt(0),
         },
-    };
+    ];
 
     private static IEnumerable<Attachment>? _attachments;
 
@@ -84,8 +90,8 @@ public static class AttachmentData
             if (_attachments is not null) return _attachments;
 
             _attachments = AttachmentSeedItems.ToList();
-            _attachments.ElementAt(4).SetDeleted("20000000-0000-0000-0000-000000000002");
-            _attachments.ElementAt(6).SetDeleted("20000000-0000-0000-0000-000000000002");
+            _attachments.ElementAt(4).SetDeleted(UserData.TestUserId);
+            _attachments.ElementAt(6).SetDeleted(UserData.TestUserId);
             return _attachments;
         }
     }
@@ -96,26 +102,21 @@ public static class AttachmentData
         _attachmentFiles = null;
     }
 
-    private static IEnumerable<AttachmentFile> AttachmentFilesSeedItems
-    {
-        get
-        {
-            const string attachmentsPath = "UserFiles/Attachments/20";
-            const string thumbnailsPath = "UserFiles/Thumbnails/20";
-            return new List<AttachmentFile>
-            {
-                new("20000000-0000-0000-0000-000000000001.png", attachmentsPath, EncodedPngFile),
-                new("20000000-0000-0000-0000-000000000001.png", thumbnailsPath, EncodedPngFile),
-                new("20000000-0000-0000-0000-000000000002.svg", attachmentsPath, EncodedSvgFile),
-                new("20000000-0000-0000-0000-000000000003.pdf", attachmentsPath, EncodedPdfFile),
-                new("20000000-0000-0000-0000-000000000004.png", attachmentsPath, Base64EncodedFile: null),
-                new("20000000-0000-0000-0000-000000000004.png", thumbnailsPath, Base64EncodedFile: null),
-                new("20000000-0000-0000-0000-000000000005.pdf", attachmentsPath, Base64EncodedFile: null),
-                new("20000000-0000-0000-0000-000000000006.pdf", attachmentsPath, EncodedPdfFile),
-                new("20000000-0000-0000-0000-000000000007.pdf", attachmentsPath, EncodedPdfFile),
-            };
-        }
-    }
+    private const string AttachmentsPath = "UserFiles/Attachments/20";
+    private const string ThumbnailsPath = "UserFiles/Thumbnails/20";
+
+    private static IEnumerable<AttachmentFile> AttachmentFilesSeedItems =>
+    [
+        new("20000000-0000-0000-0000-000000000001.png", AttachmentsPath, EncodedPngFile),
+        new("20000000-0000-0000-0000-000000000001.png", ThumbnailsPath, EncodedPngFile),
+        new("20000000-0000-0000-0000-000000000002.svg", AttachmentsPath, EncodedSvgFile),
+        new("20000000-0000-0000-0000-000000000003.pdf", AttachmentsPath, EncodedPdfFile),
+        new("20000000-0000-0000-0000-000000000004.png", AttachmentsPath, Base64EncodedFile: null),
+        new("20000000-0000-0000-0000-000000000004.png", ThumbnailsPath, Base64EncodedFile: null),
+        new("20000000-0000-0000-0000-000000000005.pdf", AttachmentsPath, Base64EncodedFile: null),
+        new("20000000-0000-0000-0000-000000000006.pdf", AttachmentsPath, EncodedPdfFile),
+        new("20000000-0000-0000-0000-000000000007.pdf", AttachmentsPath, EncodedPdfFile),
+    ];
 
     private static IEnumerable<AttachmentFile>? _attachmentFiles;
 
