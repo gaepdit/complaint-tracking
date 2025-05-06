@@ -2,7 +2,6 @@
 
 The Complaint Tracking System (CTS) is an online application to allow EPD staff to enter, assign, review, and close complaints received from the public.
 
-
 [![Georgia EPD-IT](https://raw.githubusercontent.com/gaepdit/gaepd-brand/main/blinkies/blinkies.cafe-gaepdit.gif)](https://github.com/gaepdit)
 [![.NET Test](https://github.com/gaepdit/complaint-tracking/actions/workflows/dotnet-test.yml/badge.svg)](https://github.com/gaepdit/complaint-tracking/actions/workflows/dotnet-test.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=gaepdit.complaint-tracking&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=gaepdit.complaint-tracking)
@@ -50,10 +49,12 @@ The following settings section configures the data stores, authentication, and o
     "UseDevSettings": true,
     "UseInMemoryData": true,
     "UseEfMigrations": false,
-    "DeleteAndRebuildDatabase": true,
     "UseAzureAd": false,
     "LocalUserIsAuthenticated": true,
-    "LocalUserRoles": [],
+    "LocalUserRoles": [
+      "Staff",
+      "SiteMaintenance"
+    ],
     "UseSecurityHeadersInDev": false,
     "EnableWebOptimizer": false
   }
@@ -61,56 +62,51 @@ The following settings section configures the data stores, authentication, and o
 ```
 
 - *UseDevSettings* — Indicates whether the following Dev settings should be applied.
+
+#### Database settings
+
 - *UseInMemoryData*
   - When `true`, the `LocalRepository` project is used for repositories and data stores. Data is initially seeded from the `TestData` project.
-  - When `false`, the `EfRepository` project is used, and a SQL Server database (as specified by the connection string) is created. (If the connection string is missing, then a temporary EF Core in-memory database provider is used. This option is included for convenience and is not recommended.)
-- *UseEfMigrations* — Uses Entity Framework database migrations when `true`. When `false`, the `DeleteAndRebuildDatabase` setting controls how the database is handled. (Only applies if `UseInMemoryData` is `false`.)
-- *DeleteAndRebuildDatabase* — When set to `true`, the database is deleted and recreated on each run. When set to `false`, the database is not modified on each run. (Only applies if `UseInMemoryData` and `UseEfMigrations` are both `false`.) If the database does not exist yet, it will not be created if this is set to `false`. The database is seeded with data from the `TestData` project only when `UseEfMigrations` is `false` and `DeleteAndRebuildDatabase` is `true`. Otherwise, the data in the database is not changed.
+  - When `false`, the `EfRepository` project is used, and a SQL Server database (as specified by the connection string)
+    is created.
+- *UseEfMigrations* — Uses Entity Framework database migrations when `true`. When `false`, database is created directly based on the `DbContext`. (Only applies if `UseInMemoryData` is `false`.)
+
+#### Authentication settings
+
 - *UseAzureAd* — If `true`, connects to Azure AD for user authentication. (The app must be registered in the Azure portal, and configuration added to the settings file.) If `false`, authentication is simulated using test user data.
 - *LocalUserIsAuthenticated* — Simulates a successful login with a test account when `true`. Simulates a failed login when `false`. (Only applies if `UseAzureAd` is `false`.)
 - *LocalUserRoles* — Adds the listed App Roles to the logged in account. (Only applies if `LocalUserIsAuthenticated` is `true`.)
+
+#### Miscellaneous dev settings
+
 - *UseSecurityHeadersLocally* — Sets whether to include HTTP security headers when running locally in the Development environment.
 - *EnableWebOptimizer* — Enables the WebOptimizer middleware for bundling and minification of CSS and JavaScript files. (This is disabled by default to simplify debugging.)
 
+### Production settings
+
+In a production or staging environment, `UseDevSettings` is automatically set to `false` regardless of what is specified
+in the `appsettings.json` file.
+
 #### Seeding user roles
 
-There are two ways to seed user roles, depending on the authentication method chosen.
-
-When authenticating as a test user (`UseAzureAd` set to `false`), the `LocalUserRoles` setting determines the roles assigned to the user. Add the desired roles to the array using their short name. For example:
-
-```json
-{
-  "LocalUserRoles": ["Staff", "SiteMaintenance"]
-}
-```
-
-When authenticating using AzureAD (`UseAzureAd` set to `true`), roles can be seeded using the `SeedUserRoles` setting. This setting is also used in production if needed to help seed initial admin roles. The roles are added to the user's account the first time they log in. For example:
+User roles can be seeded using the `SeedUserRoles` setting. The roles are added to the user's account the first time
+they log in. For example:
 
 ```json
 {
   "SeedUserRoles": [
     {
       "User": "user1@example.com",
-      "Roles": ["UserAdmin", "Staff"]
+      "Roles": [
+        "UserAdmin",
+        "Staff"
+      ]
     }
   ]
 }
 ```
 
-#### Production defaults
-
-In a production or staging environment (or if `UseDevSettings` is set to `false` or the `DevSettings` section is missing), the settings are automatically set to production defaults as follows:
-
-```csharp
-UseDevSettings = false,
-UseInMemoryData = false,
-UseEfMigrations = true,
-DeleteAndRebuildDatabase = false,
-UseAzureAd = true,
-EnableWebOptimizer = true,
-```
-
-#### Data persistence
+### Data persistence
 
 Here's a visualization of how the settings configure data storage at runtime.
 

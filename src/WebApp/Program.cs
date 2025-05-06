@@ -5,7 +5,6 @@ using Cts.WebApp.Platform.Logging;
 using Cts.WebApp.Platform.OrgNotifications;
 using Cts.WebApp.Platform.Settings;
 using GaEpd.EmailService.Utilities;
-using GaEpd.FileService;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.OpenApi.Models;
 using Mindscape.Raygun4Net;
@@ -73,16 +72,14 @@ builder.Services
     .AddEmailService()
     .AddValidators();
 
-// Add data stores.
-builder.Services
-    .AddDataPersistence(builder.Configuration)
-    .AddFileServices(builder.Configuration);
+// Add data stores and initialize the database.
+await builder.ConfigureDataPersistence();
+
+// Configure file storage
+await builder.ConfigureFileStorage();
 
 // Add organizational notifications.
 builder.Services.AddOrgNotifications();
-
-// Initialize database.
-builder.Services.AddHostedService<MigratorHostedService>();
 
 // Add API documentation.
 builder.Services.AddMvcCore().AddApiExplorer();
