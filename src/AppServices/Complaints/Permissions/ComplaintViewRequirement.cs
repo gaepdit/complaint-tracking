@@ -80,7 +80,7 @@ internal class ComplaintViewRequirement :
 
     private bool IsCurrentManager() =>
         _user.IsManager() &&
-        _user.HasRealClaim(AppClaimTypes.OfficeId, _resource.CurrentOffice?.Id.ToString()) ||
+        _user.HasMatchingClaim(AppClaimTypes.OfficeId, _resource.CurrentOffice?.Id.ToString()) ||
         _user.IsDivisionManager();
 
     private bool IsCurrentOwner() => _user.IsStaff() && _resource.CurrentOwner?.Id == _user.GetNameIdentifierId();

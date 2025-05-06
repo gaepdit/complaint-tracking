@@ -177,9 +177,27 @@ html:not([data-bs-theme="dark"]) .bg-dark-subtle .text-danger-emphasis {
 
 .btn-img img {
     height: 25px;
+    margin-right: 2px;
+}
+
+.btn-img-bg {
     background: white;
     box-shadow: 0 0 1px white;
-    margin-right: 2px;
+}
+
+.btn-img svg {
+    fill: #222;
+    transition: fill .15s ease-in-out;
+}
+
+[data-bs-theme="dark"] .btn-img svg {
+    fill: #fff;
+}
+
+.btn:hover svg,
+.btn:active svg,
+.btn:focus-visible svg {
+    fill: var(--bs-btn-hover-color);
 }
 
 /* Additional text utilities
