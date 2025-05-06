@@ -7,6 +7,7 @@ using Cts.AppServices.DataExport;
 using Cts.AppServices.Notifications;
 using Cts.AppServices.Offices;
 using Cts.AppServices.Reporting;
+using Cts.AppServices.Staff;
 using Cts.Domain.Entities.ActionTypes;
 using Cts.Domain.Entities.Attachments;
 using Cts.Domain.Entities.Complaints;
@@ -45,6 +46,9 @@ public static class AppServiceRegistration
         // Offices
         .AddScoped<IOfficeManager, OfficeManager>()
         .AddScoped<IOfficeService, OfficeService>()
+
+        // Staff
+        .AddScoped<IStaffService, StaffService>()
 
         // Reporting
         .AddScoped<IReportingService, ReportingService>()

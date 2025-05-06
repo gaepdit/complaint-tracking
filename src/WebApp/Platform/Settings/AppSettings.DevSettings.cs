@@ -1,4 +1,4 @@
-﻿using JetBrains.Annotations;
+using JetBrains.Annotations;
 
 namespace Cts.WebApp.Platform.Settings;
 
@@ -10,62 +10,60 @@ internal static partial class AppSettings
     public static readonly DevSettingsSection ProductionDefault = new()
     {
         UseDevSettings = false,
-        UseInMemoryData = false,
+        BuildDatabase = true,
         UseEfMigrations = true,
-        UseAzureAd = true,
-        LocalUserIsAuthenticated = false,
-        LocalUserRoles = [],
+        EnableTestUser = false,
+        TestUserIsAuthenticated = false,
+        TestUserRoles = [],
         UseSecurityHeadersInDev = false,
-        EnableWebOptimizer = true,
+        EnableWebOptimizerInDev = false,
     };
 
     // DEV configuration settings
+    [UsedImplicitly(ImplicitUseTargetFlags.Members)]
     public record DevSettingsSection
     {
         /// <summary>
         /// Enable (`true`) or disable (`false`) the development settings.
         /// </summary>
-        public bool UseDevSettings { get; [UsedImplicitly] init; }
+        public bool UseDevSettings { get; init; }
 
         /// <summary>
-        /// Use in-memory data store (`true`) or connect to a SQL Server database (`false`).
+        /// Build a SQL Server database (`true`) or use an in-memory data store (`false`).
         /// </summary>
-        public bool UseInMemoryData { get; [UsedImplicitly] init; }
+        public bool BuildDatabase { get; init; }
 
         /// <summary>
-        /// Run all Entity Framework migrations (`true`) or create the database based solely on the `DbContext` (`false`).
-        /// (Only applies if <see cref="UseInMemoryData"/> is `false`.)
+        /// Create a database using Entity Framework migrations (`true`) or solely based on the `DbContext` (`false`).
+        /// (Only applies if <see cref="BuildDatabase"/> is `true`.)
         /// </summary>
-        public bool UseEfMigrations { get; [UsedImplicitly] init; }
+        public bool UseEfMigrations { get; init; }
 
         /// <summary>
-        /// Use Azure AD authentication (`true`) or simulate authentication (`false`).
-        /// In order to use Azure AD for authentication, the app must be registered in the Azure portal and
-        /// configuration settings added in the `AzureAd` settings section. If `false`, authentication is simulated
-        /// using test user data.
+        /// Enable a test user for development (`true`) or disable (`false`).
         /// </summary>
-        public bool UseAzureAd { get; [UsedImplicitly] init; }
+        public bool EnableTestUser { get; init; }
 
         /// <summary>
         /// Simulate a successful login with a test account (`true`) or simulate a failed login (`false`).
-        /// (Only applies if <see cref="UseAzureAd"/> is `false`.)
+        /// (Only applies if <see cref="EnableTestUser"/> is `false`.)
         /// </summary>
-        public bool LocalUserIsAuthenticated { get; [UsedImplicitly] init; }
+        public bool TestUserIsAuthenticated { get; init; }
 
         /// <summary>
-        /// Add listed Roles to the logged in test user account.
-        /// (Only applies if <see cref="UseAzureAd"/> is `false` and <see cref="LocalUserIsAuthenticated"/> is `true`.)
+        /// Add listed Roles to the test user account.
+        /// (Only applies if <see cref="EnableTestUser"/> is `false` and <see cref="TestUserIsAuthenticated"/> is `true`.)
         /// </summary>
-        public string[] LocalUserRoles { get; [UsedImplicitly] init; } = [];
+        public string[] TestUserRoles { get; init; } = [];
 
         /// <summary>
         /// Include HTTP security headers when running in a Development environment (`true`).
         /// </summary>
-        public bool UseSecurityHeadersInDev { get; [UsedImplicitly] init; }
+        public bool UseSecurityHeadersInDev { get; init; }
 
         /// <summary>
         /// Use WebOptimizer to bundle and minify CSS and JS files (`true`).
         /// </summary>
-        public bool EnableWebOptimizer { get; [UsedImplicitly] init; }
+        public bool EnableWebOptimizerInDev { get; init; }
     }
 }

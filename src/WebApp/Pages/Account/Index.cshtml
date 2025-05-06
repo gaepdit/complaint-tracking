@@ -63,3 +63,16 @@ else
         }
     </dl>
 }
+
+<environment include="Local, Development">
+    <div class="bg-light-subtle">
+        <h3>Claims</h3>
+        <dl class="p-3 border rounded-3">
+            @foreach (var claim in Model.User.Claims)
+            {
+                <dt>@claim.Type</dt>
+                <dd class="text-body-secondary">@claim.Value</dd>
+            }
+        </dl>
+    </div>
+</environment>

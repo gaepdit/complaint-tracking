@@ -1,7 +1,6 @@
 ﻿using Cts.Domain.DataViews;
 using Cts.Domain.DataViews.DataArchiveViews;
 using Cts.Domain.DataViews.ReportingViews;
-using Cts.EfRepository.DbConnection;
 using Cts.EfRepository.DbObjects.Reporting;
 using Dapper;
 using System.Data;

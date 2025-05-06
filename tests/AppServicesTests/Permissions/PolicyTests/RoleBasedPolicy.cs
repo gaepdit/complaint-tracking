@@ -1,5 +1,5 @@
-﻿using Cts.AppServices.AuthorizationPolicies;
-using Cts.AppServices.IdentityServices.Claims;
+﻿using Cts.AppServices.AuthenticationServices.Claims;
+using Cts.AppServices.AuthorizationPolicies;
 using Cts.Domain.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;

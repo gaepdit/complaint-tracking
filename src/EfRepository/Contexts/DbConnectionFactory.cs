@@ -1,7 +1,12 @@
 using Microsoft.Data.SqlClient;
 using System.Data;
 
-namespace Cts.EfRepository.DbConnection;
+namespace Cts.EfRepository.Contexts;
+
+public interface IDbConnectionFactory
+{
+    IDbConnection Create();
+}
 
 public class DbConnectionFactory(string connectionString) : IDbConnectionFactory
 {

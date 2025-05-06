@@ -1,28 +1,10 @@
-﻿using Cts.AppServices.IdentityServices.Claims;
-using Cts.Domain.Identity;
-using System.Diagnostics.CodeAnalysis;
-using System.Security.Claims;
+﻿using Cts.Domain.Identity;
 using System.Security.Principal;
 
-namespace Cts.AppServices.IdentityServices.Roles;
+namespace Cts.AppServices.AuthenticationServices.Roles;
 
 public static class PrincipalExtensions
 {
-    public static string? GetEmail(this ClaimsPrincipal principal) =>
-        principal.FindFirstValue(ClaimTypes.Email);
-
-    public static string GetGivenName(this ClaimsPrincipal principal) =>
-        principal.FindFirstValue(ClaimTypes.GivenName) ?? string.Empty;
-
-    public static string GetFamilyName(this ClaimsPrincipal principal) =>
-        principal.FindFirstValue(ClaimTypes.Surname) ?? string.Empty;
-
-    public static bool HasRealClaim(this ClaimsPrincipal principal, string type, [NotNullWhen(true)] string? value) =>
-        value is not null && principal.HasClaim(type, value);
-
-    internal static bool IsActive(this ClaimsPrincipal principal) =>
-        principal.HasClaim(AppClaimTypes.ActiveUser, true.ToString());
-
     private static bool IsInOneOfRoles(this IPrincipal principal, IEnumerable<string> roles) =>
         roles.Any(principal.IsInRole);
 

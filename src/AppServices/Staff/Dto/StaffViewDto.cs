@@ -19,7 +19,6 @@ public record StaffViewDto : INamedEntity
     public string? PhoneNumber { get; init; }
     public OfficeViewDto? Office { get; init; }
     public bool Active { get; init; }
-    public string? ObjectIdentifier { get; set; }
 
     // Display properties
     [JsonIgnore]

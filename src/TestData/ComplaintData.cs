@@ -6,8 +6,8 @@ namespace Cts.TestData;
 
 internal static class ComplaintData
 {
-    private static IEnumerable<Complaint> ComplaintSeedItems => new List<Complaint>
-    {
+    private static IEnumerable<Complaint> ComplaintSeedItems =>
+    [
         new(1) // 0
         {
             ComplaintNature = "Closed complaint",
@@ -44,6 +44,7 @@ internal static class ComplaintData
             CallerTertiaryPhoneNumber = ValueObjectData.AlternatePhoneNumber,
             CallerEmail = TextData.ValidEmail,
         },
+
         new(2) // 1
         {
             ComplaintNature =
@@ -62,6 +63,7 @@ internal static class ComplaintData
             CallerAddress = ValueObjectData.CompleteAddress,
             ComplaintLocation = $"Email: {TextData.ValidEmail} & Phone: {TextData.ValidPhoneNumber}",
         },
+
         new(3) // 2
         {
             ComplaintNature = "PublicSearchSpec complaint nature reference",
@@ -86,6 +88,7 @@ internal static class ComplaintData
             ComplaintClosedDate = DateTimeOffset.Now.AddDays(-10),
             CallerPhoneNumber = ValueObjectData.AlternatePhoneNumber,
         },
+
         new(5) // 3
         {
             ComplaintNature = "Deleted complaint",
@@ -109,6 +112,7 @@ internal static class ComplaintData
             ComplaintClosedDate = DateTimeOffset.Now.AddDays(-1),
             DeleteComments = TextData.Paragraph,
         },
+
         new(6) // 4
         {
             ComplaintNature = "Open complaint assigned to user, not accepted.",
@@ -121,6 +125,7 @@ internal static class ComplaintData
             CurrentOwner = UserData.GetUsers.ElementAt(0),
             CurrentOwnerAssignedDate = DateTimeOffset.Now.AddDays(-4),
         },
+
         new(7) // 5
         {
             ComplaintNature = "Complaint accepted by user and under investigation.",
@@ -134,6 +139,7 @@ internal static class ComplaintData
             CurrentOwnerAssignedDate = DateTimeOffset.Now.AddDays(-4),
             CurrentOwnerAcceptedDate = DateTimeOffset.Now.AddDays(-3),
         },
+
         new(8) // 6
         {
             ComplaintNature = "New complaint entered more than an hour ago.",
@@ -145,6 +151,7 @@ internal static class ComplaintData
             PrimaryConcern = ConcernData.GetConcerns.ElementAt(2),
             CurrentOffice = OfficeData.GetOffices.ElementAt(1),
         },
+
         new(4) // 7
         {
             ComplaintNature = "Ready to accept",
@@ -159,6 +166,7 @@ internal static class ComplaintData
             CurrentOwnerAssignedDate = DateTimeOffset.Now.AddDays(-1),
             SourceFacilityName = "Assigned to staff user (General).",
         },
+
         new(9) // 8
         {
             ComplaintNature = "Open complaint assigned to inactive user.",
@@ -171,7 +179,7 @@ internal static class ComplaintData
             CurrentOwner = UserData.GetUsers.ElementAt(2),
             CurrentOwnerAssignedDate = DateTimeOffset.Now.AddDays(-4),
         },
-    };
+    ];
 
     private static IEnumerable<Complaint>? _complaints;
 
@@ -182,7 +190,7 @@ internal static class ComplaintData
             if (_complaints is not null) return _complaints;
 
             _complaints = ComplaintSeedItems.ToList();
-            _complaints.ElementAt(3).SetDeleted("00000000-0000-0000-0000-000000000001");
+            _complaints.ElementAt(3).SetDeleted(UserData.TestUserId);
 
             foreach (var complaint in _complaints)
             {

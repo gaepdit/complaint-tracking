@@ -4,10 +4,10 @@ namespace Cts.WebApp.Platform.Settings;
 
 public static class AppSettingsExtensions
 {
-    public static WebApplicationBuilder BindAppSettings(this WebApplicationBuilder builder)
+    public static IHostApplicationBuilder BindAppSettings(this IHostApplicationBuilder builder)
     {
         AppSettings.Version = GetVersion();
-        
+
         builder.Configuration.GetSection(nameof(AppSettings.SupportSettings))
             .Bind(AppSettings.SupportSettings);
         builder.Configuration.GetSection(nameof(AppSettings.RaygunSettings))
@@ -24,7 +24,7 @@ public static class AppSettingsExtensions
 
         if (useDevConfig) devConfig.Bind(AppSettings.DevSettings);
         else AppSettings.DevSettings = AppSettings.ProductionDefault;
-        
+
         return builder;
     }
 
