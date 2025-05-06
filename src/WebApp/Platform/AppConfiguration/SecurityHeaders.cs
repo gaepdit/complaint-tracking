@@ -42,6 +42,7 @@ internal static class SecurityHeaders
             .From("https://api.raygun.io");
         builder.AddFontSrc().Self().Data();
         builder.AddFormAction().Self()
+            .From("https://*.okta.com")
             .From("https://login.microsoftonline.com");
         builder.AddManifestSrc().Self();
         builder.AddFrameAncestors().None();

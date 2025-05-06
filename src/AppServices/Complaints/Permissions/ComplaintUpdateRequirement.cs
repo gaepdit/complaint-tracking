@@ -42,7 +42,7 @@ public class ComplaintUpdateRequirement :
 
     private bool IsCurrentManager() =>
         _user.IsManager() &&
-        _user.HasRealClaim(AppClaimTypes.OfficeId, _resource.CurrentOfficeId?.ToString()) ||
+        _user.HasMatchingClaim(AppClaimTypes.OfficeId, _resource.CurrentOfficeId?.ToString()) ||
         _user.IsDivisionManager();
 
     private bool IsRecentReporter() =>

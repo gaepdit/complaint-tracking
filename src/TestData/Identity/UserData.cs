@@ -13,7 +13,6 @@ internal static partial class UserData
             FamilyName = "User1",
             Email = "test.user@example.net",
             Office = OfficeData.GetOffices.ElementAt(0),
-            ObjectIdentifier = Guid.NewGuid().ToString(),
         },
         new() // 1
         {
@@ -22,7 +21,6 @@ internal static partial class UserData
             FamilyName = "User2",
             Email = "another.user2@example.net",
             Office = OfficeData.GetOffices.ElementAt(1),
-            ObjectIdentifier = Guid.NewGuid().ToString(),
         },
         new() // 2
         {
@@ -32,7 +30,6 @@ internal static partial class UserData
             Email = "inactive.user@example.net",
             Active = false,
             Office = OfficeData.GetOffices.ElementAt(0),
-            ObjectIdentifier = Guid.NewGuid().ToString(),
         },
     };
 

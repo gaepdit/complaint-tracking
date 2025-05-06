@@ -44,7 +44,16 @@ public class ApplicationUser : IdentityUser, IEntity<string>
     /// </summary>
     [PersonalData]
     [StringLength(36)]
-    public string? ObjectIdentifier { get; set; }
+    public string? EntraIdSubjectId { get; set; }
+
+    /// <summary>
+    /// <para>This value is the identifier provided by Okta for a user.</para>
+    /// <para>Value comes from the <c>NameIdentifierId</c> claim
+    /// (<c>http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier</c>).</para>
+    /// </summary>
+    [PersonalData]
+    [StringLength(20)]
+    public string? OktaSubjectId { get; set; }
 
     public DateTimeOffset? AccountCreatedAt { get; init; }
     public DateTimeOffset? AccountUpdatedAt { get; set; }

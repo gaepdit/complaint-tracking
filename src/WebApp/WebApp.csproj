@@ -12,6 +12,7 @@
         <PackageReference Include="Mindscape.Raygun4Net.AspNetCore" />
         <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" />
         <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders.TagHelpers" />
+        <PackageReference Include="Okta.AspNetCore" />
         <PackageReference Include="Swashbuckle.AspNetCore" />
     </ItemGroup>
 

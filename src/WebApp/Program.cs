@@ -23,7 +23,7 @@ BindingsConfiguration.BindSettings(builder);
 builder.Services.AddIdentityStores();
 
 // Configure Authentication.
-builder.Services.AddAuthenticationServices(builder.Configuration);
+builder.ConfigureAuthentication();
 
 // Persist data protection keys.
 var keysFolder = Path.Combine(builder.Configuration["PersistedFilesBasePath"] ?? "", "DataProtectionKeys");
