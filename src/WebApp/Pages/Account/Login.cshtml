@@ -1,14 +1,11 @@
 ﻿@page
 @using Cts.AppServices.IdentityServices
-@using Cts.WebApp.Pages.Shared.DisplayTemplates
 @using Cts.WebApp.Platform.Settings
 @model LoginModel
-@{
-    ViewData["Title"] = "Agency Login";
-}
 
-@if (Model.DisplayFailedUser is null)
+@if (!Model.DisplayFailedLogin)
 {
+    ViewData["Title"] = "Agency Login";
     <h1>@ViewData["Title"]</h1>
     <p>
         The Complaint Tracking System administration site is a State of Georgia application.
@@ -21,14 +18,13 @@
         <div class="p-5 bg-light-subtle border rounded-3 mt-5 mb-5">
             <h1 class="display-6">Sign in as a test user</h1>
 
-            <form asp-page-handler="@IdentityProviders.TestUserScheme" method="post">
+            <form asp-page-handler="@IdentityProviders.TestUserScheme" asp-route-returnUrl="@Model.ReturnUrl" method="post">
                 <button type="submit" class="btn btn-lg btn-outline-primary btn-img my-3 py-3 px-4" title="Sign in using your Okta account">
                     <svg class="bi me-2">
                         <use href="@Url.Content("~/images/app-icons.svg")#app-icon-person-badge"></use>
                     </svg>
                     Sign in
                 </button>
-                <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl" />
             </form>
         </div>
     }
@@ -38,7 +34,7 @@
             <div class="col-md p-3 bg-light-subtle border rounded-3 mt-3 mb-3 me-md-3">
                 <h1 class="display-6">Sign in using your Okta account</h1>
 
-                <form asp-route-scheme="@IdentityProviders.OktaScheme" method="post">
+                <form asp-route-scheme="@IdentityProviders.OktaScheme" asp-route-returnUrl="@Model.ReturnUrl" method="post">
                     <button type="submit" class="btn btn-lg btn-outline-primary btn-img my-3 py-3 px-4" title="Sign in using your Okta account">
                         <svg class="me-2" height="21" viewBox="0 0 109.21 36" role="img">
                             <path d="M98.97,23.67c-3.05,0-5.2-2.38-5.2-5.51s2.15-5.51,5.2-5.51,5.14,2.38,5.14,5.51-2.12,5.51-5.14,5.51Zm-.49,3.28c2.46,0,4.55-.96,5.87-2.97,.25,1.95,1.66,2.66,3.44,2.66h1.42v-3.09h-.61c-1.01,0-1.26-.49-1.26-1.64V9.69h-3.26v2.51c-1.11-1.76-3.2-2.82-5.6-2.82-4.28,0-8.21,3.59-8.21,8.78s3.94,8.78,8.21,8.78Zm-16.79-4.24c0,2.78,1.72,3.93,3.78,3.93h3.97v-3.09h-2.89c-1.2,0-1.45-.46-1.45-1.64V12.78h4.34v-3.09h-4.34V4h-3.41V22.71Zm-15.53,3.93h3.41v-7.27h1.14l5.81,7.27h4.31l-7.41-9.22,5.69-7.73h-3.84l-4.65,6.53h-1.05V4h-3.41V26.64Zm-11.07-17.26c-4.77,0-8.7,3.59-8.7,8.78s3.94,8.78,8.7,8.78,8.7-3.59,8.7-8.78-3.94-8.78-8.7-8.78Zm0,14.29c-3.05,0-5.2-2.38-5.2-5.51s2.15-5.51,5.2-5.51,5.2,2.38,5.2,5.51-2.15,5.51-5.2,5.51Z"></path>
@@ -47,18 +43,16 @@
                         </svg>
                         Sign in
                     </button>
-                    <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl" />
                 </form>
             </div>
 
             <div class="col-md p-3 bg-light-subtle border rounded-3 mt-3 mb-3">
                 <h1 class="display-6">Sign in using your SOG work account</h1>
 
-                <form asp-route-scheme="@IdentityProviders.EntraIdScheme" method="post">
+                <form asp-route-scheme="@IdentityProviders.EntraIdScheme" asp-route-returnUrl="@Model.ReturnUrl" method="post">
                     <button type="submit" class="btn btn-lg btn-outline-primary btn-img my-3 py-3 px-4" title="Sign in using your SOG work account">
                         <img src="~/images/ms-symbol.svg" alt="" class="btn-img-bg" /> Sign in
                     </button>
-                    <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl" />
                 </form>
 
                 <div class="callout callout-warning">
@@ -71,37 +65,10 @@
 }
 else
 {
+    ViewData["Title"] = "Agency Login Failed";
     <h1 class="text-danger-emphasis">@ViewData["Title"]</h1>
     <p class="lead">
-        There was an error creating your account. If you need assistance related to this error,
-        please contact EPD IT support.
+        There was an error logging in. If you need assistance related to this error, please contact EPD IT support.
     </p>
-
     <div asp-validation-summary="All"></div>
-
-    @if (Model.DisplayFailedUser is not null)
-    {
-        <div class="p-3 border rounded-3 bg-light-subtle">
-            <p>Data received from work account (for diagnostic purposes):</p>
-            <dl class="row">
-                <dt class="col-sm-3">@Html.DisplayNameFor(_ => Model.DisplayFailedUser.Email)</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(_ => Model.DisplayFailedUser.Email, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })</dd>
-
-                <dt class="col-sm-3">@Html.DisplayNameFor(_ => Model.DisplayFailedUser.UserName)</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(_ => Model.DisplayFailedUser.UserName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })</dd>
-
-                <dt class="col-sm-3">@Html.DisplayNameFor(_ => Model.DisplayFailedUser.FamilyName)</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(_ => Model.DisplayFailedUser.FamilyName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })</dd>
-
-                <dt class="col-sm-3">@Html.DisplayNameFor(_ => Model.DisplayFailedUser.GivenName)</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(_ => Model.DisplayFailedUser.GivenName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })</dd>
-
-                <dt class="col-sm-3">@Html.DisplayNameFor(_ => Model.DisplayFailedUser.EntraIdSubjectId)</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(_ => Model.DisplayFailedUser.EntraIdSubjectId, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })</dd>
-
-                <dt class="col-sm-3">@Html.DisplayNameFor(_ => Model.DisplayFailedUser.OktaSubjectId)</dt>
-                <dd class="col-sm-9">@Html.DisplayFor(_ => Model.DisplayFailedUser.OktaSubjectId, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })</dd>
-            </dl>
-        </div>
-    }
 }

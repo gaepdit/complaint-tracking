@@ -10,10 +10,10 @@ namespace Cts.WebApp.Pages.Account;
 [AllowAnonymous]
 public class LogoutModel(SignInManager<ApplicationUser> signInManager) : PageModel
 {
-    public Task<SignOutResult> OnGetAsync() => LogOutAndRedirectToIndex();
-    public Task<SignOutResult> OnPostAsync() => LogOutAndRedirectToIndex();
+    public Task<SignOutResult> OnGetAsync() => SignOut();
+    public Task<SignOutResult> OnPostAsync() => SignOut();
 
-    private async Task<SignOutResult> LogOutAndRedirectToIndex()
+    private async Task<SignOutResult> SignOut()
     {
         var authenticationProperties = new AuthenticationProperties { RedirectUri = "/Index" };
 

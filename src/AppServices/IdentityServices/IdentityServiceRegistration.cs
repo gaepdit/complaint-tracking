@@ -13,5 +13,6 @@ public static class IdentityServiceRegistration
 
         // Add staff and user services.
         .AddTransient<IStaffService, StaffService>()
-        .AddScoped<IUserService, UserService>();
+        .AddScoped<IUserService, UserService>()
+        .AddScoped<IIdentityManager, IdentityManager>();
 }
