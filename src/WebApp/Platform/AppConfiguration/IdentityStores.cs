@@ -1,5 +1,3 @@
-using Cts.AppServices.Staff;
-using Cts.AppServices.UserServices;
 using Cts.Domain.Identity;
 using Cts.EfRepository.Contexts;
 using Cts.LocalRepository.Identity;
@@ -25,9 +23,5 @@ public static class IdentityStores
             // Add EF identity stores.
             identityBuilder.AddRoles<IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
         }
-
-        // Add staff and user services.
-        services.AddTransient<IStaffService, StaffService>();
-        services.AddScoped<IUserService, UserService>();
     }
 }

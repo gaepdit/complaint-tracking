@@ -1,6 +1,5 @@
-﻿using Cts.AppServices.Offices;
-using Cts.AppServices.Permissions;
-using Cts.AppServices.Permissions.Helpers;
+﻿using Cts.AppServices.AuthorizationPolicies;
+using Cts.AppServices.Offices;
 
 namespace Cts.WebApp.Pages.Admin.Maintenance.Offices;
 

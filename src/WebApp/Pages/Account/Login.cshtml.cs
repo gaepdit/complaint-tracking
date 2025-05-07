@@ -1,5 +1,6 @@
-﻿using Cts.AppServices.Permissions;
-using Cts.AppServices.Permissions.Helpers;
+﻿using Cts.AppServices.AuthorizationPolicies;
+using Cts.AppServices.IdentityServices;
+using Cts.AppServices.IdentityServices.Claims;
 
 namespace Cts.WebApp.Pages.Account;
 

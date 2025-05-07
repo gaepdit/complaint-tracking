@@ -1,4 +1,4 @@
-﻿using Cts.AppServices.Permissions;
+﻿using Cts.AppServices.AuthorizationPolicies;
 
 namespace Cts.WebApp.Pages.Admin.Maintenance;
 

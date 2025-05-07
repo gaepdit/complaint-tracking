@@ -1,6 +1,6 @@
 using AutoMapper;
-using Cts.AppServices.ServiceBase;
-using Cts.AppServices.UserServices;
+using Cts.AppServices.IdentityServices;
+using Cts.AppServices.NamedEntities;
 using Cts.Domain.Entities.Concerns;
 
 namespace Cts.AppServices.Concerns;
@@ -10,6 +10,6 @@ public sealed class ConcernService(
     IConcernManager manager,
     IMapper mapper,
     IUserService userService)
-    : MaintenanceItemService<Concern, ConcernViewDto, ConcernUpdateDto>
+    : NamedEntityService<Concern, ConcernViewDto, ConcernUpdateDto>
         (repository, manager, mapper, userService),
         IConcernService;

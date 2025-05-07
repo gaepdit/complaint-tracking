@@ -1,8 +1,7 @@
-﻿using Cts.AppServices.Complaints;
+﻿using Cts.AppServices.AuthorizationPolicies;
+using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.QueryDto;
 using Cts.AppServices.Offices;
-using Cts.AppServices.Permissions;
-using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.Staff;
 using System.ComponentModel.DataAnnotations;
 
@@ -61,10 +60,13 @@ public class DashboardIndexModel(
                 { Complaints = await complaintService.GetUnassignedComplaintsForOfficeAsync(officeId, token: token) };
             MgrUnacceptedComplaints =
                 new DashboardCard($"Complaints in {officeName} that have been assigned but not accepted")
-                    { Complaints = await complaintService.GetUnacceptedComplaintsForOfficeAsync(officeId, token: token) };
+                {
+                    Complaints = await complaintService.GetUnacceptedComplaintsForOfficeAsync(officeId, token: token)
+                };
         }
 
-        var assignorOfficeList = (await officeService.GetOfficesForAssignorAsync(user.Id, ignoreOffice: null, token: token))
+        var assignorOfficeList =
+            (await officeService.GetOfficesForAssignorAsync(user.Id, ignoreOffice: null, token: token))
             .Where(office => office.Id != officeId).ToList();
 
         if (assignorOfficeList.Count == 0) return Page();

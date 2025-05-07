@@ -6,11 +6,10 @@ namespace Cts.WebApp.Platform.AppConfiguration;
 
 public static class FileStorage
 {
-    public static async Task<IHostApplicationBuilder> ConfigureFileStorage(this IHostApplicationBuilder builder)
+    public static async Task ConfigureFileStorage(this IHostApplicationBuilder builder)
     {
         builder.Services.AddFileServices(builder.Configuration);
         if (AppSettings.DevSettings.UseDevSettings) await SeedFileStoreAsync(builder.Services);
-        return builder;
     }
 
     // Initialize the attachment file store

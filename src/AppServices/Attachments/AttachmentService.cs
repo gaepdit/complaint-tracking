@@ -2,7 +2,7 @@ using AutoMapper;
 using Cts.AppServices.Attachments.Dto;
 using Cts.AppServices.Complaints.QueryDto;
 using Cts.AppServices.ErrorLogging;
-using Cts.AppServices.UserServices;
+using Cts.AppServices.IdentityServices;
 using Cts.Domain.Entities.Attachments;
 using Cts.Domain.Entities.Complaints;
 using GaEpd.FileService;
@@ -41,7 +41,8 @@ public class AttachmentService(
         return attachment == null
             ? null
             : mapper.Map<ComplaintViewDto>(await complaintRepository
-                .FindAsync(complaint => complaint.Attachments.Contains(attachment), token: token).ConfigureAwait(false));
+                .FindAsync(complaint => complaint.Attachments.Contains(attachment), token: token)
+                .ConfigureAwait(false));
     }
 
     public async Task<byte[]> GetAttachmentFileAsync(string fileId, bool getThumbnail,

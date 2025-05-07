@@ -1,4 +1,4 @@
-﻿using Cts.AppServices.Permissions.Requirements;
+﻿using Cts.AppServices.AuthorizationPolicies.Requirements;
 using Cts.Domain.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;

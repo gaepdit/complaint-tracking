@@ -1,4 +1,4 @@
-﻿using Cts.AppServices.DtoBase;
+﻿using Cts.AppServices.NamedEntities;
 using Cts.AppServices.Staff.Dto;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;

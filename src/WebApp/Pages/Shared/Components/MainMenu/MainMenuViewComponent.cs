@@ -1,5 +1,4 @@
-﻿using Cts.AppServices.Permissions;
-using Cts.AppServices.Permissions.Helpers;
+﻿using Cts.AppServices.AuthorizationPolicies;
 using Cts.WebApp.Pages.Account;
 
 namespace Cts.WebApp.Pages.Shared.Components.MainMenu;

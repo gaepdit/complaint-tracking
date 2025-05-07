@@ -1,20 +1,19 @@
-using Cts.AppServices.ErrorLogging;
-using Cts.AppServices.RegisterServices;
+using Cts.AppServices.AuthorizationPolicies;
+using Cts.AppServices.AutoMapper;
+using Cts.AppServices.IdentityServices;
+using Cts.AppServices.ServiceRegistration;
 using Cts.WebApp.Platform.AppConfiguration;
 using Cts.WebApp.Platform.Logging;
 using Cts.WebApp.Platform.OrgNotifications;
 using Cts.WebApp.Platform.Settings;
 using GaEpd.EmailService.Utilities;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.OpenApi.Models;
-using Mindscape.Raygun4Net;
 using Mindscape.Raygun4Net.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Set default timeout for regular expressions.
+// Set the default timeout for regular expressions.
 // https://learn.microsoft.com/en-us/dotnet/standard/base-types/best-practices#use-time-out-values
-// ReSharper disable once HeapView.BoxingAllocation
 AppDomain.CurrentDomain.SetData("REGEX_DEFAULT_MATCH_TIMEOUT", TimeSpan.FromMilliseconds(100));
 
 // Bind application settings.
@@ -30,8 +29,11 @@ builder.Services.AddAuthenticationServices(builder.Configuration);
 var keysFolder = Path.Combine(builder.Configuration["PersistedFilesBasePath"] ?? "", "DataProtectionKeys");
 builder.Services.AddDataProtection().PersistKeysToFileSystem(Directory.CreateDirectory(keysFolder));
 
-// Configure authorization policies.
-builder.Services.AddAuthorizationPolicies();
+// Configure authorization and identity services.
+builder.Services.AddAuthorizationPolicies().AddIdentityServices();
+
+// Add app entity services.
+builder.Services.AddAutoMapperProfiles().AddAppServices();
 
 // Configure UI services.
 builder.Services.AddRazorPages();
@@ -43,64 +45,28 @@ if (!builder.Environment.IsDevelopment())
         .AddHttpsRedirection(options => options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect);
 }
 
-// Configure application monitoring.
-builder.Services
-    .AddTransient<IErrorLogger, ErrorLogger>()
-    .AddSingleton(provider =>
-    {
-        var client = new RaygunClient(provider.GetService<RaygunSettings>()!,
-            provider.GetService<IRaygunUserProvider>()!);
-        client.SendingMessage += (_, eventArgs) =>
-            eventArgs.Message.Details.Tags.Add(builder.Environment.EnvironmentName);
-        return client;
-    })
-    .AddRaygun(opts =>
-    {
-        opts.ApiKey = AppSettings.RaygunSettings.ApiKey;
-        opts.ApplicationVersion = AppSettings.SupportSettings.InformationalVersion;
-        opts.ExcludeErrorsFromLocal = AppSettings.RaygunSettings.ExcludeErrorsFromLocal;
-        opts.IgnoreFormFieldNames = ["*Password"];
-        opts.EnvironmentVariables.Add("ASPNETCORE_*");
-    })
-    .AddRaygunUserProvider()
-    .AddHttpContextAccessor(); // needed by RaygunScriptPartial
-
-// Add app services.
-builder.Services
-    .AddAutoMapperProfiles()
-    .AddAppServices()
-    .AddEmailService()
-    .AddValidators();
-
 // Add data stores and initialize the database.
 await builder.ConfigureDataPersistence();
 
 // Configure file storage
 await builder.ConfigureFileStorage();
 
+// Add email services.
+builder.Services.AddEmailService();
+
 // Add organizational notifications.
 builder.Services.AddOrgNotifications();
 
 // Add API documentation.
-builder.Services.AddMvcCore().AddApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Version = "v1",
-        Title = "Complaint Tracking System API",
-        Contact = new OpenApiContact
-        {
-            Name = "Complaint Tracking System Technical Support",
-            Email = AppSettings.SupportSettings.TechnicalSupportEmail,
-        },
-    });
-});
+builder.Services.AddApiDocumentation();
 
 // Configure bundling and minification.
 builder.Services.AddWebOptimizer(
     minifyJavaScript: AppSettings.DevSettings.EnableWebOptimizer,
     minifyCss: AppSettings.DevSettings.EnableWebOptimizer);
+
+// Configure application crash monitoring.
+builder.Services.ConfigureErrorLogging(builder.Environment.EnvironmentName);
 
 // Build the application.
 var app = builder.Build();
@@ -127,17 +93,8 @@ app
     .UseStaticFiles()
     .UseRouting()
     .UseAuthentication()
-    .UseAuthorization();
-
-// Configure API documentation.
-app
-    .UseSwagger(options => { options.RouteTemplate = "api-docs/{documentName}/openapi.json"; })
-    .UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("v1/openapi.json", "Complaint Tracking System API v1");
-        options.RoutePrefix = "api-docs";
-        options.DocumentTitle = "Complaint Tracking System API";
-    });
+    .UseAuthorization()
+    .UseApiDocumentation();
 
 // Map endpoints.
 app.MapRazorPages();

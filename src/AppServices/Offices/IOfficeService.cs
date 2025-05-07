@@ -1,9 +1,9 @@
-using Cts.AppServices.ServiceBase;
+using Cts.AppServices.NamedEntities;
 using GaEpd.AppLibrary.ListItems;
 
 namespace Cts.AppServices.Offices;
 
-public interface IOfficeService : IMaintenanceItemService<OfficeViewDto, OfficeUpdateDto>
+public interface IOfficeService : INamedEntityService<OfficeViewDto, OfficeUpdateDto>
 {
     Task<OfficeWithAssignorDto?> FindAsync(Guid id, CancellationToken token = default);
     Task<IReadOnlyList<OfficeWithAssignorDto>> GetListIncludeAssignorAsync(CancellationToken token = default);

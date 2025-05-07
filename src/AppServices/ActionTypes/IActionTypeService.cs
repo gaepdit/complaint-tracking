@@ -1,5 +1,5 @@
-﻿using Cts.AppServices.ServiceBase;
+﻿using Cts.AppServices.NamedEntities;
 
 namespace Cts.AppServices.ActionTypes;
 
-public interface IActionTypeService : IMaintenanceItemService<ActionTypeViewDto, ActionTypeUpdateDto>;
+public interface IActionTypeService : INamedEntityService<ActionTypeViewDto, ActionTypeUpdateDto>;
