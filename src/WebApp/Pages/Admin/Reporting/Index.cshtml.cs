@@ -1,7 +1,6 @@
+using Cts.AppServices.AuthorizationPolicies;
 using Cts.AppServices.Complaints.QueryDto;
 using Cts.AppServices.Offices;
-using Cts.AppServices.Permissions;
-using Cts.AppServices.Permissions.Helpers;
 using Cts.AppServices.Reporting;
 using Cts.AppServices.Staff;
 using Cts.Domain;

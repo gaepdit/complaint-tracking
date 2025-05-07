@@ -1,5 +1,5 @@
-﻿using Cts.AppServices.Permissions.AppClaims;
-using Cts.AppServices.Permissions.Requirements;
+﻿using Cts.AppServices.AuthorizationPolicies.Requirements;
+using Cts.AppServices.IdentityServices.Claims;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 

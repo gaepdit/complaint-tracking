@@ -1,4 +1,5 @@
-﻿using Cts.Domain.Identity;
+﻿using Cts.AppServices.IdentityServices.Claims;
+using Cts.Domain.Identity;
 using Cts.WebApp.Platform.Settings;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;

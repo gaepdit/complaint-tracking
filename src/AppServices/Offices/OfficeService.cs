@@ -1,8 +1,7 @@
 using AutoMapper;
-using Cts.AppServices.Permissions;
-using Cts.AppServices.Permissions.Helpers;
-using Cts.AppServices.ServiceBase;
-using Cts.AppServices.UserServices;
+using Cts.AppServices.AuthorizationPolicies;
+using Cts.AppServices.IdentityServices;
+using Cts.AppServices.NamedEntities;
 using Cts.Domain.Entities.Offices;
 using GaEpd.AppLibrary.ListItems;
 using Microsoft.AspNetCore.Authorization;
@@ -15,7 +14,7 @@ public sealed class OfficeService(
     IMapper mapper,
     IUserService userService,
     IAuthorizationService authorization)
-    : MaintenanceItemService<Office, OfficeViewDto, OfficeUpdateDto>
+    : NamedEntityService<Office, OfficeViewDto, OfficeUpdateDto>
         (repository, manager, mapper, userService),
         IOfficeService
 {
@@ -58,7 +57,8 @@ public sealed class OfficeService(
     public async Task<Guid> CreateAsync(OfficeCreateDto resource, CancellationToken token = default)
     {
         var office = await manager
-            .CreateAsync(resource.Name, (await _userService.GetCurrentUserAsync().ConfigureAwait(false))?.Id, token: token)
+            .CreateAsync(resource.Name, (await _userService.GetCurrentUserAsync().ConfigureAwait(false))?.Id,
+                token: token)
             .ConfigureAwait(false);
         if (resource.AssignorId != null)
             office.Assignor = await _userService.FindUserAsync(resource.AssignorId).ConfigureAwait(false);
@@ -77,7 +77,8 @@ public sealed class OfficeService(
             (principal is null || !await authorization.Succeeded(principal, Policies.ActiveUser).ConfigureAwait(false)))
             includeInactive = false;
 
-        return (await repository.GetStaffMembersListAsync(id.Value, includeInactive, token: token).ConfigureAwait(false))
+        return (await repository.GetStaffMembersListAsync(id.Value, includeInactive, token: token)
+                .ConfigureAwait(false))
             .Select(staff => new ListItem<string>(staff.Id, staff.SortableNameWithInactive)).ToList();
     }
 

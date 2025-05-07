@@ -1,6 +1,5 @@
-﻿using Cts.AppServices.Concerns;
-using Cts.AppServices.Permissions;
-using Cts.AppServices.Permissions.Helpers;
+﻿using Cts.AppServices.AuthorizationPolicies;
+using Cts.AppServices.Concerns;
 
 namespace Cts.WebApp.Pages.Admin.Maintenance.Concerns;
 

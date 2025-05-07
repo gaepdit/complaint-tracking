@@ -1,9 +1,8 @@
-﻿using Cts.AppServices.Complaints;
+﻿using Cts.AppServices.AuthorizationPolicies;
+using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.CommandDto;
 using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Complaints.QueryDto;
-using Cts.AppServices.Permissions;
-using Cts.AppServices.Permissions.Helpers;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 

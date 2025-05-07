@@ -1,5 +1,5 @@
 ﻿using Cts.AppServices.ActionTypes;
-using Cts.AppServices.Permissions;
+using Cts.AppServices.AuthorizationPolicies;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using FluentValidation;

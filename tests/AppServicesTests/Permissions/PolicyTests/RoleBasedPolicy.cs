@@ -1,6 +1,5 @@
-﻿using Cts.AppServices.Permissions;
-using Cts.AppServices.Permissions.AppClaims;
-using Cts.AppServices.Permissions.Helpers;
+﻿using Cts.AppServices.AuthorizationPolicies;
+using Cts.AppServices.IdentityServices.Claims;
 using Cts.Domain.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;

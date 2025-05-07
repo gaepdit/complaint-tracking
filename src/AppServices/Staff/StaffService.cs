@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using Cts.AppServices.Permissions;
-using Cts.AppServices.Permissions.Helpers;
+using Cts.AppServices.AuthorizationPolicies;
+using Cts.AppServices.IdentityServices;
 using Cts.AppServices.Staff.Dto;
-using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
 using GaEpd.AppLibrary.Domain.Repositories;

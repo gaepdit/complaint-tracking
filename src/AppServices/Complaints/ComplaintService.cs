@@ -1,13 +1,12 @@
 using AutoMapper;
 using Cts.AppServices.Attachments;
 using Cts.AppServices.Attachments.ValidationAttributes;
+using Cts.AppServices.AuthorizationPolicies;
 using Cts.AppServices.Complaints.CommandDto;
 using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Complaints.QueryDto;
+using Cts.AppServices.IdentityServices;
 using Cts.AppServices.Notifications;
-using Cts.AppServices.Permissions;
-using Cts.AppServices.Permissions.Helpers;
-using Cts.AppServices.UserServices;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Entities.Concerns;
@@ -358,7 +357,8 @@ public sealed class ComplaintService(
         if (complaint.CurrentOwner != null &&
             complaint.CurrentOwner != previousOwner &&
             complaint.CurrentOwner == currentUser)
-            await AddTransitionAsync(complaint, TransitionType.Accepted, currentUser, token: token).ConfigureAwait(false);
+            await AddTransitionAsync(complaint, TransitionType.Accepted, currentUser, token: token)
+                .ConfigureAwait(false);
         await complaintRepository.SaveChangesAsync(token).ConfigureAwait(false);
 
         // Send notification
@@ -451,7 +451,8 @@ public sealed class ComplaintService(
         complaint.SecondaryConcern =
             resource.SecondaryConcernId == null || resource.SecondaryConcernId == resource.PrimaryConcernId
                 ? null
-                : await concernRepository.GetAsync(resource.SecondaryConcernId.Value, token: token).ConfigureAwait(false);
+                : await concernRepository.GetAsync(resource.SecondaryConcernId.Value, token: token)
+                    .ConfigureAwait(false);
 
         // Properties: Source
         complaint.SourceFacilityIdNumber = resource.SourceFacilityIdNumber;

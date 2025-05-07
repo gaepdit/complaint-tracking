@@ -1,4 +1,5 @@
-﻿using Cts.WebApp.Platform.Settings;
+﻿using Cts.AppServices.IdentityServices;
+using Cts.WebApp.Platform.Settings;
 using Microsoft.Identity.Web;
 
 namespace Cts.WebApp.Platform.AppConfiguration;

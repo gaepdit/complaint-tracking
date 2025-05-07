@@ -1,9 +1,8 @@
 ﻿using Cts.AppServices.Attachments;
 using Cts.AppServices.Attachments.Dto;
+using Cts.AppServices.AuthorizationPolicies;
 using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Complaints.QueryDto;
-using Cts.AppServices.Permissions;
-using Cts.AppServices.Permissions.Helpers;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using Cts.WebApp.Platform.Settings;
@@ -48,7 +47,8 @@ public class AttachmentDeleteModel(IAttachmentService attachmentService, IAuthor
         var complaintView = await attachmentService.FindComplaintForAttachmentAsync(AttachmentId, token: token);
         if (complaintView is null || !await UserCanDeleteAttachmentAsync(complaintView)) return BadRequest();
 
-        await attachmentService.DeleteAttachmentAsync(originalAttachment, AppSettings.AttachmentServiceConfig, token: token);
+        await attachmentService.DeleteAttachmentAsync(originalAttachment, AppSettings.AttachmentServiceConfig,
+            token: token);
 
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "Attachment successfully deleted.");
         return RedirectToPage("../Details", pageHandler: null, routeValues: new { complaintView.Id },

@@ -1,6 +1,5 @@
 ﻿using Cts.AppServices.ActionTypes;
-using Cts.AppServices.Permissions;
-using Cts.AppServices.Permissions.Helpers;
+using Cts.AppServices.AuthorizationPolicies;
 
 namespace Cts.WebApp.Pages.Admin.Maintenance.ActionTypes;
 

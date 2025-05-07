@@ -1,7 +1,6 @@
+using Cts.AppServices.AuthorizationPolicies;
+using Cts.AppServices.AuthorizationPolicies.Requirements;
 using Cts.AppServices.Offices;
-using Cts.AppServices.Permissions;
-using Cts.AppServices.Permissions.Helpers;
-using Cts.AppServices.Permissions.Requirements;
 
 namespace Cts.WebApp.Api;
 

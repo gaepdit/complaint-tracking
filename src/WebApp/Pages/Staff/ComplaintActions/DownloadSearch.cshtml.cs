@@ -1,7 +1,7 @@
 ﻿using Cts.AppServices.Attachments;
+using Cts.AppServices.AuthorizationPolicies;
 using Cts.AppServices.ComplaintActions.Dto;
 using Cts.AppServices.DataExport;
-using Cts.AppServices.Permissions;
 
 namespace Cts.WebApp.Pages.Staff.ComplaintActions;
 

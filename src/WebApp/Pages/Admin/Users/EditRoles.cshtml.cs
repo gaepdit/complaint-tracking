@@ -1,5 +1,4 @@
-using Cts.AppServices.Permissions;
-using Cts.AppServices.Permissions.Helpers;
+using Cts.AppServices.AuthorizationPolicies;
 using Cts.AppServices.Staff;
 using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Identity;

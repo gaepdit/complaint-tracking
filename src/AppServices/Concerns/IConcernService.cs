@@ -1,5 +1,5 @@
-﻿using Cts.AppServices.ServiceBase;
+﻿using Cts.AppServices.NamedEntities;
 
 namespace Cts.AppServices.Concerns;
 
-public interface IConcernService : IMaintenanceItemService<ConcernViewDto, ConcernUpdateDto>;
+public interface IConcernService : INamedEntityService<ConcernViewDto, ConcernUpdateDto>;

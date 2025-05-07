@@ -14,7 +14,7 @@ public static class DbSeedDataHelpers
         SeedComplaintData(context);
     }
 
-    public static void SeedActionTypeData(AppDbContext context)
+    private static void SeedActionTypeData(AppDbContext context)
     {
         if (context.ActionTypes.Any()) return;
         context.ActionTypes.AddRange(ActionTypeData.GetActionTypes);

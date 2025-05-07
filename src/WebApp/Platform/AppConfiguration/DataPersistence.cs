@@ -6,12 +6,15 @@ using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
+using Cts.Domain.Identity;
 using Cts.EfRepository.Contexts;
+using Cts.EfRepository.Contexts.SeedDevData;
 using Cts.EfRepository.DbConnection;
 using Cts.EfRepository.Repositories;
 using Cts.LocalRepository.Repositories;
 using Cts.WebApp.Platform.Settings;
 using GaEpd.EmailService.EmailLogRepository;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
@@ -19,60 +22,99 @@ namespace Cts.WebApp.Platform.AppConfiguration;
 
 public static class DataPersistence
 {
-    public static IServiceCollection AddDataPersistence(this IServiceCollection services,
-        ConfigurationManager configuration)
+    public static async Task ConfigureDataPersistence(this IHostApplicationBuilder builder)
+    {
+        if (AppSettings.DevSettings.UseDevSettings)
+        {
+            await builder.ConfigureDevDataPersistence();
+            return;
+        }
+
+        builder.ConfigureDatabaseServices();
+
+        await using var migrationContext = new AppDbContext(GetMigrationDbOpts(builder.Configuration).Options);
+        await migrationContext.Database.MigrateAsync();
+        await migrationContext.CreateMissingRolesAsync(builder.Services);
+    }
+
+    private static void ConfigureDatabaseServices(this IHostApplicationBuilder builder)
+    {
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+        if (string.IsNullOrEmpty(connectionString))
+            throw new InvalidOperationException("No connection string found.");
+
+        // Entity Framework context
+        builder.Services
+            .AddDbContext<AppDbContext>(db =>
+            {
+                db.UseSqlServer(connectionString, sqlServerOpts => sqlServerOpts.EnableRetryOnFailure());
+                db.ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.MultipleCollectionIncludeWarning));
+            });
+
+        // Dapper DB connection
+        builder.Services.AddTransient<IDbConnectionFactory, DbConnectionFactory>(_ =>
+            new DbConnectionFactory(connectionString));
+
+        builder.Services
+            .AddScoped<IActionTypeRepository, ActionTypeRepository>()
+            .AddScoped<IAttachmentRepository, AttachmentRepository>()
+            .AddScoped<IActionRepository, ActionRepository>()
+            .AddScoped<IComplaintRepository, ComplaintRepository>()
+            .AddScoped<IComplaintTransitionRepository, ComplaintTransitionRepository>()
+            .AddScoped<IConcernRepository, ConcernRepository>()
+            .AddScoped<IDataViewRepository, DataViewRepository>()
+            .AddScoped<IEmailLogRepository, EmailLogRepository>()
+            .AddScoped<IOfficeRepository, OfficeRepository>();
+    }
+
+    private static DbContextOptionsBuilder<AppDbContext> GetMigrationDbOpts(IConfiguration configuration)
+    {
+        var migConnString = configuration.GetConnectionString("MigrationConnection");
+        if (string.IsNullOrEmpty(migConnString))
+            throw new InvalidOperationException("No migration connection string found.");
+
+        return new DbContextOptionsBuilder<AppDbContext>()
+            .UseSqlServer(migConnString, sqlServerOpts => sqlServerOpts.MigrationsAssembly(nameof(EfRepository)));
+    }
+
+    private static async Task CreateMissingRolesAsync(this AppDbContext migrationContext, IServiceCollection services)
+    {
+        // Initialize any new roles.
+        var roleManager = services.BuildServiceProvider().GetRequiredService<RoleManager<IdentityRole>>();
+        foreach (var role in AppRole.AllRoles.Keys)
+            if (!await migrationContext.Roles.AnyAsync(idRole => idRole.Name == role))
+                await roleManager.CreateAsync(new IdentityRole(role));
+    }
+
+    private static async Task ConfigureDevDataPersistence(this IHostApplicationBuilder builder)
     {
         // When configured, use in-memory data; otherwise use a SQL Server database.
         if (AppSettings.DevSettings.UseInMemoryData)
         {
-            // Uses in-memory data.
-            services.AddSingleton<IActionTypeRepository, LocalActionTypeRepository>();
-            services.AddSingleton<IAttachmentRepository, LocalAttachmentRepository>();
-            services.AddSingleton<IActionRepository, LocalActionRepository>();
-            services.AddSingleton<IComplaintRepository, LocalComplaintRepository>();
-            services.AddSingleton<IComplaintTransitionRepository, LocalComplaintTransitionRepository>();
-            services.AddSingleton<IConcernRepository, LocalConcernRepository>();
-            services.AddSingleton<IDataViewRepository, LocalDataViewRepository>();
-            services.AddSingleton<IEmailLogRepository, LocalEmailLogRepository>();
-            services.AddSingleton<IOfficeRepository, LocalOfficeRepository>();
+            builder.Services
+                .AddSingleton<IActionTypeRepository, LocalActionTypeRepository>()
+                .AddSingleton<IAttachmentRepository, LocalAttachmentRepository>()
+                .AddSingleton<IActionRepository, LocalActionRepository>()
+                .AddSingleton<IComplaintRepository, LocalComplaintRepository>()
+                .AddSingleton<IComplaintTransitionRepository, LocalComplaintTransitionRepository>()
+                .AddSingleton<IConcernRepository, LocalConcernRepository>()
+                .AddSingleton<IDataViewRepository, LocalDataViewRepository>()
+                .AddSingleton<IEmailLogRepository, LocalEmailLogRepository>()
+                .AddSingleton<IOfficeRepository, LocalOfficeRepository>();
         }
         else
         {
-            // Uses a database connection.
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            builder.ConfigureDatabaseServices();
 
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                // In-memory database (not recommended)
-                services.AddDbContext<AppDbContext>(builder => builder.UseInMemoryDatabase("TEMP_DB"));
-            }
+            await using var migrationContext = new AppDbContext(GetMigrationDbOpts(builder.Configuration).Options);
+            await migrationContext.Database.EnsureDeletedAsync();
+
+            if (AppSettings.DevSettings.UseEfMigrations)
+                await migrationContext.Database.MigrateAsync();
             else
-            {
-                // Entity Framework context
-                services.AddDbContext<AppDbContext>(dbContextOpts =>
-                {
-                    dbContextOpts.UseSqlServer(connectionString, sqlServerOpts => sqlServerOpts.EnableRetryOnFailure());
-                    dbContextOpts.ConfigureWarnings(builder =>
-                        builder.Throw(RelationalEventId.MultipleCollectionIncludeWarning));
-                });
+                await migrationContext.Database.EnsureCreatedAsync();
 
-                // Dapper DB connection
-                services.AddTransient<IDbConnectionFactory, DbConnectionFactory>(_ =>
-                    new DbConnectionFactory(connectionString));
-            }
-
-            // Repositories
-            services.AddScoped<IActionTypeRepository, ActionTypeRepository>();
-            services.AddScoped<IAttachmentRepository, AttachmentRepository>();
-            services.AddScoped<IActionRepository, ActionRepository>();
-            services.AddScoped<IComplaintRepository, ComplaintRepository>();
-            services.AddScoped<IComplaintTransitionRepository, ComplaintTransitionRepository>();
-            services.AddScoped<IConcernRepository, ConcernRepository>();
-            services.AddScoped<IDataViewRepository, DataViewRepository>();
-            services.AddScoped<IEmailLogRepository, EmailLogRepository>();
-            services.AddScoped<IOfficeRepository, OfficeRepository>();
+            DbSeedDataHelpers.SeedAllData(migrationContext);
         }
-
-        return services;
     }
 }

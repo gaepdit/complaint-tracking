@@ -1,4 +1,4 @@
-﻿using Cts.AppServices.DtoBase;
+﻿using Cts.AppServices.NamedEntities;
 
 namespace Cts.AppServices.Concerns;
 

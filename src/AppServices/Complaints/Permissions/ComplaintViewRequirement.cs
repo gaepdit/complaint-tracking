@@ -1,6 +1,6 @@
 using Cts.AppServices.Complaints.QueryDto;
-using Cts.AppServices.Permissions.AppClaims;
-using Cts.AppServices.Permissions.Helpers;
+using Cts.AppServices.IdentityServices.Claims;
+using Cts.AppServices.IdentityServices.Roles;
 using Cts.Domain;
 using Cts.Domain.Entities.Complaints;
 using Microsoft.AspNetCore.Authorization;
