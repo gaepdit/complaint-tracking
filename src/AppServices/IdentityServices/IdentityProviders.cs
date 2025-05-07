@@ -4,13 +4,20 @@ namespace Cts.AppServices.IdentityServices;
 
 public static class IdentityProviderValidation
 {
-    public static bool ValidateIdentityProvider(this IConfiguration configuration, string loginProvider,
+    public static bool ValidateIdentityProviderId(this IConfiguration configuration, string loginProvider,
         string identityProviderId)
     {
         if (string.IsNullOrEmpty(identityProviderId)) return false;
         var allowedProviders = configuration.GetSection("AllowedIdentityProviders").Get<IdentityProvider[]>();
         return allowedProviders is not null &&
                allowedProviders.Contains(new IdentityProvider(loginProvider, identityProviderId));
+    }
+
+    public static bool ValidateLoginProvider(this IConfiguration configuration, string loginProvider)
+    {
+        if (string.IsNullOrEmpty(loginProvider)) return false;
+        var allowedProviders = configuration.GetSection("AllowedIdentityProviders").Get<IdentityProvider[]>();
+        return allowedProviders is not null && allowedProviders.Select(ip => ip.Name).Contains(loginProvider);
     }
 }
 
