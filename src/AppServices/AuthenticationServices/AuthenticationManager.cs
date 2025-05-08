@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Identity.Web;
+using System.Security.Claims;
 
 namespace Cts.AppServices.AuthenticationServices;
 
@@ -82,7 +83,9 @@ public class AuthenticationManager(
         foreach (var role in testUserRoles)
             await userManager.AddToRoleAsync(user, role).ConfigureAwait(false);
 
-        await signInManager.SignInAsync(user, false).ConfigureAwait(false);
+        await signInManager.SignInWithClaimsAsync(user, isPersistent: false,
+                additionalClaims: [new Claim(ClaimTypes.AuthenticationMethod, LoginProviders.TestUserScheme)])
+            .ConfigureAwait(false);
         return IdentityResult.Success;
     }
 

@@ -1,5 +1,3 @@
-using Cts.AppServices.AuthenticationServices;
-using Cts.AppServices.AuthorizationPolicies;
 using Cts.AppServices.AutoMapper;
 using Cts.AppServices.ServiceRegistration;
 using Cts.WebApp.Platform.AppConfiguration;
@@ -26,11 +24,8 @@ builder.Services.AddDataProtection().PersistKeysToFileSystem(Directory.CreateDir
 // Configure Identity stores.
 builder.Services.AddIdentityStores();
 
-// Configure Authentication.
-builder.ConfigureAuthentication();
-
-// Configure authorization and identity services.
-builder.Services.AddAuthenticationServices().AddAuthorizationPolicies();
+// Configure authentication and authorization.
+builder.Services.ConfigureAuthentication(builder.Configuration);
 
 // Add app entity services.
 builder.Services.AddAutoMapperProfiles().AddAppServices();
