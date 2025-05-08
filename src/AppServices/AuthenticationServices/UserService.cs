@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 
-namespace Cts.AppServices.IdentityServices;
+namespace Cts.AppServices.AuthenticationServices;
 
 public interface IUserService
 {

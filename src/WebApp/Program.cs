@@ -1,6 +1,6 @@
+using Cts.AppServices.AuthenticationServices;
 using Cts.AppServices.AuthorizationPolicies;
 using Cts.AppServices.AutoMapper;
-using Cts.AppServices.IdentityServices;
 using Cts.AppServices.ServiceRegistration;
 using Cts.WebApp.Platform.AppConfiguration;
 using Cts.WebApp.Platform.Logging;
@@ -19,18 +19,18 @@ AppDomain.CurrentDomain.SetData("REGEX_DEFAULT_MATCH_TIMEOUT", TimeSpan.FromMill
 // Bind application settings.
 BindingsConfiguration.BindSettings(builder);
 
-// Configure Identity.
+// Persist data protection keys.
+var keysFolder = Path.Combine(builder.Configuration["PersistedFilesBasePath"] ?? "", "DataProtectionKeys");
+builder.Services.AddDataProtection().PersistKeysToFileSystem(Directory.CreateDirectory(keysFolder));
+
+// Configure Identity stores.
 builder.Services.AddIdentityStores();
 
 // Configure Authentication.
 builder.ConfigureAuthentication();
 
-// Persist data protection keys.
-var keysFolder = Path.Combine(builder.Configuration["PersistedFilesBasePath"] ?? "", "DataProtectionKeys");
-builder.Services.AddDataProtection().PersistKeysToFileSystem(Directory.CreateDirectory(keysFolder));
-
 // Configure authorization and identity services.
-builder.Services.AddAuthorizationPolicies().AddIdentityServices();
+builder.Services.AddAuthenticationServices().AddAuthorizationPolicies();
 
 // Add app entity services.
 builder.Services.AddAutoMapperProfiles().AddAppServices();

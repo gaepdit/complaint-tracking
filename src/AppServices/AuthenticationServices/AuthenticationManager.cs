@@ -1,4 +1,4 @@
-﻿using Cts.AppServices.IdentityServices.Claims;
+﻿using Cts.AppServices.AuthenticationServices.Claims;
 using Cts.Domain.Identity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -6,19 +6,20 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Identity.Web;
 
-namespace Cts.AppServices.IdentityServices;
+namespace Cts.AppServices.AuthenticationServices;
 
-public interface IIdentityManager
+public interface IAuthenticationManager
 {
     public Task<IdentityResult> LogInUsingExternalProviderAsync();
+    public Task<IdentityResult> LogInAsTestUserAsync(string[] testUserRoles);
 }
 
-public class IdentityManager(
+public class AuthenticationManager(
     SignInManager<ApplicationUser> signInManager,
     UserManager<ApplicationUser> userManager,
     IConfiguration configuration,
-    ILogger<IdentityManager> logger)
-    : IIdentityManager
+    ILogger<AuthenticationManager> logger)
+    : IAuthenticationManager
 {
     public async Task<IdentityResult> LogInUsingExternalProviderAsync()
     {
@@ -35,7 +36,7 @@ public class IdentityManager(
         if (identityProviderId is null || userEmail is null)
             return MissingExternalLoginInfo();
 
-        if (!configuration.ValidateIdentityProviderId(loginProvider, identityProviderId))
+        if (!configuration.ValidateLoginProviderId(loginProvider, identityProviderId))
             return InvalidLoginProvider(loginProvider, identityProviderId);
 
         logger.LogInformation("User with ID {ProviderKey} in provider {LoginProvider} successfully authenticated",
@@ -69,6 +70,20 @@ public class IdentityManager(
         // exists, but ExternalLoginSignInAsync failed (`Succeeded == false`), then add the external provider info
         // to the user.
         return await AddLoginProviderAndSignInAsync(user, externalLoginInfo).ConfigureAwait(false);
+    }
+
+    public async Task<IdentityResult> LogInAsTestUserAsync(string[] testUserRoles)
+    {
+        var user = await userManager.FindByIdAsync("00000000-0000-0000-0000-000000000001").ConfigureAwait(false);
+        logger.LogInformation("Local user with ID {StaffId} signed in", user!.Id);
+
+        foreach (var pair in AppRole.AllRoles)
+            await userManager.RemoveFromRoleAsync(user, pair.Value.Name).ConfigureAwait(false);
+        foreach (var role in testUserRoles)
+            await userManager.AddToRoleAsync(user, role).ConfigureAwait(false);
+
+        await signInManager.SignInAsync(user, false).ConfigureAwait(false);
+        return IdentityResult.Success;
     }
 
     private async Task<IdentityResult> CreateUserAndSignInAsync(ExternalLoginInfo info)
