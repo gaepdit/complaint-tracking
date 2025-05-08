@@ -88,21 +88,8 @@ public static class DataPersistence
 
     private static async Task ConfigureDevDataPersistence(this IHostApplicationBuilder builder)
     {
-        // When configured, use in-memory data; otherwise use a SQL Server database.
-        if (AppSettings.DevSettings.UseInMemoryData)
-        {
-            builder.Services
-                .AddSingleton<IActionTypeRepository, LocalActionTypeRepository>()
-                .AddSingleton<IAttachmentRepository, LocalAttachmentRepository>()
-                .AddSingleton<IActionRepository, LocalActionRepository>()
-                .AddSingleton<IComplaintRepository, LocalComplaintRepository>()
-                .AddSingleton<IComplaintTransitionRepository, LocalComplaintTransitionRepository>()
-                .AddSingleton<IConcernRepository, LocalConcernRepository>()
-                .AddSingleton<IDataViewRepository, LocalDataViewRepository>()
-                .AddSingleton<IEmailLogRepository, LocalEmailLogRepository>()
-                .AddSingleton<IOfficeRepository, LocalOfficeRepository>();
-        }
-        else
+        // When configured, build a SQL Server database; otherwise, use in-memory data.
+        if (AppSettings.DevSettings.BuildDatabase)
         {
             builder.ConfigureDatabaseServices();
 
@@ -115,6 +102,19 @@ public static class DataPersistence
                 await migrationContext.Database.EnsureCreatedAsync();
 
             DbSeedDataHelpers.SeedAllData(migrationContext);
+        }
+        else
+        {
+            builder.Services
+                .AddSingleton<IActionTypeRepository, LocalActionTypeRepository>()
+                .AddSingleton<IAttachmentRepository, LocalAttachmentRepository>()
+                .AddSingleton<IActionRepository, LocalActionRepository>()
+                .AddSingleton<IComplaintRepository, LocalComplaintRepository>()
+                .AddSingleton<IComplaintTransitionRepository, LocalComplaintTransitionRepository>()
+                .AddSingleton<IConcernRepository, LocalConcernRepository>()
+                .AddSingleton<IDataViewRepository, LocalDataViewRepository>()
+                .AddSingleton<IEmailLogRepository, LocalEmailLogRepository>()
+                .AddSingleton<IOfficeRepository, LocalOfficeRepository>();
         }
     }
 }
