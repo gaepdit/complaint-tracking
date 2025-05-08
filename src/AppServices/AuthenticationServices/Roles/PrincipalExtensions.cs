@@ -1,7 +1,7 @@
 ﻿using Cts.Domain.Identity;
 using System.Security.Principal;
 
-namespace Cts.AppServices.IdentityServices.Roles;
+namespace Cts.AppServices.AuthenticationServices.Roles;
 
 public static class PrincipalExtensions
 {

@@ -1,4 +1,4 @@
-﻿using Cts.AppServices.IdentityServices;
+﻿using Cts.AppServices.AuthenticationServices;
 using Cts.WebApp.Platform.Settings;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Identity.Web;
@@ -24,7 +24,7 @@ public static class AuthenticationServices
             authenticationBuilder
 
                 // Requires an Okta account
-                .AddOktaMvc(authenticationScheme: IdentityProviders.OktaScheme, new OktaMvcOptions
+                .AddOktaMvc(authenticationScheme: LoginProviders.OktaScheme, new OktaMvcOptions
                 {
                     OktaDomain = builder.Configuration.GetValue<string>("Okta:OktaDomain"),
                     AuthorizationServerId = builder.Configuration.GetValue<string>("Okta:AuthorizationServerId"),
@@ -35,7 +35,7 @@ public static class AuthenticationServices
 
                 // Requires an Entra ID account
                 // Note: `cookieScheme: null` is mandatory. See https://github.com/AzureAD/microsoft-identity-web/issues/133#issuecomment-739550416
-                .AddMicrosoftIdentityWebApp(builder.Configuration, openIdConnectScheme: IdentityProviders.EntraIdScheme,
+                .AddMicrosoftIdentityWebApp(builder.Configuration, openIdConnectScheme: LoginProviders.EntraIdScheme,
                     cookieScheme: null);
         }
 
