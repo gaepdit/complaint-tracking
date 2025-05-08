@@ -1,5 +1,5 @@
-﻿using Cts.AppServices.IdentityServices;
-using Cts.AppServices.IdentityServices.Claims;
+﻿using Cts.AppServices.AuthenticationServices;
+using Cts.AppServices.AuthenticationServices.Claims;
 using Cts.Domain.Identity;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
@@ -11,10 +11,8 @@ namespace Cts.WebApp.Pages.Account;
 [AllowAnonymous]
 public class LoginModel(
     SignInManager<ApplicationUser> signInManager,
-    IIdentityManager identityManager,
-    UserManager<ApplicationUser> userManager,
-    IConfiguration configuration,
-    ILogger<LoginModel> logger
+    IAuthenticationManager authenticationManager,
+    IConfiguration configuration
 ) : PageModel
 {
     public string? ReturnUrl { get; private set; }
@@ -34,16 +32,7 @@ public class LoginModel(
         if (!AppSettings.DevSettings.LocalUserIsAuthenticated) return Forbid();
 
         ReturnUrl = returnUrl;
-
-        var user = await userManager.FindByIdAsync("00000000-0000-0000-0000-000000000001");
-        logger.LogInformation("Local user with ID {StaffId} signed in", user!.Id);
-
-        foreach (var pair in AppRole.AllRoles)
-            await userManager.RemoveFromRoleAsync(user, pair.Value.Name);
-        foreach (var role in AppSettings.DevSettings.LocalUserRoles)
-            await userManager.AddToRoleAsync(user, role);
-
-        await signInManager.SignInAsync(user, false);
+        await authenticationManager.LogInAsTestUserAsync(AppSettings.DevSettings.LocalUserRoles);
         return LocalRedirectOrHome();
     }
 
@@ -66,7 +55,7 @@ public class LoginModel(
         ReturnUrl = returnUrl;
         if (remoteError is not null)
             return LoginPageWithError($"Error from work account provider: {remoteError}");
-        var result = await identityManager.LogInUsingExternalProviderAsync();
+        var result = await authenticationManager.LogInUsingExternalProviderAsync();
         return result.Succeeded ? LocalRedirectOrHome() : await FailedLoginAsync(result);
     }
 
