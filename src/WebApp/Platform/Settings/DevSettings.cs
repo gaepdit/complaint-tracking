@@ -10,13 +10,13 @@ internal static partial class AppSettings
     public static readonly DevSettingsSection ProductionDefault = new()
     {
         UseDevSettings = false,
-        UseInMemoryData = false,
+        BuildDatabase = true,
         UseEfMigrations = true,
         UseExternalAuthentication = true,
         LocalUserIsAuthenticated = false,
         LocalUserRoles = [],
         UseSecurityHeadersInDev = false,
-        EnableWebOptimizer = true,
+        EnableWebOptimizerInDev = false,
     };
 
     // DEV configuration settings
@@ -28,13 +28,13 @@ internal static partial class AppSettings
         public bool UseDevSettings { get; [UsedImplicitly] init; }
 
         /// <summary>
-        /// Use in-memory data store (`true`) or connect to a SQL Server database (`false`).
+        /// Build a SQL Server database (`true`) or use an in-memory data store (`false`).
         /// </summary>
-        public bool UseInMemoryData { get; [UsedImplicitly] init; }
+        public bool BuildDatabase { get; [UsedImplicitly] init; }
 
         /// <summary>
-        /// Run all Entity Framework migrations (`true`) or create the database based solely on the `DbContext` (`false`).
-        /// (Only applies if <see cref="UseInMemoryData"/> is `false`.)
+        /// Create a database using Entity Framework migrations (`true`) or solely based on the `DbContext` (`false`).
+        /// (Only applies if <see cref="BuildDatabase"/> is `true`.)
         /// </summary>
         public bool UseEfMigrations { get; [UsedImplicitly] init; }
 
@@ -67,6 +67,6 @@ internal static partial class AppSettings
         /// <summary>
         /// Use WebOptimizer to bundle and minify CSS and JS files (`true`).
         /// </summary>
-        public bool EnableWebOptimizer { get; [UsedImplicitly] init; }
+        public bool EnableWebOptimizerInDev { get; [UsedImplicitly] init; }
     }
 }

@@ -53,7 +53,7 @@ To work with these settings, add an `appsettings.Development.json` file in the r
 {
   "DevSettings": {
     "UseDevSettings": true,
-    "UseInMemoryData": true,
+    "BuildDatabase": false,
     "UseEfMigrations": false,
     "UseExternalAuthentication": false,
     "LocalUserIsAuthenticated": true,
@@ -62,7 +62,7 @@ To work with these settings, add an `appsettings.Development.json` file in the r
       "SiteMaintenance"
     ],
     "UseSecurityHeadersInDev": false,
-    "EnableWebOptimizer": false
+    "EnableWebOptimizerInDev": false
   }
 }
 ```
@@ -71,13 +71,12 @@ To work with these settings, add an `appsettings.Development.json` file in the r
 
 #### Database settings
 
-- *UseInMemoryData*
-    - When `true`, the `LocalRepository` project is used for repositories and data stores. Data is initially seeded from
-      the `TestData` project.
-    - When `false`, the `EfRepository` project is used, and a SQL Server database (as specified by the connection
-      string) is created.
-- *UseEfMigrations* — Uses Entity Framework database migrations when `true`. When `false`, database is created directly
-  based on the `DbContext`. (Only applies if `UseInMemoryData` is `false`.)
+- *BuildDatabase*
+  - When `true`, the `EfRepository` project is used. A SQL Server database is created, and data is seeded from the
+    `TestData` project.
+  - When `false`, the `LocalRepository` project is used. In-memory data is initialized from the `TestData` project.
+- *UseEfMigrations* — Applies Entity Framework database migrations when `true`. When `false`, the database is created
+  directly based on the `DbContext`. (Only applies if `BuildDatabase` is `true`.)
 
 #### Authentication settings
 
@@ -93,9 +92,9 @@ To work with these settings, add an `appsettings.Development.json` file in the r
 
 #### Miscellaneous dev settings
 
-- *UseSecurityHeadersLocally* — Sets whether to include HTTP security headers when running locally in the Development
+- *UseSecurityHeadersInDev* — Sets whether to include HTTP security headers when running locally in the Development
   environment.
-- *EnableWebOptimizer* — Enables the WebOptimizer middleware for bundling and minification of CSS and JavaScript
+- *EnableWebOptimizerInDev* — Enables the WebOptimizer middleware for bundling and minification of CSS and JavaScript
   files. (This is disabled by default to simplify debugging.)
 
 ### Production settings

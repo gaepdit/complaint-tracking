@@ -61,9 +61,16 @@ builder.Services.AddOrgNotifications();
 builder.Services.AddApiDocumentation();
 
 // Configure bundling and minification.
-builder.Services.AddWebOptimizer(
-    minifyJavaScript: AppSettings.DevSettings.EnableWebOptimizer,
-    minifyCss: AppSettings.DevSettings.EnableWebOptimizer);
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddWebOptimizer(
+        minifyJavaScript: AppSettings.DevSettings.EnableWebOptimizerInDev,
+        minifyCss: AppSettings.DevSettings.EnableWebOptimizerInDev);
+}
+else
+{
+    builder.Services.AddWebOptimizer();
+}
 
 // Configure application crash monitoring.
 builder.Services.ConfigureErrorLogging(builder.Environment.EnvironmentName);
