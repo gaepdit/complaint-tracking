@@ -16,29 +16,31 @@ public class LoginModel(
 ) : PageModel
 {
     public string? ReturnUrl { get; private set; }
-
+    public IEnumerable<string> LoginProviderNames { get; private set; } = null!;
     public bool DisplayFailedLogin { get; private set; }
 
     public IActionResult OnGetAsync(string? returnUrl = null)
     {
         ReturnUrl = returnUrl;
-        if (User.Identity is not { IsAuthenticated: true }) return Page();
+        LoginProviderNames = configuration.LoginProviderNames();
+        if (User.Identity is not { IsAuthenticated: true })
+            return Page();
+
         return User.IsActive() ? LocalRedirectOrHome() : RedirectToPage("Logout");
     }
 
     public async Task<IActionResult> OnPostTestUserAsync(string? returnUrl = null)
     {
-        if (AppSettings.DevSettings.UseExternalAuthentication) return BadRequest();
-        if (!AppSettings.DevSettings.LocalUserIsAuthenticated) return Forbid();
+        if (!AppSettings.DevSettings.EnableTestUser) return BadRequest();
+        if (!AppSettings.DevSettings.TestUserIsAuthenticated) return Forbid();
 
         ReturnUrl = returnUrl;
-        await authenticationManager.LogInAsTestUserAsync(AppSettings.DevSettings.LocalUserRoles);
+        await authenticationManager.LogInAsTestUserAsync(AppSettings.DevSettings.TestUserRoles);
         return LocalRedirectOrHome();
     }
 
     public IActionResult OnPostAsync(string scheme)
     {
-        if (!AppSettings.DevSettings.UseExternalAuthentication) return BadRequest();
         if (User.Identity is { IsAuthenticated: true }) return RedirectToPage("Logout");
         if (!configuration.ValidateLoginProvider(scheme))
             throw new ArgumentException("Invalid scheme", nameof(scheme));

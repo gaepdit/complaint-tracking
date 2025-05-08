@@ -1,6 +1,6 @@
-﻿using Cts.AppServices.AuthenticationServices.Claims;
+﻿using Cts.AppServices.AuthenticationServices;
+using Cts.AppServices.AuthenticationServices.Claims;
 using Cts.Domain.Identity;
-using Cts.WebApp.Platform.Settings;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
@@ -16,16 +16,16 @@ public class LogoutModel(SignInManager<ApplicationUser> signInManager) : PageMod
     private async Task<SignOutResult> SignOut()
     {
         var authenticationProperties = new AuthenticationProperties { RedirectUri = "/Index" };
+        var userAuthenticationScheme = User.GetAuthenticationMethod();
 
-        if (!AppSettings.DevSettings.UseExternalAuthentication)
+        if (userAuthenticationScheme == LoginProviders.TestUserScheme)
         {
             await signInManager.SignOutAsync();
             return SignOut(authenticationProperties);
         }
 
-        List<string> authenticationSchemes = [CookieAuthenticationDefaults.AuthenticationScheme,];
+        List<string> authenticationSchemes = [CookieAuthenticationDefaults.AuthenticationScheme];
 
-        var userAuthenticationScheme = User.GetAuthenticationMethod();
         if (userAuthenticationScheme != null)
             authenticationSchemes.AddRange([IdentityConstants.ApplicationScheme, userAuthenticationScheme]);
 
