@@ -1,5 +1,5 @@
 ﻿using Cts.AppServices.AuthenticationServices;
-using Cts.WebApp.Platform.Settings;
+using Cts.AppServices.AuthorizationPolicies;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Identity.Web;
 using Okta.AspNetCore;
@@ -8,9 +8,10 @@ namespace Cts.WebApp.Platform.AppConfiguration;
 
 public static class AuthenticationServices
 {
-    public static void ConfigureAuthentication(this WebApplicationBuilder builder)
+    public static void ConfigureAuthentication(this IServiceCollection services,
+        IConfiguration configuration)
     {
-        var authenticationBuilder = builder.Services
+        var authenticationBuilder = services
             .ConfigureApplicationCookie(options =>
             {
                 options.Cookie.HttpOnly = true;
@@ -19,26 +20,30 @@ public static class AuthenticationServices
             .AddAuthentication(options => options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie();
 
-        if (AppSettings.DevSettings.UseExternalAuthentication)
+        if (configuration.LoginProviderNames().Contains(LoginProviders.OktaScheme))
         {
-            authenticationBuilder
-
-                // Requires an Okta account
-                .AddOktaMvc(authenticationScheme: LoginProviders.OktaScheme, new OktaMvcOptions
-                {
-                    OktaDomain = builder.Configuration.GetValue<string>("Okta:OktaDomain"),
-                    AuthorizationServerId = builder.Configuration.GetValue<string>("Okta:AuthorizationServerId"),
-                    ClientId = builder.Configuration.GetValue<string>("Okta:ClientId"),
-                    ClientSecret = builder.Configuration.GetValue<string>("Okta:ClientSecret"),
-                    Scope = new List<string> { "openid", "profile", "email" },
-                })
-
-                // Requires an Entra ID account
-                // Note: `cookieScheme: null` is mandatory. See https://github.com/AzureAD/microsoft-identity-web/issues/133#issuecomment-739550416
-                .AddMicrosoftIdentityWebApp(builder.Configuration, openIdConnectScheme: LoginProviders.EntraIdScheme,
-                    cookieScheme: null);
+            // Requires an Okta account
+            authenticationBuilder.AddOktaMvc(authenticationScheme: LoginProviders.OktaScheme, new OktaMvcOptions
+            {
+                OktaDomain = configuration.GetValue<string>("Okta:OktaDomain"),
+                AuthorizationServerId = configuration.GetValue<string>("Okta:AuthorizationServerId"),
+                ClientId = configuration.GetValue<string>("Okta:ClientId"),
+                ClientSecret = configuration.GetValue<string>("Okta:ClientSecret"),
+                Scope = new List<string> { "openid", "profile", "email" },
+            });
         }
 
-        builder.Services.AddAuthorization();
+        if (configuration.LoginProviderNames().Contains(LoginProviders.EntraIdScheme))
+        {
+            // Requires an Entra ID account
+            authenticationBuilder.AddMicrosoftIdentityWebApp(configuration,
+                openIdConnectScheme: LoginProviders.EntraIdScheme, cookieScheme: null);
+            // Note: `cookieScheme: null` is mandatory. See https://github.com/AzureAD/microsoft-identity-web/issues/133#issuecomment-739550416
+        }
+
+        services
+            .AddAuthenticationServices()
+            .AddAuthorizationPolicies()
+            .AddAuthorization();
     }
 }

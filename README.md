@@ -19,16 +19,7 @@ Public complaints are time-critical and high-profile public information. The CTS
 * The admin side of the application will be restricted to authenticated EPD employees.
 * A public website will be available for reviewing or searching for complaints.
 
-## Info for developers
-
-This is an ASP.NET web application.
-
-### Prerequisites for development
-
-+ [Visual Studio](https://www.visualstudio.com/vs/) or similar
-+ [.NET SDK](https://dotnet.microsoft.com/download)
-
-### Project organization
+## Solution organization
 
 The solution contains the following projects:
 
@@ -43,7 +34,7 @@ The solution contains the following projects:
 
 There are also corresponding unit test projects for each (not counting the `TestData` project).
 
-### Development settings
+## Development settings
 
 The following settings section configures the data stores, authentication, and other settings for development purposes.
 To work with these settings, add an `appsettings.Development.json` file in the root of the `WebApp` folder with a
@@ -55,9 +46,9 @@ To work with these settings, add an `appsettings.Development.json` file in the r
     "UseDevSettings": true,
     "BuildDatabase": false,
     "UseEfMigrations": false,
-    "UseExternalAuthentication": false,
+    "EnableTestUser": true,
     "LocalUserIsAuthenticated": true,
-    "LocalUserRoles": [
+    "TestUserRoles": [
       "Staff",
       "SiteMaintenance"
     ],
@@ -69,40 +60,94 @@ To work with these settings, add an `appsettings.Development.json` file in the r
 
 - *UseDevSettings* — Indicates whether the following Dev settings should be applied.
 
-#### Database settings
+### Dev database settings
 
 - *BuildDatabase*
-  - When `true`, the `EfRepository` project is used. A SQL Server database is created, and data is seeded from the
-    `TestData` project.
-  - When `false`, the `LocalRepository` project is used. In-memory data is initialized from the `TestData` project.
+    - When `true`, the `EfRepository` project is used. A SQL Server database is created, and data is seeded from the
+      `TestData` project.
+    - When `false`, the `LocalRepository` project is used. In-memory data is initialized from the `TestData` project.
 - *UseEfMigrations* — Applies Entity Framework database migrations when `true`. When `false`, the database is created
   directly based on the `DbContext`. (Only applies if `BuildDatabase` is `true`.)
 
-#### Authentication settings
+### Dev authentication settings
 
-- *UseExternalAuthentication* — If `true`, the app will use an external identity provider for authentication. If
-  `false`, authentication is simulated using test user data.
-    - To authenticate using Entra ID, the app must be registered in the Azure portal and configured in the `AzureAd`
-      settings section.
-    - To use Okta, the app must be registered in the Okta portal and configured in the `Okta` settings section.
-- *LocalUserIsAuthenticated* — Simulates a successful login with a test account when `true`. Simulates a failed login
-  when `false`. (Only applies if `UseExternalAuthentication` is `false`.)
-- *LocalUserRoles* — Adds the listed App Roles to the logged-in account. (Only applies if `LocalUserIsAuthenticated` is
+- *EnableTestUser* — If `true`, a test user account will be available for development purposes.
+- *TestUserIsAuthenticated* — Simulates a successful login with a test account when `true`. Simulates a failed login
+  when `false`. (Only applies if `EnableTestUser` is `false`.)
+- *TestUserRoles* — Adds the listed App Roles to the logged-in account. (Only applies if `TestUserIsAuthenticated` is
   `true`.)
 
-#### Miscellaneous dev settings
+### Miscellaneous dev settings
 
-- *UseSecurityHeadersInDev* — Sets whether to include HTTP security headers when running locally in the Development
-  environment.
-- *EnableWebOptimizerInDev* — Enables the WebOptimizer middleware for bundling and minification of CSS and JavaScript
-  files. (This is disabled by default to simplify debugging.)
+- *UseSecurityHeadersInDev* — Sets whether to include HTTP security headers when running in the Development environment.
+- *EnableWebOptimizerInDev* — Sets whether to enable the WebOptimizer middleware for bundling and minification of CSS
+  and JavaScript files when running in the Development environment.
 
-### Production settings
+## Production settings
 
 In a production or staging environment, `UseDevSettings` is automatically set to `false` regardless of what is specified
 in the `appsettings.json` file.
 
-#### Seeding user roles
+### Database settings
+
+Connection Strings for both a `DefaultConnection` and a `MigrationConnection` must be specified.
+
+- The `DefaultConnection` is used for normal app connectivity. The account only requires DML rights on the database.
+- The `MigrationConnection` is only used for applying Entity Framework migrations. The account requires DDL plus select
+  and insert rights on the database.
+
+### Authentication settings
+
+The login providers must be enabled and configured. Currently, Okta and (Azure) Entra ID are available in the application. 
+
+1. To enable authentication using Entra ID, the app must be registered in the Azure portal and configured in the `AzureAd` settings section.
+
+  ```json
+  {
+    "AzureAd": {
+      "Instance": "https://login.microsoftonline.com/",
+      "CallbackPath": "/signin-oidc",
+      "TenantId": "[Enter the Directory (tenant) ID from the Azure portal]",
+      "ClientId": "[Enter the Application (client) ID from the Azure portal]"
+    }
+  }
+  ```
+
+2. To enable Okta, the app must be registered in the Okta portal and configured in the `Okta` settings section.
+
+  ```json
+  {
+    "Okta": {
+      "OktaDomain": "https://${yourOktaDomain}",
+      "ClientId": "${clientId}",
+      "ClientSecret": "${clientSecret}",
+      "AuthorizationServerId": "default"
+    }
+  }
+  ```
+
+3. Finally, the login providers must be enabled in the `EnabledLoginProviders` section along with the allowed Okta organization ID or Entra Tenant ID. 
+
+```json
+{
+  "EnabledLoginProviders": [
+    {
+      "Name": "EntraId",
+      "Id": "tenant-1-id"
+    },
+    {
+      "Name": "EntraId",
+      "Id": "tenant-2-id"
+    },
+    {
+      "Name": "Okta",
+      "Id": "okta-id"
+    }
+  ]
+}
+```
+
+### Seeding user roles
 
 User roles can be seeded using the `SeedUserRoles` setting. The roles are added to the user's account the first time
 they log in. For example:
@@ -121,13 +166,13 @@ they log in. For example:
 }
 ```
 
-### Data persistence
+## Data persistence
 
 Here's a visualization of how the settings configure data storage at runtime.
 
 ```mermaid
 flowchart LR
-    subgraph SPL["'UseInMemoryData' = true"]
+    subgraph SPL["'BuildDatabase' = false"]
         direction LR
         D[Domain]
         T["Test Data (in memory)"]
@@ -144,7 +189,7 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    subgraph SPB["'UseInMemoryData' = false"]
+    subgraph SPB["'BuildDatabase' = true"]
         direction LR
         D[Domain]
         T[Test Data]
