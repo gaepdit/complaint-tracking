@@ -1,3 +1,4 @@
+using Cts.AppServices.Notifications;
 using Cts.Domain.DataViews.DataArchiveViews;
 using Cts.Domain.Entities.ActionTypes;
 using Cts.Domain.Entities.Attachments;
@@ -7,7 +8,6 @@ using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Entities.Concerns;
 using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
-using GaEpd.EmailService.EmailLogRepository;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 

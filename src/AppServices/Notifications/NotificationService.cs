@@ -1,7 +1,6 @@
 ﻿using Cts.AppServices.ErrorLogging;
 using Cts.Domain.Entities.Complaints;
 using GaEpd.EmailService;
-using GaEpd.EmailService.EmailLogRepository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -74,11 +73,7 @@ public class NotificationService(
         }
 
         _ = emailService.SendEmailAsync(message, token: token);
-        if (settings.EnableEmailLog)
-        {
-            await emailLogRepository.InsertAsync(message, token: token).ConfigureAwait(false);
-        }
-
+        await emailLogRepository.InsertAsync(message, token: token).ConfigureAwait(false);
         return NotificationResult.SuccessResult();
     }
 }

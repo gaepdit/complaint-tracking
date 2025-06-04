@@ -1,3 +1,4 @@
+using Cts.AppServices.Notifications;
 using Cts.Domain.DataViews;
 using Cts.Domain.Entities.ActionTypes;
 using Cts.Domain.Entities.Attachments;
@@ -13,7 +14,6 @@ using Cts.EfRepository.DbConnection;
 using Cts.EfRepository.Repositories;
 using Cts.LocalRepository.Repositories;
 using Cts.WebApp.Platform.Settings;
-using GaEpd.EmailService.EmailLogRepository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
