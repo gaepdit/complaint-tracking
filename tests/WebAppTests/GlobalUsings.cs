@@ -1,8 +1,8 @@
 global using Cts.TestData.Constants;
 global using Cts.WebApp.Models;
 global using Cts.WebApp.Platform.PageModelHelpers;
-global using FluentAssertions.Execution;
-global using FluentAssertions;
+global using AwesomeAssertions.Execution;
+global using AwesomeAssertions;
 global using FluentValidation.Results;
 global using FluentValidation;
 global using GaEpd.AppLibrary.ListItems;

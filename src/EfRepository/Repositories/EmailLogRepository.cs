@@ -1,5 +1,5 @@
-﻿using GaEpd.EmailService;
-using GaEpd.EmailService.EmailLogRepository;
+﻿using Cts.AppServices.Notifications;
+using GaEpd.EmailService;
 
 namespace Cts.EfRepository.Repositories;
 
