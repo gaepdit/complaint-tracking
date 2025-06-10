@@ -107,13 +107,16 @@ public class AuthenticationManager(
             return UnableToCreateUser(info.ProviderKey);
 
         logger.LogInformation("Created new user with ID {ProviderKey}", info.ProviderKey);
-        await SeedRolesAsync(user).ConfigureAwait(false);
+        await SeedRolesAsync(user, info.LoginProvider).ConfigureAwait(false);
 
         return await AddLoginProviderAndSignInAsync(user, info).ConfigureAwait(false);
     }
 
-    private async Task SeedRolesAsync(ApplicationUser user)
+    private async Task SeedRolesAsync(ApplicationUser user, string loginProvider)
     {
+        if (loginProvider == LoginProviders.OktaScheme)
+            await userManager.AddToRoleAsync(user, RoleName.Staff).ConfigureAwait(false);
+
         // Add the new user to application Roles if seeded in AppSettings.
         var settings = new List<SeedUserRoles>();
         configuration.GetSection(nameof(SeedUserRoles)).Bind(settings);
