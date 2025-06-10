@@ -7,11 +7,24 @@ public static class DbSeedDataHelpers
 {
     public static void SeedAllData(AppDbContext context)
     {
+        ClearAllStaticData();
         SeedActionTypeData(context);
         SeedConcernData(context);
         SeedOfficeData(context);
         SeedIdentityData(context);
         SeedComplaintData(context);
+    }
+
+    private static void ClearAllStaticData()
+    {
+        ActionTypeData.ClearData();
+        AttachmentData.ClearData();
+        ComplaintActionData.ClearData();
+        ComplaintData.ClearData();
+        ComplaintTransitionData.ClearData();
+        ConcernData.ClearData();
+        OfficeData.ClearData();
+        UserData.ClearData();
     }
 
     private static void SeedActionTypeData(AppDbContext context)
@@ -25,7 +38,6 @@ public static class DbSeedDataHelpers
     {
         if (context.Complaints.Any()) return;
 
-        context.Database.BeginTransaction();
         if (context.Database.ProviderName == AppDbContext.SqlServerProvider)
             context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Complaints ON");
 
@@ -34,7 +46,6 @@ public static class DbSeedDataHelpers
 
         if (context.Database.ProviderName == AppDbContext.SqlServerProvider)
             context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Complaints OFF");
-        context.Database.CommitTransaction();
 
         if (!context.Attachments.Any())
             context.Attachments.AddRange(AttachmentData.GetAttachments);
