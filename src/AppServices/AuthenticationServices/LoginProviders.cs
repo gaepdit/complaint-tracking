@@ -8,7 +8,7 @@ public static class LoginProviderValidation
     private static IEnumerable<string>? _loginProviderNames;
     private const string EnabledLoginProviders = "EnabledLoginProviders";
 
-    public static IEnumerable<LoginProvider> LoginProviders(this IConfiguration configuration)
+    private static IEnumerable<LoginProvider> LoginProviders(this IConfiguration configuration)
     {
         _loginProviders ??= configuration.GetSection(EnabledLoginProviders).Get<LoginProvider[]>() ?? [];
         return _loginProviders;
