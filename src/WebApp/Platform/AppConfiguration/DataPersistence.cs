@@ -10,7 +10,6 @@ using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
 using Cts.EfRepository.Contexts;
 using Cts.EfRepository.Contexts.SeedDevData;
-using Cts.EfRepository.DbConnection;
 using Cts.EfRepository.Repositories;
 using Cts.LocalRepository.Repositories;
 using Cts.WebApp.Platform.Settings;

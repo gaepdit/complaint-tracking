@@ -84,8 +84,8 @@ public static class AttachmentData
             if (_attachments is not null) return _attachments;
 
             _attachments = AttachmentSeedItems.ToList();
-            _attachments.ElementAt(4).SetDeleted("20000000-0000-0000-0000-000000000002");
-            _attachments.ElementAt(6).SetDeleted("20000000-0000-0000-0000-000000000002");
+            _attachments.ElementAt(4).SetDeleted(UserData.TestUserId);
+            _attachments.ElementAt(6).SetDeleted(UserData.TestUserId);
             return _attachments;
         }
     }

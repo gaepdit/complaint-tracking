@@ -56,7 +56,7 @@ public class LoginModel(
     {
         ReturnUrl = returnUrl;
         if (remoteError is not null)
-            return LoginPageWithError($"Error from work account provider: {remoteError}");
+            return LoginPageWithError($"Error from account provider: {remoteError}");
         var result = await authenticationManager.LogInUsingExternalProviderAsync();
         return result.Succeeded ? LocalRedirectOrHome() : await FailedLoginAsync(result);
     }
