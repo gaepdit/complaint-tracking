@@ -6,7 +6,7 @@ namespace Cts.Domain.Identity;
 
 // Add profile data for application users by adding properties to the ApplicationUser class.
 // (IdentityUser already includes ID, Email, UserName, and PhoneNumber properties.)
-public class ApplicationUser : IdentityUser, IEntity<string>
+public sealed class ApplicationUser : IdentityUser, IEntity<string>
 {
     /// <summary>
     /// A claim that specifies the given name of an entity, http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname

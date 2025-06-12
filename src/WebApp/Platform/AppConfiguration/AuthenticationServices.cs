@@ -8,10 +8,9 @@ namespace Cts.WebApp.Platform.AppConfiguration;
 
 public static class AuthenticationServices
 {
-    public static void ConfigureAuthentication(this IServiceCollection services,
-        IConfiguration configuration)
+    public static void ConfigureAuthentication(this IHostApplicationBuilder builder)
     {
-        var authenticationBuilder = services
+        var authenticationBuilder = builder.Services
             .ConfigureApplicationCookie(options =>
             {
                 options.Cookie.HttpOnly = true;
@@ -19,6 +18,8 @@ public static class AuthenticationServices
             })
             .AddAuthentication(options => options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie();
+
+        var configuration = builder.Configuration;
 
         if (configuration.LoginProviderNames().Contains(LoginProviders.OktaScheme))
         {
@@ -41,8 +42,8 @@ public static class AuthenticationServices
             // Note: `cookieScheme: null` is mandatory. See https://github.com/AzureAD/microsoft-identity-web/issues/133#issuecomment-739550416
         }
 
-        services
-            .AddAuthenticationServices()
+        builder.Services
+            .AddAuthenticationAppServices()
             .AddAuthorizationPolicies()
             .AddAuthorization();
     }

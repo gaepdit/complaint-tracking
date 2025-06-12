@@ -182,7 +182,7 @@ internal static class ComplaintData
             if (_complaints is not null) return _complaints;
 
             _complaints = ComplaintSeedItems.ToList();
-            _complaints.ElementAt(3).SetDeleted("00000000-0000-0000-0000-000000000001");
+            _complaints.ElementAt(3).SetDeleted(UserData.TestUserId);
 
             foreach (var complaint in _complaints)
             {

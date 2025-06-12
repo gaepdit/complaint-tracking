@@ -3,7 +3,7 @@
 @using Cts.WebApp.Platform.Settings
 @model LoginModel
 @{
-    ViewData["Title"] = Model.DisplayFailedLogin ? "Agency Login" : "Agency Login Failed";
+    ViewData["Title"] = Model.DisplayFailedLogin ? "Agency Login Failed" : "Agency Login";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -31,7 +31,7 @@
         <h1 class="display-6">Sign in as a test user</h1>
 
         <form asp-page-handler="@LoginProviders.TestUserScheme" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <button type="submit" class="btn btn-lg btn-outline-primary btn-img my-3 py-3 px-4" title="Sign in using your Okta account">
+            <button type="submit" class="btn btn-lg btn-outline-primary btn-img my-3 py-3 px-4" title="Sign in as a test user">
                 <svg class="bi me-2">
                     <use href="@Url.Content("~/images/app-icons.svg")#app-icon-person-badge"></use>
                 </svg>

@@ -25,7 +25,7 @@ builder.Services.AddDataProtection().PersistKeysToFileSystem(Directory.CreateDir
 builder.Services.AddIdentityStores();
 
 // Configure authentication and authorization.
-builder.Services.ConfigureAuthentication(builder.Configuration);
+builder.ConfigureAuthentication();
 
 // Add app entity services.
 builder.Services.AddAutoMapperProfiles().AddAppServices();
@@ -43,7 +43,7 @@ if (!builder.Environment.IsDevelopment())
 // Add data stores and initialize the database.
 await builder.ConfigureDataPersistence();
 
-// Configure file storage
+// Configure file storage.
 await builder.ConfigureFileStorage();
 
 // Add email services.
@@ -77,14 +77,14 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment()) app.UseDeveloperExceptionPage(); // Development
 else app.UseExceptionHandler("/Error"); // Production or Staging
 
+if (!string.IsNullOrEmpty(AppSettings.RaygunSettings.ApiKey)) app.UseRaygun();
+
 // Configure security HTTP headers
 if (!app.Environment.IsDevelopment() || AppSettings.DevSettings.UseSecurityHeadersInDev)
 {
     app.UseHsts();
     app.UseSecurityHeaders(policyCollection => policyCollection.AddSecurityHeaderPolicies());
 }
-
-if (!string.IsNullOrEmpty(AppSettings.RaygunSettings.ApiKey)) app.UseRaygun();
 
 // Configure the application pipeline.
 app

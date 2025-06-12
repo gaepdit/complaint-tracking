@@ -4,9 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Cts.AppServices.AuthenticationServices;
 
-public static class AuthenticationServiceRegistration
+public static class AuthenticationServices
 {
-    public static IServiceCollection AddAuthenticationServices(this IServiceCollection services) => services
+    public static IServiceCollection AddAuthenticationAppServices(this IServiceCollection services) => services
         .AddScoped<IClaimsTransformation, AppClaimsTransformation>()
         .AddScoped<IUserService, UserService>()
         .AddScoped<IAuthenticationManager, AuthenticationManager>();
