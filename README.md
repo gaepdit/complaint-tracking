@@ -8,8 +8,6 @@ complaints received from the public.
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=gaepdit.complaint-tracking&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=gaepdit.complaint-tracking)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=gaepdit.complaint-tracking&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=gaepdit.complaint-tracking)
 
----
-
 ## Background and project requirements
 
 Public complaints are time-critical and high-profile public information. The CTS is used by staff throughout EPD.
@@ -29,7 +27,7 @@ The solution contains the following projects:
   (for local development).
 * **EfRepository** — A class library implementing the repositories and data stores using Entity Framework and a
   database (as specified by the configured connection string).
-* **WebApp** — The front end web application and/or API.
+* **WebApp** — The front end web application and API.
 * **TestData** — A class library containing test data for development and testing.
 
 There are also corresponding unit test projects for each (not counting the `TestData` project).
@@ -177,10 +175,7 @@ flowchart LR
         D[Domain]
         T["Test Data (in memory)"]
         R[Local Repositories]
-        A[App Services]
-        W([Web App])
-        W --> A
-        A --> D
+        A([App Services])
         A --> R
         R --> T
         T --> D
@@ -194,11 +189,8 @@ flowchart LR
         D[Domain]
         T[Test Data]
         R[EF Repositories]
-        A[App Services]
-        W([Web App])
+        A([App Services])
         B[(Database)]
-        W --> A
-        A --> D
         R --> B
         A --> R
         T -->|Seed| B
@@ -212,11 +204,8 @@ flowchart LR
         direction LR
         D[Domain]
         R[EF Repositories]
-        A[App Services]
-        W([Web App])
+        A([App Services])
         B[(Database)]
-        W --> A
-        A --> D
         A --> R
         R --> B
         B --> D
