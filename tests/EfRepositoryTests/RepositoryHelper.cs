@@ -3,8 +3,6 @@ using Cts.Domain.Entities.Offices;
 using Cts.EfRepository.Contexts;
 using Cts.EfRepository.Contexts.SeedDevData;
 using Cts.EfRepository.Repositories;
-using Cts.TestData;
-using Cts.TestData.Identity;
 using GaEpd.AppLibrary.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -37,9 +35,12 @@ public sealed class RepositoryHelper : IDisposable, IAsyncDisposable
     private RepositoryHelper()
     {
         _options = SqliteInMemory.CreateOptions<AppDbContext>(builder =>
-            builder.LogTo(Console.WriteLine, events: [RelationalEventId.CommandExecuted]));
+        {
+            builder.LogTo(Console.WriteLine, events: [RelationalEventId.CommandExecuted]);
+            builder.UseSeeding((context, _) => DbSeedDataHelpers.SeedAllData(context));
+        });
         _context = new AppDbContext(_options);
-        _context.Database.EnsureCreated();
+        _context.Database.EnsureClean();
     }
 
     /// <summary>
@@ -50,8 +51,11 @@ public sealed class RepositoryHelper : IDisposable, IAsyncDisposable
     private RepositoryHelper(object callingClass, string callingMember)
     {
         _options = callingClass.CreateUniqueMethodOptions<AppDbContext>(callingMember: callingMember,
-            builder: builder => builder.UseSqlServer()
-                .LogTo(Console.WriteLine, events: [RelationalEventId.CommandExecuted]));
+            builder: builder =>
+            {
+                builder.UseSqlServer().LogTo(Console.WriteLine, events: [RelationalEventId.CommandExecuted]);
+                builder.UseSeeding((context, _) => DbSeedDataHelpers.SeedAllData(context));
+            });
         _context = new AppDbContext(_options);
         _context.Database.EnsureClean();
     }
@@ -119,26 +123,12 @@ public sealed class RepositoryHelper : IDisposable, IAsyncDisposable
         ClearChangeTracker();
     }
 
-    private static void ClearAllStaticData()
-    {
-        ActionTypeData.ClearData();
-        AttachmentData.ClearData();
-        ComplaintActionData.ClearData();
-        ComplaintData.ClearData();
-        ComplaintTransitionData.ClearData();
-        ConcernData.ClearData();
-        OfficeData.ClearData();
-        UserData.ClearData();
-    }
-
     /// <summary>
     /// Seeds data and returns an instance of ActionTypeRepository.
     /// </summary>
     /// <returns>An <see cref="ComplaintRepository"/>.</returns>
     public IComplaintRepository GetComplaintRepository()
     {
-        ClearAllStaticData();
-        DbSeedDataHelpers.SeedAllData(_context);
         Context = new AppDbContext(_options);
         return new ComplaintRepository(Context);
     }
@@ -149,9 +139,6 @@ public sealed class RepositoryHelper : IDisposable, IAsyncDisposable
     /// <returns>An <see cref="OfficeRepository"/>.</returns>
     public IOfficeRepository GetOfficeRepository()
     {
-        ClearAllStaticData();
-        DbSeedDataHelpers.SeedOfficeData(_context);
-        DbSeedDataHelpers.SeedIdentityData(_context);
         Context = new AppDbContext(_options);
         return new OfficeRepository(Context);
     }
