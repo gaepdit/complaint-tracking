@@ -1,6 +1,4 @@
-using Cts.AppServices.AuthorizationPolicies;
 using Cts.AppServices.AutoMapper;
-using Cts.AppServices.IdentityServices;
 using Cts.AppServices.ServiceRegistration;
 using Cts.WebApp.Platform.AppConfiguration;
 using Cts.WebApp.Platform.Logging;
@@ -19,18 +17,15 @@ AppDomain.CurrentDomain.SetData("REGEX_DEFAULT_MATCH_TIMEOUT", TimeSpan.FromMill
 // Bind application settings.
 BindingsConfiguration.BindSettings(builder);
 
-// Configure Identity.
-builder.Services.AddIdentityStores();
-
-// Configure Authentication.
-builder.Services.AddAuthenticationServices(builder.Configuration);
-
 // Persist data protection keys.
 var keysFolder = Path.Combine(builder.Configuration["PersistedFilesBasePath"] ?? "", "DataProtectionKeys");
 builder.Services.AddDataProtection().PersistKeysToFileSystem(Directory.CreateDirectory(keysFolder));
 
-// Configure authorization and identity services.
-builder.Services.AddAuthorizationPolicies().AddIdentityServices();
+// Configure Identity stores.
+builder.Services.AddIdentityStores();
+
+// Configure authentication and authorization.
+builder.ConfigureAuthentication();
 
 // Add app entity services.
 builder.Services.AddAutoMapperProfiles().AddAppServices();
@@ -48,7 +43,7 @@ if (!builder.Environment.IsDevelopment())
 // Add data stores and initialize the database.
 await builder.ConfigureDataPersistence();
 
-// Configure file storage
+// Configure file storage.
 await builder.ConfigureFileStorage();
 
 // Add email services.
@@ -61,9 +56,16 @@ builder.Services.AddOrgNotifications();
 builder.Services.AddApiDocumentation();
 
 // Configure bundling and minification.
-builder.Services.AddWebOptimizer(
-    minifyJavaScript: AppSettings.DevSettings.EnableWebOptimizer,
-    minifyCss: AppSettings.DevSettings.EnableWebOptimizer);
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddWebOptimizer(
+        minifyJavaScript: AppSettings.DevSettings.EnableWebOptimizerInDev,
+        minifyCss: AppSettings.DevSettings.EnableWebOptimizerInDev);
+}
+else
+{
+    builder.Services.AddWebOptimizer();
+}
 
 // Configure application crash monitoring.
 builder.Services.ConfigureErrorLogging(builder.Environment.EnvironmentName);
@@ -75,14 +77,14 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment()) app.UseDeveloperExceptionPage(); // Development
 else app.UseExceptionHandler("/Error"); // Production or Staging
 
+if (!string.IsNullOrEmpty(AppSettings.RaygunSettings.ApiKey)) app.UseRaygun();
+
 // Configure security HTTP headers
 if (!app.Environment.IsDevelopment() || AppSettings.DevSettings.UseSecurityHeadersInDev)
 {
     app.UseHsts();
     app.UseSecurityHeaders(policyCollection => policyCollection.AddSecurityHeaderPolicies());
 }
-
-if (!string.IsNullOrEmpty(AppSettings.RaygunSettings.ApiKey)) app.UseRaygun();
 
 // Configure the application pipeline.
 app

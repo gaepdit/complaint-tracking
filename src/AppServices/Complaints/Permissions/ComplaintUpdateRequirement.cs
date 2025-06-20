@@ -1,6 +1,6 @@
-﻿using Cts.AppServices.Complaints.CommandDto;
-using Cts.AppServices.IdentityServices.Claims;
-using Cts.AppServices.IdentityServices.Roles;
+﻿using Cts.AppServices.AuthenticationServices.Claims;
+using Cts.AppServices.AuthenticationServices.Roles;
+using Cts.AppServices.Complaints.CommandDto;
 using Cts.Domain;
 using Cts.Domain.Entities.Complaints;
 using Microsoft.AspNetCore.Authorization;
@@ -42,7 +42,7 @@ public class ComplaintUpdateRequirement :
 
     private bool IsCurrentManager() =>
         _user.IsManager() &&
-        _user.HasRealClaim(AppClaimTypes.OfficeId, _resource.CurrentOfficeId?.ToString()) ||
+        _user.HasMatchingClaim(AppClaimTypes.OfficeId, _resource.CurrentOfficeId?.ToString()) ||
         _user.IsDivisionManager();
 
     private bool IsRecentReporter() =>
