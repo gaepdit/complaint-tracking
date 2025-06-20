@@ -7,7 +7,6 @@ using Cts.WebApp.Platform.Logging;
 using Cts.WebApp.Platform.OrgNotifications;
 using Cts.WebApp.Platform.Settings;
 using GaEpd.EmailService.Utilities;
-using Microsoft.AspNetCore.DataProtection;
 using Mindscape.Raygun4Net.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +14,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Set the default timeout for regular expressions.
 // https://learn.microsoft.com/en-us/dotnet/standard/base-types/best-practices-regex#use-time-out-values
 AppDomain.CurrentDomain.SetData("REGEX_DEFAULT_MATCH_TIMEOUT", TimeSpan.FromMilliseconds(100));
+
+// Persist data protection keys.
+builder.Services.AddDataProtection();
 
 // Bind application settings.
 BindingsConfiguration.BindSettings(builder);
@@ -24,10 +26,6 @@ builder.Services.AddIdentityStores();
 
 // Configure Authentication.
 builder.Services.AddAuthenticationServices(builder.Configuration);
-
-// Persist data protection keys.
-var keysFolder = Path.Combine(builder.Configuration["PersistedFilesBasePath"] ?? "", "DataProtectionKeys");
-builder.Services.AddDataProtection().PersistKeysToFileSystem(Directory.CreateDirectory(keysFolder));
 
 // Configure authorization and identity services.
 builder.Services.AddAuthorizationPolicies().AddIdentityServices();
