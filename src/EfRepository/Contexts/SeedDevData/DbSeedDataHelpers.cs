@@ -39,13 +39,19 @@ public static class DbSeedDataHelpers
         if (context.Complaints.Any()) return;
 
         if (context.Database.ProviderName == AppDbContext.SqlServerProvider)
+        {
+            context.Database.BeginTransaction();
             context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Complaints ON");
+        }
 
         context.Complaints.AddRange(ComplaintData.GetComplaints);
         context.SaveChanges();
 
         if (context.Database.ProviderName == AppDbContext.SqlServerProvider)
+        {
             context.Database.ExecuteSqlRaw("SET IDENTITY_INSERT Complaints OFF");
+            context.Database.CommitTransaction();
+        }
 
         if (!context.Attachments.Any())
             context.Attachments.AddRange(AttachmentData.GetAttachments);
