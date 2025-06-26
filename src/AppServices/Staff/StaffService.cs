@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using Cts.AppServices.AuthenticationServices;
 using Cts.AppServices.AuthorizationPolicies;
-using Cts.AppServices.IdentityServices;
 using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Entities.Offices;
 using Cts.Domain.Identity;
@@ -35,15 +35,6 @@ public sealed class StaffService(
         return mapper.Map<StaffViewDto?>(user);
     }
 
-    public async Task<IReadOnlyList<StaffViewDto>> GetListAsync(StaffSearchDto spec)
-    {
-        var users = string.IsNullOrEmpty(spec.Role)
-            ? userManager.Users.ApplyFilter(spec)
-            : (await userManager.GetUsersInRoleAsync(spec.Role).ConfigureAwait(false)).AsQueryable().ApplyFilter(spec);
-
-        return mapper.Map<IReadOnlyList<StaffViewDto>>(users);
-    }
-
     public async Task<IPaginatedResult<StaffSearchResultDto>> SearchAsync(StaffSearchDto spec, PaginatedRequest paging)
     {
         var users = string.IsNullOrEmpty(spec.Role)
@@ -75,20 +66,12 @@ public sealed class StaffService(
     public async Task<IList<string>> GetRolesAsync(string id)
     {
         var user = await userManager.FindByIdAsync(id).ConfigureAwait(false);
-        if (user is null) return new List<string>();
-        return await userManager.GetRolesAsync(user).ConfigureAwait(false);
+        return user is null ? [] : await userManager.GetRolesAsync(user).ConfigureAwait(false);
     }
 
     public async Task<IReadOnlyList<AppRole>> GetAppRolesAsync(string id) =>
         AppRole.RolesAsAppRoles(await GetRolesAsync(id).ConfigureAwait(false))
             .OrderBy(r => r.DisplayName).ToList();
-
-    public async Task<bool> HasAppRoleAsync(string id, AppRole role)
-    {
-        var user = await userManager.FindByIdAsync(id).ConfigureAwait(false);
-        if (user is null) return false;
-        return await userManager.IsInRoleAsync(user, role.Name).ConfigureAwait(false);
-    }
 
     public async Task<IdentityResult> UpdateRolesAsync(string id, Dictionary<string, bool> roles)
     {

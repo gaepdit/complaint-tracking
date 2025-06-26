@@ -9,11 +9,12 @@ internal static partial class AppSettings
     // Support settings
     public static SupportSettingsSection SupportSettings { get; } = new();
 
+    [UsedImplicitly(ImplicitUseTargetFlags.Members)]
     public record SupportSettingsSection
     {
-        public string? CustomerSupportEmail { get; [UsedImplicitly] init; }
-        public string? TechnicalSupportEmail { get; [UsedImplicitly] init; }
-        public string? TechnicalSupportSite { get; [UsedImplicitly] init; }
+        public string? CustomerSupportEmail { get; init; }
+        public string? TechnicalSupportEmail { get; init; }
+        public string? TechnicalSupportSite { get; init; }
         public string? InformationalVersion { get; set; }
         public string? InformationalBuild { get; set; }
     }
@@ -27,7 +28,6 @@ internal static partial class AppSettings
     public record RaygunClientSettings
     {
         public string? ApiKey { get; [UsedImplicitly] init; }
-        public bool ExcludeErrorsFromLocal { get; [UsedImplicitly] init; }
     }
 
     // Attachment File Service configuration

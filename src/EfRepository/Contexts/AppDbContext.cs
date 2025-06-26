@@ -139,7 +139,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
         actionEntity.HasIndex(["EnteredById", "IsDeleted", "EnteredDate"], "missing_index_1192_1191")
             .IncludeProperties("ComplaintId", "ActionTypeId", "ActionDate", "Investigator", "Comments", "CreatedAt",
                 "CreatedById", "UpdatedAt", "UpdatedById", "DeletedAt", "DeletedById");
-        appUserEntity.HasIndex(["ObjectIdentifier"], "missing_index_198_197");
 #pragma warning restore S1192 // String literals should not be duplicated
 
         // === ## The following configurations are Sqlite only. ## ===

@@ -4,37 +4,42 @@ namespace Cts.TestData.Identity;
 
 internal static partial class UserData
 {
-    private static IEnumerable<ApplicationUser> UserSeedItems => new List<ApplicationUser>
+    internal const string TestUserId = "00000000-0000-0000-0000-000000000001";
+
+    private static IEnumerable<ApplicationUser> UserSeedItems
     {
-        new() // 0
+        get
         {
-            Id = "00000000-0000-0000-0000-000000000001",
-            GivenName = "Test",
-            FamilyName = "User1",
-            Email = "test.user@example.net",
-            Office = OfficeData.GetOffices.ElementAt(0),
-            ObjectIdentifier = Guid.NewGuid().ToString(),
-        },
-        new() // 1
-        {
-            Id = "00000000-0000-0000-0000-000000000002",
-            GivenName = "Another",
-            FamilyName = "User2",
-            Email = "another.user2@example.net",
-            Office = OfficeData.GetOffices.ElementAt(1),
-            ObjectIdentifier = Guid.NewGuid().ToString(),
-        },
-        new() // 2
-        {
-            Id = "00000000-0000-0000-0000-000000000003",
-            GivenName = "Inactive",
-            FamilyName = "User3",
-            Email = "inactive.user@example.net",
-            Active = false,
-            Office = OfficeData.GetOffices.ElementAt(0),
-            ObjectIdentifier = Guid.NewGuid().ToString(),
-        },
-    };
+            return new List<ApplicationUser>
+            {
+                new() // 0
+                {
+                    Id = TestUserId,
+                    GivenName = "Test",
+                    FamilyName = "User1",
+                    Email = "test.user@example.net",
+                    Office = OfficeData.GetOffices.ElementAt(0),
+                },
+                new() // 1
+                {
+                    Id = "00000000-0000-0000-0000-000000000002",
+                    GivenName = "Another",
+                    FamilyName = "User2",
+                    Email = "another.user2@example.net",
+                    Office = OfficeData.GetOffices.ElementAt(1),
+                },
+                new() // 2
+                {
+                    Id = "00000000-0000-0000-0000-000000000003",
+                    GivenName = "Inactive",
+                    FamilyName = "User3",
+                    Email = "inactive.user@example.net",
+                    Active = false,
+                    Office = OfficeData.GetOffices.ElementAt(0),
+                },
+            };
+        }
+    }
 
     private static List<ApplicationUser>? _users;
 
