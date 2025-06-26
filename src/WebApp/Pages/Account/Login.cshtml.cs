@@ -39,14 +39,14 @@ public class LoginModel(
         return LocalRedirectOrHome();
     }
 
-    public IActionResult OnPostAsync(string scheme)
+    public IActionResult OnPostAsync(string scheme,string? returnUrl = null)
     {
         if (User.Identity is { IsAuthenticated: true }) return RedirectToPage("Logout");
         if (!configuration.ValidateLoginProvider(scheme))
             throw new ArgumentException("Invalid scheme", nameof(scheme));
 
         // Request a redirect to the external login provider.
-        var redirectUrl = Url.Page("Login", pageHandler: "Callback", values: new { ReturnUrl });
+        var redirectUrl = Url.Page("Login", pageHandler: "Callback", values: new { returnUrl });
         var properties = signInManager.ConfigureExternalAuthenticationProperties(scheme, redirectUrl);
         return Challenge(properties, scheme);
     }
