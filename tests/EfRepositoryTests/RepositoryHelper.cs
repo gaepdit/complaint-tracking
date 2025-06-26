@@ -34,13 +34,11 @@ public sealed class RepositoryHelper : IDisposable, IAsyncDisposable
     /// </summary>
     private RepositoryHelper()
     {
-        _options = SqliteInMemory.CreateOptions<AppDbContext>(builder =>
-        {
-            builder.LogTo(Console.WriteLine, events: [RelationalEventId.CommandExecuted]);
-            builder.UseSeeding((context, _) => DbSeedDataHelpers.SeedAllData(context));
-        });
+        _options = SqliteInMemory.CreateOptions<AppDbContext>(builder: builder =>
+            builder.LogTo(Console.WriteLine, events: [RelationalEventId.CommandExecuted]));
         _context = new AppDbContext(_options);
         _context.Database.EnsureClean();
+        DbSeedDataHelpers.SeedAllData(_context);
     }
 
     /// <summary>
@@ -50,14 +48,12 @@ public sealed class RepositoryHelper : IDisposable, IAsyncDisposable
     /// <param name="callingMember">The unit test method requesting the Repository Helper.</param>
     private RepositoryHelper(object callingClass, string callingMember)
     {
-        _options = callingClass.CreateUniqueMethodOptions<AppDbContext>(callingMember: callingMember,
-            builder: builder =>
-            {
-                builder.UseSqlServer().LogTo(Console.WriteLine, events: [RelationalEventId.CommandExecuted]);
-                builder.UseSeeding((context, _) => DbSeedDataHelpers.SeedAllData(context));
-            });
+        _options = callingClass.CreateUniqueMethodOptions<AppDbContext>(builder: builder =>
+                builder.UseSqlServer().LogTo(Console.WriteLine, events: [RelationalEventId.CommandExecuted]),
+            callingMember);
         _context = new AppDbContext(_options);
         _context.Database.EnsureClean();
+        DbSeedDataHelpers.SeedAllData(_context);
     }
 
     /// <summary>
