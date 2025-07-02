@@ -1,5 +1,4 @@
-﻿using Cts.AppServices.ErrorLogging;
-using Cts.Domain.Entities.Complaints;
+﻿using Cts.Domain.Entities.Complaints;
 using GaEpd.EmailService;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -13,8 +12,7 @@ public class NotificationService(
     IEmailLogRepository emailLogRepository,
     IHostEnvironment environment,
     IConfiguration configuration,
-    ILogger<NotificationService> logger,
-    IErrorLogger errorLogger) : INotificationService
+    ILogger<NotificationService> logger) : INotificationService
 {
     internal static readonly EventId NotificationServiceFailure = new(2301, nameof(NotificationServiceFailure));
     internal static readonly EventId NotificationServiceException = new(2302, nameof(NotificationServiceException));
@@ -66,9 +64,9 @@ public class NotificationService(
         }
         catch (Exception e)
         {
-            await errorLogger.LogErrorAsync(e, subject).ConfigureAwait(false);
             logger.LogError(NotificationServiceException, e,
-                "Exception raised sending a notification email for Complaint {ComplaintId}.", complaint.Id);
+                "Error sending a notification email for Complaint {ComplaintId} with subject {Subject}.",
+                complaint.Id, subject);
             return NotificationResult.FailureResult($"{FailurePrefix} An error occurred when generating the email.");
         }
 

@@ -3,12 +3,10 @@ using Cts.AppServices.AutoMapper;
 using Cts.AppServices.IdentityServices;
 using Cts.AppServices.ServiceRegistration;
 using Cts.WebApp.Platform.AppConfiguration;
-using Cts.WebApp.Platform.Logging;
 using Cts.WebApp.Platform.OrgNotifications;
 using Cts.WebApp.Platform.Settings;
 using GaEpd.EmailService.Utilities;
 using Microsoft.AspNetCore.DataProtection;
-using Mindscape.Raygun4Net.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +15,8 @@ var builder = WebApplication.CreateBuilder(args);
 AppDomain.CurrentDomain.SetData("REGEX_DEFAULT_MATCH_TIMEOUT", TimeSpan.FromMilliseconds(100));
 
 // Bind application settings.
-BindingsConfiguration.BindSettings(builder);
+builder.BindAppSettings();
+builder.AddErrorLogging();
 
 // Configure Identity.
 builder.Services.AddIdentityStores();
@@ -65,15 +64,8 @@ builder.Services.AddWebOptimizer(
     minifyJavaScript: AppSettings.DevSettings.EnableWebOptimizer,
     minifyCss: AppSettings.DevSettings.EnableWebOptimizer);
 
-// Configure application crash monitoring.
-builder.Services.ConfigureErrorLogging(builder.Environment.EnvironmentName);
-
 // Build the application.
 var app = builder.Build();
-
-// Configure error handling.
-if (app.Environment.IsDevelopment()) app.UseDeveloperExceptionPage(); // Development
-else app.UseExceptionHandler("/Error"); // Production or Staging
 
 // Configure security HTTP headers
 if (!app.Environment.IsDevelopment() || AppSettings.DevSettings.UseSecurityHeadersInDev)
@@ -82,10 +74,9 @@ if (!app.Environment.IsDevelopment() || AppSettings.DevSettings.UseSecurityHeade
     app.UseSecurityHeaders(policyCollection => policyCollection.AddSecurityHeaderPolicies());
 }
 
-if (!string.IsNullOrEmpty(AppSettings.RaygunSettings.ApiKey)) app.UseRaygun();
-
 // Configure the application pipeline.
 app
+    .UseErrorHandling()
     .UseStatusCodePagesWithReExecute("/Error/{0}")
     .UseHttpsRedirection()
     .UseWebOptimizer()

@@ -34,15 +34,9 @@
 <div class="callout callout-info">
     <small>
         The Complaint Tracking System was developed by Georgia EPD-IT.<br />
-        @if (!string.IsNullOrEmpty(AppSettings.SupportSettings.InformationalVersion))
+        @if (!string.IsNullOrEmpty(AppSettings.Version))
         {
-            @:Current version: <em>@AppSettings.SupportSettings.InformationalVersion
-                @if (!string.IsNullOrEmpty(AppSettings.SupportSettings.InformationalBuild))
-                {
-                    @:(@AppSettings.SupportSettings.InformationalBuild).
-                }
-
-                @:</em>
+            @:Current version: <em>@AppSettings.Version</em>
         }
         <br />
         View the

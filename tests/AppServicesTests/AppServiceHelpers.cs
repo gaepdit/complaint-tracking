@@ -1,10 +1,10 @@
 ﻿using Cts.AppServices.Attachments;
-using Cts.AppServices.ErrorLogging;
 using Cts.AppServices.IdentityServices;
 using Cts.Domain.Entities.Attachments;
 using Cts.Domain.Entities.Complaints;
 using Cts.TestData.Constants;
 using GaEpd.FileService;
+using Microsoft.Extensions.Logging;
 using System.Text;
 
 namespace AppServicesTests;
@@ -28,6 +28,5 @@ internal static class AppServiceHelpers
             attachmentRepository ?? Substitute.For<IAttachmentRepository>(),
             complaintRepository ?? Substitute.For<IComplaintRepository>(),
             userService ?? Substitute.For<IUserService>(),
-            AppServicesTestsSetup.Mapper!,
-            errorLogger: Substitute.For<IErrorLogger>());
+            AppServicesTestsSetup.Mapper!, Substitute.For<ILogger<AttachmentService>>());
 }

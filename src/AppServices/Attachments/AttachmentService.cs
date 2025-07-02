@@ -1,12 +1,12 @@
 using AutoMapper;
 using Cts.AppServices.Attachments.Dto;
 using Cts.AppServices.Complaints.QueryDto;
-using Cts.AppServices.ErrorLogging;
 using Cts.AppServices.IdentityServices;
 using Cts.Domain.Entities.Attachments;
 using Cts.Domain.Entities.Complaints;
 using GaEpd.FileService;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 
@@ -20,9 +20,11 @@ public class AttachmentService(
     IUserService userService,
     // ReSharper disable once SuggestBaseTypeForParameterInConstructor
     IMapper mapper,
-    IErrorLogger errorLogger)
+    ILogger<AttachmentService> logger)
     : IAttachmentService
 {
+    internal static readonly EventId AttachmentServiceFailure = new(2401, nameof(AttachmentServiceFailure));
+
     private IAttachmentService.AttachmentServiceConfig Config { get; set; } = null!;
 
     public async Task<AttachmentViewDto?> FindAttachmentAsync(Guid id, CancellationToken token = default) =>
@@ -135,14 +137,9 @@ public class AttachmentService(
         }
         catch (Exception e)
         {
-            // Log error but take no other action here.
-            var customData = new Dictionary<string, object>
-            {
-                { "Action", "Saving Image" },
-                { "IFormFile", formFile },
-                { "File ID", fileId },
-            };
-            await errorLogger.LogErrorAsync(e, customData).ConfigureAwait(false);
+            // Log error but take no other action here
+            logger.LogError(AttachmentServiceFailure, e, "Error saving image {FileName} with ID {FileID}",
+                formFile.FileName, fileId);
             return false;
         }
     }

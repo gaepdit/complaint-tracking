@@ -33,6 +33,7 @@ public class OrgNotifications(
 {
     private const string ApiEndpoint = "/current";
     private const string CacheKey = nameof(OrgNotifications);
+    internal static readonly EventId OrgNotificationsFetchFailure = new(2501, nameof(OrgNotificationsFetchFailure));
 
     public async Task<List<OrgNotification>> GetOrgNotificationsAsync()
     {
@@ -49,7 +50,7 @@ public class OrgNotifications(
         catch (Exception ex)
         {
             // If the API is unresponsive or other error occurs, no notifications will be displayed.
-            logger.LogError(ex, "Failed to fetch organizational notifications.");
+            logger.LogError(OrgNotificationsFetchFailure, ex, "Failed to fetch organizational notifications.");
             notifications = [];
         }
 
