@@ -4,7 +4,7 @@ namespace Cts.WebApp.Platform.Settings;
 
 public static class AppSettingsExtensions
 {
-    public static void BindAppSettings(this WebApplicationBuilder builder)
+    public static WebApplicationBuilder BindAppSettings(this WebApplicationBuilder builder)
     {
         AppSettings.Version = GetVersion();
         
@@ -24,6 +24,8 @@ public static class AppSettingsExtensions
 
         if (useDevConfig) devConfig.Bind(AppSettings.DevSettings);
         else AppSettings.DevSettings = AppSettings.ProductionDefault;
+        
+        return builder;
     }
 
     private static string GetVersion()

@@ -4,6 +4,38 @@ namespace Cts.WebApp.Platform.AppConfiguration;
 
 internal static class SecurityHeaders
 {
+    public static WebApplicationBuilder AddSecurityHeaders(this WebApplicationBuilder builder)
+    {
+        if (builder.Environment.IsDevelopment())
+        {
+            builder.Services.AddHttpsRedirection(options =>
+                options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect);
+        }
+        else
+        {
+            // Starting value for HSTS max age is five minutes to allow for debugging.
+            // For more info on updating HSTS max age value for production, see:
+            // https://gaepdit.github.io/web-apps/use-https.html#how-to-enable-hsts
+            builder.Services
+                .AddHsts(options => options.MaxAge = TimeSpan.FromMinutes(300))
+                .AddHttpsRedirection(options =>
+                {
+                    options.HttpsPort = 443;
+                    options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
+                });
+        }
+
+        return builder;
+    }
+
+    public static WebApplication UseSecurityHeaders(this WebApplication app)
+    {
+        if (!app.Environment.IsDevelopment() || AppSettings.DevSettings.UseSecurityHeadersInDev)
+            app.UseHsts().UseSecurityHeaders(policyCollection => policyCollection.AddSecurityHeaderPolicies());
+
+        return app;
+    }
+
     private static readonly string ReportUri =
         $"https://report-to-api.raygun.com/reports?apikey={AppSettings.RaygunSettings.ApiKey}";
 

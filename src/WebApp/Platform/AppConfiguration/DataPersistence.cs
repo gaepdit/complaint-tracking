@@ -55,6 +55,7 @@ public static class DataPersistence
         builder.Services.AddTransient<IDbConnectionFactory, DbConnectionFactory>(_ =>
             new DbConnectionFactory(connectionString));
 
+        // Repositories
         builder.Services
             .AddScoped<IActionTypeRepository, ActionTypeRepository>()
             .AddScoped<IAttachmentRepository, AttachmentRepository>()
