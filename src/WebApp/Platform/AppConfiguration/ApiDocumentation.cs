@@ -5,18 +5,21 @@ namespace Cts.WebApp.Platform.AppConfiguration;
 
 public static class ApiDocumentation
 {
+    private const string ApiVersion = "v1";
+    private const string ApiTitle = "Complaint Tracking System API";
+
     public static void AddApiDocumentation(this IServiceCollection services)
     {
         services.AddMvcCore().AddApiExplorer();
         services.AddSwaggerGen(options =>
         {
-            options.SwaggerDoc("v1", new OpenApiInfo
+            options.SwaggerDoc(ApiVersion, new OpenApiInfo
             {
-                Version = "v1",
-                Title = "Complaint Tracking System API",
+                Version = ApiVersion,
+                Title = ApiTitle,
                 Contact = new OpenApiContact
                 {
-                    Name = "Complaint Tracking System Technical Support",
+                    Name = $"{ApiTitle} Support",
                     Email = AppSettings.SupportSettings.TechnicalSupportEmail,
                 },
             });
@@ -27,8 +30,8 @@ public static class ApiDocumentation
         .UseSwagger(options => { options.RouteTemplate = "api-docs/{documentName}/openapi.json"; })
         .UseSwaggerUI(options =>
         {
-            options.SwaggerEndpoint("v1/openapi.json", "Complaint Tracking System API v1");
+            options.SwaggerEndpoint($"{ApiVersion}/openapi.json", $"{ApiTitle} {ApiVersion}");
             options.RoutePrefix = "api-docs";
-            options.DocumentTitle = "Complaint Tracking System API";
+            options.DocumentTitle = ApiTitle;
         });
 }

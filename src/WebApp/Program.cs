@@ -14,15 +14,13 @@ var builder = WebApplication.CreateBuilder(args);
 // https://learn.microsoft.com/en-us/dotnet/standard/base-types/best-practices-regex#use-time-out-values
 AppDomain.CurrentDomain.SetData("REGEX_DEFAULT_MATCH_TIMEOUT", TimeSpan.FromMilliseconds(100));
 
-// Bind application settings.
-builder.BindAppSettings();
-builder.AddErrorLogging();
+builder.BindAppSettings().AddSecurityHeaders().AddErrorLogging();
 
 // Configure Identity.
 builder.Services.AddIdentityStores();
 
 // Configure Authentication.
-builder.Services.AddAuthenticationServices(builder.Configuration);
+builder.AddAuthenticationServices();
 
 // Persist data protection keys.
 var keysFolder = Path.Combine(builder.Configuration["PersistedFilesBasePath"] ?? "", "DataProtectionKeys");
@@ -31,27 +29,17 @@ builder.Services.AddDataProtection().PersistKeysToFileSystem(Directory.CreateDir
 // Configure authorization and identity services.
 builder.Services.AddAuthorizationPolicies().AddIdentityServices();
 
-// Add app entity services.
-builder.Services.AddAutoMapperProfiles().AddAppServices();
+// Add app services.
+builder.Services.AddAppServices().AddAutoMapperProfiles().AddEmailService();
 
 // Configure UI services.
 builder.Services.AddRazorPages();
-
-if (!builder.Environment.IsDevelopment())
-{
-    builder.Services
-        .AddHsts(options => options.MaxAge = TimeSpan.FromDays(360))
-        .AddHttpsRedirection(options => options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect);
-}
 
 // Add data stores and initialize the database.
 await builder.ConfigureDataPersistence();
 
 // Configure file storage
 await builder.ConfigureFileStorage();
-
-// Add email services.
-builder.Services.AddEmailService();
 
 // Add organizational notifications.
 builder.Services.AddOrgNotifications();
@@ -67,15 +55,9 @@ builder.Services.AddWebOptimizer(
 // Build the application.
 var app = builder.Build();
 
-// Configure security HTTP headers
-if (!app.Environment.IsDevelopment() || AppSettings.DevSettings.UseSecurityHeadersInDev)
-{
-    app.UseHsts();
-    app.UseSecurityHeaders(policyCollection => policyCollection.AddSecurityHeaderPolicies());
-}
-
 // Configure the application pipeline.
 app
+    .UseSecurityHeaders()
     .UseErrorHandling()
     .UseStatusCodePagesWithReExecute("/Error/{0}")
     .UseHttpsRedirection()

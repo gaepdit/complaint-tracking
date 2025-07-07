@@ -70,14 +70,14 @@ public static class DbSeedDataHelpers
         context.SaveChanges();
     }
 
-    public static void SeedOfficeData(AppDbContext context)
+    private static void SeedOfficeData(AppDbContext context)
     {
         if (context.Offices.Any()) return;
         context.Offices.AddRange(OfficeData.GetOffices);
         context.SaveChanges();
     }
 
-    public static void SeedIdentityData(AppDbContext context)
+    private static void SeedIdentityData(AppDbContext context)
     {
         // Seed Users
         var users = UserData.GetUsers.ToList();
