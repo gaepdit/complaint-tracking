@@ -1,4 +1,4 @@
-using Cts.AppServices.Staff.Dto;
+using GaEpd.AppLibrary.Extensions;
 using System.ComponentModel.DataAnnotations;
 
 namespace Cts.AppServices.ComplaintActions.Dto;
@@ -20,7 +20,10 @@ public record ActionViewDto
     public string? Comments { get; init; }
 
     [Display(Name = "Entered By")]
-    public StaffViewDto? EnteredBy { get; [UsedImplicitly] init; }
+    public string EnteredByName => new[] { EnteredByGivenName, EnteredByFamilyName }.ConcatWithSeparator();
+
+    public string? EnteredByGivenName { get; init; }
+    public string? EnteredByFamilyName { get; init; }
 
     [Display(Name = "Entered On")]
     public DateTimeOffset? EnteredDate { get; init; }
@@ -30,10 +33,11 @@ public record ActionViewDto
     [Display(Name = "Deleted?")]
     public bool IsDeleted { get; init; }
 
-    public string? DeletedById { get; init; }
-
     [Display(Name = "Deleted By")]
-    public StaffViewDto? DeletedBy { get; set; }
+    public string DeletedByName => new[] { DeletedByGivenName, DeletedByFamilyName }.ConcatWithSeparator();
+
+    public string? DeletedByGivenName { get; init; }
+    public string? DeletedByFamilyName { get; init; }
 
     [Display(Name = "Date Deleted")]
     public DateTimeOffset? DeletedAt { get; init; }

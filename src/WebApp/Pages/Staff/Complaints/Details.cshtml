@@ -326,13 +326,13 @@
                     <div class="card-body ">
                         <div class="text-break text-pre-line">@Html.DisplayFor(_ => action.Comments, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })</div>
                     </div>
-                    @if (action.EnteredBy is not null || action.EnteredDate is not null)
+                    @if (!string.IsNullOrEmpty(action.EnteredByName) || action.EnteredDate is not null)
                     {
                         <small class="card-footer text-body-secondary">
                             Entered
-                            @if (action.EnteredBy is not null)
+                            @if (!string.IsNullOrEmpty(action.EnteredByName))
                             {
-                                <text>by @action.EnteredBy.Name</text>
+                                <text>by @action.EnteredByName</text>
                             }
                             @if (action.EnteredDate is not null)
                             {
@@ -340,13 +340,13 @@
                             }
                         </small>
                     }
-                    @if (action.DeletedBy is not null || action.DeletedAt is not null)
+                    @if (!string.IsNullOrEmpty(action.DeletedByName) || action.DeletedAt is not null)
                     {
                         <small class="card-footer text-body-secondary">
                             Deleted
-                            @if (action.DeletedBy is not null)
+                            @if (!string.IsNullOrEmpty(action.DeletedByName))
                             {
-                                <text>by @action.DeletedBy.Name</text>
+                                <text>by @action.DeletedByName</text>
                             }
                             @if (action.DeletedAt is not null)
                             {
