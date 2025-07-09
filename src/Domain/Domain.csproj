@@ -4,6 +4,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="AutoMapper" />
         <PackageReference Include="GaEpd.AppLibrary" />
         <PackageReference Include="JetBrains.Annotations" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" />
