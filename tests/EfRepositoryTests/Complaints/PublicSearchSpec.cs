@@ -41,6 +41,10 @@ public class PublicSearchSpec
             .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
             .Excluding(e => e.ReviewedBy!.Office)
+            .Excluding(e => e.EnteredBy!.AssignorForOffices)
+            .Excluding(e => e.ReceivedBy!.AssignorForOffices)
+            .Excluding(e => e.CurrentOwner!.AssignorForOffices)
+            .Excluding(e => e.ReviewedBy!.AssignorForOffices)
         );
     }
 
@@ -65,6 +69,9 @@ public class PublicSearchSpec
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
+            .Excluding(e => e.EnteredBy!.AssignorForOffices)
+            .Excluding(e => e.ReceivedBy!.AssignorForOffices)
+            .Excluding(e => e.CurrentOwner!.AssignorForOffices)
         );
     }
 
@@ -85,6 +92,9 @@ public class PublicSearchSpec
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
+            .Excluding(e => e.EnteredBy!.AssignorForOffices)
+            .Excluding(e => e.ReceivedBy!.AssignorForOffices)
+            .Excluding(e => e.CurrentOwner!.AssignorForOffices)
         );
     }
 
@@ -106,6 +116,9 @@ public class PublicSearchSpec
             .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
             .Excluding(e => e.Attachments)
+            .Excluding(e => e.EnteredBy!.AssignorForOffices)
+            .Excluding(e => e.ReceivedBy!.AssignorForOffices)
+            .Excluding(e => e.CurrentOwner!.AssignorForOffices)
         );
     }
 
@@ -126,6 +139,9 @@ public class PublicSearchSpec
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
+            .Excluding(e => e.EnteredBy!.AssignorForOffices)
+            .Excluding(e => e.ReceivedBy!.AssignorForOffices)
+            .Excluding(e => e.CurrentOwner!.AssignorForOffices)
         );
     }
 
@@ -148,6 +164,10 @@ public class PublicSearchSpec
             .Excluding(e => e.CurrentOwner!.Office)
             .Excluding(e => e.ReviewedBy!.Office)
             .Excluding(e => e.Attachments)
+            .Excluding(e => e.EnteredBy!.AssignorForOffices)
+            .Excluding(e => e.ReceivedBy!.AssignorForOffices)
+            .Excluding(e => e.CurrentOwner!.AssignorForOffices)
+            .Excluding(e => e.ReviewedBy!.AssignorForOffices)
         );
     }
 
@@ -170,6 +190,9 @@ public class PublicSearchSpec
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
+            .Excluding(e => e.EnteredBy!.AssignorForOffices)
+            .Excluding(e => e.ReceivedBy!.AssignorForOffices)
+            .Excluding(e => e.CurrentOwner!.AssignorForOffices)
         );
     }
 
@@ -193,6 +216,9 @@ public class PublicSearchSpec
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
+            .Excluding(e => e.EnteredBy!.AssignorForOffices)
+            .Excluding(e => e.ReceivedBy!.AssignorForOffices)
+            .Excluding(e => e.CurrentOwner!.AssignorForOffices)
         );
     }
 
@@ -215,6 +241,9 @@ public class PublicSearchSpec
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
+            .Excluding(e => e.EnteredBy!.AssignorForOffices)
+            .Excluding(e => e.ReceivedBy!.AssignorForOffices)
+            .Excluding(e => e.CurrentOwner!.AssignorForOffices)
         );
     }
 
@@ -237,6 +266,9 @@ public class PublicSearchSpec
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
+            .Excluding(e => e.EnteredBy!.AssignorForOffices)
+            .Excluding(e => e.ReceivedBy!.AssignorForOffices)
+            .Excluding(e => e.CurrentOwner!.AssignorForOffices)
         );
     }
 
@@ -260,6 +292,9 @@ public class PublicSearchSpec
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
+            .Excluding(e => e.EnteredBy!.AssignorForOffices)
+            .Excluding(e => e.ReceivedBy!.AssignorForOffices)
+            .Excluding(e => e.CurrentOwner!.AssignorForOffices)
         );
     }
 }
