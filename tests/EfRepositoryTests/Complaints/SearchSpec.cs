@@ -26,7 +26,6 @@ public class SearchSpec
 
         var expected = ComplaintData.GetComplaints.Where(e => e is { IsDeleted: false });
         results.Should().BeEquivalentTo(expected, options => options
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
@@ -48,7 +47,6 @@ public class SearchSpec
 
         var expected = ComplaintData.GetComplaints.Where(e => e is { IsDeleted: false, ComplaintClosed: true });
         results.Should().BeEquivalentTo(expected, options => options
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
@@ -71,7 +69,6 @@ public class SearchSpec
         var expected = ComplaintData.GetComplaints.Where(e => e is
             { IsDeleted: false, ComplaintClosed: false, CurrentOwner: not null, CurrentOwnerAcceptedDate: null });
         results.Should().BeEquivalentTo(expected, options => options
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
@@ -93,7 +90,6 @@ public class SearchSpec
 
         var expected = ComplaintData.GetComplaints.Where(e => e is { IsDeleted: true });
         results.Should().BeEquivalentTo(expected, options => options
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
@@ -116,7 +112,6 @@ public class SearchSpec
 
         var expected = ComplaintData.GetComplaints;
         results.Should().BeEquivalentTo(expected, options => options
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
@@ -148,7 +143,6 @@ public class SearchSpec
         var results = await repository.GetListAsync(predicate);
 
         results.Should().BeEquivalentTo([referenceItem], options => options
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
@@ -179,7 +173,6 @@ public class SearchSpec
         var results = await repository.GetListAsync(predicate);
 
         results.Should().BeEquivalentTo([referenceItem], options => options
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
@@ -203,7 +196,6 @@ public class SearchSpec
         var expected = ComplaintData.GetComplaints.Where(e => e is { IsDeleted: false }
                                                               && e.ReceivedBy == referenceItem.ReceivedBy);
         results.Should().BeEquivalentTo(expected, options => options
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
@@ -227,7 +219,6 @@ public class SearchSpec
         var expected = ComplaintData.GetComplaints.Where(e => e is { IsDeleted: false }
                                                               && e.CallerName == referenceItem.CallerName);
         results.Should().BeEquivalentTo(expected, options => options
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
@@ -251,7 +242,6 @@ public class SearchSpec
         var expected = ComplaintData.GetComplaints.Where(e => e is { IsDeleted: false }
                                                               && e.CallerRepresents == referenceItem.CallerRepresents);
         results.Should().BeEquivalentTo(expected, options => options
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
@@ -275,7 +265,6 @@ public class SearchSpec
         var expected = ComplaintData.GetComplaints.Where(e => e is { IsDeleted: false }
                                                               && e.ComplaintNature == referenceItem.ComplaintNature);
         results.Should().BeEquivalentTo(expected, options => options
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
@@ -300,7 +289,6 @@ public class SearchSpec
                                                               && e.ComplaintLocation ==
                                                               referenceItem.ComplaintLocation);
         results.Should().BeEquivalentTo(expected, options => options
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
@@ -325,7 +313,6 @@ public class SearchSpec
                                                               && e.ComplaintDirections ==
                                                               referenceItem.ComplaintDirections);
         results.Should().BeEquivalentTo(expected, options => options
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
@@ -349,7 +336,6 @@ public class SearchSpec
         var expected = ComplaintData.GetComplaints.Where(e => e is { IsDeleted: false }
                                                               && e.ComplaintCity == referenceItem.ComplaintCity);
         results.Should().BeEquivalentTo(expected, options => options
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
@@ -373,7 +359,6 @@ public class SearchSpec
         var expected = ComplaintData.GetComplaints.Where(e => e is { IsDeleted: false }
                                                               && e.ComplaintCounty == referenceItem.ComplaintCounty);
         results.Should().BeEquivalentTo(expected, options => options
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
@@ -400,7 +385,6 @@ public class SearchSpec
                                                                       e.SecondaryConcern.Id ==
                                                                       referenceItem.PrimaryConcern.Id)));
         results.Should().BeEquivalentTo(expected, options => options
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
@@ -425,7 +409,6 @@ public class SearchSpec
                                                               && e.SourceFacilityName ==
                                                               referenceItem.SourceFacilityName);
         results.Should().BeEquivalentTo(expected, options => options
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
@@ -450,7 +433,6 @@ public class SearchSpec
             .Where(e => e is { IsDeleted: false, SourceAddress: not null } &&
                         e.SourceAddress.Street == referenceItem.SourceAddress.Street);
         results.Should().BeEquivalentTo(expected, options => options
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
@@ -476,7 +458,6 @@ public class SearchSpec
             .Where(e => e is { IsDeleted: false, SourceAddress: not null } &&
                         e.SourceAddress.Street2 == referenceItem.SourceAddress.Street2);
         results.Should().BeEquivalentTo(expected, options => options
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
@@ -501,7 +482,6 @@ public class SearchSpec
             .Where(e => e is { IsDeleted: false, SourceAddress: not null } &&
                         e.SourceAddress.City == referenceItem.SourceAddress.City);
         results.Should().BeEquivalentTo(expected, options => options
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
@@ -526,7 +506,6 @@ public class SearchSpec
             .Where(e => e is { IsDeleted: false, SourceAddress: not null } &&
                         e.SourceAddress.State == referenceItem.SourceAddress.State);
         results.Should().BeEquivalentTo(expected, options => options
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
@@ -551,7 +530,6 @@ public class SearchSpec
             .Where(e => e is { IsDeleted: false, SourceAddress: not null } &&
                         e.SourceAddress.PostalCode == referenceItem.SourceAddress.PostalCode);
         results.Should().BeEquivalentTo(expected, options => options
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
@@ -576,7 +554,6 @@ public class SearchSpec
             .Where(e => e is { IsDeleted: false } &&
                         e.CurrentOffice == referenceItem.CurrentOffice);
         results.Should().BeEquivalentTo(expected, options => options
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
@@ -601,7 +578,6 @@ public class SearchSpec
             .Where(e => e is { IsDeleted: false }
                         && e.CurrentOwner == referenceItem.CurrentOwner);
         results.Should().BeEquivalentTo(expected, options => options
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
@@ -627,7 +603,6 @@ public class SearchSpec
 
         // Assert
         results.Should().BeEquivalentTo(expected, options => options
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
@@ -653,7 +628,6 @@ public class SearchSpec
 
         // Assert
         results.Should().BeEquivalentTo(expected, options => options
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)

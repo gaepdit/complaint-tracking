@@ -12,7 +12,4 @@ public class Office : StandardNamedEntity
     internal Office(Guid id, string name) : base(id, name) { }
 
     public ApplicationUser? Assignor { get; set; }
-
-    [UsedImplicitly]
-    public ICollection<ApplicationUser> StaffMembers { get; set; } = new List<ApplicationUser>();
 }

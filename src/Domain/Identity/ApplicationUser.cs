@@ -1,4 +1,5 @@
 using Cts.Domain.Entities.Offices;
+using GaEpd.AppLibrary.Extensions;
 using Microsoft.AspNetCore.Identity;
 using System.Text;
 
@@ -24,20 +25,17 @@ public sealed class ApplicationUser : IdentityUser, IEntity<string>
 
     // Editable user/staff properties
     public const int MaxPhoneLength = 25;
-
-    [InverseProperty("StaffMembers")]
     public Office? Office { get; set; }
-
     public bool Active { get; set; } = true;
 
+    // Auditing properties
     public DateTimeOffset? AccountCreatedAt { get; init; }
     public DateTimeOffset? AccountUpdatedAt { get; set; }
     public DateTimeOffset? ProfileUpdatedAt { get; set; }
     public DateTimeOffset? MostRecentLogin { get; set; }
 
     // Display properties
-    public string SortableFullName =>
-        string.Join(", ", new[] { FamilyName, GivenName }.Where(s => !string.IsNullOrEmpty(s)));
+    public string SortableFullName => new[] { FamilyName, GivenName }.ConcatWithSeparator(", ");
 
     public string SortableNameWithInactive
     {
