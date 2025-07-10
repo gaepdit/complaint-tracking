@@ -27,6 +27,10 @@ public sealed class ApplicationUser : IdentityUser, IEntity<string>
     public const int MaxPhoneLength = 25;
     public Office? Office { get; set; }
     public bool Active { get; set; } = true;
+    
+    // Inverse of Office Assignor property (required for EF configuration)
+    [InverseProperty(nameof(Office.Assignor))]
+    public List<Office> AssignorForOffices { get; init; } = [];
 
     // Auditing properties
     public DateTimeOffset? AccountCreatedAt { get; init; }
