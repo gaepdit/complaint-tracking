@@ -177,9 +177,34 @@ html:not([data-bs-theme="dark"]) .bg-dark-subtle .text-danger-emphasis {
 
 .btn-img img {
     height: 25px;
+    margin-right: 2px;
+}
+
+.btn-img-bg {
     background: white;
     box-shadow: 0 0 1px white;
-    margin-right: 2px;
+}
+
+.btn-img svg {
+    fill: #222;
+    transition: fill .15s ease-in-out;
+    border-radius: 4px;
+}
+
+[data-bs-theme="dark"] .btn-img svg {
+    fill: #fff;
+}
+
+.btn:hover svg,
+.btn:active svg,
+.btn:focus-visible svg {
+    fill: var(--bs-btn-hover-color);
+}
+
+.btn-img svg.okta {
+    fill: #00297A !important;
+    background: #fff !important;
+    border-radius: 3px;
 }
 
 /* Additional text utilities

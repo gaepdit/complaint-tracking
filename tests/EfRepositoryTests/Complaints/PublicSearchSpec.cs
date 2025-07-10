@@ -32,7 +32,6 @@ public class PublicSearchSpec
 
         var expected = ComplaintData.GetComplaints.Where(e => !e.IsDeleted);
         results.Should().BeEquivalentTo(expected, opts => opts
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Attachments)
             .Excluding(e => e.Actions)
@@ -41,6 +40,10 @@ public class PublicSearchSpec
             .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
             .Excluding(e => e.ReviewedBy!.Office)
+            .Excluding(e => e.EnteredBy!.AssignorForOffices)
+            .Excluding(e => e.ReceivedBy!.AssignorForOffices)
+            .Excluding(e => e.CurrentOwner!.AssignorForOffices)
+            .Excluding(e => e.ReviewedBy!.AssignorForOffices)
         );
     }
 
@@ -59,13 +62,15 @@ public class PublicSearchSpec
         var expected = ComplaintData.GetComplaints
             .Where(e => e.ReceivedDate == _referenceItem.ReceivedDate && !e.IsDeleted);
         results.Should().BeEquivalentTo(expected, opts => opts
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
+            .Excluding(e => e.EnteredBy!.AssignorForOffices)
+            .Excluding(e => e.ReceivedBy!.AssignorForOffices)
+            .Excluding(e => e.CurrentOwner!.AssignorForOffices)
         );
     }
 
@@ -80,13 +85,15 @@ public class PublicSearchSpec
         var expected = ComplaintData.GetComplaints
             .Where(e => e.ComplaintNature == _referenceItem.ComplaintNature && !e.IsDeleted);
         results.Should().BeEquivalentTo(expected, opts => opts
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
+            .Excluding(e => e.EnteredBy!.AssignorForOffices)
+            .Excluding(e => e.ReceivedBy!.AssignorForOffices)
+            .Excluding(e => e.CurrentOwner!.AssignorForOffices)
         );
     }
 
@@ -101,7 +108,6 @@ public class PublicSearchSpec
         var expected = ComplaintData.GetComplaints
             .Where(e => e.PrimaryConcern.Id == _referenceItem.PrimaryConcern.Id && !e.IsDeleted);
         results.Should().BeEquivalentTo(expected, opts => opts
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
@@ -109,6 +115,9 @@ public class PublicSearchSpec
             .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
             .Excluding(e => e.Attachments)
+            .Excluding(e => e.EnteredBy!.AssignorForOffices)
+            .Excluding(e => e.ReceivedBy!.AssignorForOffices)
+            .Excluding(e => e.CurrentOwner!.AssignorForOffices)
         );
     }
 
@@ -123,13 +132,15 @@ public class PublicSearchSpec
         var expected = ComplaintData.GetComplaints
             .Where(e => e.SourceFacilityName == _referenceItem.SourceFacilityName && !e.IsDeleted);
         results.Should().BeEquivalentTo(expected, opts => opts
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
+            .Excluding(e => e.EnteredBy!.AssignorForOffices)
+            .Excluding(e => e.ReceivedBy!.AssignorForOffices)
+            .Excluding(e => e.CurrentOwner!.AssignorForOffices)
         );
     }
 
@@ -144,7 +155,6 @@ public class PublicSearchSpec
         var expected = ComplaintData.GetComplaints
             .Where(e => e.ComplaintCounty == _referenceItem.ComplaintCounty && !e.IsDeleted);
         results.Should().BeEquivalentTo(expected, opts => opts
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
@@ -153,6 +163,10 @@ public class PublicSearchSpec
             .Excluding(e => e.CurrentOwner!.Office)
             .Excluding(e => e.ReviewedBy!.Office)
             .Excluding(e => e.Attachments)
+            .Excluding(e => e.EnteredBy!.AssignorForOffices)
+            .Excluding(e => e.ReceivedBy!.AssignorForOffices)
+            .Excluding(e => e.CurrentOwner!.AssignorForOffices)
+            .Excluding(e => e.ReviewedBy!.AssignorForOffices)
         );
     }
 
@@ -169,13 +183,15 @@ public class PublicSearchSpec
                         && e.SourceAddress.Street == _referenceItem.SourceAddress.Street
                         && !e.IsDeleted);
         results.Should().BeEquivalentTo(expected, opts => opts
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
+            .Excluding(e => e.EnteredBy!.AssignorForOffices)
+            .Excluding(e => e.ReceivedBy!.AssignorForOffices)
+            .Excluding(e => e.CurrentOwner!.AssignorForOffices)
         );
     }
 
@@ -193,13 +209,15 @@ public class PublicSearchSpec
                         && e.SourceAddress.Street2 == _referenceItem.SourceAddress.Street2
                         && !e.IsDeleted);
         results.Should().BeEquivalentTo(expected, opts => opts
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
+            .Excluding(e => e.EnteredBy!.AssignorForOffices)
+            .Excluding(e => e.ReceivedBy!.AssignorForOffices)
+            .Excluding(e => e.CurrentOwner!.AssignorForOffices)
         );
     }
 
@@ -216,13 +234,15 @@ public class PublicSearchSpec
                         && e.SourceAddress.City == _referenceItem.SourceAddress.City
                         && !e.IsDeleted);
         results.Should().BeEquivalentTo(expected, opts => opts
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
+            .Excluding(e => e.EnteredBy!.AssignorForOffices)
+            .Excluding(e => e.ReceivedBy!.AssignorForOffices)
+            .Excluding(e => e.CurrentOwner!.AssignorForOffices)
         );
     }
 
@@ -239,13 +259,15 @@ public class PublicSearchSpec
                         && e.SourceAddress.State == _referenceItem.SourceAddress.State
                         && !e.IsDeleted);
         results.Should().BeEquivalentTo(expected, opts => opts
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
+            .Excluding(e => e.EnteredBy!.AssignorForOffices)
+            .Excluding(e => e.ReceivedBy!.AssignorForOffices)
+            .Excluding(e => e.CurrentOwner!.AssignorForOffices)
         );
     }
 
@@ -263,13 +285,15 @@ public class PublicSearchSpec
                         && e.SourceAddress.PostalCode == _referenceItem.SourceAddress.PostalCode
                         && !e.IsDeleted);
         results.Should().BeEquivalentTo(expected, opts => opts
-            .Excluding(e => e.CurrentOffice.StaffMembers)
             .Excluding(e => e.CurrentOffice.Assignor)
             .Excluding(e => e.Actions)
             .Excluding(e => e.ComplaintTransitions)
             .Excluding(e => e.EnteredBy!.Office)
             .Excluding(e => e.ReceivedBy!.Office)
             .Excluding(e => e.CurrentOwner!.Office)
+            .Excluding(e => e.EnteredBy!.AssignorForOffices)
+            .Excluding(e => e.ReceivedBy!.AssignorForOffices)
+            .Excluding(e => e.CurrentOwner!.AssignorForOffices)
         );
     }
 }
