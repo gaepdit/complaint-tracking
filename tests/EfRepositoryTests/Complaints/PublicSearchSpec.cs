@@ -5,6 +5,7 @@ using Cts.TestData;
 
 namespace EfRepositoryTests.Complaints;
 
+[Platform("Win")]
 public class PublicSearchSpec
 {
     private IComplaintRepository _repository;

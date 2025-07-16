@@ -130,6 +130,7 @@ public class SearchSpec
     }
 
     [Test]
+    [Platform("Win")]
     public async Task ClosedDateSpec_ReturnsFilteredList()
     {
         await using var repository = RepositoryHelper.CreateSqlServerRepositoryHelper(this).GetComplaintRepository();
@@ -160,6 +161,7 @@ public class SearchSpec
     }
 
     [Test]
+    [Platform("Win")]
     public async Task ReceivedDateSpec_ReturnsFilteredList()
     {
         await using var repository = RepositoryHelper.CreateSqlServerRepositoryHelper(this).GetComplaintRepository();
