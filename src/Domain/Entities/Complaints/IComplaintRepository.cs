@@ -48,7 +48,7 @@ public interface IComplaintRepository : IRepository<Complaint, int>
     /// <param name="token"><see cref="T:System.Threading.CancellationToken"/></param>
     /// <returns>A read-only collection of Complaints with the most recent Action for each.</returns>
     Task<IReadOnlyCollection<Complaint>> GetListWithMostRecentActionAsync(Expression<Func<Complaint, bool>> predicate,
-        string sorting = "", CancellationToken token = default);
+        string sorting, CancellationToken token = default);
 
     // Transitions
 

@@ -3,7 +3,7 @@ using Cts.Domain.Entities.ComplaintActions;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.TestData;
-using GaEpd.AppLibrary.Pagination;
+using GaEpd.AppLibrary.Extensions;
 using System.Linq.Expressions;
 
 namespace Cts.LocalRepository.Repositories;
@@ -19,16 +19,18 @@ public sealed class LocalComplaintRepository(
 
     public async Task<Complaint?> FindIncludeAllAsync(int id, bool includeDeletedActions = false,
         CancellationToken token = default) =>
-        await GetComplaintDetailsAsync(await FindAsync(id, token: token).ConfigureAwait(false), includeDeletedActions, token: token)
+        await GetComplaintDetailsAsync(await FindAsync(id, token: token).ConfigureAwait(false), includeDeletedActions,
+                token: token)
             .ConfigureAwait(false);
 
     public async Task<Complaint?> FindPublicAsync(Expression<Func<Complaint, bool>> predicate,
         CancellationToken token = default) =>
-        await GetComplaintDetailsAsync(await FindAsync(predicate, token: token).ConfigureAwait(false), false, token: token)
+        await GetComplaintDetailsAsync(await FindAsync(predicate, token: token).ConfigureAwait(false), false,
+                token: token)
             .ConfigureAwait(false);
 
     public Task<IReadOnlyCollection<Complaint>> GetListWithMostRecentActionAsync(
-        Expression<Func<Complaint, bool>> predicate, string sorting = "", CancellationToken token = default)
+        Expression<Func<Complaint, bool>> predicate, string sorting, CancellationToken token = default)
     {
         var complaints = Items.Where(predicate.Compile()).AsQueryable().OrderByIf(sorting);
 

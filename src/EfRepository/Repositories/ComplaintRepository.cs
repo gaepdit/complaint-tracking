@@ -1,6 +1,6 @@
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.ComplaintTransitions;
-using GaEpd.AppLibrary.Pagination;
+using GaEpd.AppLibrary.Extensions;
 using System.Linq.Expressions;
 
 namespace Cts.EfRepository.Repositories;
@@ -62,7 +62,7 @@ public sealed class ComplaintRepository(AppDbContext context)
     }
 
     public async Task<IReadOnlyCollection<Complaint>> GetListWithMostRecentActionAsync(
-        Expression<Func<Complaint, bool>> predicate, string sorting = "", CancellationToken token = default) =>
+        Expression<Func<Complaint, bool>> predicate, string sorting, CancellationToken token = default) =>
         await Context.Complaints.AsNoTracking().Where(predicate).OrderByIf(sorting)
             .Include(complaint => complaint.Actions
                 .Where(action => !action.IsDeleted)

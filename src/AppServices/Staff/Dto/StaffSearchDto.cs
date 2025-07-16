@@ -4,8 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Cts.AppServices.Staff.Dto;
 
-public record StaffSearchDto
-(
+public record StaffSearchDto(
     // Sorting
     SortBy Sort,
 
@@ -47,14 +46,14 @@ public enum SearchStaffStatus
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum SortBy
 {
-    [Description("FamilyName, GivenName")] NameAsc,
+    [Description("FamilyName, GivenName, Id")] NameAsc,
 
-    [Description("FamilyName desc, GivenName desc")]
+    [Description("FamilyName desc, GivenName desc, Id")]
     NameDesc,
 
-    [Description("Office.Name, FamilyName, GivenName")]
+    [Description("Office.Name, FamilyName, GivenName, Id")]
     OfficeAsc,
 
-    [Description("Office.Name desc, FamilyName, GivenName")]
+    [Description("Office.Name desc, FamilyName, GivenName, Id")]
     OfficeDesc,
 }

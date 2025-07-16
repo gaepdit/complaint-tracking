@@ -18,7 +18,7 @@ public class IndexTests
         officeServiceMock.GetAsListItemsAsync(Arg.Any<bool>(), Arg.Any<CancellationToken>())
             .Returns(new List<ListItem>());
 
-        var paging = new PaginatedRequest(1, 1);
+        var paging = new PaginatedRequest(1, 1, "Id");
         var output = new PaginatedResult<StaffSearchResultDto>(new List<StaffSearchResultDto>(), 1, paging);
         var staffServiceMock = Substitute.For<IStaffService>();
         staffServiceMock.SearchAsync(Arg.Any<StaffSearchDto>(), Arg.Any<PaginatedRequest>()).Returns(output);
