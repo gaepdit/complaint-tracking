@@ -555,3 +555,5 @@ appsettings.*.json
 
 # Code coverage report from ReportGenerator
 coveragereport/
+
+.idea/.idea.complaint-tracking/.idea/misc.xml
