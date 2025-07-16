@@ -11,28 +11,6 @@ public sealed class ComplaintRepository(AppDbContext context)
     // Entity Framework will set the ID automatically.
     public int? GetNextId() => null;
 
-    public async Task<Complaint?> FindIncludeAllAsync(int id, bool includeDeletedActions = false,
-        CancellationToken token = default) =>
-        await Context.Complaints
-            .Include(complaint => complaint.DeletedBy)
-            .Include(complaint => complaint.Attachments
-                .Where(attachment => !attachment.IsDeleted)
-                .OrderBy(attachment => attachment.UploadedDate)
-                .ThenBy(attachment => attachment.Id)
-            )
-            .Include(complaint => complaint.Actions
-                .Where(action => !action.IsDeleted || includeDeletedActions)
-                .OrderByDescending(action => action.ActionDate)
-                .ThenByDescending(action => action.EnteredDate)
-                .ThenBy(action => action.Id)
-            ).ThenInclude(action => action.DeletedBy)
-            .Include(complaint => complaint.ComplaintTransitions
-                .OrderBy(transition => transition.CommittedDate)
-                .ThenBy(transition => transition.Id)
-            )
-            .AsSplitQuery()
-            .SingleOrDefaultAsync(complaint => complaint.Id.Equals(id), token).ConfigureAwait(false);
-
     public async Task<Complaint?> FindPublicAsync(Expression<Func<Complaint, bool>> predicate,
         CancellationToken token = default)
     {

@@ -29,19 +29,12 @@ public class DeleteActionModel(
         if (actionId is null) return RedirectToPage("Index");
 
         var actionItem = await actionService.FindAsync(actionId.Value);
-        if (actionItem is null) return NotFound();
+        if (actionItem is null || actionItem.IsDeleted) return NotFound();
 
-        var complaintView = await complaintService.FindAsync(actionItem.ComplaintId);
+        var complaintView = await complaintService.FindAsync(actionItem.ComplaintId, includeDeleted: true);
         if (complaintView is null) return NotFound();
 
         if (!await UserCanDeleteActionItemsAsync(complaintView)) return Forbid();
-
-        if (actionItem.IsDeleted)
-        {
-            TempData.SetDisplayMessage(DisplayMessage.AlertContext.Warning,
-                "Complaint Action cannot be deleted because it is already deleted.");
-            return RedirectToPage("../Complaints/Details", routeValues: new { complaintView.Id });
-        }
 
         ActionItemView = actionItem;
         ActionItemId = actionId.Value;

@@ -29,4 +29,5 @@ public record AttachmentViewDto
 
     public bool IsImage { get; init; }
     public bool IsForPublic { get; set; }
+    public bool IsDeleted { get; init; }
 }

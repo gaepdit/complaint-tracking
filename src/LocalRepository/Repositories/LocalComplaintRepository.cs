@@ -17,12 +17,6 @@ public sealed class LocalComplaintRepository(
     // Local repository requires ID to be manually set.
     public int? GetNextId() => Items.Select(e => e.Id).Max() + 1;
 
-    public async Task<Complaint?> FindIncludeAllAsync(int id, bool includeDeletedActions = false,
-        CancellationToken token = default) =>
-        await GetComplaintDetailsAsync(await FindAsync(id, token: token).ConfigureAwait(false), includeDeletedActions,
-                token: token)
-            .ConfigureAwait(false);
-
     public async Task<Complaint?> FindPublicAsync(Expression<Func<Complaint, bool>> predicate,
         CancellationToken token = default) =>
         await GetComplaintDetailsAsync(await FindAsync(predicate, token: token).ConfigureAwait(false), false,

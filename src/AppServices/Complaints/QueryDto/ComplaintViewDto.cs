@@ -158,10 +158,10 @@ public record ComplaintViewDto
     [UsedImplicitly]
     public List<ComplaintTransitionViewDto> ComplaintTransitions { get; } = [];
 
+    // === Calculated properties ===
+
     public DateTimeOffset? EarliestTransition =>
         ComplaintTransitions.Count > 0 ? ComplaintTransitions[0].CommittedDate : null;
-
-    // === Calculated properties ===
 
     public bool IsPublic => ComplaintClosed && !IsDeleted;
 }

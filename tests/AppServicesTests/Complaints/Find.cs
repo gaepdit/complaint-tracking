@@ -1,5 +1,7 @@
-﻿using Cts.AppServices.Attachments;
+﻿using AutoMapper;
+using Cts.AppServices.Attachments;
 using Cts.AppServices.Complaints;
+using Cts.AppServices.Complaints.QueryDto;
 using Cts.AppServices.IdentityServices;
 using Cts.AppServices.Notifications;
 using Cts.Domain.Entities.Complaints;
@@ -9,6 +11,7 @@ using Cts.Domain.Identity;
 using Cts.TestData.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
+using System.Linq.Expressions;
 using System.Security.Claims;
 
 namespace AppServicesTests.Complaints;
@@ -21,10 +24,11 @@ public class Find
     public async Task WhenItemExists_ReturnsViewDto()
     {
         // Arrange
-        var item = new Complaint(1);
+        var item = new ComplaintViewDto { Id = 1 };
 
         var repoMock = Substitute.For<IComplaintRepository>();
-        repoMock.FindIncludeAllAsync(Arg.Any<int>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
+        repoMock.FindAsync<ComplaintViewDto>(Arg.Any<Expression<Func<Complaint, bool>>>(), Arg.Any<IMapper>(),
+                Arg.Any<CancellationToken>())
             .Returns(item);
 
         var userServiceMock = Substitute.For<IUserService>();
@@ -52,11 +56,11 @@ public class Find
     public async Task WhenNonPublicItemExists_ReturnsViewDto()
     {
         // Arrange
-        var item = new Complaint(1);
-        item.SetDeleted(null);
+        var item = new ComplaintViewDto { Id = 1, IsDeleted = true };
 
         var repoMock = Substitute.For<IComplaintRepository>();
-        repoMock.FindIncludeAllAsync(Arg.Any<int>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
+        repoMock.FindAsync<ComplaintViewDto>(Arg.Any<Expression<Func<Complaint, bool>>>(), Arg.Any<IMapper>(),
+                Arg.Any<CancellationToken>())
             .Returns(item);
 
         var userServiceMock = Substitute.For<IUserService>();
@@ -85,8 +89,9 @@ public class Find
     {
         // Arrange
         var repoMock = Substitute.For<IComplaintRepository>();
-        repoMock.FindIncludeAllAsync(Arg.Any<int>(), Arg.Any<bool>(), Arg.Any<CancellationToken>())
-            .Returns((Complaint?)null);
+        repoMock.FindAsync<ComplaintViewDto>(Arg.Any<Expression<Func<Complaint, bool>>>(), Arg.Any<IMapper>(),
+                Arg.Any<CancellationToken>())
+            .Returns((ComplaintViewDto?)null);
 
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
