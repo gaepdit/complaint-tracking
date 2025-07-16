@@ -1,5 +1,6 @@
 ﻿using Cts.AppServices.Complaints;
 using Cts.AppServices.Complaints.QueryDto;
+using GaEpd.AppLibrary.Extensions;
 using GaEpd.AppLibrary.Pagination;
 
 namespace Cts.WebApp.Api;
@@ -14,7 +15,8 @@ public class ComplaintApiController(IComplaintService complaintService) : Contro
         [FromQuery] ComplaintPublicSearchDto spec,
         [FromQuery] ushort page = 1,
         [FromQuery] ushort pageSize = 25) =>
-        await complaintService.PublicSearchAsync(spec, new PaginatedRequest(page, pageSize));
+        await complaintService.PublicSearchAsync(spec,
+            new PaginatedRequest(page, pageSize, spec.Sort.GetDescription()));
 
     [HttpGet("{id:int}")]
     public async Task<ActionResult<ComplaintPublicViewDto>> GetComplaintAsync([FromRoute] int id)
