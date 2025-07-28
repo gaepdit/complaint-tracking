@@ -39,13 +39,12 @@ public sealed class ActionService(
     }
 
     public async Task<ActionViewDto?> FindAsync(Guid id, CancellationToken token = default) =>
-        mapper.Map<ActionViewDto>(await actionRepository.FindIncludeAllAsync(action => action.Id == id, token: token)
-            .ConfigureAwait(false));
+        await actionRepository.FindAsync<ActionViewDto>(id, mapper, token: token)
+            .ConfigureAwait(false);
 
     public async Task<ActionUpdateDto?> FindForUpdateAsync(Guid id, CancellationToken token = default) =>
-        mapper.Map<ActionUpdateDto>(
-            await actionRepository.FindIncludeAllAsync(action => action.Id == id && !action.IsDeleted, token: token)
-                .ConfigureAwait(false));
+        await actionRepository.FindAsync<ActionUpdateDto>(id, mapper, token: token)
+            .ConfigureAwait(false);
 
     public async Task<IPaginatedResult<ActionSearchResultDto>> SearchAsync(ActionSearchDto spec,
         PaginatedRequest paging, CancellationToken token = default)

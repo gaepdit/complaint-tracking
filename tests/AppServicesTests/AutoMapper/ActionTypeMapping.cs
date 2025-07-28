@@ -13,12 +13,10 @@ public class ActionTypeMapping
 
         var result = AppServicesTestsSetup.Mapper!.Map<ActionTypeViewDto>(item);
 
-        using (new AssertionScope())
-        {
-            result.Id.Should().Be(item.Id);
-            result.Name.Should().Be(item.Name);
-            result.Active.Should().BeTrue();
-        }
+        using var scope = new AssertionScope();
+        result.Id.Should().Be(item.Id);
+        result.Name.Should().Be(item.Name);
+        result.Active.Should().BeTrue();
     }
 
     [Test]

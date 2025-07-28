@@ -23,7 +23,7 @@ public class PublicSearch
         // Arrange
         var itemList = new ReadOnlyCollection<Complaint>(ComplaintData.GetComplaints.ToList());
         var count = ComplaintData.GetComplaints.Count();
-        var paging = new PaginatedRequest(1, 100);
+        var paging = new PaginatedRequest(1, 100, "Id");
 
         var repoMock = Substitute.For<IComplaintRepository>();
         repoMock.GetPagedListAsync(Arg.Any<Expression<Func<Complaint, bool>>>(),
@@ -53,7 +53,7 @@ public class PublicSearch
         // Arrange
         var itemList = new ReadOnlyCollection<Complaint>(new List<Complaint>());
         const int count = 0;
-        var paging = new PaginatedRequest(1, 100);
+        var paging = new PaginatedRequest(1, 100, "Id");
 
         var repoMock = Substitute.For<IComplaintRepository>();
         repoMock.GetPagedListAsync(Arg.Any<Expression<Func<Complaint, bool>>>(),
