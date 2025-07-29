@@ -1,13 +1,11 @@
-using JetBrains.Annotations;
-
 namespace Cts.WebApp.Platform.Settings;
 
 internal static partial class AppSettings
 {
-    public static DevSettingsSection DevSettings { get; set; } = new();
+    public static DevSettingsSection DevSettings { get; private set; } = new();
 
     // PROD configuration settings
-    public static readonly DevSettingsSection ProductionDefault = new()
+    private static readonly DevSettingsSection ProductionDefault = new()
     {
         UseDevSettings = false,
         BuildDatabase = true,
@@ -20,7 +18,6 @@ internal static partial class AppSettings
     };
 
     // DEV configuration settings
-    [UsedImplicitly(ImplicitUseTargetFlags.Members)]
     public record DevSettingsSection
     {
         /// <summary>
@@ -65,5 +62,18 @@ internal static partial class AppSettings
         /// Use WebOptimizer to bundle and minify CSS and JS files (`true`).
         /// </summary>
         public bool EnableWebOptimizerInDev { get; init; }
+    }
+
+    private static IHostApplicationBuilder BindDevAppSettings(this IHostApplicationBuilder builder)
+    {
+        // Dev settings should only be used in the development environment and when explicitly enabled.
+        var devConfig = builder.Configuration.GetSection(nameof(DevSettings));
+        var useDevConfig = builder.Environment.IsDevelopment() && devConfig.Exists() &&
+                           Convert.ToBoolean(devConfig[nameof(DevSettings.UseDevSettings)]);
+
+        if (useDevConfig) devConfig.Bind(DevSettings);
+        else DevSettings = ProductionDefault;
+
+        return builder;
     }
 }

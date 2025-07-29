@@ -15,10 +15,10 @@ public class LogoutModel(SignInManager<ApplicationUser> signInManager) : PageMod
 
     private async Task<SignOutResult> SignOut()
     {
-        var authenticationProperties = new AuthenticationProperties { RedirectUri = "/Index" };
+        var authenticationProperties = new AuthenticationProperties { RedirectUri = "../" };
         var userAuthenticationScheme = User.GetAuthenticationMethod();
 
-        if (userAuthenticationScheme == LoginProviders.TestUserScheme)
+        if (userAuthenticationScheme is null or LoginProviders.TestUserScheme)
         {
             await signInManager.SignOutAsync();
             return SignOut(authenticationProperties);
@@ -26,8 +26,7 @@ public class LogoutModel(SignInManager<ApplicationUser> signInManager) : PageMod
 
         List<string> authenticationSchemes = [CookieAuthenticationDefaults.AuthenticationScheme];
 
-        if (userAuthenticationScheme != null)
-            authenticationSchemes.AddRange([IdentityConstants.ApplicationScheme, userAuthenticationScheme]);
+        authenticationSchemes.AddRange([IdentityConstants.ApplicationScheme, userAuthenticationScheme]);
 
         return SignOut(authenticationProperties, authenticationSchemes.ToArray());
     }

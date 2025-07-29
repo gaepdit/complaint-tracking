@@ -9,11 +9,8 @@ namespace Cts.WebApp.Platform.OrgNotifications;
 
 public static class OrgNotificationsServiceExtensions
 {
-    public static void AddOrgNotifications(this IServiceCollection services)
-    {
-        services.AddHttpClient();
-        services.AddScoped<IOrgNotifications, OrgNotifications>();
-    }
+    public static void AddOrgNotifications(this IServiceCollection services) =>
+        services.AddHttpClient().AddScoped<IOrgNotifications, OrgNotifications>();
 }
 
 public interface IOrgNotifications
@@ -27,7 +24,7 @@ public record OrgNotification
 }
 
 public class OrgNotifications(
-    IHttpClientFactory httpClientFactory,
+    IHttpClientFactory http,
     IMemoryCache cache,
     ILogger<OrgNotifications> logger) : IOrgNotifications
 {
@@ -44,7 +41,7 @@ public class OrgNotifications(
 
         try
         {
-            notifications = await httpClientFactory.FetchApiDataAsync<List<OrgNotification>>(
+            notifications = await http.FetchApiDataAsync<List<OrgNotification>>(
                 AppSettings.OrgNotificationsApiUrl, ApiEndpoint, "NotificationsClient") ?? [];
         }
         catch (Exception ex)
