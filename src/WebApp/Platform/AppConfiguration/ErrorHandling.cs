@@ -1,6 +1,5 @@
 ﻿using Cts.WebApp.Platform.Settings;
 using Mindscape.Raygun4Net.AspNetCore;
-using Mindscape.Raygun4Net.Extensions.Logging;
 
 namespace Cts.WebApp.Platform.AppConfiguration;
 
@@ -18,11 +17,6 @@ internal static class ErrorHandling
             options.EnvironmentVariables.Add("ASPNETCORE_*");
         });
         builder.Services.AddRaygunUserProvider();
-        builder.Logging.AddRaygunLogger(options =>
-        {
-            options.MinimumLogLevel = LogLevel.Warning;
-            options.OnlyLogExceptions = false;
-        });
     }
 
     public static WebApplication UseErrorHandling(this WebApplication app)
