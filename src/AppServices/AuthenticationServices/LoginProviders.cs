@@ -6,7 +6,7 @@ public static class LoginProviderValidation
 {
     private static IEnumerable<LoginProvider>? _loginProviders;
     private static IEnumerable<string>? _loginProviderNames;
-    private const string EnabledLoginProviders = "EnabledLoginProviders";
+    private const string EnabledLoginProviders = nameof(EnabledLoginProviders);
 
     private static IEnumerable<LoginProvider> LoginProviders(this IConfiguration configuration)
     {

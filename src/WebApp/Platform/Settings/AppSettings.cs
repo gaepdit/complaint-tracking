@@ -8,17 +8,10 @@ internal static partial class AppSettings
 {
     // Support settings
     public static string? Version { get; private set; }
-    public static Support SupportSettings { get; } = new();
+    public static Support Support { get; } = new();
+    public static EntraIdPhaseOut EntraIdPhaseOut { get; } = new();
     public static Raygun RaygunSettings { get; } = new();
     public static string? OrgNotificationsApiUrl { get; private set; }
-
-    [UsedImplicitly(ImplicitUseTargetFlags.Members)]
-    public record Support
-    {
-        public string? CustomerSupportEmail { get; init; }
-        public string? TechnicalSupportEmail { get; init; }
-        public string? TechnicalSupportSite { get; init; }
-    }
 
     public record Raygun
     {
@@ -28,4 +21,17 @@ internal static partial class AppSettings
     // Attachment File Service configuration
     public static IAttachmentService.AttachmentServiceConfig AttachmentServiceConfig { get; } =
         new(GlobalConstants.AttachmentsFolder, GlobalConstants.ThumbnailsFolder, GlobalConstants.ThumbnailSize);
+}
+
+public record Support
+{
+    public string? CustomerSupportEmail { get; [UsedImplicitly] init; }
+    public string? TechnicalSupportEmail { get; [UsedImplicitly] init; }
+    public string? TechnicalSupportSite { get; [UsedImplicitly] init; }
+}
+
+public record EntraIdPhaseOut
+{
+    public bool Enabled { get; [UsedImplicitly] init; }
+    public DateOnly EndDate { get; [UsedImplicitly] init; }
 }

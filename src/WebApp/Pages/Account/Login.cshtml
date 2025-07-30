@@ -75,12 +75,14 @@
                         </button>
                     </form>
 
-                    @if (Model.LoginProviderNames.Contains(LoginProviders.OktaScheme))
+                    @if (Model.LoginProviderNames.Contains(LoginProviders.OktaScheme) && AppSettings.EntraIdPhaseOut.Enabled)
                     {
-                        <div class="callout callout-warning">
-                            The work account login is being phased out for EPD-IT applications and will be completely
-                            removed by 12/1/2025. Please create an Okta account. For more information or technical
-                            support, contact EPD-IT.
+                        var cssClass = DateOnly.FromDateTime(DateTime.Today) > AppSettings.EntraIdPhaseOut.EndDate.AddDays(-30) ? "callout-danger" : "callout-warning";
+                        <div class="callout @cssClass">
+                            The SOG work account login is being phased out for EPD-IT applications and will be
+                            completely removed by @AppSettings.EntraIdPhaseOut.EndDate.ToLongDateString().
+                            Please create and start using an Okta account. For more information or technical support,
+                            <a href="@AppSettings.Support.TechnicalSupportSite">contact EPD-IT</a>.
                         </div>
                     }
                 </div>
