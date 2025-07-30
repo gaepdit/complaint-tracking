@@ -2,6 +2,7 @@
     <PropertyGroup>
         <InformationalVersion>2025.6.26</InformationalVersion>
         <RootNamespace>Cts.WebApp</RootNamespace>
+        <AssemblyName>Cts.WebApp</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
