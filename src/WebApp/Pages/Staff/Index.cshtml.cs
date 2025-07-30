@@ -39,8 +39,6 @@ public class DashboardIndexModel(
     public async Task<PageResult> BuildDashboardAsync(CancellationToken token)
     {
         var user = await staffService.GetCurrentUserAsync();
-        var officeName = user.Office?.Name;
-        var officeId = user.Office?.Id ?? Guid.Empty;
 
         IsStaff = await authorization.Succeeded(User, Policies.StaffUser);
         if (IsStaff)
@@ -56,18 +54,24 @@ public class DashboardIndexModel(
         {
             MgrReviewPending = new DashboardCard("My complaints to review")
                 { Complaints = await complaintService.GetReviewPendingComplaintsForUserAsync(user.Id, token: token) };
-            MgrUnassignedComplaints = new DashboardCard($"Complaints in {officeName} that have not been assigned")
-                { Complaints = await complaintService.GetUnassignedComplaintsForOfficeAsync(officeId, token: token) };
+            MgrUnassignedComplaints = new DashboardCard($"Complaints in {user.OfficeName} that have not been assigned")
+            {
+                Complaints =
+                    await complaintService.GetUnassignedComplaintsForOfficeAsync(user.OfficeId ?? Guid.Empty,
+                        token: token)
+            };
             MgrUnacceptedComplaints =
-                new DashboardCard($"Complaints in {officeName} that have been assigned but not accepted")
+                new DashboardCard($"Complaints in {user.OfficeName} that have been assigned but not accepted")
                 {
-                    Complaints = await complaintService.GetUnacceptedComplaintsForOfficeAsync(officeId, token: token)
+                    Complaints =
+                        await complaintService.GetUnacceptedComplaintsForOfficeAsync(user.OfficeId ?? Guid.Empty,
+                            token: token)
                 };
         }
 
         var assignorOfficeList =
             (await officeService.GetOfficesForAssignorAsync(user.Id, ignoreOffice: null, token: token))
-            .Where(office => office.Id != officeId).ToList();
+            .Where(office => office.Id != (user.OfficeId ?? Guid.Empty)).ToList();
 
         if (assignorOfficeList.Count == 0) return Page();
 

@@ -1,6 +1,5 @@
 ﻿using Cts.AppServices.Complaints.Permissions;
 using Cts.AppServices.Complaints.QueryDto;
-using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
@@ -69,7 +68,7 @@ public class ComplaintViewPermissions
         var resource = new ComplaintViewDto
         {
             EnteredDate = DateTimeOffset.Now.AddMinutes(-30),
-            EnteredBy = new StaffViewDto { Id = Guid.Empty.ToString() },
+            EnteredById = Guid.Empty.ToString(),
         };
         var context = new AuthorizationHandlerContext(requirements, user, resource);
         var handler = new ComplaintViewRequirement();
@@ -92,8 +91,9 @@ public class ComplaintViewPermissions
         var resource = new ComplaintViewDto
         {
             EnteredDate = DateTimeOffset.Now.AddMinutes(-90),
-            EnteredBy = new StaffViewDto { Id = Guid.Empty.ToString() },
+            EnteredById = Guid.Empty.ToString(),
         };
+
         var context = new AuthorizationHandlerContext(requirements, user, resource);
         var handler = new ComplaintViewRequirement();
 

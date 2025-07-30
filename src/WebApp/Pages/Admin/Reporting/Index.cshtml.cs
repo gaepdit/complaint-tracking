@@ -195,7 +195,7 @@ public class ReportingIndexModel(
     {
         OfficeSelectList = (await officeService.GetAsListItemsAsync(token: token)).ToSelectList();
         Office = office ??
-                 (await staffService.GetCurrentUserAsync()).Office?.Id ??
+                 (await staffService.GetCurrentUserAsync()).OfficeId ??
                  (await officeService.GetListAsync(token)).FirstOrDefault()?.Id ??
                  Guid.Empty;
     }

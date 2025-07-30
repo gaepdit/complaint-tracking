@@ -15,7 +15,8 @@ public class EditTests
         FamilyName = TextData.ValidName,
         GivenName = TextData.ValidName,
         Email = TextData.ValidEmail,
-        Office = OfficeViewTest,
+        OfficeId = OfficeViewTest.Id,
+        OfficeName = OfficeViewTest.Name,
         Active = true,
     };
 

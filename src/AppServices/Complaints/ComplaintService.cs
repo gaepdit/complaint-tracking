@@ -50,7 +50,6 @@ public sealed class ComplaintService(
 
     // Staff read methods
 
-    // TODO: Simplify the ComplaintViewDto to only include required simple properties. 
     public async Task<ComplaintViewDto?> FindAsync(int id, bool includeDeleted = false,
         CancellationToken token = default)
     {
@@ -246,7 +245,7 @@ public sealed class ComplaintService(
     {
         var result = new ComplaintAssignResult();
 
-        if (resource.OfficeId == currentComplaint.CurrentOffice?.Id &&
+        if (resource.OfficeId == currentComplaint.CurrentOfficeId &&
             resource.OwnerId == currentComplaint.CurrentOwner?.Id)
             return result;
 

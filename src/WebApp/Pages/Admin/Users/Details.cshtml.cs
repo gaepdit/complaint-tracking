@@ -9,7 +9,6 @@ namespace Cts.WebApp.Pages.Admin.Users;
 public class DetailsModel : PageModel
 {
     public StaffViewDto DisplayStaff { get; private set; } = null!;
-    public string? OfficeName => DisplayStaff.Office?.Name;
     public IReadOnlyList<AppRole> Roles { get; private set; } = null!;
     public bool IsUserAdministrator { get; private set; }
 
