@@ -1,4 +1,4 @@
-﻿using Cts.AppServices.IdentityServices.Roles;
+﻿using Cts.AppServices.AuthenticationServices.Claims;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Cts.AppServices.AuthorizationPolicies.Requirements;

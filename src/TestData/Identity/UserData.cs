@@ -4,16 +4,17 @@ namespace Cts.TestData.Identity;
 
 internal static partial class UserData
 {
-    private static IEnumerable<ApplicationUser> UserSeedItems => new List<ApplicationUser>
-    {
+    public const string TestUserId = "00000000-0000-0000-0000-000000000001";
+
+    private static IEnumerable<ApplicationUser> UserSeedItems =>
+    [
         new() // 0
         {
-            Id = "00000000-0000-0000-0000-000000000001",
+            Id = TestUserId,
             GivenName = "Test",
             FamilyName = "User1",
             Email = "test.user@example.net",
             Office = OfficeData.GetOffices.ElementAt(0),
-            ObjectIdentifier = Guid.NewGuid().ToString(),
         },
         new() // 1
         {
@@ -22,7 +23,6 @@ internal static partial class UserData
             FamilyName = "User2",
             Email = "another.user2@example.net",
             Office = OfficeData.GetOffices.ElementAt(1),
-            ObjectIdentifier = Guid.NewGuid().ToString(),
         },
         new() // 2
         {
@@ -32,9 +32,8 @@ internal static partial class UserData
             Email = "inactive.user@example.net",
             Active = false,
             Office = OfficeData.GetOffices.ElementAt(0),
-            ObjectIdentifier = Guid.NewGuid().ToString(),
         },
-    };
+    ];
 
     private static List<ApplicationUser>? _users;
 

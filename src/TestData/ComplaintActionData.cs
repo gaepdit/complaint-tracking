@@ -6,8 +6,8 @@ namespace Cts.TestData;
 
 internal static class ComplaintActionData
 {
-    private static IEnumerable<ComplaintAction> ComplaintActionSeedItems => new List<ComplaintAction>
-    {
+    private static IEnumerable<ComplaintAction> ComplaintActionSeedItems =>
+    [
         new(new Guid("30000000-0000-0000-0000-000000000001"), // 0
             ComplaintData.GetComplaints.ElementAt(0),
             ActionTypeData.GetActionTypes.ElementAt(0))
@@ -18,6 +18,7 @@ internal static class ComplaintActionData
             EnteredBy = UserData.GetUsers.ElementAt(1),
             Comments = $"Email: {TextData.ValidEmail} & Phone: {TextData.ValidPhoneNumber}",
         },
+
         new(new Guid("30000000-0000-0000-0000-000000000002"), // 1
             ComplaintData.GetComplaints.ElementAt(0),
             ActionTypeData.GetActionTypes.ElementAt(1))
@@ -28,6 +29,7 @@ internal static class ComplaintActionData
             EnteredBy = UserData.GetUsers.ElementAt(0),
             Comments = TextData.EmojiWord,
         },
+
         new(new Guid("30000000-0000-0000-0000-000000000003"), // 2
             ComplaintData.GetComplaints.ElementAt(0),
             ActionTypeData.GetActionTypes.ElementAt(5))
@@ -38,6 +40,7 @@ internal static class ComplaintActionData
             EnteredBy = UserData.GetUsers.ElementAt(1),
             Comments = TextData.MultipleParagraphs,
         },
+
         new(new Guid("30000000-0000-0000-0000-000000000004"), // 3
             ComplaintData.GetComplaints.ElementAt(0),
             ActionTypeData.GetActionTypes.ElementAt(7))
@@ -48,6 +51,7 @@ internal static class ComplaintActionData
             EnteredBy = UserData.GetUsers.ElementAt(0),
             Comments = TextData.Phrase,
         },
+
         new(new Guid("30000000-0000-0000-0000-000000000005"), // 4
             ComplaintData.GetComplaints.ElementAt(3),
             ActionTypeData.GetActionTypes.ElementAt(0))
@@ -58,6 +62,7 @@ internal static class ComplaintActionData
             EnteredBy = UserData.GetUsers.ElementAt(1),
             Comments = TextData.Phrase,
         },
+
         new(new Guid("30000000-0000-0000-0000-000000000006"), // 5
             ComplaintData.GetComplaints.ElementAt(5),
             ActionTypeData.GetActionTypes.ElementAt(0))
@@ -68,6 +73,7 @@ internal static class ComplaintActionData
             EnteredBy = UserData.GetUsers.ElementAt(1),
             Comments = TextData.Paragraph,
         },
+
         new(new Guid("30000000-0000-0000-0000-000000000007"), // 6
             ComplaintData.GetComplaints.ElementAt(5),
             ActionTypeData.GetActionTypes.ElementAt(7))
@@ -78,6 +84,7 @@ internal static class ComplaintActionData
             EnteredBy = UserData.GetUsers.ElementAt(0),
             Comments = TextData.Phrase,
         },
+
         new(new Guid("30000000-0000-0000-0000-000000000008"), // 7
             ComplaintData.GetComplaints.ElementAt(3),
             ActionTypeData.GetActionTypes.ElementAt(7))
@@ -88,6 +95,7 @@ internal static class ComplaintActionData
             EnteredBy = UserData.GetUsers.ElementAt(0),
             Comments = TextData.Phrase,
         },
+
         new(new Guid("30000000-0000-0000-0000-000000000009"), // 8
             ComplaintData.GetComplaints.ElementAt(0),
             ActionTypeData.GetActionTypes.ElementAt(5))
@@ -98,7 +106,7 @@ internal static class ComplaintActionData
             EnteredBy = UserData.GetUsers.ElementAt(1),
             Comments = TextData.MultipleParagraphs,
         },
-    };
+    ];
 
     private static List<ComplaintAction>? _complaintActions;
 
@@ -109,9 +117,9 @@ internal static class ComplaintActionData
             if (_complaintActions is not null) return _complaintActions;
 
             _complaintActions = ComplaintActionSeedItems.ToList();
-            _complaintActions[3].SetDeleted("00000000-0000-0000-0000-000000000001");
-            _complaintActions[6].SetDeleted("00000000-0000-0000-0000-000000000001");
-            _complaintActions[7].SetDeleted("00000000-0000-0000-0000-000000000001");
+            _complaintActions[3].SetDeleted(UserData.TestUserId);
+            _complaintActions[6].SetDeleted(UserData.TestUserId);
+            _complaintActions[7].SetDeleted(UserData.TestUserId);
             return _complaintActions;
         }
     }

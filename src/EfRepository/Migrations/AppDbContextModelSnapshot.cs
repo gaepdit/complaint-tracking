@@ -790,10 +790,6 @@ namespace Cts.EfRepository.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("ObjectIdentifier")
-                        .HasMaxLength(36)
-                        .HasColumnType("nvarchar(36)");
-
                     b.Property<Guid?>("OfficeId")
                         .HasColumnType("uniqueidentifier");
 
@@ -830,8 +826,6 @@ namespace Cts.EfRepository.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.HasIndex("OfficeId");
-
-                    b.HasIndex(new[] { "ObjectIdentifier" }, "missing_index_198_197");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });

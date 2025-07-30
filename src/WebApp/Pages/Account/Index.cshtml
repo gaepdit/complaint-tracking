@@ -39,27 +39,17 @@
 
 <h3>Roles</h3>
 
-@if (Model.Roles.Count == 0)
-{
-    <p>
-        Your account has no application roles. View a detailed description of
-        <a asp-page="/Admin/Users/Roles" target="_blank">user roles and capabilities</a>.
-    </p>
-}
-else
-{
-    <p>
-        Your account has the following application roles. View a detailed description of
-        <a asp-page="/Admin/Users/Roles" target="_blank">user roles and capabilities</a>.
-    </p>
+<partial name="Shared/_UserRolesPartial" model="Model.Roles" />
 
-    <dl class="p-3 border rounded-3 bg-light-subtle">
-        @foreach (var role in Model.Roles)
-        {
-            <dt>@role.DisplayName</dt>
-            <dd>
-                <p class="text-body-secondary">@role.Description</p>
-            </dd>
-        }
-    </dl>
-}
+<environment include="Local, Development">
+    <div class="bg-light-subtle">
+        <h3>Claims</h3>
+        <dl class="p-3 border rounded-3">
+            @foreach (var claim in Model.User.Claims)
+            {
+                <dt>@claim.Type</dt>
+                <dd class="text-body-secondary">@claim.Value</dd>
+            }
+        </dl>
+    </div>
+</environment>

@@ -1,0 +1,17 @@
+﻿@model IReadOnlyList<Cts.Domain.Identity.AppRole> 
+<p>
+    This account has @(Model.Count == 0 ? "no" : "the following") application roles.
+    View a detailed description of
+    <a asp-page="/Admin/Users/Roles" class="no-external-link" target="_blank">user roles and capabilities</a>.
+</p>
+
+@if (Model.Count > 0)
+{
+    <dl class="p-3 border rounded-3 bg-light-subtle">
+        @foreach (var role in Model)
+        {
+            <dt>@role.DisplayName</dt>
+            <dd><p class="text-body-secondary">@role.Description</p></dd>
+        }
+    </dl>
+}

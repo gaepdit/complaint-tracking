@@ -1,20 +1,18 @@
-﻿using Cts.WebApp.Pages.Account;
-
-namespace WebAppTests.DisplayMessages;
+﻿namespace WebAppTests.DisplayMessages;
 
 public class DisplayMessageTests
 {
+    private class TestPage : PageModel;
+
     [Test]
     public void SetDisplayMessage_ReturnsWithDisplayMessage()
     {
         // Arrange
-        // The actual Page model here doesn't matter. DisplayMessage is available for all pages.
-        var page = new UnavailableModel { TempData = WebAppTestsSetup.PageTempData() };
+        var page = new TestPage { TempData = WebAppTestsSetup.PageTempData() };
         var expectedMessage = new DisplayMessage(DisplayMessage.AlertContext.Info, "Info message", []);
-        page.TempData.SetDisplayMessage(expectedMessage.Context, expectedMessage.Message);
 
         // Act
-        page.OnGet();
+        page.TempData.SetDisplayMessage(expectedMessage.Context, expectedMessage.Message);
 
         // Assert
         page.TempData.GetDisplayMessage().Should().BeEquivalentTo(expectedMessage);
