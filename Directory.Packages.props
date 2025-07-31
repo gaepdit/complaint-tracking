@@ -10,7 +10,7 @@
     <PackageVersion Include="CsvHelper" Version="33.1.0" />
     <PackageVersion Include="Dapper" Version="2.1.66" />
     <PackageVersion Include="FluentValidation.AspNetCore" Version="11.3.1" />
-    <PackageVersion Include="GaEpd.AppLibrary" Version="6.2.0-beta.3" />
+    <PackageVersion Include="GaEpd.AppLibrary" Version="6.2.0-beta.1" />
     <PackageVersion Include="GaEpd.EmailService" Version="1.2.0" />
     <PackageVersion Include="GaEpd.FileService" Version="3.2.0" />
     <PackageVersion Include="HtmlSanitizer" Version="8.0.865" />
@@ -25,14 +25,14 @@
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Identity.Stores" Version="9.0.7" />
     <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Identity.Web" Version="3.11.0" />
+    <PackageVersion Include="Microsoft.Identity.Web" Version="3.12.0" />
     <PackageVersion Include="Microsoft.Web.LibraryManager.Build" Version="3.0.71" />
     <PackageVersion Include="Mindscape.Raygun4Net.AspNetCore" Version="11.2.4" />
     <PackageVersion Include="Mindscape.Raygun4Net.Extensions.Logging" Version="11.2.4" />
     <PackageVersion Include="NetEscapades.AspNetCore.SecurityHeaders" Version="1.1.0" />
     <PackageVersion Include="NetEscapades.AspNetCore.SecurityHeaders.TagHelpers" Version="1.1.0" />
     <PackageVersion Include="NunitXml.TestLogger" Version="6.1.0" />
-    <PackageVersion Include="SixLabors.ImageSharp" Version="3.1.10" />
+    <PackageVersion Include="SixLabors.ImageSharp" Version="3.1.11" />
     <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.15.0.120848" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="9.0.3" />
     <PackageVersion Include="coverlet.collector" Version="6.0.4" />
