@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 namespace Cts.EfRepository.Repositories;
 
 public sealed class ComplaintRepository(AppDbContext context)
-    : BaseRepository<Complaint, int, AppDbContext>(context), IComplaintRepository
+    : BaseRepositoryWithMapping<Complaint, int, AppDbContext>(context), IComplaintRepository
 {
     // Entity Framework will set the ID automatically.
     public int? GetNextId() => null;

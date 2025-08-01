@@ -12,7 +12,7 @@ public sealed class LocalComplaintRepository(
     IAttachmentRepository attachmentRepository,
     IActionRepository actionRepository,
     IComplaintTransitionRepository transitionRepository)
-    : BaseRepository<Complaint, int>(ComplaintData.GetComplaints), IComplaintRepository
+    : BaseRepositoryWithMapping<Complaint, int>(ComplaintData.GetComplaints), IComplaintRepository
 {
     // Local repository requires ID to be manually set.
     public int? GetNextId() => Items.Select(e => e.Id).Max() + 1;
