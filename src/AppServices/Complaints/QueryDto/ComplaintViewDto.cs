@@ -1,9 +1,9 @@
 ﻿using Cts.AppServices.Attachments.Dto;
 using Cts.AppServices.ComplaintActions.Dto;
-using Cts.AppServices.Offices;
 using Cts.AppServices.Staff.Dto;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.ValueObjects;
+using GaEpd.AppLibrary.Extensions;
 using System.ComponentModel.DataAnnotations;
 
 namespace Cts.AppServices.Complaints.QueryDto;
@@ -20,10 +20,17 @@ public record ComplaintViewDto
     public DateTimeOffset ReceivedDate { get; init; }
 
     [Display(Name = "Received By")]
-    public StaffViewDto? ReceivedBy { get; init; }
+    public string ReceivedByName => new[] { ReceivedByGivenName, ReceivedByFamilyName }.ConcatWithSeparator();
+
+    public string? ReceivedByGivenName { get; init; }
+    public string? ReceivedByFamilyName { get; init; }
 
     [Display(Name = "Entered By")]
-    public StaffViewDto? EnteredBy { get; init; }
+    public string EnteredByName => new[] { EnteredByGivenName, EnteredByFamilyName }.ConcatWithSeparator();
+
+    public string? EnteredById { get; init; }
+    public string? EnteredByGivenName { get; init; }
+    public string? EnteredByFamilyName { get; init; }
 
     [Display(Name = "Date Entered")]
     public DateTimeOffset EnteredDate { get; init; }
@@ -78,14 +85,11 @@ public record ComplaintViewDto
     public string? SourceEmail { get; init; }
 
     // Properties: Assignment
-
-    [Display(Name = "Current Assigned Office")]
-    public OfficeWithAssignorDto? CurrentOffice { get; init; }
-
-    public string? CurrentOfficeAssignorId { get; init; }
-
     [Display(Name = "Current Assigned Office")]
     public string? CurrentOfficeName { get; init; }
+
+    public string? CurrentOfficeAssignorId { get; init; }
+    public Guid? CurrentOfficeId { get; init; }
 
     [Display(Name = "Current Assigned Staff")]
     public StaffViewDto? CurrentOwner { get; init; }
@@ -128,7 +132,10 @@ public record ComplaintViewDto
     public DateTimeOffset? ComplaintClosedDate { get; init; }
 
     [Display(Name = "Reviewed By")]
-    public StaffViewDto? ReviewedBy { get; init; }
+    public string ReviewedByName => new[] { ReviewedByGivenName, ReviewedByFamilyName }.ConcatWithSeparator();
+
+    public string? ReviewedByGivenName { get; init; }
+    public string? ReviewedByFamilyName { get; init; }
 
     [Display(Name = "Review Comments")]
     public string? ReviewComments { get; init; }
@@ -139,7 +146,10 @@ public record ComplaintViewDto
     public bool IsDeleted { get; init; }
 
     [Display(Name = "Deleted By")]
-    public StaffViewDto? DeletedBy { get; init; }
+    public string DeletedByName => new[] { DeletedByGivenName, DeletedByFamilyName }.ConcatWithSeparator();
+
+    public string? DeletedByGivenName { get; init; }
+    public string? DeletedByFamilyName { get; init; }
 
     [Display(Name = "Date Deleted")]
     public DateTimeOffset? DeletedAt { get; init; }
@@ -150,18 +160,18 @@ public record ComplaintViewDto
     // === Lists ===
 
     [UsedImplicitly]
-    public List<ActionViewDto> Actions { get; } = [];
+    public List<ActionViewDto> Actions { get; set; } = [];
 
     [UsedImplicitly]
-    public List<AttachmentViewDto> Attachments { get; } = [];
+    public List<AttachmentViewDto> Attachments { get; set; } = [];
 
     [UsedImplicitly]
-    public List<ComplaintTransitionViewDto> ComplaintTransitions { get; } = [];
+    public List<ComplaintTransitionViewDto> ComplaintTransitions { get; set; } = [];
+
+    // === Calculated properties ===
 
     public DateTimeOffset? EarliestTransition =>
         ComplaintTransitions.Count > 0 ? ComplaintTransitions[0].CommittedDate : null;
-
-    // === Calculated properties ===
 
     public bool IsPublic => ComplaintClosed && !IsDeleted;
 }

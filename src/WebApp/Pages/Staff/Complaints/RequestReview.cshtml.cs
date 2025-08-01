@@ -36,14 +36,14 @@ public class RequestReviewModel(
 
         if (!await UserCanRequestReviewAsync(complaintView)) return Forbid();
 
-        if (complaintView.CurrentOffice is null)
+        if (complaintView.CurrentOfficeId is null)
         {
             TempData.SetDisplayMessage(DisplayMessage.AlertContext.Warning,
                 "The Complaint must be assigned to an Office in order to request a review.");
             return RedirectToPage("Details", new { Id });
         }
 
-        await PopulateSelectListsAsync(complaintView.CurrentOffice.Id);
+        await PopulateSelectListsAsync(complaintView.CurrentOfficeId.Value);
 
         if (!ReviewersSelectList.Any())
         {
@@ -60,12 +60,12 @@ public class RequestReviewModel(
     public async Task<IActionResult> OnPostAsync()
     {
         var complaintView = await complaintService.FindAsync(ComplaintRequestReview.ComplaintId);
-        if (complaintView?.CurrentOffice is null || !await UserCanRequestReviewAsync(complaintView))
+        if (complaintView?.CurrentOfficeId is null || !await UserCanRequestReviewAsync(complaintView))
             return BadRequest();
 
         if (!ModelState.IsValid)
         {
-            await PopulateSelectListsAsync(complaintView.CurrentOffice.Id);
+            await PopulateSelectListsAsync(complaintView.CurrentOfficeId.Value);
             if (!ReviewersSelectList.Any()) return BadRequest();
             ComplaintView = complaintView;
             return Page();

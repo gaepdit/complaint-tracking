@@ -1,5 +1,4 @@
-﻿using Cts.AppServices.Offices;
-using GaEpd.AppLibrary.Domain.Entities;
+﻿using GaEpd.AppLibrary.Domain.Entities;
 using GaEpd.AppLibrary.Extensions;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -17,7 +16,8 @@ public record StaffViewDto : INamedEntity
     public string? Email { get; init; }
 
     public string? PhoneNumber { get; init; }
-    public OfficeViewDto? Office { get; init; }
+    public Guid? OfficeId { get; init; }
+    public string? OfficeName { get; init; }
     public bool Active { get; init; }
     public string? ObjectIdentifier { get; set; }
 
@@ -36,7 +36,7 @@ public record StaffViewDto : INamedEntity
             var sn = new StringBuilder();
             sn.Append(Name);
 
-            if (Office != null) sn.Append($" ({Office.Name})");
+            if (OfficeName != null) sn.Append($" ({OfficeName})");
             if (!Active) sn.Append(" [Inactive]");
 
             return sn.ToString();
@@ -51,7 +51,7 @@ public record StaffViewDto : INamedEntity
             var sn = new StringBuilder();
             sn.Append(SortableFullName);
 
-            if (Office != null) sn.Append($" ({Office.Name})");
+            if (OfficeName != null) sn.Append($" ({OfficeName})");
             if (!Active) sn.Append(" [Inactive]");
 
             return sn.ToString();
@@ -61,7 +61,7 @@ public record StaffViewDto : INamedEntity
     public StaffUpdateDto AsUpdateDto() => new()
     {
         PhoneNumber = PhoneNumber,
-        OfficeId = Office?.Id,
+        OfficeId = OfficeId,
         Active = Active,
     };
 }

@@ -9,7 +9,7 @@ namespace Cts.WebApp.Pages.Account;
 public class AccountIndexModel : PageModel
 {
     public StaffViewDto DisplayStaff { get; private set; } = null!;
-    public string? OfficeName => DisplayStaff.Office?.Name;
+    public string? OfficeName => DisplayStaff.OfficeName;
     public IReadOnlyList<AppRole> Roles { get; private set; } = null!;
 
     public async Task<IActionResult> OnGetAsync([FromServices] IStaffService staffService)

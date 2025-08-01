@@ -10,7 +10,7 @@ public record ActionSearchResultDto
     public string? Investigator { get; init; }
     public StaffViewDto? EnteredBy { get; init; }
     public string? EnteredByName => EnteredBy?.SortableFullName;
-    public string? EnteredByOffice => EnteredBy?.Office?.Name;
+    public string? EnteredByOffice => EnteredBy?.OfficeName;
     public string? Comments { get; init; }
     public bool IsDeleted { get; init; }
     public bool ComplaintIsDeleted { get; init; }

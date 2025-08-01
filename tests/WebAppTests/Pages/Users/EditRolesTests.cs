@@ -16,7 +16,8 @@ public class EditRolesTests
         FamilyName = TextData.ValidName,
         GivenName = TextData.ValidName,
         Email = TextData.ValidEmail,
-        Office = OfficeViewTest,
+        OfficeId = OfficeViewTest.Id,
+        OfficeName = OfficeViewTest.Name,
         Active = true,
     };
 
@@ -65,7 +66,6 @@ public class EditRolesTests
         using var scope = new AssertionScope();
         result.Should().BeOfType<PageResult>();
         pageModel.DisplayStaff.Should().Be(StaffViewTest);
-        pageModel.OfficeName.Should().Be(TextData.ValidName);
         pageModel.UserId.Should().Be(Guid.Empty.ToString());
         pageModel.RoleSettings.Should().BeEquivalentTo(expectedRoleSettings);
     }

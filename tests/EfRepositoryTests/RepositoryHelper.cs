@@ -38,7 +38,7 @@ public sealed class RepositoryHelper : IDisposable, IAsyncDisposable
             builder.LogTo(Console.WriteLine, events: [RelationalEventId.CommandExecuted]));
         _context = new AppDbContext(_options);
         _context.Database.EnsureClean();
-        DbSeedDataHelpers.SeedAllData(_context);
+        _context.SeedAllData();
     }
 
     /// <summary>
@@ -53,7 +53,7 @@ public sealed class RepositoryHelper : IDisposable, IAsyncDisposable
             callingMember);
         _context = new AppDbContext(_options);
         _context.Database.EnsureClean();
-        DbSeedDataHelpers.SeedAllData(_context);
+        _context.SeedAllData();
     }
 
     /// <summary>

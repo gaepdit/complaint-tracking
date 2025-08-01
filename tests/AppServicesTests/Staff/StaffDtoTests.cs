@@ -1,5 +1,4 @@
-﻿using Cts.AppServices.Offices;
-using Cts.AppServices.Staff.Dto;
+﻿using Cts.AppServices.Staff.Dto;
 using Cts.TestData.Constants;
 
 namespace AppServicesTests.Staff;
@@ -51,7 +50,8 @@ public class StaffDtoTests
             Id = Guid.NewGuid().ToString(),
             Active = true,
             PhoneNumber = TextData.ValidPhoneNumber,
-            Office = new OfficeViewDto(Guid.NewGuid(), TextData.ValidName, true),
+            OfficeId = Guid.NewGuid(),
+            OfficeName = TextData.ValidName,
         };
 
         var result = staffViewDto.AsUpdateDto();
@@ -59,6 +59,6 @@ public class StaffDtoTests
         using var scope = new AssertionScope();
         result.Active.Should().BeTrue();
         result.PhoneNumber.Should().Be(staffViewDto.PhoneNumber);
-        result.OfficeId.Should().Be(staffViewDto.Office.Id);
+        result.OfficeId.Should().Be(staffViewDto.OfficeId);
     }
 }

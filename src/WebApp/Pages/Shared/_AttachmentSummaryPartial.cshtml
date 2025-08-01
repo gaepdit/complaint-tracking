@@ -9,16 +9,16 @@
             <img src="~/Staff/Complaints/Attachment/@Model.Id.ToString()/@Uri.EscapeDataString(Model.FileName)?thumbnail=true"
                  class="img-thumbnail rounded me-2" alt="Image "
                  width="@GlobalConstants.ThumbnailSize.ToString()" height="@GlobalConstants.ThumbnailSize.ToString()" />
-            @Model.FileName
         }
         else
         {
             @Html.DisplayFor(dto => dto.FileExtension, DisplayTemplate.FileTypeIcon)
-            @Model.FileName
         }
+        @Model.FileName
     </div>
     <p>
-        @Model.SizeDescription. Uploaded by @Html.DisplayFor(dto => dto.UploadedBy, DisplayTemplate.NameOrPlaceholder)
+        @Model.SizeDescription. Uploaded
+        by @Html.DisplayFor(dto => dto.UploadedByName, DisplayTemplate.StringOrPlaceholder)
         on @Html.DisplayFor(dto => dto.UploadedDate, DisplayTemplate.ShortDateTime).
     </p>
 </div>

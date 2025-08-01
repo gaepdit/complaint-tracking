@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace Cts.Domain.Entities.Complaints;
 
-public interface IComplaintRepository : IRepository<Complaint, int>
+public interface IComplaintRepository : IRepositoryWithMapping<Complaint, int>
 {
     // Complaint ID
 
@@ -14,18 +14,6 @@ public interface IComplaintRepository : IRepository<Complaint, int>
     int? GetNextId();
 
     // Specialized Complaint queries
-
-    /// <summary>
-    /// Returns the <see cref="Complaint"/> with the given <paramref name="id"/> and includes all additional
-    /// properties (<see cref="ComplaintAction"/>, <see cref="Attachment"/>, & <see cref="ComplaintTransition"/>).
-    /// Returns null if there are no matches.
-    /// </summary>
-    /// <param name="id">The Id of the Complaint.</param>
-    /// <param name="includeDeletedActions">Whether to include deleted Complaint Actions in the result.</param>
-    /// <param name="token"><see cref="T:System.Threading.CancellationToken"/></param>
-    /// <exception cref="InvalidOperationException">Thrown if there are multiple matches.</exception>
-    /// <returns>A Complaint entity.</returns>
-    Task<Complaint?> FindIncludeAllAsync(int id, bool includeDeletedActions = false, CancellationToken token = default);
 
     /// <summary>
     /// Returns the <see cref="Complaint"/> matching the conditions of <paramref name="predicate"/>. If Complaint is

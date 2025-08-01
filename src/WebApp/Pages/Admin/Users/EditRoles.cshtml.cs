@@ -17,7 +17,6 @@ public class EditRolesModel(IStaffService staffService, IAuthorizationService au
     public List<RoleSetting> RoleSettings { get; set; } = [];
 
     public StaffViewDto DisplayStaff { get; private set; } = null!;
-    public string? OfficeName => DisplayStaff.Office?.Name;
     public bool CanEditWithElevatedPrivilege { get; private set; }
 
     public async Task<IActionResult> OnGetAsync(string? id)

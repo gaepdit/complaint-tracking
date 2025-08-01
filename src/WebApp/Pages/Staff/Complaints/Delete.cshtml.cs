@@ -29,13 +29,6 @@ public class DeleteModel(IComplaintService complaintService, IAuthorizationServi
 
         if (!await UserCanManageDeletionsAsync(complaintView)) return Forbid();
 
-        if (complaintView.IsDeleted)
-        {
-            TempData.SetDisplayMessage(DisplayMessage.AlertContext.Warning,
-                "Complaint cannot be deleted because it is already deleted.");
-            return RedirectToPage("Details", routeValues: new { Id });
-        }
-
         ComplaintClosure = new ComplaintClosureDto(Id);
         ComplaintView = complaintView;
         return Page();

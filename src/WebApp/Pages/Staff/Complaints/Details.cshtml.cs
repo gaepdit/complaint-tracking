@@ -49,15 +49,19 @@ public class DetailsModel(
     [TempData]
     public bool UploadSuccess { get; set; }
 
-    public async Task<IActionResult> OnGetAsync()
+    public async Task<IActionResult> OnGetAsync(CancellationToken token = default)
     {
         if (Id <= 0) return RedirectToPage("Index");
 
-        var complaintView = await complaintService.FindAsync(Id, true);
+        var complaintView = await complaintService.FindAsync(Id, includeDeleted: true, token);
         if (complaintView is null) return NotFound();
 
         await SetPermissionsAsync(complaintView);
-        if (complaintView.IsDeleted && !UserCan[ComplaintOperation.ManageDeletions]) return NotFound();
+        if (!UserCan[ComplaintOperation.ManageDeletions])
+        {
+            if (complaintView.IsDeleted) return NotFound();
+            complaintView.Actions.RemoveAll(action => action.IsDeleted);
+        }
 
         ComplaintView = complaintView;
         var investigator = (await staffService.GetCurrentUserAsync()).Name;
@@ -72,8 +76,8 @@ public class DetailsModel(
     {
         if (Id <= 0) return BadRequest();
 
-        var complaintView = await complaintService.FindAsync(Id, includeDeletedActions: true, token: token);
-        if (complaintView is null || complaintView.IsDeleted) return BadRequest();
+        var complaintView = await complaintService.FindAsync(Id, token: token);
+        if (complaintView is null) return BadRequest();
 
         await SetPermissionsAsync(complaintView);
         if (!UserCan[ComplaintOperation.Accept]) return BadRequest();
@@ -88,8 +92,8 @@ public class DetailsModel(
     {
         if (Id <= 0 || newAction.ComplaintId != Id) return BadRequest();
 
-        var complaintView = await complaintService.FindAsync(Id, includeDeletedActions: true, token: token);
-        if (complaintView is null || complaintView.IsDeleted) return BadRequest();
+        var complaintView = await complaintService.FindAsync(Id, token: token);
+        if (complaintView is null) return BadRequest();
 
         await SetPermissionsAsync(complaintView);
         if (!UserCan[ComplaintOperation.EditActions]) return BadRequest();
@@ -112,8 +116,8 @@ public class DetailsModel(
     {
         if (Id <= 0) return BadRequest();
 
-        var complaintView = await complaintService.FindAsync(Id, includeDeletedActions: true, token: token);
-        if (complaintView is null || complaintView.IsDeleted) return BadRequest();
+        var complaintView = await complaintService.FindAsync(Id, token: token);
+        if (complaintView is null) return BadRequest();
 
         await SetPermissionsAsync(complaintView);
         if (!UserCan[ComplaintOperation.EditAttachments]) return BadRequest();

@@ -37,10 +37,10 @@ public class AssignModel(
 
         if (!await UserCanAssignAsync(complaintView)) return Forbid();
 
-        var userOfficeId = (await staffService.GetCurrentUserAsync()).Office?.Id;
+        var userOfficeId = (await staffService.GetCurrentUserAsync()).OfficeId;
         ComplaintAssignment = new ComplaintAssignmentDto(Id)
         {
-            OfficeId = complaintView.CurrentOffice?.Id ?? userOfficeId,
+            OfficeId = complaintView.CurrentOfficeId ?? userOfficeId,
             OwnerId = complaintView.CurrentOwner?.Id,
         };
         ComplaintView = complaintView;

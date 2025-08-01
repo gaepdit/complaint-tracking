@@ -28,7 +28,7 @@ public class UserMapping
         result.FamilyName.Should().Be(_item.FamilyName);
         result.Email.Should().Be(_item.Email);
         result.PhoneNumber.Should().Be(_item.PhoneNumber);
-        result.Office.Should().BeEquivalentTo(_item.Office);
+        result.OfficeName.Should().BeEquivalentTo(_item.Office!.Name);
         result.Active.Should().BeTrue();
     }
 
