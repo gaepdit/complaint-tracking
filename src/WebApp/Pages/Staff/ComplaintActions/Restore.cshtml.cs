@@ -29,19 +29,12 @@ public class RestoreActionModel(
         if (actionId is null) return RedirectToPage("Index");
 
         var actionItem = await actionService.FindAsync(actionId.Value);
-        if (actionItem is null) return NotFound();
+        if (actionItem is null || !actionItem.IsDeleted) return NotFound();
 
-        var complaintView = await complaintService.FindAsync(actionItem.ComplaintId);
+        var complaintView = await complaintService.FindAsync(actionItem.ComplaintId, includeDeleted: true);
         if (complaintView is null) return NotFound();
 
         if (!await UserCanRestoreActionItemsAsync(complaintView)) return Forbid();
-
-        if (!actionItem.IsDeleted)
-        {
-            TempData.SetDisplayMessage(DisplayMessage.AlertContext.Warning,
-                "Complaint Action cannot be restored because it is not deleted.");
-            return RedirectToPage("../Complaints/Details", routeValues: new { complaintView.Id });
-        }
 
         ActionItemView = actionItem;
         ActionItemId = actionId.Value;
@@ -55,7 +48,7 @@ public class RestoreActionModel(
         var originalActionItem = await actionService.FindAsync(ActionItemId);
         if (originalActionItem is null || !originalActionItem.IsDeleted) return BadRequest();
 
-        var complaintView = await complaintService.FindAsync(originalActionItem.ComplaintId);
+        var complaintView = await complaintService.FindAsync(originalActionItem.ComplaintId, includeDeleted: true);
         if (complaintView is null || !await UserCanRestoreActionItemsAsync(complaintView))
             return BadRequest();
 

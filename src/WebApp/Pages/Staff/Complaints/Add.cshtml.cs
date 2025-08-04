@@ -36,8 +36,8 @@ public class AddModel(
     public async Task OnGetAsync()
     {
         var user = await staffService.GetCurrentUserAsync();
-        Item = new ComplaintCreateDto(user.Id, user.Office?.Id);
-        await PopulateSelectListsAsync(user.Office?.Id);
+        Item = new ComplaintCreateDto(user.Id, user.OfficeId);
+        await PopulateSelectListsAsync(user.OfficeId);
     }
 
     public async Task<IActionResult> OnPostAsync()

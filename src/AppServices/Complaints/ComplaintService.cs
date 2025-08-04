@@ -50,18 +50,23 @@ public sealed class ComplaintService(
 
     // Staff read methods
 
-    public async Task<ComplaintViewDto?> FindAsync(int id, bool includeDeletedActions = false,
+    public async Task<ComplaintViewDto?> FindAsync(int id, bool includeDeleted = false,
         CancellationToken token = default)
     {
-        var complaint = await complaintRepository.FindIncludeAllAsync(id, includeDeletedActions, token: token)
+        var complaintViewDto = await complaintRepository
+            .FindAsync<ComplaintViewDto>(e => (includeDeleted || !e.IsDeleted) && e.Id == id, mapper, token)
             .ConfigureAwait(false);
-        if (complaint is null) return null;
-        var complaintViewDto = mapper.Map<ComplaintViewDto>(complaint);
+        if (complaintViewDto is null) return null;
 
         var principal = userService.GetCurrentPrincipal();
-        var auth = await authorization.Succeeded(principal!, complaintViewDto, ComplaintOperation.ViewDeletedActions)
+        var canViewDeleted = await authorization
+            .Succeeded(principal!, complaintViewDto, ComplaintOperation.ViewDeletedActions)
             .ConfigureAwait(false);
-        if (!auth) complaintViewDto.Actions.RemoveAll(action => action.IsDeleted);
+
+        if (!canViewDeleted && complaintViewDto.IsDeleted) return null;
+
+        if (!canViewDeleted || !includeDeleted) complaintViewDto.Actions.RemoveAll(dto => dto.IsDeleted);
+        complaintViewDto.Attachments.RemoveAll(dto => dto.IsDeleted);
 
         return complaintViewDto;
     }
@@ -240,7 +245,7 @@ public sealed class ComplaintService(
     {
         var result = new ComplaintAssignResult();
 
-        if (resource.OfficeId == currentComplaint.CurrentOffice?.Id &&
+        if (resource.OfficeId == currentComplaint.CurrentOfficeId &&
             resource.OwnerId == currentComplaint.CurrentOwner?.Id)
             return result;
 

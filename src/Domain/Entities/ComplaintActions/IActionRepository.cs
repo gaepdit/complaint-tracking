@@ -1,3 +1,3 @@
 ﻿namespace Cts.Domain.Entities.ComplaintActions;
 
-public interface IActionRepository : IRepository<ComplaintAction, Guid>;
+public interface IActionRepository : IRepositoryWithMapping<ComplaintAction, Guid>;
