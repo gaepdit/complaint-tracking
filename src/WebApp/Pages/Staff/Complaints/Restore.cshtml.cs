@@ -24,17 +24,10 @@ public class RestoreModel(IComplaintService complaintService, IAuthorizationServ
     {
         if (Id <= 0) return RedirectToPage("Index");
 
-        var complaintView = await complaintService.FindAsync(Id);
-        if (complaintView is null) return NotFound();
+        var complaintView = await complaintService.FindAsync(Id, includeDeleted: true);
+        if (complaintView is null || !complaintView.IsDeleted) return NotFound();
 
         if (!await UserCanManageDeletionsAsync(complaintView)) return Forbid();
-
-        if (!complaintView.IsDeleted)
-        {
-            TempData.SetDisplayMessage(DisplayMessage.AlertContext.Warning,
-                "Complaint cannot be restored because it is not deleted.");
-            return RedirectToPage("Details", routeValues: new { Id });
-        }
 
         ComplaintClosure = new ComplaintClosureDto(Id);
         ComplaintView = complaintView;
@@ -45,7 +38,7 @@ public class RestoreModel(IComplaintService complaintService, IAuthorizationServ
     {
         if (!ModelState.IsValid) return BadRequest();
 
-        var complaintView = await complaintService.FindAsync(ComplaintClosure.ComplaintId);
+        var complaintView = await complaintService.FindAsync(ComplaintClosure.ComplaintId, includeDeleted: true);
         if (complaintView is null || !complaintView.IsDeleted || !await UserCanManageDeletionsAsync(complaintView))
             return BadRequest();
 

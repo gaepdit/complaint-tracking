@@ -19,7 +19,7 @@ public interface IComplaintService : IDisposable, IAsyncDisposable
 
     // Staff read methods
 
-    Task<ComplaintViewDto?> FindAsync(int id, bool includeDeletedActions = false, CancellationToken token = default);
+    Task<ComplaintViewDto?> FindAsync(int id, bool includeDeleted = false, CancellationToken token = default);
 
     Task<ComplaintUpdateDto?> FindForUpdateAsync(int id, CancellationToken token = default);
 
@@ -59,14 +59,18 @@ public interface IComplaintService : IDisposable, IAsyncDisposable
     Task<ComplaintAssignResult> AssignAsync(ComplaintAssignmentDto resource, ComplaintViewDto currentComplaint,
         string? baseUrl, CancellationToken token = default);
 
-    Task<NotificationResult> CloseAsync(ComplaintClosureDto resource, string? baseUrl, CancellationToken token = default);
-    Task<NotificationResult> ReopenAsync(ComplaintClosureDto resource, string? baseUrl, CancellationToken token = default);
+    Task<NotificationResult> CloseAsync(ComplaintClosureDto resource, string? baseUrl,
+        CancellationToken token = default);
+
+    Task<NotificationResult> ReopenAsync(ComplaintClosureDto resource, string? baseUrl,
+        CancellationToken token = default);
 
     Task<NotificationResult> RequestReviewAsync(ComplaintRequestReviewDto resource, string? baseUrl,
         CancellationToken token = default);
 
     Task<NotificationResult> ReturnAsync(ComplaintAssignmentDto resource, string? baseUrl,
         CancellationToken token = default);
+
     Task DeleteAsync(ComplaintClosureDto resource, CancellationToken token = default);
     Task RestoreAsync(ComplaintClosureDto resource, CancellationToken token = default);
 }

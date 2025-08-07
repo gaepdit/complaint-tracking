@@ -5,7 +5,7 @@ namespace Cts.EfRepository.Contexts.SeedDevData;
 
 public static class DbSeedDataHelpers
 {
-    public static void SeedAllData(AppDbContext context)
+    public static void SeedAllData(this AppDbContext context)
     {
         ClearAllStaticData();
         SeedActionTypeData(context);

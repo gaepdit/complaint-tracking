@@ -12,16 +12,10 @@ public sealed class LocalComplaintRepository(
     IAttachmentRepository attachmentRepository,
     IActionRepository actionRepository,
     IComplaintTransitionRepository transitionRepository)
-    : BaseRepository<Complaint, int>(ComplaintData.GetComplaints), IComplaintRepository
+    : BaseRepositoryWithMapping<Complaint, int>(ComplaintData.GetComplaints), IComplaintRepository
 {
     // Local repository requires ID to be manually set.
     public int? GetNextId() => Items.Select(e => e.Id).Max() + 1;
-
-    public async Task<Complaint?> FindIncludeAllAsync(int id, bool includeDeletedActions = false,
-        CancellationToken token = default) =>
-        await GetComplaintDetailsAsync(await FindAsync(id, token: token).ConfigureAwait(false), includeDeletedActions,
-                token: token)
-            .ConfigureAwait(false);
 
     public async Task<Complaint?> FindPublicAsync(Expression<Func<Complaint, bool>> predicate,
         CancellationToken token = default) =>

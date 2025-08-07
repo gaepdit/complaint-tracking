@@ -87,6 +87,7 @@ internal static class ComplaintData
             ComplaintClosed = true,
             ComplaintClosedDate = DateTimeOffset.Now.AddDays(-10),
             CallerPhoneNumber = ValueObjectData.AlternatePhoneNumber,
+            ReviewedBy = UserData.GetUsers.ElementAt(1),
         },
 
         new(5) // 3
@@ -111,6 +112,7 @@ internal static class ComplaintData
             ComplaintClosed = true,
             ComplaintClosedDate = DateTimeOffset.Now.AddDays(-1),
             DeleteComments = TextData.Paragraph,
+            ReviewedBy = UserData.GetUsers.ElementAt(1),
         },
 
         new(6) // 4

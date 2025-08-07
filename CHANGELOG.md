@@ -1,5 +1,9 @@
 # Changelog
 
+## [2025.7.30] - 2025-07-30
+
+- This update includes some bug fixes and some backend changes to improve performance.
+
 ## [2025.6.26] - 2025-06-26
 
 - I added some additional date validation to prevent errors when a user mistypes a date.
@@ -159,6 +163,7 @@ _This version represents a complete rewrite of the Complaint Tracking System._
 New login system. New design library. Updated workflows. New public complaint page. Dark mode. And more! We hope you
 like it!
 
+[2025.7.30]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.7.30
 [2025.6.26]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.6.26
 [2025.5.1]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.5.1
 [2025.4.10]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.4.10

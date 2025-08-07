@@ -44,7 +44,11 @@ public static class DataPersistence
 
         // Entity Framework context
         builder.Services.AddDbContext<AppDbContext>(db => db
-            .UseSqlServer(connectionString, sqlServerOpts => sqlServerOpts.EnableRetryOnFailure())
+            .UseSqlServer(connectionString, opts =>
+            {
+                opts.EnableRetryOnFailure();
+                opts.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+            })
             .ConfigureWarnings(warnings => warnings.Throw(RelationalEventId.MultipleCollectionIncludeWarning)));
 
         // Dapper DB connection
@@ -71,7 +75,7 @@ public static class DataPersistence
             throw new InvalidOperationException("No migration connection string found.");
 
         return new DbContextOptionsBuilder<AppDbContext>()
-            .UseSqlServer(migConnString, sqlServerOpts => sqlServerOpts.MigrationsAssembly(nameof(EfRepository)));
+            .UseSqlServer(migConnString, opts => opts.MigrationsAssembly(nameof(EfRepository)));
     }
 
     private static async Task CreateMissingRolesAsync(this AppDbContext migrationContext, IServiceCollection services)

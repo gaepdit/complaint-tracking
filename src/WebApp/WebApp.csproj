@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
     <PropertyGroup>
-        <InformationalVersion>2025.6.26</InformationalVersion>
+        <InformationalVersion>2025.7.30</InformationalVersion>
         <RootNamespace>Cts.WebApp</RootNamespace>
+        <AssemblyName>Cts.WebApp</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
@@ -19,6 +20,7 @@
     <ItemGroup>
         <ProjectReference Include="..\LocalRepository\LocalRepository.csproj" />
         <ProjectReference Include="..\EfRepository\EfRepository.csproj" />
+        <ProjectReference Include="..\ServiceDefaults\ServiceDefaults.csproj" />
     </ItemGroup>
 
     <ItemGroup>

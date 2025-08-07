@@ -9,9 +9,10 @@ else
     {
         <span class="text-body-secondary fw-lighter">[Inactive]</span>
     }
-    @if(Model.Office is not null)
+
+    @if (Model.OfficeName is not null)
     {
         <br />
-        @Model.Office.Name
+        @Model.OfficeName
     }
 }

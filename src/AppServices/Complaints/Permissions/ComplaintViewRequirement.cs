@@ -76,17 +76,19 @@ internal class ComplaintViewRequirement :
     private bool NoReviewPending() => _resource is { Status: not ComplaintStatus.ReviewPending };
 
     // User roles
-    private bool IsAssignorForOffice() => _resource.CurrentOffice?.Assignor?.Id == _user.GetNameIdentifierId();
+    private bool IsAssignorForOffice() => !string.IsNullOrEmpty(_resource.CurrentOfficeAssignorId) &&
+                                          _resource.CurrentOfficeAssignorId == _user.GetNameIdentifierId();
 
     private bool IsCurrentManager() =>
         _user.IsManager() &&
-        _user.HasMatchingClaim(AppClaimTypes.OfficeId, _resource.CurrentOffice?.Id.ToString()) ||
+        _user.HasMatchingClaim(AppClaimTypes.OfficeId, _resource.CurrentOfficeId?.ToString()) ||
         _user.IsDivisionManager();
 
     private bool IsCurrentOwner() => _user.IsStaff() && _resource.CurrentOwner?.Id == _user.GetNameIdentifierId();
 
     private bool IsRecentReporter() =>
-        _resource.EnteredBy?.Id == _user.GetNameIdentifierId() &&
+        !string.IsNullOrEmpty(_resource.EnteredById) &&
+        _resource.EnteredById == _user.GetNameIdentifierId() &&
         _resource.EnteredDate.AddHours(AppConstants.RecentReporterDuration) > DateTimeOffset.Now;
 
     // User role combos
