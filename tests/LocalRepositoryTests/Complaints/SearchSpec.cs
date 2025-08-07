@@ -82,7 +82,7 @@ public class SearchSpec
     [Test]
     public async Task ClosedDateSpec_ReturnsFilteredList()
     {
-        var referenceItem = _repository.Items.First(e => e.ComplaintClosed);
+        var referenceItem = _repository.Items.First(e => e is { ComplaintClosed: true, ComplaintClosedDate: not null });
 
         var spec = new ComplaintSearchDto
         {
@@ -123,21 +123,24 @@ public class SearchSpec
     [Test]
     public async Task ReceivedBySpec_ReturnsFilteredList()
     {
-        var referenceItem = _repository.Items.First();
+        // Arrange
+        var referenceItem = _repository.Items.First(e => e.ReceivedBy != null);
+        var expected = _repository.Items.Where(e =>
+            e is { IsDeleted: false, ReceivedBy: not null } && e.ReceivedBy.Id == referenceItem.ReceivedBy!.Id);
         var spec = new ComplaintSearchDto { ReceivedBy = referenceItem.ReceivedBy!.Id };
         var predicate = ComplaintFilters.SearchPredicate(spec);
 
+        // Act
         var results = await _repository.GetListAsync(predicate);
 
-        var expected = _repository.Items.Where(e => e is { IsDeleted: false }
-                                                    && e.ReceivedBy == referenceItem.ReceivedBy);
+        // Assert
         results.Should().BeEquivalentTo(expected);
     }
 
     [Test]
     public async Task CallerSpec_ReturnsFilteredList()
     {
-        var referenceItem = _repository.Items.First();
+        var referenceItem = _repository.Items.First(e => e.CallerName != null);
         var spec = new ComplaintSearchDto { CallerName = referenceItem.CallerName };
         var predicate = ComplaintFilters.SearchPredicate(spec);
 
@@ -151,7 +154,7 @@ public class SearchSpec
     [Test]
     public async Task RepresentsSpec_ReturnsFilteredList()
     {
-        var referenceItem = _repository.Items.First();
+        var referenceItem = _repository.Items.First(e => e.CallerRepresents != null);
         var spec = new ComplaintSearchDto { Represents = referenceItem.CallerRepresents };
         var predicate = ComplaintFilters.SearchPredicate(spec);
 
@@ -165,7 +168,7 @@ public class SearchSpec
     [Test]
     public async Task TextNatureSpec_ReturnsFilteredList()
     {
-        var referenceItem = _repository.Items.First();
+        var referenceItem = _repository.Items.First(e => e.ComplaintNature != null);
         var spec = new ComplaintSearchDto { Description = referenceItem.ComplaintNature };
         var predicate = ComplaintFilters.SearchPredicate(spec);
 
@@ -179,7 +182,7 @@ public class SearchSpec
     [Test]
     public async Task TextLocationSpec_ReturnsFilteredList()
     {
-        var referenceItem = _repository.Items.First();
+        var referenceItem = _repository.Items.First(e => e.ComplaintLocation != null);
         var spec = new ComplaintSearchDto { Description = referenceItem.ComplaintLocation };
         var predicate = ComplaintFilters.SearchPredicate(spec);
 
@@ -193,7 +196,7 @@ public class SearchSpec
     [Test]
     public async Task TextDirectionSpec_ReturnsFilteredList()
     {
-        var referenceItem = _repository.Items.First();
+        var referenceItem = _repository.Items.First(e => e.ComplaintDirections != null);
         var spec = new ComplaintSearchDto { Description = referenceItem.ComplaintDirections };
         var predicate = ComplaintFilters.SearchPredicate(spec);
 
@@ -207,7 +210,7 @@ public class SearchSpec
     [Test]
     public async Task ComplaintCitySpec_ReturnsFilteredList()
     {
-        var referenceItem = _repository.Items.First();
+        var referenceItem = _repository.Items.First(e => e.ComplaintCity != null);
         var spec = new ComplaintSearchDto { ComplaintCity = referenceItem.ComplaintCity };
         var predicate = ComplaintFilters.SearchPredicate(spec);
 
@@ -221,7 +224,7 @@ public class SearchSpec
     [Test]
     public async Task CountySpec_ReturnsFilteredList()
     {
-        var referenceItem = _repository.Items.First();
+        var referenceItem = _repository.Items.First(e => e.ComplaintCounty != null);
         var spec = new ComplaintSearchDto { County = referenceItem.ComplaintCounty };
         var predicate = ComplaintFilters.SearchPredicate(spec);
 
@@ -251,7 +254,7 @@ public class SearchSpec
     [Test]
     public async Task SourceNameSpec_ReturnsFilteredList()
     {
-        var referenceItem = _repository.Items.First();
+        var referenceItem = _repository.Items.First(e => e.SourceFacilityName != null);
         var spec = new ComplaintSearchDto { Source = referenceItem.SourceFacilityName };
         var predicate = ComplaintFilters.SearchPredicate(spec);
 
@@ -265,14 +268,14 @@ public class SearchSpec
     [Test]
     public async Task StreetSpec_ReturnsFilteredList()
     {
-        var referenceItem = _repository.Items.First();
+        var referenceItem = _repository.Items.First(e => e.SourceAddress is { Street: not null });
         var spec = new ComplaintSearchDto { Street = referenceItem.SourceAddress!.Street };
         var predicate = ComplaintFilters.SearchPredicate(spec);
 
         var results = await _repository.GetListAsync(predicate);
 
         var expected = _repository.Items.Where(e =>
-            e is { IsDeleted: false } && e.SourceAddress != null &&
+            e is { IsDeleted: false, SourceAddress: not null } &&
             e.SourceAddress.Street == referenceItem.SourceAddress.Street);
         results.Should().BeEquivalentTo(expected);
     }
@@ -281,14 +284,14 @@ public class SearchSpec
     public async Task Street2Spec_ReturnsFilteredList()
     {
         // "Street" spec filter matches either Street OR Street2 from address
-        var referenceItem = _repository.Items.First();
+        var referenceItem = _repository.Items.First(e => e.SourceAddress is { Street2: not null });
         var spec = new ComplaintSearchDto { Street = referenceItem.SourceAddress!.Street2 };
         var predicate = ComplaintFilters.SearchPredicate(spec);
 
         var results = await _repository.GetListAsync(predicate);
 
         var expected = _repository.Items.Where(e =>
-            e is { IsDeleted: false } && e.SourceAddress != null &&
+            e is { IsDeleted: false, SourceAddress: not null } &&
             e.SourceAddress.Street2 == referenceItem.SourceAddress.Street2);
         results.Should().BeEquivalentTo(expected);
     }
@@ -296,14 +299,14 @@ public class SearchSpec
     [Test]
     public async Task CitySpec_ReturnsFilteredList()
     {
-        var referenceItem = _repository.Items.First();
+        var referenceItem = _repository.Items.First(e => e.SourceAddress != null);
         var spec = new ComplaintSearchDto { City = referenceItem.SourceAddress!.City };
         var predicate = ComplaintFilters.SearchPredicate(spec);
 
         var results = await _repository.GetListAsync(predicate);
 
         var expected = _repository.Items.Where(e =>
-            e is { IsDeleted: false } && e.SourceAddress != null &&
+            e is { IsDeleted: false, SourceAddress: not null } &&
             e.SourceAddress.City == referenceItem.SourceAddress.City);
         results.Should().BeEquivalentTo(expected);
     }
@@ -311,14 +314,14 @@ public class SearchSpec
     [Test]
     public async Task StateSpec_ReturnsFilteredList()
     {
-        var referenceItem = _repository.Items.First();
+        var referenceItem = _repository.Items.First(e => e.SourceAddress != null);
         var spec = new ComplaintSearchDto { State = referenceItem.SourceAddress!.State };
         var predicate = ComplaintFilters.SearchPredicate(spec);
 
         var results = await _repository.GetListAsync(predicate);
 
         var expected = _repository.Items.Where(e =>
-            e is { IsDeleted: false } && e.SourceAddress != null &&
+            e is { IsDeleted: false, SourceAddress: not null } &&
             e.SourceAddress.State == referenceItem.SourceAddress.State);
         results.Should().BeEquivalentTo(expected);
     }
@@ -326,14 +329,14 @@ public class SearchSpec
     [Test]
     public async Task PostalCodeSpec_ReturnsFilteredList()
     {
-        var referenceItem = _repository.Items.First();
+        var referenceItem = _repository.Items.First(e => e.SourceAddress != null);
         var spec = new ComplaintSearchDto { PostalCode = referenceItem.SourceAddress!.PostalCode };
         var predicate = ComplaintFilters.SearchPredicate(spec);
 
         var results = await _repository.GetListAsync(predicate);
 
         var expected = _repository.Items.Where(e =>
-            e is { IsDeleted: false } && e.SourceAddress != null &&
+            e is { IsDeleted: false, SourceAddress: not null } &&
             e.SourceAddress.PostalCode == referenceItem.SourceAddress.PostalCode);
         results.Should().BeEquivalentTo(expected);
     }
@@ -347,8 +350,8 @@ public class SearchSpec
 
         var results = await _repository.GetListAsync(predicate);
 
-        var expected = _repository.Items.Where(e => e is { IsDeleted: false }
-                                                    && e.CurrentOffice == referenceItem.CurrentOffice);
+        var expected = _repository.Items.Where(e =>
+            e is { IsDeleted: false } && e.CurrentOffice.Id == referenceItem.CurrentOffice.Id);
         results.Should().BeEquivalentTo(expected);
     }
 
@@ -361,8 +364,8 @@ public class SearchSpec
 
         var results = await _repository.GetListAsync(predicate);
 
-        var expected = _repository.Items.Where(e => e is { IsDeleted: false }
-                                                    && e.CurrentOwner == referenceItem.CurrentOwner);
+        var expected = _repository.Items.Where(e =>
+            e is { IsDeleted: false, CurrentOwner: not null } && e.CurrentOwner.Id == referenceItem.CurrentOwner.Id);
         results.Should().BeEquivalentTo(expected);
     }
 
