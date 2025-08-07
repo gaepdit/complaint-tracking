@@ -5,7 +5,7 @@ namespace Cts.WebApp.Platform.AppConfiguration;
 
 internal static class ErrorHandling
 {
-    public static void AddErrorLogging(this WebApplicationBuilder builder)
+    public static void AddErrorLogging(this IHostApplicationBuilder builder)
     {
         if (string.IsNullOrEmpty(AppSettings.RaygunSettings.ApiKey)) return;
 

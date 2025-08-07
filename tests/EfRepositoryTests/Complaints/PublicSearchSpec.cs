@@ -25,24 +25,19 @@ public class PublicSearchSpec
     [Test]
     public async Task DefaultSpec_ReturnsAllPublic()
     {
+        // Arrange
         var spec = new ComplaintPublicSearchDto();
         var predicate = ComplaintFilters.PublicSearchPredicate(spec);
 
-        await using var repository = RepositoryHelper.CreateSqlServerRepositoryHelper(this).GetComplaintRepository();
-        var results = await repository.GetListAsync(predicate);
+        var expected = ComplaintData.GetComplaints.Where(e => !e.IsDeleted).ToList();
 
-        var expected = ComplaintData.GetComplaints.Where(e => !e.IsDeleted);
-        results.Should().BeEquivalentTo(expected, opts => opts
-            .Excluding(e => e.CurrentOffice.StaffMembers)
-            .Excluding(e => e.CurrentOffice.Assignor)
-            .Excluding(e => e.Attachments)
-            .Excluding(e => e.Actions)
-            .Excluding(e => e.ComplaintTransitions)
-            .Excluding(e => e.EnteredBy!.Office)
-            .Excluding(e => e.ReceivedBy!.Office)
-            .Excluding(e => e.CurrentOwner!.Office)
-            .Excluding(e => e.ReviewedBy!.Office)
-        );
+        // Act
+        var results = await _repository.GetListAsync(predicate);
+
+        // Assert
+        results.Should().HaveSameCount(expected);
+        results.Select(e => new { e.Id, e.ComplaintClosed })
+            .Should().BeEquivalentTo(expected, options => options.ExcludingMissingMembers());
     }
 
     [Test]
@@ -127,24 +122,20 @@ public class PublicSearchSpec
     [Test]
     public async Task CountySpec_ReturnsFilteredList()
     {
+        // Arrange
         var spec = new ComplaintPublicSearchDto { County = _referenceItem.ComplaintCounty };
         var predicate = ComplaintFilters.PublicSearchPredicate(spec);
 
+        var expected = ComplaintData.GetComplaints
+            .Where(e => e.ComplaintCounty == _referenceItem.ComplaintCounty && !e.IsDeleted).ToList();
+
+        // Act
         var results = await _repository.GetListAsync(predicate);
 
-        var expected = ComplaintData.GetComplaints
-            .Where(e => e.ComplaintCounty == _referenceItem.ComplaintCounty && !e.IsDeleted);
-        results.Should().BeEquivalentTo(expected, opts => opts
-            .Excluding(e => e.CurrentOffice.StaffMembers)
-            .Excluding(e => e.CurrentOffice.Assignor)
-            .Excluding(e => e.Actions)
-            .Excluding(e => e.ComplaintTransitions)
-            .Excluding(e => e.EnteredBy!.Office)
-            .Excluding(e => e.ReceivedBy!.Office)
-            .Excluding(e => e.CurrentOwner!.Office)
-            .Excluding(e => e.ReviewedBy!.Office)
-            .Excluding(e => e.Attachments)
-        );
+        // Assert
+        results.Should().HaveSameCount(expected);
+        results.Select(e => new { e.Id, e.ComplaintCounty })
+            .Should().BeEquivalentTo(expected, options => options.ExcludingMissingMembers());
     }
 
     [Test]

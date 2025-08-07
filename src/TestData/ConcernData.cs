@@ -4,8 +4,8 @@ namespace Cts.TestData;
 
 internal static class ConcernData
 {
-    private static IEnumerable<Concern> ConcernSeedItems => new List<Concern>
-    {
+    private static IEnumerable<Concern> ConcernSeedItems =>
+    [
         new(new Guid("50000000-0000-0000-0000-000000000030"), "Agricultural Ground Water Use"),
         new(new Guid("50000000-0000-0000-0000-000000000031"), "Agricultural Surface Water Use"),
         new(new Guid("50000000-0000-0000-0000-000000000032"), "Air Quality Control"),
@@ -46,7 +46,7 @@ internal static class ConcernData
         new(new Guid("50000000-0000-0000-0000-000000000067"), "Water Quality Stormwater Construction"),
         new(new Guid("50000000-0000-0000-0000-000000000068"), "Water Quality Stormwater Industrial"),
         new(new Guid("50000000-0000-0000-0000-000000000069"), "Water Quality Stormwater Urban"),
-    };
+    ];
 
     private static IEnumerable<Concern>? _concerns;
 

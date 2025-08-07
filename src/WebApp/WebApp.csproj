@@ -13,6 +13,7 @@
         <PackageReference Include="Mindscape.Raygun4Net.AspNetCore" />
         <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" />
         <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders.TagHelpers" />
+        <PackageReference Include="Okta.AspNetCore" />
         <PackageReference Include="Swashbuckle.AspNetCore" />
     </ItemGroup>
 
@@ -20,6 +21,11 @@
         <ProjectReference Include="..\LocalRepository\LocalRepository.csproj" />
         <ProjectReference Include="..\EfRepository\EfRepository.csproj" />
         <ProjectReference Include="..\ServiceDefaults\ServiceDefaults.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="../../CHANGELOG.md" />
+        <None Include="../../README.md" />
     </ItemGroup>
 
     <ItemGroup>
@@ -37,10 +43,6 @@
             <CopyToPublishDirectory>Never</CopyToPublishDirectory>
             <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         </None>
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="../../CHANGELOG.md" />
-        <None Include="../../README.md" />
     </ItemGroup>
 
     <ItemGroup>

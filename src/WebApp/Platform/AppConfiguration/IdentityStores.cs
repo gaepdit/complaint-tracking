@@ -12,16 +12,16 @@ public static class IdentityStores
     {
         var identityBuilder = services.AddIdentity<ApplicationUser, IdentityRole>();
 
-        if (AppSettings.DevSettings.UseInMemoryData)
+        if (AppSettings.DevSettings.BuildDatabase)
+        {
+            // Add EF identity stores.
+            identityBuilder.AddRoles<IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
+        }
+        else
         {
             // Add local UserStore and RoleStore.
             services.AddSingleton<IUserStore<ApplicationUser>, LocalUserStore>();
             services.AddSingleton<IRoleStore<IdentityRole>, LocalRoleStore>();
-        }
-        else
-        {
-            // Add EF identity stores.
-            identityBuilder.AddRoles<IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
         }
     }
 }

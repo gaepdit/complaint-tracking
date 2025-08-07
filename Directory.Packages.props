@@ -32,6 +32,7 @@
     <PackageVersion Include="NetEscapades.AspNetCore.SecurityHeaders" Version="1.1.0" />
     <PackageVersion Include="NetEscapades.AspNetCore.SecurityHeaders.TagHelpers" Version="1.1.0" />
     <PackageVersion Include="NunitXml.TestLogger" Version="6.1.0" />
+    <PackageVersion Include="Okta.AspNetCore" Version="4.6.3" />
     <PackageVersion Include="SixLabors.ImageSharp" Version="3.1.11" />
     <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.15.0.120848" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="9.0.3" />

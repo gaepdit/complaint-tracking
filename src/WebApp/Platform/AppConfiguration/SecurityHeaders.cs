@@ -4,7 +4,7 @@ namespace Cts.WebApp.Platform.AppConfiguration;
 
 internal static class SecurityHeaders
 {
-    public static WebApplicationBuilder AddSecurityHeaders(this WebApplicationBuilder builder)
+    public static IHostApplicationBuilder AddSecurityHeaders(this IHostApplicationBuilder builder)
     {
         if (builder.Environment.IsDevelopment())
         {
@@ -39,7 +39,7 @@ internal static class SecurityHeaders
     private static readonly string ReportUri =
         $"https://report-to-api.raygun.com/reports?apikey={AppSettings.RaygunSettings.ApiKey}";
 
-    internal static void AddSecurityHeaderPolicies(this HeaderPolicyCollection policies)
+    private static void AddSecurityHeaderPolicies(this HeaderPolicyCollection policies)
     {
         policies.AddFrameOptionsDeny();
         policies.AddContentTypeOptionsNoSniff();
@@ -74,6 +74,7 @@ internal static class SecurityHeaders
             .From("https://api.raygun.io");
         builder.AddFontSrc().Self().Data();
         builder.AddFormAction().Self()
+            .From("https://*.okta.com")
             .From("https://login.microsoftonline.com");
         builder.AddManifestSrc().Self();
         builder.AddFrameAncestors().None();

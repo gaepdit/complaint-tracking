@@ -1,6 +1,4 @@
-using Cts.AppServices.AuthorizationPolicies;
 using Cts.AppServices.AutoMapper;
-using Cts.AppServices.IdentityServices;
 using Cts.AppServices.ServiceRegistration;
 using Cts.WebApp.Platform.AppConfiguration;
 using Cts.WebApp.Platform.OrgNotifications;
@@ -14,19 +12,15 @@ var builder = WebApplication.CreateBuilder(args);
 // https://learn.microsoft.com/en-us/dotnet/standard/base-types/best-practices-regex#use-time-out-values
 AppDomain.CurrentDomain.SetData("REGEX_DEFAULT_MATCH_TIMEOUT", TimeSpan.FromMilliseconds(100));
 
-// Persist data protection keys.
+// Configure basic settings.
+builder.BindAppSettings().AddSecurityHeaders().AddErrorLogging();
 builder.Services.AddDataProtection();
 
-builder.BindAppSettings().AddSecurityHeaders().AddErrorLogging();
-
-// Configure Identity.
+// Configure Identity stores.
 builder.Services.AddIdentityStores();
 
-// Configure Authentication.
-builder.AddAuthenticationServices();
-
-// Configure authorization and identity services.
-builder.Services.AddAuthorizationPolicies().AddIdentityServices();
+// Configure authentication and authorization.
+builder.ConfigureAuthentication();
 
 // Add app services.
 builder.Services.AddAppServices().AddAutoMapperProfiles().AddEmailService();
@@ -37,7 +31,7 @@ builder.Services.AddRazorPages();
 // Add data stores and initialize the database.
 await builder.ConfigureDataPersistence();
 
-// Configure file storage
+// Configure file storage.
 await builder.ConfigureFileStorage();
 
 // Add organizational notifications.
@@ -47,9 +41,7 @@ builder.Services.AddOrgNotifications();
 builder.Services.AddApiDocumentation();
 
 // Configure bundling and minification.
-builder.Services.AddWebOptimizer(
-    minifyJavaScript: AppSettings.DevSettings.EnableWebOptimizer,
-    minifyCss: AppSettings.DevSettings.EnableWebOptimizer);
+builder.AddWebOptimizer();
 
 // Configure Aspire.
 builder.AddServiceDefaults();
