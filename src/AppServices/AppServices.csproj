@@ -7,7 +7,8 @@
         <PackageReference Include="AutoMapper" />
         <PackageReference Include="ClosedXML" />
         <PackageReference Include="CsvHelper" />
-        <PackageReference Include="FluentValidation.AspNetCore" />
+        <PackageReference Include="FluentValidation" />
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
         <PackageReference Include="GaEpd.EmailService" />
         <PackageReference Include="GaEpd.FileService" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" />
