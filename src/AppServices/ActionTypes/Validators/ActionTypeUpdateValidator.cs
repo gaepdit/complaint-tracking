@@ -16,7 +16,8 @@ public class ActionTypeUpdateValidator : AbstractValidator<ActionTypeUpdateDto>
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .Length(AppConstants.MinimumNameLength, AppConstants.MaximumNameLength)
-            .MustAsync(async (_, name, context, token) => await NotDuplicateName(name, context, token).ConfigureAwait(false))
+            .MustAsync(async (_, name, context, token) =>
+                await NotDuplicateName(name, context, token).ConfigureAwait(false))
             .WithMessage("The name entered already exists.");
     }
 
@@ -24,6 +25,6 @@ public class ActionTypeUpdateValidator : AbstractValidator<ActionTypeUpdateDto>
         CancellationToken token = default)
     {
         var item = await _repository.FindByNameAsync(name, token: token).ConfigureAwait(false);
-        return item is null || item.Id == (Guid)context.RootContextData["Id"];
+        return item is null || item.Id == (Guid)context.RootContextData[nameof(item.Id)];
     }
 }
