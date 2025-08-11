@@ -33,12 +33,27 @@ public class AutoMapperProfile : Profile
 
         CreateMap<Complaint, ComplaintPublicViewDto>();
         CreateMap<Complaint, ComplaintSearchResultDto>();
+
         CreateMap<Complaint, ComplaintUpdateDto>()
             .ForMember(dto => dto.ReceivedDate, expression =>
                 expression.MapFrom(complaint => DateOnly.FromDateTime(complaint.ReceivedDate.Date)))
             .ForMember(dto => dto.ReceivedTime, expression =>
                 expression.MapFrom(complaint => TimeOnly.FromTimeSpan(complaint.ReceivedDate.TimeOfDay)));
-        CreateMap<Complaint, ComplaintViewDto>();
+
+        CreateMap<Complaint, ComplaintViewDto>()
+            .ForMember(dto => dto.Actions, expression => expression
+                .MapFrom(complaint => complaint.Actions
+                    .OrderByDescending(action => action.ActionDate)
+                    .ThenByDescending(action => action.EnteredDate)
+                    .ThenBy(action => action.Id)))
+            .ForMember(dto => dto.Attachments, expression => expression
+                .MapFrom(complaint => complaint.Attachments
+                    .OrderBy(action => action.UploadedDate)
+                    .ThenBy(action => action.Id)))
+            .ForMember(dto => dto.ComplaintTransitions, expression => expression
+                .MapFrom(complaint => complaint.ComplaintTransitions
+                    .OrderBy(transition => transition.CommittedDate)
+                    .ThenBy(transition => transition.Id)));
 
         CreateMap<ComplaintAction, ActionPublicViewDto>();
         CreateMap<ComplaintAction, ActionSearchResultDto>();
