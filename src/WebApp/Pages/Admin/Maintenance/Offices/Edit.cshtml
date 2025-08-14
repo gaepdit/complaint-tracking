@@ -15,11 +15,6 @@
 
 <div class="p-3 border rounded-3 bg-light-subtle">
     <form method="post">
-        <div asp-validation-summary="All" class="alert alert-danger d-flex align-items-center" role="alert">
-            <svg class="bi me-2" role="img" aria-label="Danger:">
-                <use href="@Url.Content("~/images/app-icons.svg")#app-icon-exclamation-triangle-fill"></use>
-            </svg>
-        </div>
         <div class="row">
             <div class="col-md mb-3">
                 @Html.EditorFor(model => model.Item.Name, EditorTemplate.Input)

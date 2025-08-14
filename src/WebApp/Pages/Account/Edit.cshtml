@@ -13,12 +13,6 @@
 
 <div class="p-3 border rounded-3 bg-light-subtle mb-3">
     <form method="post">
-        <div asp-validation-summary="All" class="alert alert-danger d-flex align-items-center" role="alert">
-            <svg class="bi me-2" role="img" aria-label="Danger:">
-                <use href="@Url.Content("~/images/app-icons.svg")#app-icon-exclamation-triangle-fill"></use>
-            </svg>
-            <div>Update failed:</div>
-        </div>
         <div class="row">
             <div class="col-lg mb-3">
                 @Html.EditorFor(model => model.DisplayStaff.Email, EditorTemplate.InputDisabled)

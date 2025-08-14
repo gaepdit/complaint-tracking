@@ -251,8 +251,6 @@
         <h3 id="new-action" class="h5">Add An Action Item</h3>
 
         <form method="post" asp-page-handler="NewAction" asp-fragment="new-action">
-            @Html.DisplayFor(_ => Model.ValidatingSection, DisplayTemplate.ValidationSummaryConditional,
-                new { ValidatingSection = nameof(DetailsModel.OnPostNewActionAsync) })
             <div class="row">
                 <div class="col-md-4 mb-3">
                     @Html.EditorFor(model => model.NewAction.ActionDate, EditorTemplate.InputDateOnlyNullable)
