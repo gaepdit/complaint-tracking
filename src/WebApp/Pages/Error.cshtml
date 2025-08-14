@@ -13,17 +13,6 @@ else
     <p class="lead">An error occurred while processing your request.</p>
 }
 
-@if (Model.ActiveUser)
-{
-    <p>
-        If you need assistance related to this error, please
-        <a href="https://gaepd.zendesk.com/" target="_blank" rel="noopener">contact EPD IT support</a>.
-    </p>
-}
-else
-{
-    <p>
-        If you need assistance related to this error, please
-        <a href="mailto:support@gaepd.zendesk.com">contact EPD IT support</a>.
-    </p>
-}
+<p>
+    If you need assistance related to this error, please see the <a asp-page="/Support">support page</a>.
+</p>

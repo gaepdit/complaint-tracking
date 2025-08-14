@@ -28,6 +28,7 @@ public record Support
     public string? CustomerSupportEmail { get; [UsedImplicitly] init; }
     public string? TechnicalSupportEmail { get; [UsedImplicitly] init; }
     public string? TechnicalSupportSite { get; [UsedImplicitly] init; }
+    public Uri? TechnicalSupportSiteUrl => TechnicalSupportSite is null ? null : new Uri(TechnicalSupportSite);
 }
 
 public record EntraIdPhaseOut
