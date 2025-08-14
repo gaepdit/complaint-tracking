@@ -21,7 +21,7 @@ public static class ApiDocumentation
                 {
                     Name = $"{ApiTitle} Support",
                     Email = AppSettings.Support.TechnicalSupportEmail,
-                    Url = new Uri(AppSettings.Support.TechnicalSupportSite!),
+                    Url = AppSettings.Support.TechnicalSupportSiteUrl,
                 },
             });
         });
