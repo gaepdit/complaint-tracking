@@ -100,7 +100,6 @@ public class DetailsModel(
 
         if (!ModelState.IsValid)
         {
-            ValidatingSection = nameof(OnPostNewActionAsync);
             ComplaintView = complaintView;
             await PopulateSelectListsAsync();
             return Page();
