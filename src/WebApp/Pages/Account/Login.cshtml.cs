@@ -39,7 +39,7 @@ public class LoginModel(
         return LocalRedirectOrHome();
     }
 
-    public IActionResult OnPostAsync(string scheme,string? returnUrl = null)
+    public IActionResult OnPostAsync(string scheme, string? returnUrl = null)
     {
         if (User.Identity is { IsAuthenticated: true }) return RedirectToPage("Logout");
         if (!configuration.ValidateLoginProvider(scheme))
@@ -73,6 +73,7 @@ public class LoginModel(
         foreach (var error in result.Errors)
             ModelState.AddModelError(string.Empty, error.Description);
         DisplayFailedLogin = true;
+        LoginProviderNames = configuration.LoginProviderNames();
         return Page();
     }
 
