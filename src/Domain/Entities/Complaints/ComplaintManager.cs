@@ -21,6 +21,7 @@ public class ComplaintManager(IComplaintRepository repository) : IComplaintManag
     {
         var action = new ComplaintAction(Guid.NewGuid(), complaint, actionType) { EnteredBy = user };
         action.SetCreator(user?.Id);
+        complaint.Actions.Add(action);
         return action;
     }
 
@@ -138,6 +139,7 @@ public class ComplaintManager(IComplaintRepository repository) : IComplaintManag
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }
 
+        complaint.ComplaintTransitions.Add(transition);
         return transition;
     }
 }
