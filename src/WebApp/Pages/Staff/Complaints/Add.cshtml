@@ -49,29 +49,20 @@
                     @Html.EditorFor(model => model.Item.CallerEmail, EditorTemplate.Input)
                 </div>
                 <div class="input-group mb-3">
-                    <div class="form-floating">
-                        <input asp-for="Item.CallerPhoneNumber!.Number" class="form-control" />
-                        <label asp-for="Item.CallerPhoneNumber" class="form-label"></label>
-                        <span asp-validation-for="Item.CallerPhoneNumber" class="invalid-feedback"></span>
-                    </div>
+                    @Html.EditorFor(model => model.Item.CallerPhoneNumber!.Number, EditorTemplate.Input,
+                        additionalViewData: new { Label = "Primary phone" })
                     @Html.EditorFor(model => model.Item.CallerPhoneNumber!.Type, EditorTemplate.Select,
                         additionalViewData: new { Items = phoneTypesSelectList, Placeholder = string.Empty })
                 </div>
                 <div class="input-group mb-3">
-                    <div class="form-floating">
-                        <input asp-for="Item.CallerSecondaryPhoneNumber!.Number" class="form-control" />
-                        <label asp-for="Item.CallerSecondaryPhoneNumber" class="form-label"></label>
-                        <span asp-validation-for="Item.CallerSecondaryPhoneNumber" class="invalid-feedback"></span>
-                    </div>
+                    @Html.EditorFor(model => model.Item.CallerSecondaryPhoneNumber!.Number, EditorTemplate.Input,
+                        additionalViewData: new { Label = "Secondary phone" })
                     @Html.EditorFor(model => model.Item.CallerSecondaryPhoneNumber!.Type, EditorTemplate.Select,
                         additionalViewData: new { Items = phoneTypesSelectList, Placeholder = string.Empty })
                 </div>
                 <div class="input-group mb-3">
-                    <div class="form-floating">
-                        <input asp-for="Item.CallerTertiaryPhoneNumber!.Number" class="form-control" />
-                        <label asp-for="Item.CallerTertiaryPhoneNumber" class="form-label"></label>
-                        <span asp-validation-for="Item.CallerTertiaryPhoneNumber" class="invalid-feedback"></span>
-                    </div>
+                    @Html.EditorFor(model => model.Item.CallerTertiaryPhoneNumber!.Number, EditorTemplate.Input,
+                        additionalViewData: new { Label = "Other phone" })
                     @Html.EditorFor(model => model.Item.CallerTertiaryPhoneNumber!.Type, EditorTemplate.Select,
                         additionalViewData: new { Items = phoneTypesSelectList, Placeholder = string.Empty })
                 </div>
@@ -166,29 +157,20 @@
                     @Html.EditorFor(model => model.Item.SourceEmail, EditorTemplate.Input)
                 </div>
                 <div class="input-group mb-3">
-                    <div class="form-floating">
-                        <input asp-for="Item.SourcePhoneNumber!.Number" class="form-control" />
-                        <label asp-for="Item.SourcePhoneNumber" class="form-label"></label>
-                        <span asp-validation-for="Item.SourcePhoneNumber" class="invalid-feedback"></span>
-                    </div>
+                    @Html.EditorFor(model => model.Item.SourcePhoneNumber!.Number, EditorTemplate.Input,
+                        additionalViewData: new { Label = "Primary phone" })
                     @Html.EditorFor(model => model.Item.SourcePhoneNumber!.Type, EditorTemplate.Select,
                         additionalViewData: new { Items = phoneTypesSelectList, Placeholder = string.Empty })
                 </div>
                 <div class="input-group mb-3">
-                    <div class="form-floating">
-                        <input asp-for="Item.SourceSecondaryPhoneNumber!.Number" class="form-control" />
-                        <label asp-for="Item.SourceSecondaryPhoneNumber" class="form-label"></label>
-                        <span asp-validation-for="Item.SourceSecondaryPhoneNumber" class="invalid-feedback"></span>
-                    </div>
+                    @Html.EditorFor(model => model.Item.SourceSecondaryPhoneNumber!.Number, EditorTemplate.Input,
+                        additionalViewData: new { Label = "Secondary phone" })
                     @Html.EditorFor(model => model.Item.SourceSecondaryPhoneNumber!.Type, EditorTemplate.Select,
                         additionalViewData: new { Items = phoneTypesSelectList, Placeholder = string.Empty })
                 </div>
                 <div class="input-group mb-3">
-                    <div class="form-floating">
-                        <input asp-for="Item.SourceTertiaryPhoneNumber!.Number" class="form-control" />
-                        <label asp-for="Item.SourceTertiaryPhoneNumber" class="form-label"></label>
-                        <span asp-validation-for="Item.SourceTertiaryPhoneNumber" class="invalid-feedback"></span>
-                    </div>
+                    @Html.EditorFor(model => model.Item.SourceTertiaryPhoneNumber!.Number, EditorTemplate.Input,
+                        additionalViewData: new { Label = "Other phone" })
                     @Html.EditorFor(model => model.Item.SourceTertiaryPhoneNumber!.Type, EditorTemplate.Select,
                         additionalViewData: new { Items = phoneTypesSelectList, Placeholder = string.Empty })
                 </div>

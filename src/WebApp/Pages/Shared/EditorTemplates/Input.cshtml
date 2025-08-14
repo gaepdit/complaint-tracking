@@ -1,7 +1,9 @@
 ﻿@model string
-
+@{
+    var label = (string?)ViewData["Label"];
+}
 <div class="form-floating">
     <input asp-for="@__model" class="form-control" />
-    <label asp-for="@__model" class="form-label"></label>
+    <label asp-for="@__model" class="form-label">@label</label>
     <span asp-validation-for="@__model" class="invalid-feedback"></span>
 </div>
