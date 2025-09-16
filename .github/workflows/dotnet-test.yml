@@ -16,10 +16,10 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
 
       - name: Set up .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@d4c94342e560b34958eacfc5d055d21461ed1c5d
         with:
           global-json-file: global.json
 
@@ -33,8 +33,8 @@ jobs:
         run: dotnet test --no-build --verbosity normal --logger:nunit
 
       - name: Upload test result artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           path: tests/**/TestResults.xml
 
@@ -42,7 +42,7 @@ jobs:
     name: Publish test results
     needs: dotnet-test
     runs-on: ubuntu-latest
-    if: always()
+    if: ${{ !cancelled() }}
 
     permissions:
       checks: write
@@ -50,11 +50,11 @@ jobs:
 
     steps:
       - name: Download test result artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0
         with:
           path: test-results # destination folder
 
       - name: Publish test results
-        uses: EnricoMi/publish-unit-test-result-action@v2
+        uses: EnricoMi/publish-unit-test-result-action@3a74b2957438d0b6e2e61d67b05318aa25c9e6c6
         with:
           files: test-results/**/TestResults.xml
