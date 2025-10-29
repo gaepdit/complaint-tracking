@@ -2,7 +2,7 @@
     <PropertyGroup>
         <InformationalVersion>2025.8.11</InformationalVersion>
         <RootNamespace>Cts.WebApp</RootNamespace>
-        <AssemblyName>Cts.WebApp</AssemblyName>
+        <AssemblyName>ComplaintTracking.WebApp</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
