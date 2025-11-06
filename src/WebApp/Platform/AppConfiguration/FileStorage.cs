@@ -8,7 +8,7 @@ public static class FileStorage
 {
     public static async Task ConfigureFileStorage(this IHostApplicationBuilder builder)
     {
-        builder.Services.AddFileServices(builder.Configuration);
+        builder.AddFileServices();
         if (AppSettings.DevSettings.UseDevSettings) await SeedFileStoreAsync(builder.Services);
     }
 
