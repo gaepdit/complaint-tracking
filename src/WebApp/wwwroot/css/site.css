@@ -102,19 +102,6 @@
     box-shadow: 0 0 0 .25rem hsla(var(--base-hue), 10%, 100%, .57);
 }
 
-/* Dark mode fix for table rows with "secondary" background color */
-.table > :not(caption) > .bg-secondary-subtle > * {
-    background-color: var(--bs-secondary-bg-subtle) !important;
-}
-
-/* Accessibility fix for "warning" button on medium/light background
--------------------------------------------------------------------- */
-html:not([data-bs-theme="dark"]) .btn-outline-warning {
-    --bs-btn-color: #b98b00;
-    --bs-btn-border-color: #b98b00;
-    --bs-btn-bg: #fff;
-}
-
 /* Adjust font sizing
 -------------------------------------------------- */
 html {
@@ -145,6 +132,23 @@ html:not([data-bs-theme="dark"]) .text-danger-emphasis {
 
 html:not([data-bs-theme="dark"]) .bg-dark-subtle .text-danger-emphasis {
     color: hsl(355, 98%, 24%) !important;
+}
+
+/* Fix for table rows with "secondary" background color in dark mode */
+.table > :not(caption) > .bg-secondary-subtle > * {
+    background-color: var(--bs-secondary-bg-subtle) !important;
+}
+
+/* Fix for "warning" button in light mode */
+html:not([data-bs-theme="dark"]) .btn-outline-warning {
+    --bs-btn-color: #b98b00;
+    --bs-btn-border-color: #b98b00;
+    --bs-btn-bg: #fff;
+}
+
+/* Fix for "info" outline buttons in light mode */
+html:not([data-bs-theme="dark"]) .btn-outline-info {
+    --bs-btn-color: #055160;
 }
 
 /* Nav bar logo
