@@ -2,6 +2,7 @@
 using GaEpd.AppLibrary.Apis;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Caching.Memory;
+using ZLogger;
 
 namespace Cts.WebApp.Platform.OrgNotifications;
 
@@ -47,7 +48,7 @@ public class OrgNotifications(
         catch (Exception ex)
         {
             // If the API is unresponsive or other error occurs, no notifications will be displayed.
-            logger.LogError(OrgNotificationsFetchFailure, ex, "Failed to fetch organizational notifications.");
+            logger.ZLogError(OrgNotificationsFetchFailure, ex, $"Failed to fetch organizational notifications.");
             notifications = [];
         }
 
