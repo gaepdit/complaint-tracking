@@ -556,4 +556,7 @@ appsettings.*.json
 # Code coverage report from ReportGenerator
 coveragereport/
 
-.idea/.idea.complaint-tracking/.idea/misc.xml
+# Additional JetBrains data source files
+.idea/.idea.complaint-tracking/.idea/queries/
+.idea/.idea.complaint-tracking/.idea/data_source_mapping.xml
+.idea/.idea.complaint-tracking/.idea/sqldialects.xml
