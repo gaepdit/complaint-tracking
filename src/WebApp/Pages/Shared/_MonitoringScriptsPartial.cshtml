@@ -1,0 +1,75 @@
+﻿@using Cts.WebApp.Platform.Settings
+@{
+    var setVersion = AppSettings.Version;
+    var simpleVersion = AppSettings.Version?.Split('+')[0];
+    var identifier = User.Identity?.Name;
+    var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "unknown";
+    var env = environment switch
+    {
+        "Production" => "prod",
+        "Staging" => "uat",
+        _ => "dev",
+    };
+
+    // Raygun
+    var apiKey = AppSettings.RaygunSettings.ApiKey;
+
+    // DataDog
+    var clientToken = AppSettings.DataDogSettings.ClientToken;
+    var applicationId = AppSettings.DataDogSettings.ApplicationId;
+
+    if (!string.IsNullOrEmpty(apiKey))
+    {
+<script asp-add-content-to-csp>
+  !function(a,b,c,d,e,f,g,h){a.RaygunObject=e,a[e]=a[e]||function(){
+  (a[e].o=a[e].o||[]).push(arguments)},f=b.createElement(c),g=b.getElementsByTagName(c)[0],
+  f.async=1,f.src=d,g.parentNode.insertBefore(f,g),h=a.onerror,a.onerror=function(b,c,d,f,g){
+  h&&h(b,c,d,f,g),g||(g=new Error(b)),a[e].q=a[e].q||[],a[e].q.push({
+  e:g})}}(window,document,"script","//cdn.raygun.io/raygun4js/raygun.min.js","rg4js");
+</script>
+<script asp-add-nonce>
+    rg4js('apiKey', '@apiKey');
+    rg4js('setVersion', '@setVersion');
+    rg4js('enableCrashReporting', true);
+    rg4js('withTags', ['@environment']);
+    @if (identifier is not null)
+    {
+        @:rg4js('enableRealUserMonitoring', true);
+        @:rg4js('setUser', {isAnonymous: false, identifier: '@identifier'});;
+    }
+</script>
+<environment names="Production">
+    <script asp-add-content-to-csp>rg4js('enablePulse', true);</script>
+</environment>
+    }
+
+    if (!string.IsNullOrEmpty(clientToken) && !string.IsNullOrEmpty(applicationId))
+    {
+        <script asp-add-nonce>
+            (function (h, o, u, n, d) {
+                h = h[d] = h[d] || {
+                    q: [], onReady: function (c) {
+                        h.q.push(c)
+                    }
+                }
+                d = o.createElement(u);
+                d.async = 1;
+                d.src = n
+                n = o.getElementsByTagName(u)[0];
+                n.parentNode.insertBefore(d, n)
+            })(window, document, 'script', 'https://www.datadoghq-browser-agent.com/us3/v6/datadog-rum.js', 'DD_RUM')
+            window.DD_RUM.onReady(function () {
+                window.DD_RUM.init({
+                    clientToken: '@clientToken',
+                    applicationId: '@applicationId',
+                    site: 'us3.datadoghq.com',
+                    service: 'complainttracking.webapp',
+                    env: '@env',
+                    version: '@simpleVersion',
+                    trackBfcacheViews: true,
+                    defaultPrivacyLevel: 'mask-user-input',
+                });
+            })
+        </script>
+    }
+}
