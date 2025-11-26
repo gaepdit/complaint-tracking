@@ -43,16 +43,15 @@ public class NotificationService(
 
         if (string.IsNullOrEmpty(recipientEmail))
         {
-            logger.LogWarning(NotificationServiceFailure,
-                "Notification email attempted with empty recipient for Complaint {ComplaintId}.", complaint.Id);
+            logger.ZLogWarning(NotificationServiceFailure,
+                $"Notification email attempted with empty recipient for Complaint {complaint.Id:@ComplaintId}.");
             return NotificationResult.FailureResult($"{FailurePrefix} A recipient could not be determined.");
         }
 
         if (settings is { EnableEmail: false, EnableEmailAuditing: false })
         {
-            logger.LogWarning(NotificationServiceFailure,
-                "Emailing is not enabled on the server. Notification attempted for Complaint {ComplaintId}.",
-                complaint.Id);
+            logger.ZLogWarning(NotificationServiceFailure,
+                $"Emailing is not enabled on the server. Notification attempted for Complaint {complaint.Id:@ComplaintId}.");
             return NotificationResult.FailureResult($"{FailurePrefix} Emailing is not enabled on the server.");
         }
 
@@ -64,9 +63,8 @@ public class NotificationService(
         }
         catch (Exception e)
         {
-            logger.LogError(NotificationServiceException, e,
-                "Error sending a notification email for Complaint {ComplaintId} with subject {Subject}.",
-                complaint.Id, subject);
+            logger.ZLogError(NotificationServiceException, e,
+                $"Error sending a notification email for Complaint {complaint.Id:@ComplaintId} with subject {subject}.");
             return NotificationResult.FailureResult($"{FailurePrefix} An error occurred when generating the email.");
         }
 

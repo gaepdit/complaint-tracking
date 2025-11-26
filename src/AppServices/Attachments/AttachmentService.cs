@@ -138,8 +138,7 @@ public class AttachmentService(
         catch (Exception e)
         {
             // Log error but take no other action here
-            logger.LogError(AttachmentServiceFailure, e, "Error saving image {FileName} with ID {FileID}",
-                formFile.FileName, fileId);
+            logger.ZLogError(AttachmentServiceFailure, e, $"Error saving image {formFile.FileName} with ID {fileId}");
             return false;
         }
     }
