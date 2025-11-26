@@ -16,7 +16,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3
 
       - name: Set up .NET
         uses: actions/setup-dotnet@d4c94342e560b34958eacfc5d055d21461ed1c5d
@@ -33,7 +33,7 @@ jobs:
         uses: datadog/test-visibility-github-action@f4b026bb8b8b53f323960cf86a849a0231ff93b9
         with:
           languages: dotnet
-          api_key: ${{secrets.DD_API_KEY}}
+          api_key: ${{ secrets.DD_API_KEY }}
           site: us3.datadoghq.com
 
       - name: Test
