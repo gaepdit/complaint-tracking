@@ -1,5 +1,5 @@
 ﻿using Cts.WebApp.Platform.Settings;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace Cts.WebApp.Platform.AppConfiguration;
 
