@@ -550,13 +550,8 @@ appsettings.*.json
 # Library Manager
 **/wwwroot/lib/
 
-# SonarLint Rider plugin
-.idea/**/sonarlint-state.xml
-
 # Code coverage report from ReportGenerator
 coveragereport/
 
-# Additional JetBrains data source files
-.idea/.idea.complaint-tracking/.idea/queries/
-.idea/.idea.complaint-tracking/.idea/data_source_mapping.xml
-.idea/.idea.complaint-tracking/.idea/sqldialects.xml
+# All JetBrains config files
+.idea/
