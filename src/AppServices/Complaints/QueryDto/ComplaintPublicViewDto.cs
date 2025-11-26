@@ -9,11 +9,6 @@ namespace Cts.AppServices.Complaints.QueryDto;
 
 public record ComplaintPublicViewDto
 {
-    // Backing fields
-    private readonly string? _complaintNature;
-    private readonly string? _complaintLocation;
-    private readonly string? _reviewComments;
-
     // Properties
 
     public int Id { get; init; }
@@ -32,15 +27,15 @@ public record ComplaintPublicViewDto
     [Display(Name = "Nature of Complaint")]
     public string? ComplaintNature
     {
-        get => _complaintNature;
-        init => _complaintNature = PersonalInformation.RedactPii(value);
+        get;
+        init => field = PersonalInformation.RedactPii(value);
     }
 
     [Display(Name = "Location of Complaint")]
     public string? ComplaintLocation
     {
-        get => _complaintLocation;
-        init => _complaintLocation = PersonalInformation.RedactPii(value);
+        get;
+        init => field = PersonalInformation.RedactPii(value);
     }
 
     [Display(Name = "City of Complaint")]
@@ -82,8 +77,8 @@ public record ComplaintPublicViewDto
     [Display(Name = "Review Comments")]
     public string? ReviewComments
     {
-        get => _reviewComments;
-        init => _reviewComments = PersonalInformation.RedactPii(value);
+        get;
+        init => field = PersonalInformation.RedactPii(value);
     }
 
     // === Lists ===
