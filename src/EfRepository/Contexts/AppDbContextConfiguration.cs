@@ -4,6 +4,7 @@ using Cts.Domain.Entities.ComplaintActions;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Cts.EfRepository.Contexts;
@@ -73,6 +74,8 @@ internal static class AppDbContextConfiguration
         // == "Handling DateTimeOffset in SQLite with Entity Framework Core"
         // https://blog.dangl.me/archive/handling-datetimeoffset-in-sqlite-with-entity-framework-core/
         if (dbProviderName != AppDbContext.SqliteProvider) return builder;
+
+        builder.Entity<IdentityPasskeyData>(e => e.HasNoKey());
 
         foreach (var entityType in builder.Model.GetEntityTypes())
         {
