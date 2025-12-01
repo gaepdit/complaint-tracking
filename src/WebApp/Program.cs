@@ -10,7 +10,13 @@ using ZLogger;
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure logging
-builder.Logging.ClearProviders().AddZLoggerConsole(options => options.UseJsonFormatter());
+builder.Logging.ClearProviders().AddZLoggerConsole(options =>
+{
+    if (builder.Environment.IsDevelopment())
+        options.UsePlainTextFormatter();
+    else
+        options.UseJsonFormatter();
+});
 
 // Set the default timeout for regular expressions.
 // https://learn.microsoft.com/en-us/dotnet/standard/base-types/best-practices-regex#use-time-out-values
