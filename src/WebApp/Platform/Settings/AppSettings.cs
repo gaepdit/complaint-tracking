@@ -11,11 +11,18 @@ internal static partial class AppSettings
     public static Support Support { get; } = new();
     public static EntraIdPhaseOut EntraIdPhaseOut { get; } = new();
     public static Raygun RaygunSettings { get; } = new();
+    public static DataDog DataDogSettings { get; } = new();
     public static string? OrgNotificationsApiUrl { get; private set; }
 
     public record Raygun
     {
         public string? ApiKey { get; [UsedImplicitly] init; }
+    }
+
+    public record DataDog
+    {
+        public string? ClientToken { get; [UsedImplicitly] init; }
+        public string? ApplicationId { get; [UsedImplicitly] init; }
     }
 
     // Attachment File Service configuration
