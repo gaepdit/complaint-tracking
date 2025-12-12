@@ -11,9 +11,9 @@
     <PackageVersion Include="Dapper" Version="2.1.66" />
     <PackageVersion Include="FluentValidation" Version="12.1.0" />
     <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.0" />
-    <PackageVersion Include="GaEpd.AppLibrary" Version="7.1.0" />
-    <PackageVersion Include="GaEpd.EmailService" Version="1.3.0" />
-    <PackageVersion Include="GaEpd.FileService" Version="3.2.1" />
+    <PackageVersion Include="GaEpd.AppLibrary" Version="7.2.0-beta.1" />
+    <PackageVersion Include="GaEpd.EmailService" Version="1.4.0-beta.1" />
+    <PackageVersion Include="GaEpd.FileService" Version="3.3.0-beta.1" />
     <PackageVersion Include="HtmlSanitizer" Version="8.0.865" />
     <PackageVersion Include="JetBrains.Annotations" Version="2025.2.2" />
     <PackageVersion Include="LigerShark.WebOptimizer.Core" Version="3.0.477" />
