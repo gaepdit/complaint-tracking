@@ -44,13 +44,14 @@
       "destination": "wwwroot/lib/anchor-js/"
     },
     {
-      "library": "axios@1.7.4",
+      "provider": "jsdelivr",
+      "library": "axios@1.13.2",
       "destination": "wwwroot/lib/axios/",
       "files": [
-        "axios.min.js",
-        "axios.js",
-        "axios.js.map",
-        "axios.min.js.map"
+        "dist/axios.min.js",
+        "dist/axios.js",
+        "dist/axios.js.map",
+        "dist/axios.min.js.map"
       ]
     },
     {
