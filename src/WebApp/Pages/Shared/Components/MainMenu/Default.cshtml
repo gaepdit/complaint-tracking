@@ -31,7 +31,7 @@
                     @if (Model.IsStaffUser)
                     {
                         <li class="nav-item">
-                            <a class="nav-link" asp-page="/Staff/Index" title="Dashboard">Dashboard</a>
+                            <a class="nav-link" asp-page="/Staff/Index" title="Dashboard"><span class="d-none d-md-inline">CTS</span> Dashboard</a>
                         </li>
                     }
                     @if (Model.IsActiveUser)
@@ -51,7 +51,7 @@
                             <a class="nav-link" asp-page="/Staff/Complaints/Add" title="Add New Complaint">
                                 <svg class="bi">
                                     <use href="@Url.Content("~/images/app-icons.svg")#app-icon-plus-lg"></use>
-                                </svg> <span class="d-inline d-sm-none">Add&nbsp;</span>New <span class="d-inline d-sm-none d-lg-inline">Complaint</span>
+                                </svg> <span class="d-inline d-sm-none d-xl-inline">Add&nbsp;</span>New <span class="d-inline d-sm-none d-lg-inline">Complaint</span>
                             </a>
                         </li>
                     }
