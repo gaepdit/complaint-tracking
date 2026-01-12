@@ -5,14 +5,15 @@
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
+
+        <!-- Enable the NUnit runner. This is required for using the new Microsoft Testing Platform. -->
         <EnableNUnitRunner>true</EnableNUnitRunner>
         <OutputType>Exe</OutputType>
     </PropertyGroup>
 
     <PropertyGroup>
-        <BaseProjectArtifactPath>$(MSBuildThisFileDirectory)..\.artifacts\$(MSBuildProjectName)</BaseProjectArtifactPath>
-        <BaseOutputPath>$(BaseProjectArtifactPath)\bin\</BaseOutputPath>
-        <BaseIntermediateOutputPath>$(BaseProjectArtifactPath)\obj\</BaseIntermediateOutputPath>
+        <UseArtifactsOutput>true</UseArtifactsOutput>
+        <ArtifactsPath>$(MSBuildThisFileDirectory)..\_artifacts</ArtifactsPath>
     </PropertyGroup>
 
     <PropertyGroup>

@@ -9,12 +9,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="appsettings.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
+        <None Update="appsettings.json" CopyToOutputDirectory="Always" />
     </ItemGroup>
 
     <Target Name="CopyTestSettings" AfterTargets="AfterBuild">
-        <Copy SourceFiles="appsettings.json" DestinationFolder="$(BaseProjectArtifactPath)" />
+        <!-- This <Target> element can be removed if the following issue gets fixed: -->
+        <!-- https://github.com/JonPSmith/EfCore.TestSupport/issues/62 -->
+        <Copy SourceFiles="appsettings.json" DestinationFolder="$(MSBuildThisFileDirectory)../../_artifacts" />
     </Target>
 </Project>

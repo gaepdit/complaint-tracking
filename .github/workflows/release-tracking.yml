@@ -15,9 +15,6 @@ on:
     tags:
       - "v[0-9]+.[0-9]+.[0-9]+"
 
-permissions:
-  contents: write
-
 jobs:
   release-tracking:
     # ↓ Change this to "false" to disable the workflow without any alert messages.
@@ -25,6 +22,9 @@ jobs:
     # ↑ Change to "true" (or delete) to enable the workflow.
 
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
     steps:
       - name: Get the version number
         id: get_version

@@ -6,9 +6,8 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <BaseProjectArtifactPath>$(MSBuildThisFileDirectory).artifacts\$(MSBuildProjectName)</BaseProjectArtifactPath>
-        <BaseOutputPath>$(BaseProjectArtifactPath)\bin\</BaseOutputPath>
-        <BaseIntermediateOutputPath>$(BaseProjectArtifactPath)\obj\</BaseIntermediateOutputPath>
+        <UseArtifactsOutput>true</UseArtifactsOutput>
+        <ArtifactsPath>$(MSBuildThisFileDirectory)_artifacts</ArtifactsPath>
     </PropertyGroup>
 
     <PropertyGroup>
