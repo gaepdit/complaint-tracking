@@ -1,0 +1,22 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/tests/">
+    <Project Path="tests/AppServicesTests/AppServicesTests.csproj" />
+    <Project Path="tests/DomainTests/DomainTests.csproj" />
+    <Project Path="tests/EfRepositoryTests/EfRepositoryTests.csproj" />
+    <Project Path="tests/LocalRepositoryTests/LocalRepositoryTests.csproj" />
+    <Project Path="tests/WebAppTests/WebAppTests.csproj" />
+  </Folder>
+  <Project Path="src/AppHost/AppHost.csproj" />
+  <Project Path="src/AppServices/AppServices.csproj" />
+  <Project Path="src/Domain/Domain.csproj" />
+  <Project Path="src/EfRepository/EfRepository.csproj" />
+  <Project Path="src/LocalRepository/LocalRepository.csproj" />
+  <Project Path="src/ServiceDefaults/ServiceDefaults.csproj" />
+  <Project Path="src/TestData/TestData.csproj" />
+  <Project Path="src/WebApp/WebApp.csproj" />
+</Solution>
