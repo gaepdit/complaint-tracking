@@ -1,5 +1,9 @@
 # Changelog
 
+## [2026.1.15] - 2026-1-15
+
+- Updated to .NET 10.
+
 ## [2025.11.6] - 2025-11-06
 
 - This update includes various minor UI fixes and tweaks, including:
@@ -9,7 +13,7 @@
 
 ## [2025.8.11] - 2025-08-11
 
-- Fixed a bug that caused complaint actions and attachments to display out of order. 
+- Fixed a bug that caused complaint actions and attachments to display out of order.
 
 ## [2025.8.8] - 2025-08-08
 
@@ -181,3 +185,5 @@ like it!
 [2025.8.11]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.8.11
 
 [2025.11.6]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.11.6
+
+[2026.1.15]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2026.1.15
