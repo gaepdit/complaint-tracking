@@ -42,7 +42,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
             .ConfigureDatabaseViews()
             .ConfigureEnumValues()
             .ConfigureDateTimeOffsetHandling(Database.ProviderName)
-            .ConfigurePerformanceIndexes();
+            .ConfigurePerformanceIndexes()
+            .ConfigureIdentityPasskeyData(Database.ProviderName);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

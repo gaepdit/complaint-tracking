@@ -75,8 +75,6 @@ internal static class AppDbContextConfiguration
         // https://blog.dangl.me/archive/handling-datetimeoffset-in-sqlite-with-entity-framework-core/
         if (dbProviderName != AppDbContext.SqliteProvider) return builder;
 
-        builder.Entity<IdentityPasskeyData>(e => e.HasNoKey());
-
         foreach (var entityType in builder.Model.GetEntityTypes())
         {
             // This doesn't work with owned types which we don't have anyway but which would be configured like so:
@@ -90,6 +88,14 @@ internal static class AppDbContextConfiguration
                 builder.Entity(entityType.Name).Property(property.Name)
                     .HasConversion(new DateTimeOffsetToBinaryConverter());
         }
+
+        return builder;
+    }
+
+    internal static ModelBuilder ConfigureIdentityPasskeyData(this ModelBuilder builder, string? dbProviderName)
+    {
+        if (dbProviderName == AppDbContext.SqliteProvider)
+            builder.Entity<IdentityPasskeyData>(e => e.HasNoKey());
 
         return builder;
     }
