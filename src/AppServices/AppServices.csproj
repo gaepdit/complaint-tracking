@@ -4,7 +4,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoMapper" />
         <PackageReference Include="ClosedXML" />
         <PackageReference Include="CsvHelper" />
         <PackageReference Include="FluentValidation" />

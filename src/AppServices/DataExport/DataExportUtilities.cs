@@ -73,18 +73,20 @@ public static class DataExportUtilities
     public static async Task<MemoryStream> CreateZipArchive(this Dictionary<string, Task<MemoryStream>> files)
     {
         var zipMemoryStream = new MemoryStream();
-        using (var zipArchive = new ZipArchive(zipMemoryStream, ZipArchiveMode.Create, leaveOpen: true))
+        var zipArchive = await ZipArchive.CreateAsync(zipMemoryStream, ZipArchiveMode.Create, leaveOpen: true,
+            entryNameEncoding: Encoding.UTF8).ConfigureAwait(false);
+
+        await using (zipArchive.ConfigureAwait(false))
         {
             foreach (var (key, value) in files)
             {
                 var zipEntry = zipArchive.CreateEntry(key);
-                var zipEntryStream = zipEntry.Open();
+                var zipEntryStream = await zipEntry.OpenAsync().ConfigureAwait(false);
                 await using var zipEntryStreamAsyncDisposable = zipEntryStream.ConfigureAwait(false);
                 await new MemoryStream((await value.ConfigureAwait(false)).ToArray()).CopyToAsync(zipEntryStream)
                     .ConfigureAwait(false);
             }
-        } // `zipArchive` must be disposed before resetting position and returning stream.
-        // Otherwise, the Position might move again.
+        } // `zipArchive` must be disposed before resetting position and returning stream. Otherwise, the Position might move again.
 
         zipMemoryStream.Position = 0;
         return zipMemoryStream;
