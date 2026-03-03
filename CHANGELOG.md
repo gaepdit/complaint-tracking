@@ -1,6 +1,10 @@
 # Changelog
 
-## [2026.1.15] - 2026-1-15
+## [2026.3.3] - 2026-03-03
+
+- Updated to .NET 10.
+
+## [2026.1.15] - 2026-01-15
 
 - Updated to .NET 10.
 
@@ -187,3 +191,5 @@ like it!
 [2025.11.6]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.11.6
 
 [2026.1.15]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2026.1.15
+
+[2026.3.3]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2026.3.3
