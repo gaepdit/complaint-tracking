@@ -8,27 +8,29 @@ public static class LoginProviderValidation
     private static IEnumerable<string>? _loginProviderNames;
     private const string EnabledLoginProviders = nameof(EnabledLoginProviders);
 
-    private static IEnumerable<LoginProvider> LoginProviders(this IConfiguration configuration)
+    extension(IConfiguration configuration)
     {
-        _loginProviders ??= configuration.GetSection(EnabledLoginProviders).Get<LoginProvider[]>() ?? [];
-        return _loginProviders;
-    }
+        private IEnumerable<LoginProvider> LoginProviders()
+        {
+            _loginProviders ??= configuration.GetSection(EnabledLoginProviders).Get<LoginProvider[]>() ?? [];
+            return _loginProviders;
+        }
 
-    public static IEnumerable<string> LoginProviderNames(this IConfiguration configuration)
-    {
-        _loginProviderNames ??= configuration.LoginProviders().Select(lp => lp.Name);
-        return _loginProviderNames;
-    }
+        public IEnumerable<string> LoginProviderNames()
+        {
+            _loginProviderNames ??= configuration.LoginProviders().Select(lp => lp.Name);
+            return _loginProviderNames;
+        }
 
-    public static bool ValidateLoginProviderId(this IConfiguration configuration, string loginProvider,
-        string identityProviderId)
-    {
-        if (string.IsNullOrEmpty(loginProvider) || string.IsNullOrEmpty(identityProviderId)) return false;
-        return configuration.LoginProviders().Contains(new LoginProvider(loginProvider, identityProviderId));
-    }
+        public bool ValidateLoginProviderId(string loginProvider, string identityProviderId)
+        {
+            if (string.IsNullOrEmpty(loginProvider) || string.IsNullOrEmpty(identityProviderId)) return false;
+            return configuration.LoginProviders().Contains(new LoginProvider(loginProvider, identityProviderId));
+        }
 
-    public static bool ValidateLoginProvider(this IConfiguration configuration, string loginProvider) =>
-        !string.IsNullOrEmpty(loginProvider) && configuration.LoginProviderNames().Contains(loginProvider);
+        public bool ValidateLoginProvider(string loginProvider) =>
+            !string.IsNullOrEmpty(loginProvider) && configuration.LoginProviderNames().Contains(loginProvider);
+    }
 }
 
 public record LoginProvider(string Name, string Id);

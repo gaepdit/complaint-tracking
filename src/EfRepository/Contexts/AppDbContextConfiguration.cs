@@ -4,6 +4,7 @@ using Cts.Domain.Entities.ComplaintActions;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.Entities.ComplaintTransitions;
 using Cts.Domain.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Cts.EfRepository.Contexts;
@@ -87,6 +88,14 @@ internal static class AppDbContextConfiguration
                 builder.Entity(entityType.Name).Property(property.Name)
                     .HasConversion(new DateTimeOffsetToBinaryConverter());
         }
+
+        return builder;
+    }
+
+    internal static ModelBuilder ConfigureIdentityPasskeyData(this ModelBuilder builder, string? dbProviderName)
+    {
+        if (dbProviderName == AppDbContext.SqliteProvider)
+            builder.Entity<IdentityPasskeyData>(e => e.HasNoKey());
 
         return builder;
     }

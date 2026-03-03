@@ -193,23 +193,22 @@ public sealed class ComplaintService(
 
         if (recipient is null)
         {
-            logger.LogWarning(NotificationService.NotificationPreparationFailure,
-                "Complaint {ComplaintId} notification recipient is null.", complaint.Id);
+            logger.ZLogWarning(NotificationService.NotificationPreparationFailure,
+                $"Complaint {complaint.Id:@ComplaintId} notification recipient is null.");
             return NotificationResult.FailureResult("This complaint does not have an available owner or assignor.");
         }
 
         if (!recipient.Active)
         {
-            logger.LogWarning(NotificationService.NotificationPreparationFailure,
-                "Complaint {ComplaintId} notification recipient {RecipientId} is not active in CTS.",
-                complaint.Id, recipient.Id);
+            logger.ZLogWarning(NotificationService.NotificationPreparationFailure,
+                $"Complaint {complaint.Id:@ComplaintId} notification recipient {recipient.Id:@RecipientId} is not active in CTS.");
             return NotificationResult.FailureResult("The complaint owner or assignor is not an active CTS user.");
         }
 
         if (string.IsNullOrEmpty(recipient.Email))
         {
-            logger.LogWarning(NotificationService.NotificationPreparationFailure,
-                "Complaint {ComplaintId} notification recipient {RecipientId} email address is null.",
+            logger.ZLogWarning(NotificationService.NotificationPreparationFailure,
+                $"Complaint {complaint.Id:@ComplaintId} notification recipient {recipient.Id:@RecipientId} email address is null.",
                 complaint.Id, recipient.Id);
             return NotificationResult.FailureResult("The complaint owner or assignor cannot be emailed.");
         }
@@ -324,16 +323,16 @@ public sealed class ComplaintService(
         // Send notification
         if (!reviewer.Active)
         {
-            logger.LogWarning(NotificationService.NotificationPreparationFailure,
-                "Complaint {ComplaintId} requested reviewer {RecipientId} is not active in CTS.",
+            logger.ZLogWarning(NotificationService.NotificationPreparationFailure,
+                $"Complaint {complaint.Id:@ComplaintId} requested reviewer {reviewer.Id:@ReviewerId} is not active in CTS.",
                 complaint.Id, reviewer.Id);
             return NotificationResult.FailureResult("The requested reviewer is not an active CTS user.");
         }
 
         if (string.IsNullOrEmpty(reviewer.Email))
         {
-            logger.LogWarning(NotificationService.NotificationPreparationFailure,
-                "Complaint {ComplaintId} requested reviewer {RecipientId} email address is null.",
+            logger.ZLogWarning(NotificationService.NotificationPreparationFailure,
+                $"Complaint {complaint.Id:@ComplaintId} requested reviewer {reviewer.Id:@ReviewerId} email address is null.",
                 complaint.Id, reviewer.Id);
             return NotificationResult.FailureResult("The requested reviewer cannot be emailed.");
         }

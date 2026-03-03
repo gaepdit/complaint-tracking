@@ -3,9 +3,6 @@ name: .NET Unit Tests
 on:
   pull_request:
 
-permissions:
-  contents: read
-
 jobs:
   dotnet-test:
     # ↓ Change this to "false" to disable the workflow without any alert messages.
@@ -14,12 +11,15 @@ jobs:
     
     name: Run unit tests
     runs-on: windows-latest
+    permissions:
+      contents: read
+    
     steps:
       - name: Check out repository
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
       - name: Set up .NET
-        uses: actions/setup-dotnet@d4c94342e560b34958eacfc5d055d21461ed1c5d
+        uses: actions/setup-dotnet@baa11fbfe1d6520db94683bd5c7a3818018e4309
         with:
           global-json-file: global.json
 
@@ -29,21 +29,14 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
 
-      - name: Configure Datadog Test Optimization
-        uses: datadog/test-visibility-github-action@f4b026bb8b8b53f323960cf86a849a0231ff93b9
-        with:
-          languages: dotnet
-          api_key: ${{secrets.DD_API_KEY}}
-          site: us3.datadoghq.com
-
       - name: Test
-        run: dotnet test --no-build --verbosity normal --logger:nunit
+        run: dotnet test --no-build --verbosity normal --report-spekt-nunit
 
       - name: Upload test result artifacts
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
-          path: tests/**/TestResults.xml
+          path: _artifacts/bin/**/debug/TestResults/TestResults.xml
 
   publish-test-results:
     name: Publish test results
@@ -57,11 +50,11 @@ jobs:
 
     steps:
       - name: Download test result artifacts
-        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
         with:
           path: test-results # destination folder
 
       - name: Publish test results
-        uses: EnricoMi/publish-unit-test-result-action@34d7c956a59aed1bfebf31df77b8de55db9bbaaf
+        uses: EnricoMi/publish-unit-test-result-action@c950f6fb443cb5af20a377fd0dfaa78838901040
         with:
           files: test-results/**/TestResults.xml

@@ -18,20 +18,20 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     internal const string SqliteProvider = "Microsoft.EntityFrameworkCore.Sqlite";
 
     // Domain entities
-    public DbSet<ActionType> ActionTypes => Set<ActionType>();
-    public DbSet<Attachment> Attachments => Set<Attachment>();
-    public DbSet<Complaint> Complaints => Set<Complaint>();
-    public DbSet<ComplaintAction> ComplaintActions => Set<ComplaintAction>();
-    public DbSet<ComplaintTransition> ComplaintTransitions => Set<ComplaintTransition>();
-    public DbSet<Concern> Concerns => Set<Concern>();
-    public DbSet<Office> Offices => Set<Office>();
-    public DbSet<EmailLog> EmailLogs => Set<EmailLog>();
+    public DbSet<ActionType> ActionTypes { get; set; } = null!;
+    public DbSet<Attachment> Attachments { get; set; } = null!;
+    public DbSet<Complaint> Complaints { get; set; } = null!;
+    public DbSet<ComplaintAction> ComplaintActions { get; set; } = null!;
+    public DbSet<ComplaintTransition> ComplaintTransitions { get; set; } = null!;
+    public DbSet<Concern> Concerns { get; set; } = null!;
+    public DbSet<Office> Offices { get; set; } = null!;
+    public DbSet<EmailLog> EmailLogs { get; set; } = null!;
 
     // Database views
-    public DbSet<OpenComplaint> OpenComplaintsView => Set<OpenComplaint>();
-    public DbSet<ClosedComplaint> ClosedComplaintsView => Set<ClosedComplaint>();
-    public DbSet<ClosedComplaintAction> ClosedComplaintActionsView => Set<ClosedComplaintAction>();
-    public DbSet<RecordsCount> RecordsCountView => Set<RecordsCount>();
+    public DbSet<OpenComplaint> OpenComplaintsView { get; set; } = null!;
+    public DbSet<ClosedComplaint> ClosedComplaintsView { get; set; } = null!;
+    public DbSet<ClosedComplaintAction> ClosedComplaintActionsView { get; set; } = null!;
+    public DbSet<RecordsCount> RecordsCountView { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -42,7 +42,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
             .ConfigureDatabaseViews()
             .ConfigureEnumValues()
             .ConfigureDateTimeOffsetHandling(Database.ProviderName)
-            .ConfigurePerformanceIndexes();
+            .ConfigurePerformanceIndexes()
+            .ConfigureIdentityPasskeyData(Database.ProviderName);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

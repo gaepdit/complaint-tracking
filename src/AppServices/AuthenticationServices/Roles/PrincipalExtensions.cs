@@ -5,30 +5,29 @@ namespace Cts.AppServices.AuthenticationServices.Roles;
 
 public static class PrincipalExtensions
 {
-    private static bool IsInOneOfRoles(this IPrincipal principal, IEnumerable<string> roles) =>
-        roles.Any(principal.IsInRole);
+    extension(IPrincipal principal)
+    {
+        private bool IsInOneOfRoles(IEnumerable<string> roles) => roles.Any(principal.IsInRole);
 
-    internal static bool IsAttachmentsEditor(this IPrincipal principal) =>
-        principal.IsInOneOfRoles([RoleName.AttachmentsEditor, RoleName.DivisionManager]);
+        internal bool IsAttachmentsEditor() =>
+            principal.IsInOneOfRoles([RoleName.AttachmentsEditor, RoleName.DivisionManager]);
 
-    internal static bool IsDataExporter(this IPrincipal principal) =>
-        principal.IsInRole(RoleName.DataExport);
+        internal bool IsDataExporter() => principal.IsInRole(RoleName.DataExport);
 
-    internal static bool IsDivisionManager(this IPrincipal principal) =>
-        principal.IsInRole(RoleName.DivisionManager);
+        internal bool IsDivisionManager() => principal.IsInRole(RoleName.DivisionManager);
 
-    internal static bool IsManager(this IPrincipal principal) =>
-        principal.IsInOneOfRoles([RoleName.Manager, RoleName.DivisionManager]);
+        internal bool IsManager() => principal.IsInOneOfRoles([RoleName.Manager, RoleName.DivisionManager]);
 
-    internal static bool IsSiteMaintainer(this IPrincipal principal) =>
-        principal.IsInOneOfRoles([RoleName.SiteMaintenance, RoleName.DivisionManager]);
+        internal bool IsSiteMaintainer() =>
+            principal.IsInOneOfRoles([RoleName.SiteMaintenance, RoleName.DivisionManager]);
 
-    internal static bool IsStaff(this IPrincipal principal) =>
-        principal.IsInOneOfRoles([RoleName.Staff, RoleName.Manager, RoleName.DivisionManager]);
+        internal bool IsStaff() =>
+            principal.IsInOneOfRoles([RoleName.Staff, RoleName.Manager, RoleName.DivisionManager]);
 
-    internal static bool IsUserAdmin(this IPrincipal principal) =>
-        principal.IsInOneOfRoles([RoleName.UserAdmin, RoleName.SuperUserAdmin, RoleName.DivisionManager]);
+        internal bool IsUserAdmin() =>
+            principal.IsInOneOfRoles([RoleName.UserAdmin, RoleName.SuperUserAdmin, RoleName.DivisionManager]);
 
-    internal static bool IsSuperUserAdmin(this IPrincipal principal) =>
-        principal.IsInOneOfRoles([RoleName.SuperUserAdmin, RoleName.DivisionManager]);
+        internal bool IsSuperUserAdmin() =>
+            principal.IsInOneOfRoles([RoleName.SuperUserAdmin, RoleName.DivisionManager]);
+    }
 }
