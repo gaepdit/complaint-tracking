@@ -1,11 +1,3 @@
 ﻿<script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-<script asp-add-content-to-csp>
-    // Change validation classes to work with Bootstrap
-    const settings = {
-        validClass: "is-valid",
-        errorClass: "is-invalid"
-    };
-    $.validator.setDefaults(settings);
-    $.validator.unobtrusive.options = settings;
-</script>
+<script src="~/js/jquery.validate.options.js"></script>
