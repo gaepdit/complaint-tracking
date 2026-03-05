@@ -1,6 +1,6 @@
 // Change validation classes to work with Bootstrap
 (function ($) {
-    if ($.validator && $.validator.unobtrusive) {
+    if ($.validator?.unobtrusive) {
         const settings = {
             validClass: "is-valid",
             errorClass: "is-invalid"
