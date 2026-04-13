@@ -17,7 +17,7 @@ internal static class SecurityHeaders
             // For more info on updating HSTS max age value for production, see:
             // https://gaepdit.github.io/web-apps/use-https.html#how-to-enable-hsts
             builder.Services
-                .AddHsts(options => options.MaxAge = TimeSpan.FromMinutes(300))
+                .AddHsts(options => options.MaxAge = TimeSpan.FromDays(730))
                 .AddHttpsRedirection(options =>
                 {
                     options.HttpsPort = 443;
