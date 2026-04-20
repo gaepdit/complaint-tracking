@@ -34,7 +34,7 @@ public class PublicSearch
 
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
-            Substitute.For<IAttachmentService>(), Substitute.For<INotificationService>(), AppServicesTestsSetup.Mapper!,
+            Substitute.For<IAttachmentService>(), Substitute.For<INotificationService>(), Setup.Mapper!,
             Substitute.For<IUserService>(), Substitute.For<IAuthorizationService>(),
             Substitute.For<ILogger<ComplaintService>>());
 
@@ -64,7 +64,7 @@ public class PublicSearch
 
         var appService = new ComplaintService(repoMock, Substitute.For<IComplaintManager>(),
             Substitute.For<IConcernRepository>(), Substitute.For<IOfficeRepository>(),
-            Substitute.For<IAttachmentService>(), Substitute.For<INotificationService>(), AppServicesTestsSetup.Mapper!,
+            Substitute.For<IAttachmentService>(), Substitute.For<INotificationService>(), Setup.Mapper!,
             Substitute.For<IUserService>(), Substitute.For<IAuthorizationService>(),
             Substitute.For<ILogger<ComplaintService>>());
 

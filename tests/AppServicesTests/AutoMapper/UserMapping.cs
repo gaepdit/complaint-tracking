@@ -20,7 +20,7 @@ public class UserMapping
     [Test]
     public void StaffViewMappingWorks()
     {
-        var result = AppServicesTestsSetup.Mapper!.Map<StaffViewDto>(_item);
+        var result = Setup.Mapper!.Map<StaffViewDto>(_item);
 
         using var scope = new AssertionScope();
         result.Id.Should().Be(_item.Id);
@@ -35,7 +35,7 @@ public class UserMapping
     [Test]
     public void StaffSearchResultMappingWorks()
     {
-        var result = AppServicesTestsSetup.Mapper!.Map<StaffSearchResultDto>(_item);
+        var result = Setup.Mapper!.Map<StaffSearchResultDto>(_item);
 
         using var scope = new AssertionScope();
         result.Id.Should().Be(_item.Id);
@@ -49,7 +49,7 @@ public class UserMapping
     public void NullStaffViewMappingWorks()
     {
         ApplicationUser? item = null;
-        var result = AppServicesTestsSetup.Mapper!.Map<StaffViewDto?>(item);
+        var result = Setup.Mapper!.Map<StaffViewDto?>(item);
         result.Should().BeNull();
     }
 }

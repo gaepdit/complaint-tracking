@@ -28,5 +28,5 @@ internal static class AppServiceHelpers
             attachmentRepository ?? Substitute.For<IAttachmentRepository>(),
             complaintRepository ?? Substitute.For<IComplaintRepository>(),
             userService ?? Substitute.For<IUserService>(),
-            AppServicesTestsSetup.Mapper!, Substitute.For<ILogger<AttachmentService>>());
+            Setup.Mapper!, Substitute.For<ILogger<AttachmentService>>());
 }

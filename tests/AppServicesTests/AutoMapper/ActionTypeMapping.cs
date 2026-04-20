@@ -11,7 +11,7 @@ public class ActionTypeMapping
     {
         var item = new ActionType(Guid.NewGuid(), "Name");
 
-        var result = AppServicesTestsSetup.Mapper!.Map<ActionTypeViewDto>(item);
+        var result = Setup.Mapper!.Map<ActionTypeViewDto>(item);
 
         using var scope = new AssertionScope();
         result.Id.Should().Be(item.Id);
@@ -24,7 +24,7 @@ public class ActionTypeMapping
     {
         var item = new ActionType(Guid.NewGuid(), "Name");
 
-        var result = AppServicesTestsSetup.Mapper!.Map<ActionTypeUpdateDto>(item);
+        var result = Setup.Mapper!.Map<ActionTypeUpdateDto>(item);
 
         using var scope = new AssertionScope();
         result.Name.Should().Be(item.Name);

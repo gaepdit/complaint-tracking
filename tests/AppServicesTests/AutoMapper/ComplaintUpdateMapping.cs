@@ -16,7 +16,7 @@ public class ComplaintUpdateMapping
             ReceivedDate = new DateTimeOffset(2000, 01, 01, 12, 30, 15, TimeSpan.Zero).ToLocalTime(),
         };
 
-        var result = AppServicesTestsSetup.Mapper!.Map<ComplaintUpdateDto>(item);
+        var result = Setup.Mapper!.Map<ComplaintUpdateDto>(item);
 
         using var scope = new AssertionScope();
         result.ReceivedDate.Should().Be(DateOnly.FromDateTime(item.ReceivedDate.Date));
@@ -48,7 +48,7 @@ public class ComplaintUpdateMapping
         item.SetDeleted(null);
 
         // Act
-        var result = AppServicesTestsSetup.Mapper!.Map<ComplaintUpdateDto>(item);
+        var result = Setup.Mapper!.Map<ComplaintUpdateDto>(item);
 
         // Assert
         using var scope = new AssertionScope();
