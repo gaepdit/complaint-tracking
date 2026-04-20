@@ -17,7 +17,7 @@ public class GetList
         var managerMock = Substitute.For<IConcernManager>();
         var userServiceMock = Substitute.For<IUserService>();
         var appService = new ConcernService(repoMock, managerMock,
-            AppServicesTestsSetup.Mapper!, userServiceMock);
+            Setup.Mapper!, userServiceMock);
 
         var result = await appService.GetListAsync();
 

@@ -23,7 +23,7 @@ public class GetActiveListItems
 
         var managerMock = Substitute.For<IConcernManager>();
         var userServiceMock = Substitute.For<IUserService>();
-        var appService = new ConcernService(repoMock, managerMock, AppServicesTestsSetup.Mapper!, userServiceMock);
+        var appService = new ConcernService(repoMock, managerMock, Setup.Mapper!, userServiceMock);
 
         // Act
         var result = await appService.GetAsListItemsAsync();

@@ -26,7 +26,7 @@ public class FindForUpdate
         var repoMock = Substitute.For<IOfficeRepository>();
         repoMock.FindIncludeAssignorAsync(office.Id).Returns(office);
 
-        var appService = new OfficeService(repoMock, Substitute.For<IOfficeManager>(), AppServicesTestsSetup.Mapper!,
+        var appService = new OfficeService(repoMock, Substitute.For<IOfficeManager>(), Setup.Mapper!,
             Substitute.For<IUserService>(), Substitute.For<IAuthorizationService>());
 
         // Act

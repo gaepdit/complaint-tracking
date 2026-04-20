@@ -12,7 +12,7 @@ public class OfficeMapping
     {
         var item = new Office(Guid.NewGuid(), TextData.ValidName);
 
-        var result = AppServicesTestsSetup.Mapper!.Map<OfficeViewDto>(item);
+        var result = Setup.Mapper!.Map<OfficeViewDto>(item);
 
         using var scope = new AssertionScope();
         result.Id.Should().Be(item.Id);
@@ -25,7 +25,7 @@ public class OfficeMapping
     {
         var item = new Office(Guid.NewGuid(), TextData.ValidName);
 
-        var result = AppServicesTestsSetup.Mapper!.Map<OfficeWithAssignorDto>(item);
+        var result = Setup.Mapper!.Map<OfficeWithAssignorDto>(item);
 
         using var scope = new AssertionScope();
         result.Id.Should().Be(item.Id);
@@ -39,7 +39,7 @@ public class OfficeMapping
     {
         var item = new Office(Guid.NewGuid(), TextData.ValidName);
 
-        var result = AppServicesTestsSetup.Mapper!.Map<OfficeUpdateDto>(item);
+        var result = Setup.Mapper!.Map<OfficeUpdateDto>(item);
 
         using var scope = new AssertionScope();
         result.Name.Should().Be(item.Name);
@@ -52,7 +52,7 @@ public class OfficeMapping
         var user = new ApplicationUser { Id = Guid.NewGuid().ToString() };
         var item = new Office(Guid.NewGuid(), TextData.ValidName) { Assignor = user };
 
-        var result = AppServicesTestsSetup.Mapper!.Map<OfficeUpdateDto>(item);
+        var result = Setup.Mapper!.Map<OfficeUpdateDto>(item);
 
         using var scope = new AssertionScope();
         result.Name.Should().Be(item.Name);

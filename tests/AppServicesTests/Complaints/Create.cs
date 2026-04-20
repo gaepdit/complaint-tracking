@@ -45,7 +45,7 @@ public class Create
 
         var appService = new ComplaintService(Substitute.For<IComplaintRepository>(), complaintManagerMock,
             Substitute.For<IConcernRepository>(), officeRepoMock, Substitute.For<IAttachmentService>(),
-            notificationMock, AppServicesTestsSetup.Mapper!, userServiceMock, Substitute.For<IAuthorizationService>(),
+            notificationMock, Setup.Mapper!, userServiceMock, Substitute.For<IAuthorizationService>(),
             Substitute.For<ILogger<ComplaintService>>());
 
         var item = new ComplaintCreateDto { OfficeId = Guid.Empty };
@@ -84,7 +84,7 @@ public class Create
 
         var appService = new ComplaintService(Substitute.For<IComplaintRepository>(), complaintManagerMock,
             Substitute.For<IConcernRepository>(), officeRepoMock, Substitute.For<IAttachmentService>(),
-            notificationMock, AppServicesTestsSetup.Mapper!, userServiceMock, Substitute.For<IAuthorizationService>(),
+            notificationMock, Setup.Mapper!, userServiceMock, Substitute.For<IAuthorizationService>(),
             Substitute.For<ILogger<ComplaintService>>());
 
         var item = new ComplaintCreateDto

@@ -4,7 +4,6 @@ using Cts.WebApp.Platform.AppConfiguration;
 using Cts.WebApp.Platform.OrgNotifications;
 using Cts.WebApp.Platform.Settings;
 using GaEpd.EmailService.Utilities;
-using ServiceDefaults;
 using ZLogger;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -53,9 +52,6 @@ builder.Services.AddApiDocumentation();
 // Configure bundling and minification.
 builder.AddWebOptimizer();
 
-// Configure Aspire.
-builder.AddServiceDefaults();
-
 // Build the application.
 var app = builder.Build();
 
@@ -74,7 +70,6 @@ app
     .UseApiDocumentation();
 
 // Map endpoints.
-app.MapDefaultEndpoints();
 app.MapRazorPages();
 app.MapControllers();
 

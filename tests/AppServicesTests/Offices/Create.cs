@@ -22,7 +22,7 @@ public class Create
         userServiceMock.GetCurrentUserAsync().Returns((ApplicationUser?)null);
 
         var appService = new OfficeService(Substitute.For<IOfficeRepository>(), managerMock,
-            AppServicesTestsSetup.Mapper!, userServiceMock,
+            Setup.Mapper!, userServiceMock,
             Substitute.For<IAuthorizationService>());
 
         var resource = new OfficeCreateDto(TextData.ValidName);
