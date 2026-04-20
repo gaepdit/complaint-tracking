@@ -1,5 +1,9 @@
 # Changelog
 
+## [2026.4.20] - 2026-04-20
+
+- Just a bunch of back-end updates and fixes.
+
 ## [2026.3.3] - 2026-03-03
 
 - Updated to .NET 10.
@@ -141,55 +145,31 @@ New login system. New design library. Updated workflows. New public complaint pa
 like it!
 
 [2024.10.16]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2024.10.16
-
 [2024.10.2]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2024.10.2
-
 [2024.11.5]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2024.11.5
-
 [2024.12.23]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2024.12.23
-
 [2024.7.24]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2024.7.24
-
 [2024.7.25]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2024.7.25
-
 [2024.7.26]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2024.7.26
-
 [2024.8.23]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2024.8.23
-
 [2024.8.29]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2024.8.29
-
 [2024.9.11]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2024.9.11
-
 [2025.1.10.1]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.1.10.1
-
 [2025.1.10]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.1.10
-
 [2025.1.8]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.1.8
-
 [2025.2.3]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.2.3
-
 [2025.3.24]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.3.24
-
 [2025.3.31]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.3.31
-
 [2025.3.5]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.3.5
-
 [2025.3.7]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.3.7
-
 [2025.4.10]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.4.10
-
 [2025.5.1]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.5.1
-
 [2025.6.26]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.6.26
-
 [2025.7.30]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.7.30
-
 [2025.8.8]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.8.8
-
 [2025.8.11]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.8.11
-
 [2025.11.6]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.11.6
-
 [2026.1.15]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2026.1.15
-
 [2026.3.3]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2026.3.3
+
+[2026.4.20]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2026.4.20
