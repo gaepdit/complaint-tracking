@@ -1,5 +1,9 @@
 # Changelog
 
+## [2026.4.21] - 2026-04-21
+
+- Fixed some stylesheets.
+
 ## [2026.4.20] - 2026-04-20
 
 - Just a bunch of back-end updates and fixes.
@@ -171,5 +175,5 @@ like it!
 [2025.11.6]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2025.11.6
 [2026.1.15]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2026.1.15
 [2026.3.3]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2026.3.3
-
 [2026.4.20]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2026.4.20
+[2026.4.21]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2026.4.21
