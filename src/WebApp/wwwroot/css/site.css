@@ -451,7 +451,7 @@ svg:not(:root) {
     display: inline-block;
     font-size: inherit;
     overflow: visible;
-    vertical-align: middle;
+    vertical-align: bottom;
     width: 1.5em;
     height: 1.5em;
 }

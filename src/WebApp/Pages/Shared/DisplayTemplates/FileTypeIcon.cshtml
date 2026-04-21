@@ -1,72 +1,19 @@
 @model string
-@switch (Model.ToLowerInvariant())
-{
-    case ".txt":
-        <svg class="bi svg-icon" role="img" width="16" height="16">
-            <use href="@Url.Content("~/images/file-type-icons.svg")#file-icon-text"></use>
-        </svg>
-        break;
-
-    case ".rtf":
-        <svg class="bi svg-icon" role="img" width="16" height="16">
-            <use href="@Url.Content("~/images/file-type-icons.svg")#file-icon-rtf"></use>
-        </svg>
-        break;
-
-    case ".csv":
-        <svg class="bi svg-icon" role="img" width="16" height="16">
-            <use href="@Url.Content("~/images/file-type-icons.svg")#file-icon-csv"></use>
-        </svg>
-        break;
-
-    case ".xls":
-    case ".xlsx":
-        <svg class="bi svg-icon" role="img" width="16" height="16">
-            <use href="@Url.Content("~/images/file-type-icons.svg")#file-icon-excel"></use>
-        </svg>
-        break;
-
-    case ".doc":
-    case ".docx":
-        <svg class="bi svg-icon" role="img" width="16" height="16">
-            <use href="@Url.Content("~/images/file-type-icons.svg")#file-icon-word"></use>
-        </svg>
-        break;
-
-    case ".pdf":
-        <svg class="bi svg-icon" role="img" width="16" height="16">
-            <use href="@Url.Content("~/images/file-type-icons.svg")#file-icon-pdf"></use>
-        </svg>
-        break;
-
-    case ".jpg":
-    case ".jpeg":
-    case ".png":
-    case ".bmp":
-    case ".gif":
-    case ".svg":
-        <svg class="bi svg-icon" role="img" width="16" height="16">
-            <use href="@Url.Content("~/images/file-type-icons.svg")#file-icon-image"></use>
-        </svg>
-        break;
-
-    case ".html":
-    case ".htm":
-        <svg class="bi svg-icon" role="img" width="16" height="16">
-            <use href="@Url.Content("~/images/file-type-icons.svg")#file-icon-html"></use>
-        </svg>
-        break;
-
-    case ".ppt":
-    case ".pptx":
-        <svg class="bi svg-icon" role="img" width="16" height="16">
-            <use href="@Url.Content("~/images/file-type-icons.svg")#file-icon-powerpoint"></use>
-        </svg>
-        break;
-
-    default:
-        <svg class="bi svg-icon" role="img" width="16" height="16">
-            <use href="@Url.Content("~/images/file-type-icons.svg")#file-icon-default"></use>
-        </svg>
-        break;
+@{
+    var icon = Model.ToLowerInvariant() switch
+    {
+        ".txt" => "file-icon-text",
+        ".rtf" => "file-icon-rtf",
+        ".csv" => "file-icon-csv",
+        ".xls" or ".xlsx" => "file-icon-excel",
+        ".doc" or ".docx" => "file-icon-word",
+        ".pdf" => "file-icon-pdf",
+        ".jpg" or ".jpeg" or ".png" or ".bmp" or ".gif" or ".svg" => "file-icon-image",
+        ".html" or ".htm" => "file-icon-html",
+        ".ppt" or ".pptx" => "file-icon-powerpoint",
+        _ => "file-icon-default",
+    };
 }
+<svg class="bi svg-icon" role="img">
+    <use href="@Url.Content("~/images/file-type-icons.svg?20260421")#@icon"></use>
+</svg>
