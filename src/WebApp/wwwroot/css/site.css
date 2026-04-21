@@ -352,10 +352,10 @@ details.card:not([open]) summary.card-header {
 /* Bootstrap Icons
 -------------------------------------------------- */
 .bi {
-    width: 1em;
-    height: 1em;
+    width: 1rem;
+    height: 1rem;
     fill: currentColor;
-    vertical-align: -.125em;
+    vertical-align: text-bottom;
     overflow: visible !important;
 }
 
@@ -452,8 +452,8 @@ svg:not(:root) {
     font-size: inherit;
     overflow: visible;
     vertical-align: bottom;
-    width: 1.5em;
-    height: 1.5em;
+    width: 1.5rem;
+    height: 1.5rem;
 }
 
 /* Image thumbnails
