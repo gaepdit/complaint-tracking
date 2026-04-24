@@ -4,7 +4,7 @@ namespace Cts.WebApp.Platform.AppConfiguration;
 
 internal static class SecurityHeaders
 {
-    public static IHostApplicationBuilder AddSecurityHeaders(this IHostApplicationBuilder builder)
+    public static IHostApplicationBuilder AddHttpSecurity(this IHostApplicationBuilder builder)
     {
         if (builder.Environment.IsDevelopment())
         {
@@ -13,16 +13,14 @@ internal static class SecurityHeaders
         }
         else
         {
-            // Starting value for HSTS max age is five minutes to allow for debugging.
-            // For more info on updating HSTS max age value for production, see:
-            // https://gaepdit.github.io/web-apps/use-https.html#how-to-enable-hsts
             builder.Services
                 .AddHsts(options => options.MaxAge = TimeSpan.FromDays(730))
                 .AddHttpsRedirection(options =>
                 {
                     options.HttpsPort = 443;
                     options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
-                });
+                })
+                .AddAntiforgery(options => options.Cookie.SecurePolicy = CookieSecurePolicy.Always);
         }
 
         return builder;
