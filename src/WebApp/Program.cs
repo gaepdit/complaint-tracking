@@ -22,7 +22,7 @@ builder.Logging.ClearProviders().AddZLoggerConsole(options =>
 AppDomain.CurrentDomain.SetData("REGEX_DEFAULT_MATCH_TIMEOUT", TimeSpan.FromMilliseconds(100));
 
 // Configure basic settings.
-builder.BindAppSettings().AddSecurityHeaders().AddErrorLogging();
+builder.BindAppSettings().AddHttpSecurity().AddErrorLogging();
 builder.Services.AddDataProtection();
 
 // Configure Identity stores.
