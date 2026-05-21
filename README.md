@@ -103,7 +103,7 @@ Connection Strings for both a `DefaultConnection` and a `MigrationConnection` mu
 
 ### Authentication settings
 
-The login providers must be enabled and configured. Currently, Okta and (Azure) Entra ID are available in the application. 
+The login provider(s) must be enabled and configured.
 
 1. To enable authentication using Entra ID, the app must be registered in the Azure portal and configured in the `AzureAd` settings section.
 
@@ -118,20 +118,8 @@ The login providers must be enabled and configured. Currently, Okta and (Azure) 
   }
   ```
 
-2. To enable Okta, the app must be registered in the Okta portal and configured in the `Okta` settings section.
-
-  ```json
-  {
-    "Okta": {
-      "OktaDomain": "https://${yourOktaDomain}",
-      "ClientId": "${clientId}",
-      "ClientSecret": "${clientSecret}",
-      "AuthorizationServerId": "default"
-    }
-  }
-  ```
-
-3. Finally, the login providers must be enabled in the `EnabledLoginProviders` section along with the allowed Okta organization ID or Entra Tenant ID. 
+2. Finally, the login provider(s) must be enabled in the `EnabledLoginProviders` section along with the allowed Entra
+   Tenant ID.
 
 ```json
 {
@@ -143,10 +131,6 @@ The login providers must be enabled and configured. Currently, Okta and (Azure) 
     {
       "Name": "EntraId",
       "Id": "tenant-2-id"
-    },
-    {
-      "Name": "Okta",
-      "Id": "okta-id"
     }
   ]
 }

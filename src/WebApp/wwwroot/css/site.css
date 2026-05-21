@@ -205,12 +205,6 @@ html:not([data-bs-theme="dark"]) .btn-outline-info {
     fill: var(--bs-btn-hover-color);
 }
 
-.btn-img svg.okta {
-    fill: #00297A !important;
-    background: #fff !important;
-    border-radius: 3px;
-}
-
 /* Additional text utilities
 -------------------------------------------------- */
 .font-weight-medium {

@@ -2,7 +2,6 @@
 using Cts.AppServices.AuthorizationPolicies;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Identity.Web;
-using Okta.AspNetCore;
 
 namespace Cts.WebApp.Platform.AppConfiguration;
 
@@ -20,19 +19,6 @@ public static class AuthenticationServices
             .AddCookie();
 
         var configuration = builder.Configuration;
-
-        if (configuration.LoginProviderNames().Contains(LoginProviders.OktaScheme))
-        {
-            // Requires an Okta account
-            authenticationBuilder.AddOktaMvc(authenticationScheme: LoginProviders.OktaScheme, new OktaMvcOptions
-            {
-                OktaDomain = configuration.GetValue<string>("Okta:OktaDomain"),
-                AuthorizationServerId = configuration.GetValue<string>("Okta:AuthorizationServerId"),
-                ClientId = configuration.GetValue<string>("Okta:ClientId"),
-                ClientSecret = configuration.GetValue<string>("Okta:ClientSecret"),
-                Scope = new List<string> { "openid", "profile", "email" },
-            });
-        }
 
         if (configuration.LoginProviderNames().Contains(LoginProviders.EntraIdScheme))
         {

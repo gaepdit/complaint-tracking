@@ -74,7 +74,6 @@ internal static class SecurityHeaders
             .From("https://browser-intake-us3-datadoghq.com");
         builder.AddFontSrc().Self().Data();
         builder.AddFormAction().Self()
-            .From("https://*.okta.com")
             .From("https://login.microsoftonline.com");
         builder.AddManifestSrc().Self();
         builder.AddFrameAncestors().None();

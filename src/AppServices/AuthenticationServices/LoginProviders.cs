@@ -37,7 +37,6 @@ public record LoginProvider(string Name, string Id);
 
 public static class LoginProviders
 {
-    public const string OktaScheme = "Okta";
     public const string EntraIdScheme = "EntraId";
     public const string TestUserScheme = "TestUser";
 }
