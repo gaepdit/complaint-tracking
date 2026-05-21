@@ -555,3 +555,6 @@ coveragereport/
 
 # All JetBrains config files
 .idea/
+
+# SixLabors license file
+sixlabors.lic

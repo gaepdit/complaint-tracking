@@ -32,6 +32,12 @@ The solution contains the following projects:
 
 There are also corresponding unit test projects for each (not counting the `TestData` project).
 
+## License requirements
+
+The SixLabors ImageSharp package requires the presence of a license file named `sixlabors.lic` in the `AppServices`
+project directory (`\src\AppServices`). Either retrieve an existing license file for the project
+or [apply for a new one](https://licensing.sixlabors.com/).
+
 ## Development settings
 
 The following settings section configures the data stores, authentication, and other settings for development purposes.
