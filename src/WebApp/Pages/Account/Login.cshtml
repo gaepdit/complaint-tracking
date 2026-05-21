@@ -34,7 +34,8 @@
                 <div class="py-3 px-4 bg-light-subtle border rounded-3">
                     <h1 class="display-6">Sign in as a test user</h1>
 
-                    <form asp-page-handler="@LoginProviders.TestUserScheme" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    <form asp-page-handler="@LoginProviders.TestUserScheme" asp-route-returnUrl="@Model.ReturnUrl"
+                          method="post">
                         <button type="submit" class="btn btn-lg btn-outline-primary btn-img icon-link my-3 py-3 px-4"
                                 title="Sign in as a test user">
                             <svg class="bi me-2">
@@ -47,16 +48,34 @@
             </div>
         }
 
+        @if (Model.LoginProviderNames.Contains(LoginProviders.DuoScheme))
+        {
+            <div class="col-lg">
+                <div class="py-3 px-4 bg-light-subtle border rounded-3">
+                    <h1 class="display-6">Sign in using your Duo account</h1>
+
+                    <form asp-route-scheme="@LoginProviders.DuoScheme" asp-route-returnUrl="@Model.ReturnUrl"
+                          method="post">
+                        <button type="submit" class="btn btn-lg btn-outline-primary btn-img icon-link my-3 py-3 px-4"
+                                title="Sign in using your Duo account">
+                            <img src="https://duo.com/images/duo-logo.svg" alt="" class="btn-img-bg me-1"/> Sign in
+                        </button>
+                    </form>
+                </div>
+            </div>
+        }
+
         @if (Model.LoginProviderNames.Contains(LoginProviders.EntraIdScheme))
         {
             <div class="col-lg">
                 <div class="py-3 px-4 bg-light-subtle border rounded-3">
                     <h1 class="display-6">Sign in using your SOG work account</h1>
 
-                    <form asp-route-scheme="@LoginProviders.EntraIdScheme" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    <form asp-route-scheme="@LoginProviders.EntraIdScheme" asp-route-returnUrl="@Model.ReturnUrl"
+                          method="post">
                         <button type="submit" class="btn btn-lg btn-outline-primary btn-img icon-link my-3 py-3 px-4"
                                 title="Sign in using your SOG work account">
-                            <img src="~/images/ms-symbol.svg" alt="" class="btn-img-bg" /> Sign in
+                            <img src="~/images/ms-symbol.svg" alt="" class="btn-img-bg me-1"/> Sign in
                         </button>
                     </form>
 

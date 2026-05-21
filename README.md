@@ -105,36 +105,56 @@ Connection Strings for both a `DefaultConnection` and a `MigrationConnection` mu
 
 The login provider(s) must be enabled and configured.
 
-1. To enable authentication using Entra ID, the app must be registered in the Azure portal and configured in the `AzureAd` settings section.
+1. To enable authentication using Entra ID, the app must be registered in the Azure portal and configured in the
+   `AzureAd` settings section.
 
-  ```json
-  {
-    "AzureAd": {
-      "Instance": "https://login.microsoftonline.com/",
-      "CallbackPath": "/signin-oidc",
-      "TenantId": "[Enter the Directory (tenant) ID from the Azure portal]",
-      "ClientId": "[Enter the Application (client) ID from the Azure portal]"
-    }
-  }
-  ```
-
-2. Finally, the login provider(s) must be enabled in the `EnabledLoginProviders` section along with the allowed Entra
-   Tenant ID.
-
-```json
-{
-  "EnabledLoginProviders": [
+    ```json
     {
-      "Name": "EntraId",
-      "Id": "tenant-1-id"
-    },
-    {
-      "Name": "EntraId",
-      "Id": "tenant-2-id"
+      "AzureAd": {
+        "Instance": "https://login.microsoftonline.com/",
+        "CallbackPath": "/signin-oidc",
+        "TenantId": "[Enter the Directory (tenant) ID from the Azure portal]",
+        "ClientId": "[Enter the Application (client) ID from the Azure portal]"
+      }
     }
-  ]
-}
-```
+    ```
+
+2. To enable Duo Security, the app must be registered in the Duo portal and configured in the `DuoSecurity` settings
+   section.
+
+    ```json
+    {
+      "DuoSecurity": {
+        "Authority ": "https://yourDuoEndpoint",
+        "ClientId": "YourDuoClientId",
+        "ClientSecret": "YourDuoClientSecret"
+      }
+    }
+    ```
+
+3. Finally, the login providers must be enabled in the `EnabledLoginProviders` section along with the allowed
+   organization or tenant IDs.
+
+    ```json
+    {
+      "EnabledLoginProviders": [
+        {
+          "Name": "EntraId",
+          "Id": "tenant-1-id"
+        },
+        {
+          "Name": "EntraId",
+          "Id": "tenant-2-id"
+        },
+        {
+          "Name": "DuoSecurity",
+          "Id": ""
+        }
+      ]
+    }
+    ```
+
+   (`ID` is not used for Duo, but an empty string must be provided to be included in the allowed providers list.)
 
 ### Seeding user roles
 

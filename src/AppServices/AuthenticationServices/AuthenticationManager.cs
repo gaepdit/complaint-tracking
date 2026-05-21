@@ -31,12 +31,11 @@ public class AuthenticationManager(
             return MissingExternalLoginInfo();
 
         var loginProvider = externalLoginInfo.LoginProvider;
-        var identityProviderId = externalLoginInfo.Principal.GetIdentityProviderId();
+        var identityProviderId = externalLoginInfo.Principal.GetIdentityProviderId() ?? string.Empty;
         var userEmail = externalLoginInfo.Principal.GetEmail();
         var providerKey = externalLoginInfo.ProviderKey;
 
-        if (identityProviderId is null || userEmail is null)
-            return MissingExternalLoginInfo();
+        if (userEmail is null) return MissingExternalLoginInfo();
 
         if (!configuration.ValidateLoginProviderId(loginProvider, identityProviderId))
             return InvalidLoginProvider(loginProvider, identityProviderId);
@@ -95,7 +94,7 @@ public class AuthenticationManager(
     {
         var user = new ApplicationUser
         {
-            UserName = info.Principal.GetDisplayName(),
+            UserName = info.Principal.GetEmail(),
             Email = info.Principal.GetEmail(),
             GivenName = info.Principal.GetGivenName(),
             FamilyName = info.Principal.GetFamilyName(),
@@ -109,13 +108,16 @@ public class AuthenticationManager(
             return UnableToCreateUser(info.ProviderKey);
 
         logger.ZLogInformation($"Created new user with ID {info.ProviderKey}");
-        await SeedRolesAsync(user).ConfigureAwait(false);
+        await SeedRolesAsync(user, info.LoginProvider).ConfigureAwait(false);
 
         return await AddLoginProviderAndSignInAsync(user, info).ConfigureAwait(false);
     }
 
-    private async Task SeedRolesAsync(ApplicationUser user)
+    private async Task SeedRolesAsync(ApplicationUser user, string loginProvider)
     {
+        if (loginProvider == LoginProviders.DuoScheme)
+            await userManager.AddToRoleAsync(user, RoleName.Staff).ConfigureAwait(false);
+
         // Add the new user to application Roles if seeded in AppSettings.
         var settings = new List<SeedUserRoles>();
         configuration.GetSection(nameof(SeedUserRoles)).Bind(settings);

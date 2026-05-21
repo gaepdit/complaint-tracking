@@ -180,13 +180,13 @@ html:not([data-bs-theme="dark"]) .btn-outline-info {
 }
 
 .btn-img img {
-    height: 25px;
-    margin-right: 2px;
+    height: 35px;
 }
 
 .btn-img-bg {
     background: white;
     box-shadow: 0 0 1px white;
+    padding: 2px;
 }
 
 .btn-img svg {
