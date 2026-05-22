@@ -1,51 +1,54 @@
 {
-  "version": "1.0",
-  "defaultProvider": "cdnjs",
+  "version": "3.0",
+  "defaultProvider": "jsdelivr",
   "libraries": [
     {
       "library": "jquery@3.7.1",
-      "destination": "wwwroot/lib/jquery/",
+      "destination": "wwwroot/lib/jquery",
       "files": [
-        "jquery.min.js",
-        "jquery.min.map",
-        "jquery.js"
+        "dist/jquery.min.js",
+        "dist/jquery.min.map",
+        "dist/jquery.js"
       ]
     },
     {
-      "library": "bootstrap@5.3.3",
-      "destination": "wwwroot/lib/bootstrap/",
+      "library": "bootstrap@5.3.8",
+      "destination": "wwwroot/lib/bootstrap",
       "files": [
-        "js/bootstrap.bundle.min.js",
-        "js/bootstrap.bundle.js",
-        "js/bootstrap.bundle.min.js.map",
-        "css/bootstrap.css",
-        "css/bootstrap.min.css",
-        "css/bootstrap.min.css.map"
+        "dist/js/bootstrap.bundle.min.js",
+        "dist/js/bootstrap.bundle.js",
+        "dist/js/bootstrap.bundle.min.js.map",
+        "dist/css/bootstrap.css",
+        "dist/css/bootstrap.min.css",
+        "dist/css/bootstrap.min.css.map"
       ]
     },
     {
-      "library": "jquery-validate@1.21.0",
-      "destination": "wwwroot/lib/jquery-validate/",
+      "library": "jquery-validation@1.21.0",
+      "destination": "wwwroot/lib/jquery-validation",
       "files": [
-        "jquery.validate.min.js",
-        "jquery.validate.js"
+        "dist/jquery.validate.min.js",
+        "dist/jquery.validate.js"
       ]
     },
     {
       "library": "jquery-validation-unobtrusive@4.0.0",
-      "destination": "wwwroot/lib/jquery-validation-unobtrusive/",
+      "destination": "wwwroot/lib/jquery-validation-unobtrusive",
       "files": [
-        "jquery.validate.unobtrusive.min.js",
-        "jquery.validate.unobtrusive.js"
+        "dist/jquery.validate.unobtrusive.min.js",
+        "dist/jquery.validate.unobtrusive.js"
       ]
     },
     {
       "library": "anchor-js@5.0.0",
-      "destination": "wwwroot/lib/anchor-js/"
+      "destination": "wwwroot/lib/anchor-js",
+      "files": [
+        "anchor.min.js",
+        "anchor.js"
+      ]
     },
     {
-      "provider": "jsdelivr",
-      "library": "axios@1.13.2",
+      "library": "axios@1.16.1",
       "destination": "wwwroot/lib/axios/",
       "files": [
         "dist/axios.min.js",
@@ -55,11 +58,11 @@
       ]
     },
     {
-      "library": "fancybox@3.5.7",
+      "library": "@fancyapps/fancybox@3.5.7",
       "destination": "wwwroot/lib/fancybox/",
       "files": [
-        "jquery.fancybox.min.js",
-        "jquery.fancybox.min.css"
+        "dist/jquery.fancybox.min.js",
+        "dist/jquery.fancybox.min.css"
       ]
     }
   ]
