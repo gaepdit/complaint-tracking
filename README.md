@@ -36,7 +36,8 @@ There are also corresponding unit test projects for each (not counting the `Test
 
 The SixLabors ImageSharp package requires the presence of a license file named `sixlabors.lic` in the `AppServices`
 project directory (`\src\AppServices`). Either retrieve an existing license file for the project
-or [apply for a new one](https://licensing.sixlabors.com/).
+or [apply for a new one](https://licensing.sixlabors.com/). The same license key should be stored as an action secret in
+GitHub.
 
 ## Development settings
 
