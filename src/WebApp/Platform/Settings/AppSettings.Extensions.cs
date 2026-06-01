@@ -6,6 +6,10 @@ internal static partial class AppSettings
 {
     public static IHostApplicationBuilder BindAppSettings(this IHostApplicationBuilder builder)
     {
+        // Set default timeout for regular expressions.
+        // https://learn.microsoft.com/en-us/dotnet/standard/base-types/best-practices#use-time-out-values
+        AppDomain.CurrentDomain.SetData("REGEX_DEFAULT_MATCH_TIMEOUT", TimeSpan.FromMilliseconds(100));
+
         Version = GetVersion();
 
         builder.Configuration.GetSection(nameof(Support)).Bind(Support);

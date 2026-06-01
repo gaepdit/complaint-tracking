@@ -119,18 +119,20 @@ The login provider(s) must be enabled and configured.
     }
     ```
 
-2. To enable Duo Security, the app must be registered in the Duo portal and configured in the `DuoSecurity` settings
-   section.
+2. To enable Duo SSO, the app must be registered in the Duo portal and configured in the `DuoSSO` settings section.
 
     ```json
     {
-      "DuoSecurity": {
-        "Authority ": "https://yourDuoEndpoint",
-        "ClientId": "YourDuoClientId",
-        "ClientSecret": "YourDuoClientSecret"
+      "DuoSSO": {
+        "Authority ": "[Enter the Duo application endpoint: https://{duo-subdomain}.sso.duosecurity.com/oidc/{ClientId}]",
+        "ClientId": "[Enter the Duo Client ID]",
+        "ClientSecret": "[Enter the Duo Client Secret]",
+        "CallbackPath": "/signin-oidc-duo"
       }
     }
     ```
+
+   Note that the callback path must be unique for each login provider.
 
 3. Finally, the login providers must be enabled in the `EnabledLoginProviders` section along with the allowed
    organization or tenant IDs.
@@ -147,7 +149,7 @@ The login provider(s) must be enabled and configured.
           "Id": "tenant-2-id"
         },
         {
-          "Name": "DuoSecurity",
+          "Name": "DuoSSO",
           "Id": ""
         }
       ]

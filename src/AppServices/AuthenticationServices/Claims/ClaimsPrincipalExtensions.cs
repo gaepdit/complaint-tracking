@@ -15,7 +15,6 @@ public static class ClaimsPrincipalExtensions
     extension(ClaimsPrincipal principal)
     {
         public string? GetIdentityProviderId() => principal.FindFirstOfMany(IdentityProviderId, TenantId);
-        public string? GetAuthenticationMethod() => principal.FindFirstOfMany(ClaimTypes.AuthenticationMethod);
         public string? GetEmail() => principal.FindFirstOfMany(ClaimTypes.Email, Email);
         public string GetGivenName() => principal.FindFirstOfMany(ClaimTypes.GivenName, GivenName) ?? string.Empty;
         public string GetFamilyName() => principal.FindFirstOfMany(ClaimTypes.Surname, FamilyName) ?? string.Empty;

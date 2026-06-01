@@ -1,5 +1,4 @@
 ﻿using Cts.AppServices.AuthenticationServices;
-using Cts.AppServices.AuthorizationPolicies;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
@@ -8,11 +7,13 @@ namespace Cts.WebApp.Platform.AppConfiguration;
 
 public static class AuthenticationServices
 {
-    public static void ConfigureAuthentication(this IHostApplicationBuilder builder)
+    public static IHostApplicationBuilder ConfigureAuthentication(this IHostApplicationBuilder builder)
     {
         var authenticationBuilder = builder.Services
             .ConfigureApplicationCookie(options =>
             {
+                options.Cookie.Name = ".CTS.Identity";
+                options.Cookie.Path = "/";
                 options.Cookie.HttpOnly = true;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             })
@@ -55,9 +56,8 @@ public static class AuthenticationServices
             // Note: `cookieScheme: null` is mandatory. See https://github.com/AzureAD/microsoft-identity-web/issues/133#issuecomment-739550416
         }
 
-        builder.Services
-            .AddAuthenticationAppServices()
-            .AddAuthorizationPolicies()
-            .AddAuthorization();
+        builder.Services.AddAuthenticationAppServices();
+
+        return builder;
     }
 }
