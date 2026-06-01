@@ -23,15 +23,18 @@ public static class AuthenticationServices
 
         if (configuration.LoginProviderNames().Contains(LoginProviders.DuoScheme))
         {
+            // Requires a Duo account
             authenticationBuilder.AddOpenIdConnect(authenticationScheme: LoginProviders.DuoScheme,
-                displayName: "Duo OIDC",
+                displayName: "Duo SSO",
                 configureOptions: options =>
                 {
-                    var configSection = builder.Configuration.GetSection("DuoSecurity");
+                    var configSection = builder.Configuration.GetSection("DuoSSO");
 
                     options.Authority = configSection["Authority"];
                     options.ClientId = configSection["ClientId"];
                     options.ClientSecret = configSection["ClientSecret"];
+                    options.CallbackPath = configSection["CallbackPath"];
+                    // (Each OIDC provider must have a unique callback path.)
 
                     options.Scope.Add("openid");
                     options.Scope.Add("profile");
@@ -41,8 +44,6 @@ public static class AuthenticationServices
                     options.SignInScheme = null;
                     options.ResponseType = OpenIdConnectResponseType.Code;
                     options.MapInboundClaims = false;
-                    // Each OIDC provider must have a unique callback path. "/signin-oidc" is already used by Azure Entra ID.
-                    options.CallbackPath = "/signin-oidc-duo";
                 });
         }
 
