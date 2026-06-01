@@ -42,14 +42,15 @@
 <partial name="Shared/_UserRolesPartial" model="Model.Roles" />
 
 <environment include="Local, Development">
-    <div class="bg-light-subtle">
-        <h3>Claims</h3>
-        <dl class="p-3 border rounded-3">
+    <details>
+        <summary><h3 class="h5 no-anchor d-inline-block">Claims</h3></summary>
+
+        <dl class="p-3 border rounded-3 bg-light-subtle">
             @foreach (var claim in Model.User.Claims)
             {
                 <dt>@claim.Type</dt>
                 <dd class="text-body-secondary">@claim.Value</dd>
             }
         </dl>
-    </div>
+    </details>
 </environment>
