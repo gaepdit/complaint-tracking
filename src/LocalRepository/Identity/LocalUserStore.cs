@@ -9,7 +9,8 @@ namespace Cts.LocalRepository.Identity;
 public sealed class LocalUserStore :
     IUserRoleStore<ApplicationUser>, // inherits IUserStore<ApplicationUser>
     IUserLoginStore<ApplicationUser>,
-    IQueryableUserStore<ApplicationUser>
+    IQueryableUserStore<ApplicationUser>,
+    IUserEmailStore<ApplicationUser>
 {
     public IQueryable<ApplicationUser> Users => UserStore.AsQueryable();
     internal ICollection<ApplicationUser> UserStore { get; }
@@ -184,6 +185,43 @@ public sealed class LocalUserStore :
         var userId = UserLogins
             .SingleOrDefault(ul => ul.LoginProvider == loginProvider && ul.ProviderKey == providerKey)?.UserId;
         return Task.FromResult(UserStore.SingleOrDefault(user => user.Id == userId));
+    }
+
+    public Task SetEmailAsync(ApplicationUser user, string? email, CancellationToken cancellationToken)
+    {
+        // Not used
+        throw new NotImplementedException();
+    }
+
+    public Task<string?> GetEmailAsync(ApplicationUser user, CancellationToken cancellationToken) =>
+        Task.FromResult(user.Email);
+
+    public Task<bool> GetEmailConfirmedAsync(ApplicationUser user, CancellationToken cancellationToken)
+    {
+        // Not used
+        throw new NotImplementedException();
+    }
+
+    public Task SetEmailConfirmedAsync(ApplicationUser user, bool confirmed, CancellationToken cancellationToken)
+    {
+        // Not used
+        throw new NotImplementedException();
+    }
+
+    public Task<ApplicationUser?> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken) =>
+        Task.FromResult(Users.SingleOrDefault(user => user.NormalizedEmail == normalizedEmail));
+
+    public Task<string?> GetNormalizedEmailAsync(ApplicationUser user, CancellationToken cancellationToken)
+    {
+        // Not used
+        throw new NotImplementedException();
+    }
+
+    public Task SetNormalizedEmailAsync(ApplicationUser user, string? normalizedEmail,
+        CancellationToken cancellationToken)
+    {
+        user.NormalizedEmail = normalizedEmail;
+        return Task.CompletedTask;
     }
 
     private sealed class UserLogin
