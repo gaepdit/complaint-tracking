@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 
-namespace Cts.AppServices.AuthenticationServices.Claims;
+namespace Cts.AppServices.AuthenticationServices;
 
 public static class ClaimsPrincipalExtensions
 {

@@ -3,7 +3,14 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 
-namespace Cts.AppServices.AuthenticationServices.Claims;
+namespace Cts.AppServices.AuthenticationServices;
+
+public static class AppClaimTypes
+{
+    // App claim types
+    public const string ActiveUser = nameof(ActiveUser);
+    public const string OfficeId = nameof(OfficeId);
+}
 
 public class AppClaimsTransformation(UserManager<ApplicationUser> userManager) : IClaimsTransformation
 {

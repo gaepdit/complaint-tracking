@@ -1,5 +1,4 @@
-﻿using Cts.AppServices.AuthenticationServices.Claims;
-using Cts.Domain.Identity;
+﻿using Cts.Domain.Identity;
 using GaEpd.AppLibrary.Domain.Repositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
