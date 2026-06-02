@@ -14,7 +14,7 @@ internal static partial class AppSettings
         TestUserIsAuthenticated = false,
         TestUserRoles = [],
         UseSecurityHeadersInDev = false,
-        EnableWebOptimizerInDev = false,
+        EnableWebOptimizer = false,
     };
 
     // DEV configuration settings
@@ -61,7 +61,7 @@ internal static partial class AppSettings
         /// <summary>
         /// Use WebOptimizer to bundle and minify CSS and JS files (`true`).
         /// </summary>
-        public bool EnableWebOptimizerInDev { get; init; }
+        public bool EnableWebOptimizer { get; init; }
     }
 
     private static IHostApplicationBuilder BindDevAppSettings(this IHostApplicationBuilder builder)

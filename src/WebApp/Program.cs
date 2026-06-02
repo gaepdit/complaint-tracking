@@ -40,7 +40,7 @@ builder.Services.AddOrgNotifications();
 builder.Services.AddApiDocumentation();
 
 // Configure bundling and minification.
-builder.AddWebOptimizer();
+builder.Services.AddWebOptimizer();
 
 // Build the application.
 var app = builder.Build();
