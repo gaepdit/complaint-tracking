@@ -1,5 +1,6 @@
 ﻿using Cts.AppServices.AuthenticationServices;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
@@ -17,7 +18,11 @@ public static class AuthenticationServices
                 options.Cookie.HttpOnly = true;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             })
-            .AddAuthentication(options => options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            })
             .AddCookie();
 
         var configuration = builder.Configuration;
@@ -34,14 +39,14 @@ public static class AuthenticationServices
                     options.Authority = configSection["Authority"];
                     options.ClientId = configSection["ClientId"];
                     options.ClientSecret = configSection["ClientSecret"];
-                    options.CallbackPath = configSection["CallbackPath"];
                     // (Each OIDC provider must have a unique callback path.)
+                    options.CallbackPath = configSection["CallbackPath"];
 
-                    options.Scope.Add("openid");
                     options.Scope.Add("profile");
                     options.Scope.Add("email");
 
-                    // `SignInScheme = null` is mandatory. See https://github.com/AzureAD/microsoft-identity-web/issues/133#issuecomment-739550416
+                    // `SignInScheme = null` is mandatory.
+                    // See https://github.com/AzureAD/microsoft-identity-web/issues/133#issuecomment-739550416
                     options.SignInScheme = null;
                     options.ResponseType = OpenIdConnectResponseType.Code;
                     options.MapInboundClaims = false;
