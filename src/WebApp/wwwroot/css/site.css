@@ -495,25 +495,34 @@ svg:not(:root) {
 
 /* Collapsible tables
 -------------------------------------------------- */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 767px) {
     .table-collapsible {
         border: 0;
+    }
+
+    .table-collapsible thead tr {
+        padding: 0 .5rem;
     }
 
     .table-collapsible thead th {
         display: none;
     }
 
-    .table-collapsible thead tr::before {
+    .table-collapsible thead tr.sortable::before {
         content: "Sort by:";
         display: inline-block;
-        padding: .5rem 0.5rem;
+        padding: 0 .5rem .5rem;
         font-weight: 700;
     }
 
-    .table-collapsible thead th.table-collapsible-sortable {
+    .table-collapsible thead th.sortable {
         display: inline-block;
         border-bottom: none;
+        padding: 0 .5rem .5rem;
+    }
+
+    .table-collapsible thead th.sortable a {
+        padding: .5rem 0;
     }
 
     .table-collapsible tr {
@@ -526,7 +535,8 @@ svg:not(:root) {
         border-top: 2px solid #5b616b;
     }
 
-    .table-collapsible tbody th {
+    .table-collapsible tbody th,
+    .table-collapsible tbody td:first-child {
         background-color: rgb(var(--bs-secondary-bg-rgb));
     }
 
@@ -538,7 +548,7 @@ svg:not(:root) {
         border-left: none;
         border-right: none;
         border-top: none;
-        padding: 0.5rem 0.5rem;
+        padding: 0.5rem 1rem;
     }
 
     .table-collapsible th::after,
@@ -556,6 +566,10 @@ svg:not(:root) {
     .table-collapsible tbody th:before, .table-collapsible td:before {
         content: attr(data-label) ": ";
         font-weight: 700;
+    }
+
+    .table-collapsible tbody .btn {
+        vertical-align: baseline;
     }
 }
 
