@@ -504,14 +504,14 @@ svg:not(:root) {
         display: none;
     }
 
-    .table-collapsible thead tr::before {
+    .table-collapsible thead tr.sortable::before {
         content: "Sort by:";
         display: inline-block;
         padding: .5rem 0.5rem;
         font-weight: 700;
     }
 
-    .table-collapsible thead th.table-collapsible-sortable {
+    .table-collapsible thead th.sortable {
         display: inline-block;
         border-bottom: none;
     }
@@ -556,6 +556,10 @@ svg:not(:root) {
     .table-collapsible tbody th:before, .table-collapsible td:before {
         content: attr(data-label) ": ";
         font-weight: 700;
+    }
+
+    .table-collapsible tbody th .btn {
+        vertical-align: baseline;
     }
 }
 
