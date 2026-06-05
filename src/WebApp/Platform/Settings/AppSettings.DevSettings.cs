@@ -13,7 +13,7 @@ internal static partial class AppSettings
         EnableTestUser = false,
         TestUserIsAuthenticated = false,
         TestUserRoles = [],
-        UseSecurityHeadersInDev = false,
+        EnableSecurityHeaders = false,
         EnableWebOptimizer = false,
     };
 
@@ -56,7 +56,7 @@ internal static partial class AppSettings
         /// <summary>
         /// Include HTTP security headers when running in a Development environment (`true`).
         /// </summary>
-        public bool UseSecurityHeadersInDev { get; init; }
+        public bool EnableSecurityHeaders { get; init; }
 
         /// <summary>
         /// Use WebOptimizer to bundle and minify CSS and JS files (`true`).

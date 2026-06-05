@@ -57,7 +57,7 @@ To work with these settings, add an `appsettings.Development.json` file in the r
       "Staff",
       "SiteMaintenance"
     ],
-    "UseSecurityHeadersInDev": false,
+    "UseSecurityHeaders": false,
     "EnableWebOptimizer": false
   }
 }
@@ -84,7 +84,7 @@ To work with these settings, add an `appsettings.Development.json` file in the r
 
 ### Miscellaneous dev settings
 
-- *UseSecurityHeadersInDev* — Sets whether to include HTTP security headers when running in the Development environment.
+- *UseSecurityHeaders* — Sets whether to include HTTP security headers when running in the Development environment.
 - *EnableWebOptimizer* — Sets whether to enable the WebOptimizer middleware for bundling and minification of CSS
   and JavaScript files when running in the Development environment.
 
