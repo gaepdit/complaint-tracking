@@ -46,7 +46,9 @@
 @if (Model.IsUserAdministrator)
 {
     <p>
-        <a asp-page="EditRoles" asp-route-id="@Model.DisplayStaff.Id" class="btn btn-outline-primary btn-sm">Edit User Roles</a>
+        <a asp-page="EditRoles" asp-route-id="@Model.DisplayStaff.Id" class="btn btn-outline-primary btn-sm">
+            Edit User Roles
+        </a>
     </p>
 }
 

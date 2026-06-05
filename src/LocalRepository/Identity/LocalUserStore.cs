@@ -147,11 +147,6 @@ public sealed class LocalUserStore :
         return Task.FromResult<IList<ApplicationUser>>(usersInRole);
     }
 
-    public void Dispose()
-    {
-        // Method intentionally left empty.
-    }
-
     public Task AddLoginAsync(ApplicationUser user, UserLoginInfo login, CancellationToken cancellationToken)
     {
         UserLogins.Add(new UserLogin
@@ -222,6 +217,11 @@ public sealed class LocalUserStore :
     {
         user.NormalizedEmail = normalizedEmail;
         return Task.CompletedTask;
+    }
+
+    public void Dispose()
+    {
+        // Method intentionally left empty.
     }
 
     private sealed class UserLogin

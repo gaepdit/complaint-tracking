@@ -5,13 +5,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Complaint Tracking System</title>
-    <partial name="_FaviconPartial"/>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="~/css/site.css"/>
-    <partial name="_MonitoringScriptsPartial"/>
+    <partial name="_FaviconPartial" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <partial name="_MonitoringScriptsPartial" />
     <script src="~/js/color-modes.js"></script>
     @await RenderSectionAsync("Styles", false)
 </head>
@@ -22,11 +22,11 @@
 <environment exclude="Production">
     <div class="banner-test-site">Test Site</div>
 </environment>
-<vc:main-menu model="Model"/>
+<vc:main-menu model="Model" />
 
 <main id="main-content" role="main" class="flex-grow-1">
     <div class="container">
-        <partial name="_AlertPartial" for="@displayMessage"/>
+        <partial name="_AlertPartial" for="@displayMessage" />
         @RenderBody()
     </div>
 </main>
@@ -53,7 +53,7 @@
                     <a href="https://epd.georgia.gov/" target="_blank" rel="noopener"
                        class="btn-subtle">Environmental Protection Division</a>
                 </span>
-                <br/>&copy; @DateTime.Now.Year.ToString() State of Georgia
+                <br />&copy; @DateTime.Now.Year.ToString() State of Georgia
                 <span class="d-print-none ms-1">
                     <span class="text-body-secondary">|</span>
                     <a href="https://georgia.gov/accessibility" target="_blank" rel="noopener"
