@@ -1,11 +1,9 @@
-﻿using Cts.AppServices.AuthenticationServices.Claims;
-using Cts.Domain.Identity;
+﻿using Cts.Domain.Identity;
 using GaEpd.AppLibrary.Domain.Repositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.Identity.Web;
 using System.Security.Claims;
 
 namespace Cts.AppServices.AuthenticationServices;
@@ -31,12 +29,11 @@ public class AuthenticationManager(
             return MissingExternalLoginInfo();
 
         var loginProvider = externalLoginInfo.LoginProvider;
-        var identityProviderId = externalLoginInfo.Principal.GetIdentityProviderId();
+        var identityProviderId = externalLoginInfo.Principal.GetIdentityProviderId() ?? string.Empty;
         var userEmail = externalLoginInfo.Principal.GetEmail();
         var providerKey = externalLoginInfo.ProviderKey;
 
-        if (identityProviderId is null || userEmail is null)
-            return MissingExternalLoginInfo();
+        if (userEmail is null) return MissingExternalLoginInfo();
 
         if (!configuration.ValidateLoginProviderId(loginProvider, identityProviderId))
             return InvalidLoginProvider(loginProvider, identityProviderId);
@@ -73,17 +70,22 @@ public class AuthenticationManager(
         return await AddLoginProviderAndSignInAsync(user, externalLoginInfo).ConfigureAwait(false);
     }
 
+    private static bool TestUserRolesPopulated { get; set; }
+
     public async Task<IdentityResult> LogInAsTestUserAsync(string[] testUserRoles)
     {
         const string userId = "00000000-0000-0000-0000-000000000001";
         var user = await userManager.FindByIdAsync(userId).ConfigureAwait(false);
         if (user is null) throw new EntityNotFoundException<ApplicationUser>(userId);
-        logger.ZLogInformation($"Local user with ID {user.Id:@StaffId} signed in");
 
-        foreach (var pair in AppRole.AllRoles)
-            await userManager.RemoveFromRoleAsync(user, pair.Value.Name).ConfigureAwait(false);
-        foreach (var role in testUserRoles)
-            await userManager.AddToRoleAsync(user, role).ConfigureAwait(false);
+        if (!TestUserRolesPopulated)
+        {
+            foreach (var role in testUserRoles)
+                await userManager.AddToRoleAsync(user, role).ConfigureAwait(false);
+            TestUserRolesPopulated = true;
+        }
+
+        logger.ZLogInformation($"Local user with ID {user.Id:@StaffId} signed in");
 
         await signInManager.SignInWithClaimsAsync(user, isPersistent: false,
                 additionalClaims: [new Claim(ClaimTypes.AuthenticationMethod, LoginProviders.TestUserScheme)])
@@ -95,7 +97,7 @@ public class AuthenticationManager(
     {
         var user = new ApplicationUser
         {
-            UserName = info.Principal.GetDisplayName(),
+            UserName = info.Principal.GetEmail(),
             Email = info.Principal.GetEmail(),
             GivenName = info.Principal.GetGivenName(),
             FamilyName = info.Principal.GetFamilyName(),
@@ -108,15 +110,15 @@ public class AuthenticationManager(
         if (!createUserResult.Succeeded)
             return UnableToCreateUser(info.ProviderKey);
 
-        logger.ZLogInformation($"Created new user with ID {info.ProviderKey}");
         await SeedRolesAsync(user, info.LoginProvider).ConfigureAwait(false);
+        logger.ZLogInformation($"Created new user with ID {info.ProviderKey}");
 
         return await AddLoginProviderAndSignInAsync(user, info).ConfigureAwait(false);
     }
 
     private async Task SeedRolesAsync(ApplicationUser user, string loginProvider)
     {
-        if (loginProvider == LoginProviders.OktaScheme)
+        if (loginProvider == LoginProviders.DuoScheme)
             await userManager.AddToRoleAsync(user, RoleName.Staff).ConfigureAwait(false);
 
         // Add the new user to application Roles if seeded in AppSettings.
@@ -180,7 +182,7 @@ public class AuthenticationManager(
             FamilyName = user.FamilyName,
         };
 
-        user.UserName = info.Principal.GetDisplayName();
+        user.UserName = info.Principal.GetEmail();
         user.Email = info.Principal.GetEmail();
         user.GivenName = info.Principal.GetGivenName();
         user.FamilyName = info.Principal.GetFamilyName();

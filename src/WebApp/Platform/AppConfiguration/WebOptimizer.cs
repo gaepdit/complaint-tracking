@@ -4,17 +4,17 @@ namespace Cts.WebApp.Platform.AppConfiguration;
 
 internal static class WebOptimizer
 {
-    public static void AddWebOptimizer(this IHostApplicationBuilder builder)
+    public static void AddWebOptimizer(this IServiceCollection services)
     {
-        if (builder.Environment.IsDevelopment())
+        if (AppSettings.DevSettings.UseDevSettings)
         {
-            builder.Services.AddWebOptimizer(
-                minifyJavaScript: AppSettings.DevSettings.EnableWebOptimizerInDev,
-                minifyCss: AppSettings.DevSettings.EnableWebOptimizerInDev);
+            services.AddWebOptimizer(
+                minifyJavaScript: AppSettings.DevSettings.EnableWebOptimizer,
+                minifyCss: AppSettings.DevSettings.EnableWebOptimizer);
         }
         else
         {
-            builder.Services.AddWebOptimizer();
+            services.AddWebOptimizer(minifyJavaScript: true, minifyCss: true);
         }
     }
 }

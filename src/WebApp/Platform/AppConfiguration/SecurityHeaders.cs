@@ -28,8 +28,11 @@ internal static class SecurityHeaders
 
     public static WebApplication UseSecurityHeaders(this WebApplication app)
     {
-        if (!app.Environment.IsDevelopment() || AppSettings.DevSettings.UseSecurityHeadersInDev)
-            app.UseHsts().UseSecurityHeaders(policyCollection => policyCollection.AddSecurityHeaderPolicies());
+        if (!app.Environment.IsDevelopment())
+            app.UseHsts();
+
+        if (AppSettings.UseSecurityHeaders)
+            app.UseSecurityHeaders(policyCollection => policyCollection.AddSecurityHeaderPolicies());
 
         return app;
     }
@@ -74,7 +77,6 @@ internal static class SecurityHeaders
             .From("https://browser-intake-us3-datadoghq.com");
         builder.AddFontSrc().Self().Data();
         builder.AddFormAction().Self()
-            .From("https://*.okta.com")
             .From("https://login.microsoftonline.com");
         builder.AddManifestSrc().Self();
         builder.AddFrameAncestors().None();

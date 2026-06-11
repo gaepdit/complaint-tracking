@@ -1,5 +1,4 @@
-﻿using Cts.AppServices.AuthenticationServices.Claims;
-using Cts.AppServices.AuthenticationServices.Roles;
+﻿using Cts.AppServices.AuthenticationServices;
 using Cts.AppServices.Offices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Identity.Web;
