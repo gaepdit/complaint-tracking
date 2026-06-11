@@ -79,12 +79,12 @@
                         </button>
                     </form>
 
-                    @if (AppSettings.EntraIdPhaseOut.Enabled)
+                    @if (Model.EntraIdPhaseOut.Enabled)
                     {
-                        var cssClass = DateOnly.FromDateTime(DateTime.Today) > AppSettings.EntraIdPhaseOut.EndDate.AddDays(-30) ? "callout-danger" : "callout-warning";
+                        var cssClass = DateOnly.FromDateTime(DateTime.Today) > Model.EntraIdPhaseOut.EndDate.AddDays(-30) ? "callout-danger" : "callout-warning";
                         <div class="callout @cssClass">
                             The SOG work account login is being phased out for EPD-IT applications and will be
-                            completely removed by @AppSettings.EntraIdPhaseOut.EndDate.ToLongDateString(). Information
+                            completely removed by @Model.EntraIdPhaseOut.EndDate.ToLongDateString(). Information
                             on a replacement will be provided when available. For more information or assistance,
                             contact <a asp-page="/Support">EPD-IT support</a>.
                         </div>

@@ -70,17 +70,22 @@ public class AuthenticationManager(
         return await AddLoginProviderAndSignInAsync(user, externalLoginInfo).ConfigureAwait(false);
     }
 
+    private static bool TestUserRolesPopulated { get; set; }
+
     public async Task<IdentityResult> LogInAsTestUserAsync(string[] testUserRoles)
     {
         const string userId = "00000000-0000-0000-0000-000000000001";
         var user = await userManager.FindByIdAsync(userId).ConfigureAwait(false);
         if (user is null) throw new EntityNotFoundException<ApplicationUser>(userId);
-        logger.ZLogInformation($"Local user with ID {user.Id:@StaffId} signed in");
 
-        foreach (var pair in AppRole.AllRoles)
-            await userManager.RemoveFromRoleAsync(user, pair.Value.Name).ConfigureAwait(false);
-        foreach (var role in testUserRoles)
-            await userManager.AddToRoleAsync(user, role).ConfigureAwait(false);
+        if (!TestUserRolesPopulated)
+        {
+            foreach (var role in testUserRoles)
+                await userManager.AddToRoleAsync(user, role).ConfigureAwait(false);
+            TestUserRolesPopulated = true;
+        }
+
+        logger.ZLogInformation($"Local user with ID {user.Id:@StaffId} signed in");
 
         await signInManager.SignInWithClaimsAsync(user, isPersistent: false,
                 additionalClaims: [new Claim(ClaimTypes.AuthenticationMethod, LoginProviders.TestUserScheme)])
@@ -105,8 +110,8 @@ public class AuthenticationManager(
         if (!createUserResult.Succeeded)
             return UnableToCreateUser(info.ProviderKey);
 
-        logger.ZLogInformation($"Created new user with ID {info.ProviderKey}");
         await SeedRolesAsync(user, info.LoginProvider).ConfigureAwait(false);
+        logger.ZLogInformation($"Created new user with ID {info.ProviderKey}");
 
         return await AddLoginProviderAndSignInAsync(user, info).ConfigureAwait(false);
     }

@@ -2,6 +2,11 @@ namespace Cts.WebApp.Platform.Settings;
 
 internal static partial class AppSettings
 {
+    // Dev-related properties
+    public static bool TestUserEnabled => DevSettings is { UseDevSettings: true, EnableTestUser: true };
+    public static bool UseSecurityHeaders => DevSettings is not { UseDevSettings: true, EnableSecurityHeaders: false };
+
+    // DEV configuration settings
     public static DevSettingsSection DevSettings { get; private set; } = new();
 
     // PROD configuration settings
