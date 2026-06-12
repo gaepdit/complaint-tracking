@@ -10,7 +10,6 @@ internal static partial class AppSettings
 
         builder.Configuration.GetSection(nameof(Support)).Bind(Support);
         builder.Configuration.GetSection(nameof(EntraIdPhaseOut)).Bind(EntraIdPhaseOut);
-        builder.Configuration.GetSection(nameof(RaygunSettings)).Bind(RaygunSettings);
         builder.Configuration.GetSection(nameof(DataDogSettings)).Bind(DataDogSettings);
         OrgNotificationsApiUrl = builder.Configuration.GetValue<string>(nameof(OrgNotificationsApiUrl));
 
