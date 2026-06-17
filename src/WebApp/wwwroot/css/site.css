@@ -350,6 +350,12 @@ details.card:not([open]) summary.card-header {
     border-bottom: none;
 }
 
+/* Details/Summary
+-------------------------------------------------- */
+summary:hover, summary:focus {
+    background: hsla(0, 0%, 100%, 0.04);
+}
+
 /* Bootstrap Icons
 -------------------------------------------------- */
 .bi {
