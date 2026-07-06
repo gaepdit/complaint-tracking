@@ -353,6 +353,11 @@ details.card:not([open]) summary.card-header {
 /* Details/Summary
 -------------------------------------------------- */
 summary:hover, summary:focus {
+    background: hsla(0, 0%, 0%, 0.04);
+}
+
+[data-bs-theme="dark"] summary:hover,
+[data-bs-theme="dark"] summary:focus {
     background: hsla(0, 0%, 100%, 0.04);
 }
 
