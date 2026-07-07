@@ -157,7 +157,8 @@
         {
             <partial name="Shared/_PaginationNavAndCount" model="Model.PaginationNav" />
             <div class="table-responsive-md">
-                <table class="table table-collapsible table-hover" aria-label="Complaint Action search results">
+                <table class="table table-collapsible table-hover sortable"
+                       aria-label="Complaint Action search results">
                     <thead>
                     <tr class="text-nowrap">
                         <partial name="Shared/_SortableTableColHead"
@@ -178,7 +179,7 @@
                         <tr>
                             <th scope="row" data-label="Complaint ID">
                                 <a asp-page="../Complaints/Details" asp-route-id="@item.ComplaintId.ToString()"
-                                   class="btn btn-outline-primary btn-sm @(item.IsDeleted || item.ComplaintIsDeleted ? "btn-outline-danger" : "")">@item.ComplaintId.ToString()</a>
+                                   class="btn btn-outline-primary btn-sm ms-1 ms-md-0 @(item.IsDeleted || item.ComplaintIsDeleted ? "btn-outline-danger" : "")">@item.ComplaintId.ToString()</a>
                                 @if (item.IsDeleted)
                                 {
                                     <br />

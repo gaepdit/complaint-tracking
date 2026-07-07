@@ -1,9 +1,6 @@
-# Workflow to register a new application version with both GitHub Releases and Raygun deployment tracking.
+# Workflow to register a new application version as a GitHub Release.
 
 # The workflow is triggered when a tag in the format "v1.0.0" is pushed to GitHub.
-#
-# Learn more about Raygun Deployment Tracking at:
-# https://raygun.com/documentation/product-guides/deployment-tracking/overview/
 #
 # Learn more about the GitHub release action at:
 # https://github.com/marketplace/actions/git-release
@@ -26,34 +23,8 @@ jobs:
       contents: write
     
     steps:
-      - name: Get the version number
-        id: get_version
-        run: |
-          VERSION=${GITHUB_REF_NAME#v}
-          echo Version: $VERSION
-          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-
-      - name: Send to the Raygun Deployments API
-        id: raygun_deployment
-        uses: fjogeleit/http-request-action@551353b829c3646756b2ec2b3694f819d7957495
-        with:
-          url: https://api.raygun.com/v3/applications/api-key/${{ secrets.RAYGUN_APIKEY }}/deployments
-          method: POST
-          bearerToken: ${{ secrets.RAYGUN_AUTHTOKEN }}
-          data: >-
-            {
-              "version": "${{ steps.get_version.outputs.VERSION }}",
-              "ownerName": "${{ github.event.pusher.name }}",
-              "emailAddress": "${{ github.event.pusher.email }}",
-              "scmIdentifier": "${{ github.sha }}",
-              "scmType": "GitHub"
-            }
-
-      - name: Show Raygun response
-        run: echo ${{ steps.raygun_deployment.outputs.response }}
-
       - name: Check out repository
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
 
       - name: Create GitHub Release
         id: github_release

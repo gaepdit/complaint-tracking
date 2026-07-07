@@ -5,9 +5,9 @@
 
 <partial name="_PaginationNavAndCount" model="Model.Pagination" />
 <div class="table-responsive-md">
-    <table class="table table-collapsible table-hover" aria-label="Complaint search results">
+    <table class="table table-collapsible table-hover sortable" aria-label="Complaint search results">
         <thead>
-        <tr class="text-nowrap">
+        <tr class="text-nowrap sortable">
             <partial name="_SortableTableColHead" model='new SearchResultsColumnDisplay("ID", SortBy.IdAsc, SortBy.IdDesc, Model.Spec)' />
             <partial name="_SortableTableColHead" model='new SearchResultsColumnDisplay("Date Received", SortBy.ReceivedDateAsc, SortBy.ReceivedDateDesc, Model.Spec)' />
             <partial name="_SortableTableColHead" model='new SearchResultsColumnDisplay("Status", SortBy.StatusAsc, SortBy.StatusDesc, Model.Spec)' />
@@ -25,14 +25,14 @@
                     @if (Model.IsPublic)
                     {
                         <a asp-page="./Complaint" asp-route-id="@item.Id.ToString()"
-                           class="btn btn-outline-primary btn-sm">
+                           class="btn btn-outline-primary btn-sm ms-1 ms-md-0">
                             @item.Id.ToString()
                         </a>
                     }
                     else
                     {
                         <a asp-page="Details" asp-route-id="@item.Id.ToString()"
-                           class="btn btn-outline-primary btn-sm @(item.IsDeleted ? "btn-outline-danger" : "btn-outline-primary")">
+                           class="btn btn-outline-primary btn-sm ms-1 ms-md-0 @(item.IsDeleted ? "btn-outline-danger" : "btn-outline-primary")">
                             @item.Id.ToString()
                         </a>
                     }
