@@ -17,14 +17,14 @@
 </h2>
 
 <dl class="row">
-    <dt class="col-sm-3">Email</dt>
-    <dd class="col-sm-9">@Model.DisplayStaff.Email</dd>
+    <dt class="col-sm-2">Email</dt>
+    <dd class="col-sm-10">@Model.DisplayStaff.Email</dd>
 
-    <dt class="col-sm-3">Phone</dt>
-    <dd class="col-sm-9">@Html.DisplayFor(model => model.DisplayStaff.PhoneNumber, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })</dd>
+    <dt class="col-sm-2">Phone</dt>
+    <dd class="col-sm-10">@Html.DisplayFor(model => model.DisplayStaff.PhoneNumber, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })</dd>
 
-    <dt class="col-sm-3">Office</dt>
-    <dd class="col-sm-9">@Html.DisplayFor(model => model.OfficeName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })</dd>
+    <dt class="col-sm-2">Office</dt>
+    <dd class="col-sm-10">@Html.DisplayFor(model => model.OfficeName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })</dd>
 </dl>
 
 <div class="mb-3">
@@ -42,14 +42,15 @@
 <partial name="Shared/_UserRolesPartial" model="Model.Roles" />
 
 <environment include="Local, Development">
-    <div class="bg-light-subtle">
-        <h3>Claims</h3>
-        <dl class="p-3 border rounded-3">
+    <details>
+        <summary><h3 class="h5 no-anchor d-inline-block">Claims</h3></summary>
+
+        <dl class="p-3 border rounded-3 bg-light-subtle">
             @foreach (var claim in Model.User.Claims)
             {
                 <dt>@claim.Type</dt>
                 <dd class="text-body-secondary">@claim.Value</dd>
             }
         </dl>
-    </div>
+    </details>
 </environment>

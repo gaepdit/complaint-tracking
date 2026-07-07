@@ -57,8 +57,8 @@ To work with these settings, add an `appsettings.Development.json` file in the r
       "Staff",
       "SiteMaintenance"
     ],
-    "UseSecurityHeadersInDev": false,
-    "EnableWebOptimizerInDev": false
+    "UseSecurityHeaders": false,
+    "EnableWebOptimizer": false
   }
 }
 ```
@@ -84,8 +84,8 @@ To work with these settings, add an `appsettings.Development.json` file in the r
 
 ### Miscellaneous dev settings
 
-- *UseSecurityHeadersInDev* — Sets whether to include HTTP security headers when running in the Development environment.
-- *EnableWebOptimizerInDev* — Sets whether to enable the WebOptimizer middleware for bundling and minification of CSS
+- *UseSecurityHeaders* — Sets whether to include HTTP security headers when running in the Development environment.
+- *EnableWebOptimizer* — Sets whether to enable the WebOptimizer middleware for bundling and minification of CSS
   and JavaScript files when running in the Development environment.
 
 ## Production settings
@@ -103,54 +103,60 @@ Connection Strings for both a `DefaultConnection` and a `MigrationConnection` mu
 
 ### Authentication settings
 
-The login providers must be enabled and configured. Currently, Okta and (Azure) Entra ID are available in the application. 
+The login provider(s) must be enabled and configured.
 
-1. To enable authentication using Entra ID, the app must be registered in the Azure portal and configured in the `AzureAd` settings section.
+1. To enable authentication using Entra ID, the app must be registered in the Azure portal and configured in the
+   `AzureAd` settings section.
 
-  ```json
-  {
-    "AzureAd": {
-      "Instance": "https://login.microsoftonline.com/",
-      "CallbackPath": "/signin-oidc",
-      "TenantId": "[Enter the Directory (tenant) ID from the Azure portal]",
-      "ClientId": "[Enter the Application (client) ID from the Azure portal]"
-    }
-  }
-  ```
-
-2. To enable Okta, the app must be registered in the Okta portal and configured in the `Okta` settings section.
-
-  ```json
-  {
-    "Okta": {
-      "OktaDomain": "https://${yourOktaDomain}",
-      "ClientId": "${clientId}",
-      "ClientSecret": "${clientSecret}",
-      "AuthorizationServerId": "default"
-    }
-  }
-  ```
-
-3. Finally, the login providers must be enabled in the `EnabledLoginProviders` section along with the allowed Okta organization ID or Entra Tenant ID. 
-
-```json
-{
-  "EnabledLoginProviders": [
+    ```json
     {
-      "Name": "EntraId",
-      "Id": "tenant-1-id"
-    },
-    {
-      "Name": "EntraId",
-      "Id": "tenant-2-id"
-    },
-    {
-      "Name": "Okta",
-      "Id": "okta-id"
+      "AzureAd": {
+        "Instance": "https://login.microsoftonline.com/",
+        "CallbackPath": "/signin-oidc",
+        "TenantId": "[Enter the Directory (tenant) ID from the Azure portal]",
+        "ClientId": "[Enter the Application (client) ID from the Azure portal]"
+      }
     }
-  ]
-}
-```
+    ```
+
+2. To enable Duo SSO, the app must be registered in the Duo portal and configured in the `DuoSSO` settings section.
+
+    ```json
+    {
+      "DuoSSO": {
+        "Authority ": "[Enter the Duo application endpoint: https://{duo-subdomain}.sso.duosecurity.com/oidc/{ClientId}]",
+        "ClientId": "[Enter the Duo Client ID]",
+        "ClientSecret": "[Enter the Duo Client Secret]",
+        "CallbackPath": "/signin-oidc-duo"
+      }
+    }
+    ```
+
+   Note that the callback path must be unique for each login provider.
+
+3. Finally, the login providers must be enabled in the `EnabledLoginProviders` section along with the allowed
+   organization or tenant IDs.
+
+    ```json
+    {
+      "EnabledLoginProviders": [
+        {
+          "Name": "EntraId",
+          "Id": "tenant-1-id"
+        },
+        {
+          "Name": "EntraId",
+          "Id": "tenant-2-id"
+        },
+        {
+          "Name": "DuoSSO",
+          "Id": ""
+        }
+      ]
+    }
+    ```
+
+   (`ID` is not used for Duo, but an empty string must be provided to be included in the allowed providers list.)
 
 ### Seeding user roles
 

@@ -9,17 +9,7 @@ using ZLogger;
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure logging
-builder.Logging.ClearProviders().AddZLoggerConsole(options =>
-{
-    if (builder.Environment.IsDevelopment())
-        options.UsePlainTextFormatter();
-    else
-        options.UseJsonFormatter();
-});
-
-// Set the default timeout for regular expressions.
-// https://learn.microsoft.com/en-us/dotnet/standard/base-types/best-practices-regex#use-time-out-values
-AppDomain.CurrentDomain.SetData("REGEX_DEFAULT_MATCH_TIMEOUT", TimeSpan.FromMilliseconds(100));
+builder.Logging.ClearProviders().AddZLoggerConsole(options => options.UseJsonFormatter());
 
 // Configure basic settings.
 builder.BindAppSettings().AddHttpSecurity();
@@ -29,7 +19,7 @@ builder.Services.AddDataProtection();
 builder.Services.AddIdentityStores();
 
 // Configure authentication and authorization.
-builder.ConfigureAuthentication();
+builder.ConfigureAuthentication().ConfigureAuthorization();
 
 // Add app services.
 builder.Services.AddAppServices().AddAutoMapperProfiles().AddEmailService();
@@ -50,7 +40,7 @@ builder.Services.AddOrgNotifications();
 builder.Services.AddApiDocumentation();
 
 // Configure bundling and minification.
-builder.AddWebOptimizer();
+builder.Services.AddWebOptimizer();
 
 // Build the application.
 var app = builder.Build();

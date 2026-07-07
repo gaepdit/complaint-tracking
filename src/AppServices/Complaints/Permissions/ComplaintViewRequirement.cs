@@ -1,5 +1,5 @@
-using Cts.AppServices.AuthenticationServices.Claims;
-using Cts.AppServices.AuthenticationServices.Roles;
+using Cts.AppServices.AuthenticationServices;
+using Cts.AppServices.AuthorizationPolicies;
 using Cts.AppServices.Complaints.QueryDto;
 using Cts.Domain;
 using Cts.Domain.Entities.Complaints;

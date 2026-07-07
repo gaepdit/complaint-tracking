@@ -10,6 +10,7 @@
         <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
         <PackageReference Include="GaEpd.EmailService" />
         <PackageReference Include="GaEpd.FileService" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore" />
         <PackageReference Include="Microsoft.Identity.Web" />
         <PackageReference Include="SixLabors.ImageSharp" />

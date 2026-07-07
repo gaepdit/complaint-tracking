@@ -1,11 +1,13 @@
-﻿using Cts.AppServices.AuthorizationPolicies.Requirements;
+﻿using Cts.AppServices.AuthenticationServices;
+using Cts.AppServices.Complaints.Permissions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Cts.AppServices.AuthorizationPolicies;
 
 #pragma warning disable S125 // Sections of code should not be commented out
 //
-// Two ways to use these policies:
+// Ways to use these policies:
 //
 // A. As an attribute on a PageModel class (must be registered first in `AddAuthorizationPolicies`):
 //
@@ -22,37 +24,59 @@ namespace Cts.AppServices.AuthorizationPolicies;
 //        var isStaff =  await authorization.Succeeded(User, Policies.StaffUser);
 //    }
 //
+// C. With resource/operation-based permission handlers:
+//
+//     var canAssign = await authorization.Succeeded(User, complaintView, ComplaintOperation.Assign);
+//
 #pragma warning restore S125
 
 public static class Policies
 {
+    public static IServiceCollection AddAuthorizationPolicies(this IServiceCollection services)
+    {
+        services.AddAuthorizationBuilder()
+            .AddPolicy(nameof(ActiveUser), ActiveUser)
+            .AddPolicy(nameof(DataExporter), DataExporter)
+            .AddPolicy(nameof(DivisionManager), DivisionManager)
+            .AddPolicy(nameof(Manager), Manager)
+            .AddPolicy(nameof(SiteMaintainer), SiteMaintainer)
+            .AddPolicy(nameof(StaffUser), StaffUser)
+            .AddPolicy(nameof(SuperUserAdministrator), SuperUserAdministrator)
+            .AddPolicy(nameof(UserAdministrator), UserAdministrator);
+
+        // Resource/operation-based permission handlers
+        services.AddSingleton<IAuthorizationHandler, ComplaintViewRequirement>();
+
+        return services;
+    }
+
     // Default policy builder
     private static AuthorizationPolicyBuilder ActiveUserPolicyBuilder => new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser().AddRequirements(new ActiveUserRequirement());
+        .RequireAuthenticatedUser()
+        .RequireClaim(AppClaimTypes.ActiveUser, true.ToString());
 
     // Claims-based policies
-    public static AuthorizationPolicy ActiveUser { get; } =
-        ActiveUserPolicyBuilder.Build();
+    public static AuthorizationPolicy ActiveUser { get; } = ActiveUserPolicyBuilder.Build();
 
     // Role-based policies
-    public static AuthorizationPolicy DataExporter { get; } =
-        ActiveUserPolicyBuilder.AddRequirements(new DataExporterRequirement()).Build();
+    public static AuthorizationPolicy DataExporter { get; } = ActiveUserPolicyBuilder
+        .RequireAssertion(context => context.User.IsDataExporter()).Build();
 
-    public static AuthorizationPolicy DivisionManager { get; } =
-        ActiveUserPolicyBuilder.AddRequirements(new DivisionManagerRequirement()).Build();
+    public static AuthorizationPolicy DivisionManager { get; } = ActiveUserPolicyBuilder
+        .RequireAssertion(context => context.User.IsDivisionManager()).Build();
 
-    public static AuthorizationPolicy Manager { get; } =
-        ActiveUserPolicyBuilder.AddRequirements(new ManagerRequirement()).Build();
+    public static AuthorizationPolicy Manager { get; } = ActiveUserPolicyBuilder
+        .RequireAssertion(context => context.User.IsManager()).Build();
 
-    public static AuthorizationPolicy SiteMaintainer { get; } =
-        ActiveUserPolicyBuilder.AddRequirements(new SiteMaintainerRequirement()).Build();
+    public static AuthorizationPolicy SiteMaintainer { get; } = ActiveUserPolicyBuilder
+        .RequireAssertion(context => context.User.IsSiteMaintainer()).Build();
 
-    public static AuthorizationPolicy StaffUser { get; } =
-        ActiveUserPolicyBuilder.AddRequirements(new StaffUserRequirement()).Build();
+    public static AuthorizationPolicy StaffUser { get; } = ActiveUserPolicyBuilder
+        .RequireAssertion(context => context.User.IsStaff()).Build();
 
-    public static AuthorizationPolicy UserAdministrator { get; } =
-        ActiveUserPolicyBuilder.AddRequirements(new UserAdminRequirement()).Build();
+    public static AuthorizationPolicy UserAdministrator { get; } = ActiveUserPolicyBuilder
+        .RequireAssertion(context => context.User.IsUserAdmin()).Build();
 
-    public static AuthorizationPolicy SuperUserAdministrator { get; } =
-        ActiveUserPolicyBuilder.AddRequirements(new SuperUserAdminRequirement()).Build();
+    public static AuthorizationPolicy SuperUserAdministrator { get; } = ActiveUserPolicyBuilder
+        .RequireAssertion(context => context.User.IsSuperUserAdmin()).Build();
 }

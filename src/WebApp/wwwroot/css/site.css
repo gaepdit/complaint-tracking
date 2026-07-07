@@ -180,13 +180,13 @@ html:not([data-bs-theme="dark"]) .btn-outline-info {
 }
 
 .btn-img img {
-    height: 25px;
-    margin-right: 2px;
+    height: 35px;
 }
 
 .btn-img-bg {
     background: white;
     box-shadow: 0 0 1px white;
+    padding: 2px;
 }
 
 .btn-img svg {
@@ -203,12 +203,6 @@ html:not([data-bs-theme="dark"]) .btn-outline-info {
 .btn:active svg,
 .btn:focus-visible svg {
     fill: var(--bs-btn-hover-color);
-}
-
-.btn-img svg.okta {
-    fill: #00297A !important;
-    background: #fff !important;
-    border-radius: 3px;
 }
 
 /* Additional text utilities
@@ -233,11 +227,17 @@ html:not([data-bs-theme="dark"]) .btn-outline-info {
     text-decoration: underline dotted;
 }
 
-/* External links
+/* Spacing utilities
+-------------------------------------------------- */
+.ms-n1 {
+    margin-left: -0.25rem !important;
+}
+
+/* External link indicator icon
 -------------------------------------------------- */
 a[target]::after {
     content: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='hsl(216, 100%, 50%)' viewBox='0 0 16 16'><path fill-rule='evenodd' d='M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5'/><path fill-rule='evenodd' d='M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z'/></svg>");
-    margin-left: .2em;
+    margin-left: .4em;
 }
 
 /* Suppress external link icon */
@@ -397,6 +397,30 @@ label:has([disabled]), label:has(:disabled) {
 
 .validation-summary-errors ul {
     margin-bottom: 0;
+}
+
+/* Subtle button-like links
+-------------------------------------------------- */
+.btn-subtle {
+    padding: .25rem;
+    border-radius: 8px;
+    text-decoration: none;
+    text-underline-offset: 0.125em;
+    white-space: nowrap;
+}
+
+.btn-subtle:hover {
+    text-decoration: underline;
+}
+
+.btn-subtle:hover,
+.btn-subtle:focus {
+    background: hsla(0, 0%, 0%, 0.04);
+}
+
+[data-bs-theme="dark"] .btn-subtle:hover,
+[data-bs-theme="dark"] .btn-subtle:focus {
+    background: hsla(0, 0%, 100%, 0.04);
 }
 
 /* Table of contents
