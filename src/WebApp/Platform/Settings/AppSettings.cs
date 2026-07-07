@@ -14,7 +14,6 @@ internal static partial class AppSettings
     public static string ShortEnv => Env switch { "Production" => "prod", "Staging" => "uat", _ => "dev" };
 
     public static Support Support { get; } = new();
-    public static EntraIdPhaseOut EntraIdPhaseOut { get; } = new();
     public static DataDog DataDogSettings { get; } = new();
     public static string? OrgNotificationsApiUrl { get; private set; }
 

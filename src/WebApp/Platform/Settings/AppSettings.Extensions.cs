@@ -13,7 +13,6 @@ internal static partial class AppSettings
         Version = GetVersion();
 
         builder.Configuration.GetSection(nameof(Support)).Bind(Support);
-        builder.Configuration.GetSection(nameof(EntraIdPhaseOut)).Bind(EntraIdPhaseOut);
         builder.Configuration.GetSection(nameof(DataDogSettings)).Bind(DataDogSettings);
         OrgNotificationsApiUrl = builder.Configuration.GetValue<string>(nameof(OrgNotificationsApiUrl));
 
