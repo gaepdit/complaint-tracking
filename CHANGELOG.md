@@ -1,5 +1,9 @@
 # Changelog
 
+## [2026.7.13] - 2026-07-13
+
+- Fixed some minor layout bugs and other minor updates.
+
 ## [2026.4.21] - 2026-04-21
 
 - Fixed some stylesheets.
@@ -177,3 +181,4 @@ like it!
 [2026.3.3]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2026.3.3
 [2026.4.20]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2026.4.20
 [2026.4.21]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2026.4.21
+[2026.7.13]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2026.7.13
