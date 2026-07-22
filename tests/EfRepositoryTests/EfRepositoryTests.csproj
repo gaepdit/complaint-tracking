@@ -1,6 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <ItemGroup>
         <PackageReference Include="EfCore.TestSupport" />
+        <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" />
+        <PackageReference Include="System.Security.Cryptography.Xml" />
     </ItemGroup>
 
     <ItemGroup>
