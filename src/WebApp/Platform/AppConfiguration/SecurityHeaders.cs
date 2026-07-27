@@ -45,6 +45,7 @@ internal static class SecurityHeaders
 
     private static void AddSecurityHeaderPolicies(this HeaderPolicyCollection policies)
     {
+        policies.AddFrameOptionsDeny();
         policies.AddContentTypeOptionsNoSniff();
         policies.AddReferrerPolicyStrictOriginWhenCrossOrigin();
         policies.RemoveServerHeader();
