@@ -45,14 +45,15 @@ internal static class SecurityHeaders
 
     private static void AddSecurityHeaderPolicies(this HeaderPolicyCollection policies)
     {
-        policies.AddFrameOptionsDeny();
-        policies.AddContentTypeOptionsNoSniff();
-        policies.AddReferrerPolicyStrictOriginWhenCrossOrigin();
-        policies.RemoveServerHeader();
-        policies.AddContentSecurityPolicyReportOnly(builder => builder.CspBuilder());
-        policies.AddCrossOriginOpenerPolicy(builder => builder.SameOrigin());
-        policies.AddCrossOriginEmbedderPolicy(builder => builder.Credentialless());
-        policies.AddCrossOriginResourcePolicy(builder => builder.SameSite());
+        policies
+            .AddFrameOptionsDeny()
+            .AddContentTypeOptionsNoSniff()
+            .AddReferrerPolicyStrictOriginWhenCrossOrigin()
+            .RemoveServerHeader()
+            .AddContentSecurityPolicyReportOnly(builder => builder.CspBuilder())
+            .AddCrossOriginOpenerPolicy(builder => builder.SameOrigin())
+            .AddCrossOriginEmbedderPolicy(builder => builder.Credentialless())
+            .AddCrossOriginResourcePolicy(builder => builder.SameSite());
 
         if (string.IsNullOrEmpty(AppSettings.DataDogSettings.ClientToken)) return;
         policies.AddReportingEndpoints(builder => builder.AddEndpoint("csp-endpoint", DatadogReportUri));
