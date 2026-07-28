@@ -34,9 +34,7 @@ function setUpStaffDropdown(officeElementId, staffElementId, forAssignment, plac
             })
             .catch(function errorHandler(error) {
                 staffSelect.innerHTML = '<option value="">Error</option>';
-                if (error instanceof Error && typeof rg4js === "function") {
-                    rg4js('send', {error: error, tags: ['handled_promise_rejection']});
-                }
+                console.error(error);
             });
     });
 }
