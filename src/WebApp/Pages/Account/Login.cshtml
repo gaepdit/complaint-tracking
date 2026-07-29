@@ -34,7 +34,7 @@
                 <div class="py-3 px-4 bg-light-subtle border rounded-3">
                     <h1 class="display-6">Sign in as a test user</h1>
 
-                    <form asp-page-handler="@LoginProviders.TestUserScheme" asp-route-returnUrl="@Model.ReturnUrl"
+                    <form asp-route-scheme="@LoginProviders.TestUserScheme" asp-route-returnUrl="@Model.ReturnUrl"
                           method="post">
                         <button type="submit" class="btn btn-lg btn-outline-primary btn-img icon-link my-3 py-3 px-4"
                                 title="Sign in as a test user">
