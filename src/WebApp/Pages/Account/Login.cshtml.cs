@@ -3,7 +3,9 @@ using Cts.Domain.Identity;
 using Cts.WebApp.Models;
 using Cts.WebApp.Platform.PageModelHelpers;
 using Cts.WebApp.Platform.Settings;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
+using System.Net;
 
 namespace Cts.WebApp.Pages.Account;
 
@@ -21,7 +23,7 @@ public class LoginModel(
 
     public IActionResult OnGetAsync(string? returnUrl = null)
     {
-        ReturnUrl = returnUrl;
+        ReturnUrl = WebUtility.HtmlEncode(returnUrl);
         ConfigurePageVariables();
         if (User.Identity is not { IsAuthenticated: true }) return Page();
         return User.IsActive() ? LocalRedirectOrHome() : RedirectToPage("Logout");
@@ -31,9 +33,7 @@ public class LoginModel(
     {
         if (User.Identity is { IsAuthenticated: true }) return RedirectToPage("Logout");
         if (scheme == LoginProviders.TestUserScheme) return await LogInAsTestUserAsync(returnUrl);
-
-        if (!configuration.ValidateLoginProvider(scheme))
-            throw new ArgumentException("Invalid scheme", nameof(scheme));
+        if (!configuration.ValidateLoginProvider(scheme)) throw new ArgumentException("Invalid scheme", nameof(scheme));
 
         // Request a redirect to the external login provider.
         var redirectUrl = Url.Page("Login", pageHandler: "Callback", values: new { returnUrl });
@@ -46,7 +46,7 @@ public class LoginModel(
         if (!AppSettings.TestUserEnabled) return BadRequest();
         if (!AppSettings.DevSettings.TestUserIsAuthenticated) return Forbid();
 
-        ReturnUrl = returnUrl;
+        ReturnUrl = WebUtility.HtmlEncode(returnUrl);
         await authenticationManager.LogInAsTestUserAsync(AppSettings.DevSettings.TestUserRoles);
         return LocalRedirectOrHome();
     }
@@ -54,7 +54,7 @@ public class LoginModel(
     // The callback method is called by the external login provider.
     public async Task<IActionResult> OnGetCallbackAsync(string? returnUrl = null, string? remoteError = null)
     {
-        ReturnUrl = returnUrl;
+        ReturnUrl = WebUtility.HtmlEncode(returnUrl);
         if (remoteError is not null)
             return LoginPageWithError($"Error from account provider: {remoteError}");
         var result = await authenticationManager.LogInUsingExternalProviderAsync();
@@ -89,6 +89,6 @@ public class LoginModel(
 
 public record EntraIdPhaseOut
 {
-    public bool Enabled { get; init; }
-    public DateOnly EndDate { get; init; }
+    public bool Enabled { get; [UsedImplicitly] init; }
+    public DateOnly EndDate { get; [UsedImplicitly] init; }
 }
