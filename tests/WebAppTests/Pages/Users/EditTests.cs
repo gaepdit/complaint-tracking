@@ -35,10 +35,10 @@ public class EditTests
 
         var pageModel = new EditModel(staffServiceMock, officeServiceMock,
                 Substitute.For<IValidator<StaffUpdateDto>>())
-            { TempData = WebAppTestsSetup.PageTempData() };
+            { TempData = WebAppTestsSetup.PageTempData(), Id = new Guid(StaffViewTest.Id) };
 
         // Act
-        var result = await pageModel.OnGetAsync(StaffViewTest.Id);
+        var result = await pageModel.OnGetAsync();
 
         // Assert
         using var scope = new AssertionScope();
@@ -54,10 +54,10 @@ public class EditTests
         // Arrange
         var pageModel = new EditModel(Substitute.For<IStaffService>(),
                 Substitute.For<IOfficeService>(), Substitute.For<IValidator<StaffUpdateDto>>())
-            { TempData = WebAppTestsSetup.PageTempData() };
+            { TempData = WebAppTestsSetup.PageTempData(), Id = null };
 
         // Act
-        var result = await pageModel.OnGetAsync(null);
+        var result = await pageModel.OnGetAsync();
 
         // Assert
         using var scope = new AssertionScope();
@@ -74,10 +74,10 @@ public class EditTests
 
         var pageModel = new EditModel(staffServiceMock, Substitute.For<IOfficeService>(),
                 Substitute.For<IValidator<StaffUpdateDto>>())
-            { TempData = WebAppTestsSetup.PageTempData() };
+            { TempData = WebAppTestsSetup.PageTempData(), Id = Guid.Empty };
 
         // Act
-        var result = await pageModel.OnGetAsync(Guid.Empty.ToString());
+        var result = await pageModel.OnGetAsync();
 
         // Assert
         result.Should().BeOfType<NotFoundResult>();
@@ -97,8 +97,9 @@ public class EditTests
         validatorMock.ValidateAsync(Arg.Any<StaffUpdateDto>(), Arg.Any<CancellationToken>())
             .Returns(new ValidationResult());
 
+        var id = Guid.NewGuid();
         var page = new EditModel(staffServiceMock, Substitute.For<IOfficeService>(), validatorMock)
-            { Item = StaffUpdateTest, TempData = WebAppTestsSetup.PageTempData() };
+            { Item = StaffUpdateTest, TempData = WebAppTestsSetup.PageTempData(), Id = id };
 
         // Act
         var result = await page.OnPostAsync();
@@ -108,7 +109,7 @@ public class EditTests
         page.ModelState.IsValid.Should().BeTrue();
         result.Should().BeOfType<RedirectToPageResult>();
         ((RedirectToPageResult)result).PageName.Should().Be("Details");
-        ((RedirectToPageResult)result).RouteValues!["id"].Should().Be(Guid.Empty);
+        ((RedirectToPageResult)result).RouteValues!["id"].Should().Be(id);
         page.TempData.GetDisplayMessage().Should().BeEquivalentTo(expectedMessage);
     }
 
@@ -151,7 +152,7 @@ public class EditTests
             .Returns(new ValidationResult(validationFailures));
 
         var page = new EditModel(staffServiceMock, officeServiceMock, validatorMock)
-            { Item = StaffUpdateTest, TempData = WebAppTestsSetup.PageTempData() };
+            { Item = StaffUpdateTest, TempData = WebAppTestsSetup.PageTempData(), Id = new Guid(StaffViewTest.Id) };
 
         // Act
         var result = await page.OnPostAsync();

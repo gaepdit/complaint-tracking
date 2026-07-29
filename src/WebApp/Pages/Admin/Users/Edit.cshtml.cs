@@ -14,7 +14,7 @@ public class EditModel(IStaffService staffService, IOfficeService officeService,
     : PageModel
 {
     [FromRoute]
-    public Guid Id { get; set; }
+    public Guid? Id { get; set; }
 
     [BindProperty]
     public StaffUpdateDto Item { get; set; } = null!;
@@ -23,15 +23,14 @@ public class EditModel(IStaffService staffService, IOfficeService officeService,
 
     public SelectList OfficesSelectList { get; private set; } = null!;
 
-    public async Task<IActionResult> OnGetAsync(string? id)
+    public async Task<IActionResult> OnGetAsync()
     {
-        if (id is null) return RedirectToPage("Index");
-        if (!Guid.TryParse(id, out var guid)) return NotFound();
+        if (Id is null) return RedirectToPage("Index");
 
-        var staff = await staffService.FindAsync(id);
+        var staff = await staffService.FindAsync(Id.Value.ToString());
         if (staff is null) return NotFound();
+        if (staff.Email is null) return BadRequest();
 
-        Id = guid;
         DisplayStaff = staff;
         Item = DisplayStaff.AsUpdateDto();
 
@@ -41,11 +40,12 @@ public class EditModel(IStaffService staffService, IOfficeService officeService,
 
     public async Task<IActionResult> OnPostAsync()
     {
+        if (Id is null) return BadRequest();
         await validator.ApplyValidationAsync(Item, ModelState);
 
         if (!ModelState.IsValid)
         {
-            var staff = await staffService.FindAsync(Id.ToString());
+            var staff = await staffService.FindAsync(Id.Value.ToString());
             if (staff is null) return BadRequest();
 
             DisplayStaff = staff;
@@ -54,7 +54,7 @@ public class EditModel(IStaffService staffService, IOfficeService officeService,
             return Page();
         }
 
-        var result = await staffService.UpdateAsync(Id.ToString(), Item);
+        var result = await staffService.UpdateAsync(Id.Value.ToString(), Item);
         if (!result.Succeeded) return BadRequest();
 
         TempData.SetDisplayMessage(DisplayMessage.AlertContext.Success, "Successfully updated.");

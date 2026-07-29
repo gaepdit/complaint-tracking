@@ -23,7 +23,7 @@ public class EditRolesTests
 
     private static readonly List<EditRolesModel.RoleSetting> RoleSettingsTest =
     [
-        new EditRolesModel.RoleSetting
+        new()
         {
             Name = TextData.ValidName,
             DisplayName = TextData.ValidName,
@@ -36,15 +36,6 @@ public class EditRolesTests
     public async Task OnGet_PopulatesThePageModel()
     {
         // Arrange
-        var expectedRoleSettings = AppRole.AllRoles
-            .Select(r => new EditRolesModel.RoleSetting
-            {
-                Name = r.Key,
-                DisplayName = r.Value.DisplayName,
-                Description = r.Value.Description,
-                IsSelected = r.Key == RoleName.SiteMaintenance,
-            }).ToList();
-
         var staffServiceMock = Substitute.For<IStaffService>();
         staffServiceMock.FindAsync(Arg.Any<string>())
             .Returns(StaffViewTest);
@@ -57,16 +48,25 @@ public class EditRolesTests
             .Returns(AuthorizationResult.Success());
 
         var pageModel = new EditRolesModel(staffServiceMock, authorizationMock)
-            { TempData = WebAppTestsSetup.PageTempData() };
+            { TempData = WebAppTestsSetup.PageTempData(), Id = new Guid(StaffViewTest.Id) };
+
+        var expectedRoleSettings = AppRole.AllRoles
+            .Select(r => new EditRolesModel.RoleSetting
+            {
+                Name = r.Key,
+                DisplayName = r.Value.DisplayName,
+                Description = r.Value.Description,
+                IsSelected = r.Key == RoleName.SiteMaintenance,
+            }).ToList();
 
         // Act
-        var result = await pageModel.OnGetAsync(StaffViewTest.Id);
+        var result = await pageModel.OnGetAsync();
 
         // Assert
         using var scope = new AssertionScope();
         result.Should().BeOfType<PageResult>();
         pageModel.DisplayStaff.Should().Be(StaffViewTest);
-        pageModel.UserId.Should().Be(Guid.Empty.ToString());
+        pageModel.Id.Should().Be(StaffViewTest.Id);
         pageModel.RoleSettings.Should().BeEquivalentTo(expectedRoleSettings);
     }
 
@@ -75,10 +75,10 @@ public class EditRolesTests
     {
         // Arrange
         var pageModel = new EditRolesModel(Substitute.For<IStaffService>(), Substitute.For<IAuthorizationService>())
-            { TempData = WebAppTestsSetup.PageTempData() };
+            { TempData = WebAppTestsSetup.PageTempData(), Id = null };
 
         // Act
-        var result = await pageModel.OnGetAsync(null);
+        var result = await pageModel.OnGetAsync();
 
         // Assert
         using var scope = new AssertionScope();
@@ -95,10 +95,10 @@ public class EditRolesTests
             .Returns((StaffViewDto?)null);
 
         var pageModel = new EditRolesModel(staffServiceMock, Substitute.For<IAuthorizationService>())
-            { TempData = WebAppTestsSetup.PageTempData() };
+            { TempData = WebAppTestsSetup.PageTempData(), Id = Guid.Empty };
 
         // Act
-        var result = await pageModel.OnGetAsync(Guid.Empty.ToString());
+        var result = await pageModel.OnGetAsync();
 
         // Assert
         result.Should().BeOfType<NotFoundResult>();
@@ -122,10 +122,11 @@ public class EditRolesTests
                 requirements: Arg.Any<IEnumerable<IAuthorizationRequirement>>())
             .Returns(AuthorizationResult.Success());
 
+        var userId = Guid.NewGuid();
         var page = new EditRolesModel(staffServiceMock, authorizationMock)
         {
             RoleSettings = RoleSettingsTest,
-            UserId = Guid.Empty.ToString(),
+            Id = userId,
             TempData = WebAppTestsSetup.PageTempData(),
         };
 
@@ -137,7 +138,7 @@ public class EditRolesTests
         page.ModelState.IsValid.Should().BeTrue();
         result.Should().BeOfType<RedirectToPageResult>();
         ((RedirectToPageResult)result).PageName.Should().Be("Details");
-        ((RedirectToPageResult)result).RouteValues!["id"].Should().Be(Guid.Empty.ToString());
+        ((RedirectToPageResult)result).RouteValues!["id"].Should().Be(userId);
         page.TempData.GetDisplayMessage().Should().BeEquivalentTo(expectedMessage);
     }
 
@@ -159,7 +160,7 @@ public class EditRolesTests
         var page = new EditRolesModel(staffServiceMock, authorizationMock)
         {
             RoleSettings = RoleSettingsTest,
-            UserId = Guid.Empty.ToString(),
+            Id = Guid.NewGuid(),
             TempData = WebAppTestsSetup.PageTempData(),
             PageContext = WebAppTestsSetup.PageContextWithUser(),
         };
@@ -188,10 +189,11 @@ public class EditRolesTests
                 requirements: Arg.Any<IEnumerable<IAuthorizationRequirement>>())
             .Returns(AuthorizationResult.Success());
 
+        var userId = Guid.NewGuid();
         var page = new EditRolesModel(staffServiceMock, authorizationMock)
         {
             RoleSettings = RoleSettingsTest,
-            UserId = Guid.Empty.ToString(),
+            Id = userId,
             TempData = WebAppTestsSetup.PageTempData(),
             PageContext = WebAppTestsSetup.PageContextWithUser(),
         };
@@ -205,7 +207,7 @@ public class EditRolesTests
         page.ModelState.IsValid.Should().BeFalse();
         page.ModelState[string.Empty]!.Errors[0].ErrorMessage.Should().Be("CODE: DESCRIPTION");
         page.DisplayStaff.Should().Be(StaffViewTest);
-        page.UserId.Should().Be(Guid.Empty.ToString());
+        page.Id.Should().Be(userId);
         page.RoleSettings.Should().BeEquivalentTo(RoleSettingsTest);
     }
 }
