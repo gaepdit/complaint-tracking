@@ -4,42 +4,47 @@
     // DataDog
     var ddClientToken = AppSettings.DataDogSettings.ClientToken;
     var ddApplicationId = AppSettings.DataDogSettings.ApplicationId;
+    const string service = "cts";
 
     if (!string.IsNullOrEmpty(ddClientToken) && !string.IsNullOrEmpty(ddApplicationId))
     {
         var identifier = User.GetNameIdentifierId()?.ToLowerInvariant();
-<script asp-add-nonce>
-    (function(h,o,u,n,d) {
-        h=h[d]=h[d]||{q:[],onReady:function(c){h.q.push(c)}}
-        d = o.createElement(u);
-        d.async = 1;
-        d.src = n;
-        d.crossOrigin = ''
-        n=o.getElementsByTagName(u)[0];n.parentNode.insertBefore(d,n)
-    })(window, document, 'script', 'https://www.datadoghq-browser-agent.com/us3/v6/datadog-rum.js', 'DD_RUM');
-    window.DD_RUM.onReady(function () {
-        window.DD_RUM.init({
-            clientToken: '@ddClientToken',
-            applicationId: '@ddApplicationId',
-            site: 'us3.datadoghq.com',
-            service: 'cts',
-            env: '@AppSettings.ShortEnv',
-            version: '@AppSettings.SimpleVersion',
-            trackUserInteractions: true,
-            sessionSampleRate: 100,
-            sessionReplaySampleRate: 20,
-            trackBfcacheViews: true,
-            defaultPrivacyLevel: 'mask-user-input',
-        });
-        @if (identifier is null)
-        {
-            @:window.DD_RUM.clearUser();
-        }
-        else
-        {
-            @:window.DD_RUM.setAccount({id: '@identifier'});
-        }
-  })
-</script>
+        <script asp-add-nonce>
+            @* @formatter:off *@
+            (function(h,o,u,n,d) {
+                h=h[d]=h[d]||{q:[],onReady:function(c){h.q.push(c)}}
+                d=o.createElement(u);d.async=1;d.src=n,d.crossOrigin=''
+                n=o.getElementsByTagName(u)[0];n.parentNode.insertBefore(d,n)
+            })(window,document,'script','https://www.datadoghq-browser-agent.com/us3/v7/datadog-rum.js','DD_RUM');
+            @* @formatter:on  *@
+
+            window.DD_RUM.onReady(function () {
+                window.DD_RUM.init({
+                    clientToken: '@ddClientToken',
+                    applicationId: '@ddApplicationId',
+                    site: 'us3.datadoghq.com',
+                    service: '@service',
+                    env: '@AppSettings.ShortEnv',
+                    version: '@AppSettings.SimpleVersion',
+                    trackUserInteractions: true,
+                    forwardErrorsToLogs: true,
+                    forwardConsoleLogs: ['error', 'warn'],
+                    sessionSampleRate: 100,
+                    sessionReplaySampleRate: 20,
+                    beforeSend: (log) => {
+                        // discard debug logs
+                        if (log.level === 'debug') return false;
+                    },
+                });
+                @if (identifier is null)
+                {
+                    @:window.DD_RUM.clearUser();
+                }
+                else
+                {
+                    @:window.DD_RUM.setAccount({id: '@identifier'});
+                }
+            })
+        </script>
     }
 }
