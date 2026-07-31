@@ -157,7 +157,7 @@ public class SearchSpec
         var spec = new ComplaintSearchDto
         {
             ClosedFrom = DateOnly.FromDateTime(referenceItem.ComplaintClosedDate!.Value.Date),
-            ClosedTo = DateOnly.FromDateTime(referenceItem.ComplaintClosedDate!.Value.Date),
+            ClosedTo = DateOnly.FromDateTime(referenceItem.ComplaintClosedDate.Value.Date),
         };
 
         var predicate = ComplaintFilters.SearchPredicate(spec);
