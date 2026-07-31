@@ -58,7 +58,7 @@ public sealed class DataExportService(
 
     private async Task DeleteOldExportFilesAsync(string exportFilePath, CancellationToken token)
     {
-        var filesAsyncEnumerable = fileService.GetFilesAsync(exportFilePath, token: token);
+        var filesAsyncEnumerable = fileService.ListFilesAsync(exportFilePath, token: token);
         await foreach (var file in filesAsyncEnumerable.ConfigureAwait(false))
         {
             // Keep only recent files for auditing.
