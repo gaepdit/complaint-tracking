@@ -13,6 +13,7 @@
     <PropertyGroup>
         <!-- https://aka.ms/vs-build-acceleration -->
         <AccelerateBuildsInVisualStudio>true</AccelerateBuildsInVisualStudio>
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     </PropertyGroup>
 
     <ItemGroup>
