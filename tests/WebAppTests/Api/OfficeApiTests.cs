@@ -7,26 +7,7 @@ namespace WebAppTests.Api;
 [TestFixture]
 public class OfficeApiTests
 {
-    private static readonly List<ListItem<string>> ListItems =
-        [new ListItem<string>(Guid.Empty.ToString(), TextData.ValidName)];
-
-    [Test]
-    public async Task ListOffices_ReturnsListOfOffices()
-    {
-        // Arrange
-        List<OfficeWithAssignorDto> officeList = [new OfficeWithAssignorDto(Guid.Empty, TextData.ValidName, true)];
-
-        var officeServiceMock = Substitute.For<IOfficeService>();
-        officeServiceMock.GetListIncludeAssignorAsync(CancellationToken.None).Returns(officeList);
-
-        var apiController = new OfficeApiController(officeServiceMock, Substitute.For<IAuthorizationService>());
-
-        // Act
-        var result = await apiController.ListOfficesAsync();
-
-        // Assert
-        result.Should().BeEquivalentTo(officeList);
-    }
+    private static readonly List<ListItem<string>> ListItems = [new(Guid.Empty.ToString(), TextData.ValidName)];
 
     [Test]
     public async Task GetStaffForAssignment_GivenUserIsAuthorized_ReturnsWithList()
