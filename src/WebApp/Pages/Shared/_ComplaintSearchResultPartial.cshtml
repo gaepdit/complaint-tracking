@@ -3,14 +3,14 @@
 @using Cts.WebApp.Pages.Shared.DisplayTemplates
 @model Cts.WebApp.Models.SearchResultsDisplay
 
-<partial name="_PaginationNavAndCount" model="Model.Pagination" />
+<partial name="Shared/_PaginationNavAndCount" model="Model.Pagination" />
 <div class="table-responsive-md">
     <table class="table table-collapsible table-hover sortable" aria-label="Complaint search results">
         <thead>
         <tr class="text-nowrap sortable">
-            <partial name="_SortableTableColHead" model='new SearchResultsColumnDisplay("ID", SortBy.IdAsc, SortBy.IdDesc, Model.Spec)' />
-            <partial name="_SortableTableColHead" model='new SearchResultsColumnDisplay("Date Received", SortBy.ReceivedDateAsc, SortBy.ReceivedDateDesc, Model.Spec)' />
-            <partial name="_SortableTableColHead" model='new SearchResultsColumnDisplay("Status", SortBy.StatusAsc, SortBy.StatusDesc, Model.Spec)' />
+            <partial name="Shared/_SortableTableColHead" model='new SearchResultsColumnDisplay("ID", SortBy.IdAsc, SortBy.IdDesc, Model.Spec)' />
+            <partial name="Shared/_SortableTableColHead" model='new SearchResultsColumnDisplay("Date Received", SortBy.ReceivedDateAsc, SortBy.ReceivedDateDesc, Model.Spec)' />
+            <partial name="Shared/_SortableTableColHead" model='new SearchResultsColumnDisplay("Status", SortBy.StatusAsc, SortBy.StatusDesc, Model.Spec)' />
             <th scope="col" data-label="Source & Location">Source & Location</th>
             <th scope="col" data-label="Staff/Office Assigned">Staff/Office Assigned</th>
             <th scope="col" data-label="Area(s) of Concern">Area(s) of Concern</th>
@@ -94,4 +94,4 @@
         </tbody>
     </table>
 </div>
-<partial name="_PaginationNav" model="Model.Pagination" />
+<partial name="Shared/_PaginationNav" model="Model.Pagination" />
