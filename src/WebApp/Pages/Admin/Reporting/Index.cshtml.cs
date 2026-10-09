@@ -3,6 +3,7 @@ using Cts.AppServices.Complaints.QueryDto;
 using Cts.AppServices.Offices;
 using Cts.AppServices.Reporting;
 using Cts.AppServices.Staff;
+using Cts.AppServices.Utilities;
 using Cts.Domain;
 using Cts.Domain.DataViews.ReportingViews;
 using GaEpd.AppLibrary.ListItems;
@@ -39,11 +40,11 @@ public class ReportingIndexModel(
     public int? Threshold { get; set; }
 
     [Display(Name = "Date From"), DataType(DataType.Date)]
-    [DisplayFormat(DataFormatString = "{0:O}", ApplyFormatInEditMode = true)]
+    [DisplayFormat(DataFormatString = DateTimeFormats.DateOnlyInput, ApplyFormatInEditMode = true)]
     public DateOnly? From { get; set; }
 
     [Display(Name = "Date To"), DataType(DataType.Date)]
-    [DisplayFormat(DataFormatString = "{0:O}", ApplyFormatInEditMode = true)]
+    [DisplayFormat(DataFormatString = DateTimeFormats.DateOnlyInput, ApplyFormatInEditMode = true)]
     public DateOnly? To { get; set; }
 
     [Display(Name = "Include Administratively Closed Complaints")]

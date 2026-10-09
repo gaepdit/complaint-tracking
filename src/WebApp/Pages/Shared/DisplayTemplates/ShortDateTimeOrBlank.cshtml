@@ -1,2 +1,3 @@
-﻿@model DateTimeOffset?
-@Model?.ToString(Platform.Constants.DateTimeFormatConstants.ShortDateTimeFormat)
+﻿@using Cts.AppServices.Utilities
+@model DateTimeOffset?
+@Model?.ToString(DateTimeFormats.ShortDateTimeFormat)

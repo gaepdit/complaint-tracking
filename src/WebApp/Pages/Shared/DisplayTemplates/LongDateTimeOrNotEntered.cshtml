@@ -1,9 +1,10 @@
-﻿@model DateTimeOffset?
+﻿@using Cts.AppServices.Utilities
+@model DateTimeOffset?
 @if (Model is null)
 {
     <span class="text-body-secondary fw-lighter">[Not entered]</span>
 }
 else
 {
-    @Model.Value.ToString(Platform.Constants.DateTimeFormatConstants.LongDateTimeFormat)
+    @Model.Value.ToString(DateTimeFormats.LongDateTimeFormat)
 }

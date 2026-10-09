@@ -1,2 +1,3 @@
-﻿@model DateOnly
-@Model.ToString(Platform.Constants.DateTimeFormatConstants.LongDateFormat)
+﻿@using Cts.AppServices.Utilities
+@model DateOnly
+@Model.ToString(DateTimeFormats.LongDateFormat)
