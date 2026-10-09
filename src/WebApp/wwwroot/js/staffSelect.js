@@ -3,9 +3,9 @@ function setUpStaffDropdown(officeElementId, staffElementId, forAssignment, plac
     let apiPath;
 
     if (forAssignment === true) {
-        apiPath = "staff-for-assignment";
+        apiPath = "StaffForAssignment";
     } else {
-        apiPath = "all-staff";
+        apiPath = "Staff";
     }
 
     const officeSelect = document.getElementById(officeElementId);
@@ -16,7 +16,7 @@ function setUpStaffDropdown(officeElementId, staffElementId, forAssignment, plac
         staffSelect.disabled = true;
         if (officeSelect.value === '') return;
 
-        axios.get(`/api/offices/${officeSelect.value}/${apiPath}`)
+        axios.get(`/Content/Office/${officeSelect.value}/${apiPath}`)
             .then(function (response) {
                 const data = response.data;
                 if (data == null || data.length === 0) return;
