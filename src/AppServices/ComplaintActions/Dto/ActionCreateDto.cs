@@ -1,3 +1,4 @@
+using Cts.AppServices.Utilities;
 using System.ComponentModel.DataAnnotations;
 
 namespace Cts.AppServices.ComplaintActions.Dto;
@@ -7,7 +8,7 @@ public record ActionCreateDto(int ComplaintId)
     [Required]
     [Display(Name = "Action Date")]
     [DataType(DataType.Date)]
-    [DisplayFormat(DataFormatString = "{0:O}", ApplyFormatInEditMode = true)]
+    [DisplayFormat(DataFormatString = DateTimeFormats.DateOnlyInput, ApplyFormatInEditMode = true)]
     public DateOnly? ActionDate { get; init; } = DateOnly.FromDateTime(DateTime.Today);
 
     [Required]

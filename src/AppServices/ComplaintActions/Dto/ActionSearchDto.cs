@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Cts.AppServices.Utilities;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -20,12 +21,12 @@ public record ActionSearchDto
 
     [Display(Name = "Action Date From")]
     [DataType(DataType.Date)]
-    [DisplayFormat(DataFormatString = "{0:O}", ApplyFormatInEditMode = true)]
+    [DisplayFormat(DataFormatString = DateTimeFormats.DateOnlyInput, ApplyFormatInEditMode = true)]
     public DateOnly? DateFrom { get; init; }
 
     [Display(Name = "Through")]
     [DataType(DataType.Date)]
-    [DisplayFormat(DataFormatString = "{0:O}", ApplyFormatInEditMode = true)]
+    [DisplayFormat(DataFormatString = DateTimeFormats.DateOnlyInput, ApplyFormatInEditMode = true)]
     public DateOnly? DateTo { get; init; }
 
     [Display(Name = "Entered By")]
@@ -36,12 +37,12 @@ public record ActionSearchDto
 
     [Display(Name = "From")]
     [DataType(DataType.Date)]
-    [DisplayFormat(DataFormatString = "{0:O}", ApplyFormatInEditMode = true)]
+    [DisplayFormat(DataFormatString = DateTimeFormats.DateOnlyInput, ApplyFormatInEditMode = true)]
     public DateOnly? EnteredFrom { get; init; }
 
     [Display(Name = "Through")]
     [DataType(DataType.Date)]
-    [DisplayFormat(DataFormatString = "{0:O}", ApplyFormatInEditMode = true)]
+    [DisplayFormat(DataFormatString = DateTimeFormats.DateOnlyInput, ApplyFormatInEditMode = true)]
     public DateOnly? EnteredTo { get; init; }
 
     [Display(Name = "Investigator")]
@@ -59,12 +60,12 @@ public record ActionSearchDto
         { nameof(Sort), Sort.ToString() },
         { nameof(ActionType), ActionType?.ToString() },
         { nameof(DeletedStatus), DeletedStatus?.ToString() },
-        { nameof(DateFrom), DateFrom?.ToString("d") },
-        { nameof(DateTo), DateTo?.ToString("d") },
+        { nameof(DateFrom), DateFrom?.ToString(DateTimeFormats.RouteValue) },
+        { nameof(DateTo), DateTo?.ToString(DateTimeFormats.RouteValue) },
         { nameof(EnteredBy), EnteredBy },
         { nameof(Office), Office?.ToString() },
-        { nameof(EnteredFrom), EnteredFrom?.ToString("d") },
-        { nameof(EnteredTo), EnteredTo?.ToString("d") },
+        { nameof(EnteredFrom), EnteredFrom?.ToString(DateTimeFormats.RouteValue) },
+        { nameof(EnteredTo), EnteredTo?.ToString(DateTimeFormats.RouteValue) },
         { nameof(Investigator), Investigator },
         { nameof(Comments), Comments },
         { nameof(Concern), Concern?.ToString() },

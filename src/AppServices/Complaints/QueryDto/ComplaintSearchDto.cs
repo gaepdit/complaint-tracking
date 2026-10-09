@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Cts.AppServices.Utilities;
+using System.ComponentModel.DataAnnotations;
 
 namespace Cts.AppServices.Complaints.QueryDto;
 
@@ -18,12 +19,12 @@ public record ComplaintSearchDto : IBasicSearchDisplay
 
     [Display(Name = "From")]
     [DataType(DataType.Date)]
-    [DisplayFormat(DataFormatString = "{0:O}", ApplyFormatInEditMode = true)]
+    [DisplayFormat(DataFormatString = DateTimeFormats.DateOnlyInput, ApplyFormatInEditMode = true)]
     public DateOnly? ClosedFrom { get; init; }
 
     [Display(Name = "Through")]
     [DataType(DataType.Date)]
-    [DisplayFormat(DataFormatString = "{0:O}", ApplyFormatInEditMode = true)]
+    [DisplayFormat(DataFormatString = DateTimeFormats.DateOnlyInput, ApplyFormatInEditMode = true)]
     public DateOnly? ClosedTo { get; init; }
 
     // Attachments
@@ -34,12 +35,12 @@ public record ComplaintSearchDto : IBasicSearchDisplay
 
     [Display(Name = "From")]
     [DataType(DataType.Date)]
-    [DisplayFormat(DataFormatString = "{0:O}", ApplyFormatInEditMode = true)]
+    [DisplayFormat(DataFormatString = DateTimeFormats.DateOnlyInput, ApplyFormatInEditMode = true)]
     public DateOnly? ReceivedFrom { get; init; }
 
     [Display(Name = "Through")]
     [DataType(DataType.Date)]
-    [DisplayFormat(DataFormatString = "{0:O}", ApplyFormatInEditMode = true)]
+    [DisplayFormat(DataFormatString = DateTimeFormats.DateOnlyInput, ApplyFormatInEditMode = true)]
     public DateOnly? ReceivedTo { get; init; }
 
     [Display(Name = "Received By")]
@@ -108,11 +109,11 @@ public record ComplaintSearchDto : IBasicSearchDisplay
         { nameof(Sort), Sort.ToString() },
         { nameof(Status), Status?.ToString() },
         { nameof(DeletedStatus), DeletedStatus?.ToString() },
-        { nameof(ClosedFrom), ClosedFrom?.ToString("d") },
-        { nameof(ClosedTo), ClosedTo?.ToString("d") },
+        { nameof(ClosedFrom), ClosedFrom?.ToString(DateTimeFormats.RouteValue) },
+        { nameof(ClosedTo), ClosedTo?.ToString(DateTimeFormats.RouteValue) },
         { nameof(Attachments), Attachments?.ToString() },
-        { nameof(ReceivedFrom), ReceivedFrom?.ToString("d") },
-        { nameof(ReceivedTo), ReceivedTo?.ToString("d") },
+        { nameof(ReceivedFrom), ReceivedFrom?.ToString(DateTimeFormats.RouteValue) },
+        { nameof(ReceivedTo), ReceivedTo?.ToString(DateTimeFormats.RouteValue) },
         { nameof(ReceivedBy), ReceivedBy },
         { nameof(CallerName), CallerName },
         { nameof(Represents), Represents },

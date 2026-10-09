@@ -22,7 +22,7 @@ public record ComplaintCreateDto : IComplaintCommandDto
 
     [Required]
     [DataType(DataType.Date)]
-    [DisplayFormat(DataFormatString = "{0:O}", ApplyFormatInEditMode = true)]
+    [DisplayFormat(DataFormatString = DateTimeFormats.DateOnlyInput, ApplyFormatInEditMode = true)]
     [Display(Name = "Date received")]
     public DateOnly ReceivedDate { get; init; } = DateOnly.FromDateTime(DateTime.Today);
 
@@ -119,7 +119,7 @@ public record ComplaintCreateDto : IComplaintCommandDto
     public string? SourceEmail { get; init; }
 
     [Display(Name = "Primary phone")]
-    public PhoneNumber? SourcePhoneNumber { get; init; } 
+    public PhoneNumber? SourcePhoneNumber { get; init; }
 
     [Display(Name = "Secondary phone")]
     public PhoneNumber? SourceSecondaryPhoneNumber { get; init; }

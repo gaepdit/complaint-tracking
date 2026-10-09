@@ -1,3 +1,4 @@
+using Cts.AppServices.Utilities;
 using Cts.Domain.Entities.Complaints;
 using Cts.Domain.ValueObjects;
 using System.ComponentModel.DataAnnotations;
@@ -20,7 +21,7 @@ public record ComplaintUpdateDto : IComplaintCommandDto
 
     [Required]
     [DataType(DataType.Date)]
-    [DisplayFormat(DataFormatString = "{0:O}", ApplyFormatInEditMode = true)]
+    [DisplayFormat(DataFormatString = DateTimeFormats.DateOnlyInput, ApplyFormatInEditMode = true)]
     [Display(Name = "Date received")]
     public DateOnly ReceivedDate { get; init; }
 
