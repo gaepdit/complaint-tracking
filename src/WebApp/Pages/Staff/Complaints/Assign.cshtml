@@ -12,7 +12,7 @@
 <h1>@ViewData["Title"]</h1>
 
 <div class="p-3 border rounded-3">
-    <partial name="_ComplaintSummaryPartial" model="Model.ComplaintView" />
+    <partial name="Shared/_ComplaintSummaryPartial" model="Model.ComplaintView" />
 
     <form method="post">
         <div class="row">
@@ -36,13 +36,13 @@
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    <partial name="_StaffSelectScriptsPartial" />
+    <partial name="Shared/_ValidationScriptsPartial" />
+    <partial name="Shared/_StaffSelectScriptsPartial" />
     <script asp-add-content-to-csp>
-    setUpStaffDropdown(
-        "@nameof(Model.ComplaintAssignment)_@nameof(ComplaintAssignmentDto.OfficeId)",
-        "@nameof(Model.ComplaintAssignment)_@nameof(ComplaintAssignmentDto.OwnerId)",
-        true,
-        "@SelectOptions.SelectTextDefaultAssignor");
+        setUpStaffDropdown(
+            "@nameof(Model.ComplaintAssignment)_@nameof(ComplaintAssignmentDto.OfficeId)",
+            "@nameof(Model.ComplaintAssignment)_@nameof(ComplaintAssignmentDto.OwnerId)",
+            true,
+            "@SelectOptions.SelectTextDefaultAssignor");
     </script>
 }

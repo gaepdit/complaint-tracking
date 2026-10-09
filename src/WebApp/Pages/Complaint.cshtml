@@ -187,7 +187,7 @@
                             attachment.IsForPublic = true;
                             <tr>
                                 <td>
-                                    <partial name="_AttachmentLinkPartial" model="attachment" />
+                                    <partial name="Shared/_AttachmentLinkPartial" model="attachment" />
                                 </td>
                                 <td>@Html.DisplayFor(_ => attachment.Size, DisplayTemplate.FileSize)</td>
                                 <td>@Html.DisplayFor(_ => attachment.UploadedDate, DisplayTemplate.ShortDate)</td>
@@ -210,10 +210,10 @@
 @section Scripts
 {
     <script src="~/js/table-of-contents.js" defer></script>
-    <partial name="_FancyboxScriptsPartial" />
+    <partial name="Shared/_FancyboxScriptsPartial" />
 }
 
 @section Styles
 {
-    <partial name="_FancyboxStylesPartial" />
+    <partial name="Shared/_FancyboxStylesPartial" />
 }
