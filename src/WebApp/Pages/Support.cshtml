@@ -12,9 +12,9 @@
     <a href="mailto:@AppSettings.Support.CustomerSupportEmail">@AppSettings.Support.CustomerSupportEmail</a>.
 </p>
 
-@if (Model.ActiveUser)
-{
-    <ul>
+<ul>
+    @if (Model.ActiveUser)
+    {
         <li>
             <p>
                 <a href="~/static/Complaint-Tracking-System-Instructions.pdf" target="_blank">General Instructions
@@ -26,12 +26,14 @@
                 <a href="~/static/Complaint-Attachments-Policy.pdf" target="_blank">Complaint Attachments Policy (<abbr>PDF</abbr>)</a>
             </p>
         </li>
-    </ul>
-    <p>
-        For technical support, contact
-        <a href="@AppSettings.Support.TechnicalSupportSite" target="_blank" rel="noopener">EPD IT support</a>.
-    </p>
-}
+    }
+    <li><p>
+            <a href="@AppSettings.Support.TechnicalSupportSite" target="_blank" rel="noopener">Technical support
+                site</a></p>
+    </li>
+
+    <li><p><a href="~/api-docs/index.html" target="_blank">API documentation</a></p></li>
+</ul>
 
 <div class="callout callout-info">
     <small>
@@ -42,9 +44,11 @@
         }
         <br />
         View the
-        <a href="https://github.com/gaepdit/complaint-tracking/blob/main/CHANGELOG.md" target="_blank" rel="noopener" class="text-decoration-hover link-offset-2">Changelog</a>.
+        <a href="https://github.com/gaepdit/complaint-tracking/blob/main/CHANGELOG.md" target="_blank" rel="noopener"
+           class="text-decoration-hover link-offset-2">Changelog</a>.
         <br />
         Source code available on
-        <a href="https://github.com/gaepdit/complaint-tracking" target="_blank" rel="noopener" class="text-decoration-hover link-offset-2">GitHub</a>.
+        <a href="https://github.com/gaepdit/complaint-tracking" target="_blank" rel="noopener"
+           class="text-decoration-hover link-offset-2">GitHub</a>.
     </small>
 </div>
