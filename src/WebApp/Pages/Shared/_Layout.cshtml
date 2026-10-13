@@ -8,10 +8,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Complaint Tracking System</title>
-    <partial name="_FaviconPartial" />
+    <partial name="Shared/_FaviconPartial" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-    <partial name="_MonitoringScriptsPartial" />
+    <partial name="Shared/_MonitoringScriptsPartial" />
     <script src="~/js/color-modes.js"></script>
     @await RenderSectionAsync("Styles", false)
 </head>
@@ -26,7 +26,7 @@
 
 <main id="main-content" role="main" class="flex-grow-1">
     <div class="container">
-        <partial name="_AlertPartial" for="@displayMessage" />
+        <partial name="Shared/_AlertPartial" for="@displayMessage" />
         @RenderBody()
     </div>
 </main>

@@ -263,7 +263,7 @@
         }
         else
         {
-            <partial name="_ComplaintSearchResultPartial" model="Model.ResultsDisplay" />
+            <partial name="Shared/_ComplaintSearchResultPartial" model="Model.ResultsDisplay" />
         }
     </div>
 }
@@ -271,6 +271,7 @@
 @section Scripts {
     <script src="~/js/dateValidation.js"  ></script>
     <script src="~/js/formSearch.js"  ></script>
+    <partial name="Shared/_StaffSelectScriptsPartial" />
     <script asp-add-content-to-csp>
         document.addEventListener("DOMContentLoaded", function () {
             datePairs(
@@ -307,5 +308,4 @@
             );
         });
     </script>
-    <partial name="_StaffSelectScriptsPartial" />
 }
