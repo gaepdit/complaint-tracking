@@ -12,6 +12,7 @@
         <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" />
         <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders.TagHelpers" />
         <PackageReference Include="Swashbuckle.AspNetCore" />
+        <PackageReference Include="System.Security.Cryptography.Pkcs" />
     </ItemGroup>
 
     <ItemGroup>
