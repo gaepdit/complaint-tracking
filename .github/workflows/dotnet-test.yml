@@ -33,13 +33,13 @@ jobs:
         run: dotnet build --no-restore
 
       - name: Test
-        run: dotnet test --no-build --verbosity normal --report-spekt-nunit
+        run: dotnet test --no-build --verbosity normal --report-spekt-nunit "LogFilePath=TestResults/TestResults.{assembly}.xml"
 
       - name: Upload test result artifacts
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         with:
-          path: _artifacts/bin/**/debug/TestResults/TestResults.xml
+          path: _artifacts/bin/**/debug/TestResults/TestResults.*.xml
 
   publish-test-results:
     name: Publish test results
@@ -60,4 +60,4 @@ jobs:
       - name: Publish test results
         uses: EnricoMi/publish-unit-test-result-action@d0a4676d0e0b938bc201470d88276b7c74c712b3
         with:
-          files: test-results/**/TestResults.xml
+          files: test-results/**/TestResults.*.xml
