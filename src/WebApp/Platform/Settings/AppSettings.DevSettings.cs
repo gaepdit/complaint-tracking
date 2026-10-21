@@ -69,7 +69,7 @@ internal static partial class AppSettings
         public bool EnableWebOptimizer { get; init; }
     }
 
-    private static IHostApplicationBuilder BindDevAppSettings(this IHostApplicationBuilder builder)
+    public static IHostApplicationBuilder LoadDevAppSettings(this IHostApplicationBuilder builder)
     {
         // Dev settings should only be used in the development environment and when explicitly enabled.
         var devConfig = builder.Configuration.GetSection(nameof(DevSettings));
