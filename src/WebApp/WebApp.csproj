@@ -6,6 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" />
         <PackageReference Include="LigerShark.WebOptimizer.Core" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
         <PackageReference Include="Microsoft.Web.LibraryManager.Build" />
