@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders().AddZLoggerConsole(options => options.UseJsonFormatter());
 
 // Configure basic settings.
-builder.LoadDevAppSettings().AddKeyVault().LoadAppSettings();
+builder.LoadAppSettings();
 builder.AddHttpSecurity();
 builder.Services.AddDataProtection();
 

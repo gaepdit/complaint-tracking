@@ -5,18 +5,16 @@ namespace Cts.WebApp.Platform.Settings;
 
 internal static partial class AppSettings
 {
-    public static IHostApplicationBuilder AddKeyVault(this IHostApplicationBuilder builder)
+    private static void AddKeyVault(this IHostApplicationBuilder builder)
     {
         var keyVaultName = builder.Configuration.GetValue<string>("AzureKeyVaultName");
-        if (string.IsNullOrEmpty(keyVaultName)) return builder;
+        if (string.IsNullOrEmpty(keyVaultName)) return;
 
         var keyVaultUri = new Uri($"https://{keyVaultName}.vault.azure.net");
         builder.Configuration.AddAzureKeyVault(keyVaultUri, new DefaultAzureCredential());
-
-        return builder;
     }
 
-    public static IHostApplicationBuilder LoadAppSettings(this IHostApplicationBuilder builder)
+    public static void LoadAppSettings(this IHostApplicationBuilder builder)
     {
         // Set default timeout for regular expressions.
         // https://learn.microsoft.com/en-us/dotnet/standard/base-types/best-practices#use-time-out-values
@@ -24,11 +22,12 @@ internal static partial class AppSettings
 
         Version = GetVersion();
 
+        builder.AddKeyVault();
+        builder.LoadDevAppSettings();
+
         builder.Configuration.GetSection(nameof(Support)).Bind(Support);
         builder.Configuration.GetSection(nameof(DataDogSettings)).Bind(DataDogSettings);
         OrgNotificationsApiUrl = builder.Configuration.GetValue<string>(nameof(OrgNotificationsApiUrl));
-
-        return builder;
     }
 
     private static string GetVersion()
