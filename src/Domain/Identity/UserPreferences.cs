@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace AirWeb.Domain.Core.Entities;
+namespace Cts.Domain.Identity;
 
 public record UserPreferences
 {
