@@ -17,4 +17,6 @@ public interface IStaffService : IDisposable, IAsyncDisposable
     Task<IReadOnlyList<AppRole>> GetAppRolesAsync(string id);
     Task<IdentityResult> UpdateRolesAsync(string id, Dictionary<string, bool> roles);
     Task<IdentityResult> UpdateAsync(string id, StaffUpdateDto resource);
+    Task<UserPreferences> GetPreferencesAsync();
+    Task UpdateThemePreferenceAsync(ThemePreference theme);
 }
