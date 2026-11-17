@@ -37,6 +37,7 @@ public sealed class ApplicationUser : IdentityUser, IEntity<string>
     public DateTimeOffset? AccountUpdatedAt { get; set; }
     public DateTimeOffset? ProfileUpdatedAt { get; set; }
     public DateTimeOffset? MostRecentLogin { get; set; }
+    public UserPreferences Preferences { get; init; } = new();
 
     // Display properties
     public string SortableFullName => new[] { FamilyName, GivenName }.ConcatWithSeparator(", ");
