@@ -1,5 +1,9 @@
 # Changelog
 
+## [2026.11.17] - 2026-11-17
+
+- Updated dependencies.
+
 ## [2026.10.20] - 2026-10-20
 
 - Updated dependencies.
@@ -197,3 +201,4 @@ like it!
 [2026.7.22]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2026.7.22
 [2026.7.30]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2026.7.30
 [2026.10.20]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2026.10.20
+[2026.11.17]: https://github.com/gaepdit/complaint-tracking/releases/tag/v2026.11.17
