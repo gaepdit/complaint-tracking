@@ -6,7 +6,7 @@ using Cts.Domain.Identity;
 namespace Cts.WebApp.Pages.Account;
 
 [Authorize(Policy = nameof(Policies.ActiveUser))]
-public class AccountIndexModel : PageModel
+public class AccountIndexModel([FromServices] IStaffService staffService) : PageModel
 {
     public StaffViewDto DisplayStaff { get; private set; } = null!;
     public UserPreferences Preferences { get; private set; } = null!;
@@ -17,6 +17,12 @@ public class AccountIndexModel : PageModel
     {
         DisplayStaff = await staffService.GetCurrentUserAsync();
         Roles = await staffService.GetAppRolesAsync(DisplayStaff.Id);
+        Preferences = await staffService.GetPreferencesAsync();
         return Page();
+    }
+    public async Task<IActionResult> OnPostAsync(ThemePreference theme)
+    {
+        await staffService.UpdateThemePreferenceAsync(theme);
+        return RedirectToPage();
     }
 }
