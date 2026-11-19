@@ -25,7 +25,34 @@
 
     <dt class="col-sm-2">Office</dt>
     <dd class="col-sm-10">@Html.DisplayFor(model => model.OfficeName, DisplayTemplate.StringOrPlaceholder, new { Placeholder = "none" })</dd>
+
+    <dt class="col-sm-3">Theme</dt>
+    <dd class="col-sm-9">
+        @Model.Preferences.Theme
+    </dd>
 </dl>
+
+<div class="mb-3">
+
+    <label class="form-label">Theme</label>
+
+    <div class="btn-group" role="group" aria-label="Theme selection">
+        <input type="radio" class="btn-check" name="Theme" id="themeLight" value="light">
+        <label class="btn btn-outline-secondary" for="themeLight">
+            Light
+        </label>
+
+        <input type="radio" class="btn-check" name="Theme" id="themeDark" value="dark">
+        <label class="btn btn-outline-secondary" for="themeDark">
+            Dark
+        </label>
+
+        <input type="radio" class="btn-check" name="Theme" id="themeAuto" value="auto">
+        <label class="btn btn-outline-secondary" for="themeAuto">
+            Auto
+        </label>
+    </div>
+</div>
 
 <div class="mb-3">
     @if (Model.DisplayStaff.Active)

@@ -4,7 +4,7 @@ namespace Cts.Domain.Identity;
 
 public record UserPreferences
 {
-    public ThemePreference Theme { get; set; } = ThemePreference.Auto;
+    public ThemePreference Theme { get; set; } = ThemePreference.Light;
 }
 
 public enum ThemePreference
