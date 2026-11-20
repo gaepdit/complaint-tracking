@@ -1,5 +1,6 @@
 ﻿@page
 @using Cts.WebApp.Pages.Shared.DisplayTemplates
+@using Cts.Domain.Identity
 @model AccountIndexModel
 @{
     ViewData["Title"] = "Account Profile";
@@ -32,27 +33,35 @@
     </dd>
 </dl>
 
-<div class="mb-3">
+<h3 class="mt-4">Preferences</h3>
 
-    <label class="form-label">Theme</label>
+<form method="post" id="themeForm">
+    <fieldset>
+        <legend class="col-form-label fw-bold">Appearance</legend>
+        <div class="btn-group">
+            <input class="btn-check" type="radio" name="theme" autocomplete="off"
+                   id="themeAuto" value="auto" checked="@(Model.Preferences.Theme == ThemePreference.Auto)" />
+            <label class="btn btn-outline-primary" for="themeAuto">
+@*                 <partial name="Shared/_AppIconsPartial" model="@AppIcon.AutoDarkMode" />
+ *@                Auto
+            </label>
 
-    <div class="btn-group" role="group" aria-label="Theme selection">
-        <input type="radio" class="btn-check" name="Theme" id="themeLight" value="light">
-        <label class="btn btn-outline-secondary" for="themeLight">
-            Light
-        </label>
+            <input class="btn-check" type="radio" name="theme" autocomplete="off"
+                   id="themeLight" value="light" checked="@(Model.Preferences.Theme == ThemePreference.Light)" />
+            <label class="btn btn-outline-primary" for="themeLight">
+@*                 <partial name="Shared/_AppIconsPartial" model="@AppIcon.LightMode" />
+ *@                Light
+            </label>
 
-        <input type="radio" class="btn-check" name="Theme" id="themeDark" value="dark">
-        <label class="btn btn-outline-secondary" for="themeDark">
-            Dark
-        </label>
-
-        <input type="radio" class="btn-check" name="Theme" id="themeAuto" value="auto">
-        <label class="btn btn-outline-secondary" for="themeAuto">
-            Auto
-        </label>
-    </div>
-</div>
+            <input class="btn-check" type="radio" name="theme" autocomplete="off"
+                   id="themeDark" value="dark" checked="@(Model.Preferences.Theme == ThemePreference.Dark)" />
+            <label class="btn btn-outline-primary" for="themeDark">
+@*                 <partial name="Shared/_AppIconsPartial" model="@AppIcon.DarkMode" />
+ *@                Dark
+            </label>
+        </div>
+    </fieldset>
+</form>
 
 <div class="mb-3">
     @if (Model.DisplayStaff.Active)
